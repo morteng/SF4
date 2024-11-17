@@ -1,8 +1,7 @@
 from flask_migrate import Migrate, upgrade as migrate_upgrade
 from app import create_app, db
 
-def run_migrations():
-    app = create_app('development')
+def run_migrations(app):
     with app.app_context():
         migrate = Migrate(app, db)
         migrate_upgrade()
@@ -22,7 +21,7 @@ def main():
             db.create_all()
         
         print("Initializing migrate")
-        run_migrations()
+        run_migrations(app)
         
         print("Migrations completed successfully.")
         
