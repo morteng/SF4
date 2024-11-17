@@ -1,7 +1,12 @@
+import os
 import sys
 import subprocess
+from dotenv import load_dotenv
 from app import create_app
 from app.extensions import db
+
+# Load environment variables at the very beginning
+load_dotenv()
 
 def run_migrations():
     """Run database migrations."""
@@ -30,7 +35,16 @@ def run_tests():
         sys.exit(1)
 
 def main():
-    print(f"Attempting to create app with config: 'default'")  # Add this line
+    print(f"Attempting to create app with config: 'default'")
+    
+    # Verify environment variables are set
+    required_vars = ['ADMIN_USERNAME', 'ADMIN_PASSWORD', 'ADMIN_EMAIL', 'SECRET_KEY']
+    missing_vars = [var for var in required_vars if not os.environ.get(var)]
+    
+    if missing_vars:
+        print(f"Error: Missing environment variables: {', '.join(missing_vars)}")
+        sys.exit(1)
+
     # Create the application instance
     app = create_app('default')
 
