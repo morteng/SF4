@@ -42,7 +42,7 @@ def admin_index():
     Returns:
         str: A greeting message.
     """
-    return 'Hello Admin!', 200
+    return 'Hey Admin!', 200
 
 @admin_bp.route('/admin/stipends', methods=['POST'])
 def create_stipend():
