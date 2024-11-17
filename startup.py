@@ -14,7 +14,8 @@ def main():
     try:
         print("Current Python Path:", sys.path)
         print("Attempting to create app with config: 'development'")
-        app, _ = create_app('development')  # Updated to ignore the migrate object
+        app_tuple = create_app('development')
+        app = app_tuple[0]  # Get just the app from the tuple
         print(f"App created successfully with config: development")
         
         print("Initializing db")
