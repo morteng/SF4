@@ -16,7 +16,7 @@ def main():
         print("Current Python Path:", sys.path)
         print("Attempting to create app with config: 'development'")
         app, migrate = create_app('development')
-        print(f"Creating app with config: {app.config['ENV']}")
+        print(f"App created successfully with config: development")
         
         print("Initializing db")
         with app.app_context():
