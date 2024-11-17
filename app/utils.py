@@ -24,15 +24,31 @@ def admin_required(f):
 
 def init_admin_user():
     """Initialize admin user if it doesn't exist"""
-    admin = User.query.filter_by(username='admin').first()
+    from os import environ
+    
+    admin_username = environ.get('ADMIN_USERNAME', 'admin_user')
+    admin_email = environ.get('ADMIN_EMAIL', 'admin@example.com')
+    admin_password = environ.get('ADMIN_PASSWORD', 'admin')
+
+    admin = User.query.filter(
+        (User.username == admin_username) | 
+        (User.email == admin_email)
+    ).first()
+    
     if not admin:
-        admin = User(
-            username='admin',
-            email='admin@example.com',
-            is_admin=True
-        )
-        admin.set_password('admin')  # Set a default password
-        db.session.add(admin)
-        db.session.commit()
-        admin.generate_auth_token()  # Generate initial token
+        try:
+            admin = User(
+                username=admin_username,
+                email=admin_email,
+                is_admin=True
+            )
+            admin.set_password(admin_password)
+            db.session.add(admin)
+            db.session.commit()
+            print(f"Created admin user: {admin_username}")
+            admin.generate_auth_token()  # Generate initial token
+        except Exception as e:
+            print(f"Error creating admin user: {e}")
+            db.session.rollback()
+    
     return admin
