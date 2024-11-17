@@ -1,9 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import secrets  # Built into Python, no extra dependencies needed
-
-db = SQLAlchemy()
+from app.extensions import db  # Import the shared db instance
 
 class User(db.Model):
     __tablename__ = 'users'
