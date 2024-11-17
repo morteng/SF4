@@ -12,8 +12,13 @@ def create_app(config_name='default'):
     app = Flask(__name__)
     app.config.from_object(config)
 
+    # Print out the configuration to verify
+    print(f"Creating app with config: {config.__dict__}")
+
     # Initialize extensions
+    print("Initializing db...")
     db.init_app(app)
+    print("Initializing migrate...")
     migrate.init_app(app, db)
 
     # Register blueprints
