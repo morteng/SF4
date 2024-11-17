@@ -139,5 +139,7 @@
 
 ### 8. startup
 
-- **Application Startup**:
+- **Application files and configs**:
   - startup.py - A script to init db, do any migrations, update dbs, and create the admin user. Then run tests, abort if tests fail. Then run the app.
+  - config.py - A config file that contains the configuration classes for the app.
+  - tests/conftest.py - A file that contains the fixtures for the tests.
