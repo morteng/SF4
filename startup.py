@@ -30,6 +30,7 @@ def run_tests():
         sys.exit(1)
 
 def main():
+    print(f"Attempting to create app with config: 'default'")  # Add this line
     # Create the application instance
     app = create_app('default')
 

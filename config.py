@@ -21,11 +21,12 @@ class ProductionConfig(Config):
     DATABASE_URL = os.environ.get('DATABASE_URL') or 'sqlite:///production.db'
 
 def get_config(config_name):
+    print(f"Received config name: {config_name}")  # Add this line
     config_map = {
         'development': DevelopmentConfig,
         'testing': TestingConfig,
         'production': ProductionConfig,
-        'default': DevelopmentConfig  # Add this line
+        'default': DevelopmentConfig
     }
     
     config_class = config_map.get(config_name)
