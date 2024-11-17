@@ -1,10 +1,10 @@
 import sys
-from flask_migrate import Migrate, upgrade as migrate_upgrade
-from app import create_app, db
+from flask_migrate import upgrade as migrate_upgrade
+from app import create_app, db, migrate
 
 def run_migrations(app):
     with app.app_context():
-        migrate = Migrate(app, db)
+        migrate.init_app(app, db)  # Initialize Migrate with app and db
         migrate_upgrade()
 
 def run_tests():
