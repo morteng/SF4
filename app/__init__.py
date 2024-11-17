@@ -13,10 +13,11 @@ def create_app(config_name='default'):
     # Initialize extensions
     db.init_app(app)
 
-    # Initialize Flask-Migrate
-    migrate = Migrate(app, db)
-
     # Register blueprints
-    register_blueprints(app)  # Removed the with app.app_context() here
+    register_blueprints(app)
 
-    return app  # Just return the app object
+    # Initialize Flask-Migrate after db is fully set up
+    migrate = Migrate()
+    migrate.init_app(app, db)
+
+    return app
