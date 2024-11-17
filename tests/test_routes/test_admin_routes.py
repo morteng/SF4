@@ -16,9 +16,20 @@ def test_client():
 @pytest.fixture(scope='module')
 def init_database(test_client):
     db.create_all()
-    admin_user = User(username='admin_user', password_hash='hashed_password', email='admin@example.com', is_admin=True)
-    db.session.add(admin_user)
-    db.session.commit()
+    # First try to find existing admin user
+    admin_user = User.query.filter_by(email='admin@example.com').first()
+    if not admin_user:
+        admin_user = User(
+            username='admin_user',
+            password_hash='hashed_password',
+            email='admin@example.com',
+            is_admin=True
+        )
+        db.session.add(admin_user)
+        db.session.commit()
+    yield
+    db.session.remove()
+    db.drop_all()
 
 def test_admin_login(test_client, init_database):
     response = test_client.post('/admin/login', json={
