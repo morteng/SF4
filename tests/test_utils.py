@@ -2,6 +2,7 @@ import pytest
 from app.models.user import User
 from app.models.bot import Bot
 from app.extensions import db  # Import the db object
+from app.utils import init_admin_user  # Import the init_admin_user function
 
 @pytest.fixture
 def admin_user(app, session):
