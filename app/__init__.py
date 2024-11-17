@@ -44,33 +44,43 @@ def create_app(config_name=None):
     with app.app_context():
         db.create_all()  # This replaces init_db()
         
-        # Initialize admin user
         from app.models.user import User
         admin_username = os.environ.get('ADMIN_USERNAME', 'admin_user')
         admin_email = os.environ.get('ADMIN_EMAIL', 'admin@example.com')
+        admin_password = os.environ.get('ADMIN_PASSWORD', 'admin')
         
-        # Check for existing admin by username OR email
-        admin = User.query.filter(
-            (User.username == admin_username) | 
-            (User.email == admin_email)
-        ).first()
+        # First try to find admin by email
+        admin = User.query.filter_by(email=admin_email).first()
         
-        if not admin:
+        if admin:
+            # Update existing admin if needed
+            admin.username = admin_username
+            admin.is_admin = True
+            if admin_password:  # Only update password if provided
+                admin.set_password(admin_password)
+            print(f"Updated existing admin user: {admin.username}")
+        else:
+            # Create new admin if none exists
             try:
                 admin = User(
                     username=admin_username,
                     email=admin_email,
                     is_admin=True
                 )
-                admin.set_password(os.environ.get('ADMIN_PASSWORD', 'admin'))
+                admin.set_password(admin_password)
                 db.session.add(admin)
-                db.session.commit()
-                print(f"Created admin user: {admin_username}")
+                print(f"Created new admin user: {admin.username}")
             except Exception as e:
                 print(f"Error creating admin user: {e}")
                 db.session.rollback()
-        else:
-            print(f"Admin user already exists: {admin.username}")
+                raise
+        
+        try:
+            db.session.commit()
+        except Exception as e:
+            print(f"Error saving admin user changes: {e}")
+            db.session.rollback()
+            raise
 
     return app
 
