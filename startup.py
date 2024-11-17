@@ -4,9 +4,9 @@ from dotenv import load_dotenv
 from flask_migrate import upgrade as migrate_upgrade
 from app import create_app, db
 
-def run_migrations(app):
-    with app.app_context():
-        migrate_upgrade()
+def run_migrations():
+    # Remove app context parameter since we'll use the outer context
+    migrate_upgrade()
 
 def run_tests():
     import pytest
@@ -26,13 +26,13 @@ def main():
         app = create_app(config_name)
         print(f"App created successfully with config: {config_name}")
         
-        # Use a single app context for all database operations
+        # Use a single app context for all operations
         with app.app_context():
             print("Initializing db")
             db.create_all()
         
             print("Running migrations...")
-            run_migrations(app)
+            run_migrations()  # Remove app parameter
             
             print("Migrations completed successfully.")
         
