@@ -1,8 +1,9 @@
-from app.models.user import User
+from flask import current_app as app
 from werkzeug.security import generate_password_hash
+from app.models.user import User
+from app.extensions import db  # Import db here
 
 def init_admin_user():
-    from flask import current_app as app
     with app.app_context():
         username = app.config['ADMIN_USERNAME']
         password = app.config['ADMIN_PASSWORD']
