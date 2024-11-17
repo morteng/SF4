@@ -1,22 +1,21 @@
-from app import create_app, init_db, run_migrations, run_tests, init_admin_user
+from app import create_app, run_tests
 
 def main():
-    # Create the Flask app with the appropriate configuration
-    app = create_app()
-
-    # Initialize the database
-    with app.app_context():
-        init_db()
-        run_migrations()
-        init_admin_user()
-
-    # Run tests
-    if not run_tests():
-        print("Tests failed. Aborting startup.")
-        return
-
-    # Run the application
-    app.run(debug=True)
+    try:
+        print("Attempting to create app with config: 'development'")
+        app = create_app('development')
+        
+        # Run tests
+        if not run_tests():
+            print("Tests failed. Aborting startup.")
+            return
+        
+        # Run the application
+        app.run(debug=True)
+        
+    except Exception as e:
+        print(f"Error during startup: {str(e)}")
+        raise
 
 if __name__ == '__main__':
     main()
