@@ -29,6 +29,7 @@ def create_app(config_name='default'):
         
         # Create tables if in development mode
         if config.DEBUG:
+            print("Creating all tables")
             db.create_all()
 
     return app
