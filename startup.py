@@ -1,4 +1,6 @@
 import sys
+import os
+from dotenv import load_dotenv
 from flask_migrate import upgrade as migrate_upgrade
 from app import create_app, db
 
@@ -12,11 +14,19 @@ def run_tests():
 
 def main():
     try:
-        print("Current Python Path:", sys.path)
-        print("Attempting to create app with config: 'development'")
-        app = create_app('development')
-        print(f"App created successfully with config: development")
+        # Load environment variables from .env file
+        load_dotenv()
         
+        # Get config from environment
+        config_name = os.getenv('FLASK_CONFIG', 'development')
+        
+        print("Current Python Path:", sys.path)
+        print(f"Attempting to create app with config: '{config_name}'")
+        
+        app = create_app(config_name)
+        print(f"App created successfully with config: {config_name}")
+        
+        # Use a single app context for all database operations
         with app.app_context():
             print("Initializing db")
             db.create_all()
@@ -26,13 +36,13 @@ def main():
             
             print("Migrations completed successfully.")
         
-        print("Running tests...")
-        run_tests()
-        
-        print("Tests completed successfully.")
-        
-        print("Starting the app...")
-        app.run(debug=True)
+            print("Running tests...")
+            run_tests()
+            
+            print("Tests completed successfully.")
+            
+            print("Starting the app...")
+            app.run(debug=True)
             
     except Exception as e:
         print(f"Error during startup: {e}")
