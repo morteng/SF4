@@ -14,7 +14,7 @@ def main():
     try:
         print("Current Python Path:", sys.path)
         print("Attempting to create app with config: 'development'")
-        app, migrate = create_app('development')  # Unpack the tuple here
+        app = create_app('development')  # Just get the app, not a tuple
         print(f"App created successfully with config: development")
         
         print("Initializing db")
@@ -22,7 +22,7 @@ def main():
             db.create_all()
         
         print("Running migrations...")
-        run_migrations(app)  # Pass just the app, not the tuple
+        run_migrations(app)
         
         print("Migrations completed successfully.")
         

@@ -17,7 +17,6 @@ def create_app(config_name='default'):
     migrate = Migrate(app, db)
 
     # Register blueprints
-    with app.app_context():
-        register_blueprints(app)
+    register_blueprints(app)  # Removed the with app.app_context() here
 
-    return app, migrate
+    return app  # Just return the app object
