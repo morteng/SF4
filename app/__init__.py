@@ -15,11 +15,19 @@ def create_app(config_name='default'):
     # Print out the configuration to verify
     print(f"Creating app with config: {config.__dict__}")
 
-    # Initialize extensions
-    print("Initializing db...")
-    db.init_app(app)
-    print("Initializing migrate...")
-    migrate.init_app(app, db)
+    # Check if db is already initialized
+    if not hasattr(db, 'app'):
+        print("Initializing db...")
+        db.init_app(app)
+    else:
+        print("DB already initialized")
+
+    # Check if migrate is already initialized
+    if not hasattr(migrate, 'app'):
+        print("Initializing migrate...")
+        migrate.init_app(app, db)
+    else:
+        print("Migrate already initialized")
 
     # Register blueprints
     app.register_blueprint(user_bp)

@@ -37,15 +37,9 @@ def run_tests():
 def main():
     print(f"Attempting to create app with config: 'default'")
     
-    # Print out the configuration being used
+    # Create the application instance ONLY ONCE
     config = get_config('default')
-    print(f"Configuration: {config.__dict__}")
-
-    # Create the application instance
     app = create_app('default')
-    
-    # Print out app configuration to verify
-    print(f"App Config: {app.config}")
 
     # Run migrations and initialize admin user
     try:
