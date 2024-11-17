@@ -10,3 +10,6 @@ __pycache__/
 .aider*
 .coverage*
 .pytest_cache/
+
+# Databases
+instance/site.db
