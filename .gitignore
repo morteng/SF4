@@ -8,3 +8,5 @@ __pycache__/
 # Environment variables
 .env
 .aider*
+.coverage*
+.pytest_cache/

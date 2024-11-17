@@ -18,8 +18,18 @@ This document outlines the coding conventions and best practices to follow when 
 
 - **Routes**: Split routes into separate files according to functionality.
   - `user_routes.py`: User-facing routes.
-  - `admin_routes.py`: Admin CRUD operations.
   - `bot_routes.py`: Bot management and monitoring.
+- **Admin routes**: Separate admin-specific routes for administrative tasks.
+  - app/routes/admin/tag_routes.py: Manage tags and categories.
+  - app/routes/admin/organization_routes.py: Manage organizations and their details.
+  - app/routes/admin/stipend_routes.py: Manage stipends and their details.
+  - app/routes/admin/user_routes.py: Manage user accounts and permissions.
+  - app/routes/admin/bot_routes.py: Manage bot configurations and monitoring.
+  - ... (add more as needed)
+- **Static Files**: Organize static files (CSS, JavaScript, images) into separate directories.
+  - `static/css/`, `static/js/`, `static/images/`.
+- **Templates**: Keep templates clean and modular, using template inheritance for consistency.
+
 - **Models**: Organize models into separate files per entity.
   - `stipend.py`, `organization.py`, `tag.py`, etc.
 - **Services**: Encapsulate business logic in services.
