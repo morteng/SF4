@@ -40,46 +40,26 @@ def create_app(config_name=None):
     app.register_blueprint(admin_user_bp)
     app.register_blueprint(stipend_bp)
 
-    # Initialize the database, run migrations, and create admin user
+    # Initialize the database and create admin user within app context
     with app.app_context():
-        init_db()
-        run_migrations()
-        init_admin_user()
+        db.create_all()  # This replaces init_db()
+        
+        # Initialize admin user
+        from app.models.user import User
+        admin = User.query.filter_by(username='admin').first()
+        if not admin:
+            admin = User(
+                username=os.environ.get('ADMIN_USERNAME', 'admin'),
+                email=os.environ.get('ADMIN_EMAIL', 'admin@example.com'),
+                is_admin=True
+            )
+            admin.set_password(os.environ.get('ADMIN_PASSWORD', 'admin'))
+            db.session.add(admin)
+            db.session.commit()
 
     return app
-
-def init_db():
-    """Initialize the database."""
-    from app.models.user import User
-    from app.models.bot import Bot
-    from app.models.organization import Organization
-    from app.models.tag import Tag
-    from app.models.stipend import Stipend
-    db.create_all()
-
-def run_migrations():
-    """Run database migrations."""
-    # Placeholder for running migrations using Alembic or similar tool
-    pass
 
 def run_tests():
     """Run tests using pytest with coverage."""
     import pytest
     return pytest.main(['-v', '--cov=app', '--cov-report=term-missing', 'tests/']) == 0
-
-def init_admin_user():
-    """Initialize admin user if it doesn't exist."""
-    from app.models.user import User
-    from app.extensions import db
-    
-    admin = User.query.filter_by(username='admin').first()
-    if not admin:
-        admin = User(
-            username=os.environ.get('ADMIN_USERNAME', 'admin'),
-            email=os.environ.get('ADMIN_EMAIL', 'admin@example.com'),
-            is_admin=True
-        )
-        admin.set_password(os.environ.get('ADMIN_PASSWORD', 'admin'))
-        db.session.add(admin)
-        db.session.commit()
-    return admin
