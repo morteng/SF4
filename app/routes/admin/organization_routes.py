@@ -1,10 +1,12 @@
 from flask import Blueprint, request, jsonify
 from app.models.organization import Organization
 from app.extensions import db
+from app.utils import admin_required
 
 org_bp = Blueprint('organization', __name__, url_prefix='/admin/organizations')
 
 @org_bp.route('', methods=['POST'])
+@admin_required
 def create_organization():
     """
     Creates a new organization.
@@ -29,6 +31,7 @@ def create_organization():
     }), 201
 
 @org_bp.route('/<int:organization_id>', methods=['PUT'])
+@admin_required
 def update_organization(organization_id):
     """
     Updates an existing organization.
@@ -56,6 +59,7 @@ def update_organization(organization_id):
     }), 200
 
 @org_bp.route('/<int:organization_id>', methods=['DELETE'])
+@admin_required
 def delete_organization(organization_id):
     """
     Deletes an organization.

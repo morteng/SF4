@@ -1,10 +1,12 @@
 from flask import Blueprint, request, jsonify
 from app.models.tag import Tag
 from app.extensions import db
+from app.utils import admin_required
 
 tag_bp = Blueprint('tag', __name__, url_prefix='/admin/tags')
 
 @tag_bp.route('', methods=['POST'])
+@admin_required
 def create_tag():
     """
     Creates a new tag.
@@ -28,6 +30,7 @@ def create_tag():
     }), 201
 
 @tag_bp.route('/<int:tag_id>', methods=['PUT'])
+@admin_required
 def update_tag(tag_id):
     """
     Updates an existing tag.
@@ -54,6 +57,7 @@ def update_tag(tag_id):
     }), 200
 
 @tag_bp.route('/<int:tag_id>', methods=['DELETE'])
+@admin_required
 def delete_tag(tag_id):
     """
     Deletes a tag.

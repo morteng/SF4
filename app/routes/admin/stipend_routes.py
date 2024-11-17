@@ -1,10 +1,12 @@
 from flask import Blueprint, request, jsonify
 from app.models.stipend import Stipend
 from app.extensions import db
+from app.utils import admin_required
 
 stipend_bp = Blueprint('stipend', __name__, url_prefix='/admin/stipends')
 
 @stipend_bp.route('', methods=['POST'])
+@admin_required
 def create_stipend():
     """
     Creates a new stipend.
@@ -34,6 +36,7 @@ def create_stipend():
     }), 201
 
 @stipend_bp.route('/<int:stipend_id>', methods=['PUT'])
+@admin_required
 def update_stipend(stipend_id):
     """
     Updates an existing stipend.
@@ -66,6 +69,7 @@ def update_stipend(stipend_id):
     }), 200
 
 @stipend_bp.route('/<int:stipend_id>', methods=['DELETE'])
+@admin_required
 def delete_stipend(stipend_id):
     """
     Deletes a stipend.

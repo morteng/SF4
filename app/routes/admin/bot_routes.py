@@ -1,10 +1,12 @@
 from flask import Blueprint, request, jsonify
 from app.models.bot import Bot
 from app.extensions import db
+from app.utils import admin_required
 
 admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/admin/bots')
 
 @admin_bot_bp.route('', methods=['POST'])
+@admin_required
 def create_bot():
     """
     Creates a new bot.
@@ -29,6 +31,7 @@ def create_bot():
     }), 201
 
 @admin_bot_bp.route('/<int:bot_id>', methods=['PUT'])
+@admin_required
 def update_bot(bot_id):
     """
     Updates an existing bot.
@@ -56,6 +59,7 @@ def update_bot(bot_id):
     }), 200
 
 @admin_bot_bp.route('/<int:bot_id>', methods=['DELETE'])
+@admin_required
 def delete_bot(bot_id):
     """
     Deletes a bot.
@@ -76,6 +80,7 @@ def delete_bot(bot_id):
     }), 200
 
 @admin_bot_bp.route('/status')
+@admin_required
 def bot_status():
     """
     Returns the status of all bots.

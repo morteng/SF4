@@ -1,23 +1,22 @@
-import os
-from flask import current_app as app
-from werkzeug.security import generate_password_hash
+from functools import wraps
+from flask import jsonify, request
 from app.models.user import User
-from app.extensions import db
 
-def init_admin_user():
-    # Use os.environ.get() with a default to ensure we always have a value
-    username = os.environ.get('ADMIN_USERNAME', 'admin')
-    password = os.environ.get('ADMIN_PASSWORD', 'defaultpassword')
-    email = os.environ.get('ADMIN_EMAIL', 'admin@example.com')
-
-    admin_user = User.query.filter_by(username=username).first()
-    if not admin_user:
-        admin_user = User(
-            username=username,
-            password_hash=generate_password_hash(password),
-            email=email,
-            is_admin=True
-        )
-        db.session.add(admin_user)
-        db.session.commit()
-        print(f"Created admin user: {username}")
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return jsonify({'message': 'No authorization header'}), 401
+            
+        try:
+            # Assuming Bearer token format
+            token = auth_header.split(' ')[1]
+            user = User.verify_auth_token(token)
+            if not user or not user.is_admin:
+                return jsonify({'message': 'Unauthorized access'}), 403
+        except Exception as e:
+            return jsonify({'message': 'Invalid token', 'error': str(e)}), 401
+            
+        return f(*args, **kwargs)
+    return decorated_function

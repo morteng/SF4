@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models.user import User
 from app.extensions import db
+from app.utils import admin_required
 
 admin_user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
 
@@ -24,12 +25,15 @@ def admin_login():
     if not user or not check_password_hash(user.password_hash, password) or not user.is_admin:
         return jsonify({'message': 'Invalid credentials'}), 401
 
+    token = user.generate_auth_token()
     return jsonify({
         'message': 'Admin login successful',
-        'user_id': user.id
+        'user_id': user.id,
+        'token': token
     }), 200
 
 @admin_user_bp.route('/<int:user_id>', methods=['PUT'])
+@admin_required
 def update_user(user_id):
     """
     Updates an existing user.
@@ -58,6 +62,7 @@ def update_user(user_id):
     }), 200
 
 @admin_user_bp.route('/<int:user_id>', methods=['DELETE'])
+@admin_required
 def delete_user(user_id):
     """
     Deletes a user.
