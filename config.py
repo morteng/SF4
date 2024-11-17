@@ -4,6 +4,7 @@ import os
 load_dotenv()
 
 class Config:
+    DEBUG = False  # Set default to False
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'default_secret_key'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

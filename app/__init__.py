@@ -3,6 +3,7 @@ from config import get_config
 from app.extensions import db, migrate
 from app.routes.user_routes import user_bp
 from app.routes.admin_routes import admin_bp
+from app.routes.bot_routes import bot_bp  # Add this line
 
 def create_app(config_name='default'):
     # Load configuration
@@ -18,6 +19,7 @@ def create_app(config_name='default'):
     # Register blueprints
     app.register_blueprint(user_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(bot_bp)  # Add this line
 
     with app.app_context():
         # Import models to ensure they're recognized
