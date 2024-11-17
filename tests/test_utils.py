@@ -1,5 +1,7 @@
 import pytest
 from app.utils import init_admin_user  # This is all we need since utils already imports User
+from app.models.user import User
+from app.extensions import db
 
 def test_init_admin_user(app, session):
     """Test admin user initialization"""
