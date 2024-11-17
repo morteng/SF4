@@ -1,8 +1,8 @@
 import sys
 from flask_migrate import upgrade as migrate_upgrade
-from app import create_app, db, migrate
+from app import create_app, db
 
-def run_migrations(app):
+def run_migrations(app, migrate):
     with app.app_context():
         migrate.init_app(app, db)  # Initialize Migrate with app and db
         migrate_upgrade()
@@ -15,15 +15,15 @@ def main():
     try:
         print("Current Python Path:", sys.path)
         print("Attempting to create app with config: 'development'")
-        app = create_app('development')
+        app, migrate = create_app('development')
         print(f"Creating app with config: {app.config['ENV']}")
         
         print("Initializing db")
         with app.app_context():
             db.create_all()
         
-        print("Initializing migrate")
-        run_migrations(app)
+        print("Running migrations...")
+        run_migrations(app, migrate)
         
         print("Migrations completed successfully.")
         
