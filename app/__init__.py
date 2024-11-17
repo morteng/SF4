@@ -18,9 +18,9 @@ def create_app(config_name='default'):
     db.init_app(app)
 
     # Register blueprints, etc.
-    from .routes import user_routes, admin_routes, bot_routes
-    app.register_blueprint(user_routes.bp)
-    app.register_blueprint(admin_routes.bp)
-    app.register_blueprint(bot_routes.bp)
+    from .routes import user_bp, admin_bp, bot_bp
+    app.register_blueprint(user_bp)
+    app.register_blueprint(admin_bp)
+    app.register_blueprint(bot_bp)
 
     return app

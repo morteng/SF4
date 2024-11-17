@@ -1,2 +1,3 @@
-# Import routes to ensure they are registered
-from . import bot_routes, user_routes, admin_routes
+from .user_routes import user_bp
+from .admin_routes import admin_bp
+from .bot_routes import bot_bp
