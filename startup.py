@@ -8,7 +8,7 @@ def run_migrations(app):
 
 def run_tests():
     import pytest
-    pytest.main(['-v', '--cov=app', '--cov-report=html'])
+    pytest.main(['-v', '--cov=app', '--cov-report=term'])
 
 def main():
     try:
