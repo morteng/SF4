@@ -1,15 +1,10 @@
 import os
-from dotenv import load_dotenv
+from flask import Config
 
-# Load environment variables
-load_dotenv()
-
-class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback_secret_key')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///default.db')
+class Config(Config):
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'default_secret_key')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///site.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    
-    # Add other common configuration settings
 
 class DevelopmentConfig(Config):
     DEBUG = True
@@ -24,16 +19,10 @@ class ProductionConfig(Config):
     TESTING = False
 
 def get_config(config_name=None):
-    # If no config name is provided, check the environment variable
-    if config_name is None or config_name == 'default':
-        config_name = os.environ.get('FLASK_CONFIG', 'development')
-    
-    # Map configuration names to classes
-    config_map = {
+    config_mapping = {
         'development': DevelopmentConfig,
         'testing': TestingConfig,
-        'production': ProductionConfig
+        'production': ProductionConfig,
+        'default': DevelopmentConfig
     }
-    
-    # Return the appropriate configuration class
-    return config_map.get(config_name, DevelopmentConfig)
+    return config_mapping.get(config_name)
