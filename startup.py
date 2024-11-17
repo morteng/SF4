@@ -1,3 +1,4 @@
+import sys
 from flask_migrate import Migrate, upgrade as migrate_upgrade
 from app import create_app, db
 
@@ -12,6 +13,7 @@ def run_tests():
 
 def main():
     try:
+        print("Current Python Path:", sys.path)
         print("Attempting to create app with config: 'development'")
         app = create_app('development')
         print(f"Creating app with config: {app.config['ENV']}")
