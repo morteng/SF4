@@ -36,10 +36,10 @@ def main():
     # Import create_app here to ensure it's imported in the main function
     from app import create_app
 
-    print(f"Attempting to create app with config: 'default'")
+    print(f"Attempting to create app with config: 'development'")
     
     # Create the application instance ONLY ONCE
-    app = create_app('default')
+    app = create_app('development')
 
     # Run migrations and initialize admin user
     try:
