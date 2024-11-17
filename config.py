@@ -1,28 +1,34 @@
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
 
 class Config:
-    DEBUG = False  # Set default to False
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'default_secret_key'
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback_secret_key')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///default.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+    # Add other common configuration settings
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///site.db'
+    TESTING = False
 
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    WTF_CSRF_ENABLED = False  # Disable CSRF for testing
 
 class ProductionConfig(Config):
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///production.db'
+    TESTING = False
 
-def get_config(config_name):
-    print(f"Received config name: {config_name}")  # Add this line
+def get_config(config_name=None):
+    # If no config name is provided, check the environment variable
+    if config_name is None:
+        config_name = os.environ.get('FLASK_CONFIG', 'default')
+    
+    # Map configuration names to classes
     config_map = {
         'development': DevelopmentConfig,
         'testing': TestingConfig,
@@ -30,8 +36,5 @@ def get_config(config_name):
         'default': DevelopmentConfig
     }
     
-    config_class = config_map.get(config_name)
-    if config_class is None:
-        raise ValueError(f"Unknown configuration: {config_name}")
-    
-    return config_class()
+    # Return the appropriate configuration class
+    return config_map.get(config_name, DevelopmentConfig)
