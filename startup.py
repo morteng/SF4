@@ -3,8 +3,8 @@ from flask_migrate import upgrade as migrate_upgrade
 from app import create_app, db
 
 def run_migrations(app):
-    with app.app_context():
-        migrate_upgrade()
+    # Remove the with context here since we'll use the outer context
+    migrate_upgrade()
 
 def run_tests():
     import pytest
@@ -14,17 +14,18 @@ def main():
     try:
         print("Current Python Path:", sys.path)
         print("Attempting to create app with config: 'development'")
-        app = create_app('development')  # Just get the app, not a tuple
+        app = create_app('development')
         print(f"App created successfully with config: development")
         
-        print("Initializing db")
+        # Use a single app context for all database operations
         with app.app_context():
+            print("Initializing db")
             db.create_all()
         
-        print("Running migrations...")
-        run_migrations(app)
-        
-        print("Migrations completed successfully.")
+            print("Running migrations...")
+            run_migrations(app)
+            
+            print("Migrations completed successfully.")
         
         print("Running tests...")
         run_tests()
