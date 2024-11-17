@@ -6,15 +6,15 @@ from app.routes.admin_routes import admin_bp
 from app.routes.bot_routes import bot_bp
 
 def create_app(config_name='default'):
-    # Load configuration
+    print(f"Creating app with config: {config_name}")
     config = get_config(config_name)
     
-    # Create Flask app
     app = Flask(__name__)
     app.config.from_object(config)
 
-    # Initialize extensions BEFORE registering blueprints
+    print("Initializing db")
     db.init_app(app)
+    print("Initializing migrate")
     migrate.init_app(app, db)
 
     # Register blueprints
