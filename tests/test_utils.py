@@ -1,38 +1,50 @@
 import pytest
 from app.utils import init_admin_user
 from app.models.user import User
-from app.extensions import db
 
-@pytest.fixture(scope='function')
-def admin_user(session):
-    # Create an admin user for testing
-    admin = User(
-        username='admin_user',
-        email='admin@example.com',
-        is_admin=True
+def test_init_admin_user(app, session):
+    """Test admin user initialization"""
+    # First run should create admin
+    admin = init_admin_user()
+    assert admin is not None
+    assert admin.username == 'admin'
+    assert admin.is_admin is True
+    
+    # Second run should return existing admin
+    admin2 = init_admin_user()
+    assert admin2.id == admin.id
+
+def test_admin_required_decorator(client, admin_token):
+    """Test admin_required decorator"""
+    # Test without auth header
+    response = client.get('/admin/bots/status')
+    assert response.status_code == 401
+    
+    # Test with invalid token
+    response = client.get('/admin/bots/status', 
+                         headers={'Authorization': 'Bearer invalid'})
+    assert response.status_code == 401
+    
+    # Test with admin user token
+    response = client.get('/admin/bots/status', 
+                         headers={'Authorization': f'Bearer {admin_token}'})
+    assert response.status_code == 200
+
+def test_admin_required_decorator_non_admin(client):
+    """Test admin_required decorator with non-admin user"""
+    # Create a non-admin user and generate token
+    non_admin_user = User(
+        username='non_admin',
+        email='non_admin@example.com',
+        is_admin=False
     )
-    admin.set_password('admin_password')
-    session.add(admin)
-    session.commit()
-    yield admin
-
-def test_init_admin_user_existing(app, session):
-    with app.app_context():
-        init_admin_user()
-        # Check if the admin user still exists and has not been recreated
-        admin = User.query.filter_by(username='admin_user').first()
-        assert admin is not None
-        assert admin.is_admin is True
-
-def test_init_admin_user_new(app, session):
-    with app.app_context():
-        # Delete existing admin user to simulate a new setup
-        User.query.filter_by(username='admin_user').delete()
-        session.commit()
-
-        init_admin_user()
-        # Check if the admin user has been created correctly
-        admin = User.query.filter_by(username='admin_user').first()
-        assert admin is not None
-        assert admin.is_admin is True
-        assert admin.check_password('admin_password') is True
+    non_admin_user.set_password('non_admin')
+    db.session.add(non_admin_user)
+    db.session.commit()
+    
+    token = non_admin_user.generate_auth_token()
+    
+    # Test with non-admin user token
+    response = client.get('/admin/bots/status', 
+                         headers={'Authorization': f'Bearer {token}'})
+    assert response.status_code == 403

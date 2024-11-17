@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import jsonify, request
 from app.models.user import User
+from app.extensions import db
 
 def admin_required(f):
     @wraps(f)
@@ -20,3 +21,17 @@ def admin_required(f):
             
         return f(*args, **kwargs)
     return decorated_function
+
+def init_admin_user():
+    """Initialize admin user if it doesn't exist"""
+    admin = User.query.filter_by(username='admin').first()
+    if not admin:
+        admin = User(
+            username='admin',
+            email='admin@example.com',
+            is_admin=True
+        )
+        admin.set_password('admin')  # Set a default password
+        db.session.add(admin)
+        db.session.commit()
+    return admin

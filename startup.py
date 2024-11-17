@@ -1,59 +1,27 @@
-import sys
-import os
-import signal
-from dotenv import load_dotenv
-from flask_migrate import upgrade as migrate_upgrade
-from app import create_app, db
-
-def signal_handler(signum, frame):
-    print("\nShutting down gracefully...")
-    sys.exit(0)
-
-# Register the signal handler
-signal.signal(signal.SIGINT, signal_handler)
-
-def run_migrations():
-    # Remove app context parameter since we'll use the outer context
-    migrate_upgrade()
-
-def run_tests():
-    import pytest
-    pytest.main(['-x', '--cov=app', '--cov-report=term'])
+from app import create_app, init_db, run_migrations, run_tests, init_admin_user
 
 def main():
     try:
-        # Load environment variables from .env file
-        load_dotenv()
+        print("Attempting to create app with config: 'development'")
+        app = create_app('development')
         
-        # Get config from environment
-        config_name = os.getenv('FLASK_CONFIG', 'development')
-        
-        print("Current Python Path:", sys.path)
-        print(f"Attempting to create app with config: '{config_name}'")
-        
-        app = create_app(config_name)
-        print(f"App created successfully with config: {config_name}")
-        
-        # Create a single app context for the setup phase
         with app.app_context():
             print("Initializing db")
-            db.create_all()
-        
+            init_db()
+            
             print("Running migrations...")
             run_migrations()
             print("Migrations completed successfully.")
-        
+            
             print("Running tests...")
             run_tests()
             print("Tests completed successfully.")
-        
-        # Run the app outside of the setup context
-        print("Starting the app...")
-        app.run(debug=True)
+            
+            # Initialize admin user
+            init_admin_user()
+            
+        return app
             
     except Exception as e:
         print(f"Error during startup: {e}")
-        sys.exit(1)  # Exit with error code
-
-if __name__ == '__main__':
-    main()
+        return None
