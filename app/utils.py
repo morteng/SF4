@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import jsonify, request
 from app.models.user import User
+from app.extensions import db  # Import the db object
 
 def admin_required(f):
     @wraps(f)
