@@ -46,16 +46,31 @@ def create_app(config_name=None):
         
         # Initialize admin user
         from app.models.user import User
-        admin = User.query.filter_by(username='admin').first()
+        admin_username = os.environ.get('ADMIN_USERNAME', 'admin_user')
+        admin_email = os.environ.get('ADMIN_EMAIL', 'admin@example.com')
+        
+        # Check for existing admin by username OR email
+        admin = User.query.filter(
+            (User.username == admin_username) | 
+            (User.email == admin_email)
+        ).first()
+        
         if not admin:
-            admin = User(
-                username=os.environ.get('ADMIN_USERNAME', 'admin'),
-                email=os.environ.get('ADMIN_EMAIL', 'admin@example.com'),
-                is_admin=True
-            )
-            admin.set_password(os.environ.get('ADMIN_PASSWORD', 'admin'))
-            db.session.add(admin)
-            db.session.commit()
+            try:
+                admin = User(
+                    username=admin_username,
+                    email=admin_email,
+                    is_admin=True
+                )
+                admin.set_password(os.environ.get('ADMIN_PASSWORD', 'admin'))
+                db.session.add(admin)
+                db.session.commit()
+                print(f"Created admin user: {admin_username}")
+            except Exception as e:
+                print(f"Error creating admin user: {e}")
+                db.session.rollback()
+        else:
+            print(f"Admin user already exists: {admin.username}")
 
     return app
 
