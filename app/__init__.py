@@ -9,10 +9,11 @@ def create_app(config_name='default'):
     # Load configuration
     config = get_config(config_name)
     
+    # Create Flask app
     app = Flask(__name__)
     app.config.from_object(config)
 
-    # Initialize extensions
+    # Initialize extensions BEFORE registering blueprints
     db.init_app(app)
     migrate.init_app(app, db)
 
@@ -21,6 +22,7 @@ def create_app(config_name='default'):
     app.register_blueprint(admin_bp)
     app.register_blueprint(bot_bp)
 
+    # Use app context to import models and create tables
     with app.app_context():
         # Import models to ensure they're recognized
         from .models import user, stipend, organization, tag, bot, notification

@@ -2,7 +2,6 @@ import os
 import sys
 import subprocess
 from dotenv import load_dotenv
-from app import create_app
 
 # Load environment variables at the very beginning
 load_dotenv()
@@ -34,6 +33,9 @@ def run_tests():
         sys.exit(1)
 
 def main():
+    # Import create_app here to ensure it's imported in the main function
+    from app import create_app
+
     print(f"Attempting to create app with config: 'default'")
     
     # Create the application instance ONLY ONCE
