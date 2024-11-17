@@ -17,8 +17,25 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    @staticmethod
+    def validate_username(username):
+        """Validate username format."""
+        if not username or len(username) < 3:
+            raise ValueError("Username must be at least 3 characters long")
+        return username
+
+    @staticmethod
+    def validate_email(email):
+        """Validate email format."""
+        import re
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            raise ValueError("Invalid email format")
+        return email
+
     def set_password(self, password):
-        """Set the user's password."""
+        """Set the user's password with validation."""
+        if not password or len(password) < 6:
+            raise ValueError("Password must be at least 6 characters long")
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):

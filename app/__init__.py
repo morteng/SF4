@@ -57,11 +57,23 @@ def run_migrations():
     pass
 
 def run_tests():
-    """Run tests using pytest."""
+    """Run tests using pytest with coverage."""
     import pytest
-    pytest.main(['-v', 'tests/'])
+    pytest.main(['-v', '--cov=app', '--cov-report=term-missing', 'tests/'])
 
 def init_admin_user():
     """Initialize admin user if it doesn't exist."""
-    from app.utils import init_admin_user as utils_init_admin_user
-    return utils_init_admin_user()
+    from app.models.user import User
+    from app.extensions import db
+    
+    admin = User.query.filter_by(username='admin').first()
+    if not admin:
+        admin = User(
+            username='admin',
+            email='admin@example.com',
+            is_admin=True
+        )
+        admin.set_password('admin')
+        db.session.add(admin)
+        db.session.commit()
+    return admin
