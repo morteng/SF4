@@ -1,7 +1,6 @@
 from functools import wraps
 from flask import jsonify, request
 from app.models.user import User
-from app.extensions import db
 
 def admin_required(f):
     @wraps(f)
@@ -34,4 +33,5 @@ def init_admin_user():
         admin.set_password('admin')  # Set a default password
         db.session.add(admin)
         db.session.commit()
+        admin.generate_auth_token()  # Generate initial token
     return admin
