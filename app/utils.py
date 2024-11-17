@@ -1,20 +1,20 @@
-import os
 from app.models.user import User
-from app.extensions import db
+from werkzeug.security import generate_password_hash
 
 def init_admin_user():
-    admin_username = os.environ.get('ADMIN_USERNAME', 'admin_user')
-    admin_password = os.environ.get('ADMIN_PASSWORD', 'admin_password')
-    admin_email = os.environ.get('ADMIN_EMAIL', 'admin@example.com')
+    from flask import current_app as app
+    with app.app_context():
+        username = app.config['ADMIN_USERNAME']
+        password = app.config['ADMIN_PASSWORD']
+        email = app.config['ADMIN_EMAIL']
 
-    existing_admin = User.query.filter_by(username=admin_username).first()
-    if not existing_admin:
-        admin = User(
-            username=admin_username, 
-            email=admin_email, 
-            is_admin=True
-        )
-        admin.set_password(admin_password)
-        db.session.add(admin)
-        db.session.commit()
-        print(f"Admin user '{admin_username}' created successfully.")
+        admin_user = User.query.filter_by(username=username).first()
+        if not admin_user:
+            admin_user = User(
+                username=username,
+                password_hash=generate_password_hash(password),
+                email=email,
+                is_admin=True
+            )
+            db.session.add(admin_user)
+            db.session.commit()
