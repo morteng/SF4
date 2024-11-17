@@ -9,7 +9,11 @@ def init_admin_user():
 
     existing_admin = User.query.filter_by(username=admin_username).first()
     if not existing_admin:
-        admin = User(username=admin_username, email=admin_email, is_admin=True)
+        admin = User(
+            username=admin_username, 
+            email=admin_email, 
+            is_admin=True
+        )
         admin.set_password(admin_password)
         db.session.add(admin)
         db.session.commit()

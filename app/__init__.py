@@ -1,25 +1,29 @@
 from flask import Flask
+from config import get_config
 from app.extensions import db, migrate
+from app.routes.user_routes import user_bp
+from app.routes.admin_routes import admin_bp
 
 def create_app(config_name='default'):
-    app = Flask(__name__)
+    # Load configuration
+    config = get_config(config_name)
     
-    # Set appropriate configuration based on config_name
-    if config_name == 'testing':
-        app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-        app.config['DEBUG'] = False
-    elif config_name == 'production':
-        app.config['DEBUG'] = False
-    else:
-        app.config['DEBUG'] = True
+    app = Flask(__name__)
+    app.config.from_object(config)
 
-    # Initialize extensions and register blueprints
+    # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
 
+    # Register blueprints
+    app.register_blueprint(user_bp)
+    app.register_blueprint(admin_bp)
+
     with app.app_context():
-        from . import routes
+        # Import models to ensure they're recognized
         from .models import user, stipend, organization, tag, bot, notification
+        
+        # Create tables if they don't exist
+        db.create_all()
 
     return app
