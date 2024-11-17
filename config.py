@@ -9,7 +9,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    DATABASE_URL = os.environ.get('DATABASE_URL') or 'sqlite:///site.db'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///site.db'
 
 class TestingConfig(Config):
     TESTING = True
@@ -18,7 +18,7 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
-    DATABASE_URL = os.environ.get('DATABASE_URL') or 'sqlite:///production.db'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///production.db'
 
 def get_config(config_name):
     print(f"Received config name: {config_name}")  # Add this line
