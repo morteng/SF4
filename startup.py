@@ -3,7 +3,6 @@ import sys
 import subprocess
 from dotenv import load_dotenv
 from app import create_app
-from config import get_config
 
 # Load environment variables at the very beginning
 load_dotenv()
@@ -38,7 +37,6 @@ def main():
     print(f"Attempting to create app with config: 'default'")
     
     # Create the application instance ONLY ONCE
-    config = get_config('default')
     app = create_app('default')
 
     # Run migrations and initialize admin user

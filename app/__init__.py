@@ -12,22 +12,9 @@ def create_app(config_name='default'):
     app = Flask(__name__)
     app.config.from_object(config)
 
-    # Print out the configuration to verify
-    print(f"Creating app with config: {config.__dict__}")
-
-    # Check if db is already initialized
-    if not hasattr(db, 'app'):
-        print("Initializing db...")
-        db.init_app(app)
-    else:
-        print("DB already initialized")
-
-    # Check if migrate is already initialized
-    if not hasattr(migrate, 'app'):
-        print("Initializing migrate...")
-        migrate.init_app(app, db)
-    else:
-        print("Migrate already initialized")
+    # Initialize extensions
+    db.init_app(app)
+    migrate.init_app(app, db)
 
     # Register blueprints
     app.register_blueprint(user_bp)
