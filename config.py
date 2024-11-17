@@ -25,15 +25,14 @@ class ProductionConfig(Config):
 
 def get_config(config_name=None):
     # If no config name is provided, check the environment variable
-    if config_name is None:
-        config_name = os.environ.get('FLASK_CONFIG', 'default')
+    if config_name is None or config_name == 'default':
+        config_name = os.environ.get('FLASK_CONFIG', 'development')
     
     # Map configuration names to classes
     config_map = {
         'development': DevelopmentConfig,
         'testing': TestingConfig,
-        'production': ProductionConfig,
-        'default': DevelopmentConfig
+        'production': ProductionConfig
     }
     
     # Return the appropriate configuration class

@@ -5,7 +5,16 @@ from app.routes.user_routes import user_bp
 from app.routes.admin_routes import admin_bp
 from app.routes.bot_routes import bot_bp
 
+# Global variable to track app creation
+_app = None
+
 def create_app(config_name='default'):
+    global _app
+    
+    # If app has already been created, return the existing app
+    if _app is not None:
+        return _app
+
     print(f"Creating app with config: {config_name}")
     config = get_config(config_name)
     
@@ -32,4 +41,6 @@ def create_app(config_name='default'):
             print("Creating all tables")
             db.create_all()
 
+    # Store the created app
+    _app = app
     return app
