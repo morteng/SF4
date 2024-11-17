@@ -29,3 +29,11 @@ def session(app):
 @pytest.fixture(scope='function')
 def client(app):
     return app.test_client()
+
+@pytest.fixture(scope='function')
+def init_database(app, session):
+    with app.app_context():
+        # Create admin user or other initial data if needed
+        from app.utils import init_admin_user
+        init_admin_user()
+    return None
