@@ -10,7 +10,7 @@ def run_migrations():
 
 def run_tests():
     import pytest
-    pytest.main(['-v', '--cov=app', '--cov-report=term'])
+    pytest.main(['-x', '--cov=app', '--cov-report=term'])
 
 def main():
     try:
