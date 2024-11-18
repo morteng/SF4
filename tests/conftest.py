@@ -13,16 +13,8 @@ def test_client():
         db.session.remove()
         db.drop_all()
 
-@pytest.fixture(scope='module')
-def init_database(test_client):
-    # Initialize the database and apply migrations
-    with test_client.application.app_context():
-        db.create_all()
-        run_migrations()  # Apply migrations
-        yield
-
-@pytest.fixture(scope='module')
-def admin_user(init_database, test_client):
+@pytest.fixture(scope='function')
+def admin_user(test_client):
     # Create an admin user if it doesn't exist
     with test_client.application.app_context():
         admin = User.query.filter_by(username='admin').first()
@@ -35,9 +27,9 @@ def admin_user(init_database, test_client):
             )
             db.session.add(admin)
             db.session.commit()
-        return admin
+        yield admin
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='function')
 def admin_token(test_client, admin_user):
     # Log in the admin user and get the token
     with test_client.application.app_context():
@@ -47,4 +39,4 @@ def admin_token(test_client, admin_user):
         }, follow_redirects=True)
         assert response.status_code == 200
         # Assuming the login returns a session cookie for authentication
-        return response.cookies['session']
+        yield response.cookies['session']
