@@ -20,9 +20,12 @@ def create_app(config_name=None):
     from .models import user, stipend, tag, organization, bot, notification, association_tables
 
     # Register routes
-    from .routes import public_user_routes, admin_routes, public_bot_routes  # Add public_bot_routes here
-    app.register_blueprint(public_user_routes.public_user_bp)  # Ensure the blueprint is correctly referenced
-    app.register_blueprint(admin_routes.admin_bp)  # Ensure the blueprint is correctly referenced
-    app.register_blueprint(public_bot_routes.bot_bp)  # Register the bot blueprint
+    from .routes.public_user_routes import public_user_bp
+    from .routes.admin_routes import admin_bp
+    from .routes.public_bot_routes import public_bot_bp as bot_bp  # Ensure this is correctly referencing the blueprint
+    
+    app.register_blueprint(public_user_bp)  # Ensure the blueprint is correctly referenced
+    app.register_blueprint(admin_bp)  # Ensure the blueprint is correctly referenced
+    app.register_blueprint(bot_bp)  # Register the bot blueprint
 
     return app
