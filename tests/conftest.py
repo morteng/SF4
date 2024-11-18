@@ -18,9 +18,9 @@ def db(app):
         yield _db
         _db.drop_all()
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='module')
 def session(db):
-    """Create a new database session for a test"""
+    """Create a new database session for a test module"""
     connection = db.engine.connect()
     transaction = connection.begin()
     
