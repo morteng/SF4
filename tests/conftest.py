@@ -80,3 +80,8 @@ def test_bot(session):
     session.add(bot)
     session.commit()
     return bot
+
+@pytest.fixture(scope='module')
+def client(app):
+    """Create a test client"""
+    return app.test_client()
