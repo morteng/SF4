@@ -39,5 +39,14 @@ def run_tests():
     import pytest
     pytest.main(['-v', 'tests'])
 
+def main():
+    app = create_app('development')
+    init_db(app)
+    run_migrations()
+    try:
+        app.run()
+    except Exception as e:
+        print(f"Application failed to start: {e}")
+
 if __name__ == '__main__':
     main()
