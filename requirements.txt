@@ -6,3 +6,4 @@ flask_sqlalchemy
 flask_migrate
 werkzeug
 alembic
+Flask-Login
