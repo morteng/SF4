@@ -19,3 +19,7 @@ def update_stipend(stipend_id, name, summary, description, homepage_url, applica
         db.session.commit()
         return True
     return False
+
+def list_all_stipends():
+    from app.extensions import db
+    return Stipend.query.all()

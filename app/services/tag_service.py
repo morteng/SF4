@@ -13,3 +13,7 @@ def update_tag(tag_id, name, category):
         db.session.commit()
         return True
     return False
+
+def list_all_tags():
+    from app.extensions import db
+    return Tag.query.all()
