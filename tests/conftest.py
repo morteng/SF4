@@ -1,27 +1,32 @@
 import pytest
 from app import create_app, db
+from app.models.user import User
 
-@pytest.fixture(scope='session')
-def app():
-    from app.config import get_config  # Corrected import
+@pytest.fixture(scope='module')
+def test_client():
     app = create_app('testing')
-    with app.app_context():
-        db.create_all()
-        yield app
-        db.session.remove()
-        db.drop_all()
+    with app.test_client() as client:
+        with app.app_context():
+            db.create_all()
+            yield client
+            db.session.remove()
+            db.drop_all()
 
-@pytest.fixture(scope='function')
-def client(app):
-    return app.test_client()
+@pytest.fixture(scope='module')
+def admin_user(test_client):
+    with test_client.application.app_context():
+        admin = User(username='admin', email='admin@example.com', is_admin=True)
+        admin.set_password('securepassword')
+        db.session.add(admin)
+        db.session.commit()
+        return admin
 
-@pytest.fixture(scope='function')
-def session(app, db):
-    connection = db.engine.connect()
-    transaction = connection.begin()
-    options = dict(bind=connection)
-    session = db.create_scoped_session(options=options)
-    yield session
-    session.remove()
-    transaction.rollback()
-    connection.close()
+@pytest.fixture(scope='module')
+def admin_token(test_client, admin_user):
+    with test_client:
+        response = test_client.post('/login', data={
+            'username': admin_user.username,
+            'password': 'securepassword'
+        }, follow_redirects=True)
+        assert response.status_code == 200
+        return test_client.cookie_jar
