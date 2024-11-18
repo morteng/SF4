@@ -36,6 +36,26 @@ def update_bot(bot_id):
 @bot_bp.route('/bots', methods=['POST'])
 @login_required
 def create_bot():
+    name = request.form.get('name')
+    description = request.form.get('description')
+    status = request.form.get('status')
+
+    if not name or not description or not status:
+        flash('Missing required fields', 'danger')
+        return redirect(url_for('admin_bot.list_bots'))
+
+    bot = create_bot(name, description, status)
+    if bot:
+        flash('Bot created successfully', 'success')
+        return redirect(url_for('admin_bot.bot_details', bot_id=bot.id))
+    else:
+        flash('Failed to create bot', 'danger')
+        return redirect(url_for('admin_bot.list_bots'))
+
+# Add API endpoint for creating bots
+@bot_bp.route('/api/bots', methods=['POST'])
+@login_required
+def api_create_bot():
     name = request.json.get('name')
     description = request.json.get('description')
     status = request.json.get('status')
@@ -48,5 +68,3 @@ def create_bot():
         return jsonify({"bot_id": bot.id}), 201
     else:
         return jsonify({"message": "Failed to create bot"}), 500
-
-# Add other routes as needed

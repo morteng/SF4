@@ -14,7 +14,7 @@ def admin_token(test_client, admin_user):
 def test_create_bot_unauthorized(test_client):
     """Test creating bot without authentication fails"""
     client = test_client
-    response = client.post('/admin/api/bots', json={  
+    response = client.post('/admin/api/bots', json={
         'name': 'Test Bot',
         'description': 'Test Description',
         'status': 'active'
@@ -25,7 +25,7 @@ def test_create_bot_authorized(test_client, admin_token):
     """Test creating bot with authentication succeeds"""
     client = test_client
     client.cookie_jar.update(admin_token)
-    response = client.post('/admin/api/bots', json={  
+    response = client.post('/admin/api/bots', json={
         'name': 'Test Bot',
         'description': 'Test Description',
         'status': 'active'
