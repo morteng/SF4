@@ -1,5 +1,21 @@
 from flask import Flask
-from app import create_app, db  # Ensure db is imported here
+from app.extensions import db, migrate  # Ensure db and migrate are imported here
+from app.models import Base  # Ensure Base is imported here
+
+def create_app(config_name):
+    app = Flask(__name__)
+    
+    # Load configuration based on environment variable or default to 'development'
+    config_module = f"config.{config_name.capitalize()}Config"
+    app.config.from_object(config_module)
+    
+    # Initialize extensions
+    db.init_app(app)
+    migrate.init_app(app, db)
+    
+    # Register blueprints and other components here if needed
+    
+    return app
 
 def init_db(app):
     with app.app_context():
