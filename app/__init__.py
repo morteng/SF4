@@ -7,6 +7,8 @@ def create_app(config_name=None):
     if config_name is None:
         config_name = os.environ.get('FLASK_CONFIG', 'default')
     
+    print(f"Selected configuration name: {config_name}")
+    
     app = Flask(__name__)
     config_class = get_config(config_name)
     app.config.from_object(config_class)
@@ -20,3 +22,5 @@ def create_app(config_name=None):
     app.register_blueprint(public_user_routes.bp)
 
     return app
+
+print(f"App module loaded")

@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+print(f"Loaded environment variables: {os.environ}")
+
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'default_secret_key')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///site.db')
@@ -35,3 +37,5 @@ def get_config(config_name):
     if not config_class:
         raise ValueError(f"Unknown configuration name: {config_name}")
     return config_class
+
+print(f"Configuration map: {config_map}")
