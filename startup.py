@@ -1,12 +1,9 @@
 import os
 import pytest
-from flask_sqlalchemy import SQLAlchemy
-from app import create_app
-from app.config import get_config  # Corrected import statement
+from app import create_app, db  # Import the existing db instance
 
 # Initialize the database
 def init_db(app):
-    db = SQLAlchemy(app)
     with app.app_context():
         db.create_all()
 
