@@ -24,10 +24,9 @@ def admin_user(test_client):
 
 @pytest.fixture(scope='module')
 def admin_token(test_client, admin_user):
-    with test_client:
-        response = test_client.post(url_for('public_user.login'), data={
-            'username': admin_user.username,
-            'password': 'securepassword'
-        }, follow_redirects=True)
-        assert response.status_code == 200
-        return test_client.cookie_jar
+    response = test_client.post(url_for('public_user.login'), data={
+        'username': admin_user.username,
+        'password': 'securepassword'
+    }, follow_redirects=True)
+    assert response.status_code == 200
+    return test_client.cookie_jar
