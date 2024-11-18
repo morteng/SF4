@@ -13,6 +13,9 @@ from app import create_app  # Adjust the import according to your project struct
 app = create_app('default')
 app.app_context().push()
 
+# Import Alembic's context object
+from alembic import context
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
