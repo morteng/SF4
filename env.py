@@ -13,9 +13,6 @@ from app import create_app  # Adjust the import according to your project struct
 app = create_app('default')
 app.app_context().push()
 
-# Import Alembic context
-from alembic import context
-
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -28,11 +25,6 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 from app.models import Base  # Adjust the import according to your project structure
 target_metadata = Base.metadata
-
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
