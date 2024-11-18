@@ -1,5 +1,5 @@
 import pytest
-from app import create_app, db  # Remove run_migrations if not defined
+from app import create_app, db
 from app.models.user import User
 from werkzeug.security import generate_password_hash
 
