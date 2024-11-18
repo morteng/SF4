@@ -30,14 +30,7 @@ def register_blueprints(app):
     app.register_blueprint(public_bot_bp)
     app.register_blueprint(public_user_bp)
 
-    app.register_blueprint(admin_routes.bp)
-    app.register_blueprint(public_bot_routes.bp)
-    app.register_blueprint(public_user_routes.bp)
-
     # Define your routes here
-    @bp.route('/some-bot-route')
+    @public_bot_bp.route('/some-bot-route')
     def some_bot_route():
         return "Bot Route!"
-    app.register_blueprint(admin_routes.bp)
-    app.register_blueprint(public_bot_routes.bp)
-    app.register_blueprint(public_user_routes.bp)
