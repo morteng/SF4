@@ -1,7 +1,5 @@
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from app.extensions import db
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)

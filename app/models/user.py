@@ -1,7 +1,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import secrets  # Built into Python, no extra dependencies needed
-from app.extensions import db  # Import the shared db instance
+from app.extensions import db
 
 class User(db.Model):
     __tablename__ = 'users'

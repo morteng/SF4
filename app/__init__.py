@@ -11,5 +11,12 @@ def create_app(config_name=None):
     app.config.from_object(config)
     
     # Initialize extensions and blueprints here
-    
+    from .extensions import db
+    db.init_app(app)
+
+    from .routes.public_user_routes import public_user_bp
+    from .routes.public_bot_routes import public_bot_bp
+    app.register_blueprint(public_user_bp)
+    app.register_blueprint(public_bot_bp)
+
     return app

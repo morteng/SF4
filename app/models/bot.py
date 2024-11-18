@@ -1,5 +1,5 @@
 from datetime import datetime
-from app.extensions import db  # Import the shared db instance
+from app.extensions import db
 
 class Bot(db.Model):
     __tablename__ = 'bots'
