@@ -1,3 +1,5 @@
+import os  # Added import statement for os
+
 from app import create_app, db
 from config import get_config  # Corrected import statement
 
