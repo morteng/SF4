@@ -1,21 +1,16 @@
-from sqlalchemy import Table, Column, ForeignKey, Integer
+from sqlalchemy import Table, Column, Integer, ForeignKey
+from app.extensions import db
 
-# Define the association tables without immediate db reference
-stipend_tags = None
-stipend_organizations = None
+stipend_tags = Table(
+    'stipend_tags',
+    db.Model.metadata,
+    Column('stipend_id', Integer, ForeignKey('stipend.id'), primary_key=True),
+    Column('tag_id', Integer, ForeignKey('tag.id'), primary_key=True)
+)
 
-def init_association_tables(db):
-    global stipend_tags, stipend_organizations
-    stipend_tags = Table(
-        'stipend_tags',
-        db.metadata,
-        Column('stipend_id', Integer, ForeignKey('stipends.id'), primary_key=True),
-        Column('tag_id', Integer, ForeignKey('tags.id'), primary_key=True)
-    )
-
-    stipend_organizations = Table(
-        'stipend_organizations',
-        db.metadata,
-        Column('stipend_id', Integer, ForeignKey('stipends.id'), primary_key=True),
-        Column('organization_id', Integer, ForeignKey('organizations.id'), primary_key=True)
-    )
+organization_stipends = Table(
+    'organization_stipends',
+    db.Model.metadata,
+    Column('organization_id', Integer, ForeignKey('organization.id'), primary_key=True),
+    Column('stipend_id', Integer, ForeignKey('stipend.id'), primary_key=True)
+)

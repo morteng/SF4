@@ -1,4 +1,5 @@
 from app.extensions import db
+from .association_tables import organization_stipends
 
 class Organization(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -9,4 +10,4 @@ class Organization(db.Model):
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
 
     # Relationships
-    stipends = db.relationship('Stipend', secondary='organization_stipends', back_populates='organizations')
+    stipends = db.relationship('Stipend', secondary=organization_stipends, back_populates='organizations')

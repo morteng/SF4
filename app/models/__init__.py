@@ -1,3 +1,4 @@
+from .association_tables import stipend_tags, organization_stipends
 from .stipend import Stipend
 from .organization import Organization
 from .tag import Tag
