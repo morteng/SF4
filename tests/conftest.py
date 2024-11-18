@@ -1,5 +1,5 @@
 import pytest
-from app import create_app, db, run_migrations  # Import the run_migrations function
+from app import create_app, db  # Remove run_migrations if not defined
 from app.models.user import User
 from werkzeug.security import generate_password_hash
 
@@ -8,7 +8,9 @@ def test_client():
     app = create_app('testing')
     with app.app_context():
         db.create_all()
-        run_migrations()  # Run migrations before tests
+        # Ensure migrations are run if necessary
+        # Uncomment the following line if run_migrations is defined and needed
+        # run_migrations()
         yield app.test_client()
         db.session.remove()
         db.drop_all()
@@ -38,5 +40,6 @@ def admin_token(test_client, admin_user):
             'password': 'password'
         }, follow_redirects=True)
         assert response.status_code == 200
-        # Assuming the login returns a session cookie for authentication
-        yield response.headers.get('Set-Cookie')
+        # Extract the session cookie from the response headers
+        session_cookie = next((cookie for cookie in response.headers.getlist('Set-Cookie') if 'session' in cookie), None)
+        yield session_cookie
