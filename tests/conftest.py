@@ -2,6 +2,7 @@ import pytest
 from app import create_app, db
 from app.models.user import User
 from app.models.bot import Bot
+from werkzeug.security import generate_password_hash
 
 @pytest.fixture(scope='session')
 def app():
