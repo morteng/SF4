@@ -12,3 +12,10 @@ def update_bot_status(bot_id, status):
         db.session.commit()
         return True
     return False
+
+def create_bot(name, description, status):
+    from app.extensions import db
+    new_bot = Bot(name=name, description=description, status=status)
+    db.session.add(new_bot)
+    db.session.commit()
+    return new_bot

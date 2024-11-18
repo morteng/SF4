@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_required
-from app.services.bot_service import get_bot_by_id, update_bot_status
+from app.services.bot_service import get_bot_by_id, update_bot_status, create_bot
 
 bot_bp = Blueprint('admin_bot', __name__)
 
@@ -28,5 +28,21 @@ def update_bot(bot_id):
     else:
         flash('Failed to update bot status', 'danger')
     return redirect(url_for('admin_bot.bot_details', bot_id=bot_id))
+
+@bot_bp.route('/bots', methods=['POST'])
+@login_required
+def create_bot():
+    name = request.json.get('name')
+    description = request.json.get('description')
+    status = request.json.get('status')
+
+    if not name or not description or not status:
+        return jsonify({"message": "Missing required fields"}), 400
+
+    bot = create_bot(name, description, status)
+    if bot:
+        return jsonify({"bot_id": bot.id}), 201
+    else:
+        return jsonify({"message": "Failed to create bot"}), 500
 
 # Add other routes as needed
