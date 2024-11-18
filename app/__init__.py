@@ -1,5 +1,5 @@
 from flask import Flask
-from app.config import Config
+from .config import get_config  # Use get_config function instead of importing Config directly
 from app.extensions import db
 import os
 
@@ -8,7 +8,7 @@ def create_app(config_name='default'):
     app = Flask(__name__)
     
     # Load configuration based on environment variable or default to 'default'
-    config_class = Config.get_config(config_name)
+    config_class = get_config(config_name)
     app.config.from_object(config_class)
 
     # Initialize extensions
