@@ -1,13 +1,9 @@
-from .default import DefaultConfig
-from .development import DevelopmentConfig
-from .testing import TestingConfig
-from .production import ProductionConfig
+import importlib
 
 def get_config(config_name):
-    config_map = {
-        'default': DefaultConfig,
-        'development': DevelopmentConfig,
-        'testing': TestingConfig,
-        'production': ProductionConfig
-    }
-    return config_map.get(config_name, DefaultConfig)
+    try:
+        config_module = importlib.import_module(f'.{config_name}', package=__name__)
+        return getattr(config_module, f'{config_name.capitalize()}Config')
+    except (ModuleNotFoundError, AttributeError):
+        from .default import DefaultConfig
+        return DefaultConfig
