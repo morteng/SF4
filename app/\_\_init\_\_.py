@@ -1,4 +1,5 @@
 from flask import Flask
+import os  # Import the os module
 from .config import get_config  # Use get_config function instead of importing Config directly
 from app.extensions import db
 
