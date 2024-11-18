@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, redirect, url_for
 from flask_login import LoginManager, login_required
 from app.models.user import User  # Import the User model
+from app.extensions import db  # Import the db object
 
 def create_app(config_name='default'):
     from app.config import get_config
