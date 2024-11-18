@@ -1,4 +1,4 @@
-import os  # Added import statement for os
+import os
 from flask import Flask
 from config import get_config  # Updated import statement
 from .extensions import db, migrate
