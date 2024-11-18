@@ -1,6 +1,7 @@
 from flask import Flask
 from app.extensions import db, migrate  # Ensure db and migrate are imported here
 from app.models import Base  # Ensure Base is imported here
+from app.routes.admin import admin_bp
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -14,6 +15,7 @@ def create_app(config_name):
     migrate.init_app(app, db)
     
     # Register blueprints and other components here if needed
+    app.register_blueprint(admin_bp)
     
     return app
 

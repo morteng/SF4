@@ -1,12 +1,5 @@
 from flask import Blueprint
+from .user_routes import admin_user_bp
 
-# Create a blueprint for the admin routes
-admin_bp = Blueprint('admin', __name__)
-
-@admin_bp.route('/dashboard')
-def dashboard():
-    return "Admin Dashboard"
-
-@admin_bp.route('/stipends')
-def stipends():
-    return "Stipend Management"
+admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
+admin_bp.register_blueprint(admin_user_bp)
