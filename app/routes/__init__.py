@@ -14,4 +14,4 @@ def register_blueprints(app):
     app.register_blueprint(admin_tag_bp, url_prefix='/admin')
     app.register_blueprint(admin_user_bp, url_prefix='/admin')
     app.register_blueprint(public_bot_bp)
-    app.register_blueprint(public_user_bp)
+    app.register_blueprint(public_user_bp)  # No prefix here
