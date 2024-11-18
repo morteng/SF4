@@ -2,8 +2,12 @@ import os
 from flask import Flask
 from config import get_config
 from .extensions import db, migrate  # Ensure you have the migrate extension defined
+from dotenv import load_dotenv  # Import load_dotenv from python-dotenv
 
 def create_app(config_name=None):
+    # Load environment variables from .env file
+    load_dotenv()
+
     if config_name is None:
         config_name = os.getenv('FLASK_CONFIG', 'default')
     
