@@ -2,7 +2,6 @@ import pytest
 from sqlalchemy.orm import scoped_session, sessionmaker
 from app import create_app, db as _db
 from app.models.user import User
-from app.models.bot import Bot
 from werkzeug.security import generate_password_hash
 
 @pytest.fixture(scope='session')
@@ -50,24 +49,16 @@ def init_admin_user(session):
         )
         session.add(admin_user)
         session.commit()
+        # Generate token for the admin user
+        admin_user.generate_auth_token()
 
 @pytest.fixture
-def admin_user(app, session):
-    """Create test admin user"""
-    user = User(
-        username='admin_test',
-        email='admin@test.com',
-        is_admin=True
-    )
-    user.set_password('test_password')
-    session.add(user)
-    session.commit()
-    return user
-
-@pytest.fixture
-def admin_token(admin_user):
-    """Generate admin authentication token"""
-    return admin_user.generate_auth_token()
+def admin_token(session):
+    """Get admin authentication token"""
+    admin_user = session.query(User).filter_by(email='admin@example.com').first()
+    if not admin_user.auth_token:
+        admin_user.generate_auth_token()
+    return admin_user.auth_token
 
 @pytest.fixture
 def test_bot(session):
