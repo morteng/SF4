@@ -1,5 +1,4 @@
 import pytest
-from app.models.bot import Bot
 
 def test_create_bot_unauthorized(client):
     """Test creating bot without authentication fails"""
@@ -22,6 +21,7 @@ def test_create_bot_authorized(client, admin_token):
     )
     assert response.status_code == 201
     assert 'bot_id' in response.json
+    print(f"Bot created with ID: {response.json['bot_id']}")  # Debug statement
 
 def test_update_bot_authorized(client, admin_token, test_bot):
     """Test updating bot with admin authentication"""
@@ -35,6 +35,7 @@ def test_update_bot_authorized(client, admin_token, test_bot):
     )
     assert response.status_code == 200
     assert Bot.query.get(test_bot.id).name == 'Updated Bot'
+    print(f"Bot updated with ID: {test_bot.id}")  # Debug statement
 
 def test_delete_bot_authorized(client, admin_token, test_bot):
     """Test deleting bot with admin authentication"""
@@ -43,6 +44,7 @@ def test_delete_bot_authorized(client, admin_token, test_bot):
     )
     assert response.status_code == 200
     assert Bot.query.get(test_bot.id) is None
+    print(f"Bot deleted with ID: {test_bot.id}")  # Debug statement
 
 def test_create_bot_missing_fields(client, admin_token):
     """Test creating bot with missing fields fails"""
