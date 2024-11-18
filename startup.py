@@ -1,7 +1,6 @@
 import os
 import pytest
 from app import create_app, db  # Import the existing db instance
-from app.config import get_config  # Import get_config
 
 # Initialize the database
 def init_db(app):
@@ -17,8 +16,7 @@ def run_tests():
 
 def main():
     config_name = os.environ.get('FLASK_CONFIG', 'default')
-    config = get_config(config_name)
-    app = create_app(config)
+    app = create_app(config_name)
 
     # Initialize the database
     init_db(app)
