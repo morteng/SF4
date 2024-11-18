@@ -1,6 +1,7 @@
 import os
 import pytest
 from app import create_app, db  # Import the existing db instance
+from app.config import get_config  # Import get_config
 
 # Initialize the database
 def init_db(app):
