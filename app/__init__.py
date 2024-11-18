@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_login import LoginManager
 from app.extensions import db  # Ensure db is imported here
+from app.models.user import User  # Import the User model
 
 def create_app(config_name='default'):
     from app.config import get_config
@@ -13,6 +14,11 @@ def create_app(config_name='default'):
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'public_user_routes.login'  # Set the login view
+
+    # User loader function for Flask-Login
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
     # Register blueprints
     from app.routes import register_blueprints
