@@ -16,10 +16,13 @@ def create_app(config_name=None):
     db.init_app(app)
     migrate.init_app(app, db)
 
+    # Import models to ensure they are registered with SQLAlchemy
+    from .models import user, stipend, tag, organization, bot, notification, association_tables
+
     # Register routes
     from .routes import public_user_routes, admin_routes, public_bot_routes  # Add public_bot_routes here
     app.register_blueprint(public_user_routes.public_user_bp)  # Ensure the blueprint is correctly referenced
     app.register_blueprint(admin_routes.admin_bp)  # Ensure the blueprint is correctly referenced
-    app.register_blueprint(public_bot_routes.public_bot_bp)  # Register the bot blueprint
+    app.register_blueprint(public_bot_routes.bot_bp)  # Register the bot blueprint
 
     return app
