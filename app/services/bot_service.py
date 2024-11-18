@@ -1,5 +1,5 @@
 from app.models.bot import Bot
-from app.extensions import db
+from app.extensions import db  # Import db from extensions
 
 def get_bot_by_id(bot_id):
     """Retrieve a bot by its ID."""
