@@ -1,6 +1,7 @@
 from .config import get_config  # Use get_config function instead of importing Config directly
 from flask import Flask
 from dotenv import load_dotenv
+import os
 
 def create_app(config_name=None):
     load_dotenv()
