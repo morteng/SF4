@@ -20,26 +20,12 @@ def create_app(config_name='default'):
     # Register blueprints
     from app.routes.admin import admin_bp
     from app.routes.user import user_bp
+    from app.routes.public_bot_routes import public_bot_bp
+    from app.routes.public_user_routes import public_user_bp
+
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(user_bp, url_prefix='/user')
+    app.register_blueprint(public_bot_bp, url_prefix='/bot')
+    app.register_blueprint(public_user_bp, url_prefix='/user')
 
     return app
-
-# Ensure the database is created when the application starts
-def init_db(app):
-    with app.app_context():
-        print(f"Initializing database with URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
-        db.create_all()
-
-if __name__ == '__main__':
-    config_name = os.getenv('FLASK_CONFIG', 'default')
-    app = create_app(config_name)
-    
-    # Print the configuration class being used
-    print(f"Using configuration: {app.config['ENV']}")
-
-    # Initialize the database
-    init_db(app)
-
-    # Run the application
-    app.run()

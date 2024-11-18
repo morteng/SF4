@@ -10,12 +10,15 @@ def init_db(app):
     with app.app_context():
         print(f"Initializing database with URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
         db.create_all()
+        print("Database initialization complete.")
 
 def run_tests():
     result = pytest.main(['-v', 'tests/'])
     if result != 0:
         print("Tests failed. Aborting startup.")
         exit(1)
+    else:
+        print("All tests passed successfully.")
 
 def main():
     config_name = os.environ.get('FLASK_CONFIG', 'default')
