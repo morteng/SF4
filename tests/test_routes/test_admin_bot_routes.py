@@ -11,19 +11,21 @@ def admin_token(test_client, admin_user):
         assert response.status_code == 200
         return test_client.cookie_jar
 
-def test_create_bot_unauthorized(client):
+def test_create_bot_unauthorized(test_client):
     """Test creating bot without authentication fails"""
-    response = client.post('/admin/api/bots', json={  # Updated to /admin/api/bots
+    client = test_client
+    response = client.post('/admin/api/bots', json={  
         'name': 'Test Bot',
         'description': 'Test Description',
         'status': 'active'
     })
     assert response.status_code == 401
 
-def test_create_bot_authorized(client, admin_token):
+def test_create_bot_authorized(test_client, admin_token):
     """Test creating bot with authentication succeeds"""
+    client = test_client
     client.cookie_jar.update(admin_token)
-    response = client.post('/admin/api/bots', json={  # Updated to /admin/api/bots
+    response = client.post('/admin/api/bots', json={  
         'name': 'Test Bot',
         'description': 'Test Description',
         'status': 'active'

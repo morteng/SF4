@@ -24,7 +24,7 @@ def admin_user(test_client):
 @pytest.fixture(scope='module')
 def admin_token(test_client, admin_user):
     with test_client:
-        response = test_client.post('/login', data={
+        response = test_client.post(url_for('public_user.login'), data={
             'username': admin_user.username,
             'password': 'securepassword'
         }, follow_redirects=True)
