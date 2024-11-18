@@ -1,38 +1,27 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from config import get_config  # Updated import statement
+from .extensions import db, migrate
 
 def create_app(config_name=None):
     app = Flask(__name__)
-    config_class = get_config(config_name or 'default')
-    app.config.from_object(config_class)
+    
+    if config_name is None:
+        config_name = os.getenv('FLASK_CONFIG', 'default')
+    
+    config = get_config(config_name)
+    app.config.from_object(config)
 
     initialize_extensions(app)
     register_blueprints(app)
 
     return app
 
-def get_config(config_name):
-    if config_name == 'development':
-        from config.development import DevelopmentConfig
-        return DevelopmentConfig
-    elif config_name == 'testing':
-        from config.testing import TestingConfig
-        return TestingConfig
-    elif config_name == 'production':
-        from config.production import ProductionConfig
-        return ProductionConfig
-    else:
-        from config.default import DefaultConfig
-        return DefaultConfig
-
 def initialize_extensions(app):
     db.init_app(app)
-    # Initialize other extensions here
+    migrate.init_app(app, db)
 
 def register_blueprints(app):
-    from app.routes.admin_routes import admin_bp
-    from app.routes.public_user_routes import public_user_bp
-    app.register_blueprint(admin_bp, url_prefix='/admin')
-    app.register_blueprint(public_user_bp, url_prefix='/user')
+    from .routes import admin_routes, public_bot_routes, public_user_routes
+    app.register_blueprint(admin_routes.bp)
+    app.register_blueprint(public_bot_routes.bp)
+    app.register_blueprint(public_user_routes.bp)
