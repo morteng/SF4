@@ -22,13 +22,14 @@ def main():
     config = get_config(config_name)
     
     app = create_app(config_name=config_name)
-    init_db(app)
-    run_migrations()
-    if not run_tests():
-        print("Tests failed. Aborting startup.")
-        return
-    # Run the application
-    app.run()
+    with app.app_context():
+        init_db(app)
+        run_migrations()
+        if not run_tests():
+            print("Tests failed. Aborting startup.")
+            return
+        # Run the application
+        app.run()
 
 if __name__ == '__main__':
     main()
