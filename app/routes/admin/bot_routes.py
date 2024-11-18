@@ -13,7 +13,20 @@ def list_bots():
 @bot_bp.route('/bots/<int:bot_id>')
 @login_required
 def bot_details(bot_id):
-    # Your code here
-    pass
+    bot = get_bot_by_id(bot_id)
+    if not bot:
+        flash('Bot not found', 'danger')
+        return redirect(url_for('admin_bot.list_bots'))
+    return render_template('admin/bot_details.html', bot=bot)
+
+@bot_bp.route('/bots/<int:bot_id>/update_status', methods=['POST'])
+@login_required
+def update_bot(bot_id):
+    status = request.form.get('status')
+    if update_bot_status(bot_id, status):
+        flash('Bot status updated successfully', 'success')
+    else:
+        flash('Failed to update bot status', 'danger')
+    return redirect(url_for('admin_bot.bot_details', bot_id=bot_id))
 
 # Add other routes as needed
