@@ -1,4 +1,4 @@
-from .admin_routes import admin_bp
+from .admin_routes import bp as admin_bp
 from .public_bot_routes import public_bot_bp
 from .public_user_routes import public_user_bp
 
