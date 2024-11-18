@@ -22,7 +22,22 @@ def initialize_extensions(app):
     migrate.init_app(app, db)
 
 def register_blueprints(app):
-    from .routes import admin_routes, public_bot_routes, public_user_routes
+    from .admin import admin_routes
+    from .public_bot_routes import bp as public_bot_bp
+    from .public_user_routes import bp as public_user_bp
+
+    app.register_blueprint(admin_routes.bp)
+    app.register_blueprint(public_bot_bp)
+    app.register_blueprint(public_user_bp)
+
+    app.register_blueprint(admin_routes.bp)
+    app.register_blueprint(public_bot_routes.bp)
+    app.register_blueprint(public_user_routes.bp)
+
+    # Define your routes here
+    @bp.route('/some-bot-route')
+    def some_bot_route():
+        return "Bot Route!"
     app.register_blueprint(admin_routes.bp)
     app.register_blueprint(public_bot_routes.bp)
     app.register_blueprint(public_user_routes.bp)
