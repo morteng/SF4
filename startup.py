@@ -23,6 +23,7 @@ def main():
     
     # Print the configuration class being used
     print(f"Using configuration: {app.config['ENV']}")
+    print(f"Loaded configuration: {app.config}")
 
     # Initialize the database
     init_db(app)
