@@ -1,5 +1,5 @@
 import pytest
-from app import create_app, db
+from app import create_app, db as _db
 from app.models.user import User
 from app.models.bot import Bot
 from werkzeug.security import generate_password_hash
@@ -10,10 +10,29 @@ def app():
     app = create_app('testing')
     return app
 
-@pytest.fixture(scope='module')
-def client(app):
-    with app.test_client() as client:
-        yield client
+@pytest.fixture(scope='session')
+def db(app):
+    """Set up the database for testing"""
+    with app.app_context():
+        _db.create_all()
+        yield _db
+        _db.drop_all()
+
+@pytest.fixture(scope='function')
+def session(db):
+    """Create a new database session for a test"""
+    connection = db.engine.connect()
+    transaction = connection.begin()
+    
+    # Create a session bound to the connection
+    session = db.create_scoped_session(options=dict(bind=connection, binds={}))
+    
+    yield session
+    
+    # Rollback the transaction and close the connection
+    session.close()
+    transaction.rollback()
+    connection.close()
 
 @pytest.fixture(scope='module', autouse=True)
 def init_admin_user(session):
