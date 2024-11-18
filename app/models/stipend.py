@@ -15,4 +15,4 @@ class Stipend(db.Model):
 
     # Relationships
     tags = db.relationship('Tag', secondary='stipend_tags', back_populates='stipends')
-    organizations = db.relationship('Organization', secondary='organization_stipends', back_populates='stipends')
+    organizations = db.relationship('Organization', secondary='organization_stipends', back_populates='organizations')

@@ -1,5 +1,5 @@
 from flask import Flask
-from .extensions import db
+from .extensions import db, migrate
 from .routes import register_blueprints
 
 def create_app(config_name='default'):
@@ -11,6 +11,9 @@ def create_app(config_name='default'):
 
     # Initialize database
     db.init_app(app)
+
+    # Initialize migrate
+    migrate.init_app(app, db)
 
     # Register blueprints
     register_blueprints(app)
