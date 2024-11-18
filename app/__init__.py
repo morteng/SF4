@@ -1,11 +1,13 @@
 from flask import Flask
 from .routes import register_blueprints
+import sys
 
 def create_app(config_name=None):
     app = Flask(__name__)
     
     # Load configuration
     config_class = get_config(config_name or 'default')
+    print(f"Loading config: {config_class.__name__}")  # Debug statement
     app.config.from_object(config_class)
     
     # Initialize extensions (if any)
@@ -17,6 +19,7 @@ def create_app(config_name=None):
     return app
 
 def get_config(config_name):
+    print(f"Getting config for: {config_name}")  # Debug statement
     if config_name == 'default':
         from .config.default import DefaultConfig
         return DefaultConfig
@@ -35,6 +38,7 @@ def get_config(config_name):
 
 def initialize_extensions(app):
     # Initialize your extensions here (e.g., db, migrate)
+    print("Initializing extensions")  # Debug statement
     from .extensions import db, migrate
     db.init_app(app)
     migrate.init_app(app, db)
