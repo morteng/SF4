@@ -2,6 +2,9 @@ from logging.config import fileConfig
 import sys
 from pathlib import Path
 
+# Import context from Alembic
+from alembic.runtime.environment import Context
+
 # Load environment variables from .env file
 from dotenv import load_dotenv
 load_dotenv()
@@ -15,7 +18,7 @@ app.app_context().push()
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
-config = context.config
+config = Context.get_context()
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
