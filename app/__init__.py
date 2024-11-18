@@ -17,15 +17,21 @@ def create_app(config_name=None):
     return app
 
 def get_config(config_name):
-    from . import config  # Corrected import statement
-    
-    config_map = {
-        'default': config.DefaultConfig,
-        'development': config.DevelopmentConfig,
-        'testing': config.TestingConfig,
-        'production': config.ProductionConfig
-    }
-    return config_map.get(config_name, config.DefaultConfig)
+    if config_name == 'default':
+        from .config.default import DefaultConfig
+        return DefaultConfig
+    elif config_name == 'development':
+        from .config.development import DevelopmentConfig
+        return DevelopmentConfig
+    elif config_name == 'testing':
+        from .config.testing import TestingConfig
+        return TestingConfig
+    elif config_name == 'production':
+        from .config.production import ProductionConfig
+        return ProductionConfig
+    else:
+        from .config.default import DefaultConfig
+        return DefaultConfig
 
 def initialize_extensions(app):
     # Initialize your extensions here (e.g., db, migrate)
