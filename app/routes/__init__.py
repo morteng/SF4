@@ -11,7 +11,7 @@ def register_blueprints(app):
     # Register other blueprints if any
     from .public_bot_routes import public_bot_bp
     from .public_user_routes import user_bp
-    app.register_blueprint(bot_bp)
+    app.register_blueprint(public_bot_bp)
     app.register_blueprint(user_bp)
 
     # Register admin blueprints
