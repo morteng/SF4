@@ -2,9 +2,6 @@ from logging.config import fileConfig
 import sys
 from pathlib import Path
 
-# Import context from Alembic
-from alembic import context
-
 # Load environment variables from .env file
 from dotenv import load_dotenv
 load_dotenv()
