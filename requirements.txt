@@ -1,9 +1,5 @@
 Flask
-pytest
-pytest-cov
-python-dotenv
-flask_sqlalchemy
-flask_migrate
-werkzeug
+Flask-SQLAlchemy
 alembic
-Flask-Login
+pytest
+python-dotenv
