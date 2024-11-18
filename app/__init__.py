@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
-from .config import get_config  # Use get_config function instead of importing Config directly
+import sys
+from .config import get_config  # Ensure this is correctly referencing config.py
 from flask import Flask
 
 def create_app(config_name=None):
@@ -17,6 +18,8 @@ def create_app(config_name=None):
     db.init_app(app)
 
     with app.app_context():
+        print("Current working directory:", os.getcwd())  # Debug print to verify current directory
+        print("sys.path:", sys.path)  # Debug print to verify Python path
         db.create_all()  # Ensure tables are created
 
     # Register blueprints
