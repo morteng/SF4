@@ -18,8 +18,8 @@ def create_app(config_name=None):
 
     # Register routes
     from .routes import public_user_routes, admin_routes, public_bot_routes  # Add public_bot_routes here
-    app.register_blueprint(public_user_routes.bp)
-    app.register_blueprint(admin_routes.bp)
+    app.register_blueprint(public_user_routes.public_user_bp)  # Ensure the blueprint is correctly referenced
+    app.register_blueprint(admin_routes.admin_bp)  # Ensure the blueprint is correctly referenced
     app.register_blueprint(public_bot_routes.public_bot_bp)  # Register the bot blueprint
 
     return app
