@@ -6,6 +6,8 @@ from flask import Flask
 def create_app(config_name=None):
     load_dotenv()
     
+    print("Environment variables:", dict(os.environ))  # Add this line to verify .env loading
+    
     app = Flask(__name__)
     config = get_config(config_name or os.getenv('FLASK_CONFIG', 'default'))
     app.config.from_object(config)
