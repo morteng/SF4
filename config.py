@@ -26,13 +26,14 @@ class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
 
+config_map = {
+    'default': DefaultConfig,
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig
+}
+
 def get_config(config_name):
-    config_map = {
-        'default': DefaultConfig,
-        'development': DevelopmentConfig,
-        'testing': TestingConfig,
-        'production': ProductionConfig
-    }
     config_class = config_map.get(config_name)
     if not config_class:
         raise ValueError(f"Unknown configuration name: {config_name}")
