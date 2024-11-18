@@ -1,6 +1,5 @@
-from flask import Flask
-from flask_login import LoginManager
-from app.extensions import db  # Ensure db is imported here
+from flask import Flask, jsonify, request, redirect, url_for
+from flask_login import LoginManager, login_required
 from app.models.user import User  # Import the User model
 
 def create_app(config_name='default'):
@@ -14,6 +13,14 @@ def create_app(config_name='default'):
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'public_user.login'  # Corrected endpoint name
+
+    # Custom unauthorized handler
+    @login_manager.unauthorized_handler
+    def unauthorized():
+        if request.path.startswith('/admin'):
+            return jsonify({"message": "Unauthorized"}), 401
+        else:
+            return redirect(url_for('public_user.login'))
 
     # User loader function for Flask-Login
     @login_manager.user_loader
