@@ -750,4 +750,3 @@ This master document provides a comprehensive guide for developing the **Stipend
 
 ---
 
-*Note: This document reflects the updated route organization, splitting the admin routes into several files under `app/routes/admin/`, and includes the detailed testing specification as per the latest updates.*
