@@ -115,7 +115,7 @@ The **Stipend Discovery Website** is a Flask-based application designed to help 
 
 ### Database Initialization
 
-- **Script**: A `startup.py` script to initialize the database, perform migrations, and create the default admin user.
+- **Script**: A `app.py` script to initialize the database, perform migrations, and create the default admin user.
 - **Relationships**: Set up many-to-many relationships between stipends, tags, and organizations.
 
 ### User-Facing Pages
@@ -687,7 +687,7 @@ migrations/
 .gitignore
 README.md
 requirements.txt
-startup.py
+app.py
 wsgi.py
 ```
 
