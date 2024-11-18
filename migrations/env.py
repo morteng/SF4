@@ -4,6 +4,7 @@ from sqlalchemy import pool
 from flask import current_app
 import os
 import sys
+from alembic import context
 
 # Add the project directory to the system path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../")
