@@ -1,6 +1,32 @@
 import pytest
+from app import create_app, db
 from app.models.user import User
 from app.models.bot import Bot
+
+@pytest.fixture(scope='session')
+def app():
+    from app import create_app
+    app = create_app('testing')
+    return app
+
+@pytest.fixture(scope='module')
+def client(app):
+    with app.test_client() as client:
+        yield client
+
+@pytest.fixture(scope='module', autouse=True)
+def init_admin_user(session):
+    # First try to find existing admin user
+    admin_user = session.query(User).filter_by(email='admin@example.com').first()
+    if not admin_user:
+        admin_user = User(
+            username='admin_user',
+            password_hash=generate_password_hash('secure_password'),
+            email='admin@example.com',
+            is_admin=True
+        )
+        session.add(admin_user)
+        session.commit()
 
 @pytest.fixture
 def admin_user(app, session):
