@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template
+from flask import Blueprint
 
-bp = Blueprint('public_bots', __name__, url_prefix='/bots')
+public_bot_bp = Blueprint('public_bot', __name__)
 
-@bp.route('/')
-def public_bots():
-    return render_template('public/bots.html')
+# Define your routes here
+@public_bot_bp.route('/some-bot-route')
+def some_bot_route():
+    return "Bot Route!"
