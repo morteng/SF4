@@ -22,7 +22,7 @@ def initialize_extensions(app):
     migrate.init_app(app, db)
 
 def register_blueprints(app):
-    from .routes.admin import admin_bp
+    from .admin_routes import admin_bp
     from .public_bot_routes import public_bot_bp
     from .public_user_routes import bp as public_user_bp
 
