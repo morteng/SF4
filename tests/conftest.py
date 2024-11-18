@@ -2,6 +2,8 @@ import pytest
 from sqlalchemy.orm import scoped_session, sessionmaker
 from app import create_app, db as _db
 from werkzeug.security import generate_password_hash
+from app.models.user import User  # Import User model
+from app.models.bot import Bot    # Import Bot model
 
 @pytest.fixture(scope='session')
 def app():
