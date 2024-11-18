@@ -15,11 +15,5 @@ def run_tests():
     import pytest
     pytest.main(['-v', 'tests'])
 
-def main():
-    app = create_app()
-    init_db(app)
-    run_migrations()
-    run_tests()
-
 if __name__ == '__main__':
     main()
