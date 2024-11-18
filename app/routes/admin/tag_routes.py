@@ -15,7 +15,7 @@ def list_tags():
 def tag_details(tag_id):
     tag = get_tag_by_id(tag_id)
     if not tag:
-        flash('Oops! Tag not found', 'danger')
+        flash('Tag not found', 'danger')
         return redirect(url_for('admin_tag.list_tags'))
     return render_template('admin/tag_details.html', tag=tag)
 
@@ -27,7 +27,7 @@ def update_tag_route(tag_id):
     if update_tag(tag_id, name, category):
         flash('Tag updated successfully', 'success')
     else:
-        flash('Whoops! Failed to update tag', 'danger')
+        flash('Failed to update tag', 'danger')
     return redirect(url_for('admin_tag.tag_details', tag_id=tag_id))
 
 # Add other routes as needed

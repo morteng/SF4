@@ -15,7 +15,7 @@ def list_bots():
 def bot_details(bot_id):
     bot = get_bot_by_id(bot_id)
     if not bot:
-        flash('Oops! Bot not found', 'danger')
+        flash('Bot not found', 'danger')
         return redirect(url_for('admin_bot.list_bots'))
     return render_template('admin/bot_details.html', bot=bot)
 
@@ -26,7 +26,7 @@ def update_bot(bot_id):
     if update_bot_status(bot_id, status):
         flash('Bot status updated successfully', 'success')
     else:
-        flash('Whoops! Failed to update bot status', 'danger')
+        flash('Failed to update bot status', 'danger')
     return redirect(url_for('admin_bot.bot_details', bot_id=bot_id))
 
 # Add other routes as needed

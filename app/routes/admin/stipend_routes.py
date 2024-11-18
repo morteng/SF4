@@ -15,7 +15,7 @@ def list_stipends():
 def stipend_details(stipend_id):
     stipend = get_stipend_by_id(stipend_id)
     if not stipend:
-        flash('Oops! Stipend not found', 'danger')
+        flash('Stipend not found', 'danger')
         return redirect(url_for('admin_stipend.list_stipends'))
     return render_template('admin/stipend_details.html', stipend=stipend)
 
@@ -33,7 +33,7 @@ def update_stipend_route(stipend_id):
     if update_stipend(stipend_id, name, summary, description, homepage_url, application_procedure, eligibility_criteria, application_deadline, open_for_applications):
         flash('Stipend updated successfully', 'success')
     else:
-        flash('Whoops! Failed to update stipend', 'danger')
+        flash('Failed to update stipend', 'danger')
     return redirect(url_for('admin_stipend.stipend_details', stipend_id=stipend_id))
 
 # Add other routes as needed
