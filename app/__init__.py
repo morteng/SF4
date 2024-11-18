@@ -29,4 +29,6 @@ def get_config(config_name):
 
 def initialize_extensions(app):
     # Initialize your extensions here (e.g., db, migrate)
-    pass
+    from .extensions import db, migrate
+    db.init_app(app)
+    migrate.init_app(app, db)
