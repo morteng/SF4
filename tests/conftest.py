@@ -14,7 +14,7 @@ def test_client():
 def admin_user(test_client):
     # Create an admin user if it doesn't exist
     from app.extensions import db
-    with app.app_context():
+    with test_client.application.app_context():
         admin = User.query.filter_by(username='admin').first()
         if not admin:
             admin = User(
