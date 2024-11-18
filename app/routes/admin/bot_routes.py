@@ -17,6 +17,15 @@ def create_bot():
         jsonify: A message indicating success and the created bot's ID.
     """
     data = request.get_json()
+    
+    # Validate required fields
+    required_fields = ['name', 'description', 'status']
+    if not all(field in data for field in required_fields):
+        return jsonify({'message': 'Missing required fields'}), 400
+        
+    if not data['name'].strip():
+        return jsonify({'message': 'Invalid bot name'}), 400
+
     bot = Bot(
         name=data['name'],
         description=data['description'],

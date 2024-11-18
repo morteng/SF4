@@ -76,4 +76,6 @@ def test_bot(session):
 @pytest.fixture(scope='module')
 def client(app):
     """Create a test client"""
-    return app.test_client()
+    with app.test_client() as test_client:
+        with app.app_context():
+            yield test_client
