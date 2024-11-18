@@ -4,5 +4,3 @@ from .tag import Tag
 from .user import User
 from .bot import Bot
 from .notification import Notification
-
-# No need to import db here directly
