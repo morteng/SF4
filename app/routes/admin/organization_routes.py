@@ -15,7 +15,7 @@ def list_organizations():
 def organization_details(organization_id):
     organization = get_organization_by_id(organization_id)
     if not organization:
-        flash('Organization not found', 'danger')
+        flash('Oops! Organization not found', 'danger')
         return redirect(url_for('admin_organization.list_organizations'))
     return render_template('admin/organization_details.html', organization=organization)
 
@@ -28,7 +28,7 @@ def update_organization_route(organization_id):
     if update_organization(organization_id, name, description, homepage_url):
         flash('Organization updated successfully', 'success')
     else:
-        flash('Failed to update organization', 'danger')
+        flash('Whoops! Failed to update organization', 'danger')
     return redirect(url_for('admin_organization.organization_details', organization_id=organization_id))
 
 # Add other routes as needed
