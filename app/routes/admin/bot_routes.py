@@ -7,9 +7,12 @@ admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/admin/bots')
 
 @admin_bot_bp.route('', methods=['POST'])
 @admin_required
-def create_bot():
+def create_bot(admin_user):
     """
     Creates a new bot.
+    
+    Args:
+        admin_user: The authenticated admin user from the @admin_required decorator
     
     Expects a JSON payload with bot details.
     
@@ -41,13 +44,12 @@ def create_bot():
 
 @admin_bot_bp.route('/<int:bot_id>', methods=['PUT'])
 @admin_required
-def update_bot(bot_id):
+def update_bot(admin_user, bot_id):
     """
     Updates an existing bot.
     
-    Expects a JSON payload with updated bot details.
-    
     Args:
+        admin_user: The authenticated admin user from the @admin_required decorator
         bot_id (int): The ID of the bot to be updated.
         
     Returns:
@@ -69,11 +71,12 @@ def update_bot(bot_id):
 
 @admin_bot_bp.route('/<int:bot_id>', methods=['DELETE'])
 @admin_required
-def delete_bot(bot_id):
+def delete_bot(admin_user, bot_id):
     """
     Deletes a bot.
     
     Args:
+        admin_user: The authenticated admin user from the @admin_required decorator
         bot_id (int): The ID of the bot to be deleted.
         
     Returns:
@@ -90,9 +93,12 @@ def delete_bot(bot_id):
 
 @admin_bot_bp.route('/status')
 @admin_required
-def bot_status():
+def bot_status(admin_user):
     """
     Returns the status of all bots.
+    
+    Args:
+        admin_user: The authenticated admin user from the @admin_required decorator
     
     Returns:
         jsonify: A message indicating the status of all bots.
