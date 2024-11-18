@@ -1,80 +1,19 @@
-from flask import Blueprint, request, jsonify
-from app.models.organization import Organization
-from app.extensions import db
-from app.utils import admin_required
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import login_required
+from app.services.organization_service import get_organization_by_id, update_organization
 
-org_bp = Blueprint('organization', __name__, url_prefix='/admin/organizations')
+organization_bp = Blueprint('admin_organization', __name__)
 
-@org_bp.route('', methods=['POST'])
-@admin_required
-def create_organization():
-    """
-    Creates a new organization.
-    
-    Expects a JSON payload with organization details.
-    
-    Returns:
-        jsonify: A message indicating success and the created organization's ID.
-    """
-    data = request.get_json()
-    organization = Organization(
-        name=data['name'],
-        description=data['description'],
-        homepage_url=data['homepage_url']
-    )
-    db.session.add(organization)
-    db.session.commit()
+@organization_bp.route('/organizations')
+@login_required
+def list_organizations():
+    # Your code here
+    pass
 
-    return jsonify({
-        'message': 'Organization created successfully',
-        'organization_id': organization.id
-    }), 201
+@organization_bp.route('/organizations/<int:organization_id>')
+@login_required
+def organization_details(organization_id):
+    # Your code here
+    pass
 
-@org_bp.route('/<int:organization_id>', methods=['PUT'])
-@admin_required
-def update_organization(organization_id):
-    """
-    Updates an existing organization.
-    
-    Expects a JSON payload with updated organization details.
-    
-    Args:
-        organization_id (int): The ID of the organization to be updated.
-        
-    Returns:
-        jsonify: A message indicating success and the updated organization's ID.
-    """
-    data = request.get_json()
-    organization = Organization.query.get_or_404(organization_id)
-
-    organization.name = data['name']
-    organization.description = data['description']
-    organization.homepage_url = data['homepage_url']
-
-    db.session.commit()
-
-    return jsonify({
-        'message': 'Organization updated successfully',
-        'organization_id': organization.id
-    }), 200
-
-@org_bp.route('/<int:organization_id>', methods=['DELETE'])
-@admin_required
-def delete_organization(organization_id):
-    """
-    Deletes an organization.
-    
-    Args:
-        organization_id (int): The ID of the organization to be deleted.
-        
-    Returns:
-        jsonify: A message indicating success and the deleted organization's ID.
-    """
-    organization = Organization.query.get_or_404(organization_id)
-    db.session.delete(organization)
-    db.session.commit()
-
-    return jsonify({
-        'message': 'Organization deleted successfully',
-        'organization_id': organization.id
-    }), 200
+# Add other routes as needed
