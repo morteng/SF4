@@ -9,14 +9,12 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 def get_config(config_name):
-    if config_name == 'development':
-        return DevelopmentConfig
-    elif config_name == 'testing':
-        return TestingConfig
-    elif config_name == 'production':
-        return ProductionConfig
-    else:
-        return Config
+    config_map = {
+        'development': DevelopmentConfig,
+        'testing': TestingConfig,
+        'production': ProductionConfig
+    }
+    return config_map.get(config_name, Config)
 
 class DevelopmentConfig(Config):
     DEBUG = True
