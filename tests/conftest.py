@@ -31,7 +31,7 @@ def admin_user(test_client):
 
 @pytest.fixture(scope='function')
 def admin_token(test_client, admin_user):
-    # Log in the admin user and get the token
+    # Log in the admin user and get the session cookie
     with test_client.application.app_context():
         response = test_client.post('/admin/login', data={
             'username': admin_user.username,
