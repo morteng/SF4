@@ -1,14 +1,14 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required
-from app.services.stipend_service import get_stipend_by_id, update_stipend, list_all_stipends
+from app.services.stipend_service import get_stipend_by_id, update_stipend
 
 stipend_bp = Blueprint('admin_stipend', __name__)
 
 @stipend_bp.route('/stipends')
 @login_required
 def list_stipends():
-    stipends = list_all_stipends()
-    return render_template('admin/stipend_list.html', stipends=stipends)
+    # Your code here
+    pass
 
 @stipend_bp.route('/stipends/<int:stipend_id>')
 @login_required
@@ -30,7 +30,6 @@ def update_stipend_route(stipend_id):
     eligibility_criteria = request.form.get('eligibility_criteria')
     application_deadline = request.form.get('application_deadline')
     open_for_applications = request.form.get('open_for_applications') == 'on'
-    
     if update_stipend(stipend_id, name, summary, description, homepage_url, application_procedure, eligibility_criteria, application_deadline, open_for_applications):
         flash('Stipend updated successfully', 'success')
     else:

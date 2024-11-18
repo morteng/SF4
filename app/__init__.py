@@ -14,11 +14,11 @@ def create_app(config_name='default'):
         app.register_blueprint(public_bot_routes.bp)
 
         # Register admin blueprints
-        app.register_blueprint(bot_routes.bp)
-        app.register_blueprint(organization_routes.bp)
-        app.register_blueprint(stipend_routes.bp)
-        app.register_blueprint(tag_routes.bp)
-        app.register_blueprint(user_routes.bp)
+        app.register_blueprint(bot_routes.bot_bp)
+        app.register_blueprint(organization_routes.organization_bp)
+        app.register_blueprint(stipend_routes.stipend_bp)
+        app.register_blueprint(tag_routes.tag_bp)
+        app.register_blueprint(user_routes.user_bp)
 
     register_blueprints(app)
 
