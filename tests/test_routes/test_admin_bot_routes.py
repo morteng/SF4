@@ -10,19 +10,18 @@ def test_create_bot_unauthorized(client):
     })
     assert response.status_code == 401
 
-def test_create_bot_authorized(client, admin_token, app):
+def test_create_bot_authorized(client, admin_token):
     """Test creating bot with admin authentication succeeds"""
-    with app.app_context():
-        response = client.post('/admin/bots', 
-            json={
-                'name': 'Test Bot',
-                'description': 'Test Description',
-                'status': 'active'
-            },
-            headers={'Authorization': f'Bearer {admin_token}'}
-        )
-        assert response.status_code == 201
-        assert 'bot_id' in response.json
+    response = client.post('/admin/bots', 
+        json={
+            'name': 'Test Bot',
+            'description': 'Test Description',
+            'status': 'active'
+        },
+        headers={'Authorization': f'Bearer {admin_token}'}
+    )
+    assert response.status_code == 201
+    assert 'bot_id' in response.json
 
 def test_update_bot_authorized(client, admin_token, test_bot):
     """Test updating bot with admin authentication"""
