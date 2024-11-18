@@ -1,4 +1,5 @@
 import pytest
+from app.models.bot import Bot  # Import the Bot model
 
 def test_create_bot_unauthorized(client):
     """Test creating bot without authentication fails"""
