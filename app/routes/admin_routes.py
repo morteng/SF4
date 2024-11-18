@@ -6,6 +6,7 @@ from app.models.tag import Tag
 from app.models.organization import Organization
 from app.models.notification import Notification
 from werkzeug.security import generate_password_hash
+from app.extensions import db  # Import the db object
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
