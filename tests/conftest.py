@@ -39,6 +39,7 @@ def session(db):
 
 @pytest.fixture(scope='module', autouse=True)
 def init_admin_user(session):
+    """Initialize admin user with auth token"""
     # First try to find existing admin user
     admin_user = session.query(User).filter_by(email='admin@example.com').first()
     if not admin_user:
@@ -49,17 +50,16 @@ def init_admin_user(session):
             is_admin=True
         )
         session.add(admin_user)
-        session.commit()
-        # Generate token for the admin user
-        admin_user.generate_auth_token()
+    
+    # Always generate a fresh token
+    admin_user.generate_auth_token()
+    session.commit()
+    return admin_user
 
 @pytest.fixture
-def admin_token(session):
+def admin_token(init_admin_user):
     """Get admin authentication token"""
-    admin_user = session.query(User).filter_by(email='admin@example.com').first()
-    if not admin_user.auth_token:
-        admin_user.generate_auth_token()
-    return admin_user.auth_token
+    return init_admin_user.auth_token
 
 @pytest.fixture
 def test_bot(session):
