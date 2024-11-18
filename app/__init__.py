@@ -13,7 +13,7 @@ def create_app(config_name='default'):
     db.init_app(app)
     login_manager = LoginManager()
     login_manager.init_app(app)
-    login_manager.login_view = 'public_user_routes.login'  # Set the login view
+    login_manager.login_view = 'public_user.login'  # Corrected endpoint name
 
     # User loader function for Flask-Login
     @login_manager.user_loader
