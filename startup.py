@@ -13,6 +13,7 @@ def run_tests():
     pass
 
 def main():
+    from app.config import get_config  # Corrected import
     app = create_app('development')
     init_db(app)
     run_migrations()

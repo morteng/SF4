@@ -3,6 +3,7 @@ from app import create_app, db
 
 @pytest.fixture(scope='session')
 def app():
+    from app.config import get_config  # Corrected import
     app = create_app('testing')
     with app.app_context():
         db.create_all()
