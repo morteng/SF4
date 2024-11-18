@@ -1,32 +1,39 @@
 import pytest
-from flask import url_for  # Import url_for here
-from app import create_app, db
+from flask import Flask
+from app import create_app
 from app.models.user import User
+from werkzeug.security import generate_password_hash
 
 @pytest.fixture(scope='module')
 def test_client():
     app = create_app('testing')
     with app.test_client() as client:
-        with app.app_context():
-            db.create_all()
-            yield client
-            db.session.remove()
-            db.drop_all()
+        yield client
 
 @pytest.fixture(scope='module')
 def admin_user(test_client):
-    with test_client.application.app_context():
-        admin = User(username='admin', email='admin@example.com', is_admin=True)
-        admin.set_password('securepassword')
-        db.session.add(admin)
-        db.session.commit()
+    # Create an admin user if it doesn't exist
+    from app.extensions import db
+    with app.app_context():
+        admin = User.query.filter_by(username='admin').first()
+        if not admin:
+            admin = User(
+                username='admin',
+                password_hash=generate_password_hash('password'),
+                email='admin@example.com',
+                is_admin=True
+            )
+            db.session.add(admin)
+            db.session.commit()
         return admin
 
 @pytest.fixture(scope='module')
 def admin_token(test_client, admin_user):
-    response = test_client.post(url_for('public_user.login'), data={
+    # Log in the admin user and get the token
+    response = test_client.post('/admin/login', data={
         'username': admin_user.username,
-        'password': 'securepassword'
+        'password': 'password'
     }, follow_redirects=True)
     assert response.status_code == 200
-    return test_client.cookie_jar
+    # Assuming the login returns a token in the session or cookies
+    return response.headers.get('Authorization') or response.cookies['session']
