@@ -1,4 +1,5 @@
 import pytest
+from sqlalchemy.orm import scoped_session, sessionmaker
 from app import create_app, db as _db
 from app.models.user import User
 from app.models.bot import Bot
@@ -24,13 +25,15 @@ def session(db):
     connection = db.engine.connect()
     transaction = connection.begin()
     
-    # Create a session bound to the connection
-    session = db.create_scoped_session(options=dict(bind=connection, binds={}))
+    # Create a session factory
+    session_factory = sessionmaker(bind=connection)
+    # Create a scoped session
+    session = scoped_session(session_factory)
     
     yield session
     
     # Rollback the transaction and close the connection
-    session.close()
+    session.remove()
     transaction.rollback()
     connection.close()
 
