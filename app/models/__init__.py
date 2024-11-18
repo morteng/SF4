@@ -1,7 +1,9 @@
-from .association_tables import stipend_tags, organization_stipends
+from sqlalchemy.ext.declarative import declarative_base
+from .user import User
 from .bot import Bot
 from .notification import Notification
 from .organization import Organization
 from .stipend import Stipend
 from .tag import Tag
-from .user import User
+
+Base = declarative_base()
