@@ -1,7 +1,7 @@
 from flask import Flask
+import os  # Import the os module
 from .config import get_config  # Use get_config function instead of importing Config directly
 from app.extensions import db
-import os
 
 def create_app(config_name='default'):
     # Create and configure the app
@@ -10,6 +10,9 @@ def create_app(config_name='default'):
     # Load configuration based on environment variable or default to 'default'
     config_class = get_config(config_name)
     app.config.from_object(config_class)
+
+    # Print the configuration class being used
+    print(f"Loaded configuration: {config_class.__name__}")
 
     # Initialize extensions
     db.init_app(app)
@@ -25,10 +28,18 @@ def create_app(config_name='default'):
 # Ensure the database is created when the application starts
 def init_db(app):
     with app.app_context():
+        print(f"Initializing database with URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
         db.create_all()
 
 if __name__ == '__main__':
     config_name = os.getenv('FLASK_CONFIG', 'default')
     app = create_app(config_name)
+    
+    # Print the configuration class being used
+    print(f"Using configuration: {app.config['ENV']}")
+
+    # Initialize the database
     init_db(app)
+
+    # Run the application
     app.run()

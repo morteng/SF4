@@ -13,6 +13,3 @@ __pycache__/
 
 # Databases
 instance/site.db
-
-# github
-.gitignore*
