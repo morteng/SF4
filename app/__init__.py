@@ -1,7 +1,10 @@
 from flask import Flask
+from flask_login import LoginManager
 from app.extensions import db, migrate  # Ensure db and migrate are imported here
 from app.models import Base  # Ensure Base is imported here
-from app.routes.admin import admin_bp
+from app.routes.admin import admin_bp, bot_bp
+
+login_manager = LoginManager()
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -13,10 +16,17 @@ def create_app(config_name):
     # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
-    
+    login_manager.init_app(app)  # Initialize Flask-Login
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        from app.models.user import User
+        return User.query.get(int(user_id))
+
     # Register blueprints and other components here if needed
     app.register_blueprint(admin_bp)
-    
+    app.register_blueprint(bot_bp)  # Register the bot blueprint
+
     return app
 
 def init_db(app):
