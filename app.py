@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+import os
 from app import create_app, db
 
 def init_db(app):
@@ -13,8 +15,9 @@ def run_tests():
     pass
 
 def main():
-    from app.config import get_config  # Corrected import
-    app = create_app('development')
+    load_dotenv()  # Load environment variables from .env file
+    config_name = os.getenv('FLASK_CONFIG', 'default')
+    app = create_app(config_name)
     init_db(app)
     run_migrations()
     run_tests()
