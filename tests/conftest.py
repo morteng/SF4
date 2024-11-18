@@ -1,8 +1,6 @@
 import pytest
 from sqlalchemy.orm import scoped_session, sessionmaker
 from app import create_app, db as _db
-from app.models.user import User
-from app.models.bot import Bot  # Import the Bot model
 from werkzeug.security import generate_password_hash
 
 @pytest.fixture(scope='session')
@@ -15,8 +13,15 @@ def app():
 def db(app):
     """Set up the database for testing"""
     with app.app_context():
+        # Import all models to ensure they're registered with SQLAlchemy
+        from app.models import User, Bot, Stipend, Tag, Organization, Notification
+        
+        # Create all tables
         _db.create_all()
+        
         yield _db
+        
+        # Drop all tables after tests
         _db.drop_all()
 
 @pytest.fixture(scope='module')

@@ -1,7 +1,8 @@
-from .association_tables import stipend_tags, stipend_organizations
-from .bot import Bot
-from .notification import Notification
-from .organization import Organization
-from .stipend import Stipend
-from .tag import Tag
-from .user import User
+from app.models.user import User
+from app.models.bot import Bot
+from app.models.stipend import Stipend
+from app.models.tag import Tag
+from app.models.organization import Organization
+from app.models.notification import Notification
+
+__all__ = ['User', 'Bot', 'Stipend', 'Tag', 'Organization', 'Notification']
