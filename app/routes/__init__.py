@@ -9,7 +9,7 @@ from .admin.user_routes import user_bp as admin_user_bp
 
 def register_blueprints(app):
     # Register other blueprints if any
-    from .public_bot_routes import bot_bp
+    from .public_bot_routes import public_bot_bp
     from .public_user_routes import user_bp
     app.register_blueprint(bot_bp)
     app.register_blueprint(user_bp)
