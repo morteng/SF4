@@ -1,6 +1,6 @@
 import pytest
 from flask import Flask
-from app import create_app
+from app import create_app, db
 from app.models.user import User
 from werkzeug.security import generate_password_hash
 
@@ -11,7 +11,17 @@ def test_client():
         yield client
 
 @pytest.fixture(scope='module')
-def admin_user(test_client):
+def init_database(test_client):
+    # Initialize the database and apply migrations
+    with test_client.application.app_context():
+        db.create_all()
+        run_migrations()  # Apply migrations
+        yield
+        db.session.remove()
+        db.drop_all()
+
+@pytest.fixture(scope='module')
+def admin_user(init_database, test_client):
     # Create an admin user if it doesn't exist
     from app.extensions import db
     with test_client.application.app_context():
@@ -35,5 +45,5 @@ def admin_token(test_client, admin_user):
         'password': 'password'
     }, follow_redirects=True)
     assert response.status_code == 200
-    # Assuming the login returns a token in the session or cookies
-    return response.headers.get('Authorization') or response.cookies['session']
+    # Assuming the login returns a session cookie for authentication
+    return response.cookies['session']
