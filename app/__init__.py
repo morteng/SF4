@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from config import get_config
+from .extensions import db, migrate  # Ensure you have the migrate extension defined
 
 def create_app(config_name=None):
     if config_name is None:
@@ -12,7 +13,6 @@ def create_app(config_name=None):
     app.config.from_object(config)
 
     # Initialize extensions
-    from .extensions import db, migrate  # Ensure you have the migrate extension defined
     db.init_app(app)
     migrate.init_app(app, db)
 

@@ -1,6 +1,6 @@
 import os
-from app import create_app, db
-from config import get_config
+from app import create_app, db  # Ensure this is correctly referencing app/__init__.py
+from config import get_config  # Corrected import statement
 
 def init_db(app):
     with app.app_context():
