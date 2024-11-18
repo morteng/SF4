@@ -1,5 +1,4 @@
 import pytest
-from flask import Flask
 from app import create_app, db, run_migrations  # Import the run_migrations function
 from app.models.user import User
 from werkzeug.security import generate_password_hash
