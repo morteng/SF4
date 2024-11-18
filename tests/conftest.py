@@ -39,4 +39,4 @@ def admin_token(test_client, admin_user):
         }, follow_redirects=True)
         assert response.status_code == 200
         # Assuming the login returns a session cookie for authentication
-        yield response.cookies['session']
+        yield response.headers.get('Set-Cookie')
