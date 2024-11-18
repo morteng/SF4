@@ -1,6 +1,7 @@
 from flask import Flask
 from .config import get_config  # Use get_config function instead of importing Config directly
 from app.extensions import db
+import os
 
 def create_app(config_name='default'):
     # Create and configure the app
