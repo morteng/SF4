@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template
+from flask import Blueprint
 
-bp = Blueprint('public_users', __name__, url_prefix='/users')
+public_user_bp = Blueprint('public_user', __name__)
 
-@bp.route('/')
-def public_users():
-    return render_template('public/users.html')
+# Define your routes here
+@public_user_bp.route('/some-route')
+def some_route():
+    return "Hello, World!"
