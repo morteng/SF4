@@ -14,7 +14,7 @@ def run_migrations():
 
 def run_tests():
     import pytest
-    result = pytest.main(['-v', 'tests'])
+    result = pytest.main(['-x', 'tests'])
     return result == 0
 
 def main():
