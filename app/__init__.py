@@ -9,7 +9,7 @@ def create_app(config_name=None):
     load_dotenv()
 
     if config_name is None:
-        config_name = os.getenv('FLASK_CONFIG', 'default')
+        config_name = os.getenv('FLASK_CONFIG', 'development')
     
     config = get_config(config_name)
     
