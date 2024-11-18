@@ -18,7 +18,7 @@ def create_app(config_name='default'):
     # Custom unauthorized handler
     @login_manager.unauthorized_handler
     def unauthorized():
-        if request.path.startswith('/admin'):
+        if request.path.startswith('/admin/api/'):
             return jsonify({"message": "Unauthorized"}), 401
         else:
             return redirect(url_for('public_user.login'))
