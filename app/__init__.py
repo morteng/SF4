@@ -17,9 +17,7 @@ def create_app(config_name=None):
     migrate.init_app(app, db)
 
     from .routes import admin_routes, public_bot_routes, public_user_routes
-    app.register_blueprint(admin_routes.bp)
-    app.register_blueprint(public_bot_routes.bp)
-    app.register_blueprint(public_user_routes.bp)
+    app.register_blueprint(admin_routes.bp)  # Ensure 'bp' is correctly imported
 
     return app
 

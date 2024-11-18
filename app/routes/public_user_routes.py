@@ -1,11 +1,7 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, render_template
 
-public_user_bp = Blueprint('public_user', __name__, url_prefix='/user')
+bp = Blueprint('public_users', __name__, url_prefix='/users')
 
-@public_user_bp.route('/index')
-def user_index():
-    return jsonify({"message": "Public user index page"}), 200
-
-@public_user_bp.route('/profile/<int:user_id>')
-def user_profile(user_id):
-    return jsonify({"message": f"Public profile for user {user_id}"}), 200
+@bp.route('/')
+def public_users():
+    return render_template('public/users.html')

@@ -1,7 +1,7 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, render_template
 
-public_bot_bp = Blueprint('public_bot', __name__, url_prefix='/bot')
+bp = Blueprint('public_bots', __name__, url_prefix='/bots')
 
-@public_bot_bp.route('/status')
-def bot_status():
-    return jsonify({"message": "Public bot status"}), 200
+@bp.route('/')
+def public_bots():
+    return render_template('public/bots.html')
