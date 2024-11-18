@@ -1,35 +1,31 @@
 from app import create_app, db
-import os
+from config import get_config  # Corrected import statement
 
 def init_db():
-    """Initialize the database by creating all tables."""
-    app = create_app()
-    with app.app_context():
-        print("Initializing database...")
-        db.create_all()
+    # Your existing code for initializing the database
+    pass
 
 def run_migrations():
-    """Run database migrations."""
-    from flask_migrate import upgrade
-    app = create_app()
-    with app.app_context():
-        print("Running migrations...")
-        upgrade()
+    # Your existing code for running migrations
+    pass
 
 def run_tests():
-    """Run tests using pytest."""
-    import pytest
-    exit_code = pytest.main(['tests'])
-    if exit_code != 0:
-        print("Tests failed. Aborting startup.")
-        os._exit(exit_code)
+    # Your existing code for running tests
+    pass
 
 def main():
-    init_db()
-    run_migrations()
-    run_tests()
-    app = create_app()
-    app.run()
+    config_name = os.getenv('FLASK_CONFIG', 'default')
+    config = get_config(config_name)
+    
+    app = create_app(config_name=config_name)
+    with app.app_context():
+        init_db()
+        run_migrations()
+        if not run_tests():
+            print("Tests failed. Aborting startup.")
+            return
+        # Run the application
+        app.run()
 
 if __name__ == '__main__':
     main()
