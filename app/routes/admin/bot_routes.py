@@ -1,12 +1,14 @@
 # app/routes/admin/bot_routes.py
 
+from flask_sqlalchemy import SQLAlchemy
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required
 from app.models.bot import Bot
 from app.forms.admin_forms import BotForm
-from app.extensions import db
 from app.services.bot_service import BotService
 from app.utils import admin_required
+
+db = SQLAlchemy()
 
 admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/admin/bots')
 

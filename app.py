@@ -17,10 +17,6 @@ def create_app(config_name='default'):
     init_extensions(app)
     init_routes(app)
 
-    @app.route('/')
-    def index():
-        return render_template('index.html')
-
     return app
 
 if __name__ == '__main__':
