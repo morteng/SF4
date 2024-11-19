@@ -7,6 +7,9 @@ def create_app(config_name):
     load_dotenv()  # Load environment variables from .env file
     app = Flask(__name__)
     
+    config = get_config(config_name)
+    app.config.from_object(config)  # Set the configuration
+    
     # Initialize the database
     init_db(app)
     
