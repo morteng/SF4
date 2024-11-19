@@ -1,22 +1,20 @@
-# app/routes/admin/organization_routes.py
-
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from app.models.organization import Organization
 from app.forms.admin_forms import OrganizationForm
-from app.utils import admin_required
+from app.services.organization_service import get_organization_by_id, delete_organization
 from app import db
 
 admin_org_bp = Blueprint('admin_org', __name__, url_prefix='/admin/organizations')
 
 @admin_org_bp.route('/')
-@admin_required
+@login_required
 def index():
     organizations = Organization.query.all()
-    return render_template('admin/organizations/index.html', organizations=organizations)
+    return render_template('admin/organization_index.html', organizations=organizations)
 
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
-@admin_required
+@login_required
 def create():
     form = OrganizationForm()
     if form.validate_on_submit():
@@ -27,27 +25,41 @@ def create():
         )
         db.session.add(organization)
         db.session.commit()
-        flash('Organization created successfully.', 'success')
+        flash('Organization created successfully!', 'success')
         return redirect(url_for('admin_org.index'))
-    return render_template('admin/organizations/create.html', form=form)
+    return render_template('admin/organization_form.html', form=form, title='Create Organization')
 
 @admin_org_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
-@admin_required
+@login_required
 def edit(id):
-    organization = Organization.query.get_or_404(id)
+    organization = get_organization_by_id(id)
+    if not organization:
+        flash('Organization not found!', 'danger')
+        return redirect(url_for('admin_org.index'))
+    
     form = OrganizationForm(obj=organization)
     if form.validate_on_submit():
-        form.populate_obj(organization)
+        organization.name = form.name.data
+        organization.description = form.description.data
+        organization.homepage_url = form.homepage_url.data
         db.session.commit()
-        flash('Organization updated successfully.', 'success')
+        flash('Organization updated successfully!', 'success')
         return redirect(url_for('admin_org.index'))
-    return render_template('admin/organizations/edit.html', form=form, organization=organization)
+    return render_template('admin/organization_form.html', form=form, title='Edit Organization')
 
 @admin_org_bp.route('/delete/<int:id>', methods=['POST'])
-@admin_required
+@login_required
 def delete(id):
-    organization = Organization.query.get_or_404(id)
-    db.session.delete(organization)
-    db.session.commit()
-    flash('Organization deleted successfully.', 'success')
+    organization = get_organization_by_id(id)
+    if not organization:
+        flash('Organization not found!', 'danger')
+        return redirect(url_for('admin_org.index'))
+    
+    try:
+        delete_organization(organization)
+        db.session.commit()
+        flash('Organization deleted successfully!', 'success')
+    except Exception as e:
+        flash(f'Failed to delete organization: {str(e)}', 'danger')
+    
     return redirect(url_for('admin_org.index'))

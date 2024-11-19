@@ -1,10 +1,9 @@
 from app.models.bot import Bot
 
-class BotService:
-    def __init__(self):
-        pass
+def get_bot_by_id(bot_id):
+    from app import db
+    return db.session.get(Bot, bot_id)
 
-    @staticmethod
-    def get_bot_by_id(bot_id):
-        from app.extensions import db
-        return db.session.query(Bot).filter_by(id=bot_id).first()
+def run_bot(bot):
+    # Implement the logic to run the bot
+    pass

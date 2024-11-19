@@ -1,22 +1,20 @@
-# app/routes/admin/user_routes.py
-
-from flask import Blueprint, render_template, redirect, url_for, request, flash
-from flask_login import login_required, current_user, login_user
+from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask_login import login_required
 from app.models.user import User
 from app.forms.admin_forms import UserForm
-from app.utils import admin_required
+from app.services.user_service import get_user_by_id, delete_user
 from app import db
 
 admin_user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
 
 @admin_user_bp.route('/')
-@admin_required
+@login_required
 def index():
     users = User.query.all()
-    return render_template('admin/users/index.html', users=users)
+    return render_template('admin/user_index.html', users=users)
 
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
-@admin_required
+@login_required
 def create():
     form = UserForm()
     if form.validate_on_submit():
@@ -28,32 +26,53 @@ def create():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('User created successfully.', 'success')
+        flash('User created successfully!', 'success')
         return redirect(url_for('admin_user.index'))
-    return render_template('admin/users/create.html', form=form)
+    return render_template('admin/user_form.html', form=form, title='Create User')
 
 @admin_user_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
-@admin_required
+@login_required
 def edit(id):
-    user = User.query.get_or_404(id)
-    form = UserForm(obj=user)
+    user = get_user_by_id(id)
+    if not user:
+        flash('User not found!', 'danger')
+        return redirect(url_for('admin_user.index'))
+    
+    form = UserForm(original_username=user.username, original_email=user.email, obj=user)
     if form.validate_on_submit():
-        form.populate_obj(user)
+        if form.username.data != user.username and User.query.filter_by(username=form.username.data).first():
+            flash('Username already exists!', 'danger')
+            return redirect(url_for('admin_user.edit', id=id))
+        
+        if form.email.data != user.email and User.query.filter_by(email=form.email.data).first():
+            flash('Email already exists!', 'danger')
+            return redirect(url_for('admin_user.edit', id=id))
+        
+        user.username = form.username.data
+        user.email = form.email.data
+        user.is_admin = form.is_admin.data
+        
         if form.password.data:
             user.set_password(form.password.data)
+        
         db.session.commit()
-        flash('User updated successfully.', 'success')
+        flash('User updated successfully!', 'success')
         return redirect(url_for('admin_user.index'))
-    return render_template('admin/users/edit.html', form=form, user=user)
+    return render_template('admin/user_form.html', form=form, title='Edit User')
 
 @admin_user_bp.route('/delete/<int:id>', methods=['POST'])
-@admin_required
+@login_required
 def delete(id):
-    user = User.query.get_or_404(id)
-    if user.id == current_user.id:
-        flash('You cannot delete your own account.', 'danger')
+    user = get_user_by_id(id)
+    if not user:
+        flash('User not found!', 'danger')
         return redirect(url_for('admin_user.index'))
-    db.session.delete(user)
-    db.session.commit()
-    flash('User deleted successfully.', 'success')
+    
+    try:
+        delete_user(user)
+        db.session.commit()
+        flash('User deleted successfully!', 'success')
+    except Exception as e:
+        flash(f'Failed to delete user: {str(e)}', 'danger')
+    
     return redirect(url_for('admin_user.index'))
