@@ -9,6 +9,7 @@ from app.routes.admin.bot_routes import admin_bot_bp
 from app.routes.public_user_routes import public_user_bp
 from app.routes.public_bot_routes import public_bot_bp
 from app.routes.user.user_routes import user_bp
+from app.config import get_config  # Import get_config from app.config
 
 def create_app(config_name='default'):
     app = Flask(__name__)
