@@ -17,8 +17,7 @@ def create_app(config_name='default'):
 
     # Initialize the database object
     from flask_sqlalchemy import SQLAlchemy
-    db = SQLAlchemy()
-    db.init_app(app)
+    db = SQLAlchemy(app)  # Move this line here
 
     # Initialize migrate and login manager
     migrate.init_app(app, db)
