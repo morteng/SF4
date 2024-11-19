@@ -9,4 +9,4 @@ def list_users():
 
 @user_bp.route('/greet')
 def greet():
-    return "Hey there!"
+    return "Hey there, buddy!"
