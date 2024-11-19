@@ -1,35 +1,23 @@
-import os
-from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy  # Import SQLAlchemy here
-from app.config import get_config
-from app.extensions import init_extensions
-from app.routes import init_routes
-from app.models import init_models
-
-# Define the db object here
-db = SQLAlchemy()
+from flask import Flask
+from .extensions import init_extensions
+from .models import init_models
+from .routes import init_routes
 
 def create_app(config_name='default'):
-    # Ensure instance directory exists
-    instance_path = os.path.join(os.getcwd(), 'instance')
-    if not os.path.exists(instance_path):
-        os.makedirs(instance_path)
-
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__)
+    
+    # Load configuration
+    from .config import get_config
     config = get_config(config_name)
     app.config.from_object(config)
 
-    db.init_app(app)  # Initialize the database with the app
+    # Initialize extensions
     init_extensions(app)
-    init_routes(app)
-    init_models(db)  # Initialize models
 
-    @app.route('/')
-    def index():
-        return render_template('index.html')
+    # Initialize models
+    init_models(app)
+
+    # Initialize routes
+    init_routes(app)
 
     return app
-
-if __name__ == '__main__':
-    app = create_app('development')
-    app.run(debug=True)
