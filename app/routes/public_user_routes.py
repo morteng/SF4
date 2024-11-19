@@ -4,15 +4,15 @@ from app.models.user import User
 from app.forms.user_forms import ProfileForm
 from app.services.user_service import get_user_by_id
 
-user_bp = Blueprint('user', __name__, url_prefix='/user')
+public_user_bp = Blueprint('user', __name__, url_prefix='/user')
 
-@user_bp.route('/profile')
+@public_user_bp.route('/profile')
 @login_required
 def profile():
     user = current_user
     return render_template('user/profile.html', user=user)
 
-@user_bp.route('/edit_profile', methods=['GET', 'POST'])
+@public_user_bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
     form = ProfileForm(original_username=current_user.username, original_email=current_user.email)
