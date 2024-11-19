@@ -1,8 +1,6 @@
 import pytest
 from app import create_app, db
 from sqlalchemy.orm import scoped_session, sessionmaker
-from app.models.user import User
-from app.models import init_models
 
 @pytest.fixture(scope='session')
 def app():
@@ -12,10 +10,7 @@ def app():
 @pytest.fixture(scope='session')
 def _db(app):
     with app.app_context():
-        # Initialize models
-        init_models(app)
-        
-        # Create all tables
+        # Initialize database tables
         db.create_all()
         yield db
         db.drop_all()
@@ -41,14 +36,16 @@ def client(app):
 @pytest.fixture(scope='session')
 def admin_user(_db, app):
     with app.app_context():
-        admin = User(
-            username='admin',
-            email='admin@example.com',
-            is_admin=True
-        )
-        admin.set_password('password123')
-        _db.session.add(admin)
-        _db.session.commit()
+        admin = _db.session.query(User).filter_by(username='admin').first()
+        if not admin:
+            admin = User(
+                username='admin',
+                email='admin@example.com',
+                is_admin=True
+            )
+            admin.set_password('password123')
+            _db.session.add(admin)
+            _db.session.commit()
         return admin
 
 @pytest.fixture(scope='function')
