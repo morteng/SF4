@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy  # Import SQLAlchemy here
 from app.config import get_config
 from app.extensions import init_extensions
 from app.routes import init_routes
