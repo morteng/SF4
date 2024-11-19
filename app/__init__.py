@@ -9,16 +9,6 @@ def create_app(config_name='default'):
 
     init_extensions(app)
 
-    # Register public bot blueprint
-    from .routes.public_bot_routes import public_bot_bp
-    app.register_blueprint(public_bot_bp)
-    print(f"Registered blueprint: {public_bot_bp.name}")
-
-    # Register public user blueprint
-    from .routes.public_user_routes import public_user_bp
-    app.register_blueprint(public_user_bp)
-    print(f"Registered blueprint: {public_user_bp.name}")
-
     # Initialize admin routes
     routes.init_routes(app)
 
