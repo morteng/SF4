@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+<div id="bots">
+    <hx-get href="{{ url_for('admin_bot_routes.bot_dashboard') }}" hx-target="#bots" hx-swap="innerHTML"></hx-get>
+    <!-- Bot dashboard will be loaded here -->
+</div>
+<a href="{{ url_for('admin_stipend_routes.stipends_list') }}">Manage Stipends</a>
+<a href="{{ url_for('admin_tag_routes.tags_list') }}">Manage Tags</a>
+<a href="{{ url_for('admin_organization_routes.organizations_list') }}">Manage Organizations</a>
+<a href="{{ url_for('admin_user_routes.users_list') }}">Manage Users</a>
+{% endblock %}

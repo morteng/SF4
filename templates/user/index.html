@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Welcome to the Stipend Discovery Website</h2>
+<div id="stipends">
+    <hx-get href="{{ url_for('public_user_routes.stipend_search') }}" hx-target="#stipends" hx-swap="innerHTML"></hx-get>
+    <!-- Stipend list will be loaded here -->
+</div>
+{% endblock %}

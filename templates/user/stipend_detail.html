@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ stipend.name }}</h2>
+<p><strong>Summary:</strong> {{ stipend.summary }}</p>
+<p><strong>Description:</strong> {{ stipend.description }}</p>
+<p><strong>Homepage URL:</strong> <a href="{{ stipend.homepage_url }}" target="_blank">{{ stipend.homepage_url }}</a></p>
+<p><strong>Application Procedure:</strong> {{ stipend.application_procedure }}</p>
+<p><strong>Eligibility Criteria:</strong> {{ stipend.eligibility_criteria }}</p>
+<p><strong>Application Deadline:</strong> {{ stipend.application_deadline }}</p>
+<p><strong>Open for Applications:</strong> {% if stipend.open_for_applications %}Yes{% else %}No{% endif %}</p>
+
+<a href="{{ url_for('public_user_routes.index') }}">Back to Stipends</a>
+{% endblock %}
