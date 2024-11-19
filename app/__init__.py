@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from app.config import get_config
 from app.extensions import init_extensions
 from app.routes import init_routes
+from app.models import init_models
 
 # Define the db object here
 db = SQLAlchemy()
@@ -21,6 +22,7 @@ def create_app(config_name='default'):
     db.init_app(app)  # Initialize the database with the app
     init_extensions(app)
     init_routes(app)
+    init_models(db)  # Initialize models
 
     @app.route('/')
     def index():
