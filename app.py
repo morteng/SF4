@@ -1,20 +1,20 @@
 import os
-from logging.config import fileConfig
-from flask import current_app
-from sqlalchemy import engine_from_config, pool
+from flask import Flask, current_app
+from sqlalchemy import create_engine
 from alembic import context
-from app import create_app, db
+from app import db
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
 # Interpret the config file for Python logging.
-fileConfig(config.config_file_name)
-
-# add your model's MetaData object here
-# for 'autogenerate' support
-target_metadata = db.metadata
+context.configure(
+    url=os.getenv('SQLALCHEMY_DATABASE_URI'),
+    target_metadata=db.metadata,
+    literal_binds=True,
+    dialect_opts={"paramstyle": "named"},
+)
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
@@ -28,7 +28,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = os.getenv('SQLALCHEMY_DATABASE_URI')
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -56,13 +56,9 @@ def run_migrations_online():
         if not os.path.exists(db_path):
             os.makedirs(db_path)
 
-        connectable = engine_from_config(
-            config.get_section(config.config_ini_section),
-            prefix='sqlalchemy.',
-            poolclass=pool.NullPool,
-        )
+        engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 
-        with connectable.connect() as connection:
+        with engine.connect() as connection:
             context.configure(
                 connection=connection, target_metadata=target_metadata
             )
