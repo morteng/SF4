@@ -1,10 +1,13 @@
-from flask import Flask, Blueprint
-from .extensions import db, migrate
-from .config import get_config
-
-# Import blueprints
-from app.routes.admin import admin_bp
+from flask import Flask, migrate
+from app.extensions import db, login_manager
+from app.routes.admin.stipend_routes import admin_stipend_bp
+from app.routes.admin.tag_routes import admin_tag_bp
+from app.routes.admin.organization_routes import admin_org_bp
+from app.routes.admin.user_routes import admin_user_bp
+from app.routes.admin.bot_routes import admin_bot_bp
 from app.routes.public_user_routes import public_user_bp
+from app.routes.public_bot_routes import public_bot_bp
+from app.routes.user.user_routes import user_bp
 
 def create_app(config_name='default'):
     app = Flask(__name__)

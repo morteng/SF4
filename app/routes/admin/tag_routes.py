@@ -1,34 +1,52 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+# app/routes/admin/tag_routes.py
+
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required
-from app.services.tag_service import get_tag_by_id, update_tag, list_all_tags
+from app.models.tag import Tag
+from app.forms.admin_forms import TagForm
+from app.extensions import db
+from app.utils import admin_required
 
-tag_bp = Blueprint('admin_tag', __name__)
+admin_tag_bp = Blueprint('admin_tag', __name__, url_prefix='/admin/tags')
 
-@tag_bp.route('/tags', methods=['GET'])
-@login_required
-def list_tags():
-    from app.services.tag_service import list_all_tags
-    tags = list_all_tags()
-    return render_template('admin/tag_list.html', tags=tags)
+@admin_tag_bp.route('/')
+@admin_required
+def index():
+    tags = Tag.query.all()
+    return render_template('admin/tags/index.html', tags=tags)
 
-@tag_bp.route('/tags/<int:tag_id>')
-@login_required
-def tag_details(tag_id):
-    tag = get_tag_by_id(tag_id)
-    if not tag:
-        flash('Tag not found', 'danger')
-        return redirect(url_for('admin_tag.list_tags'))
-    return render_template('admin/tag_details.html', tag=tag)
+@admin_tag_bp.route('/create', methods=['GET', 'POST'])
+@admin_required
+def create():
+    form = TagForm()
+    if form.validate_on_submit():
+        tag = Tag(
+            name=form.name.data,
+            category=form.category.data
+        )
+        db.session.add(tag)
+        db.session.commit()
+        flash('Tag created successfully.', 'success')
+        return redirect(url_for('admin_tag.index'))
+    return render_template('admin/tags/create.html', form=form)
 
-@tag_bp.route('/tags/<int:tag_id>/update', methods=['POST'])
-@login_required
-def update_tag_route(tag_id):
-    name = request.form.get('name')
-    category = request.form.get('category')
-    if update_tag(tag_id, name, category):
-        flash('Tag updated successfully', 'success')
-    else:
-        flash('Failed to update tag', 'danger')
-    return redirect(url_for('admin_tag.tag_details', tag_id=tag_id))
+@admin_tag_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
+@admin_required
+def edit(id):
+    tag = Tag.query.get_or_404(id)
+    form = TagForm(obj=tag)
+    if form.validate_on_submit():
+        form.populate_obj(tag)
+        db.session.commit()
+        flash('Tag updated successfully.', 'success')
+        return redirect(url_for('admin_tag.index'))
+    return render_template('admin/tags/edit.html', form=form, tag=tag)
 
-# Add other routes as needed
+@admin_tag_bp.route('/delete/<int:id>', methods=['POST'])
+@admin_required
+def delete(id):
+    tag = Tag.query.get_or_404(id)
+    db.session.delete(tag)
+    db.session.commit()
+    flash('Tag deleted successfully.', 'success')
+    return redirect(url_for('admin_tag.index'))

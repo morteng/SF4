@@ -1,32 +1,35 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+# app/routes/admin/bot_routes.py
+
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required
-from app.services.bot_service import list_all_bots, get_bot_by_id, update_bot
+from app.models.bot import Bot
+from app.forms.admin_forms import BotForm
+from app.extensions import db
+from app.services.bot_service import BotService
+from app.utils import admin_required
 
-bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
+admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/admin/bots')
 
-@bot_bp.route('/', methods=['GET'])
-@login_required
-def list_bots():
-    bots = list_all_bots()
-    return render_template('admin/bot_list.html', bots=bots)
+@admin_bot_bp.route('/')
+@admin_required
+def index():
+    bots = Bot.query.all()
+    return render_template('admin/bots/index.html', bots=bots)
 
-@bot_bp.route('/<int:bot_id>', methods=['GET'])
-@login_required
-def bot_details(bot_id):
-    bot = get_bot_by_id(bot_id)
-    if not bot:
-        flash('Bot not found', 'danger')
-        return redirect(url_for('bot.list_bots'))
-    return render_template('admin/bot_details.html', bot=bot)
+@admin_bot_bp.route('/run/<int:id>', methods=['POST'])
+@admin_required
+def run_bot(id):
+    bot = Bot.query.get_or_404(id)
+    try:
+        BotService.run_bot(bot.name)
+        flash(f'{bot.name} executed successfully.', 'success')
+    except Exception as e:
+        flash(f'Error running {bot.name}: {str(e)}', 'danger')
+    return redirect(url_for('admin_bot.index'))
 
-@bot_bp.route('/<int:bot_id>/update', methods=['POST'])
-@login_required
-def update_bot_route(bot_id):
-    name = request.form.get('name')
-    description = request.form.get('description')
-    status = request.form.get('status')
-    if update_bot(bot_id, name, description, status):
-        flash('Bot updated successfully', 'success')
-    else:
-        flash('Failed to update bot', 'danger')
-    return redirect(url_for('bot.bot_details', bot_id=bot_id))
+@admin_bot_bp.route('/logs/<int:id>')
+@admin_required
+def view_logs(id):
+    bot = Bot.query.get_or_404(id)
+    logs = bot.error_log
+    return render_template('admin/bots/logs.html', bot=bot, logs=logs)
