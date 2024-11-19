@@ -24,7 +24,7 @@ def admin_user(test_client):
 
 @pytest.fixture(scope='module')
 def admin_token(test_client, admin_user):
-    response = test_client.post('/admin/login', data={
+    response = test_client.post('/users/login', data={  # Updated URL to match blueprint registration
         'username': admin_user.username,
         'password': 'password'
     }, follow_redirects=True)

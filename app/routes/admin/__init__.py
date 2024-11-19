@@ -10,8 +10,8 @@ from .organization_routes import organization_bp
 from .user_routes import user_bp
 
 # Register the imported blueprints with the main admin blueprint
-admin_bp.register_blueprint(bot_admin_bp)  # Renamed to 'bot_admin'
+admin_bp.register_blueprint(bot_admin_bp, url_prefix='/bots')  # Renamed to 'bot_admin'
 admin_bp.register_blueprint(stipend_bp)
 admin_bp.register_blueprint(tag_bp)
 admin_bp.register_blueprint(organization_bp)
-admin_bp.register_blueprint(user_bp)
+admin_bp.register_blueprint(user_bp, url_prefix='/users')
