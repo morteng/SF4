@@ -1,30 +1,38 @@
-# app/routes/public_user_routes.py
+from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask_login import login_required, current_user
+from app.models.user import User
+from app.forms.user_forms import ProfileForm
+from app.services.user_service import get_user_by_id
 
-from flask import Blueprint, render_template, request
-from app.models.stipend import Stipend
-from app.models.tag import Tag
+user_bp = Blueprint('user', __name__, url_prefix='/user')
 
-public_user_bp = Blueprint('public_user', __name__)
+@user_bp.route('/profile')
+@login_required
+def profile():
+    user = current_user
+    return render_template('user/profile.html', user=user)
 
-@public_user_bp.route('/')
-def index():
-    # Fetch popular stipends or any default display
-    stipends = Stipend.query.limit(10).all()
-    tags = Tag.query.all()
-    return render_template('user/index.html', stipends=stipends, tags=tags)
-
-@public_user_bp.route('/search')
-def search():
-    query = request.args.get('query', '')
-    selected_tags = request.args.getlist('tags')
-    stipends = Stipend.query.filter(
-        Stipend.name.contains(query)
-    ).join(Stipend.tags).filter(
-        Tag.name.in_(selected_tags)
-    ).all()
-    return render_template('user/search_results.html', stipends=stipends)
-
-@public_user_bp.route('/stipend/<int:id>')
-def stipend_detail(id):
-    stipend = Stipend.query.get_or_404(id)
-    return render_template('user/stipend_detail.html', stipend=stipend)
+@user_bp.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = ProfileForm(original_username=current_user.username, original_email=current_user.email)
+    if form.validate_on_submit():
+        if form.username.data != current_user.username and User.query.filter_by(username=form.username.data).first():
+            flash('Username already exists!', 'danger')
+            return redirect(url_for('user.edit_profile'))
+        
+        if form.email.data != current_user.email and User.query.filter_by(email=form.email.data).first():
+            flash('Email already exists!', 'danger')
+            return redirect(url_for('user.edit_profile'))
+        
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        
+        if form.password.data:
+            current_user.set_password(form.password.data)
+        
+        from app import db
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('user.profile'))
+    return render_template('user/edit_profile.html', form=form, title='Edit Profile')

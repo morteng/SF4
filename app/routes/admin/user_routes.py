@@ -3,13 +3,13 @@ from flask_login import login_required
 from app.models.user import User
 from app.forms.admin_forms import UserForm
 from app.services.user_service import get_user_by_id, delete_user
-from app import db
 
 admin_user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
 
 @admin_user_bp.route('/')
 @login_required
 def index():
+    from app import db
     users = User.query.all()
     return render_template('admin/user_index.html', users=users)
 
@@ -24,6 +24,7 @@ def create():
             is_admin=form.is_admin.data
         )
         user.set_password(form.password.data)
+        from app import db
         db.session.add(user)
         db.session.commit()
         flash('User created successfully!', 'success')
@@ -55,6 +56,7 @@ def edit(id):
         if form.password.data:
             user.set_password(form.password.data)
         
+        from app import db
         db.session.commit()
         flash('User updated successfully!', 'success')
         return redirect(url_for('admin_user.index'))
@@ -70,6 +72,7 @@ def delete(id):
     
     try:
         delete_user(user)
+        from app import db
         db.session.commit()
         flash('User deleted successfully!', 'success')
     except Exception as e:

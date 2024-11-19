@@ -3,13 +3,13 @@ from flask_login import login_required
 from app.models.bot import Bot
 from app.forms.admin_forms import BotForm
 from app.services.bot_service import get_bot_by_id, run_bot
-from app import db
 
 admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/admin/bots')
 
 @admin_bot_bp.route('/')
 @login_required
 def index():
+    from app import db
     bots = Bot.query.all()
     return render_template('admin/bot_index.html', bots=bots)
 
@@ -23,6 +23,7 @@ def create():
             description=form.description.data,
             status='inactive'
         )
+        from app import db
         db.session.add(bot)
         db.session.commit()
         flash('Bot created successfully!', 'success')
@@ -41,6 +42,7 @@ def edit(id):
     if form.validate_on_submit():
         bot.name = form.name.data
         bot.description = form.description.data
+        from app import db
         db.session.commit()
         flash('Bot updated successfully!', 'success')
         return redirect(url_for('admin_bot.index'))
@@ -54,6 +56,7 @@ def delete(id):
         flash('Bot not found!', 'danger')
         return redirect(url_for('admin_bot.index'))
     
+    from app import db
     db.session.delete(bot)
     db.session.commit()
     flash('Bot deleted successfully!', 'success')

@@ -3,13 +3,13 @@ from flask_login import login_required
 from app.models.stipend import Stipend
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import get_stipend_by_id, delete_stipend
-from app import db
 
 admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
 
 @admin_stipend_bp.route('/')
 @login_required
 def index():
+    from app import db
     stipends = Stipend.query.all()
     return render_template('admin/stipend_index.html', stipends=stipends)
 
@@ -28,6 +28,7 @@ def create():
             application_deadline=form.application_deadline.data,
             open_for_applications=form.open_for_applications.data
         )
+        from app import db
         db.session.add(stipend)
         db.session.commit()
         flash('Stipend created successfully!', 'success')
@@ -52,6 +53,7 @@ def edit(id):
         stipend.eligibility_criteria = form.eligibility_criteria.data
         stipend.application_deadline = form.application_deadline.data
         stipend.open_for_applications = form.open_for_applications.data
+        from app import db
         db.session.commit()
         flash('Stipend updated successfully!', 'success')
         return redirect(url_for('admin_stipend.index'))
@@ -67,6 +69,7 @@ def delete(id):
     
     try:
         delete_stipend(stipend)
+        from app import db
         db.session.commit()
         flash('Stipend deleted successfully!', 'success')
     except Exception as e:

@@ -3,13 +3,13 @@ from flask_login import login_required
 from app.models.tag import Tag
 from app.forms.admin_forms import TagForm
 from app.services.tag_service import get_tag_by_id, delete_tag
-from app import db
 
 admin_tag_bp = Blueprint('admin_tag', __name__, url_prefix='/admin/tags')
 
 @admin_tag_bp.route('/')
 @login_required
 def index():
+    from app import db
     tags = Tag.query.all()
     return render_template('admin/tag_index.html', tags=tags)
 
@@ -22,6 +22,7 @@ def create():
             name=form.name.data,
             category=form.category.data
         )
+        from app import db
         db.session.add(tag)
         db.session.commit()
         flash('Tag created successfully!', 'success')
@@ -40,6 +41,7 @@ def edit(id):
     if form.validate_on_submit():
         tag.name = form.name.data
         tag.category = form.category.data
+        from app import db
         db.session.commit()
         flash('Tag updated successfully!', 'success')
         return redirect(url_for('admin_tag.index'))
@@ -55,6 +57,7 @@ def delete(id):
     
     try:
         delete_tag(tag)
+        from app import db
         db.session.commit()
         flash('Tag deleted successfully!', 'success')
     except Exception as e:
