@@ -9,7 +9,7 @@ admin_user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
 @admin_user_bp.route('/')
 @login_required
 def index():
-    from app import db
+    from app import db  # Import db within the function to avoid circular imports
     users = User.query.all()
     return render_template('admin/user_index.html', users=users)
 
@@ -24,7 +24,7 @@ def create():
             is_admin=form.is_admin.data
         )
         user.set_password(form.password.data)
-        from app import db
+        from app import db  # Import db within the function to avoid circular imports
         db.session.add(user)
         db.session.commit()
         flash('User created successfully!', 'success')
@@ -56,7 +56,7 @@ def edit(id):
         if form.password.data:
             user.set_password(form.password.data)
         
-        from app import db
+        from app import db  # Import db within the function to avoid circular imports
         db.session.commit()
         flash('User updated successfully!', 'success')
         return redirect(url_for('admin_user.index'))
@@ -72,7 +72,7 @@ def delete(id):
     
     try:
         delete_user(user)
-        from app import db
+        from app import db  # Import db within the function to avoid circular imports
         db.session.commit()
         flash('User deleted successfully!', 'success')
     except Exception as e:

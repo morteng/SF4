@@ -9,7 +9,7 @@ admin_org_bp = Blueprint('admin_org', __name__, url_prefix='/admin/organizations
 @admin_org_bp.route('/')
 @login_required
 def index():
-    from app import db
+    from app import db  # Import db within the function to avoid circular imports
     organizations = Organization.query.all()
     return render_template('admin/organization_index.html', organizations=organizations)
 
@@ -23,7 +23,7 @@ def create():
             description=form.description.data,
             homepage_url=form.homepage_url.data
         )
-        from app import db
+        from app import db  # Import db within the function to avoid circular imports
         db.session.add(organization)
         db.session.commit()
         flash('Organization created successfully!', 'success')
@@ -43,7 +43,7 @@ def edit(id):
         organization.name = form.name.data
         organization.description = form.description.data
         organization.homepage_url = form.homepage_url.data
-        from app import db
+        from app import db  # Import db within the function to avoid circular imports
         db.session.commit()
         flash('Organization updated successfully!', 'success')
         return redirect(url_for('admin_org.index'))
@@ -59,7 +59,7 @@ def delete(id):
     
     try:
         delete_organization(organization)
-        from app import db
+        from app import db  # Import db within the function to avoid circular imports
         db.session.commit()
         flash('Organization deleted successfully!', 'success')
     except Exception as e:

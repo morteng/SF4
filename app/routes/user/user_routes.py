@@ -3,7 +3,6 @@ from flask_login import login_required, current_user
 from app.models.user import User
 from app.forms.user_forms import ProfileForm
 from app.services.user_service import get_user_by_id
-from app import db
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
@@ -32,6 +31,7 @@ def edit_profile():
         if form.password.data:
             current_user.set_password(form.password.data)
         
+        from app import db  # Import db within the function to avoid circular imports
         db.session.commit()
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('user.profile'))
