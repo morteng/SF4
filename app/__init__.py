@@ -19,4 +19,7 @@ def create_app(config_name='default'):
     app.register_blueprint(public_user_bp)
     print(f"Registered blueprint: {public_user_bp.name}")
 
+    # Initialize admin routes
+    routes.init_routes(app)
+
     return app
