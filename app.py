@@ -1,52 +1,77 @@
-from flask import Flask
-from app.extensions import db  # Ensure db is imported here
-from app.config import get_config
+import os
+from logging.config import fileConfig
+from flask import current_app
+from sqlalchemy import engine_from_config, pool
+from alembic import context
+from app import create_app, db
 
-def create_app(config_name):
-    app = Flask(__name__)
-    
-    # Load configuration using the get_config function
-    config = get_config(config_name)
-    if config:
-        app.config.from_object(config)
-    else:
-        raise ValueError(f"Unknown configuration name: {config_name}")
-    
-    # Initialize extensions
-    db.init_app(app)
-    
-    return app
+# this is the Alembic Config object, which provides
+# access to the values within the .ini file in use.
+config = context.config
 
-def init_db(app):
+# Interpret the config file for Python logging.
+fileConfig(config.config_file_name)
+
+# add your model's MetaData object here
+# for 'autogenerate' support
+target_metadata = db.metadata
+
+def run_migrations_offline():
+    """Run migrations in 'offline' mode.
+
+    This configures the context with just a URL
+    and not an Engine, though an Engine is acceptable
+    here as well.  By skipping the Engine creation
+    we don't even need a DBAPI to be available.
+
+    Calls to context.execute() here emit the given string to the
+    script output.
+
+    """
+    url = config.get_main_option("sqlalchemy.url")
+    context.configure(
+        url=url,
+        target_metadata=target_metadata,
+        literal_binds=True,
+        dialect_opts={"paramstyle": "named"},
+    )
+
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+def run_migrations_online():
+    """Run migrations in 'online' mode.
+
+    In this scenario we need to create an Engine
+    and associate a connection with the context.
+
+    """
+    # Load the Flask app configuration
+    config_name = os.getenv('FLASK_CONFIG', 'development')
+    app = create_app(config_name)
     with app.app_context():
-        try:
-            db.create_all()
-            print("Database initialized successfully.")
-        except Exception as e:
-            print(f"Failed to initialize database: {e}")
+        # Ensure the database directory exists
+        db_path = os.path.dirname(app.config['SQLALCHEMY_DATABASE_URI'].replace('sqlite:///', ''))
+        if not os.path.exists(db_path):
+            os.makedirs(db_path)
 
-def run_migrations():
-    from alembic import command
-    from alembic.config import Config
-    alembic_cfg = Config("alembic.ini")
-    try:
-        command.upgrade(alembic_cfg, "head")
-        print("Migrations applied successfully.")
-    except Exception as e:
-        print(f"Failed to apply migrations: {e}")
+        connectable = engine_from_config(
+            config.get_section(config.config_ini_section),
+            prefix='sqlalchemy.',
+            poolclass=pool.NullPool,
+        )
 
-def run_tests():
-    import pytest
-    pytest.main(['-v', 'tests'])
+        with connectable.connect() as connection:
+            context.configure(
+                connection=connection, target_metadata=target_metadata
+            )
 
-def main():
-    app = create_app('development')
-    init_db(app)
-    run_migrations()
-    try:
-        app.run()
-    except Exception as e:
-        print(f"Application failed to start: {e}")
+            with context.begin_transaction():
+                context.run_migrations()
 
-if __name__ == '__main__':
-    main()
+
+if context.is_offline_mode():
+    run_migrations_offline()
+else:
+    run_migrations_online()
