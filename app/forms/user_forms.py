@@ -12,9 +12,14 @@ class ProfileForm(FlaskForm):
         self.original_username = original_username
         self.original_email = original_email
 
-class RegistrationForm(FlaskForm):  # Add this form
+class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=4, max=25)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
+
+class LoginForm(FlaskForm):  # Add this form
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Login')
