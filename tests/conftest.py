@@ -18,8 +18,8 @@ def session(_db):
     connection = _db.engine.connect()
     transaction = connection.begin()
     options = dict(bind=connection, binds={})
-    # Use db.session instead of _db.create_scoped_session
-    session = _db.sessionmaker(bind=_db.engine, **options)()
+    # Use db.session instead of creating a new sessionmaker instance
+    session = _db.create_scoped_session(options)
     yield session
     session.rollback()
     transaction.rollback()
