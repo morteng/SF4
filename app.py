@@ -1,9 +1,8 @@
 import os
-from flask import Flask, current_app
+from flask import Flask, render_template
 from app.config import get_config
 from app.extensions import init_extensions
-from app.routes.admin import admin_bp
-from app.routes.user import user_bp
+from app.routes import init_routes
 
 def create_app(config_name='default'):
     # Create and configure the app
@@ -14,15 +13,15 @@ def create_app(config_name='default'):
     # Initialize extensions
     init_extensions(app)
 
-    # Register blueprints
-    app.register_blueprint(admin_bp, url_prefix='/admin')
-    app.register_blueprint(user_bp, url_prefix='/user')
+    # Register routes
+    init_routes(app)
+
+    @app.route('/')
+    def index():
+        return render_template('index.html')
 
     return app
 
 if __name__ == '__main__':
-    app = create_app(os.getenv('FLASK_CONFIG', 'development'))
-    with app.app_context():
-        print("Admin blueprint initialized successfully.")
-        # Run the application
-        app.run()
+    app = create_app()
+    app.run(debug=True)
