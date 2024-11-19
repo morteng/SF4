@@ -1,10 +1,29 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
-from ..forms.user_forms import ProfileForm
+from ..forms.user_forms import ProfileForm, RegistrationForm  # Add RegistrationForm import
 from ..models.user import User
 from ..services.user_service import get_user_by_id
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
+
+@user_bp.route('/register', methods=['GET', 'POST'])  # Add this route
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        user = User.query.filter_by(username=username).first()
+        if user:
+            flash('Username already exists')
+            return redirect(url_for('user.register'))
+        new_user = User(username=username, email=email)
+        new_user.set_password(password)
+        from app import db
+        db.session.add(new_user)
+        db.session.commit()
+        login_user(new_user)
+        return redirect(url_for('user.profile'))
+    return render_template('register.html')
 
 @user_bp.route('/login', methods=['GET', 'POST'])
 def login():
