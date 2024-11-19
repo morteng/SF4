@@ -2,6 +2,7 @@ import os
 from flask import Flask, current_app
 from sqlalchemy import create_engine
 from alembic import context
+from logging.config import fileConfig  # Import fileConfig for logging configuration
 from app.models import db  # Import the db instance from your application models
 
 # this is the Alembic Config object, which provides
