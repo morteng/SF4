@@ -1,7 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
 from .association_tables import stipend_tag_association
-
-db = SQLAlchemy()
+from . import db
 
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
