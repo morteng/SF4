@@ -1,7 +1,6 @@
 import pytest
-from app import create_app, db
+from app import create_app
 from sqlalchemy.orm import scoped_session, sessionmaker
-from app.models.user import User  # Import the User model
 
 @pytest.fixture(scope='session')
 def app():
@@ -10,6 +9,7 @@ def app():
 
 @pytest.fixture(scope='session')
 def _db(app):
+    from app import db  # Import db inside the fixture to avoid circular imports
     with app.app_context():
         # Initialize database tables
         db.create_all()
@@ -36,6 +36,7 @@ def client(app):
 
 @pytest.fixture(scope='session')
 def admin_user(_db, app):
+    from app.models.user import User  # Import the User model inside the fixture
     with app.app_context():
         admin = _db.session.query(User).filter_by(username='admin').first()
         if not admin:

@@ -1,12 +1,9 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
-from .models import init_models
 from .routes import init_routes
 
-# Initialize the database, migrate, and login manager objects
-db = SQLAlchemy()
+# Initialize migrate and login manager objects
 migrate = Migrate()
 login_manager = LoginManager()
 
@@ -18,8 +15,12 @@ def create_app(config_name='default'):
     config = get_config(config_name)
     app.config.from_object(config)
 
-    # Initialize database, migrate, and login manager
+    # Initialize the database object
+    from flask_sqlalchemy import SQLAlchemy
+    db = SQLAlchemy()
     db.init_app(app)
+
+    # Initialize migrate and login manager
     migrate.init_app(app, db)
     login_manager.init_app(app)
 
@@ -30,6 +31,7 @@ def create_app(config_name='default'):
         return User.query.get(int(user_id))
 
     # Initialize models
+    from .models import init_models
     init_models(app)
 
     # Initialize routes
