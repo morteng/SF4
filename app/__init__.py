@@ -1,5 +1,5 @@
 from flask import Flask
-from config import get_config
+from .config import get_config  # Use relative import
 from extensions import init_extensions
 from routes import init_routes
 
