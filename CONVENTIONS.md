@@ -49,7 +49,8 @@ The **Stipend Discovery Website** is a Flask-based application designed to help 
 ### Backend
 
 - **Framework**: Flask (Python)
-- **Database**: SQLite for development; consider PostgreSQL for production
+- **Database**: SQLite for development; PostgreSQL for production
+- **Database Migrations**: Alembic for database schema migrations
 - **Interaction**: HTMX for real-time updates
 - **Bots**:
   - **TagBot**: Automatically tags stipends based on content.
@@ -115,8 +116,8 @@ The **Stipend Discovery Website** is a Flask-based application designed to help 
 
 ### Database Initialization
 
-- **Script**: A `app.py` script to initialize the database, perform migrations, and create the default admin user.
-- **Relationships**: Set up many-to-many relationships between stipends, tags, and organizations.
+- **Script**: The `app.py` script initializes the database, performs migrations, and creates the default admin user.
+- **Relationships**: Set up many-to-many relationships between stipends, tags, and organizations using association tables.
 
 ### User-Facing Pages
 
@@ -159,7 +160,7 @@ The **Stipend Discovery Website** is a Flask-based application designed to help 
 ### Project Structure
 
 - **Routes**: Split routes into separate files according to functionality.
-  - `user_routes.py`: User-facing routes.
+  - `public_user_routes.py`: User-facing routes.
   - **Admin Routes**: Located under `app/routes/admin/` directory.
     - `bot_routes.py`: Manage bot configurations and monitoring.
     - `organization_routes.py`: Manage organizations and their details.
@@ -173,8 +174,12 @@ The **Stipend Discovery Website** is a Flask-based application designed to help 
   - `stipend.py`, `organization.py`, `tag.py`, `user.py`, etc.
 - **Services**: Encapsulate business logic in services.
   - `bot_service.py`, `tag_service.py`, etc.
+- **Forms**: Use WTForms for form handling, located in `app/forms/`.
+  - `user_forms.py`, `admin_forms.py`, etc.
 - **Tests**: Mirror the application structure in the `tests/` directory.
-  - `test_routes/`, `test_models/`, `test_services/`.
+  - `tests/app/`, `tests/bots/`, with subdirectories matching the `app/` structure.
+- **Conventions Documentation**:
+  - Use `CONVENTIONS.md` to document coding standards and guidelines.
 
 ---
 
@@ -219,6 +224,8 @@ This testing specification outlines the requirements and guidelines for implemen
   - Views (routes)
   - Services
   - Utilities
+  - Forms
+  - Bots
 - **Coverage Reports**: Measure coverage using `pytest-cov` and generate reports on each test run.
 
 #### 3. Test Organization
@@ -228,23 +235,51 @@ This testing specification outlines the requirements and guidelines for implemen
   ```plaintext
   tests/
     conftest.py
-    test_models/
-      test_user.py
-      test_stipend.py
-      test_organization.py
-      test_tag.py
-    test_routes/
-      test_user_routes.py
-      admin/
-        test_stipend_routes.py
-        test_tag_routes.py
-        test_organization_routes.py
-        test_user_routes.py
-        test_bot_routes.py
-    test_services/
-      test_bot_service.py
-      test_tag_service.py
-      test_notification_service.py
+    app/
+      __init__.py
+      test_config.py
+      test_extensions.py
+      test_utils.py
+      models/
+        __init__.py
+        test_association_tables.py
+        test_bot.py
+        test_notification.py
+        test_organization.py
+        test_stipend.py
+        test_tag.py
+        test_user.py
+      routes/
+        __init__.py
+        admin/
+          __init__.py
+          test_bot_routes.py
+          test_organization_routes.py
+          test_stipend_routes.py
+          test_tag_routes.py
+          test_user_routes.py
+        test_public_bot_routes.py
+        test_public_user_routes.py
+        user/
+          __init__.py
+          test_user_routes.py
+      services/
+        __init__.py
+        test_bot_service.py
+        test_notification_service.py
+        test_organization_service.py
+        test_stipend_service.py
+        test_tag_service.py
+        test_user_service.py
+      forms/
+        __init__.py
+        test_user_forms.py
+        test_admin_forms.py
+    bots/
+      __init__.py
+      test_tag_bot.py
+      test_update_bot.py
+      test_review_bot.py
   ```
 
 - **Naming Conventions**:
@@ -257,7 +292,7 @@ This testing specification outlines the requirements and guidelines for implemen
 ##### Unit Tests
 
 - **Purpose**: Test individual functions or methods in isolation.
-- **Scope**: Models, services, utility functions.
+- **Scope**: Models, services, forms, utility functions.
 - **Example**: Testing the `set_password` method in the `User` model.
 
 ##### Integration Tests
@@ -292,7 +327,7 @@ This testing specification outlines the requirements and guidelines for implemen
 #### 7. Running Tests and Generating Reports
 
 - **Run all tests**: `pytest`
-- **Run specific tests**: `pytest tests/test_models/test_user.py`
+- **Run specific tests**: `pytest tests/app/models/test_user.py`
 - **Generate coverage report**: `pytest --cov=app --cov-report=html`
   - View the report by opening `htmlcov/index.html` in a browser.
 
@@ -310,7 +345,7 @@ This testing specification outlines the requirements and guidelines for implemen
 #### Unit Test Example
 
 ```python
-# tests/test_models/test_user.py
+# tests/app/models/test_user.py
 
 def test_set_password():
     from app.models.user import User
@@ -323,7 +358,7 @@ def test_set_password():
 #### Integration Test Example
 
 ```python
-# tests/test_routes/admin/test_stipend_routes.py
+# tests/app/routes/admin/test_stipend_routes.py
 
 def test_admin_create_stipend(client, session):
     # Log in as admin
@@ -353,7 +388,7 @@ def test_admin_create_stipend(client, session):
 #### End-to-End Test Example
 
 ```python
-# tests/test_routes/test_user_routes.py
+# tests/app/routes/test_public_user_routes.py
 
 def test_stipend_search(client, session):
     # Add test data to the database
@@ -382,12 +417,18 @@ def test_stipend_search(client, session):
 - **App Factory** in `app/__init__.py`:
 
   ```python
-  def create_app(config_name='default'):
-      # Load configuration
+  def create_app(config_name=None):
+      from app.config import Config, DevelopmentConfig, TestingConfig, ProductionConfig
+      load_dotenv()
+      app = Flask(__name__)
       if config_name == 'testing':
-          app.config.from_object('config.TestingConfig')
+          app.config.from_object(TestingConfig)
+      elif config_name == 'development':
+          app.config.from_object(DevelopmentConfig)
+      elif config_name == 'production':
+          app.config.from_object(ProductionConfig)
       else:
-          app.config.from_object('config.Config')
+          app.config.from_object(Config)
       # Initialize extensions and blueprints
       return app
   ```
@@ -397,15 +438,17 @@ def test_stipend_search(client, session):
   ```python
   @pytest.fixture(scope='session')
   def app():
+      from app import create_app
       app = create_app('testing')
       return app
 
   @pytest.fixture(scope='session')
   def db(app):
+      from app.extensions import db as _db
       with app.app_context():
-          db.create_all()
-          yield db
-          db.drop_all()
+          _db.create_all()
+          yield _db
+          _db.drop_all()
 
   @pytest.fixture(scope='function')
   def session(db):
@@ -444,15 +487,16 @@ def test_stipend_search(client, session):
 
 ### Environment Variables Management
 
-- **.env File**:
+- **.env.example File**:
   - Located in the project's root directory.
-  - Excluded from version control via `.gitignore`.
+  - Provides a template for the required environment variables.
+  - Should be copied to `.env` and customized per environment.
 
-- **Contents of `.env`**:
+- **Contents of `.env.example`**:
 
   ```env
   SECRET_KEY=your_secret_key_here
-  DATABASE_URL=sqlite:///site.db
+  DATABASE_URL=sqlite:///instance/site.db
   ADMIN_USERNAME=admin_user
   ADMIN_PASSWORD=secure_password
   ADMIN_EMAIL=admin@example.com
@@ -504,6 +548,8 @@ def test_stipend_search(client, session):
 
   ```python
   def init_admin_user():
+      from app.models.user import User
+      from app.extensions import db
       username = os.environ.get('ADMIN_USERNAME')
       password = os.environ.get('ADMIN_PASSWORD')
       email = os.environ.get('ADMIN_EMAIL')
@@ -517,7 +563,7 @@ def test_stipend_search(client, session):
 
 - **Sensitive Data Protection**:
   - Do not hard-code sensitive information in the codebase.
-  - Ensure the `.env` file is excluded from version control.
+  - Ensure the `.env` file is excluded from version control via `.gitignore`.
 - **Environment Variables Handling**:
   - Provide clear error messages if essential environment variables are missing.
   - Prevent the application from starting if critical configurations are not set.
@@ -536,7 +582,7 @@ def test_stipend_search(client, session):
 
 - **Setup Instructions**:
   - Include instructions in the `README.md` on:
-    - Creating the `.env` file based on a template.
+    - Creating the `.env` file based on `.env.example`.
     - Keeping the `.env` file out of version control.
     - Setting environment variables for different environments.
 
@@ -604,91 +650,141 @@ def test_stipend_search(client, session):
 ## Folder Structure
 
 ```plaintext
-app/
-  __init__.py
-  routes/
+Project Root/
+  .env.example
+  .flaskenv
+  .gitignore
+  CONVENTIONS.md
+  alembic.ini
+  alembic.log
+  app.py
+  requirements.txt
+  pytest.ini
+  wsgi.py
+  db.py
+  app/
     __init__.py
-    user_routes.py
-    admin/
+    config.py
+    extensions.py
+    utils.py
+    models/
       __init__.py
-      bot_routes.py
-      organization_routes.py
-      stipend_routes.py
-      tag_routes.py
-      user_routes.py
-  models/
-    __init__.py
-    stipend.py
-    organization.py
-    tag.py
-    user.py
-    bot.py
-    notification.py
-  templates/
-    base.html
-    user/
-      index.html
-      stipend_detail.html
-    admin/
-      dashboard.html
-      stipend_form.html
-      tag_form.html
-      organization_form.html
-      user_form.html
-      bot_dashboard.html
-    errors/
-      404.html
-      500.html
-  static/
-    css/
-      main.css
-    js/
-      main.js
-    images/
-  forms/
-    __init__.py
-    user_forms.py
-    admin_forms.py
-  services/
-    __init__.py
-    bot_service.py
-    tag_service.py
-    notification_service.py
+      association_tables.py
+      bot.py
+      notification.py
+      organization.py
+      stipend.py
+      tag.py
+      user.py
+    routes/
+      __init__.py
+      admin/
+        __init__.py
+        bot_routes.py
+        organization_routes.py
+        stipend_routes.py
+        tag_routes.py
+        user_routes.py
+      public_bot_routes.py
+      public_user_routes.py
+      user/
+        __init__.py
+        user_routes.py
+    services/
+      __init__.py
+      bot_service.py
+      notification_service.py
+      organization_service.py
+      stipend_service.py
+      tag_service.py
+      user_service.py
+    forms/
+      __init__.py
+      user_forms.py
+      admin_forms.py
+    templates/
+      base.html
+      user/
+        index.html
+        stipend_detail.html
+      admin/
+        dashboard.html
+        stipend_form.html
+        tag_form.html
+        organization_form.html
+        user_form.html
+        bot_dashboard.html
+      errors/
+        404.html
+        500.html
+    static/
+      css/
+        main.css
+      js/
+        main.js
+      images/
+  bots/
+    tag_bot.py
+    update_bot.py
+    review_bot.py
+  migrations/
+    README
+    env.py
+    script.py.mako
+    versions/
+      # Migration scripts generated by Alembic
+  instance/
+    site.db
+    config.env
   tests/
     conftest.py
-    test_models/
-      test_user.py
-      test_stipend.py
-      test_organization.py
-      test_tag.py
-    test_routes/
-      test_user_routes.py
-      admin/
-        test_stipend_routes.py
-        test_tag_routes.py
-        test_organization_routes.py
-        test_user_routes.py
-        test_bot_routes.py
-    test_services/
-      test_bot_service.py
-      test_tag_service.py
-      test_notification_service.py
-  config.py
-  db.py
-bots/
-  tag_bot.py
-  update_bot.py
-  review_bot.py
-instance/
-  site.db
-  config.env
-migrations/
-.env
-.gitignore
-README.md
-requirements.txt
-app.py
-wsgi.py
+    app/
+      __init__.py
+      test_config.py
+      test_extensions.py
+      test_utils.py
+      models/
+        __init__.py
+        test_association_tables.py
+        test_bot.py
+        test_notification.py
+        test_organization.py
+        test_stipend.py
+        test_tag.py
+        test_user.py
+      routes/
+        __init__.py
+        admin/
+          __init__.py
+          test_bot_routes.py
+          test_organization_routes.py
+          test_stipend_routes.py
+          test_tag_routes.py
+          test_user_routes.py
+        test_public_bot_routes.py
+        test_public_user_routes.py
+        user/
+          __init__.py
+          test_user_routes.py
+      services/
+        __init__.py
+        test_bot_service.py
+        test_notification_service.py
+        test_organization_service.py
+        test_stipend_service.py
+        test_tag_service.py
+        test_user_service.py
+      forms/
+        __init__.py
+        test_user_forms.py
+        test_admin_forms.py
+    bots/
+      __init__.py
+      test_tag_bot.py
+      test_update_bot.py
+      test_review_bot.py
+  CONVENTIONS.md
+  README.md
 ```
 
 ---
@@ -706,7 +802,7 @@ wsgi.py
 
 - **Environment**: Prepare for deployment on platforms like Render or Docker.
 - **Environment Variables**: Securely manage via `.env` and deployment platform settings.
-- **Database**: Use SQLite for development; consider PostgreSQL for production environments.
+- **Database**: Use SQLite for development; PostgreSQL for production environments.
 
 ### Documentation and Versioning
 
@@ -746,7 +842,6 @@ wsgi.py
 
 ## Conclusion
 
-This master document provides a comprehensive guide for developing the **Stipend Discovery Website**. It consolidates all relevant information, including project specifications, coding conventions, system architecture, testing strategies, and more. The focus is on building a robust backend with automated bots and a secure admin interface before addressing frontend development in detail. By adhering to the guidelines and standards outlined, the development team can ensure a high-quality, maintainable, and scalable application.
+This master document provides a comprehensive guide for developing the **Stipend Discovery Website**. It consolidates all relevant information, including project specifications, coding conventions, system architecture, testing strategies, and more. By adhering to the guidelines and standards outlined, the development team can ensure a high-quality, maintainable, and scalable application.
 
 ---
-
