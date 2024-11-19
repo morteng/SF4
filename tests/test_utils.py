@@ -3,7 +3,27 @@ from flask import Flask, jsonify
 from app.utils import login_required  # Corrected the import to login_required
 from app.models.user import User
 
-def test_login_required_decorator(app, client, admin_token):
+@pytest.fixture(scope='function')
+def app():
+    from app import create_app
+    app = create_app('testing')
+    with app.app_context():
+        yield app
+
+@pytest.fixture(scope='function')
+def client(app):
+    return app.test_client()
+
+@pytest.fixture(scope='function')
+def admin_user(client):
+    response = client.post('/admin/login', data={
+        'username': 'admin',
+        'password': 'password'
+    }, follow_redirects=True)
+    assert response.status_code == 200
+    return response
+
+def test_login_required_decorator(app, client, admin_user):
     """Test the login_required decorator with valid and invalid auth."""
     
     # Create a test route using the decorator
@@ -12,21 +32,16 @@ def test_login_required_decorator(app, client, admin_token):
     def protected_route():
         return jsonify({"message": "Access granted"}), 200
 
-    # Test with valid admin token
-    response = client.get('/test_admin', 
-                         headers={'Authorization': f'Bearer {admin_token}'})
-    assert response.status_code == 401  # This will fail because the test setup is incorrect
+    # Test with valid session cookie (from admin_user fixture)
+    response = client.get('/test_admin', headers=admin_user.headers)
+    assert response.status_code == 200
 
-    # Test with invalid token
-    response = client.get('/test_admin', 
-                         headers={'Authorization': 'Bearer invalid_token'})
-    assert response.status_code == 401
-
-    # Test with missing token
+    # Test with invalid session cookie
+    client.set_cookie('localhost', 'user_id', value='invalid_id')
     response = client.get('/test_admin')
     assert response.status_code == 401
 
-    # Test with malformed Authorization header
-    response = client.get('/test_admin', 
-                         headers={'Authorization': 'invalid_format'})
+    # Test with missing session cookie
+    client.cookie_jar.clear()
+    response = client.get('/test_admin')
     assert response.status_code == 401
