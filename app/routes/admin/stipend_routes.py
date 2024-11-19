@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, url_for, flash, render_template, request
 from flask_login import login_required
 from app.models.stipend import Stipend
 from app.services.stipend_service import get_stipend_by_id, delete_stipend
+from app.extensions import db  # Import db here
 
 admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
 

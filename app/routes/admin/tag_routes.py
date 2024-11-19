@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, url_for, flash, render_template, request
 from flask_login import login_required
 from app.models.tag import Tag
 from app.services.tag_service import get_tag_by_id, delete_tag
+from app.extensions import db  # Import db here
 
 admin_tag_bp = Blueprint('admin_tag', __name__, url_prefix='/admin/tags')
 

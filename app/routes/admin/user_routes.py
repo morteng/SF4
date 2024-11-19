@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, url_for, flash, render_template, request
 from flask_login import login_required
 from app.models.user import User
 from app.services.user_service import get_user_by_id, delete_user
+from app.extensions import db  # Import db here
 
 admin_user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
 

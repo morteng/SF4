@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, url_for, flash, render_template, request
 from flask_login import login_required
 from app.models.organization import Organization
 from app.services.organization_service import get_organization_by_id, delete_organization
+from app.extensions import db  # Import db here
 
 admin_org_bp = Blueprint('admin_org', __name__, url_prefix='/admin/organizations')
 

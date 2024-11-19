@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, url_for, flash, render_template
 from flask_login import login_required
 from app.models.bot import Bot
 from app.services.bot_service import get_bot_by_id, run_bot
+from app.extensions import db  # Import db here
 
 admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/admin/bots')
 
