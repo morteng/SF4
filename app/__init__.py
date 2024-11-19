@@ -1,7 +1,10 @@
+from dotenv import load_dotenv
+import os
 from flask import Flask
 from .extensions import db
 
 def create_app(config_name):
+    load_dotenv()  # Load environment variables from .env file
     app = Flask(__name__)
     
     # Initialize the database
