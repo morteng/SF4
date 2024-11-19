@@ -1,6 +1,5 @@
 from flask import Flask
-from app.extensions import db, migrate  # Ensure db and migrate are imported here
-from app.models import Base  # Ensure Base is imported here
+from app.extensions import db  # Ensure db is imported here
 from app.config import get_config
 
 def create_app(config_name):
@@ -15,9 +14,6 @@ def create_app(config_name):
     
     # Initialize extensions
     db.init_app(app)
-    migrate.init_app(app, db)
-    
-    # Register blueprints and other components here if needed
     
     return app
 

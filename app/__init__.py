@@ -1,4 +1,5 @@
-from flask import Flask, migrate
+from flask import Flask
+from flask_migrate import Migrate  # Correct import for Migrate
 from app.extensions import db, login_manager
 from app.routes.admin.stipend_routes import admin_stipend_bp
 from app.routes.admin.tag_routes import admin_tag_bp
@@ -21,11 +22,17 @@ def create_app(config_name='default'):
     
     # Initialize extensions
     db.init_app(app)
-    migrate.init_app(app, db)
+    migrate = Migrate(app, db)  # Initialize Migrate here
     
     # Register blueprints
-    app.register_blueprint(admin_bp, url_prefix='/admin')
+    app.register_blueprint(admin_stipend_bp, url_prefix='/admin/stipends')
+    app.register_blueprint(admin_tag_bp, url_prefix='/admin/tags')
+    app.register_blueprint(admin_org_bp, url_prefix='/admin/organizations')
+    app.register_blueprint(admin_user_bp, url_prefix='/admin/users')
+    app.register_blueprint(admin_bot_bp, url_prefix='/admin/bots')
     app.register_blueprint(public_user_bp, url_prefix='/')
+    app.register_blueprint(public_bot_bp, url_prefix='/bots')
+    app.register_blueprint(user_bp, url_prefix='/user')
     
     print("Blueprints registered successfully.")
     
