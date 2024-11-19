@@ -2,22 +2,28 @@ import os
 from logging.config import fileConfig
 from flask import current_app
 from alembic import context
-from app import create_app  # Import the create_app function from your application
-from app.models import db  # Import the db instance from your application models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
 # Interpret the config file for Python logging.
+# This line sets up loggers basically.
 fileConfig(config.config_file_name)
 
-# Create a Flask app instance and configure it
-app = create_app(os.getenv('FLASK_CONFIG', 'development'))
-current_app.app_context().push()
-
-# target_metadata is your SQLAlchemy database metadata
+# add your model's MetaData object here
+# for 'autogenerate' support
+# from myapp import mymodel
+# target_metadata = mymodel.Base.metadata
+from app import create_app, db
+app = create_app('development')
 target_metadata = db.metadata
+
+# other values from the config, defined by the needs of env.py,
+# can be acquired:
+# my_important_option = config.get_main_option("my_important_option")
+# ... etc.
+
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
@@ -31,7 +37,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = app.config['SQLALCHEMY_DATABASE_URI']
+    url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -50,16 +56,23 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    connectable = app.config['SQLALCHEMY_DATABASE_URI']
+    # connectable = engine_from_config(
+    #     config.get_section(config.config_ini_section),
+    #     prefix="sqlalchemy.",
+    #     poolclass=pool.NullPool,
+    # )
 
-    with db.engine.connect() as connection:
+    # Use Flask's app context to get the database URL
+    connectable = current_app.extensions['sqlalchemy'].db.engine
+
+    with connectable.connect() as connection:
         context.configure(
-            connection=connection,
-            target_metadata=target_metadata
+            connection=connection, target_metadata=target_metadata
         )
 
         with context.begin_transaction():
             context.run_migrations()
+
 
 if context.is_offline_mode():
     run_migrations_offline()

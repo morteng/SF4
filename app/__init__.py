@@ -5,6 +5,7 @@ from app.config import get_config
 from app.extensions import init_extensions
 from app.routes import init_routes
 
+# Define the db object here
 db = SQLAlchemy()
 
 def create_app(config_name='default'):

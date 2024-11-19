@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
-
+# db is already defined and initialized in app/__init__.py, so no need to re-initialize it here.
 def init_extensions(app):
-    db.init_app(app)
+    # Ensure that db.init_app(app) is not called here again.
+    pass
