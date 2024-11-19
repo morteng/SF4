@@ -13,6 +13,8 @@ def setup_directories():
 @pytest.fixture(scope='session')
 def app(setup_directories):
     app = create_app('testing')
+    # Correct the SQLALCHEMY_DATABASE_URI to avoid duplicate 'instance' directory
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/morten/sf4/instance/site.db'
     return app
 
 @pytest.fixture(scope='session')
