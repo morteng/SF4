@@ -22,6 +22,7 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL', 'sqlite:///:memory:')
+    WTF_CSRF_ENABLED = False  # Disable CSRF for testing
 
 class ProductionConfig(Config):
     DEBUG = False
