@@ -1,17 +1,22 @@
-from flask import Blueprint, request, jsonify, session
-from app.models.user import User
+from flask import Blueprint, request, redirect, url_for, session, flash
 from werkzeug.security import check_password_hash
+from app.models.user import User
 
-admin_user_bp = Blueprint('admin_user', __name__)
+admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
-@admin_user_bp.route('/login', methods=['POST'])
+@admin_bp.route('/login', methods=['POST'])
 def login():
-    username = request.form.get('username')
-    password = request.form.get('password')
-
+    username = request.form['username']
+    password = request.form['password']
     user = User.query.filter_by(username=username).first()
     if user and check_password_hash(user.password_hash, password) and user.is_admin:
         session['user_id'] = user.id
-        return jsonify({"message": "Login successful"}), 200
+        return redirect(url_for('admin.dashboard'))
     else:
-        return jsonify({"message": "Invalid credentials"}), 401
+        flash('Invalid username or password')
+        return redirect(url_for('admin.login')), 401
+
+@admin_bp.route('/dashboard')
+@login_required
+def dashboard():
+    return "Admin Dashboard"
