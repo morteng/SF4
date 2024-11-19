@@ -1,5 +1,7 @@
-from app.extensions import db
+from flask_sqlalchemy import SQLAlchemy
 from .association_tables import stipend_tags
+
+db = SQLAlchemy()
 
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
