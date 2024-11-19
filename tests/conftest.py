@@ -1,10 +1,17 @@
+import os
 import pytest
 from app import create_app
 from app.extensions import db  # Corrected import statement
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+@pytest.fixture(scope='session', autouse=True)
+def setup_directories():
+    instance_dir = '/home/morten/sf4/instance'
+    if not os.path.exists(instance_dir):
+        os.makedirs(instance_dir)
+
 @pytest.fixture(scope='session')
-def app():
+def app(setup_directories):
     app = create_app('testing')
     return app
 
