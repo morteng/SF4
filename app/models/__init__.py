@@ -1,4 +1,4 @@
-from .association_tables import stipend_tag_association, organization_stipends
+from ..extensions import db  # Import db here
 
 def init_models(app):
     from .bot import Bot
