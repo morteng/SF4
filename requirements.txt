@@ -5,3 +5,5 @@ pytest
 python-dotenv
 SQLAlchemy
 Flask-Login
+Flask-WTF
+WTForms
