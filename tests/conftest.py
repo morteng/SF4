@@ -1,6 +1,7 @@
 import pytest
 from app import create_app, db
 from app.models.user import User
+import logging
 
 @pytest.fixture(scope='module')
 def test_client():
@@ -27,5 +28,6 @@ def admin_token(test_client, admin_user):
         'username': admin_user.username,
         'password': 'password'
     }, follow_redirects=True)
+    logging.info(f"Login response status code: {response.status_code}")
     assert response.status_code == 200
     return response.headers['Set-Cookie']
