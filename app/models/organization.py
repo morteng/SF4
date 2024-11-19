@@ -1,10 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
-from .association_tables import init_association_tables
+from .association_tables import stipend_tag_association, organization_stipends
 
 db = SQLAlchemy()
-
-# Initialize association tables
-stipend_tag_association, organization_stipends = init_association_tables(db)
 
 class Organization(db.Model):
     id = db.Column(db.Integer, primary_key=True)
