@@ -21,16 +21,17 @@ def _db(app):
         db.drop_all()
 
 @pytest.fixture(scope='function', autouse=True)
-def session(_db):
-    connection = _db.engine.connect()
-    transaction = connection.begin()
-    options = dict(bind=connection, binds={})
-    Session = scoped_session(sessionmaker(bind=connection))
-    session = Session()
-    yield session
-    session.rollback()
-    transaction.rollback()
-    connection.close()
+def session(_db, app):
+    with app.app_context():
+        connection = _db.engine.connect()
+        transaction = connection.begin()
+        options = dict(bind=connection, binds={})
+        Session = scoped_session(sessionmaker(bind=connection))
+        session = Session()
+        yield session
+        session.rollback()
+        transaction.rollback()
+        connection.close()
 
 @pytest.fixture(scope='function')
 def client(app):
@@ -57,4 +58,4 @@ def admin_token(client, admin_user):
         'password': 'password123'
     }, follow_redirects=True)
     assert response.status_code == 200
-    return response.headers['Authorization']
+    return response.headers.get('Authorization')  # Use .get() to avoid KeyError if the header is missing

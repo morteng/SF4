@@ -9,3 +9,6 @@ def init_models(app):
     from .stipend import Stipend
     from .tag import Tag
     from .user import User
+    
+    # Register models with the app's db instance
+    db.Model.metadata.reflect(bind=app.db.engine)
