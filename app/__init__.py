@@ -1,8 +1,5 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from app.config import get_config
-
-db = SQLAlchemy()
+from .extensions import db, migrate
 
 def create_app(config_name='default'):
     app = Flask(__name__)
@@ -13,6 +10,7 @@ def create_app(config_name='default'):
 
     # Initialize extensions and blueprints
     db.init_app(app)
+    migrate.init_app(app, db)
     from .routes.admin import admin_bp
     app.register_blueprint(admin_bp)
 
