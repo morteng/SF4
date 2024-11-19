@@ -4,3 +4,4 @@ alembic
 pytest
 python-dotenv
 SQLAlchemy  # Ensure SQLAlchemy is explicitly listed
+Flask-Login==0.6.2

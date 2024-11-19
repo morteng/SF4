@@ -1,4 +1,5 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
+from flask_login import login_required
 
 user_bp = Blueprint('admin_user', __name__)
 
