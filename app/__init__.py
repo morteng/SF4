@@ -1,15 +1,18 @@
 from flask import Flask
-from .config import get_config  # Use relative import
-from .extensions import init_extensions  # Use relative import
-import routes
+from app.config import get_config
+from app.extensions import init_extensions
+from app.routes import init_routes as init_app_routes
 
 def create_app(config_name='default'):
+    # Load configuration
+    config = get_config(config_name)
     app = Flask(__name__)
-    app.config.from_object(get_config(config_name))
+    app.config.from_object(config)
 
+    # Initialize extensions
     init_extensions(app)
 
-    # Initialize admin routes
-    routes.init_routes(app)
+    # Initialize routes
+    init_app_routes(app)
 
     return app
