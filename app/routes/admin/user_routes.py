@@ -1,6 +1,7 @@
 from flask import Blueprint, request, redirect, url_for, session, flash
 from werkzeug.security import check_password_hash
 from app.models.user import User
+from app.utils import login_required  # Import the login_required decorator
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
