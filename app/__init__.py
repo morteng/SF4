@@ -10,8 +10,10 @@ from app.routes.public_user_routes import public_user_bp
 from app.routes.public_bot_routes import public_bot_bp
 from app.routes.user.user_routes import user_bp
 from app.config import get_config  # Import get_config from app.config
+from dotenv import load_dotenv  # Import load_dotenv to load environment variables
 
 def create_app(config_name='default'):
+    load_dotenv()  # Load environment variables from .env file
     app = Flask(__name__)
     
     # Load configuration using the get_config function
