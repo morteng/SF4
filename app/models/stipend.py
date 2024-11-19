@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from .association_tables import stipend_tags, organization_stipends
+from .association_tables import stipend_tag_association, organization_stipends
 
 db = SQLAlchemy()
 
@@ -17,5 +17,5 @@ class Stipend(db.Model):
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
 
     # Relationships
-    tags = db.relationship('Tag', secondary=stipend_tags, back_populates='stipends')
+    tags = db.relationship('Tag', secondary=stipend_tag_association, back_populates='stipends')
     organizations = db.relationship('Organization', secondary=organization_stipends, back_populates='stipends')
