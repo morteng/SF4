@@ -1,6 +1,6 @@
 import pytest
 from app import create_app
-from sqlalchemy.orm import scoped_session, sessionmaker
+from app.extensions import db  # Corrected import statement
 
 @pytest.fixture(scope='session')
 def app():
@@ -9,7 +9,6 @@ def app():
 
 @pytest.fixture(scope='session')
 def _db(app):
-    from app import db  # Import db inside the fixture to avoid circular imports
     with app.app_context():
         # Initialize database tables
         db.create_all()
