@@ -2,6 +2,8 @@ import os
 from logging.config import fileConfig
 from flask import current_app
 from alembic import context
+from app import create_app  # Import the create_app function from your application
+from app.models import db  # Import the db instance from your application models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -10,14 +12,12 @@ config = context.config
 # Interpret the config file for Python logging.
 fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-from app import create_app  # Import the create_app function from your application
+# Create a Flask app instance and configure it
 app = create_app(os.getenv('FLASK_CONFIG', 'development'))
-config.set_main_option('sqlalchemy.url', app.config['SQLALCHEMY_DATABASE_URI'])
+current_app.app_context().push()
 
-# target_metadata = mymodel.Base.metadata
-target_metadata = current_app.extensions['migrate'].db.metadata
+# target_metadata is your SQLAlchemy database metadata
+target_metadata = db.metadata
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
@@ -31,7 +31,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = app.config['SQLALCHEMY_DATABASE_URI']
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -50,9 +50,9 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    connectable = current_app.extensions['migrate'].db.engine
+    connectable = app.config['SQLALCHEMY_DATABASE_URI']
 
-    with connectable.connect() as connection:
+    with db.engine.connect() as connection:
         context.configure(
             connection=connection,
             target_metadata=target_metadata
