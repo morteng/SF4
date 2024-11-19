@@ -14,4 +14,4 @@ admin_bp.register_blueprint(bot_admin_bp, url_prefix='/bots')  # Renamed to 'bot
 admin_bp.register_blueprint(stipend_bp)
 admin_bp.register_blueprint(tag_bp)
 admin_bp.register_blueprint(organization_bp)
-admin_bp.register_blueprint(user_bp, url_prefix='/users')
+admin_bp.register_blueprint(user_bp)  # Corrected URL prefix to match the blueprint registration

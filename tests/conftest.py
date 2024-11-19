@@ -7,7 +7,8 @@ import logging
 def test_client():
     app = create_app('testing')
     with app.test_client() as client:
-        yield client
+        with app.app_context():  # Ensure application context is pushed
+            yield client
 
 @pytest.fixture(scope='module')
 def admin_user(test_client):

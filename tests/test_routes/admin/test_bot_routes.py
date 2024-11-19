@@ -5,7 +5,7 @@ from app.utils import login_required  # Ensure this import is correct
 @pytest.mark.usefixtures("admin_user")
 def test_create_bot_authorized(test_client, admin_token):
     # Use the session cookie directly in the headers
-    response = test_client.post('/admin/bots', json={
+    response = test_client.post('/bots', json={
         'name': 'TestBot',
         'description': 'A test bot',
         'status': 'active'
