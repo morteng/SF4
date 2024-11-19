@@ -1,21 +1,29 @@
 import pytest
-from app import create_app, db
-from app.models.user import User
-from app.models.stipend import Stipend
-from app.models.tag import Tag
-from app.models.organization import Organization
-from app.models.bot import Bot
-from app.models.notification import Notification
-from werkzeug.security import generate_password_hash
+from app import create_app
+from app.extensions import db
+
+@pytest.fixture(scope='module')
+def app():
+    app = create_app('testing')
+    with app.app_context():
+        db.create_all()
+        yield app
+        db.session.remove()
+        db.drop_all()
+
+@pytest.fixture(scope='function')
+def client(app):
+    return app.test_client()
 
 @pytest.fixture(scope='module', autouse=True)
 def init_admin_user(session):
     # First try to find existing admin user
+    from app.models.user import User  # Import the User model inside the fixture
     admin_user = session.query(User).filter_by(email='admin@example.com').first()
     if not admin_user:
         admin_user = User(
             username='admin_user',
-            password_hash=generate_password_hash('secure_password'),
+            password_hash='pbkdf2:sha256:150000$XbL3IjWn$3d8Kq7J29e4gFyhiuQlZIl12tXcVU8S2R5Qx5hPZV0k=',
             email='admin@example.com',
             is_admin=True
         )
@@ -46,6 +54,7 @@ def test_create_stipend(client, session):
 
 def test_update_stipend(client, session):
     # Create a stipend first
+    from app.models.stipend import Stipend
     stipend = Stipend(
         name='Sample Stipend',
         summary='Sample summary',
@@ -68,6 +77,7 @@ def test_update_stipend(client, session):
 
 def test_delete_stipend(client, session):
     # Create a stipend first
+    from app.models.stipend import Stipend
     stipend = Stipend(
         name='Sample Stipend',
         summary='Sample summary',
@@ -95,6 +105,7 @@ def test_create_tag(client, session):
 
 def test_update_tag(client, session):
     # Create a tag first
+    from app.models.tag import Tag
     tag = Tag(name='Sample Tag', category='Category')
     session.add(tag)
     session.commit()
@@ -108,6 +119,7 @@ def test_update_tag(client, session):
 
 def test_delete_tag(client, session):
     # Create a tag first
+    from app.models.tag import Tag
     tag = Tag(name='Sample Tag', category='Category')
     session.add(tag)
     session.commit()
@@ -127,6 +139,7 @@ def test_create_organization(client, session):
 
 def test_update_organization(client, session):
     # Create an organization first
+    from app.models.organization import Organization
     organization = Organization(
         name='Sample Organization',
         description='Sample description',
@@ -144,6 +157,7 @@ def test_update_organization(client, session):
 
 def test_delete_organization(client, session):
     # Create an organization first
+    from app.models.organization import Organization
     organization = Organization(
         name='Sample Organization',
         description='Sample description',
@@ -167,6 +181,7 @@ def test_create_bot(client, session):
 
 def test_update_bot(client, session):
     # Create a bot first
+    from app.models.bot import Bot
     bot = Bot(name='Sample Bot', description='Sample description', status='active')
     session.add(bot)
     session.commit()
@@ -181,6 +196,7 @@ def test_update_bot(client, session):
 
 def test_delete_bot(client, session):
     # Create a bot first
+    from app.models.bot import Bot
     bot = Bot(name='Sample Bot', description='Sample description', status='active')
     session.add(bot)
     session.commit()
@@ -199,6 +215,7 @@ def test_create_notification(client, session):
 
 def test_update_notification(client, session):
     # Create a notification first
+    from app.models.notification import Notification
     notification = Notification(message='Sample notification', type='info')
     session.add(notification)
     session.commit()
@@ -212,6 +229,7 @@ def test_update_notification(client, session):
 
 def test_delete_notification(client, session):
     # Create a notification first
+    from app.models.notification import Notification
     notification = Notification(message='Sample notification', type='info')
     session.add(notification)
     session.commit()
