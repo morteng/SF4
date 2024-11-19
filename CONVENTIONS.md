@@ -687,9 +687,6 @@ Project Root/
         user_routes.py
       public_bot_routes.py
       public_user_routes.py
-      user/
-        __init__.py
-        user_routes.py
     services/
       __init__.py
       bot_service.py
