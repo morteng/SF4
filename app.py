@@ -9,12 +9,7 @@ from app.models import db  # Import the db instance from your application models
 config = context.config
 
 # Interpret the config file for Python logging.
-context.configure(
-    url=os.getenv('SQLALCHEMY_DATABASE_URI'),
-    target_metadata=db.metadata,
-    literal_binds=True,
-    dialect_opts={"paramstyle": "named"},
-)
+fileConfig(config.config_file_name)
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
