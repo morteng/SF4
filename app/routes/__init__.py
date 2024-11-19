@@ -1,4 +1,5 @@
-from flask import render_template
+from flask import render_template, current_app
+from flask_login import current_user
 from .admin.bot_routes import admin_bot_bp
 from .admin.organization_routes import admin_org_bp
 from .admin.stipend_routes import admin_stipend_bp
@@ -18,4 +19,4 @@ def init_routes(app):
     # Add the root route
     @app.route('/')
     def index():
-        return render_template('index.html')
+        return render_template('index.html', current_user=current_user)
