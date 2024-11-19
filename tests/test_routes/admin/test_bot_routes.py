@@ -1,5 +1,6 @@
 import pytest
 import logging
+from app.utils import login_required  # Ensure this import is correct
 
 @pytest.mark.usefixtures("admin_user")
 def test_create_bot_authorized(test_client, admin_token):
