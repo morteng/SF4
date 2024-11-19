@@ -5,15 +5,16 @@ from app.extensions import init_extensions
 from app.routes import init_routes
 
 def create_app(config_name='default'):
-    # Create and configure the app
-    app = Flask(__name__)
+    # Ensure instance directory exists
+    instance_path = os.path.join(os.getcwd(), 'instance')
+    if not os.path.exists(instance_path):
+        os.makedirs(instance_path)
+
+    app = Flask(__name__, instance_relative_config=True)
     config = get_config(config_name)
     app.config.from_object(config)
 
-    # Initialize extensions
     init_extensions(app)
-
-    # Register routes
     init_routes(app)
 
     @app.route('/')
@@ -23,5 +24,5 @@ def create_app(config_name='default'):
     return app
 
 if __name__ == '__main__':
-    app = create_app()
+    app = create_app('development')
     app.run(debug=True)
