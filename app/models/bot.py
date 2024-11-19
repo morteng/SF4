@@ -1,4 +1,4 @@
-from app.extensions import db
+from app import db
 
 class Bot(db.Model):
     id = db.Column(db.Integer, primary_key=True)
