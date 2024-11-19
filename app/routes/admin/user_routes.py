@@ -1,7 +1,7 @@
 # app/routes/admin/user_routes.py
 
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, login_user
 from app.models.user import User
 from app.forms.admin_forms import UserForm
 from app.extensions import db
