@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, session
 import logging
 from app.models.user import User
 
-user_bp = Blueprint('admin', __name__, url_prefix='/admin')
+user_bp = Blueprint('user', __name__, url_prefix='/users')  # Corrected the blueprint name
 
 @user_bp.route('/login', methods=['POST'])
 def login():
