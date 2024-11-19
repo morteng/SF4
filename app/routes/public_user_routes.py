@@ -4,7 +4,7 @@ from app.models.user import User
 from app.forms.user_forms import ProfileForm
 from app.services.user_service import get_user_by_id
 
-public_user_bp = Blueprint('user', __name__, url_prefix='/user')
+public_user_bp = Blueprint('public_user', __name__, url_prefix='/user')
 
 @public_user_bp.route('/profile')
 @login_required
