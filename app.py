@@ -1,13 +1,17 @@
 from flask import Flask
 from app.extensions import db, migrate  # Ensure db and migrate are imported here
 from app.models import Base  # Ensure Base is imported here
+from app.config import get_config
 
 def create_app(config_name):
     app = Flask(__name__)
     
-    # Load configuration based on environment variable or default to 'development'
-    config_module = f"config.{config_name.capitalize()}Config"
-    app.config.from_object(config_module)
+    # Load configuration using the get_config function
+    config = get_config(config_name)
+    if config:
+        app.config.from_object(config)
+    else:
+        raise ValueError(f"Unknown configuration name: {config_name}")
     
     # Initialize extensions
     db.init_app(app)
