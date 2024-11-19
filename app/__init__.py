@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_migrate import Migrate  # Correct import for Migrate
-from app.extensions import db, login_manager
+from app.extensions import db, login_manager, init_extensions
 from app.routes.admin.stipend_routes import admin_stipend_bp
 from app.routes.admin.tag_routes import admin_tag_bp
 from app.routes.admin.organization_routes import admin_org_bp
@@ -22,7 +22,7 @@ def create_app(config_name='default'):
         raise ValueError(f"Unknown configuration name: {config_name}")
     
     # Initialize extensions
-    db.init_app(app)
+    init_extensions(app)
     migrate = Migrate(app, db)  # Initialize Migrate here
     
     # Register blueprints
