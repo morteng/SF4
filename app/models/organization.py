@@ -1,5 +1,7 @@
-from app.extensions import db
+from flask_sqlalchemy import SQLAlchemy
 from .association_tables import organization_stipends
+
+db = SQLAlchemy()
 
 class Organization(db.Model):
     id = db.Column(db.Integer, primary_key=True)
