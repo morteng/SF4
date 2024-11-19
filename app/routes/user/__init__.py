@@ -1,15 +1,12 @@
-from flask import Blueprint, request, jsonify, session
-from app.utils import login_required
-from app.services.user_service import create_user, get_user_by_username, authenticate_user
+from flask import Blueprint
+from app.utils import admin_required  # Ensure this is the correct function
 
-user_bp = Blueprint('user', __name__, url_prefix='/users')
+user_bp = Blueprint('user', __name__)
 
-@user_bp.route('/profile/<int:user_id>', methods=['GET'])
-@login_required
-def profile(user_id):
-    from app.services.user_service import get_user_by_id
-    user = get_user_by_id(user_id)
-    if not user:
-        flash('User not found', 'danger')
-        return redirect(url_for('user.index'))
-    return render_template('user/profile.html', user=user)
+# Example of using admin_required, adjust as necessary
+# @user_bp.route('/some_route')
+# @admin_required
+# def some_view():
+#     pass
+
+from .user_routes import *
