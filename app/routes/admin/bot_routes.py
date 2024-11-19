@@ -7,8 +7,7 @@ from app.models.bot import Bot
 from app.forms.admin_forms import BotForm
 from app.services.bot_service import BotService
 from app.utils import admin_required
-
-db = SQLAlchemy()
+from app import db
 
 admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/admin/bots')
 

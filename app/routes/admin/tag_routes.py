@@ -4,8 +4,8 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required
 from app.models.tag import Tag
 from app.forms.admin_forms import TagForm
-from app.extensions import db
 from app.utils import admin_required
+from app import db
 
 admin_tag_bp = Blueprint('admin_tag', __name__, url_prefix='/admin/tags')
 
