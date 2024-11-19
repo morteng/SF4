@@ -2,7 +2,7 @@ import os
 from flask import Flask, current_app
 from sqlalchemy import create_engine
 from alembic import context
-from app import db
+from app.models import db  # Import the db instance from your application models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -31,7 +31,7 @@ def run_migrations_offline():
     url = os.getenv('SQLALCHEMY_DATABASE_URI')
     context.configure(
         url=url,
-        target_metadata=target_metadata,
+        target_metadata=db.metadata,  # Use db.metadata directly
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
     )
@@ -48,6 +48,7 @@ def run_migrations_online():
 
     """
     # Load the Flask app configuration
+    from app import create_app  # Import create_app here
     config_name = os.getenv('FLASK_CONFIG', 'development')
     app = create_app(config_name)
     with app.app_context():
@@ -60,7 +61,7 @@ def run_migrations_online():
 
         with engine.connect() as connection:
             context.configure(
-                connection=connection, target_metadata=target_metadata
+                connection=connection, target_metadata=db.metadata  # Use db.metadata directly
             )
 
             with context.begin_transaction():
