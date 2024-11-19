@@ -7,3 +7,8 @@ def init_routes(app):
     admin_init_routes(app)
 
     # Register additional blueprints if needed
+    app.register_blueprint(public_bot_bp)
+    print(f"Registered blueprint: {public_bot_bp.name}")
+
+    app.register_blueprint(public_user_bp)
+    print(f"Registered blueprint: {public_user_bp.name}")

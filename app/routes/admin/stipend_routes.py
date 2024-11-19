@@ -4,7 +4,7 @@ from app.models.stipend import Stipend
 from app.services.stipend_service import get_stipend_by_id, delete_stipend
 from app.extensions import db  # Import db here
 
-admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
+admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
 
 @admin_stipend_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
