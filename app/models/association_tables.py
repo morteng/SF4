@@ -1,4 +1,3 @@
-from . import db
 
 stipend_tag_association = db.Table(
     'stipend_tag',
