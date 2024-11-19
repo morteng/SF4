@@ -2,7 +2,7 @@ from flask import Flask
 from flask_login import LoginManager
 from app.extensions import db, migrate  # Ensure db and migrate are imported here
 from app.models import Base  # Ensure Base is imported here
-from app.routes.admin import admin_bp, bot_admin_bp  # Import the bot_admin_bp
+from app.routes.admin import admin_bp  # Import the admin_bp
 from app.routes.user import user_bp
 
 login_manager = LoginManager()
@@ -25,7 +25,6 @@ def create_app(config_name):
         return User.query.get(int(user_id))
 
     # Register blueprints and other components here if needed
-    admin_bp.register_blueprint(bot_admin_bp, url_prefix='/bots')  # Register bot_admin_bp under admin_bp
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(user_bp, url_prefix='/users')
 
