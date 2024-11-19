@@ -1,4 +1,5 @@
 import pytest
+import logging
 
 @pytest.mark.usefixtures("admin_user")
 def test_create_bot_authorized(test_client, admin_token):
