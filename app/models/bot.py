@@ -5,5 +5,6 @@ class Bot(db.Model):
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
     status = db.Column(db.String(50), nullable=False)
-    last_run = db.Column(db.DateTime, nullable=True)
-    error_log = db.Column(db.Text, nullable=True)
+
+    def __repr__(self):
+        return f"<Bot {self.name}>"
