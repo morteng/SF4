@@ -12,8 +12,7 @@ def test_client():
 
 @pytest.fixture(scope='module')
 def admin_user(test_client):
-    app = create_app('testing')
-    with app.app_context():
+    with test_client.application.app_context():  # Use the correct application context
         db.create_all()
         admin = User(username='admin', email='admin@example.com', is_admin=True)
         admin.set_password('password')
