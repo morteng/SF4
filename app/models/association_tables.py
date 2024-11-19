@@ -1,5 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 
+db = SQLAlchemy()
+
 def init_association_tables(db):
     # Define your association tables here
     stipend_tag_association = db.Table(
