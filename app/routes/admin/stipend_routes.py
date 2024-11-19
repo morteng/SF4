@@ -4,11 +4,12 @@ from app.services.stipend_service import get_stipend_by_id, update_stipend
 
 stipend_bp = Blueprint('admin_stipend', __name__)
 
-@stipend_bp.route('/stipends')
+@stipend_bp.route('/stipends', methods=['GET'])
 @login_required
 def list_stipends():
-    # Your code here
-    pass
+    from app.services.stipend_service import list_all_stipends
+    stipends = list_all_stipends()
+    return render_template('admin/stipend_list.html', stipends=stipends)
 
 @stipend_bp.route('/stipends/<int:stipend_id>')
 @login_required

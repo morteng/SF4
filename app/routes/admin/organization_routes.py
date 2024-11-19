@@ -4,11 +4,12 @@ from app.services.organization_service import get_organization_by_id, update_org
 
 organization_bp = Blueprint('admin_organization', __name__)
 
-@organization_bp.route('/organizations')
+@organization_bp.route('/organizations', methods=['GET'])
 @login_required
 def list_organizations():
-    # Your code here
-    pass
+    from app.services.organization_service import list_all_organizations
+    organizations = list_all_organizations()
+    return render_template('admin/organization_list.html', organizations=organizations)
 
 @organization_bp.route('/organizations/<int:organization_id>')
 @login_required

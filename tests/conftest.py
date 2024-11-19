@@ -15,13 +15,13 @@ def app():
 def client(app):
     return app.test_client()
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='module')
 def session(app):
     with app.app_context():
         connection = db.engine.connect()
         transaction = connection.begin()
         options = dict(bind=connection)
-        session = db.create_scoped_session(options=options)
+        session = db._make_scoped_session(options=options)
         yield session
         session.remove()
         transaction.rollback()

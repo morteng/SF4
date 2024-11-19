@@ -27,7 +27,7 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('public_user.login'))
 
-@public_user_bp.route('/dashboard')
+@public_user_bp.route('/dashboard', methods=['GET'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('user/dashboard.html')

@@ -4,9 +4,10 @@ from app.services.tag_service import get_tag_by_id, update_tag, list_all_tags
 
 tag_bp = Blueprint('admin_tag', __name__)
 
-@tag_bp.route('/tags')
+@tag_bp.route('/tags', methods=['GET'])
 @login_required
 def list_tags():
+    from app.services.tag_service import list_all_tags
     tags = list_all_tags()
     return render_template('admin/tag_list.html', tags=tags)
 
