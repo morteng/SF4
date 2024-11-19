@@ -1,6 +1,7 @@
 import pytest
 from app import create_app, db
 from sqlalchemy.orm import scoped_session, sessionmaker
+from app.models.user import User
 
 @pytest.fixture(scope='session')
 def app():
@@ -19,7 +20,6 @@ def session(_db):
     connection = _db.engine.connect()
     transaction = connection.begin()
     options = dict(bind=connection, binds={})
-    # Use scoped_session(sessionmaker(bind=connection)) instead of _db.create_scoped_session(options)
     Session = scoped_session(sessionmaker(bind=connection))
     session = Session()
     yield session
@@ -31,3 +31,25 @@ def session(_db):
 def client(app):
     with app.test_client() as client:
         yield client
+
+@pytest.fixture(scope='session')
+def admin_user(_db, app):
+    with app.app_context():
+        admin = User(
+            username='admin',
+            email='admin@example.com',
+            is_admin=True
+        )
+        admin.set_password('password123')
+        _db.session.add(admin)
+        _db.session.commit()
+        return admin
+
+@pytest.fixture(scope='function')
+def admin_token(client, admin_user):
+    response = client.post('/admin/login', data={
+        'username': admin_user.username,
+        'password': 'password123'
+    }, follow_redirects=True)
+    assert response.status_code == 200
+    return response.headers['Authorization']
