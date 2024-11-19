@@ -1,6 +1,6 @@
 from flask import Flask
 from .config import get_config  # Use relative import
-from extensions import init_extensions
+from .extensions import init_extensions  # Use relative import
 from routes import init_routes
 
 def create_app(config_name='default'):
