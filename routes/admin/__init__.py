@@ -1,8 +1,10 @@
 from flask import Blueprint
 from .stipend_routes import admin_stipend_bp
 from .organization_routes import admin_org_bp
-from .tag_routes import admin_tag_bp
 from .bot_routes import admin_bot_bp
+
+# Ensure the correct path to tag_routes.py
+from .tag_routes import admin_tag_bp
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
