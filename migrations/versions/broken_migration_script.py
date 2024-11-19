@@ -7,7 +7,9 @@ Create Date: 2024-11-19 12:30:00.000000
 """
 from alembic import op
 import sqlalchemy as sa
-from handlers import some_handler  # This is the problematic line
+
+# Remove the problematic line
+# from handlers import some_handler
 
 # revision identifiers, used by Alembic.
 revision = 'broken_revision_id'
