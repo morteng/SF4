@@ -1,5 +1,5 @@
 import pytest
-from app import create_app
+from app import create_app, db
 
 @pytest.fixture(scope='session')
 def app():
