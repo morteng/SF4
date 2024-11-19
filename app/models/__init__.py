@@ -9,4 +9,3 @@ def init_models(app):
     from .stipend import Stipend
     from .tag import Tag
     from .user import User
-    db.init_app(app)
