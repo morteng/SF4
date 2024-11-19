@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 from flask import Flask
 from .extensions import db
+from .config import get_config  # Import get_config from config.py
 
 def create_app(config_name):
     load_dotenv()  # Load environment variables from .env file
