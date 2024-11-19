@@ -1,6 +1,7 @@
 import pytest
 from app import create_app, db
 from sqlalchemy.orm import scoped_session, sessionmaker
+from app.models.user import User  # Import the User model
 
 @pytest.fixture(scope='session')
 def app():
