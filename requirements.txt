@@ -3,3 +3,4 @@ Flask-SQLAlchemy
 alembic
 pytest
 python-dotenv
+SQLAlchemy  # Ensure SQLAlchemy is explicitly listed
