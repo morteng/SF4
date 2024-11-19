@@ -2,11 +2,11 @@ from flask import Blueprint, request, jsonify, session
 import logging
 from app.models.user import User
 
-user_bp = Blueprint('user', __name__, url_prefix='/users')  # Corrected the blueprint name
+admin_user_bp = Blueprint('admin_user', __name__, url_prefix='/users')  # Renamed to 'admin_user'
 
-@user_bp.route('/login', methods=['POST'])
+@admin_user_bp.route('/login', methods=['POST'])
 def login():
-    data = request.form
+    data = request.get_json()  # Changed from request.form to request.get_json
     username = data.get('username')
     password = data.get('password')
     

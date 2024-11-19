@@ -29,7 +29,7 @@ def admin_user(app, test_client):
 
 @pytest.fixture(scope='module')
 def admin_token(test_client, admin_user):
-    response = test_client.post('/users/login', data={
+    response = test_client.post('/users/login', json={  # Changed from data= to json=
         'username': admin_user.username,
         'password': 'password'
     }, follow_redirects=True)
@@ -38,7 +38,7 @@ def admin_token(test_client, admin_user):
 
 @pytest.fixture(scope='module')
 def user_token(test_client):
-    response = test_client.post('/users/login', data={
+    response = test_client.post('/users/login', json={  # Changed from data= to json=
         'username': 'user',
         'password': 'password'
     }, follow_redirects=True)
