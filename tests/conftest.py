@@ -16,6 +16,18 @@ def client(app):
     return app.test_client()
 
 @pytest.fixture(scope='function')
+def session(app):
+    with app.app_context():
+        connection = db.engine.connect()
+        transaction = connection.begin()
+        options = dict(bind=connection)
+        session = db.create_scoped_session(options=options)
+        yield session
+        session.remove()
+        transaction.rollback()
+        connection.close()
+
+@pytest.fixture(scope='function')
 def admin_user(app, session):
     user = User(username='admin', email='admin@example.com', is_admin=True)
     user.set_password('password')
