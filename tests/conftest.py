@@ -30,5 +30,5 @@ def admin_token(client, admin_user):
         'password': 'password'
     }, follow_redirects=True)
     assert response.status_code == 200
-    # Assuming the token is returned in a cookie or JSON response
+    # Assuming the token is returned in a JSON response
     return response.json.get('token')  # Adjust this based on your actual implementation
