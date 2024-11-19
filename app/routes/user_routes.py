@@ -3,7 +3,6 @@ from flask_login import login_user, logout_user, login_required, current_user
 from ..forms.user_forms import ProfileForm
 from ..models.user import User
 from ..services.user_service import get_user_by_id
-from .. import db  # Import the db object
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
@@ -33,6 +32,7 @@ def profile():
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
+        from app import db
         db.session.commit()
         flash('Your changes have been saved.')
     elif request.method == 'GET':
