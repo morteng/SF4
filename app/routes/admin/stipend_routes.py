@@ -1,21 +1,25 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, redirect, url_for, flash, render_template, request
 from flask_login import login_required
 from app.models.stipend import Stipend
-from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import get_stipend_by_id, delete_stipend
 
 admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
 
-@admin_stipend_bp.route('/')
+@admin_stipend_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
-def index():
-    from app import db  # Import db within the function to avoid circular imports
-    stipends = Stipend.query.all()
-    return render_template('admin/stipend_index.html', stipends=stipends)
+def delete(id):
+    stipend = get_stipend_by_id(id)
+    if stipend:
+        delete_stipend(stipend)
+        flash('Stipend deleted successfully.', 'success')
+    else:
+        flash('Stipend not found.', 'danger')
+    return redirect(url_for('admin_stipend.index'))
 
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
+    from app.forms.admin_forms import StipendForm
     form = StipendForm()
     if form.validate_on_submit():
         stipend = Stipend(
@@ -28,21 +32,21 @@ def create():
             application_deadline=form.application_deadline.data,
             open_for_applications=form.open_for_applications.data
         )
-        from app import db  # Import db within the function to avoid circular imports
         db.session.add(stipend)
         db.session.commit()
-        flash('Stipend created successfully!', 'success')
+        flash('Stipend created successfully.', 'success')
         return redirect(url_for('admin_stipend.index'))
-    return render_template('admin/stipend_form.html', form=form, title='Create Stipend')
+    return render_template('admin/stipend_form.html', form=form)
 
 @admin_stipend_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
-        flash('Stipend not found!', 'danger')
+        flash('Stipend not found.', 'danger')
         return redirect(url_for('admin_stipend.index'))
     
+    from app.forms.admin_forms import StipendForm
     form = StipendForm(obj=stipend)
     if form.validate_on_submit():
         stipend.name = form.name.data
@@ -53,26 +57,7 @@ def edit(id):
         stipend.eligibility_criteria = form.eligibility_criteria.data
         stipend.application_deadline = form.application_deadline.data
         stipend.open_for_applications = form.open_for_applications.data
-        from app import db  # Import db within the function to avoid circular imports
         db.session.commit()
-        flash('Stipend updated successfully!', 'success')
+        flash('Stipend updated successfully.', 'success')
         return redirect(url_for('admin_stipend.index'))
-    return render_template('admin/stipend_form.html', form=form, title='Edit Stipend')
-
-@admin_stipend_bp.route('/delete/<int:id>', methods=['POST'])
-@login_required
-def delete(id):
-    stipend = get_stipend_by_id(id)
-    if not stipend:
-        flash('Stipend not found!', 'danger')
-        return redirect(url_for('admin_stipend.index'))
-    
-    try:
-        delete_stipend(stipend)
-        from app import db  # Import db within the function to avoid circular imports
-        db.session.commit()
-        flash('Stipend deleted successfully!', 'success')
-    except Exception as e:
-        flash(f'Failed to delete stipend: {str(e)}', 'danger')
-    
-    return redirect(url_for('admin_stipend.index'))
+    return render_template('admin/stipend_form.html', form=form)

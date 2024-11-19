@@ -1,10 +1,9 @@
-from .user import User
-from .organization import Organization
-from .stipend import Stipend
-from .tag import Tag
-from .bot import Bot
-from .notification import Notification
+from .association_tables import stipend_tag_association, organization_stipends
 
 def init_models(app):
-    from flask_sqlalchemy import SQLAlchemy
-    db = SQLAlchemy(app)  # Ensure db is initialized here if not already done
+    from .bot import Bot
+    from .notification import Notification
+    from .stipend import Stipend
+    from .tag import Tag
+    from .user import User
+    from .organization import Organization
