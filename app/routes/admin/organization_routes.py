@@ -1,42 +1,64 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required
-from app.services.organization_service import get_organization_by_id, update_organization, create_organization, delete_organization
+from app.services.organization_service import get_organization_by_id, update_organization, create_organization, delete_organization, list_all_organizations
 
 organization_bp = Blueprint('admin_organization', __name__)
 
 @organization_bp.route('/organizations', methods=['GET'])
 @login_required
 def list_organizations():
-    from app.services.organization_service import list_all_applied for the `list_all_stipends` function.
-2. **Filtering Logic**: Implement filtering logic in the `search_stipends` route based on the query parameter.
+    organizations = list_all_organizations()
+    return render_template('admin/organization_list.html', organizations=organizations)
 
-Let's update these files accordingly.
+@organization_bp.route('/organization/<int:organization_id>', methods=['GET'])
+@login_required
+def view_organization(organization_id):
+    organization = get_organization_by_id(organization_id)
+    if organization is None:
+        flash('Organization not found.', 'danger')
+        return redirect(url_for('admin_organization.list_organizations'))
+    return render_template('admin/organization_detail.html', organization=organization)
 
-### Updated `app/routes/public_user_routes.py`
+@organization_bp.route('/organization/create', methods=['GET', 'POST'])
+@login_required
+def create_organization_route():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        homepage_url = request.form.get('homepage_url')
+        organization = create_organization(name, description, homepage_url)
+        flash(f'Organization {organization.name} created successfully.', 'success')
+        return redirect(url_for('admin_organization.list_organizations'))
+    return render_template('admin/organization_form.html')
 
-```python
-from flask import Blueprint, render_template, request, jsonify
-from app.services.stipend_service import list_all_stipends, get_stipend_by_id
+@organization_bp.route('/organization/<int:organization_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_organization_route(organization_id):
+    organization = get_organization_by_id(organization_id)
+    if organization is None:
+        flash('Organization not found.', 'danger')
+        return redirect(url_for('admin_organization.list_organizations'))
+    
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        homepage_url = request.form.get('homepage_url')
+        update_organization(organization_id, name, description, homepage_url)
+        flash(f'Organization {organization.name} updated successfully.', 'success')
+        return redirect(url_for('admin_organization.view_organization', organization_id=organization.id))
+    
+    return render_template('admin/organization_form.html', organization=organization)
 
-public_user_bp = Blueprint('public_user', __name__)
+@organization_bp.route('/organization/<int:organization_id>/delete', methods=['POST'])
+@login_required
+def delete_organization_route(organization_id):
+    organization = get_organization_by_id(organization_id)
+    if organization is None:
+        flash('Organization not found.', 'danger')
+        return redirect(url_for('admin_organization.list_organizations'))
+    
+    delete_organization(organization_id)
+    flash(f'Organization {organization.name} deleted successfully.', 'success')
+    return redirect(url_for('admin_organization.list_organizations'))
 
-@public_user_bp.route('/')
-def homepage():
-    # Fetch popular stipends and tags for filtering
-    stipends = list_all_stipends()
-    return render_template('user/index.html', stipends=stipends)
-
-@public_user_bp.route('/search')
-def search_stipends():
-    query = request.args.get('query', '')
-    stipends = list_all_stipends(query=query)  # Pass the query to filter stipends
-    return jsonify(stipends=[stipend.to_dict() for stipend in stipends])
-
-@public_user_bp.route('/stipend/<int:stipend_id>')
-def stipend_details(stipend_id):
-    stipend = get_stipend_by_id(stipend_id)
-    if stipend is None:
-        return render_template('errors/404.html'), 404
-    return render_template('user/stipend_detail.html', stipend=stipend)
-
-print("Public user blueprint initialized successfully.")
+print("Admin organization blueprint initialized successfully.")
