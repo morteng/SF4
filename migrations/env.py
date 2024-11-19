@@ -24,6 +24,7 @@ Environment variables:
 """
 import os
 from logging.config import fileConfig
+from alembic import context  # Import the context object from Alembic
 
 from flask import current_app
 from sqlalchemy import engine_from_config, pool
