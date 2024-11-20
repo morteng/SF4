@@ -8,16 +8,16 @@
 <body>
     <nav>
         <ul>
-            <li><a href="{{ url_for('visitor.index') }}">Home</a></li>
-            <li><a href="{{ url_for('visitor.about') }}">About</a></li>
+            <li><a href="{{ url_for('routes.visitor.index') }}">Home</a></li>
+            <li><a href="{{ url_for('routes.visitor.about') }}">About</a></li>
             {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('user.profile') }}">Profile</a></li>
-                <form action="{{ url_for('visitor.logout') }}" method="POST" style="display:inline;">
+                <li><a href="{{ url_for('routes.user.profile') }}">Profile</a></li>
+                <form action="{{ url_for('routes.visitor.logout') }}" method="POST" style="display:inline;">
                     <button type="submit">Logout</button>
                 </form>
             {% else %}
-                <li><a href="{{ url_for('visitor.login') }}">Login</a></li>
-                <li><a href="{{ url_for('visitor.register') }}">Register</a></li>
+                <li><a href="{{ url_for('routes.visitor.login') }}">Login</a></li>
+                <li><a href="{{ url_for('routes.visitor.register') }}">Register</a></li>
             {% endif %}
         </ul>
     </nav>
