@@ -12,12 +12,15 @@ class StipendForm(FlaskForm):
 
 class TagForm(FlaskForm):
     # ... form fields and methods ...
+    pass
 
 class OrganizationForm(FlaskForm):
     # ... form fields and methods ...
+    pass
 
 class UserForm(FlaskForm):
     # ... form fields and methods ...
+    pass
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
