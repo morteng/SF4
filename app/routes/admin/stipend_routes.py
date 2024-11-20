@@ -7,9 +7,9 @@ from app.extensions import db  # Import db
 
 admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
 
-@admin_stipend_bp.route('/list')
+@admin_stipend_bp.route('/', methods=['GET'])
 @login_required
-def list_stipends():
+def index():
     stipends = get_all_stipends()
     return render_template('admin/stipend/index.html', stipends=stipends)
 
@@ -31,7 +31,7 @@ def create_stipend():
         db.session.add(new_stipend)
         db.session.commit()
         flash('Stipend created successfully', 'success')
-        return redirect(url_for('admin_stipend.list_stipends'))
+        return redirect(url_for('admin_stipend.index'))
     return render_template('admin/stipend/create.html', form=form)
 
 @admin_stipend_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
@@ -40,7 +40,7 @@ def edit_stipend(id):
     stipend = get_stipend_by_id(id)
     if stipend is None:
         flash('Stipend not found', 'danger')
-        return redirect(url_for('admin_stipend.list_stipends'))
+        return redirect(url_for('admin_stipend.index'))
     
     form = StipendForm(obj=stipend)
     if form.validate_on_submit():
@@ -54,7 +54,7 @@ def edit_stipend(id):
         stipend.open_for_applications = form.open_for_applications.data
         db.session.commit()
         flash('Stipend updated successfully', 'success')
-        return redirect(url_for('admin_stipend.list_stipends'))
+        return redirect(url_for('admin_stipend.index'))
     
     return render_template('admin/stipend/edit.html', form=form)
 
@@ -64,8 +64,8 @@ def delete_stipend(id):
     stipend = get_stipend_by_id(id)
     if stipend is None:
         flash('Stipend not found', 'danger')
-        return redirect(url_for('admin_stipend.list_stipends'))
+        return redirect(url_for('admin_stipend.index'))
     
     delete_stipend(stipend)
     flash('Stipend deleted successfully', 'success')
-    return redirect(url_for('admin_stipend.list_stipends'))
+    return redirect(url_for('admin_stipend.index'))
