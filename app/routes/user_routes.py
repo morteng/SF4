@@ -3,6 +3,8 @@ from flask_login import login_user, logout_user, login_required, current_user
 from ..forms.user_forms import ProfileForm, RegistrationForm  # Add RegistrationForm import
 from ..models.user import User
 from ..services.user_service import get_user_by_id
+from ..models.stipend import Stipend  # Import Stipend model
+from ..services.stipend_service import get_stipend_by_id  # Import get_stipend_by_id function
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
