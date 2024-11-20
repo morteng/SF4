@@ -1,31 +1,30 @@
 import os
+from dotenv import load_dotenv
 
-class DefaultConfig:
-    """Default configuration for the application."""
-    
-    # General Config
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'your_secret_key_here')
-    DEBUG = False
-    TESTING = False
-    
-    # Database Config
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///instance/site.db')
+load_dotenv()
+
+class Config:
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'a_very_secret_key'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-class DevelopmentConfig(DefaultConfig):
-    """Development configuration."""
-    
+class DevelopmentConfig(Config):
     DEBUG = True
+    TESTING = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///instance/site.db'
 
-class TestingConfig(DefaultConfig):
-    """Testing configuration."""
-    
+class TestingConfig(Config):
+    DEBUG = False
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    WTF_CSRF_ENABLED = False  # Disable CSRF for testing
 
-class ProductionConfig(DefaultConfig):
-    """Production configuration."""
-    
+class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://user:password@localhost/dbname'
+
+config_by_name = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig,
+    'default': DevelopmentConfig
+}
