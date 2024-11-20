@@ -1,14 +1,16 @@
-from .admin import init_routes as admin_init_routes
-from .public_bot_routes import public_bot_bp
-from .public_user_routes import public_user_bp
+from flask import Blueprint
+
+# Create a blueprint for public routes
+public_bp = Blueprint('public', __name__)
+
+# Import and register other blueprints here
+from .admin import admin_bp
+from .user_routes import user_bp
+
+# Register the public routes
+from .public_routes import public_bp
 
 def init_routes(app):
-    # Initialize admin routes
-    admin_init_routes(app)
-
-    # Register additional blueprints if needed
-    app.register_blueprint(public_bot_bp)
-    print(f"Registered blueprint: {public_bot_bp.name}")
-
-    app.register_blueprint(public_user_bp)
-    print(f"Registered blueprint: {public_user_bp.name}")
+    app.register_blueprint(public_bp)
+    app.register_blueprint(admin_bp, url_prefix='/admin')
+    app.register_blueprint(user_bp, url_prefix='/user')
