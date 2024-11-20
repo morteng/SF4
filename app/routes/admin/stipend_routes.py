@@ -2,15 +2,15 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from app.models.stipend import Stipend
 from app.forms.admin_forms import StipendForm  # Corrected import path
-from app.services.stipend_service import get_stipend_by_id, delete_stipend
+from app.services.stipend_service import get_stipend_by_id, delete_stipend, get_all_stipends
 from app.extensions import db  # Import db
 
-admin_stipend_bp = Blueprint('admin_stipend', __name__)
+admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
 
 @admin_stipend_bp.route('/list')
 @login_required
 def list_stipends():
-    stipends = Stipend.query.all()
+    stipends = get_all_stipends()
     return render_template('admin/stipend/index.html', stipends=stipends)
 
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])

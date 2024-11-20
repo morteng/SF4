@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required
-from app.services.bot_service import get_bot_by_id, run_bot
+from app.services.bot_service import get_bot_by_id, run_bot, get_all_bots
 
-admin_bot_bp = Blueprint('admin_bot', __name__)
+admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/admin/bots')
 
 @admin_bot_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
@@ -30,6 +30,5 @@ def run(id):
 @admin_bot_bp.route('/')
 @login_required
 def index():
-    # Assuming there's a method to get all bots, let's add it here
-    # For now, we'll just render an empty template
-    return render_template('admin/bot/index.html')
+    bots = get_all_bots()
+    return render_template('admin/bot/index.html', bots=bots)

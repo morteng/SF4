@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required
-from app.services.tag_service import get_tag_by_id, delete_tag
+from app.services.tag_service import get_tag_by_id, delete_tag, get_all_tags
 
-tag_bp = Blueprint('admin_tag', __name__)
+tag_bp = Blueprint('admin_tag', __name__, url_prefix='/admin/tags')
 
 @tag_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
@@ -18,6 +18,5 @@ def delete(id):
 @tag_bp.route('/')
 @login_required
 def index():
-    # Assuming there's a method to get all tags, let's add it here
-    # For now, we'll just render an empty template
-    return render_template('admin/tag/index.html')
+    tags = get_all_tags()
+    return render_template('admin/tag/index.html', tags=tags)
