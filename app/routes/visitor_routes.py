@@ -8,16 +8,17 @@ visitor_bp = Blueprint('visitor', __name__)
 
 @visitor_bp.route('/', methods=['GET'])
 def index():
-    # Logic for visitor home page
+    """Display the visitor home page."""
     return render_template('index.html')
 
 @visitor_bp.route('/about', methods=['GET'])
 def about():
-    # Logic for about page
+    """Display the about page."""
     return render_template('about.html')
 
 @visitor_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    """Handle user login."""
     if current_user.is_authenticated:
         return redirect(url_for('user.profile'))
     
@@ -34,6 +35,7 @@ def login():
 
 @visitor_bp.route('/register', methods=['GET', 'POST'])
 def register():
+    """Handle user registration."""
     if current_user.is_authenticated:
         return redirect(url_for('user.profile'))
     
@@ -50,6 +52,7 @@ def register():
 @visitor_bp.route('/logout', methods=['POST'])
 @login_required
 def logout():
+    """Handle user logout."""
     logout_user()
     flash('You have been logged out.', 'info')
     return redirect(url_for('visitor.index'))

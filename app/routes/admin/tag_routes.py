@@ -7,6 +7,7 @@ tag_bp = Blueprint('admin_tag', __name__, url_prefix='/admin/tags')
 @tag_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
+    """Delete a tag by ID."""
     tag = get_tag_by_id(id)
     if tag:
         delete_tag(tag)
@@ -18,5 +19,6 @@ def delete(id):
 @tag_bp.route('/', methods=['GET'])
 @login_required
 def index():
+    """List all tags."""
     tags = get_all_tags()
     return render_template('admin/tag/index.html', tags=tags)

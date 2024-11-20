@@ -10,12 +10,14 @@ admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipe
 @admin_stipend_bp.route('/', methods=['GET'])
 @login_required
 def index():
+    """List all stipends."""
     stipends = get_all_stipends()
     return render_template('admin/stipend/index.html', stipends=stipends)
 
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create_stipend():
+    """Create a new stipend."""
     form = StipendForm()
     if form.validate_on_submit():
         new_stipend = Stipend(
@@ -37,6 +39,7 @@ def create_stipend():
 @admin_stipend_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_stipend(id):
+    """Edit a stipend by ID."""
     stipend = get_stipend_by_id(id)
     if stipend is None:
         flash('Stipend not found', 'danger')
@@ -61,6 +64,7 @@ def edit_stipend(id):
 @admin_stipend_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete_stipend(id):
+    """Delete a stipend by ID."""
     stipend = get_stipend_by_id(id)
     if stipend is None:
         flash('Stipend not found', 'danger')

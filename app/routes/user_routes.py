@@ -8,11 +8,13 @@ user_bp = Blueprint('user', __name__)
 @user_bp.route('/profile', methods=['GET'])
 @login_required
 def profile():
+    """Display the user's profile."""
     return render_template('user/profile.html', user=current_user)
 
 @user_bp.route('/edit', methods=['GET', 'POST'])
 @login_required
 def profile_edit():  # Renamed from edit_profile to profile_edit for consistency
+    """Edit the user's profile."""
     form = ProfileForm(original_username=current_user.username, original_email=current_user.email)
     if form.validate_on_submit():
         current_user.username = form.username.data

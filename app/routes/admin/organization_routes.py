@@ -7,6 +7,7 @@ org_bp = Blueprint('admin_org', __name__, url_prefix='/admin/organizations')
 @org_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
+    """Delete an organization by ID."""
     organization = get_organization_by_id(id)
     if organization:
         delete_organization(organization)
@@ -18,5 +19,6 @@ def delete(id):
 @org_bp.route('/', methods=['GET'])
 @login_required
 def index():
+    """List all organizations."""
     organizations = get_all_organizations()
     return render_template('admin/organization/index.html', organizations=organizations)

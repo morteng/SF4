@@ -7,6 +7,7 @@ admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/admin/bots')
 @admin_bot_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
+    """Delete a bot by ID."""
     bot = get_bot_by_id(id)
     if bot:
         # Assuming there's a method to delete the bot, let's add it here
@@ -19,6 +20,7 @@ def delete(id):
 @admin_bot_bp.route('/run/<int:id>', methods=['POST'])
 @login_required
 def run(id):
+    """Run a bot by ID."""
     bot = get_bot_by_id(id)
     if bot:
         run_bot(bot)
@@ -30,5 +32,6 @@ def run(id):
 @admin_bot_bp.route('/', methods=['GET'])
 @login_required
 def index():
+    """List all bots."""
     bots = get_all_bots()
     return render_template('admin/bot/index.html', bots=bots)

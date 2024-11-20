@@ -7,6 +7,7 @@ user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
 @user_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
+    """Delete a user by ID."""
     user = get_user_by_id(id)
     if user:
         delete_user(user)
@@ -18,5 +19,6 @@ def delete(id):
 @user_bp.route('/', methods=['GET'])
 @login_required
 def index():
+    """List all users."""
     users = get_all_users()
     return render_template('admin/user/index.html', users=users)
