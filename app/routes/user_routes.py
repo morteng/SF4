@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
+from app.forms.user_forms import ProfileForm  # Import ProfileForm
+from app.extensions import db  # Import db
 
 user_bp = Blueprint('user', __name__)
 
