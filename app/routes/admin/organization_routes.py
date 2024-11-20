@@ -15,7 +15,7 @@ def delete(id):
         flash('Organization not found.', 'danger')
     return redirect(url_for('admin_org.index'))
 
-@org_bp.route('/')
+@org_bp.route('/', methods=['GET'])
 @login_required
 def index():
     organizations = get_all_organizations()

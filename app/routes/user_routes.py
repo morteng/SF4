@@ -5,7 +5,7 @@ from app.extensions import db  # Import db
 
 user_bp = Blueprint('user', __name__)
 
-@user_bp.route('/profile')
+@user_bp.route('/profile', methods=['GET'])
 @login_required
 def profile():
     return render_template('user/profile.html', user=current_user)

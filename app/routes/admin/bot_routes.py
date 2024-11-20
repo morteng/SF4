@@ -27,7 +27,7 @@ def run(id):
         flash('Bot not found.', 'danger')
     return redirect(url_for('admin_bot.index'))
 
-@admin_bot_bp.route('/')
+@admin_bot_bp.route('/', methods=['GET'])
 @login_required
 def index():
     bots = get_all_bots()

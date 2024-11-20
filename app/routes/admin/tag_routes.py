@@ -15,7 +15,7 @@ def delete(id):
         flash('Tag not found.', 'danger')
     return redirect(url_for('admin_tag.index'))
 
-@tag_bp.route('/')
+@tag_bp.route('/', methods=['GET'])
 @login_required
 def index():
     tags = get_all_tags()

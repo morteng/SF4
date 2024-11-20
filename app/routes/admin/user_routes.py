@@ -15,7 +15,7 @@ def delete(id):
         flash('User not found.', 'danger')
     return redirect(url_for('admin_user.index'))
 
-@user_bp.route('/')
+@user_bp.route('/', methods=['GET'])
 @login_required
 def index():
     users = get_all_users()
