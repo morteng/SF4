@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
-from ..forms.admin_forms import UserForm  # Assuming you have a UserForm in admin_forms
+from ..forms.admin_forms import UserForm  # Corrected import path
 from ..models.user import User
 from ..services.user_service import get_user_by_id
 from app import db  # Correctly import db from app
