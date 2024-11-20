@@ -1,30 +1,24 @@
-from flask import Blueprint, redirect, url_for, flash, render_template, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required
-from app.models.stipend import Stipend
-from app.services.stipend_service import get_stipend_by_id, delete_stipend
-from app.extensions import db  # Import db here
+from ..forms.admin_forms import StipendForm
+from ..models.stipend import Stipend
+from ..services.stipend_service import get_stipend_by_id, delete_stipend
+from app import db  # Import db here
 
-# Ensure the blueprint is defined correctly
 admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
 
-@admin_stipend_bp.route('/delete/<int:id>', methods=['POST'])
+@admin_stipend_bp.route('/')
 @login_required
-def delete(id):
-    stipend = get_stipend_by_id(id)
-    if stipend:
-        delete_stipend(stipend)
-        flash('Stipend deleted successfully.', 'success')
-    else:
-        flash('Stipend not found.', 'danger')
-    return redirect(url_for('admin_stipend.index'))
+def index():
+    stipends = Stipend.query.all()
+    return render_template('admin/stipend_index.html', stipends=stipends)
 
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
-    from app.forms.admin_forms import StipendForm
     form = StipendForm()
     if form.validate_on_submit():
-        stipend = Stipend(
+        new_stipend = Stipend(
             name=form.name.data,
             summary=form.summary.data,
             description=form.description.data,
@@ -34,21 +28,20 @@ def create():
             application_deadline=form.application_deadline.data,
             open_for_applications=form.open_for_applications.data
         )
-        db.session.add(stipend)
+        db.session.add(new_stipend)
         db.session.commit()
-        flash('Stipend created successfully.', 'success')
+        flash('Stipend created successfully!', 'success')
         return redirect(url_for('admin_stipend.index'))
-    return render_template('admin/stipend_form.html', form=form)
+    return render_template('admin/stipend_form.html', form=form, title='Create Stipend')
 
 @admin_stipend_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit(id):
     stipend = get_stipend_by_id(id)
-    if not stipend:
-        flash('Stipend not found.', 'danger')
+    if stipend is None:
+        flash('Stipend not found!', 'danger')
         return redirect(url_for('admin_stipend.index'))
     
-    from app.forms.admin_forms import StipendForm
     form = StipendForm(obj=stipend)
     if form.validate_on_submit():
         stipend.name = form.name.data
@@ -60,14 +53,19 @@ def edit(id):
         stipend.application_deadline = form.application_deadline.data
         stipend.open_for_applications = form.open_for_applications.data
         db.session.commit()
-        flash('Stipend updated successfully.', 'success')
+        flash('Stipend updated successfully!', 'success')
         return redirect(url_for('admin_stipend.index'))
-    return render_template('admin/stipend_form.html', form=form)
+    return render_template('admin/stipend_form.html', form=form, title='Edit Stipend')
 
-@admin_stipend_bp.route('/')
+@admin_stipend_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
-def index():
-    # Assuming there's a method to get all stipends, let's add it here
-    # For now, we'll just render an empty template
-    stipends = Stipend.query.all()  # Fetch all stipends from the database
-    return render_template('admin/stipend/index.html', stipends=stipends)
+def delete(id):
+    stipend = get_stipend_by_id(id)
+    if stipend is None:
+        flash('Stipend not found!', 'danger')
+        return redirect(url_for('admin_stipend.index'))
+    
+    delete_stipend(stipend)
+    db.session.commit()
+    flash('Stipend deleted successfully!', 'success')
+    return redirect(url_for('admin_stipend.index'))
