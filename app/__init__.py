@@ -19,20 +19,16 @@ def create_app(config_name='default'):
     login_manager.init_app(app)
     login_manager.login_view = 'public.index'
 
-    from .routes.public_routes import public_bp
-    from .routes.user_routes import user_bp  # Import the user blueprint
-
-    app.register_blueprint(public_bp)  # Register the public routes
-    app.register_blueprint(user_bp, url_prefix='/user')  # Register the user routes with a prefix
+    from .routes import init_routes
 
     init_extensions(app)
     init_models(app)
+    init_routes(app)
 
     return app
 
 def init_extensions(app):
-    from .extensions import init_extensions as _init_extensions
-    _init_extensions(app)
+    pass  # No need to import or initialize db here
 
 def init_models(app):
     from .models import init_models as _init_models

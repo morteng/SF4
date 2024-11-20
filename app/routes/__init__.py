@@ -1,8 +1,5 @@
 from flask import Blueprint
 
-# Create a blueprint for public routes
-public_bp = Blueprint('public', __name__)
-
 # Import and register other blueprints here
 from .admin import admin_bp
 from .user_routes import user_bp

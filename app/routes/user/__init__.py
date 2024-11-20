@@ -1,7 +1,7 @@
-# app/routes/user/__init__.py
-
 from flask import Blueprint
 
+# Create a blueprint for user routes
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
-from . import user_routes
+# Import routes to register them with the blueprint
+from .user_routes import *
