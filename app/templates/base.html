@@ -3,29 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Stipend Discovery{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
     <nav>
         <ul>
-            <li><a href="{{ url_for('public.index') }}">Home</a></li>
+            <li><a href="{{ url_for('visitor.index') }}">Home</a></li>
+            <li><a href="{{ url_for('visitor.about') }}">About</a></li>
             {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('user.profile') }}">Profile</a></li>
-                <form action="{{ url_for('user.logout') }}" method="post">
+                <form action="{{ url_for('visitor.logout') }}" method="POST" style="display:inline;">
                     <button type="submit">Logout</button>
                 </form>
             {% else %}
-                <li><a href="{{ url_for('user.login') }}">Login</a></li>
-                <li><a href="{{ url_for('user.register') }}">Register</a></li>  <!-- Ensure this line is correct -->
+                <li><a href="{{ url_for('visitor.login') }}">Login</a></li>
+                <li><a href="{{ url_for('visitor.register') }}">Register</a></li>
             {% endif %}
         </ul>
     </nav>
-    <div>
-        {% with messages = get_flashed_messages() %}
+    <div class="content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             <ul>
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
+              {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+              {% endfor %}
             </ul>
           {% endif %}
         {% endwith %}
