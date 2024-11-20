@@ -1,5 +1,6 @@
 from flask import Flask
 from app.models.user import User
+from app.extensions import db, login_manager  # Import login_manager here
 
 def create_app(config_name='default'):
     from app.config import config_by_name
@@ -18,7 +19,6 @@ def create_app(config_name='default'):
     return app
 
 def init_extensions(app):
-    from app.extensions import db, login_manager
     db.init_app(app)
     login_manager.init_app(app)
 
