@@ -7,7 +7,7 @@
 <body>
     <nav>
         <ul>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('public.index') }}">Home</a></li>
             {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('user.profile') }}">Profile</a></li>
                 <form action="{{ url_for('user.logout') }}" method="post">
