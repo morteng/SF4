@@ -1,7 +1,11 @@
 from flask import Blueprint
 
 # Import admin blueprints
-from .admin import admin_bot_bp, admin_org_bp, admin_stipend_bp, admin_tag_bp, admin_user_bp
+from .admin.admin_bot_bp import admin_bot_bp
+from .admin.organization_routes import org_bp as admin_org_bp
+from .admin.stipend_routes import admin_stipend_bp
+from .admin.tag_routes import tag_bp as admin_tag_bp
+from .admin.user_routes import user_bp as admin_user_bp
 
 # Create a blueprint for the routes
 routes_bp = Blueprint('routes', __name__)
