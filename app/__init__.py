@@ -13,10 +13,12 @@ def create_app(config_name='default'):
     from app.routes.admin import admin_bp
     from app.routes.public_bot_routes import public_bot_bp
     from app.routes.public_user_routes import public_user_bp
+    from app.routes.public_routes import public_bp  # Ensure this is imported
 
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(public_bot_bp)
     app.register_blueprint(public_user_bp)
+    app.register_blueprint(public_bp)  # Register the public blueprint
 
     return app
 
