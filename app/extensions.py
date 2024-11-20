@@ -1,2 +1,10 @@
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+
+# Initialize extensions
+db = SQLAlchemy()
+login_manager = LoginManager()
+
 def init_extensions(app):
-    pass  # No need to import or initialize db here
+    db.init_app(app)
+    login_manager.init_app(app)
