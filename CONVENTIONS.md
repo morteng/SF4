@@ -680,16 +680,14 @@ Project Root/
       __init__.py
       admin/
         __init__.py
+        auth_routes.py
         bot_routes.py
         organization_routes.py
         stipend_routes.py
         tag_routes.py
         user_routes.py
-      public_bot_routes.py
-      public_user_routes.py
-      user/
-        __init__.py
-        user_routes.py
+      user_routes.py
+      visitor_routes.py
     services/
       __init__.py
       bot_service.py
@@ -756,16 +754,14 @@ Project Root/
         __init__.py
         admin/
           __init__.py
+          test_auth_routes.py
           test_bot_routes.py
           test_organization_routes.py
           test_stipend_routes.py
           test_tag_routes.py
           test_user_routes.py
-        test_public_bot_routes.py
-        test_public_user_routes.py
-        user/
-          __init__.py
-          test_user_routes.py
+        test_user_routes.py
+        test_visitor_routes.py
       services/
         __init__.py
         test_bot_service.py
