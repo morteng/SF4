@@ -9,6 +9,8 @@ from app import db  # Correctly import db from app
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
+# Visitor Routes
+
 @user_bp.route('/register', methods=['GET', 'POST'])  # Add this route
 def register():
     if request.method == 'POST':
@@ -45,6 +47,34 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('public.index'))
+
+# Homepage route
+@user_bp.route('/')
+def homepage():
+    # Fetch popular stipends or any other data you want to display on the homepage
+    stipends = Stipend.query.all()  # Example: fetch all stipends
+    return render_template('homepage.html', stipends=stipends, title='Home')
+
+# Stipend search route
+@user_bp.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('query', '')
+    if query:
+        stipends = Stipend.query.filter(Stipend.name.contains(query) | Stipend.summary.contains(query)).all()
+    else:
+        stipends = []
+    return render_template('search.html', stipends=stipends, query=query, title='Search Results')
+
+# Stipend details route
+@user_bp.route('/stipend/<int:id>')
+def stipend_details(id):
+    stipend = get_stipend_by_id(id)
+    if stipend is None:
+        flash('Stipend not found!', 'danger')
+        return redirect(url_for('user.homepage'))
+    return render_template('stipend_detail.html', stipend=stipend, title=stipend.name)
+
+# User Routes
 
 @user_bp.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -83,29 +113,3 @@ def edit_profile():
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('user.profile'))
     return render_template('edit_profile.html', form=form, title='Edit Profile')
-
-# Homepage route
-@user_bp.route('/')
-def homepage():
-    # Fetch popular stipends or any other data you want to display on the homepage
-    stipends = Stipend.query.all()  # Example: fetch all stipends
-    return render_template('homepage.html', stipends=stipends, title='Home')
-
-# Stipend search route
-@user_bp.route('/search', methods=['GET'])
-def search():
-    query = request.args.get('query', '')
-    if query:
-        stipends = Stipend.query.filter(Stipend.name.contains(query) | Stipend.summary.contains(query)).all()
-    else:
-        stipends = []
-    return render_template('search.html', stipends=stipends, query=query, title='Search Results')
-
-# Stipend details route
-@user_bp.route('/stipend/<int:id>')
-def stipend_details(id):
-    stipend = get_stipend_by_id(id)
-    if stipend is None:
-        flash('Stipend not found!', 'danger')
-        return redirect(url_for('user.homepage'))
-    return render_template('stipend_detail.html', stipend=stipend, title=stipend.name)
