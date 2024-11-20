@@ -62,3 +62,11 @@ def edit(id):
         flash('Stipend updated successfully.', 'success')
         return redirect(url_for('admin_stipend.index'))
     return render_template('admin/stipend_form.html', form=form)
+
+@admin_stipend_bp.route('/')
+@login_required
+def index():
+    # Assuming there's a method to get all stipends, let's add it here
+    # For now, we'll just render an empty template
+    stipends = Stipend.query.all()  # Fetch all stipends from the database
+    return render_template('admin/stipend/index.html', stipends=stipends)
