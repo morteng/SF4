@@ -5,6 +5,7 @@ from ..models.user import User
 from ..services.user_service import get_user_by_id
 from ..models.stipend import Stipend  # Import Stipend model
 from ..services.stipend_service import get_stipend_by_id  # Import get_stipend_by_id function
+from app import db  # Correctly import db from app
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
@@ -20,7 +21,6 @@ def register():
             return redirect(url_for('user.register'))
         new_user = User(username=username, email=email)
         new_user.set_password(password)
-        from app import db
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
@@ -53,7 +53,6 @@ def profile():
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
-        from app import db
         db.session.commit()
         flash('Your changes have been saved.')
     elif request.method == 'GET':
@@ -82,7 +81,6 @@ def edit_profile():
         if form.password.data:
             current_user.set_password(form.password.data)
         
-        from app import db
         db.session.commit()
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('user.profile'))

@@ -1,63 +1,64 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
-from flask_login import login_required
-from app.forms.admin_forms import UserForm
-from app.models.user import User
-from app.services.user_service import get_user_by_id, delete_user
-from app.extensions import db  # Import the db object
+from flask_login import login_user, logout_user, login_required, current_user
+from ..forms.admin_forms import UserForm  # Assuming you have a UserForm in admin_forms
+from ..models.user import User
+from ..services.user_service import get_user_by_id
+from app import db  # Correctly import db from app
 
-user_bp = Blueprint('admin_user', __name__, url_prefix='/users')
+admin_user_bp = Blueprint('admin_user', __name__, url_prefix='/users')
 
-@user_bp.route('/delete/<int:id>', methods=['POST'])
+@admin_user_bp.route('/')
 @login_required
-def delete(id):
-    user = get_user_by_id(id)
-    if user:
-        delete_user(user)
-        flash(f'User {user.username} deleted.', 'success')
-    else:
-        flash('User not found.', 'danger')
-    return redirect(url_for('admin_user.index'))
+def index():
+    users = User.query.all()
+    return render_template('admin/user_index.html', users=users)
 
-@user_bp.route('/create', methods=['GET', 'POST'])
+@admin_user_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     form = UserForm()
     if form.validate_on_submit():
-        user = User(
+        new_user = User(
             username=form.username.data,
-            email=form.email.data,
-            is_admin=form.is_admin.data
+            email=form.email.data
         )
-        user.set_password(form.password.data)
-        db.session.add(user)
+        new_user.set_password(form.password.data)
+        db.session.add(new_user)
         db.session.commit()
-        flash('User created successfully.', 'success')
+        flash('User created successfully!', 'success')
         return redirect(url_for('admin_user.index'))
-    return render_template('admin/user_form.html', form=form)
+    return render_template('admin/user_form.html', form=form, title='Create User')
 
-@user_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
+@admin_user_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit(id):
     user = get_user_by_id(id)
-    if not user:
-        flash('User not found.', 'danger')
+    if user is None:
+        flash('User not found!', 'danger')
         return redirect(url_for('admin_user.index'))
     
     form = UserForm(obj=user)
     if form.validate_on_submit():
         user.username = form.username.data
         user.email = form.email.data
-        user.is_admin = form.is_admin.data
+        
         if form.password.data:
             user.set_password(form.password.data)
+        
         db.session.commit()
-        flash('User updated successfully.', 'success')
+        flash('User updated successfully!', 'success')
         return redirect(url_for('admin_user.index'))
-    return render_template('admin/user_form.html', form=form)
+    return render_template('admin/user_form.html', form=form, title='Edit User')
 
-@user_bp.route('/')
+@admin_user_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
-def index():
-    # Assuming there's a method to get all users, let's add it here
-    # For now, we'll just render an empty template
-    return render_template('admin/user/index.html')
+def delete(id):
+    user = get_user_by_id(id)
+    if user is None:
+        flash('User not found!', 'danger')
+        return redirect(url_for('admin_user.index'))
+    
+    db.session.delete(user)
+    db.session.commit()
+    flash('User deleted successfully!', 'success')
+    return redirect(url_for('admin_user.index'))
