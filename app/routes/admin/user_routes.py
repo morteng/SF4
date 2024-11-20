@@ -3,6 +3,7 @@ from flask_login import login_required
 from app.forms.admin_forms import UserForm
 from app.models.user import User
 from app.services.user_service import get_user_by_id, delete_user
+from app.extensions import db  # Import the db object
 
 user_bp = Blueprint('admin_user', __name__, url_prefix='/users')
 
