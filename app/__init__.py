@@ -1,4 +1,5 @@
 from flask import Flask
+from app.models.user import User
 
 def create_app(config_name='default'):
     from app.config import config_by_name
@@ -8,6 +9,11 @@ def create_app(config_name='default'):
     init_extensions(app)
     init_models(app)
     init_routes(app)
+
+    # Initialize the user loader for Flask-Login
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
     return app
 
