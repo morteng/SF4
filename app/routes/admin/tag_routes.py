@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required
 from app.services.tag_service import get_tag_by_id, delete_tag
 
-tag_bp = Blueprint('admin_tag', __name__, url_prefix='/tags')
+tag_bp = Blueprint('admin_tag', __name__)
 
 @tag_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required

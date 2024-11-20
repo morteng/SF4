@@ -1,19 +1,10 @@
 from flask import Blueprint
 
-# Create a blueprint for admin routes
-admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
-
-# Import and register other blueprints or routes here
-from .auth_routes import auth_bp
+# Import individual admin route modules
 from .bot_routes import admin_bot_bp
-from .organization_routes import org_bp
-from .tag_routes import tag_bp
-from .user_routes import admin_user_bp  # Corrected import path
+from .organization_routes import org_bp as admin_org_bp
 from .stipend_routes import admin_stipend_bp
+from .tag_routes import tag_bp as admin_tag_bp
+from .user_routes import user_bp as admin_user_bp
 
-admin_bp.register_blueprint(auth_bp)
-admin_bp.register_blueprint(admin_bot_bp, url_prefix='/bots')
-admin_bp.register_blueprint(org_bp, url_prefix='/organizations')
-admin_bp.register_blueprint(tag_bp, url_prefix='/tags')
-admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')  # Corrected import path
-admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
+# No need to register blueprints here, they will be registered in the main routes/__init__.py

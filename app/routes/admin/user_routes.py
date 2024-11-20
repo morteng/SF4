@@ -1,31 +1,23 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
-from flask_login import login_required, current_user
-from app.models.user import User
-from app.forms.admin_forms import UserForm
-from app.services.user_service import get_user_by_id
+from flask import Blueprint, render_template, redirect, url_for, flash
+from flask_login import login_required
+from app.services.user_service import get_user_by_id, delete_user
 
-admin_user_bp = Blueprint('admin_user', __name__)
+user_bp = Blueprint('admin_user', __name__)
 
-@admin_user_bp.route('/list')
+@user_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
-def list_users():
-    # Logic to list users for admin
-    pass
+def delete(id):
+    user = get_user_by_id(id)
+    if user:
+        delete_user(user)
+        flash(f'User {user.username} deleted.', 'success')
+    else:
+        flash('User not found.', 'danger')
+    return redirect(url_for('admin_user.index'))
 
-@admin_user_bp.route('/create', methods=['GET', 'POST'])
+@user_bp.route('/')
 @login_required
-def create_user():
-    # Logic to create a new user by admin
-    pass
-
-@admin_user_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
-@login_required
-def edit_user(id):
-    # Logic to edit an existing user by admin
-    pass
-
-@admin_user_bp.route('/delete/<int:id>', methods=['POST'])
-@login_required
-def delete_user(id):
-    # Logic to delete a user by admin
-    pass
+def index():
+    # Assuming there's a method to get all users, let's add it here
+    # For now, we'll just render an empty template
+    return render_template('admin/user/index.html')

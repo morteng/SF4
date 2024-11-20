@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required
 from app.services.bot_service import get_bot_by_id, run_bot
 
-admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/bots')
+admin_bot_bp = Blueprint('admin_bot', __name__)
 
 @admin_bot_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required

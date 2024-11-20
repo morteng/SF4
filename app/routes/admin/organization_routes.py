@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required
 from app.services.organization_service import get_organization_by_id, delete_organization
 
-org_bp = Blueprint('admin_org', __name__, url_prefix='/organizations')
+org_bp = Blueprint('admin_org', __name__)
 
 @org_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
