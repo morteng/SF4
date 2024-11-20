@@ -9,20 +9,53 @@ admin_stipend_bp = Blueprint('admin_stipend', __name__)
 @admin_stipend_bp.route('/list')
 @login_required
 def list_stipends():
-    # Logic to list stipends for admin
-    pass
+    stipends = Stipend.query.all()
+    return render_template('admin/stipend/index.html', stipends=stipends)
 
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create_stipend():
-    # Logic to create a new stipend by admin
-    pass
+    form = StipendForm()
+    if form.validate_on_submit():
+        new_stipend = Stipend(
+            name=form.name.data,
+            summary=form.summary.data,
+            description=form.description.data,
+            homepage_url=form.homepage_url.data,
+            application_procedure=form.application_procedure.data,
+            eligibility_criteria=form.eligibility_criteria.data,
+            application_deadline=form.application_deadline.data,
+            open_for_applications=form.open_for_applications.data
+        )
+        db.session.add(new_stipend)
+        db.session.commit()
+        flash('Stipend created successfully', 'success')
+        return redirect(url_for('admin_stipend.list_stipends'))
+    return render_template('admin/stipend/create.html', form=form)
 
 @admin_stipend_bp.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_stipend(id):
-    # Logic to edit an existing stipend by admin
-    pass
+    stipend = get_stipend_by_id(id)
+    if stipend is None:
+        flash('Stipend not found', 'danger')
+        return redirect(url_for('admin_stipend.list_stipends'))
+    
+    form = StipendForm(obj=stipend)
+    if form.validate_on_submit():
+        stipend.name = form.name.data
+        stipend.summary = form.summary.data
+        stipend.description = form.description.data
+        stipend.homepage_url = form.homepage_url.data
+        stipend.application_procedure = form.application_procedure.data
+        stipend.eligibility_criteria = form.eligibility_criteria.data
+        stipend.application_deadline = form.application_deadline.data
+        stipend.open_for_applications = form.open_for_applications.data
+        db.session.commit()
+        flash('Stipend updated successfully', 'success')
+        return redirect(url_for('admin_stipend.list_stipends'))
+    
+    return render_template('admin/stipend/edit.html', form=form)
 
 @admin_stipend_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
