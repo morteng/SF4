@@ -1,13 +1,10 @@
 from flask import Blueprint
 
-# Import and register other blueprints here
+# Importing blueprints
 from .admin import admin_bp
-from .user_routes import user_bp
-
-# Register the public routes
-from .public_routes import public_bp
+from .public_user_routes import public_user_bp
 
 def init_routes(app):
-    app.register_blueprint(public_bp)
+    # Registering blueprints
     app.register_blueprint(admin_bp, url_prefix='/admin')
-    app.register_blueprint(user_bp, url_prefix='/user')
+    app.register_blueprint(public_user_bp)
