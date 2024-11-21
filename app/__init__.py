@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from config import Config
-from app.extensions import init_extensions, init_admin_user, db, migrate
+from app.extensions import init_extensions, init_admin_user, db
 
 def create_app(config_name='default'):
     # Initialize the Flask application
