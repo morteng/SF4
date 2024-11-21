@@ -61,6 +61,12 @@ def create_app(config_name='default'):
                 db.create_all()
         else:
             print(f"Database file already exists.")  # Debugging line
+            with app.app_context():
+                try:
+                    db.session.execute("SELECT 1")
+                    print(f"Database is accessible and can be queried.")
+                except Exception as e:
+                    print(f"Failed to query the database: {e}")
     except Exception as e:
         print(f"An error occurred while creating the database: {e}")  # Debugging line
 
