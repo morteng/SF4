@@ -1,5 +1,5 @@
 from flask import Flask
-from config import Config, config_by_name
+from .config import Config, config_by_name  # Corrected import statement
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
