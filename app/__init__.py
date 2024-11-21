@@ -30,4 +30,4 @@ def init_routes(app):
 
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(user_bp, url_prefix='/user')
-    app.register_blueprint(visitor_bp)
+    app.register_blueprint(visitor_bp)  # No prefix for visitor routes
