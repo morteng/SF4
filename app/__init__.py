@@ -37,8 +37,24 @@ def create_app(config_name='default'):
         except Exception as e:
             print(f"Failed to create or write to {test_file_path}: {e}")
 
-    # Initialize extensions and routes
+    # Initialize extensions
     init_extensions(app)
+
+    # Ensure the database file exists and create it if necessary
+    db_file_path = os.path.join(instance_path, 'site.db')
+    print(f"Database file path: {db_file_path}")  # Debugging line
+
+    try:
+        if not os.path.exists(db_file_path):
+            print(f"Database file does not exist. Creating it now...")  # Debugging line
+            with app.app_context():
+                db.create_all()
+        else:
+            print(f"Database file already exists.")  # Debugging line
+    except Exception as e:
+        print(f"An error occurred while creating the database: {e}")  # Debugging line
+
+    # Initialize routes
     init_routes(app)
 
     return app
