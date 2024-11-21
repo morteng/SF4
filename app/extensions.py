@@ -19,18 +19,6 @@ def init_extensions(app):
         print(f"Creating directory: {instance_path}")  # Debugging line
         os.makedirs(instance_path)
 
-    # Ensure the database file exists
-    print("checking for db file")  # Debugging line
-    db_file_path = os.path.join(instance_path, 'site.db')
-    if not os.path.isfile(db_file_path):
-        print(f"Creating database file: {db_file_path}")  # Debugging line
-        with open(db_file_path, 'w') as f:
-            pass
-
-    # Create the database tables if they don't exist
-    with app.app_context():
-        db.create_all()
-
     # Initialize the default admin user
     init_admin_user(app)
     
