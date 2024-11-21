@@ -8,6 +8,12 @@ def create_app(config_name='default'):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(Config)
 
+    # Ensure the instance/ directory exists
+    instance_path = app.instance_path
+    if not os.path.exists(instance_path):
+        print(f"Creating directory: {instance_path}")  # Debugging line
+        os.makedirs(instance_path)
+
     # Initialize extensions and routes
     init_extensions(app)
     init_routes(app)
