@@ -26,8 +26,8 @@ def init_extensions(app):
 def init_routes(app):
     from app.routes.admin import admin_bp
     from app.routes.user import user_bp
-    from app.routes.visitor import visitor_bp
+    from app.routes.visitor_routes import visitor_bp  # Ensure this matches the file name
 
-    app.register_blueprint(admin_bp, url_prefix='/admin/admin')
+    app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(visitor_bp)
