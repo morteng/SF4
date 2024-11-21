@@ -1,44 +1,30 @@
 from flask import Flask
-from .config import config_by_name  # Corrected import statement
-from flask_migrate import Migrate
-import os  # Import the os module
-from .extensions import db, login_manager, init_extensions, init_admin_user
-
-migrate = Migrate()
+from config import Config
+from app.extensions import init_extensions, init_admin_user
 
 def create_app(config_name='default'):
-    app = Flask(__name__)
-    
-    # Print environment variables for debugging
-    print(f"FLASK_CONFIG: {os.getenv('FLASK_CONFIG')}")
-    print(f"DATABASE_URL: {os.getenv('DATABASE_URL')}")
+    # Initialize the Flask application
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_object(Config)
 
-    config_class = config_by_name.get(os.getenv('FLASK_CONFIG', 'default'))
-    app.config.from_object(config_class)
-
-    # Print the database URI being used
-    print(f"SQLALCHEMY_DATABASE_URI: {app.config['SQLALCHEMY_DATABASE_URI']}")  # Debugging line
-
+    # Initialize extensions and routes
     init_extensions(app)
-    
+    init_routes(app)
+
+    # Ensure the database file exists
+    from app.extensions import db
     with app.app_context():
-        db.create_all()  # Create the database tables if they don't exist
-        init_admin_user()  # Initialize admin user within the application context
-        init_routes(app)
+        db_file_path = os.path.join(app.instance_path, 'site.db')
+        if not os.path.exists(db_file_path):
+            print(f"Database file does not exist. Creating it now...")  # Debugging line
+            db.create_all()
 
     return app
-
 
 def init_routes(app):
     from app.routes.admin import admin_bp
     from app.routes.user import user_bp
-    from app.routes.visitor_routes import visitor_bp  # Ensure this matches the file name
-
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(user_bp, url_prefix='/user')
-    app.register_blueprint(visitor_bp)  # No prefix for visitor routes
 
-@login_manager.user_loader
-def load_user(user_id):
-    from app.models.user import User
-    return User.query.get(int(user_id))
+# Other initialization functions can be added here
