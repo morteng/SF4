@@ -1,7 +1,7 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from .extensions import init_extensions
+from .models import User
+from .services.user_service import create_admin_user
 
 def create_app(config_name='default'):
     app = Flask(__name__)
@@ -19,21 +19,25 @@ def create_app(config_name='default'):
     # Initialize extensions
     init_extensions(app)
     
+    # Initialize database
+    from .db import init_db
+    init_db(app)
+
     # Initialize models
-    init_models(app)
-    
+    with app.app_context():
+        db.create_all()
+
+    # Create default admin user if it doesn't exist
+    create_admin_user()
+
     # Initialize routes
     init_routes(app)
 
     return app
 
 def init_extensions(app):
+    from .extensions import db
     db.init_app(app)  # Ensure SQLAlchemy is initialized with the app
-
-def init_models(app):
-    from app.models import User, Stipend, Tag, Organization, Bot, Notification
-    with app.app_context():
-        db.create_all()
 
 def init_routes(app):
     from app.routes.visitor_routes import visitor_bp
