@@ -2,36 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Stipend Discovery{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stipend Discovery</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
     <nav>
         <ul>
-            <li><a href="{{ url_for('routes.visitor.index') }}">Home</a></li>
-            <li><a href="{{ url_for('routes.visitor.about') }}">About</a></li>
+            <li><a href="{{ url_for('visitor.index') }}">Home</a></li>
+            <li><a href="{{ url_for('visitor.about') }}">About</a></li>
             {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('routes.user.profile') }}">Profile</a></li>
-                <form action="{{ url_for('routes.visitor.logout') }}" method="POST" style="display:inline;">
+                <li><a href="{{ url_for('user.profile') }}">Profile</a></li>
+                <form action="{{ url_for('visitor.logout') }}" method="post" style="display:inline;">
                     <button type="submit">Logout</button>
                 </form>
             {% else %}
-                <li><a href="{{ url_for('routes.visitor.login') }}">Login</a></li>
-                <li><a href="{{ url_for('routes.visitor.register') }}">Register</a></li>
+                <li><a href="{{ url_for('visitor.login') }}">Login</a></li>
+                <li><a href="{{ url_for('visitor.register') }}">Register</a></li>
             {% endif %}
         </ul>
     </nav>
-    <div class="content">
+    <main>
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
-            <ul>
-              {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
-              {% endfor %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
             </ul>
           {% endif %}
         {% endwith %}
         {% block content %}{% endblock %}
-    </div>
+    </main>
 </body>
 </html>
