@@ -9,8 +9,6 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 
 def init_extensions(app):
-    
-
     # Ensure the instance/ directory exists
     instance_path = app.instance_path
     if not os.path.exists(instance_path):
@@ -18,7 +16,7 @@ def init_extensions(app):
         os.makedirs(instance_path)
 
     # Ensure the database file exists
-    db_path = app.config['SQLALCHEMY_DATABASE_URI'].split('///')[-1]
+    db_path = os.path.join(app.instance_path, 'site.db')
     if not os.path.isfile(db_path):
         print(f"Creating database file: {db_path}")  # Debugging line
         open(db_path, 'a').close()  # Create an empty file
