@@ -21,6 +21,12 @@ def create_app(config_name='default'):
 
     init_extensions(app)
     
+    # Ensure the instance directory exists
+    instance_dir = os.path.join(app.root_path, '..', 'instance')
+    if not os.path.exists(instance_dir):
+        os.makedirs(instance_dir)
+        print(f"Created instance directory: {instance_dir}")
+
     with app.app_context():
         db.create_all()  # Ensure all tables are created
         init_routes(app)
