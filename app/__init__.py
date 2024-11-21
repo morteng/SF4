@@ -19,10 +19,6 @@ def create_app(config_name='default'):
     # Initialize extensions
     init_extensions(app)
     
-    # Initialize database
-    from .db import init_db
-    init_db(app)
-
     # Initialize models
     with app.app_context():
         db.create_all()

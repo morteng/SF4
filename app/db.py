@@ -1,8 +1,6 @@
 import os
-from flask_sqlalchemy import SQLAlchemy
 
 def init_db(app):
-    db = SQLAlchemy(app)
     db_path = app.config['SQLALCHEMY_DATABASE_URI'].split('///')[-1]
     
     # Ensure the directory exists
