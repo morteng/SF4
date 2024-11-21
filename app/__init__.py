@@ -1,9 +1,11 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from app.config import config_by_name  # Update this line
+from flask_migrate import Migrate  # Import Migrate
+from app.config import config_by_name
 
 db = SQLAlchemy()
+migrate = Migrate()  # Create a migrate object
 
 def create_app(config_name='default'):
     app = Flask(__name__)
@@ -19,6 +21,7 @@ def create_app(config_name='default'):
 
 def init_extensions(app):
     db.init_app(app)
+    migrate.init_app(app, db)  # Initialize Migrate with app and db
 
 def init_routes(app):
     from app.routes.admin import admin_bp

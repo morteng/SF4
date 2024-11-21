@@ -7,3 +7,4 @@ SQLAlchemy
 Flask-Login
 Flask-WTF
 WTForms
+Flask-Migrate  # Add this line
