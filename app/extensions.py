@@ -9,8 +9,7 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 
 def init_extensions(app):
-    db.init_app(app)
-    login_manager.init_app(app)
+    
 
     # Ensure the instance/ directory exists
     instance_path = app.instance_path
@@ -30,6 +29,8 @@ def init_extensions(app):
 
     # Initialize the default admin user
     init_admin_user(app)
+    db.init_app(app)
+    login_manager.init_app(app)
 
 def init_admin_user(app):
     with app.app_context():
