@@ -19,9 +19,6 @@ def init_extensions(app):
         print(f"Creating directory: {instance_path}")  # Debugging line
         os.makedirs(instance_path)
 
-    # Initialize the default admin user
-    init_admin_user(app)
-    
 
 def init_admin_user(app):
     username = os.environ.get('ADMIN_USERNAME')

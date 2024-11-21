@@ -2,8 +2,6 @@ from flask import Flask
 from .config import config_by_name  # Corrected import statement
 from flask_migrate import Migrate
 import os  # Import the os module
-from flask_sqlalchemy import SQLAlchemy  # Added import for SQLAlchemy
-from flask_login import LoginManager  # Added import for LoginManager
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -26,6 +24,7 @@ def create_app(config_name='default'):
     
     with app.app_context():
         db.create_all()  # Create the database tables if they don't exist
+        init_admin_user(app)  # Initialize admin user within the application context
         init_routes(app)
 
     return app
