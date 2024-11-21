@@ -1,3 +1,4 @@
+import os
 from app.models.user import User
 from werkzeug.security import generate_password_hash
 from flask_sqlalchemy import SQLAlchemy
