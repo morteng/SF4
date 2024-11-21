@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from config import config_by_name
+from app.config import config_by_name  # Update this line
 
 db = SQLAlchemy()
 
