@@ -1,5 +1,6 @@
 import os
-from flask import Flask, text
+from flask import Flask
+from sqlalchemy import text  # Correct import for text
 from config import Config
 from app.extensions import init_extensions, init_admin_user, db
 
