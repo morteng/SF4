@@ -22,6 +22,12 @@ def create_app(config_name='default'):
     # Print the database URI for debugging
     print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")  # Debugging line
 
+    # Check if the instance/ directory is writable
+    if not os.access(instance_path, os.W_OK):
+        print(f"Directory {instance_path} is not writable.")  # Debugging line
+    else:
+        print(f"Directory {instance_path} is writable.")  # Debugging line
+
     # Initialize extensions and routes
     init_extensions(app)
     init_routes(app)
