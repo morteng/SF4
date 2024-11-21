@@ -4,7 +4,7 @@ from config import Config
 from app.extensions import init_extensions, init_admin_user, db
 
 def create_app(config_name='default'):
-    # Initialize the Flask application
+    # Initialize the Flask application with instance_relative_config=True
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(Config)
 
@@ -36,6 +36,16 @@ def create_app(config_name='default'):
             print(f"Successfully created and wrote to {test_file_path}")
         except Exception as e:
             print(f"Failed to create or write to {test_file_path}: {e}")
+
+    # Manually check if we can create a SQLite database file
+    db_file_path = os.path.join(instance_path, 'site.db')
+    try:
+        import sqlite3
+        conn = sqlite3.connect(db_file_path)
+        print(f"Successfully created and connected to the database at {db_file_path}")
+        conn.close()
+    except Exception as e:
+        print(f"Failed to create or connect to the database at {db_file_path}: {e}")
 
     # Initialize extensions
     init_extensions(app)
