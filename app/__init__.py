@@ -12,14 +12,6 @@ def create_app(config_name='default'):
     init_extensions(app)
     init_routes(app)
 
-    # Ensure the database file exists
-    from app.extensions import db
-    with app.app_context():
-        db_file_path = os.path.join(app.instance_path, 'site.db')
-        if not os.path.exists(db_file_path):
-            print(f"Database file does not exist. Creating it now...")  # Debugging line
-            db.create_all()
-
     return app
 
 def init_routes(app):
