@@ -1,6 +1,7 @@
+# app/__init__.py
 from flask import Flask
 from app.models.user import User
-from app.extensions import db, login_manager  # Import login_manager here
+from app.extensions import db, login_manager
 
 def create_app(config_name='default'):
     from app.config import config_by_name
@@ -33,5 +34,11 @@ def init_models(app):
         from app.models.user import User
 
 def init_routes(app):
-    from app.routes import routes_bp
-    app.register_blueprint(routes_bp)
+    from app.routes import visitor_bp, admin_bot_bp, admin_org_bp, admin_stipend_bp, admin_tag_bp, admin_user_bp, user_bp
+    app.register_blueprint(visitor_bp)
+    app.register_blueprint(admin_bot_bp, url_prefix='/admin/bots')
+    app.register_blueprint(admin_org_bp, url_prefix='/admin/organizations')
+    app.register_blueprint(admin_stipend_bp, url_prefix='/admin/stipends')
+    app.register_blueprint(admin_tag_bp, url_prefix='/admin/tags')
+    app.register_blueprint(admin_user_bp, url_prefix='/admin/users')
+    app.register_blueprint(user_bp, url_prefix='/user')
