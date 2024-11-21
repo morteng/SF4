@@ -7,6 +7,11 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'a_very_secret_key'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+class DefaultConfig(Config):
+    DEBUG = True
+    TESTING = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///instance/site.db'
+
 class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = False
@@ -26,5 +31,5 @@ config_by_name = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-    'default': DevelopmentConfig
+    'default': DefaultConfig
 }
