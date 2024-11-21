@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2>{% if form.id.data %}Edit{% else %}Create{% endif %} Organization</h2>
-<form hx-post="{{ url_for('admin_organization_routes.create_or_edit', id=form.id.data) }}" hx-target="#organizations" hx-swap="outerHTML">
+<form hx-post="{{ url_for('admin_org.index') }}" hx-target="#organizations" hx-swap="outerHTML">
     {{ form.hidden_tag() }}
     <div>
         {{ form.name.label }}<br>
@@ -27,5 +27,5 @@
     </div>
     <button type="submit">{% if form.id.data %}Update{% else %}Create{% endif %}</button>
 </form>
-<a href="{{ url_for('admin_organization_routes.organizations_list') }}">Back to Organizations</a>
+<a href="{{ url_for('admin_org.index') }}">Back to Organizations</a>
 {% endblock %}

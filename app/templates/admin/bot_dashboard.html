@@ -6,7 +6,7 @@
     {% for bot in bots %}
         <div>
             <p><strong>{{ bot.name }}</strong>: {{ bot.description }}</p>
-            <form hx-post="{{ url_for('admin_bot_routes.run_bot', id=bot.id) }}" hx-target="#bots" hx-swap="outerHTML">
+            <form hx-post="{{ url_for('admin_bot.run', id=bot.id) }}" hx-target="#bots" hx-swap="outerHTML">
                 <button type="submit">Run Bot</button>
             </form>
         </div>

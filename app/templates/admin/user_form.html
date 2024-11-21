@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2>{% if form.id.data %}Edit{% else %}Create{% endif %} User</h2>
-<form hx-post="{{ url_for('admin_user_routes.create_or_edit', id=form.id.data) }}" hx-target="#users" hx-swap="outerHTML">
+<form hx-post="{{ url_for('admin_user.index') }}" hx-target="#users" hx-swap="outerHTML">
     {{ form.hidden_tag() }}
     <div>
         {{ form.username.label }}<br>
@@ -31,5 +31,5 @@
     </div>
     <button type="submit">{% if form.id.data %}Update{% else %}Create{% endif %}</button>
 </form>
-<a href="{{ url_for('admin_user_routes.users_list') }}">Back to Users</a>
+<a href="{{ url_for('admin_user.index') }}">Back to Users</a>
 {% endblock %}
