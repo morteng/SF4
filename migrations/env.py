@@ -13,11 +13,13 @@ config = context.config
 # This line sets up basic configuration.
 fileConfig(config.config_file_name)
 
+# Import the app factory function and create an app instance
+from app import create_app  # Import the app factory function
+app = create_app()  # Create an app instance
+
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = current_app.extensions['migrate'].db.metadata
+target_metadata = db.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -66,7 +68,6 @@ def run_migrations_online():
 
         with context.begin_transaction():
             context.run_migrations()
-
 
 if context.is_offline_mode():
     run_migrations_offline()

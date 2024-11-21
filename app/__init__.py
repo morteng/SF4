@@ -14,9 +14,9 @@ def create_app(config_name='default'):
     app.config.from_object(Config)
 
     init_extensions(app)
-    init_routes(app)
     
     with app.app_context():
+        init_routes(app)
         init_admin_user(app)
 
     return app
