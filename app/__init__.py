@@ -14,19 +14,10 @@ def create_app(config_name='default'):
         print(f"Creating directory: {instance_path}")  # Debugging line
         os.makedirs(instance_path)
 
-    # Ensure the database file exists and create it if necessary
-    db_file_path = os.path.join(instance_path, 'site.db')
-    with app.app_context():
-        if not os.path.exists(db_file_path):
-            print(f"Database file does not exist. Creating it now...")  # Debugging line
-            db.create_all()
-
     # Initialize extensions and routes
     init_extensions(app)
     init_routes(app)
     init_admin_user(app)
-
-    # Return the configured Flask application
 
     return app
 
