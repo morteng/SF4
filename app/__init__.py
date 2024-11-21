@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, text
 from config import Config
 from app.extensions import init_extensions, init_admin_user, db
 
@@ -63,7 +63,7 @@ def create_app(config_name='default'):
             print(f"Database file already exists.")  # Debugging line
             with app.app_context():
                 try:
-                    db.session.execute("SELECT 1")
+                    db.session.execute(text('SELECT 1'))
                     print(f"Database is accessible and can be queried.")
                 except Exception as e:
                     print(f"Failed to query the database: {e}")
