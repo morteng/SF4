@@ -20,7 +20,7 @@ def create_app(config_name='default'):
         print(f"Directory already exists: {instance_path}")  # Debugging line
 
     # Print the database URI for debugging
-    print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")  # Debugging line
+    print(f"Database URI from config: {app.config['SQLALCHEMY_DATABASE_URI']}")  # Debugging line
 
     # Check if the instance/ directory is writable
     if not os.access(instance_path, os.W_OK):
