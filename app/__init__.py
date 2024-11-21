@@ -28,6 +28,15 @@ def create_app(config_name='default'):
     else:
         print(f"Directory {instance_path} is writable.")  # Debugging line
 
+        # Test creating a file in the instance directory
+        test_file_path = os.path.join(instance_path, 'test.txt')
+        try:
+            with open(test_file_path, 'w') as f:
+                f.write("Test file")
+            print(f"Successfully created and wrote to {test_file_path}")
+        except Exception as e:
+            print(f"Failed to create or write to {test_file_path}: {e}")
+
     # Initialize extensions and routes
     init_extensions(app)
     init_routes(app)
