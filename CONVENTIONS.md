@@ -661,10 +661,10 @@ Project Root/
   requirements.txt
   pytest.ini
   wsgi.py
-  db.py
   app/
     __init__.py
     config.py
+    db.py
     extensions.py
     utils.py
     models/

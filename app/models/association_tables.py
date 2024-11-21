@@ -1,6 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()  # Ensure db is defined here or imported properly
+from . import db
 
 stipend_tag_association = db.Table(
     'stipend_tag_association',
