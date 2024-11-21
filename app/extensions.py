@@ -9,6 +9,9 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 
 def init_extensions(app):
+    db.init_app(app)
+    login_manager.init_app(app)
+
     # Ensure the instance/ directory exists
     instance_path = app.instance_path
     if not os.path.exists(instance_path):
@@ -27,22 +30,20 @@ def init_extensions(app):
 
     # Initialize the default admin user
     init_admin_user(app)
-    db.init_app(app)
-    login_manager.init_app(app)
+    
 
-def init_admin_user(app):
-    with app.app_context():
-        username = os.environ.get('ADMIN_USERNAME')
-        password = os.environ.get('ADMIN_PASSWORD')
-        email = os.environ.get('ADMIN_EMAIL')
+def init_admin_user():
+    username = os.environ.get('ADMIN_USERNAME')
+    password = os.environ.get('ADMIN_PASSWORD')
+    email = os.environ.get('ADMIN_EMAIL')
 
-        if not User.query.filter_by(username=username).first():
-            print(f"Creating admin user: {username}")  # Debugging line
-            admin_user = User(
-                username=username,
-                password_hash=generate_password_hash(password),
-                email=email,
-                is_admin=True
-            )
-            db.session.add(admin_user)
-            db.session.commit()
+    if not User.query.filter_by(username=username).first():
+        print(f"Creating admin user: {username}")  # Debugging line
+        admin_user = User(
+            username=username,
+            email=email,
+            is_admin=True
+        )
+        admin_user.set_password(password)
+        db.session.add(admin_user)
+        db.session.commit()
