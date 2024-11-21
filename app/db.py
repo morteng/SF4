@@ -1,4 +1,5 @@
 import os
+from .extensions import db  # Import db here
 
 def init_db(app):
     db_path = app.config['SQLALCHEMY_DATABASE_URI'].split('///')[-1]
