@@ -2,6 +2,9 @@ from flask import Flask
 from .config import config_by_name  # Corrected import statement
 from flask_migrate import Migrate
 import os  # Import the os module
+from flask_sqlalchemy import SQLAlchemy  # Import SQLAlchemy
+from flask_login import LoginManager  # Import LoginManager
+from .extensions import init_admin_user  # Import init_admin_user
 
 db = SQLAlchemy()
 migrate = Migrate()
