@@ -1,5 +1,5 @@
 from flask import Flask
-from .config import Config, config_by_name  # Corrected import statement
+from .config import config_by_name  # Corrected import statement
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -21,16 +21,8 @@ def create_app(config_name='default'):
 
     init_extensions(app)
     
-    # Ensure the instance directory exists
-    instance_dir = os.path.join(app.root_path, '..', 'instance')
-    if not os.path.exists(instance_dir):
-        os.makedirs(instance_dir)
-        print(f"Created instance directory: {instance_dir}")
-
     with app.app_context():
-        db.create_all()  # Ensure all tables are created
         init_routes(app)
-        init_admin_user(app)
 
     return app
 
@@ -53,20 +45,3 @@ def init_routes(app):
 def load_user(user_id):
     from app.models.user import User
     return User.query.get(int(user_id))
-
-def init_admin_user(app):
-    from app.models.user import User
-    admin_username = os.getenv('ADMIN_USERNAME')
-    admin_password = os.getenv('ADMIN_PASSWORD')
-    admin_email = os.getenv('ADMIN_EMAIL')
-
-    if not User.query.filter_by(username=admin_username).first():
-        print(f"Creating admin user: {admin_username}")  # Debugging line
-        admin_user = User(
-            username=admin_username,
-            email=admin_email,
-            is_admin=True
-        )
-        admin_user.set_password(admin_password)
-        db.session.add(admin_user)
-        db.session.commit()

@@ -18,12 +18,6 @@ def init_extensions(app):
         print(f"Creating directory: {instance_path}")  # Debugging line
         os.makedirs(instance_path)
 
-    # Ensure the database file exists
-    db_path = os.path.join(app.instance_path, 'site.db')
-    if not os.path.isfile(db_path):
-        print(f"Creating database file: {db_path}")  # Debugging line
-        open(db_path, 'a').close()  # Create an empty file
-
     # Create the database tables if they don't exist
     with app.app_context():
         db.create_all()
@@ -32,7 +26,7 @@ def init_extensions(app):
     init_admin_user(app)
     
 
-def init_admin_user():
+def init_admin_user(app):
     username = os.environ.get('ADMIN_USERNAME')
     password = os.environ.get('ADMIN_PASSWORD')
     email = os.environ.get('ADMIN_EMAIL')
