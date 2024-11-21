@@ -13,6 +13,11 @@ def create_app(config_name='default'):
     if not os.path.exists(instance_path):
         print(f"Creating directory: {instance_path}")  # Debugging line
         os.makedirs(instance_path)
+    else:
+        print(f"Directory already exists: {instance_path}")  # Debugging line
+
+    # Print the database URI for debugging
+    print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")  # Debugging line
 
     # Initialize extensions and routes
     init_extensions(app)
