@@ -16,6 +16,7 @@ def create_app(config_name='default'):
     init_extensions(app)
     
     with app.app_context():
+        db.create_all()  # Ensure all tables are created
         init_routes(app)
         init_admin_user(app)
 
