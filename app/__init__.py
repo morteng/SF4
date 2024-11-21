@@ -1,5 +1,5 @@
 from flask import Flask
-from config import Config
+from config import Config, config_by_name
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
@@ -11,7 +11,13 @@ login_manager = LoginManager()
 
 def create_app(config_name='default'):
     app = Flask(__name__)
-    app.config.from_object(Config)
+    
+    # Print environment variables for debugging
+    print(f"FLASK_CONFIG: {os.getenv('FLASK_CONFIG')}")
+    print(f"DATABASE_URL: {os.getenv('DATABASE_URL')}")
+
+    config_class = config_by_name.get(os.getenv('FLASK_CONFIG', 'default'))
+    app.config.from_object(config_class)
 
     init_extensions(app)
     
