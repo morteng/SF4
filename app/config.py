@@ -3,5 +3,5 @@ import os
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        f"sqlite:///{os.path.join(os.path.abspath(os.getcwd()), 'instance', 'site.db')}"
+        f"sqlite:///{os.path.join(os.path.abspath('/home/morten/sf4'), 'instance', 'site.db')}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
