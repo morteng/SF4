@@ -1,5 +1,5 @@
 from flask import Flask
-from .extensions import init_extensions
+from .extensions import init_extensions, db  # Import db here
 from .models import User
 from .services.user_service import create_admin_user
 
