@@ -15,7 +15,9 @@ def create_app(config_name='default'):
 
     init_extensions(app)
     init_routes(app)
-    init_admin_user(app)
+    
+    with app.app_context():
+        init_admin_user(app)
 
     return app
 
@@ -40,18 +42,17 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 def init_admin_user(app):
-    with app.app_context():
-        from app.models.user import User
-        admin_username = os.getenv('ADMIN_USERNAME')
-        admin_password = os.getenv('ADMIN_PASSWORD')
-        admin_email = os.getenv('ADMIN_EMAIL')
+    from app.models.user import User
+    admin_username = os.getenv('ADMIN_USERNAME')
+    admin_password = os.getenv('ADMIN_PASSWORD')
+    admin_email = os.getenv('ADMIN_EMAIL')
 
-        if not User.query.filter_by(username=admin_username).first():
-            admin_user = User(
-                username=admin_username,
-                email=admin_email,
-                is_admin=True
-            )
-            admin_user.set_password(admin_password)
-            db.session.add(admin_user)
-            db.session.commit()
+    if not User.query.filter_by(username=admin_username).first():
+        admin_user = User(
+            username=admin_username,
+            email=admin_email,
+            is_admin=True
+        )
+        admin_user.set_password(admin_password)
+        db.session.add(admin_user)
+        db.session.commit()
