@@ -20,7 +20,7 @@ def init_extensions(app):
         os.makedirs(instance_path)
 
 
-def init_admin_user(app):
+def init_admin_user():
     username = os.environ.get('ADMIN_USERNAME')
     password = os.environ.get('ADMIN_PASSWORD')
     email = os.environ.get('ADMIN_EMAIL')

@@ -2,13 +2,9 @@ from flask import Flask
 from .config import config_by_name  # Corrected import statement
 from flask_migrate import Migrate
 import os  # Import the os module
-from flask_sqlalchemy import SQLAlchemy  # Import SQLAlchemy
-from flask_login import LoginManager  # Import LoginManager
-from .extensions import init_admin_user  # Import init_admin_user
+from .extensions import db, login_manager, init_extensions, init_admin_user
 
-db = SQLAlchemy()
 migrate = Migrate()
-login_manager = LoginManager()
 
 def create_app(config_name='default'):
     app = Flask(__name__)
@@ -27,16 +23,11 @@ def create_app(config_name='default'):
     
     with app.app_context():
         db.create_all()  # Create the database tables if they don't exist
-        init_admin_user(app)  # Initialize admin user within the application context
+        init_admin_user()  # Initialize admin user within the application context
         init_routes(app)
 
     return app
 
-def init_extensions(app):
-    from .extensions import init_extensions as ext_init
-    ext_init(app)
-    migrate.init_app(app, db)
-    login_manager.login_view = 'visitor.login'
 
 def init_routes(app):
     from app.routes.admin import admin_bp
