@@ -55,6 +55,7 @@ def init_admin_user(app):
     admin_email = os.getenv('ADMIN_EMAIL')
 
     if not User.query.filter_by(username=admin_username).first():
+        print(f"Creating admin user: {admin_username}")  # Debugging line
         admin_user = User(
             username=admin_username,
             email=admin_email,
