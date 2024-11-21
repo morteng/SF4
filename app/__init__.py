@@ -19,6 +19,9 @@ def create_app(config_name='default'):
     config_class = config_by_name.get(os.getenv('FLASK_CONFIG', 'default'))
     app.config.from_object(config_class)
 
+    # Print the database URI being used
+    print(f"SQLALCHEMY_DATABASE_URI: {app.config['SQLALCHEMY_DATABASE_URI']}")  # Debugging line
+
     init_extensions(app)
     
     with app.app_context():
