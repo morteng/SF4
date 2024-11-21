@@ -26,6 +26,7 @@ def init_extensions(app):
                 db.create_all()
             else:
                 print(f"Database file already exists.")  # Debugging line
+                db.create_all()
         except Exception as e:
             print(f"An error occurred while creating the database: {e}")  # Debugging line
 
