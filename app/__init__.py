@@ -25,7 +25,6 @@ def create_app(config_name='default'):
     # Initialize extensions and routes
     init_extensions(app)
     init_routes(app)
-    init_admin_user(app)
 
     return app
 
