@@ -8,6 +8,9 @@ def create_app(config_name='default'):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(Config)
 
+    # Print the current working directory for debugging
+    print(f"Current Working Directory: {os.getcwd()}")  # Debugging line
+
     # Ensure the instance/ directory exists
     instance_path = app.instance_path
     if not os.path.exists(instance_path):
