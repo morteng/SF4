@@ -17,6 +17,9 @@ fileConfig(config.config_file_name)
 from app import create_app  # Import the app factory function
 app = create_app()  # Create an app instance
 
+# Import db from extensions
+from app.extensions import db  # Import db
+
 # add your model's MetaData object here
 # for 'autogenerate' support
 target_metadata = db.metadata
