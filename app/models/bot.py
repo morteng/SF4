@@ -1,6 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from app.extensions import db
 
 class Bot(db.Model):
     id = db.Column(db.Integer, primary_key=True)

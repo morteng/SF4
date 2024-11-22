@@ -1,7 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-
-# Ensure db is already initialized in __init__.py
-db = SQLAlchemy()
+from app.extensions import db
 
 def init_models(app):
     from .user import User
