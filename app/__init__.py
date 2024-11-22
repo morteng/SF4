@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_migrate import Migrate  # Import Flask-Migrate
 from app.models.user import User
 from app.extensions import db, login_manager, init_extensions  # Import login_manager and init_extensions here
 
@@ -15,6 +16,9 @@ def create_app(config_name='default'):
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
+
+    # Initialize Flask-Migrate
+    migrate = Migrate(app, db)
 
     return app
 
