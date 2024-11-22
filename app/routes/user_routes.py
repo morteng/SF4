@@ -21,7 +21,7 @@ def profile_edit():  # Renamed from edit_profile to profile_edit for consistency
         current_user.email = form.email.data
         db.session.commit()
         flash('Profile updated successfully', 'success')
-        return redirect(url_for('user.profile'))
+        return redirect(url_for('routes.user.profile'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
