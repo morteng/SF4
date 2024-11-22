@@ -12,6 +12,7 @@
             <li><a href="{{ url_for('routes.visitor.about') }}">About</a></li>
             {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('routes.user.profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('routes.user.edit_profile') }}">Edit Profile</a></li>
                 <form action="{{ url_for('routes.visitor.logout') }}" method="POST" style="display:inline;">
                     <button type="submit">Logout</button>
                 </form>

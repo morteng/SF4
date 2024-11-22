@@ -1,11 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired, Email, ValidationError
+from app.models.user import User
 
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Update')
+    submit = SubmitField('Save Changes')
 
     def __init__(self, original_username, original_email, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
@@ -13,19 +14,14 @@ class ProfileForm(FlaskForm):
         self.original_email = original_email
 
     def validate(self, extra_validators=None):
-        if not FlaskForm.validate(self, extra_validators=extra_validators):
+        if not super(ProfileForm, self).validate(extra_validators=extra_validators):
             return False
-        # Add custom validation logic here if needed
+        user_by_username = User.query.filter_by(username=self.username.data).first()
+        if user_by_username is not None and user_by_username.username != self.original_username:
+            self.username.errors.append('Please use a different username.')
+            return False
+        user_by_email = User.query.filter_by(email=self.email.data).first()
+        if user_by_email is not None and user_by_email.email != self.original_email:
+            self.email.errors.append('Please use a different email address.')
+            return False
         return True
-
-class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Login')
-
-class RegisterForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Register')
