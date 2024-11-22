@@ -1,6 +1,6 @@
 from flask import Flask
 from app.models.user import User
-from app.extensions import db, login_manager  # Import login_manager here
+from app.extensions import db, login_manager, init_extensions  # Import login_manager and init_extensions here
 
 def create_app(config_name='default'):
     from app.config import config_by_name
@@ -17,10 +17,6 @@ def create_app(config_name='default'):
         return User.query.get(int(user_id))
 
     return app
-
-def init_extensions(app):
-    db.init_app(app)
-    login_manager.init_app(app)
 
 def init_models(app):
     with app.app_context():
