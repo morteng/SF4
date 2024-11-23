@@ -5,11 +5,11 @@
 
 <nav>
     <ul>
-        <li><a hx-get="{{ url_for('admin_bot_routes.bot_dashboard') }}" hx-target="#content" hx-swap="innerHTML">Manage Bots</a></li>
-        <li><a hx-get="{{ url_for('admin_stipend_routes.stipends_list') }}" hx-target="#content" hx-swap="innerHTML">Manage Stipends</a></li>
-        <li><a hx-get="{{ url_for('admin_tag_routes.tags_list') }}" hx-target="#content" hx-swap="innerHTML">Manage Tags</a></li>
-        <li><a hx-get="{{ url_for('admin_organization_routes.organizations_list') }}" hx-target="#content" hx-swap="innerHTML">Manage Organizations</a></li>
-        <li><a hx-get="{{ url_for('admin_user_routes.users_list') }}" hx-target="#content" hx-swap="innerHTML">Manage Users</a></li>
+        <li><a hx-get="{{ url_for('routes.admin_bot.index') }}" hx-target="#content" hx-swap="innerHTML">Manage Bots</a></li>
+        <li><a hx-get="{{ url_for('routes.admin_stipend.index') }}" hx-target="#content" hx-swap="innerHTML">Manage Stipends</a></li>
+        <li><a hx-get="{{ url_for('routes.admin_tag.index') }}" hx-target="#content" hx-swap="innerHTML">Manage Tags</a></li>
+        <li><a hx-get="{{ url_for('routes.admin_org.index') }}" hx-target="#content" hx-swap="innerHTML">Manage Organizations</a></li>
+        <li><a hx-get="{{ url_for('routes.admin_user.index') }}" hx-target="#content" hx-swap="innerHTML">Manage Users</a></li>
     </ul>
 </nav>
 
