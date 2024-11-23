@@ -9,4 +9,5 @@ def delete_tag(tag):
     db.session.commit()
 
 def get_all_tags():
+    from app.models.tag import Tag
     return Tag.query.all()

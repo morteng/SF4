@@ -9,4 +9,5 @@ def delete_organization(organization):
     db.session.commit()
 
 def get_all_organizations():
+    from app.models.organization import Organization
     return Organization.query.all()

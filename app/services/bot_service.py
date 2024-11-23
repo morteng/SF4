@@ -8,4 +8,5 @@ def run_bot(bot):
     pass
 
 def get_all_bots():
+    from app.models.bot import Bot
     return Bot.query.all()

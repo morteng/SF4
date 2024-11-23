@@ -9,6 +9,7 @@ def delete_user(user):
     db.session.commit()
 
 def get_all_users():
+    from app.models.user import User
     return User.query.all()
 
 def update_user(user):

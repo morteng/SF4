@@ -9,4 +9,5 @@ def delete_stipend(stipend):
     db.session.commit()
 
 def get_all_stipends():
+    from app.models.stipend import Stipend
     return Stipend.query.all()
