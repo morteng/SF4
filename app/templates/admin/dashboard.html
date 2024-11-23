@@ -16,4 +16,39 @@
 <div id="content">
     <!-- Content will be loaded here -->
 </div>
+
+<h3>Bots</h3>
+<ul>
+    {% for bot in bots %}
+        <li>{{ bot.name }} - {{ bot.description }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Organizations</h3>
+<ul>
+    {% for organization in organizations %}
+        <li>{{ organization.name }} - {{ organization.description }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Stipends</h3>
+<ul>
+    {% for stipend in stipends %}
+        <li>{{ stipend.name }} - {{ stipend.summary }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Tags</h3>
+<ul>
+    {% for tag in tags %}
+        <li>{{ tag.name }} - {{ tag.category }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Users</h3>
+<ul>
+    {% for user in users %}
+        <li>{{ user.username }} - {{ user.email }}</li>
+    {% endfor %}
+</ul>
 {% endblock %}
