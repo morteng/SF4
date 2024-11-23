@@ -1,3 +1,4 @@
+# app/config.py
 import os
 from dotenv import load_dotenv
 
@@ -10,7 +11,8 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///instance/site.db'
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath('instance/site.db')}"
+
 
 class TestingConfig(Config):
     DEBUG = False
@@ -20,7 +22,8 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://user:password@localhost/dbname'
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath('instance/site.db')}"
+
 
 config_by_name = {
     'development': DevelopmentConfig,

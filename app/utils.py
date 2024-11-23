@@ -1,3 +1,4 @@
+# app/utils.py
 from flask import abort, redirect, url_for
 from flask_login import current_user, login_required as _login_required  # Import the original login_required
 

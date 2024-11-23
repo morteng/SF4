@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import DataRequired, Email, ValidationError
 from app.models.user import User
+from wtforms.validators import DataRequired, Email, EqualTo
 
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -25,3 +26,15 @@ class ProfileForm(FlaskForm):
             self.email.errors.append('Please use a different email address.')
             return False
         return True
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Login')
+
+class RegisterForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Register')

@@ -20,7 +20,7 @@ def about():
 def login():
     """Handle user login."""
     if current_user.is_authenticated:
-        return redirect(url_for('user.profile'))
+        return redirect(url_for('routes.user.profile'))
     
     form = LoginForm()
     if form.validate_on_submit():
@@ -28,7 +28,7 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
             flash('Login successful.', 'success')
-            return redirect(url_for('user.profile'))
+            return redirect(url_for('routes.user.profile'))
         else:
             flash('Invalid username or password.', 'danger')
     return render_template('login.html', form=form)
@@ -37,7 +37,7 @@ def login():
 def register():
     """Handle user registration."""
     if current_user.is_authenticated:
-        return redirect(url_for('user.profile'))
+        return redirect(url_for('routes.user.profile'))
     
     form = RegisterForm()
     if form.validate_on_submit():
@@ -55,4 +55,4 @@ def logout():
     """Handle user logout."""
     logout_user()
     flash('You have been logged out.', 'info')
-    return redirect(url_for('visitor.index'))
+    return redirect(url_for('routes.visitor.index'))

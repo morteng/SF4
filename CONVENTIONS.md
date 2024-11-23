@@ -686,8 +686,8 @@ Project Root/
         stipend_routes.py
         tag_routes.py
         user_routes.py
-      user_routes.py
-      visitor_routes.py
+      user_routes.py #logged in user routes
+      visitor_routes.py #not loged in user routes
     services/
       __init__.py
       bot_service.py

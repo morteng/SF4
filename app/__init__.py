@@ -1,7 +1,10 @@
+#app/__init__.py
 from flask import Flask
 from flask_migrate import Migrate  # Import Flask-Migrate
 from app.models.user import User
-from app.extensions import db, login_manager, init_extensions  # Import login_manager and init_extensions here
+from app.extensions import db, login_manager, init_extensions 
+from werkzeug.security import generate_password_hash
+import os
 
 def create_app(config_name='default'):
     from app.config import config_by_name
@@ -19,6 +22,25 @@ def create_app(config_name='default'):
 
     # Initialize Flask-Migrate
     migrate = Migrate(app, db)
+
+    with app.app_context():
+        # Check if an admin user exists
+        admin_user = User.query.filter_by(is_admin=True).first()
+        if not admin_user:
+            # Create the default admin user
+            username = os.environ.get('ADMIN_USERNAME', 'admin')
+            password = os.environ.get('ADMIN_PASSWORD', 'password')
+            email = os.environ.get('ADMIN_EMAIL', 'admin@example.com')
+
+            admin_user = User(
+                username=username,
+                password_hash=generate_password_hash(password),
+                email=email,
+                is_admin=True
+            )
+            db.session.add(admin_user)
+            db.session.commit()
+            print("Default admin user created.")
 
     return app
 

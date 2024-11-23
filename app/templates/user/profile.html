@@ -5,5 +5,5 @@
 <p><strong>Username:</strong> {{ user.username }}</p>
 <p><strong>Email:</strong> {{ user.email }}</p>
 
-<a href="{{ url_for('user_routes.profile_edit') }}">Edit Profile</a>
+<a href="{{ url_for('routes.user.edit_profile') }}">Edit Profile</a>
 {% endblock %}
