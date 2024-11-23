@@ -7,6 +7,9 @@ from .admin.stipend_routes import admin_stipend_bp
 from .admin.tag_routes import tag_bp as admin_tag_bp
 from .admin.user_routes import user_bp as admin_user_bp
 
+# Import the admin dashboard blueprint
+from .admin.dashboard_routes import admin_dashboard_bp
+
 # Create a blueprint for the routes
 routes_bp = Blueprint('routes', __name__)
 
@@ -16,6 +19,9 @@ routes_bp.register_blueprint(admin_org_bp, url_prefix='/admin/organizations')
 routes_bp.register_blueprint(admin_stipend_bp, url_prefix='/admin/stipends')
 routes_bp.register_blueprint(admin_tag_bp, url_prefix='/admin/tags')
 routes_bp.register_blueprint(admin_user_bp, url_prefix='/admin/users')
+
+# Register the admin dashboard blueprint
+routes_bp.register_blueprint(admin_dashboard_bp, url_prefix='/admin')
 
 # Import and register other route modules
 from .user_routes import user_bp
