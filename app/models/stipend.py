@@ -1,5 +1,5 @@
 from .association_tables import stipend_tag_association, organization_stipends
-from . import db
+from app.extensions import db
 
 class Stipend(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -14,6 +14,5 @@ class Stipend(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
 
-    # Relationships
-    tags = db.relationship('Tag', secondary=stipend_tag_association, back_populates='stipends')
-    organizations = db.relationship('Organization', secondary=organization_stipends, back_populates='stipends')
+    def __repr__(self):
+        return f'<Stipend {self.name}>'
