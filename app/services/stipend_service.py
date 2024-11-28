@@ -1,4 +1,4 @@
-from .models import Stipend
+from app.models import Stipend
 from sqlalchemy.exc import SQLAlchemyError
 
 def get_all_stipends():
