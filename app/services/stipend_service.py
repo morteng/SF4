@@ -1,5 +1,6 @@
 from app.models import Stipend
 from sqlalchemy.exc import SQLAlchemyError
+from app.extensions import db
 
 def get_all_stipends():
     try:
