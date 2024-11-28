@@ -16,7 +16,7 @@ def create_app(config_name='development'):
         init_models(app)
 
     # Register blueprints
-    from .routes import blueprint
-    app.register_blueprint(blueprint)
+    from .routes import routes_bp  # Changed here
+    app.register_blueprint(routes_bp)  # And here
 
     return app
