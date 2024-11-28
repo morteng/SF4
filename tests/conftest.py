@@ -1,7 +1,11 @@
 import os
+import sys
 import pytest
 from app import create_app  # Adjusted import to use absolute import
 from app.extensions import db  # Corrected import statement
+
+# Add the project root directory to sys.path
+sys.path.insert(0, '/home/morten/sf4')
 
 @pytest.fixture(scope='session', autouse=True)
 def setup_directories():
