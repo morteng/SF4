@@ -3,6 +3,7 @@ import sys
 import pytest
 from app import create_app  # Adjusted import to use absolute import
 from app.extensions import db  # Corrected import statement
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 # Add the project root directory to sys.path
 sys.path.insert(0, '/home/morten/sf4')
