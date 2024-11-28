@@ -1,8 +1,7 @@
 import os
 import pytest
-from ..app import create_app  # Adjusted import to use relative import
+from app import create_app  # Adjusted import to use absolute import
 from app.extensions import db  # Corrected import statement
-from sqlalchemy.orm import scoped_session, sessionmaker  # Added these imports
 
 @pytest.fixture(scope='session', autouse=True)
 def setup_directories():
