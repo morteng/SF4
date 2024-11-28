@@ -1,12 +1,19 @@
-from app.models.stipend import Stipend
-
-def get_stipend_by_id(stipend_id):
-    return Stipend.query.get(stipend_id)
-
-def delete_stipend(stipend):
-    from app.extensions import db
-    db.session.delete(stipend)
-    db.session.commit()
+from .models import Stipend
+from sqlalchemy.exc import SQLAlchemyError
 
 def get_all_stipends():
-    return Stipend.query.all()
+    try:
+        return Stipend.query.all()
+    except SQLAlchemyError as e:
+        # Log the error
+        print(str(e))
+        return []
+
+def delete_stipend(stipend):
+    try:
+        db.session.delete(stipend)
+        db.session.commit()
+    except SQLAlchemyError as e:
+        # Log the error and possibly handle it
+        print(str(e))
+        db.session.rollback()

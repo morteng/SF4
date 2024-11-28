@@ -1,25 +1,21 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 class StipendForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    # ... other fields ...
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # ... initialization code ...
+    name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
+    # Add other fields with validators as needed
 
 class TagForm(FlaskForm):
-    # ... form fields and methods ...
+    # Define fields with validators
     pass
 
 class OrganizationForm(FlaskForm):
-    # ... form fields and methods ...
+    # Define fields with validators
     pass
 
 class UserForm(FlaskForm):
-    # ... form fields and methods ...
+    # Define fields with validators
     pass
 
 class LoginForm(FlaskForm):

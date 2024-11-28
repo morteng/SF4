@@ -2,37 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Stipend Discovery{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('routes.visitor.index') }}">Home</a></li>
-            <li><a href="{{ url_for('routes.visitor.about') }}">About</a></li>
-            {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('routes.user.profile') }}">Profile</a></li>
-                <li><a href="{{ url_for('routes.user.edit_profile') }}">Edit Profile</a></li>
-                <form action="{{ url_for('routes.visitor.logout') }}" method="POST" style="display:inline;">
-                    <button type="submit">Logout</button>
-                </form>
-            {% else %}
-                <li><a href="{{ url_for('routes.visitor.login') }}">Login</a></li>
-                <li><a href="{{ url_for('routes.visitor.register') }}">Register</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-    <div class="content">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <ul>
-              {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
-    </div>
+    {% block content %}{% endblock %}
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
 </body>
 </html>
