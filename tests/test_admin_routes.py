@@ -1,6 +1,6 @@
 import unittest
 from app import create_app, db
-from app.models import User, Stipend
+from app.models import User
 from flask_login import login_user
 
 class AdminRouteTests(unittest.TestCase):
@@ -15,19 +15,22 @@ class AdminRouteTests(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def test_admin_access(self):
-        user = User(username='testuser', is_admin=True)
+    def create_user(self, username='testuser', password='testpassword', is_admin=False):
+        user = User(username=username, is_admin=is_admin)
+        user.set_password(password)
         db.session.add(user)
         db.session.commit()
+        return user
+
+    def test_admin_access(self):
+        user = self.create_user(is_admin=True)
         with self.app.test_client() as client:
             login_user(user)
             response = client.get('/admin/stipends/')
             self.assertEqual(response.status_code, 200)
 
     def test_non_admin_access(self):
-        user = User(username='testuser', is_admin=False)
-        db.session.add(user)
-        db.session.commit()
+        user = self.create_user(is_admin=False)
         with self.app.test_client() as client:
             login_user(user)
             response = client.get('/admin/stipends/')
