@@ -1,5 +1,9 @@
 import sys
-sys.path.insert(0, '../')
+import os
+
+# Get the absolute path to the project root
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, project_root)
 
 from app import create_app, db
 from alembic.config import Config
