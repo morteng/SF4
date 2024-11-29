@@ -19,7 +19,7 @@ def edit_profile():
         current_user.email = form.email.data
         update_user(current_user)
         flash('Your changes have been saved.')
-        return redirect(url_for('routes.user.profile'))
+        return redirect(url_for('user.profile'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
