@@ -17,7 +17,7 @@ def test_create_organization_authorized(logged_in_client):
         'homepage_url': 'http://test.org'
     })
     assert response.status_code == 201
-    assert 'organization_id' in response.json
+    assert 'id' in response.json  # Updated from 'organization_id' to 'id'
 
 def test_update_organization_authorized(logged_in_client):
     """Test updating organization with admin authentication"""
@@ -28,7 +28,7 @@ def test_update_organization_authorized(logged_in_client):
         'homepage_url': 'http://initial.org'
     })
     assert create_response.status_code == 201
-    organization_id = create_response.json['organization_id']
+    organization_id = create_response.json['id']  # Updated from 'organization_id' to 'id'
 
     # Now update the organization
     response = logged_in_client.put(f'/admin/organizations/{organization_id}', json={
@@ -37,7 +37,7 @@ def test_update_organization_authorized(logged_in_client):
         'homepage_url': 'http://updated.org'
     })
     assert response.status_code == 200
-    assert response.json['organization_id'] == organization_id
+    assert response.json['id'] == organization_id  # Updated from 'organization_id' to 'id'
 
 def test_delete_organization_authorized(logged_in_client):
     """Test deleting organization with admin authentication"""
@@ -48,12 +48,12 @@ def test_delete_organization_authorized(logged_in_client):
         'homepage_url': 'http://delete.org'
     })
     assert create_response.status_code == 201
-    organization_id = create_response.json['organization_id']
+    organization_id = create_response.json['id']  # Updated from 'organization_id' to 'id'
 
     # Now delete the organization
     response = logged_in_client.delete(f'/admin/organizations/{organization_id}')
     assert response.status_code == 200
-    assert response.json['organization_id'] == organization_id
+    assert response.json['id'] == organization_id  # Updated from 'organization_id' to 'id'
 
 def test_create_organization_missing_fields(logged_in_client):
     """Test creating organization with missing fields fails"""
