@@ -29,3 +29,34 @@
     </tbody>
 </table>
 {% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Manage Organizations{% endblock %}
+
+{% block content %}
+<h1>Manage Organizations</h1>
+<a href="{{ url_for('admin_org.create') }}">Create New Organization</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for organization in organizations %}
+        <tr>
+            <td>{{ organization.id }}</td>
+            <td>{{ organization.name }}</td>
+            <td>
+                <form action="{{ url_for('admin_org.delete', id=organization.id) }}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
