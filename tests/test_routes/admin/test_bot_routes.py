@@ -3,9 +3,9 @@ import pytest
 @pytest.mark.usefixtures("admin_user")
 def test_create_bot_api(client, session):
     # Log in as admin
-    response = client.post('/admin/login', data={
-        'username': 'admin_user',
-        'password': 'secure_password'
+    response = client.post('/admin/auth/login', data={
+        'username': 'admin',
+        'password': 'password123'
     }, follow_redirects=True)
     assert response.status_code == 200
     assert b'Dashboard' in response.data
