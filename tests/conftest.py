@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-import pytest  # Add this import
+import pytest
 
 # Get the project root directory
 root = Path(__file__).resolve().parent.parent
@@ -12,3 +12,7 @@ from app import create_app
 def app():
     app = create_app('testing')
     return app
+
+@pytest.fixture
+def client(app):
+    return app.test_client()
