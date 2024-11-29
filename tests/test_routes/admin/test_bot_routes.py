@@ -1,11 +1,19 @@
+import re
 import pytest
 
 @pytest.mark.usefixtures("admin_user")
 def test_create_bot_api(client, session):
-    # Log in as admin
+    # Get the login page to retrieve the CSRF token
+    response = client.get('/admin/auth/login')
+    assert response.status_code == 200
+    html = response.get_data(as_text=True)
+    csrf_token = re.search(r'name="csrf_token" type="hidden" value="([^"]+)"', html).group(1)
+
+    # Log in as admin with the CSRF token
     response = client.post('/admin/auth/login', data={
         'username': 'admin',
-        'password': 'password123'
+        'password': 'password123',
+        'csrf_token': csrf_token
     }, follow_redirects=True)
     assert response.status_code == 200
     assert b'Dashboard' in response.data
