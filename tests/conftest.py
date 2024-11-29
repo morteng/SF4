@@ -1,7 +1,10 @@
-import pytest
+import sys
+sys.path.insert(0, '../')
+
 from app import create_app, db
 from alembic.config import Config
 from alembic import command
+import pytest
 
 @pytest.fixture(scope='module')
 def app():
