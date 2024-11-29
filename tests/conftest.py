@@ -59,7 +59,7 @@ def admin_user(session):
     return admin
 
 @pytest.fixture(scope='function')
-def admin_token(client, admin_user, session):
+def admin_token(client, admin_user, session, app):
     with app.app_context():
         with client.session_transaction() as sess:
             from flask_login import login_user
