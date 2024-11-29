@@ -3,6 +3,7 @@ from flask_login import login_required
 from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization
 from werkzeug.exceptions import abort
+from app.extensions import db
 
 org_bp = Blueprint('admin_org', __name__, url_prefix='/admin/organizations')
 
@@ -50,3 +51,28 @@ def delete(id):
 def index():
     organizations = get_all_organizations()
     return render_template('admin/organization/index.html', organizations=organizations)
+
+@org_bp.route('/<int:id>', methods=['PUT'])
+@login_required
+def update(id):
+    organization = get_organization_by_id(id)
+    if not organization:
+        abort(404, description='Organization not found.')
+    
+    data = request.get_json()
+    if not data:
+        abort(400, description='No input data provided.')
+    
+    name = data.get('name')
+    description = data.get('description')
+    homepage_url = data.get('homepage_url')
+    
+    if not name or not homepage_url:
+        abort(400, description='Name and Homepage URL are required.')
+    
+    organization.name = name
+    organization.description = description
+    organization.homepage_url = homepage_url
+    db.session.commit()
+    
+    return jsonify(organization.to_dict()), 200
