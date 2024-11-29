@@ -19,8 +19,8 @@ def app():
         _db.create_all()
     return app
 
-@pytest.fixture(scope='function')
-def db(app):
+@pytest.fixture(scope='module')
+def module_db(app):
     with app.app_context():
         _db.create_all()
         yield _db  # Provide the database instance
@@ -28,38 +28,32 @@ def db(app):
         _db.drop_all()
 
 @pytest.fixture(scope='function')
+def db(app, module_db):
+    # Create a new database session for a clean state per test
+    connection = _db.engine.connect()
+    transaction = connection.begin()
+    _db.session = _db.create_scoped_session(options={"bind": connection})
+    yield _db
+    _db.session.remove()
+    transaction.rollback()
+    connection.close()
+
+@pytest.fixture(scope='function')
 def client(app, db):
     with app.test_client() as client:
         yield client
 
-@pytest.fixture(scope='function')
-def admin_user(db):
-    user = User(username='admin', email='admin@example.com', is_admin=True)
-    user.set_password('password')
-    db.session.add(user)
-    db.session.commit()
-    yield user
-    # Cleanup is handled by db.drop_all()
-
-@pytest.fixture(scope='function')
-def logged_in_client(app, admin_user):
-    with app.test_client() as client:
-        # Retrieve the login page to get the CSRF token
-        response = client.get('/login')
-        assert response.status_code == 200
-        html = response.get_data(as_text=True)
-        
-        # Extract the CSRF token from the form
-        csrf_match = re.search(r'name="csrf_token" type="hidden" value="([^"]+)"', html)
-        if not csrf_match:
-            raise ValueError("CSRF token not found in login form")
-        csrf_token = csrf_match.group(1)
-        
-        # Simulate logging in by making a POST request to the login endpoint with CSRF token
-        response = client.post('/login', data={
-            'username': admin_user.username,
-            'password': 'password',
-            'csrf_token': csrf_token
-        }, follow_redirects=True)
-        assert response.status_code == 200
-        yield client
+@pytest.fixture(scope='module', autouse=True)
+def init_admin_user(module_db):
+    # First try to find existing admin user
+    from app.models.user import User  # Import the User model inside the fixture
+    admin_user = module_db.session.query(User).filter_by(email='admin@example.com').first()
+    if not admin_user:
+        admin_user = User(
+            username='admin_user',
+            password_hash='pbkdf2:sha256:150000$XbL3IjWn$3d8Kq7J29e4gFyhiuQlZIl12tXcVU8S2R5Qx5hPZV0k=',
+            email='admin@example.com',
+            is_admin=True
+        )
+        module_db.session.add(admin_user)
+        module_db.session.commit()
