@@ -1,9 +1,6 @@
 import os
 import sys
 import pytest
-from app import create_app
-from app.extensions import db
-from sqlalchemy.orm import scoped_session, sessionmaker
 
 # Determine the absolute path of the project root directory
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -18,6 +15,11 @@ tests_dir = os.path.dirname(os.path.abspath(__file__))
 # Ensure the project root is in sys.path
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
+
+from app import create_app
+from app.extensions import db
+from sqlalchemy.orm import scoped_session, sessionmaker
+
 
 @pytest.fixture(scope='session', autouse=True)
 def setup_directories():
