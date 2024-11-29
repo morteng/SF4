@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from app.forms.admin_forms import StipendForm
-from app.services.stipend_service import get_all_stipends, delete_stipend, create_stipend
+from app.services.stipend_service import get_all_stipends, delete_stipend, create_stipend, get_stipend_by_id
 
 admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
 
