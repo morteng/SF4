@@ -5,6 +5,7 @@
     <title>{% block title %}Admin Dashboard{% endblock %}</title>
 </head>
 <body>
+    {% include 'admin/_nav.html' %}
     {% block content %}{% endblock %}
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
 </body>
