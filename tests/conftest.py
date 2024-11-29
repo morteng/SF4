@@ -59,13 +59,8 @@ def admin_user(session):
 
 @pytest.fixture(scope='function')
 def admin_token(client, admin_user, session):
-    with client:
+    with app.app_context():
         with client.session_transaction() as sess:
             from flask_login import login_user
             login_user(admin_user)
             session.refresh(admin_user)  # Ensure the user is attached to the session
-            # Assuming the token or necessary data is stored in the session
-            # For example, if using Flask-Login's remember me feature
-            # You might need to adjust this based on your authentication mechanism
-            # admin_token = sess.get('admin_token')
-            # return admin_token
