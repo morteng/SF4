@@ -25,13 +25,14 @@ def app():
 
 @pytest.fixture(scope='function')
 def db(app):
-    connection = _db.engine.connect()
-    transaction = connection.begin()
-    session = _db.create_scoped_session(options={"bind": connection})
-    yield session
-    session.remove()
-    transaction.rollback()
-    connection.close()
+    with app.app_context():
+        connection = _db.engine.connect()
+        transaction = connection.begin()
+        session = _db.create_scoped_session(options={"bind": connection})
+        yield session
+        session.remove()
+        transaction.rollback()
+        connection.close()
 
 @pytest.fixture(scope='function')
 def client(app, db):
