@@ -1,8 +1,19 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required
-from app.services.user_service import get_user_by_id, delete_user, get_all_users
+from app.forms.admin_forms import UserForm
+from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user
 
 user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
+
+@user_bp.route('/create', methods=['GET', 'POST'])
+@login_required
+def create():
+    form = UserForm()
+    if form.validate_on_submit():
+        new_user = create_user(form.data)
+        flash('User created successfully.', 'success')
+        return redirect(url_for('admin_user.index'))
+    return render_template('admin/user/create.html', form=form)
 
 @user_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
