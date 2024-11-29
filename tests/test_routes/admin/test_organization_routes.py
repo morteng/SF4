@@ -57,8 +57,8 @@ def test_delete_organization_authorized(logged_in_client):
 def test_create_organization_missing_fields(logged_in_client):
     """Test creating organization with missing fields fails"""
     response = logged_in_client.post('/admin/organizations/create', json={
-        'name': 'Test Organization',
-        'homepage_url': 'http://test.org'
+        'name': 'Test Organization'
+        # 'homepage_url' is missing
     })
     assert response.status_code == 400
 
