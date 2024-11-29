@@ -43,6 +43,10 @@ def admin_user(db):
 @pytest.fixture(scope='function')
 def logged_in_client(app, admin_user):
     with app.test_client() as client:
-        with app.app_context():
-            login_user(admin_user)
+        # Simulate logging in by making a POST request to the login endpoint
+        response = client.post('/login', data={
+            'username': admin_user.username,
+            'password': 'password'
+        }, follow_redirects=True)
+        assert response.status_code == 200
         yield client
