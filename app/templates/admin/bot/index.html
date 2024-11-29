@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Bots{% endblock %}
+
+{% block content %}
+<h1>Manage Bots</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for bot in bots %}
+        <tr>
+            <td>{{ bot.id }}</td>
+            <td>{{ bot.name }}</td>
+            <td>{{ bot.description }}</td>
+            <td>{{ bot.status }}</td>
+            <td>
+                <form action="{{ url_for('admin_bot.run', id=bot.id) }}" method="post">
+                    <button type="submit">Run</button>
+                </form>
+                <form action="{{ url_for('admin_bot.delete', id=bot.id) }}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

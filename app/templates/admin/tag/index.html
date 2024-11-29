@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Tags{% endblock %}
+
+{% block content %}
+<h1>Manage Tags</h1>
+<a href="{{ url_for('admin_tag.create') }}">Create New Tag</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tag in tags %}
+        <tr>
+            <td>{{ tag.id }}</td>
+            <td>{{ tag.name }}</td>
+            <td>
+                <form action="{{ url_for('admin_tag.delete', id=tag.id) }}" method="post">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
