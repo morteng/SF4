@@ -2,7 +2,7 @@ import pytest
 
 def test_create_organization_unauthorized(client):
     """Test creating organization without authentication fails"""
-    response = client.post('/admin/organizations', json={
+    response = client.post('/admin/organizations/create', json={
         'name': 'Test Organization',
         'description': 'Test Description',
         'homepage_url': 'http://test.org'
@@ -11,7 +11,7 @@ def test_create_organization_unauthorized(client):
 
 def test_create_organization_authorized(client, admin_token):
     """Test creating organization with admin authentication succeeds"""
-    response = client.post('/admin/organizations', 
+    response = client.post('/admin/organizations/create', 
         json={
             'name': 'Test Organization',
             'description': 'Test Description',
@@ -25,7 +25,7 @@ def test_create_organization_authorized(client, admin_token):
 def test_update_organization_authorized(client, admin_token):
     """Test updating organization with admin authentication"""
     # First create an organization to update
-    create_response = client.post('/admin/organizations', 
+    create_response = client.post('/admin/organizations/create', 
         json={
             'name': 'Initial Organization',
             'description': 'Initial Description',
@@ -51,7 +51,7 @@ def test_update_organization_authorized(client, admin_token):
 def test_delete_organization_authorized(client, admin_token):
     """Test deleting organization with admin authentication"""
     # First create an organization to delete
-    create_response = client.post('/admin/organizations', 
+    create_response = client.post('/admin/organizations/create', 
         json={
             'name': 'Organization to Delete',
             'description': 'Description of Organization to Delete',
@@ -71,7 +71,7 @@ def test_delete_organization_authorized(client, admin_token):
 
 def test_create_organization_missing_fields(client, admin_token):
     """Test creating organization with missing fields fails"""
-    response = client.post('/admin/organizations', 
+    response = client.post('/admin/organizations/create', 
         json={
             'name': 'Test Organization',
             'homepage_url': 'http://test.org'
@@ -82,7 +82,7 @@ def test_create_organization_missing_fields(client, admin_token):
 
 def test_create_organization_invalid_name(client, admin_token):
     """Test creating organization with invalid name fails"""
-    response = client.post('/admin/organizations', 
+    response = client.post('/admin/organizations/create', 
         json={
             'name': '',
             'description': 'Test Description',
@@ -94,7 +94,7 @@ def test_create_organization_invalid_name(client, admin_token):
 
 def test_create_organization_invalid_homepage_url(client, admin_token):
     """Test creating organization with invalid homepage URL fails"""
-    response = client.post('/admin/organizations', 
+    response = client.post('/admin/organizations/create', 
         json={
             'name': 'Test Organization',
             'description': 'Test Description',
