@@ -4,6 +4,7 @@ import pytest
 from app.models.user import User
 from app.extensions import db as _db
 from flask_login import login_user
+import re
 
 # Get the project root directory
 root = Path(__file__).resolve().parent.parent
@@ -43,10 +44,22 @@ def admin_user(db):
 @pytest.fixture(scope='function')
 def logged_in_client(app, admin_user):
     with app.test_client() as client:
-        # Simulate logging in by making a POST request to the login endpoint
+        # Retrieve the login page to get the CSRF token
+        response = client.get('/login')
+        assert response.status_code == 200
+        html = response.get_data(as_text=True)
+        
+        # Extract the CSRF token from the form
+        csrf_match = re.search(r'name="csrf_token" type="hidden" value="([^"]+)"', html)
+        if not csrf_match:
+            raise ValueError("CSRF token not found in login form")
+        csrf_token = csrf_match.group(1)
+        
+        # Simulate logging in by making a POST request to the login endpoint with CSRF token
         response = client.post('/login', data={
             'username': admin_user.username,
-            'password': 'password'
+            'password': 'password',
+            'csrf_token': csrf_token
         }, follow_redirects=True)
         assert response.status_code == 200
         yield client
