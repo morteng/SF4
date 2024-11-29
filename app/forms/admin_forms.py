@@ -11,3 +11,9 @@ class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
     category = StringField('Category', validators=[Length(max=50)])
     submit = SubmitField('Create')
+
+class OrganizationForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
+    description = StringField('Description', validators=[Length(max=255)])
+    homepage_url = StringField('Homepage URL', validators=[Length(max=255)])
+    submit = SubmitField('Create')
