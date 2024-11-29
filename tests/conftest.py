@@ -17,6 +17,11 @@ def app():
     return app
 
 @pytest.fixture(scope='function')
+def client(app):
+    with app.test_client() as client:
+        yield client
+
+@pytest.fixture(scope='function')
 def admin_user(app):
     with app.app_context():
         user = User(username='admin', email='admin@example.com', is_admin=True)
