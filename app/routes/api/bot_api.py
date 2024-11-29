@@ -2,7 +2,7 @@ from flask import request, jsonify
 from app.extensions import db
 from app.models.bot import Bot
 from app.services.bot_service import create_bot
-from app.routes.api import api_bp
+from . import api_bp  # Import from the current package
 from app.utils import login_required
 
 @api_bp.route('/bots', methods=['POST'])
