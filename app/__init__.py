@@ -22,7 +22,20 @@ def create_app(config_name='development'):
         init_models(app)
 
     # Register blueprints
-    from .routes import routes_bp  # Changed here
-    app.register_blueprint(routes_bp)  # And here
+    from .routes.admin.bot_routes import admin_bot_bp
+    from .routes.admin.organization_routes import org_bp as admin_org_bp
+    from .routes.admin.stipend_routes import admin_stipend_bp
+    from .routes.admin.tag_routes import tag_bp as admin_tag_bp
+    from .routes.admin.user_routes import user_bp as admin_user_bp
+    from .routes.user_routes import user_bp
+    from .routes.visitor_routes import visitor_bp
+
+    app.register_blueprint(admin_bot_bp, url_prefix='/admin/bots')
+    app.register_blueprint(admin_org_bp, url_prefix='/admin/organizations')
+    app.register_blueprint(admin_stipend_bp, url_prefix='/admin/stipends')
+    app.register_blueprint(admin_tag_bp, url_prefix='/admin/tags')
+    app.register_blueprint(admin_user_bp, url_prefix='/admin/users')
+    app.register_blueprint(user_bp, url_prefix='/user')
+    app.register_blueprint(visitor_bp)
 
     return app
