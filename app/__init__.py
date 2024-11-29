@@ -3,6 +3,7 @@ from .config import config_by_name
 from .extensions import db, login_manager
 from .models import init_models  # Import the function
 from .models.user import User  # Import the User model
+from .routes.api import api_bp  # Import the API blueprint
 
 def create_app(config_name='development'):
     app = Flask(__name__)
@@ -30,6 +31,7 @@ def create_app(config_name='development'):
     from .routes.user_routes import user_bp
     from .routes.visitor_routes import visitor_bp
 
+    app.register_blueprint(api_bp)  # Register the API blueprint
     app.register_blueprint(admin_bot_bp, url_prefix='/admin/bots')
     app.register_blueprint(admin_org_bp, url_prefix='/admin/organizations')
     app.register_blueprint(admin_stipend_bp, url_prefix='/admin/stipends')
