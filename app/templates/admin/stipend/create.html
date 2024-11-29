@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Stipend{% endblock %}
+
+{% block content %}
+<h1>Create New Stipend</h1>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.name.label }}<br>
+        {{ form.name(size=32) }}
+    </div>
+    <!-- Add other fields here -->
+    <button type="submit">Create</button>
+</form>
+{% endblock %}
