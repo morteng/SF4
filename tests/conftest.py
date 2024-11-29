@@ -15,7 +15,7 @@ def app():
     app = create_app('testing')
     with app.app_context():
         # Run migrations
-        alembic_cfg = Config("alembic.ini")
+        alembic_cfg = Config("migrations/alembic.ini")  # Adjusted path to alembic.ini
         command.upgrade(alembic_cfg, "head")
         db.session.commit()
     yield app
