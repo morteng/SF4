@@ -24,3 +24,11 @@ def create_stipend(data):
     db.session.add(new_stipend)
     db.session.commit()
     return new_stipend
+
+def get_stipend_by_id(stipend_id):
+    try:
+        return Stipend.query.get(stipend_id)
+    except SQLAlchemyError as e:
+        # Log the error
+        print(str(e))
+        return None
