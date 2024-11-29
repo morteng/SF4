@@ -2,6 +2,7 @@ import unittest
 from app import create_app, db
 from app.models import User
 from flask_login import login_user
+from werkzeug.security import generate_password_hash
 
 class AdminRouteTests(unittest.TestCase):
     def setUp(self):
@@ -15,8 +16,8 @@ class AdminRouteTests(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def create_user(self, username='testuser', password='testpassword', is_admin=False):
-        user = User(username=username, is_admin=is_admin)
+    def create_user(self, username='testuser', password='testpassword', email='testuser@example.com', is_admin=False):
+        user = User(username=username, email=email, is_admin=is_admin)
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
