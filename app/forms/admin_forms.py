@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length
+from wtforms import StringField, TextAreaField, SubmitField, BooleanField, PasswordField
+from wtforms.validators import DataRequired, Length, Email
 
 class OrganizationForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
@@ -22,4 +22,11 @@ class StipendForm(FlaskForm):
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
     category = StringField('Category', validators=[Length(max=50)])
+    submit = SubmitField('Create')
+
+class UserForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[Length(min=8)])
+    is_admin = BooleanField('Is Admin')
     submit = SubmitField('Create')
