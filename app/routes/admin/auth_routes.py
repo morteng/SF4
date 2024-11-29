@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms.user_forms import LoginForm  # Updated import statement
+from app.forms.user_forms import LoginForm
 from app.models.user import User
 
-auth_bp = Blueprint('admin_auth', __name__, url_prefix='/admin/auth')
+auth_bp = Blueprint('admin_auth', __name__, url_prefix='/admin/auth', template_folder='templates')
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -19,7 +19,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('admin_stipend.index'))
         else:
             flash('Invalid username or password.', 'danger')
-    return render_template('admin/auth/login.html', form=form)
+    return render_template('login.html', form=form)
 
 @auth_bp.route('/logout', methods=['POST'])
 @login_required
