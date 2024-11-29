@@ -5,8 +5,15 @@ from app import create_app  # Adjusted import to use absolute import
 from app.extensions import db  # Corrected import statement
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-# Add the project root directory to sys.path
-sys.path.insert(0, '/home/morten/sf4')
+# Determine the absolute path of the tests directory
+tests_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Go up one level to get the project root directory
+project_root = os.path.dirname(tests_dir)
+
+# Add the project root to sys.path if it's not already there
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 @pytest.fixture(scope='session', autouse=True)
 def setup_directories():
