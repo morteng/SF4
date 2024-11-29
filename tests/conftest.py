@@ -59,11 +59,11 @@ def admin_user(session):
     return admin
 
 @pytest.fixture(scope='function')
-def admin_token(client, admin_user, session, app):
-    with app.app_context():
+def admin_token(client, admin_user, app):
+    with app.test_request_context():
+        from flask_login import login_user
+        login_user(admin_user)
         with client.session_transaction() as sess:
-            from flask_login import login_user
-            login_user(admin_user)
-            session.refresh(admin_user)  # Ensure the user is attached to the session
-        cookie_header = '; '.join([f"{key}={value}" for key, value in client.cookie_jar._cookies['localhost.local']['/'].items()])
-        return cookie_header
+            session_data = {key: value for key, value in sess.items()}
+    cookie_header = '; '.join([f"{key}={value}" for key, value in session_data.items()])
+    return cookie_header
