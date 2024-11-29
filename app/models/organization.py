@@ -10,3 +10,13 @@ class Organization(db.Model):
 
     def __repr__(self):
         return f'<Organization {self.name}>'
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'homepage_url': self.homepage_url,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }
