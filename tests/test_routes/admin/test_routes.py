@@ -16,10 +16,10 @@ def client(app):
     return app.test_client()
 
 @pytest.fixture(scope='module', autouse=True)
-def init_admin_user(session):
+def init_admin_user(db):
     # First try to find existing admin user
     from app.models.user import User  # Import the User model inside the fixture
-    admin_user = session.query(User).filter_by(email='admin@example.com').first()
+    admin_user = db.session.query(User).filter_by(email='admin@example.com').first()
     if not admin_user:
         admin_user = User(
             username='admin_user',
@@ -27,8 +27,8 @@ def init_admin_user(session):
             email='admin@example.com',
             is_admin=True
         )
-        session.add(admin_user)
-        session.commit()
+        db.session.add(admin_user)
+        db.session.commit()
 
 def test_admin_login(client):
     response = client.post('/admin/login', json={
