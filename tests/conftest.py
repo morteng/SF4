@@ -1,14 +1,17 @@
 import os
 import sys
 import pytest
-from app import create_app  
-from app.extensions import db  
+from app import create_app
+from app.extensions import db
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+# Determine the directory of the current file (conftest.py)
 tests_dir = os.path.dirname(os.path.abspath(__file__))
 
+# Determine the project root directory
 project_root = os.path.dirname(tests_dir)
 
+# Ensure the project root is in sys.path
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
@@ -52,7 +55,7 @@ def client(app):
 
 @pytest.fixture(scope='session')
 def admin_user(_db, app):
-    from app.models.user import User 
+    from app.models.user import User
     with app.app_context():
         admin = _db.session.query(User).filter_by(username='admin').first()
         if not admin:
@@ -73,4 +76,4 @@ def admin_token(client, admin_user):
         'password': 'password123'
     }, follow_redirects=True)
     assert response.status_code == 200
-    return response.headers.get('Authorization')  
+    return response.headers.get('Authorization')
