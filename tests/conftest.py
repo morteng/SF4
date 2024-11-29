@@ -1,17 +1,14 @@
 import os
 import sys
 import pytest
-from app import create_app  # Adjusted import to use absolute import
-from app.extensions import db  # Corrected import statement
+from app import create_app  
+from app.extensions import db  
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-# Determine the absolute path of the tests directory
 tests_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Go up one level to get the project root directory
 project_root = os.path.dirname(tests_dir)
 
-# Add the project root to sys.path if it's not already there
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
@@ -24,7 +21,6 @@ def setup_directories():
 @pytest.fixture(scope='session')
 def app(setup_directories):
     app = create_app('testing')
-    # Correct the SQLALCHEMY_DATABASE_URI to avoid duplicate 'instance' directory
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/morten/sf4/instance/site.db'
     return app
 
@@ -56,7 +52,7 @@ def client(app):
 
 @pytest.fixture(scope='session')
 def admin_user(_db, app):
-    from app.models.user import User  # Import the User model inside the fixture
+    from app.models.user import User 
     with app.app_context():
         admin = _db.session.query(User).filter_by(username='admin').first()
         if not admin:
@@ -77,4 +73,4 @@ def admin_token(client, admin_user):
         'password': 'password123'
     }, follow_redirects=True)
     assert response.status_code == 200
-    return response.headers.get('Authorization')  # Use .get() to avoid KeyError if the header is missing
+    return response.headers.get('Authorization')  
