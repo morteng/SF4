@@ -5,6 +5,7 @@ from .models import init_models  # Import the function
 from .models.user import User  # Import the User model
 from .routes.api import api_bp  # Import the API blueprint
 from .routes.admin.auth_routes import auth_bp  # Import the admin auth blueprint
+from flask_migrate import Migrate  # Import Migrate
 
 def create_app(config_name='development'):
     app = Flask(__name__)
@@ -13,6 +14,7 @@ def create_app(config_name='development'):
     # Initialize extensions
     db.init_app(app)
     login_manager.init_app(app)
+    migrate = Migrate(app, db)  # Initialize Flask-Migrate
 
     # Set up user loader
     @login_manager.user_loader
