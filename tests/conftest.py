@@ -1,6 +1,6 @@
 import pytest
 from app import create_app
-from app.extensions import db as _db
+from app.extensions import _db
 from app.models.user import User
 
 @pytest.fixture(scope='module')
@@ -28,9 +28,8 @@ def db(app):
     with app.app_context():
         connection = _db.engine.connect()
         transaction = connection.begin()
-        session = _db.create_scoped_session(options={"bind": connection})
-        yield session
-        session.remove()
+        _db.session.bind = connection
+        yield _db.session
         transaction.rollback()
         connection.close()
 
