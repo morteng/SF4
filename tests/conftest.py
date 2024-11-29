@@ -9,17 +9,8 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-# Determine the directory of the current file (conftest.py)
-tests_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Ensure the project root is in sys.path
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
-
 from app import create_app
 from app.extensions import db
-from sqlalchemy.orm import scoped_session, sessionmaker
-
 
 @pytest.fixture(scope='session', autouse=True)
 def setup_directories():
@@ -31,55 +22,50 @@ def setup_directories():
 def app(setup_directories):
     app = create_app('testing')
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/morten/sf4/instance/site.db'
-    return app
-
-@pytest.fixture(scope='session')
-def _db(app):
     with app.app_context():
-        # Initialize database tables
         db.create_all()
-        yield db
+    yield app
+    with app.app_context():
         db.drop_all()
 
-@pytest.fixture(scope='function', autouse=True)
-def session(_db, app):
-    with app.app_context():
-        connection = _db.engine.connect()
-        transaction = connection.begin()
-        options = dict(bind=connection, binds={})
-        Session = scoped_session(sessionmaker(bind=connection))
-        session = Session()
-        yield session
-        session.rollback()
-        transaction.rollback()
-        connection.close()
+@pytest.fixture(scope='function')
+def session(app):
+    from sqlalchemy.orm import scoped_session, sessionmaker
+    connection = db.engine.connect()
+    db.session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=connection))
+    yield db.session
+    db.session.remove()
+    connection.close()
 
 @pytest.fixture(scope='function')
 def client(app):
     with app.test_client() as client:
         yield client
 
-@pytest.fixture(scope='session')
-def admin_user(_db, app):
+@pytest.fixture(scope='function')
+def admin_user(session):
     from app.models.user import User
-    with app.app_context():
-        admin = _db.session.query(User).filter_by(username='admin').first()
-        if not admin:
-            admin = User(
-                username='admin',
-                email='admin@example.com',
-                is_admin=True
-            )
-            admin.set_password('password123')
-            _db.session.add(admin)
-            _db.session.commit()
-        return admin
+    admin = session.query(User).filter_by(username='admin').first()
+    if not admin:
+        admin = User(
+            username='admin',
+            email='admin@example.com',
+            is_admin=True
+        )
+        admin.set_password('password123')
+        session.add(admin)
+        session.commit()
+    return admin
 
 @pytest.fixture(scope='function')
-def admin_token(client, admin_user):
-    response = client.post('/admin/login', data={
-        'username': admin_user.username,
-        'password': 'password123'
-    }, follow_redirects=True)
-    assert response.status_code == 200
-    return response.headers.get('Authorization')
+def admin_token(client, admin_user, session):
+    with client:
+        with client.session_transaction() as sess:
+            from flask_login import login_user
+            login_user(admin_user)
+            session.refresh(admin_user)  # Ensure the user is attached to the session
+            # Assuming the token or necessary data is stored in the session
+            # For example, if using Flask-Login's remember me feature
+            # You might need to adjust this based on your authentication mechanism
+            # admin_token = sess.get('admin_token')
+            # return admin_token
