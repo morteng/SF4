@@ -4,6 +4,7 @@ from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization
 from werkzeug.exceptions import abort
 from app.extensions import db
+from urllib.parse import urlparse
 
 org_bp = Blueprint('admin_org', __name__, url_prefix='/admin/organizations')
 
@@ -22,6 +23,14 @@ def create():
         
         if not name or not homepage_url:
             abort(400, description='Name and Homepage URL are required.')
+        
+        # Validate URL format
+        try:
+            result = urlparse(homepage_url)
+            if not all([result.scheme, result.netloc]):
+                abort(400, description='Homepage URL is invalid.')
+        except ValueError:
+            abort(400, description='Homepage URL is invalid.')
         
         # Create the organization
         new_org = create_organization({
