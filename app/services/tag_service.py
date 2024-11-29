@@ -1,12 +1,34 @@
 from app.models.tag import Tag
-
-def get_tag_by_id(tag_id):
-    return Tag.query.get(tag_id)
-
-def delete_tag(tag):
-    from app.extensions import db
-    db.session.delete(tag)
-    db.session.commit()
+from sqlalchemy.exc import SQLAlchemyError
+from app.extensions import db
 
 def get_all_tags():
-    return Tag.query.all()
+    try:
+        return Tag.query.all()
+    except SQLAlchemyError as e:
+        # Log the error
+        print(str(e))
+        return []
+
+def delete_tag(tag):
+    try:
+        db.session.delete(tag)
+        db.session.commit()
+    except SQLAlchemyError as e:
+        # Log the error and possibly handle it
+        print(str(e))
+        db.session.rollback()
+
+def create_tag(data):
+    new_tag = Tag(**data)
+    db.session.add(new_tag)
+    db.session.commit()
+    return new_tag
+
+def get_tag_by_id(tag_id):
+    try:
+        return Tag.query.get(tag_id)
+    except SQLAlchemyError as e:
+        # Log the error
+        print(str(e))
+        return None
