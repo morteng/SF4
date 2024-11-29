@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms.admin_forms import LoginForm
+from app.forms.user_forms import LoginForm  # Updated import statement
 from app.models.user import User
 
 auth_bp = Blueprint('admin_auth', __name__, url_prefix='/admin/auth')
