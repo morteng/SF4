@@ -18,3 +18,8 @@ class StipendForm(FlaskForm):
     application_deadline = StringField('Application Deadline')
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
+
+class TagForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
+    category = StringField('Category', validators=[Length(max=50)])
+    submit = SubmitField('Create')
