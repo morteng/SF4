@@ -10,9 +10,12 @@ user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
 def create():
     form = UserForm()
     if form.validate_on_submit():
-        new_user = create_user(form.data)
-        flash('User created successfully.', 'success')
-        return redirect(url_for('admin_user.index'))
+        try:
+            new_user = create_user(form.data)
+            flash('User created successfully.', 'success')
+            return redirect(url_for('admin_user.index'))
+        except ValueError as e:
+            flash(str(e), 'danger')
     return render_template('admin/user/create.html', form=form)
 
 @user_bp.route('/delete/<int:id>', methods=['POST'])
