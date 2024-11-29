@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+import pytest  # Add this import
 
 # Get the project root directory
 root = Path(__file__).resolve().parent.parent
