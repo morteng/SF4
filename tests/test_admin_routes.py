@@ -25,10 +25,11 @@ class AdminRouteTests(unittest.TestCase):
 
     def test_admin_access(self):
         user = self.create_user(is_admin=True)
-        with self.app.test_client() as client:
+        with self.app.test_request_context():
             login_user(user)
-            response = client.get('/admin/stipends/')
-            self.assertEqual(response.status_code, 200)
+            with self.app.test_client() as client:
+                response = client.get('/admin/stipends/')
+                self.assertEqual(response.status_code, 200)
 
     def test_non_admin_access(self):
         user = self.create_user(is_admin=False)
