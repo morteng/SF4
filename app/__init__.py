@@ -4,7 +4,7 @@ from app.extensions import db, login_manager
 from flask_migrate import Migrate
 from app.models.user import User
 from app.models import init_models
-from app.routes import auth_bp, user_bp, visitor_bp
+from app.routes import user_bp, visitor_bp
 from app.routes.admin import register_admin_blueprints
 
 def create_app(config_name='development'):
@@ -26,9 +26,8 @@ def create_app(config_name='development'):
         init_models(app)
 
     # Register blueprints
-    app.register_blueprint(auth_bp)
-    register_admin_blueprints(app)  # This function handles all admin-related blueprints
     app.register_blueprint(user_bp)
+    register_admin_blueprints(app)  # This function handles all admin-related blueprints
     app.register_blueprint(visitor_bp)
 
     return app
