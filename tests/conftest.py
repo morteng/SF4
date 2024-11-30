@@ -47,11 +47,11 @@ def logged_in_client(app, db):
     db.session.add(admin_user)
     db.session.commit()
 
-    # Log in the admin user
+    # Log in the admin user with form data
     login_data = {
         'username': 'admin',
         'password': 'password'
     }
-    client.post('/admin/auth/login', data=login_data)
+    client.post('/admin/auth/login', data=login_data, follow_redirects=True)
 
     return client

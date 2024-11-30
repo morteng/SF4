@@ -11,13 +11,18 @@ def test_create_organization_unauthorized(client, db):
 
 def test_create_organization_authorized(logged_in_client, db):
     """Test creating organization with admin authentication succeeds"""
+    # First, ensure that the user is logged in by accessing a protected route
+    response = logged_in_client.get('/admin/dashboard')
+    assert response.status_code == 200
+
+    # Now, create the organization
     response = logged_in_client.post('/admin/organizations/create', json={
         'name': 'Test Organization',
         'description': 'Test Description',
         'homepage_url': 'http://test.org'
     })
     assert response.status_code == 201
-    assert 'id' in response.json  # Updated from 'organization_id' to 'id'
+    assert 'id' in response.json
 
 def test_update_organization_authorized(logged_in_client, db):
     """Test updating organization with admin authentication"""
@@ -28,7 +33,7 @@ def test_update_organization_authorized(logged_in_client, db):
         'homepage_url': 'http://initial.org'
     })
     assert create_response.status_code == 201
-    organization_id = create_response.json['id']  # Updated from 'organization_id' to 'id'
+    organization_id = create_response.json['id']
 
     # Now update the organization
     response = logged_in_client.put(f'/admin/organizations/{organization_id}', json={
@@ -37,7 +42,7 @@ def test_update_organization_authorized(logged_in_client, db):
         'homepage_url': 'http://updated.org'
     })
     assert response.status_code == 200
-    assert response.json['id'] == organization_id  # Updated from 'organization_id' to 'id'
+    assert response.json['id'] == organization_id
 
 def test_delete_organization_authorized(logged_in_client, db):
     """Test deleting organization with admin authentication"""
@@ -48,7 +53,7 @@ def test_delete_organization_authorized(logged_in_client, db):
         'homepage_url': 'http://delete.org'
     })
     assert create_response.status_code == 201
-    organization_id = create_response.json['id']  # Updated from 'organization_id' to 'id'
+    organization_id = create_response.json['id']
 
     # Now delete the organization using the correct endpoint
     response = logged_in_client.post(f'/admin/organizations/delete/{organization_id}')
