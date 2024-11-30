@@ -9,7 +9,7 @@ from .organization_routes import org_bp as admin_org_bp
 from .stipend_routes import admin_stipend_bp
 from .tag_routes import tag_bp as admin_tag_bp
 from .user_routes import user_bp as admin_user_bp
-from .dashboard_routes import dashboard_bp  # Import the new dashboard blueprint
+from app.routes.admin.dashboard_routes import dashboard_bp  # Import the new dashboard blueprint
 
 # Register blueprints
 def register_admin_blueprints(app):
