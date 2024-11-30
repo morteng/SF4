@@ -38,12 +38,18 @@ def create_app(config_name='development'):
     from .routes.admin.stipend_routes import admin_stipend_bp
     from .routes.admin.tag_routes import tag_bp as admin_tag_bp
     from .routes.admin.user_routes import user_bp as admin_user_bp
+    from .routes.admin.dashboard_routes import dashboard_bp  # Import the dashboard blueprint
     from .routes.user_routes import user_bp
     from .routes.visitor_routes import visitor_bp
 
     app.register_blueprint(api_bp)  # Register the API blueprint
     app.register_blueprint(auth_bp)  # Register the admin auth blueprint
-    register_admin_blueprints(app)  # Register all admin blueprints
+    app.register_blueprint(admin_bot_bp, url_prefix='/admin/bots')
+    app.register_blueprint(admin_org_bp, url_prefix='/admin/organizations')
+    app.register_blueprint(admin_stipend_bp, url_prefix='/admin/stipends')
+    app.register_blueprint(admin_tag_bp, url_prefix='/admin/tags')
+    app.register_blueprint(admin_user_bp, url_prefix='/admin/users')
+    app.register_blueprint(dashboard_bp, url_prefix='/admin/dashboard')  # Register the dashboard blueprint
 
     return app
 from flask_migrate import Migrate  # Import Migrate
