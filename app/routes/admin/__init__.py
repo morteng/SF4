@@ -7,6 +7,7 @@ from .stipend_routes import admin_stipend_bp
 from .tag_routes import tag_bp as admin_tag_bp
 from .user_routes import user_bp as admin_user_bp
 from .dashboard_routes import dashboard_bp  # Import the new dashboard blueprint
+from .dashboard_routes import dashboard_bp  # Import the new dashboard blueprint
 
 # Register blueprints
 def register_admin_blueprints(app):
@@ -15,4 +16,5 @@ def register_admin_blueprints(app):
     app.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
     app.register_blueprint(admin_tag_bp, url_prefix='/tags')
     app.register_blueprint(admin_user_bp, url_prefix='/users')
+    app.register_blueprint(dashboard_bp, url_prefix='/admin')  # Register the dashboard blueprint
     app.register_blueprint(dashboard_bp, url_prefix='/admin/dashboard')  # Register the dashboard blueprint
