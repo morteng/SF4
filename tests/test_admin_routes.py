@@ -28,7 +28,7 @@ class AdminRouteTests(unittest.TestCase):
         with self.app.test_request_context():
             login_user(user)
             with self.app.test_client() as client:
-                response = client.get('/admin/stipends/')
+                response = client.get('/admin/stipends/')  # Updated URL
                 self.assertEqual(response.status_code, 200)
 
     def test_non_admin_access(self):
@@ -36,7 +36,7 @@ class AdminRouteTests(unittest.TestCase):
         with self.app.test_request_context():
             login_user(user)
             with self.app.test_client() as client:
-                response = client.get('/admin/stipends/')
+                response = client.get('/admin/stipends/')  # Updated URL
                 self.assertEqual(response.status_code, 403)
 
 if __name__ == '__main__':

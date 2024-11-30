@@ -10,9 +10,9 @@ from .dashboard_routes import admin_dashboard_bp  # Import the new blueprint
 
 # Register blueprints
 def register_admin_blueprints(app):
-    app.register_blueprint(admin_bot_bp, url_prefix='/bots')
-    app.register_blueprint(admin_org_bp, url_prefix='/organizations')
-    app.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
-    app.register_blueprint(admin_tag_bp, url_prefix='/tags')
-    app.register_blueprint(admin_user_bp, url_prefix='/users')
-    app.register_blueprint(admin_dashboard_bp, url_prefix='/admin')  # Register the new blueprint
+    app.register_blueprint(admin_bot_bp, url_prefix='/admin/bots')
+    app.register_blueprint(admin_org_bp, url_prefix='/admin/organizations')
+    app.register_blueprint(admin_stipend_bp, url_prefix='/admin/stipends')
+    app.register_blueprint(admin_tag_bp, url_prefix='/admin/tags')
+    app.register_blueprint(admin_user_bp, url_prefix='/admin/users')
+    app.register_blueprint(admin_dashboard_bp, url_prefix='/admin/dashboard')  # Register the new blueprint
