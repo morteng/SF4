@@ -17,6 +17,8 @@ def app():
 @pytest.fixture(scope='function')
 def db(app):
     with app.app_context():
+        _db.session.remove()
+        _db.drop_all()
         _db.create_all()
         # Create admin user for each test function
         admin_user = User(
@@ -43,16 +45,18 @@ def logged_in_client(app, db):
     client = app.test_client()
 
     # Use the pre-existing admin user from the db fixture
-    admin_user = User.query.filter_by(email='admin@example.com').first()
-    if not admin_user:
-        raise ValueError("Admin user not found")
+    with app.app_context():
+        admin_user = User.query.filter_by(email='admin@example.com').first()
+        if not admin_user:
+            raise ValueError("Admin user not found")
 
     # Log in the admin user with form data
     login_data = {
         'username': admin_user.username,
         'password': 'password'  # Ensure this matches the password set in db fixture
     }
-    response = client.post('/login', data=login_data, follow_redirects=True)
-    assert response.status_code == 200
+    with app.app_context():
+        response = client.post('/login', data=login_data, follow_redirects=True)
+        assert response.status_code == 200
 
     return client
