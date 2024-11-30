@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required
 from app.forms.admin_forms import UserForm
-from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user
+from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user
 
 user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
 
@@ -36,3 +36,17 @@ def index():
     """List all users."""
     users = get_all_users()
     return render_template('admin/user/index.html', users=users)
+
+@user_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@login_required
+def update(id):
+    user = get_user_by_id(id)
+    if not user:
+        flash('User not found.', 'danger')
+        return redirect(url_for('admin_user.index'))
+    form = UserForm(obj=user)
+    if form.validate_on_submit():
+        update_user(user, form.data)
+        flash('User updated successfully.', 'success')
+        return redirect(url_for('admin_user.index'))
+    return render_template('admin/user/update.html', form=form, user=user)

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required
-from app.services.bot_service import get_bot_by_id, run_bot, get_all_bots
-from app.extensions import db
+from app.forms.admin_forms import BotForm
+from app.services.bot_service import get_bot_by_id, run_bot, get_all_bots, create_bot, update_bot
 
 admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/admin/bots')
 
@@ -36,3 +36,27 @@ def index():
     """List all bots."""
     bots = get_all_bots()
     return render_template('admin/bot/index.html', bots=bots)
+
+@admin_bot_bp.route('/create', methods=['GET', 'POST'])
+@login_required
+def create():
+    form = BotForm()
+    if form.validate_on_submit():
+        new_bot = create_bot(form.data)
+        flash('Bot created successfully.', 'success')
+        return redirect(url_for('admin_bot.index'))
+    return render_template('admin/bot/create.html', form=form)
+
+@admin_bot_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@login_required
+def update(id):
+    bot = get_bot_by_id(id)
+    if not bot:
+        flash('Bot not found.', 'danger')
+        return redirect(url_for('admin_bot.index'))
+    form = BotForm(obj=bot)
+    if form.validate_on_submit():
+        update_bot(bot, form.data)
+        flash('Bot updated successfully.', 'success')
+        return redirect(url_for('admin_bot.index'))
+    return render_template('admin/bot/update.html', form=form, bot=bot)

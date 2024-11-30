@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from app.forms.admin_forms import StipendForm
-from app.services.stipend_service import get_all_stipends, delete_stipend, create_stipend, get_stipend_by_id
+from app.services.stipend_service import get_all_stipends, delete_stipend, create_stipend, get_stipend_by_id, update_stipend
 
 admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
 
@@ -37,3 +37,19 @@ def create():
         flash('Stipend created successfully.', 'success')
         return redirect(url_for('admin_stipend.index'))
     return render_template('admin/stipend/create.html', form=form)
+
+@admin_stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@login_required
+def update(id):
+    if not current_user.is_admin:
+        abort(403)
+    stipend = get_stipend_by_id(id)
+    if not stipend:
+        flash('Stipend not found.', 'danger')
+        return redirect(url_for('admin_stipend.index'))
+    form = StipendForm(obj=stipend)
+    if form.validate_on_submit():
+        update_stipend(stipend, form.data)
+        flash('Stipend updated successfully.', 'success')
+        return redirect(url_for('admin_stipend.index'))
+    return render_template('admin/stipend/update.html', form=form, stipend=stipend)
