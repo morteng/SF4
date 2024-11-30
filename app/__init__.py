@@ -5,6 +5,7 @@ from .models import init_models  # Import the function
 from .models.user import User  # Import the User model
 from .routes.api import api_bp  # Import the API blueprint
 from .routes.admin.auth_routes import auth_bp  # Import the admin auth blueprint
+from .routes.admin.__init__ import register_admin_blueprints  # Import the registration function
 from flask_migrate import Migrate  # Import Migrate
 
 def create_app(config_name='development'):
@@ -36,12 +37,6 @@ def create_app(config_name='development'):
 
     app.register_blueprint(api_bp)  # Register the API blueprint
     app.register_blueprint(auth_bp)  # Register the admin auth blueprint
-    app.register_blueprint(admin_bot_bp, url_prefix='/admin/bots')
-    app.register_blueprint(admin_org_bp, url_prefix='/admin/organizations')
-    app.register_blueprint(admin_stipend_bp, url_prefix='/admin/stipends')
-    app.register_blueprint(admin_tag_bp, url_prefix='/admin/tags')
-    app.register_blueprint(admin_user_bp, url_prefix='/admin/users')
-    app.register_blueprint(user_bp, url_prefix='/user')
-    app.register_blueprint(visitor_bp)
+    register_admin_blueprints(app)  # Register all admin blueprints
 
     return app
