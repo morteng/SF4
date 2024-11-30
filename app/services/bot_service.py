@@ -16,3 +16,9 @@ def run_bot(bot):
 
 def get_all_bots():
     return db.session.query(Bot).all()
+
+def update_bot(bot, data):
+    bot.name = data['name']
+    bot.description = data['description']
+    # Update other fields as necessary
+    db.session.commit()
