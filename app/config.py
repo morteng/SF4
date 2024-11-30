@@ -13,17 +13,16 @@ class DevelopmentConfig(Config):
     TESTING = False
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath('instance/site.db')}"
 
-
 class TestingConfig(Config):
     DEBUG = False
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    WTF_CSRF_ENABLED = False  # Disable CSRF for tests
 
 class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath('instance/site.db')}"
-
 
 config_by_name = {
     'development': DevelopmentConfig,
