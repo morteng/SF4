@@ -35,3 +35,23 @@ def db(app):
 def client(app, db):
     with app.test_client() as client:
         yield client
+
+@pytest.fixture(scope='function')
+def logged_in_client(app, db):
+    # Create a test client
+    client = app.test_client()
+
+    # Create an admin user
+    admin_user = User(username='admin', email='admin@example.com', is_admin=True)
+    admin_user.set_password('password')
+    db.session.add(admin_user)
+    db.session.commit()
+
+    # Log in the admin user
+    login_data = {
+        'username': 'admin',
+        'password': 'password'
+    }
+    client.post('/admin/auth/login', data=login_data)
+
+    return client
