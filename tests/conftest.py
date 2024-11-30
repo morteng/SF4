@@ -56,7 +56,7 @@ def logged_in_client(app, db):
         'password': 'password'  # Ensure this matches the password set in db fixture
     }
     with app.app_context():
-        response = client.post('/login', data=login_data, follow_redirects=True)
+        response = client.post('/admin/auth/login', data=login_data, follow_redirects=True)
         assert response.status_code == 200
 
     return client
