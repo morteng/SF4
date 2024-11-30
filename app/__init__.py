@@ -7,6 +7,8 @@ from .models.user import User
 from .routes.api import api_bp
 from .routes.admin.auth_routes import auth_bp
 from .routes.admin.__init__ import register_admin_blueprints
+from .routes.user_routes import user_bp
+from .routes.visitor_routes import visitor_bp
 
 
 def create_app(config_name='development'):
@@ -31,5 +33,7 @@ def create_app(config_name='development'):
     app.register_blueprint(api_bp)
     app.register_blueprint(auth_bp)
     register_admin_blueprints(app)  # This function handles all admin-related blueprints
+    app.register_blueprint(user_bp)
+    app.register_blueprint(visitor_bp)
 
     return app
