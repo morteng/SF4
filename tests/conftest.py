@@ -10,17 +10,6 @@ def app():
     app = create_app('testing')
     with app.app_context():
         _db.create_all()
-        # Initialize admin user
-        admin_user = _db.session.query(User).filter_by(email='admin@example.com').first()
-        if not admin_user:
-            admin_user = User(
-                username='admin_user',
-                email='admin@example.com',
-                is_admin=True
-            )
-            admin_user.set_password('password')  # Set password using set_password
-            _db.session.add(admin_user)
-            _db.session.commit()
     yield app
     with app.app_context():
         _db.drop_all()
@@ -29,7 +18,17 @@ def app():
 def db(app):
     with app.app_context():
         _db.create_all()
-        yield _db
+        # Create admin user for each test function
+        admin_user = User(
+            username='admin_user',
+            email='admin@example.com',
+            is_admin=True
+        )
+        admin_user.set_password('password')  # Ensure password is set correctly
+        _db.session.add(admin_user)
+        _db.session.commit()
+    yield _db
+    with app.app_context():
         _db.session.remove()
         _db.drop_all()
 
@@ -43,7 +42,7 @@ def logged_in_client(app, db):
     # Create a test client
     client = app.test_client()
 
-    # Use the pre-existing admin user from the app fixture
+    # Use the pre-existing admin user from the db fixture
     admin_user = User.query.filter_by(email='admin@example.com').first()
     if not admin_user:
         raise ValueError("Admin user not found")
@@ -51,7 +50,7 @@ def logged_in_client(app, db):
     # Log in the admin user with form data
     login_data = {
         'username': admin_user.username,
-        'password': 'password'  # Ensure this matches the password set in app fixture
+        'password': 'password'  # Ensure this matches the password set in db fixture
     }
     response = client.post('/login', data=login_data, follow_redirects=True)
     assert response.status_code == 200
