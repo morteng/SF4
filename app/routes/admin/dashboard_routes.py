@@ -8,7 +8,7 @@ from app.models.bot import Bot
 
 admin_dashboard_bp = Blueprint('admin_dashboard', __name__)
 
-@admin_dashboard_bp.route('/dashboard', methods=['GET'])
+@admin_dashboard_bp.route('/', methods=['GET'])
 @login_required
 def index():
     if not current_user.is_admin:
