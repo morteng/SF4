@@ -29,4 +29,3 @@ def register_admin_blueprints(app):
     app.register_blueprint(admin_tag_bp, url_prefix='/tags')
     app.register_blueprint(admin_user_bp, url_prefix='/users')
     app.register_blueprint(dashboard_bp, url_prefix='/admin')  # Register the dashboard blueprint
-    app.register_blueprint(dashboard_bp, url_prefix='/admin/dashboard')  # Register the dashboard blueprint
