@@ -20,7 +20,10 @@ def about():
 def login():
     """Handle user login."""
     if current_user.is_authenticated:
-        return redirect(url_for('user.profile'))
+        if current_user.is_admin:
+            return redirect(url_for('admin_stipend.index'))
+        else:
+            return redirect(url_for('user.profile'))
     
     form = LoginForm()
     if form.validate_on_submit():
@@ -28,7 +31,10 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
             flash('Login successful.', 'success')
-            return redirect(url_for('user.profile'))
+            if user.is_admin:
+                return redirect(url_for('admin_stipend.index'))
+            else:
+                return redirect(url_for('user.profile'))
         else:
             flash('Invalid username or password.', 'danger')
     return render_template('login.html', form=form)
