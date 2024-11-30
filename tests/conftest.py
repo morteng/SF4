@@ -1,6 +1,5 @@
-import sys
-from pathlib import Path
 import pytest
+from bs4 import BeautifulSoup
 from app import create_app
 from app.extensions import db as _db
 from app.models.user import User
@@ -44,16 +43,23 @@ def logged_in_client(app, db):
     # Create a test client
     client = app.test_client()
 
+    # Fetch the login form to get the CSRF token
+    response = client.get('/admin/auth/login')
+    assert response.status_code == 200
+    soup = BeautifulSoup(response.data.decode(), 'html.parser')
+    csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+
     # Use the pre-existing admin user from the db fixture
     with app.app_context():
         admin_user = User.query.filter_by(email='admin@example.com').first()
         if not admin_user:
             raise ValueError("Admin user not found")
 
-    # Log in the admin user with form data
+    # Log in the admin user with form data including CSRF token
     login_data = {
         'username': admin_user.username,
-        'password': 'password'  # Ensure this matches the password set in db fixture
+        'password': 'password',
+        'csrf_token': csrf_token
     }
     with app.app_context():
         response = client.post('/admin/auth/login', data=login_data, follow_redirects=True)
