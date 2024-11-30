@@ -12,7 +12,7 @@ def test_create_organization_unauthorized(client, db):
 def test_create_organization_authorized(logged_in_client, db):
     """Test creating organization with admin authentication succeeds"""
     # First, ensure that the user is logged in by accessing a protected route
-    response = logged_in_client.get('/admin/dashboard/dashboard')
+    response = logged_in_client.get('/admin/dashboard')
     assert response.status_code == 200
 
     # Now, create the organization
