@@ -1,7 +1,14 @@
-<a href="{{ url_for('admin_stipend.index') }}">Manage Stipends</a>
-<a href="{{ url_for('admin_tag.index') }}">Manage Tags</a>
-<a href="{{ url_for('admin_organization.index') }}">Manage Organizations</a>
-<a href="{{ url_for('admin_user.index') }}">Manage Users</a>
+<h1>Admin Dashboard</h1>
+<p>Total Stipends: {{ stipend_count }}</p>
+<p>Total Tags: {{ tag_count }}</p>
+<p>Total Organizations: {{ organization_count }}</p>
+<p>Total Users: {{ user_count }}</p>
+<p>Total Bots: {{ bot_count }}</p>
+
+<a href="{{ url_for('admin_stipend.index') }}">Manage Stipends</a><br>
+<a href="{{ url_for('admin_tag.index') }}">Manage Tags</a><br>
+<a href="{{ url_for('admin_organization.index') }}">Manage Organizations</a><br>
+<a href="{{ url_for('admin_user.index') }}">Manage Users</a><br>
 <div id="bots">
     <hx-get href="{{ url_for('admin_bot.index') }}" hx-target="#bots" hx-swap="innerHTML"></hx-get>
 </div>
