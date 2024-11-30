@@ -1,16 +1,3 @@
-from flask import Flask
-from flask_migrate import Migrate
-from .config import config_by_name
-from .extensions import db, login_manager
-from .models import init_models
-from .models.user import User
-from .routes.api import api_bp
-from .routes.admin.auth_routes import auth_bp
-from .routes.admin.__init__ import register_admin_blueprints
-from .routes.user_routes import user_bp
-from .routes.visitor_routes import visitor_bp
-
-
 def create_app(config_name='development'):
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
