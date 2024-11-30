@@ -1,10 +1,5 @@
 import sys
 from pathlib import Path
-
-# Add the root directory of the project to the PYTHONPATH
-root_dir = Path(__file__).resolve().parent.parent
-sys.path.append(str(root_dir))
-
 import pytest
 from app import create_app
 from app.extensions import db as _db
@@ -20,10 +15,10 @@ def app():
         if not admin_user:
             admin_user = User(
                 username='admin_user',
-                password_hash='pbkdf2:sha256:150000$XbL3IjWn$3d8Kq7J29e4gFyhiuQlZIl12tXcVU8S2R5Qx5hPZV0k=',
                 email='admin@example.com',
                 is_admin=True
             )
+            admin_user.set_password('password')  # Set password using set_password
             _db.session.add(admin_user)
             _db.session.commit()
     yield app
@@ -48,16 +43,15 @@ def logged_in_client(app, db):
     # Create a test client
     client = app.test_client()
 
-    # Create an admin user
-    admin_user = User(username='admin', email='admin@example.com', is_admin=True)
-    admin_user.set_password('password')
-    db.session.add(admin_user)
-    db.session.commit()
+    # Use the pre-existing admin user from the app fixture
+    admin_user = User.query.filter_by(email='admin@example.com').first()
+    if not admin_user:
+        raise ValueError("Admin user not found")
 
     # Log in the admin user with form data
     login_data = {
-        'username': 'admin',
-        'password': 'password'
+        'username': admin_user.username,
+        'password': 'password'  # Ensure this matches the password set in app fixture
     }
     response = client.post('/login', data=login_data, follow_redirects=True)
     assert response.status_code == 200
