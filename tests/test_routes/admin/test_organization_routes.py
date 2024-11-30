@@ -1,6 +1,6 @@
 import pytest
 
-def test_create_organization_unauthorized(client):
+def test_create_organization_unauthorized(client, db):
     """Test creating organization without authentication fails"""
     response = client.post('/admin/organizations/create', json={
         'name': 'Test Organization',
@@ -9,7 +9,7 @@ def test_create_organization_unauthorized(client):
     })
     assert response.status_code == 401
 
-def test_create_organization_authorized(logged_in_client):
+def test_create_organization_authorized(logged_in_client, db):
     """Test creating organization with admin authentication succeeds"""
     response = logged_in_client.post('/admin/organizations/create', json={
         'name': 'Test Organization',
@@ -19,7 +19,7 @@ def test_create_organization_authorized(logged_in_client):
     assert response.status_code == 201
     assert 'id' in response.json  # Updated from 'organization_id' to 'id'
 
-def test_update_organization_authorized(logged_in_client):
+def test_update_organization_authorized(logged_in_client, db):
     """Test updating organization with admin authentication"""
     # First create an organization to update
     create_response = logged_in_client.post('/admin/organizations/create', json={
@@ -39,7 +39,7 @@ def test_update_organization_authorized(logged_in_client):
     assert response.status_code == 200
     assert response.json['id'] == organization_id  # Updated from 'organization_id' to 'id'
 
-def test_delete_organization_authorized(logged_in_client):
+def test_delete_organization_authorized(logged_in_client, db):
     """Test deleting organization with admin authentication"""
     # First create an organization to delete
     create_response = logged_in_client.post('/admin/organizations/create', json={
@@ -54,7 +54,7 @@ def test_delete_organization_authorized(logged_in_client):
     response = logged_in_client.post(f'/admin/organizations/delete/{organization_id}')
     assert response.status_code == 302  # Assuming redirect after delete
 
-def test_create_organization_missing_fields(logged_in_client):
+def test_create_organization_missing_fields(logged_in_client, db):
     """Test creating organization with missing fields fails"""
     response = logged_in_client.post('/admin/organizations/create', json={
         'name': 'Test Organization'
@@ -62,7 +62,7 @@ def test_create_organization_missing_fields(logged_in_client):
     })
     assert response.status_code == 400
 
-def test_create_organization_invalid_name(logged_in_client):
+def test_create_organization_invalid_name(logged_in_client, db):
     """Test creating organization with invalid name fails"""
     response = logged_in_client.post('/admin/organizations/create', json={
         'name': '',
@@ -71,7 +71,7 @@ def test_create_organization_invalid_name(logged_in_client):
     })
     assert response.status_code == 400
 
-def test_create_organization_invalid_homepage_url(logged_in_client):
+def test_create_organization_invalid_homepage_url(logged_in_client, db):
     """Test creating organization with invalid homepage URL fails"""
     response = logged_in_client.post('/admin/organizations/create', json={
         'name': 'Test Organization',
