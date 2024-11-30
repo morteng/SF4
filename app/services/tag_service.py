@@ -32,3 +32,8 @@ def get_tag_by_id(tag_id):
         # Log the error
         print(str(e))
         return None
+
+def update_tag(tag, data):
+    tag.name = data['name']
+    tag.category = data['category']
+    db.session.commit()
