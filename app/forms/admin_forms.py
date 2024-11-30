@@ -30,3 +30,8 @@ class UserForm(FlaskForm):
     password = PasswordField('Password', validators=[Length(min=8)])
     is_admin = BooleanField('Is Admin')
     submit = SubmitField('Create')
+
+class BotForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
+    description = TextAreaField('Description', validators=[Length(max=255)])
+    submit = SubmitField('Submit')
