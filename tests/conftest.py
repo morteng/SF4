@@ -1,22 +1,31 @@
-# tests/conftest.py
 import pytest
 from app import create_app
-from app.extensions import db  # Ensure db is imported from app.extensions
+from app.config import TestingConfig
+from app.extensions import db as _db  # Ensure correct import
 
 @pytest.fixture(scope='module')
 def app():
-    app = create_app('testing')
+    app = create_app(TestingConfig)
     with app.app_context():
-        db.create_all()  # Ensure db is initialized within the app context
+        _db.create_all()
     yield app
     with app.app_context():
-        db.session.remove()
-        db.drop_all()
+        _db.drop_all()
 
-@pytest.fixture(scope='module')
+@pytest.fixture
 def client(app):
     return app.test_client()
 
-@pytest.fixture(scope='module')
-def runner(app):
-    return app.test_cli_runner()
+@pytest.fixture
+def db(app):
+    with app.app_context():
+        _db.create_all()
+    yield _db
+    with app.app_context():
+        _db.drop_all()
+
+@pytest.fixture
+def session(db):
+    db.session.begin_nested()
+    yield db.session
+    db.session.rollback()
