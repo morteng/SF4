@@ -1,7 +1,7 @@
 import tempfile
 import shutil
 import pytest
-import os  # Added import for os module
+import os  # Ensure os is imported
 from app import create_app, db as _db
 
 @pytest.fixture(scope='module')
@@ -21,3 +21,8 @@ def app():
     _db.session.remove()
     os.close(db_fd)
     os.unlink(db_fname)
+
+@pytest.fixture(scope='module')
+def db(app):
+    with app.app_context():
+        yield _db
