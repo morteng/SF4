@@ -10,6 +10,15 @@ from app.routes.admin.tag_routes import tag_bp
 from app.routes.user_routes import user_bp
 from app.routes.visitor_routes import visitor_bp
 
+# Importing all models to ensure they are registered with SQLAlchemy
+from app.models.user import User
+from app.models.bot import Bot
+from app.models.organization import Organization
+from app.models.stipend import Stipend
+from app.models.notification import Notification
+from app.models.tag import Tag
+from app.models.association_tables import user_organization, bot_tag
+
 def create_app(config_name='development'):
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
