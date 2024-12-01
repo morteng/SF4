@@ -2,6 +2,8 @@ import pytest
 from app import create_app
 from app.config import TestingConfig
 from app.extensions import db as _db  # Ensure correct import
+from app.models.user import User
+from app.extensions import login_manager
 
 @pytest.fixture(scope='module')
 def app():
@@ -29,3 +31,19 @@ def session(db):
     db.session.begin_nested()
     yield db.session
     db.session.rollback()
+
+@pytest.fixture
+def logged_in_client(client, db_session):
+    # Create a test user
+    user = User(username='testuser', email='test@example.com', is_admin=True)
+    user.set_password('testpassword')
+    db_session.add(user)
+    db_session.commit()
+
+    # Log in the user
+    with client.session_transaction() as session:
+        user_obj = User.query.filter_by(username='testuser').first()
+        login_manager.login_user(user_obj)
+        session['user_id'] = user_obj.id
+
+    return client
