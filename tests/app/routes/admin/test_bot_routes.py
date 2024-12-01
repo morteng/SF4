@@ -8,14 +8,14 @@ class TestBotRoutes:
 
     def test_list_bots(self, logged_in_client):
         # Test listing bots
-        response = logged_in_client.get('/bots/')
+        response = logged_in_client.get('/admin/bots/')
         assert response.status_code == 200
         soup = BeautifulSoup(response.data.decode(), 'html.parser')
         assert soup.find('h1', string='List of Bots')
 
     def test_create_bot(self, logged_in_client):
         # Test creating a new bot
-        response = logged_in_client.post('/bots/create', data={
+        response = logged_in_client.post('/admin/bots/create', data={
             'name': 'Test Bot',
             'description': 'A test bot for coverage'
         }, follow_redirects=True)
@@ -29,7 +29,7 @@ class TestBotRoutes:
         db.session.commit()
 
         # Update the bot
-        response = logged_in_client.post(f'/bots/update/{bot.id}', data={
+        response = logged_in_client.post(f'/admin/bots/update/{bot.id}', data={
             'name': 'Updated Name',
             'description': 'Updated Description'
         }, follow_redirects=True)
@@ -44,7 +44,7 @@ class TestBotRoutes:
         db.session.commit()
 
         # Delete the bot
-        response = logged_in_client.post(f'/bots/delete/{bot.id}', follow_redirects=True)
+        response = logged_in_client.post(f'/admin/bots/delete/{bot.id}', follow_redirects=True)
         assert response.status_code == 200
         assert Bot.query.get(bot.id) is None
 
@@ -58,6 +58,6 @@ class TestBotRoutes:
         db.session.commit()
 
         # Run the bot
-        response = logged_in_client.post(f'/bots/run/{bot.id}', follow_redirects=True)
+        response = logged_in_client.post(f'/admin/bots/run/{bot.id}', follow_redirects=True)
         assert response.status_code == 200
         mock_run_bot.assert_called_once_with(bot)

@@ -7,14 +7,14 @@ class TestOrganizationRoutes:
 
     def test_list_organizations(self, logged_in_client):
         # Test listing organizations
-        response = logged_in_client.get('/organizations/')
+        response = logged_in_client.get('/admin/organizations/')
         assert response.status_code == 200
         soup = BeautifulSoup(response.data.decode(), 'html.parser')
         assert soup.find('h1', string='List of Organizations')
 
     def test_create_organization(self, logged_in_client):
         # Test creating a new organization
-        response = logged_in_client.post('/organizations/create', data={
+        response = logged_in_client.post('/admin/organizations/create', data={
             'name': 'Test Org',
             'description': 'A test organization for coverage',
             'homepage_url': 'http://test.org'
@@ -29,7 +29,7 @@ class TestOrganizationRoutes:
         db.session.commit()
 
         # Update the organization
-        response = logged_in_client.put(f'/organizations/{org.id}', json={
+        response = logged_in_client.put(f'/admin/organizations/{org.id}', json={
             'name': 'Updated Name',
             'description': 'Updated Description',
             'homepage_url': 'http://updated.org'
@@ -45,6 +45,6 @@ class TestOrganizationRoutes:
         db.session.commit()
 
         # Delete the organization
-        response = logged_in_client.post(f'/organizations/delete/{org.id}', follow_redirects=True)
+        response = logged_in_client.post(f'/admin/organizations/delete/{org.id}', follow_redirects=True)
         assert response.status_code == 200
         assert Organization.query.get(org.id) is None
