@@ -26,6 +26,7 @@ def logged_in_client(app, client):
         _db.session.commit()
 
     # Log the user in
-    with client:
-        client.post('/login', data={'username': 'testuser', 'password': 'testpassword'})
-        yield client
+    with client.session_transaction() as session:
+        session['user_id'] = user.id
+
+    yield client
