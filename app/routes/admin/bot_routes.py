@@ -4,7 +4,8 @@ from app.forms.admin_forms import BotForm
 from app.services.bot_service import get_bot_by_id, run_bot, get_all_bots, create_bot, update_bot
 from app.extensions import db  # Import the db object
 
-admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/admin/bots')
+# Define the bot blueprint without '/admin' in url_prefix
+admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/bots')
 
 @admin_bot_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
