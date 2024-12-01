@@ -1,7 +1,7 @@
 import tempfile
 import shutil
 import pytest
-from bs4 import BeautifulSoup  # Add this import
+from bs4 import BeautifulSoup
 from app import create_app
 from app.extensions import db as _db
 from app.models.user import User
@@ -48,7 +48,8 @@ def logged_in_client(app, db):
     # Fetch the login form to get the CSRF token
     response = client.get('/admin/auth/login')
     assert response.status_code == 200
-    soup = BeautifulSoup(response.data.decode(), 'html.parser')  # █
+    soup = BeautifulSoup(response.data.decode(), 'html.parser')
+    csrf_token = soup.find('input', {'name': 'csrf_token'})['value']  # Extract CSRF token
 
     # Use the pre-existing admin user from the db fixture
     with app.app_context():
@@ -60,7 +61,7 @@ def logged_in_client(app, db):
     login_data = {
         'username': admin_user.username,
         'password': 'password',
-        'csrf_token': csrf_token
+        'csrf_token': csrf_token  # Use the extracted CSRF token
     }
     with app.app_context():
         response = client.post('/admin/auth/login', data=login_data, follow_redirects=True)
