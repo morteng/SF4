@@ -1,10 +1,18 @@
 import pytest
 from app import create_app, db as _db  # Note: renamed db to _db to avoid confusion
 from app.models.user import User
+from flask_login import LoginManager
 
 @pytest.fixture(scope='module')
 def app():
     app = create_app('testing')
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
     with app.app_context():
         yield app
 

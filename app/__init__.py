@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_login import LoginManager
 from app.extensions import db
 from app.config import config_by_name
 # Importing admin blueprints
@@ -23,6 +24,14 @@ def create_app(config_name='development'):
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
     db.init_app(app)
+    
+    # Initialize LoginManager
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
     
     # Registering admin blueprints
     app.register_blueprint(admin_bot_bp)
