@@ -20,13 +20,15 @@ def db(app):
 def logged_in_client(app, client):
     # Create a test user and log them in
     with app.app_context():
-        user = User(username='testuser', email='test@example.com')
-        user.set_password('testpassword')
-        _db.session.add(user)
-        _db.session.commit()
-
-    # Log the user in
-    with client.session_transaction() as session:
-        session['user_id'] = user.id
-
+        with _db.session.begin() as session:
+            user = User(username='testuser', email='test@example.com')
+            user.set_password('testpassword')
+            session.add(user)
+            session.commit()
+            user_id = user.id  # store the id immediately
+        
+        # Log the user in
+        with client.session_transaction() as sess:
+            sess['user_id'] = user_id
+    
     yield client
