@@ -6,13 +6,6 @@ from flask_login import LoginManager
 @pytest.fixture(scope='module')
 def app():
     app = create_app('testing')
-    login_manager = LoginManager()
-    login_manager.init_app(app)
-
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
-
     with app.app_context():
         yield app
 
@@ -33,8 +26,8 @@ def logged_in_client(app, client, db):
     with app.app_context():
         user = User(username='testuser', email='test@example.com')
         user.set_password('testpassword')
-        db.session.add(user)
-        db.session.commit()
+        _db.session.add(user)
+        _db.session.commit()
         
     with client:
         client.post('/login', data={'username': 'testuser', 'password': 'testpassword'})
