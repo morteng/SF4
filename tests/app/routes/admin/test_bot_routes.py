@@ -2,6 +2,7 @@ import pytest
 from bs4 import BeautifulSoup
 from app.models.bot import Bot
 from app.services.bot_service import run_bot
+from sqlalchemy import inspect
 
 @pytest.mark.usefixtures("db")
 class TestBotRoutes:
@@ -61,3 +62,9 @@ class TestBotRoutes:
         response = logged_in_client.post(f'/admin/bots/run/{bot.id}', follow_redirects=True)
         assert response.status_code == 200
         mock_run_bot.assert_called_once_with(bot)
+
+    def test_user_table_exists(self, app, db):
+        with app.app_context():
+            inspector = inspect(db.engine)
+            table_names = inspector.get_table_names()
+            assert 'user' in table_names
