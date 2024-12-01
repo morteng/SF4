@@ -1,25 +1,25 @@
 import pytest
-from app import create_app, db
+from app import create_app, db as _db  # Note: renamed db to _db to avoid confusion
 from app.models.user import User
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def app():
     app = create_app('testing')
     with app.app_context():
-        db.create_all()
         yield app
-        db.drop_all()
 
-@pytest.fixture
-def client(app):
+@pytest.fixture(scope='function')
+def db(app):
+    _db.create_all()
+    yield _db
+    _db.session.remove()
+    _db.drop_all()
+
+@pytest.fixture(scope='function')
+def client(app, db):
     return app.test_client()
 
-@pytest.fixture
-def db(app):
-    with app.app_context():
-        yield db
-
-@pytest.fixture
+@pytest.fixture(scope='function')
 def logged_in_client(app, client, db):
     # Create a test user and log them in
     with app.app_context():
