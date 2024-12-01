@@ -1,4 +1,3 @@
-# app/config.py
 import os
 
 class Config:
@@ -16,8 +15,9 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     DEBUG = False
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # Use in-memory SQLite for testing
-    WTF_CSRF_ENABLED = True  # Ensure CSRF is enabled for testing
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    SQLALCHEMY_ECHO = True  # Enable echo to see SQL statements
+    WTF_CSRF_ENABLED = True
     SECRET_KEY = os.environ.get('SECRET_TEST_KEY', 'insecure-test-key')  # Change this in production
 
 class ProductionConfig(Config):

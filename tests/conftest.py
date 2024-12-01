@@ -1,14 +1,8 @@
 import pytest
 from app import create_app, db
 from app.models.user import User
-from app.models.bot import Bot
-from app.models.organization import Organization
-from app.models.stipend import Stipend
-from app.models.notification import Notification
-from app.models.tag import Tag
-from app.models.association_tables import user_organization, bot_tag
 
-@pytest.fixture(scope='module')
+@pytest.fixture
 def app():
     app = create_app('testing')
     with app.app_context():
