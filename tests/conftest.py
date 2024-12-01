@@ -9,7 +9,7 @@ from app.models.user import User
 @pytest.fixture(scope='module')
 def app():
     instance_path = tempfile.mkdtemp()
-    app = create_app('testing', instance_path=instance_path)
+    app = create_app('testing', instance_path=instance_path)  # Ensure 'testing' config is used
     with app.app_context():
         _db.create_all()
     yield app

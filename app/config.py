@@ -15,7 +15,7 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     DEBUG = False
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///:memory:')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # Use in-memory SQLite for testing
     WTF_CSRF_ENABLED = True  # Ensure CSRF is enabled for testing
     SECRET_KEY = os.environ.get('SECRET_TEST_KEY', 'insecure-test-key')  # Change this in production
 
