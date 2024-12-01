@@ -30,5 +30,5 @@ def logged_in_client(app, client, db):
         _db.session.commit()
         
     with client:
-        client.post('/login', data={'username': 'testuser', 'password': 'testpassword'})
+        client.post(url_for('visitor.login'), data={'username': 'testuser', 'password': 'testpassword'})
         yield client
