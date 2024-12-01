@@ -1,6 +1,6 @@
 import pytest
 from flask import Flask, jsonify
-from app.utils import login_required  # Corrected the import to login_required
+from flask_login import login_required
 from app.models.user import User
 
 @pytest.fixture(scope='function')
@@ -28,7 +28,7 @@ def test_login_required_decorator(app, client, admin_user):
     
     # Create a test route using the decorator
     @app.route('/test_admin')
-    @login_required  # Use login_required instead of admin_required
+    @login_required
     def protected_route():
         return jsonify({"message": "Access granted"}), 200
 
