@@ -585,7 +585,6 @@ Project Root/
       __init__.py
       admin/
         __init__.py
-        auth_routes.py
         bot_routes.py
         organization_routes.py
         stipend_routes.py
