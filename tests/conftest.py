@@ -2,6 +2,7 @@ import pytest
 from app import create_app, db as _db  # Note: renamed db to _db to avoid confusion
 from app.models.user import User
 from flask_login import LoginManager
+from flask import url_for  # Import url_for from flask
 
 @pytest.fixture(scope='module')
 def app():
