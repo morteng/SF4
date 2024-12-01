@@ -1,8 +1,10 @@
 import tempfile
 import shutil
 import pytest
+from bs4 import BeautifulSoup  # Import BeautifulSoup
 from app import create_app
 from app.extensions import db as _db
+from app.models.user import User  # Import the User model
 
 @pytest.fixture(scope='module')
 def app():
