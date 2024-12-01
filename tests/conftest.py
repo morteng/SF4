@@ -12,7 +12,7 @@ def app():
         "TESTING": True
     }
     
-    app = create_app(config)
+    app = create_app(config=config)
     with app.app_context():
         _db.create_all()
         

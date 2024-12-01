@@ -5,7 +5,7 @@ from app.config import config_by_name
 from dotenv import load_dotenv
 import os
 
-def create_app(config_name=None, instance_path=None):
+def create_app(config_name=None, instance_path=None, config=None):
     # Load environment variables from .env file
     load_dotenv()
     
@@ -14,7 +14,11 @@ def create_app(config_name=None, instance_path=None):
         config_name = os.environ.get('FLASK_CONFIG', 'development')
     
     app = Flask(__name__, instance_path=instance_path)
-    app.config.from_object(config_by_name[config_name])
+    
+    if config:
+        app.config.update(config)
+    else:
+        app.config.from_object(config_by_name[config_name])
     
     print(f"Config name: {config_name}")
     print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
