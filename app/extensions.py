@@ -1,6 +1,6 @@
-# tests/test_example.py
-from app.extensions import db  # Ensure db is imported from app.extensions
+# app/extensions.py
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
-def test_example(client):
-    response = client.get('/')
-    assert response.status_code == 200
+db = SQLAlchemy()
+login_manager = LoginManager()

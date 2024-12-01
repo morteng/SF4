@@ -1,7 +1,7 @@
 # tests/conftest.py
 import pytest
 from app import create_app
-from app.extensions import db  # Import db from app.extensions
+from app.extensions import db  # Ensure db is imported from app.extensions
 
 @pytest.fixture(scope='module')
 def app():

@@ -1,6 +1,5 @@
 # app/__init__.py
 from flask import Flask
-from app.extensions import db, login_manager
 from app.config import config_by_name
 from dotenv import load_dotenv
 import os
@@ -20,6 +19,7 @@ def create_app(config_name='development'):
     print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
     
     # Initialize extensions
+    from app.extensions import db, login_manager
     db.init_app(app)
     login_manager.init_app(app)
     
