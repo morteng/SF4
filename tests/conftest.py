@@ -1,35 +1,37 @@
 import pytest
-from app import create_app, db as _db  # Note: renamed db to _db to avoid confusion
 from app.models.user import User
-from flask_login import LoginManager
-from flask import url_for  # Import url_for from flask
+from flask import session
 
-@pytest.fixture(scope='module')
-def app():
-    app = create_app('testing')
-    with app.app_context():
-        yield app
+@pytest.fixture
+def authenticate_client(client):
+    def _authenticate(user):
+        with client:
+            response = client.post(
+                '/login',
+                data={'username': user.username, 'password': 'test_password'}
+            )
+            assert response.status_code == 302
+            return client
+    return _authenticate
 
-@pytest.fixture(scope='function')
-def db(app):
-    _db.create_all()
-    yield _db
-    _db.session.remove()
-    _db.drop_all()
+@pytest.fixture
+def auth_client(authenticate_client, user):
+    return authenticate_client(user)
 
-@pytest.fixture(scope='function')
-def client(app, db):
-    return app.test_client()
+@pytest.fixture
+def admin_user():
+    user = User(
+        username='admin_test',
+        email='admin_test@example.com',
+        password='test_password',
+        is_admin=True
+    )
+    db.session.add(user)
+    db.session.commit()
+    yield user
+    db.session.delete(user)
+    db.session.commit()
 
-@pytest.fixture(scope='function')
-def logged_in_client(app, client, db):
-    # Create a test user and log them in
-    with app.app_context():
-        user = User(username='testuser', email='test@example.com')
-        user.set_password('testpassword')
-        _db.session.add(user)
-        _db.session.commit()
-        
-    with client:
-        client.post(url_for('visitor.login'), data={'username': 'testuser', 'password': 'testpassword'})
-        yield client
+@pytest.fixture
+def admin_auth_client(authenticate_client, admin_user):
+    return authenticate_client(admin_user)
