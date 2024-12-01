@@ -1,6 +1,7 @@
 import pytest
 from app.models.user import User
 from flask import session
+from app.extensions import db  # Import the db object
 
 @pytest.fixture
 def authenticate_client(client):
