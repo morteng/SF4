@@ -5,22 +5,6 @@ from app.config import config_by_name
 from dotenv import load_dotenv
 import os
 
-class Config:
-    SQLALCHEMY_DATABASE_URI = None
-    TESTING = False
-
-class DevelopmentConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///dev.db'
-
-class TestingConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    TESTING = True
-
-config_by_name = {
-    'development': DevelopmentConfig,
-    'testing': TestingConfig
-}
-
 def create_app(config_name='development'):
     # Load environment variables from .env file
     load_dotenv()
