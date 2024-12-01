@@ -1,6 +1,7 @@
 import tempfile
 import shutil
 import pytest
+import os  # Added import for os module
 from app import create_app, db as _db
 
 @pytest.fixture(scope='module')
