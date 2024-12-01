@@ -2,6 +2,20 @@ import pytest
 from app.models.user import User
 from flask import session
 from app.extensions import db  # Import the db object
+from app import create_app
+
+@pytest.fixture
+def app():
+    app = create_app('testing')
+    with app.app_context():
+        db.create_all()
+        yield app
+        db.session.remove()
+        db.drop_all()
+
+@pytest.fixture
+def client(app):
+    return app.test_client()
 
 @pytest.fixture
 def authenticate_client(client):
