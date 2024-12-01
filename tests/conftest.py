@@ -5,7 +5,7 @@ from app.extensions import db as _db  # Ensure correct import
 
 @pytest.fixture(scope='module')
 def app():
-    app = create_app(TestingConfig)
+    app = create_app('testing')  # Pass 'testing' as a string
     with app.app_context():
         _db.create_all()
     yield app
