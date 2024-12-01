@@ -167,6 +167,37 @@ The **Stipend Discovery Website** is a Flask-based application designed to help 
     - `stipend_routes.py`: Manage stipends and their details.
     - `tag_routes.py`: Manage tags and categories.
     - `user_routes.py`: Manage user accounts and permissions.
+- **Endpoints and their routes**:
+admin_bot.create       GET, POST  /admin/bots/create
+admin_bot.delete       POST       /admin/bots/delete/<int:id>
+admin_bot.index        GET        /admin/bots/
+admin_bot.run          POST       /admin/bots/run/<int:id>
+admin_bot.update       GET, POST  /admin/bots/update/<int:id>
+admin_dashboard.index  GET        /admin/dashboard/
+admin_org.create       GET, POST  /admin/organizations/create
+admin_org.delete       POST       /admin/organizations/delete/<int:id>
+admin_org.index        GET        /admin/organizations/
+admin_org.update       PUT        /admin/organizations/<int:id>
+admin_stipend.create   GET, POST  /admin/stipends/create
+admin_stipend.delete   POST       /admin/stipends/delete/<int:id>
+admin_stipend.index    GET        /admin/stipends/
+admin_stipend.update   GET, POST  /admin/stipends/update/<int:id>
+admin_tag.create       GET, POST  /admin/tags/create
+admin_tag.delete       POST       /admin/tags/delete/<int:id>
+admin_tag.index        GET        /admin/tags/
+admin_tag.update       GET, POST  /admin/tags/update/<int:id>
+admin_user.create      GET, POST  /admin/users/create
+admin_user.delete      POST       /admin/users/delete/<int:id>
+admin_user.index       GET        /admin/users/
+admin_user.update      GET, POST  /admin/users/update/<int:id>
+static                 GET        /static/<path:filename>
+user.edit_profile      GET, POST  /edit_profile
+user.profile           GET        /profile
+visitor.about          GET        /about
+visitor.index          GET        /
+visitor.login          GET, POST  /login
+visitor.logout         POST       /logout
+visitor.register       GET, POST  /register
 - **Static Files**: Organize static files (CSS, JavaScript, images) into separate directories.
   - `static/css/`, `static/js/`, `static/images/`.
 - **Templates**: Keep templates clean and modular, using template inheritance for consistency.
@@ -339,133 +370,6 @@ This testing specification outlines the requirements and guidelines for implemen
 4. **Error Handling**: Test how the application handles invalid inputs and exceptions.
 5. **Edge Cases**: Include tests for edge cases and boundary conditions.
 6. **Documentation**: Add docstrings or comments to explain complex tests.
-
-### Example Test Cases
-
-#### Unit Test Example
-
-```python
-# tests/app/models/test_user.py
-
-def test_set_password():
-    from app.models.user import User
-    user = User(username='testuser')
-    user.set_password('testpassword')
-    assert user.password_hash is not None
-    assert user.check_password('testpassword') is True
-```
-
-#### Integration Test Example
-
-```python
-# tests/app/routes/admin/test_stipend_routes.py
-
-def test_admin_create_stipend(client, session):
-    # Log in as admin
-    response = client.post('/admin/login', data={
-        'username': 'admin_user',
-        'password': 'secure_password'
-    }, follow_redirects=True)
-    assert response.status_code == 200
-    assert b'Dashboard' in response.data
-
-    # Create a new stipend
-    response = client.post('/admin/stipends/create', data={
-        'name': 'Sample Stipend',
-        'summary': 'Sample summary',
-        'description': 'Sample description',
-        # Additional fields...
-    }, follow_redirects=True)
-    assert response.status_code == 200
-    assert b'Sample Stipend' in response.data
-
-    # Verify in database
-    from app.models.stipend import Stipend
-    stipend = session.query(Stipend).filter_by(name='Sample Stipend').first()
-    assert stipend is not None
-```
-
-#### End-to-End Test Example
-
-```python
-# tests/app/routes/test_public_user_routes.py
-
-def test_stipend_search(client, session):
-    # Add test data to the database
-    from app.models.stipend import Stipend
-    stipend = Stipend(name='Test Stipend', summary='Test Summary')
-    session.add(stipend)
-    session.commit()
-
-    # Simulate user searching for the stipend
-    response = client.get('/search?query=Test+Stipend')
-    assert response.status_code == 200
-    assert b'Test Stipend' in response.data
-```
-
-### Testing Environment Configuration
-
-- **Testing Configuration Class** in `config.py`:
-
-  ```python
-  class TestingConfig(Config):
-      TESTING = True
-      SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-      WTF_CSRF_ENABLED = False  # Disable CSRF for testing
-  ```
-
-- **App Factory** in `app/__init__.py`:
-
-  ```python
-  def create_app(config_name=None):
-      from app.config import Config, DevelopmentConfig, TestingConfig, ProductionConfig
-      load_dotenv()
-      app = Flask(__name__)
-      if config_name == 'testing':
-          app.config.from_object(TestingConfig)
-      elif config_name == 'development':
-          app.config.from_object(DevelopmentConfig)
-      elif config_name == 'production':
-          app.config.from_object(ProductionConfig)
-      else:
-          app.config.from_object(Config)
-      # Initialize extensions and blueprints
-      return app
-  ```
-
-- **Fixtures** in `tests/conftest.py`:
-
-  ```python
-  @pytest.fixture(scope='session')
-  def app():
-      from app import create_app
-      app = create_app('testing')
-      return app
-
-  @pytest.fixture(scope='session')
-  def db(app):
-      from app.extensions import db as _db
-      with app.app_context():
-          _db.create_all()
-          yield _db
-          _db.drop_all()
-
-  @pytest.fixture(scope='function')
-  def session(db):
-      connection = db.engine.connect()
-      transaction = connection.begin()
-      options = dict(bind=connection)
-      session = db.create_scoped_session(options=options)
-      yield session
-      transaction.rollback()
-      connection.close()
-      session.remove()
-
-  @pytest.fixture(scope='function')
-  def client(app):
-      with app.test_client() as client:
-          yield client
-  ```
 
 ### Additional Considerations
 
@@ -651,6 +555,7 @@ def test_stipend_search(client, session):
 
 ```plaintext
 Project Root/
+  .env
   .env.example
   .flaskenv
   .gitignore
