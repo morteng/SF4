@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from app.models.bot import Bot
 from app.services.bot_service import run_bot
 from sqlalchemy import inspect
+from flask import url_for  # Import url_for from flask
 
 @pytest.mark.usefixtures("db")
 class TestBotRoutes:
