@@ -22,7 +22,7 @@ class TestOrganizationRoutes:
         assert response.status_code == 200
         assert Organization.query.filter_by(name='Test Org').first() is not None
 
-    def test_update_organization(self, logged_in_client):
+    def test_update_organization(self, logged_in_client, db):
         # Create an organization first
         org = Organization(name='Old Name', description='Old Description', homepage_url='http://old.org')
         db.session.add(org)
@@ -38,7 +38,7 @@ class TestOrganizationRoutes:
         updated_org = Organization.query.get(org.id)
         assert updated_org.name == 'Updated Name'
 
-    def test_delete_organization(self, logged_in_client):
+    def test_delete_organization(self, logged_in_client, db):
         # Create an organization first
         org = Organization(name='ToDelete', description='For deletion', homepage_url='http://delete.org')
         db.session.add(org)

@@ -22,7 +22,7 @@ class TestBotRoutes:
         assert response.status_code == 200
         assert Bot.query.filter_by(name='Test Bot').first() is not None
 
-    def test_update_bot(self, logged_in_client):
+    def test_update_bot(self, logged_in_client, db):
         # Create a bot first
         bot = Bot(name='Old Name', description='Old Description')
         db.session.add(bot)
@@ -37,7 +37,7 @@ class TestBotRoutes:
         updated_bot = Bot.query.get(bot.id)
         assert updated_bot.name == 'Updated Name'
 
-    def test_delete_bot(self, logged_in_client):
+    def test_delete_bot(self, logged_in_client, db):
         # Create a bot first
         bot = Bot(name='ToDelete', description='For deletion')
         db.session.add(bot)
@@ -48,7 +48,7 @@ class TestBotRoutes:
         assert response.status_code == 200
         assert Bot.query.get(bot.id) is None
 
-    def test_run_bot(self, mocker, logged_in_client):
+    def test_run_bot(self, mocker, logged_in_client, db):
         # Mock the run_bot function
         mock_run_bot = mocker.patch('app.services.bot_service.run_bot')
 
