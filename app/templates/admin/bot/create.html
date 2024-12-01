@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Create Bot{% endblock %}
+
+{% block content %}
+<h1>Create Bot</h1>
+<form method="post" action="{{ url_for('admin_bot.create') }}">
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+    </div>
+    <button type="submit">Create</button>
+</form>
+{% endblock %}
