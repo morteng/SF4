@@ -6,10 +6,17 @@ from app.models.user import User
 from app.models import init_models
 from app.routes import user_bp, visitor_bp
 from app.routes.admin import register_admin_blueprints
+from dotenv import load_dotenv
+import os
 
 def create_app(config_name='development'):
+    load_dotenv()  # Load environment variables from .env file
+    
+    # Manually set config values
     app = Flask(__name__)
-    app.config.from_object(config_by_name[config_name])
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    # Set other config values as needed
 
     # Initialize extensions
     db.init_app(app)
