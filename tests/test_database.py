@@ -1,3 +1,4 @@
 def test_database_connection(db):
-    result = db.engine.execute("SELECT 1")
-    assert result.scalar() == 1
+    with db.engine.connect() as connection:
+        result = connection.execute("SELECT 1")
+        assert result.scalar() == 1
