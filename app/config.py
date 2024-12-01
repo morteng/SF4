@@ -19,8 +19,14 @@ class TestingConfig(Config):
     WTF_CSRF_ENABLED = True  # Ensure CSRF is enabled for testing
     SECRET_KEY = os.environ.get('SECRET_TEST_KEY', 'insecure-test-key')  # Change this in production
 
+class ProductionConfig(Config):
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'your_prod_database_uri')
+    SECRET_KEY = os.environ.get('SECRET_PROD_KEY', 'insecure-prod-key')  # Change this in production
+
 config_by_name = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
-    # Add other configurations as needed
+    'production': ProductionConfig,
+    'default': DevelopmentConfig  # or whichever is appropriate
 }
