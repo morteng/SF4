@@ -23,6 +23,12 @@ def create_app(config_name=None, instance_path=None):
     db.init_app(app)
     login_manager.init_app(app)
     
+    from .models.user import User
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+    
     # Register admin-related blueprints directly with their own prefixes
     from app.routes.admin.bot_routes import admin_bot_bp
     from app.routes.admin.organization_routes import org_bp
