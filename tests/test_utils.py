@@ -12,11 +12,13 @@ def app():
 
 @pytest.fixture(scope='function')
 def client(app):
-    return app.test_client()
+    with app.test_client() as client:
+        with app.app_context():
+            yield client
 
 @pytest.fixture(scope='function')
 def admin_user(client):
-    response = client.post('/admin/login', data={
+    response = client.post('/login', data={
         'username': 'admin',
         'password': 'password'
     }, follow_redirects=True)
@@ -33,15 +35,17 @@ def test_login_required_decorator(app, client, admin_user):
         return jsonify({"message": "Access granted"}), 200
 
     # Test with valid session cookie (from admin_user fixture)
-    response = client.get('/test_admin', headers=admin_user.headers)
+    with client.session_transaction() as sess:
+        client.set_cookie('localhost', 'session', sess['_session'])
+    response = client.get('/test_admin')
     assert response.status_code == 200
 
     # Test with invalid session cookie
-    client.set_cookie('localhost', 'user_id', value='invalid_id')
+    client.set_cookie('localhost', 'session', 'invalid_session')
     response = client.get('/test_admin')
     assert response.status_code == 401
 
     # Test with missing session cookie
-    client.cookie_jar.clear()
+    client.delete_cookie('localhost', 'session')
     response = client.get('/test_admin')
     assert response.status_code == 401
