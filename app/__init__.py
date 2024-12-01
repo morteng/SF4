@@ -35,12 +35,14 @@ def create_app(config_name=None, instance_path=None):
     from app.routes.admin.stipend_routes import admin_stipend_bp
     from app.routes.admin.tag_routes import tag_bp
     from app.routes.admin.user_routes import user_bp
+    from app.routes.admin.auth_routes import auth_bp  # Import auth blueprint
     
     app.register_blueprint(admin_bot_bp, url_prefix='/admin/bots')
     app.register_blueprint(org_bp, url_prefix='/admin/organizations')
     app.register_blueprint(admin_stipend_bp, url_prefix='/admin/stipends')
     app.register_blueprint(tag_bp, url_prefix='/admin/tags')
     app.register_blueprint(user_bp, url_prefix='/admin/users')
+    app.register_blueprint(auth_bp, url_prefix='/admin/auth')  # Register auth blueprint
     
     # Register user blueprint
     from app.routes.user_routes import user_bp
