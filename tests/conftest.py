@@ -1,28 +1,18 @@
-import tempfile
-import shutil
+# tests/conftest.py
 import pytest
-import os  # Ensure os is imported
-from app import create_app, db as _db
+from app import create_app, db
 
 @pytest.fixture(scope='module')
 def app():
-    db_fd, db_fname = tempfile.mkstemp()
-    config = {
-        "SQLALCHEMY_DATABASE_URI": f"sqlite:///{db_fname}",
-        "TESTING": True
-    }
-    
-    app = create_app(config=config)
+    app = create_app('testing')
     with app.app_context():
-        _db.create_all()
-        
+        db.create_all()
     yield app
-    
-    _db.session.remove()
-    os.close(db_fd)
-    os.unlink(db_fname)
+    with app.app_context():
+        db.session.remove()
+        db.drop_all()
 
 @pytest.fixture(scope='module')
 def db(app):
     with app.app_context():
-        yield _db
+        yield db
