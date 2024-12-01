@@ -11,10 +11,7 @@ def app():
 
 @pytest.fixture
 def db(app):
-    with app.app_context():
-        _db.create_all()
-        yield _db
-        _db.drop_all()
+    return _db
 
 @pytest.fixture
 def logged_in_client(app, client):
