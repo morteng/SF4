@@ -1,3 +1,5 @@
+import tempfile
+import shutil
 import pytest
 from bs4 import BeautifulSoup
 from app import create_app
@@ -6,12 +8,14 @@ from app.models.user import User
 
 @pytest.fixture(scope='module')
 def app():
-    app = create_app('testing')
+    instance_path = tempfile.mkdtemp()
+    app = create_app('testing', instance_path=instance_path)
     with app.app_context():
         _db.create_all()
     yield app
     with app.app_context():
         _db.drop_all()
+    shutil.rmtree(instance_path)
 
 @pytest.fixture(scope='function')
 def db(app):
