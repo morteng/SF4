@@ -19,6 +19,8 @@ def create_app(config_name=None, instance_path=None):
     db.init_app(app)
     login_manager.init_app(app)
     
-    # Register blueprints or other setup
+    # Register admin blueprint
+    from app.routes.admin import admin_bp
+    app.register_blueprint(admin_bp)
     
     return app
