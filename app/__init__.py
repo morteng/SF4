@@ -16,6 +16,9 @@ def create_app(config_name=None, instance_path=None):
     app = Flask(__name__, instance_path=instance_path)
     app.config.from_object(config_by_name[config_name])
     
+    print(f"Config name: {config_name}")
+    print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
+    
     # Initialize extensions
     db.init_app(app)
     login_manager.init_app(app)
