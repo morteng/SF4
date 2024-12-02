@@ -2,17 +2,16 @@ import pytest
 from bs4 import BeautifulSoup
 from app.models.organization import Organization
 
-@pytest.mark.usefixtures("_db")
 class TestOrganizationRoutes:
 
-    def test_list_organizations(self, logged_in_client):
+    def test_list_organizations(self, logged_in_client, db):
         # Test listing organizations
         response = logged_in_client.get('/admin/organizations/')
         assert response.status_code == 200
         soup = BeautifulSoup(response.data.decode(), 'html.parser')
         assert soup.find('h1', string='ManageOrganizations')
 
-    def test_create_organization(self, logged_in_client, _db):
+    def test_create_organization(self, logged_in_client, db):
         # Test creating a new organization
         response = logged_in_client.post('/admin/organizations/create', data={
             'name': 'Test Org',
@@ -22,11 +21,11 @@ class TestOrganizationRoutes:
         assert response.status_code == 200
         assert Organization.query.filter_by(name='Test Org').first() is not None
 
-    def test_update_organization(self, logged_in_client, _db):
+    def test_update_organization(self, logged_in_client, db):
         # Create an organization first
         org = Organization(name='Old Name', description='Old Description', homepage_url='http://old.org')
-        _db.session.add(org)
-        _db.session.commit()
+        db.session.add(org)
+        db.session.commit()
 
         # Update the organization
         response = logged_in_client.put(f'/admin/organizations/{org.id}', json={
@@ -38,11 +37,11 @@ class TestOrganizationRoutes:
         updated_org = Organization.query.get(org.id)
         assert updated_org.name == 'Updated Name'
 
-    def test_delete_organization(self, logged_in_client, _db):
+    def test_delete_organization(self, logged_in_client, db):
         # Create an organization first
         org = Organization(name='ToDelete', description='For deletion', homepage_url='http://delete.org')
-        _db.session.add(org)
-        _db.session.commit()
+        db.session.add(org)
+        db.session.commit()
 
         # Delete the organization
         response = logged_in_client.post(f'/admin/organizations/delete/{org.id}', follow_redirects=True)
