@@ -658,7 +658,6 @@ Project Root/
         __init__.py
         admin/
           __init__.py
-          test_auth_routes.py
           test_bot_routes.py
           test_organization_routes.py
           test_stipend_routes.py
