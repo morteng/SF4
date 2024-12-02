@@ -10,6 +10,8 @@ from app.routes.admin.tag_routes import tag_bp
 # Importing user and visitor blueprints
 from app.routes.user_routes import user_bp
 from app.routes.visitor_routes import visitor_bp
+# Importing new greeting blueprint
+from app.routes.greeting_routes import greeting_bp
 
 # Importing all models to ensure they are registered with SQLAlchemy
 from app.models.user import User
@@ -42,5 +44,8 @@ def create_app(config_name='development'):
     # Registering user and visitor blueprints
     app.register_blueprint(user_bp)
     app.register_blueprint(visitor_bp)
+    
+    # Registering new greeting blueprint
+    app.register_blueprint(greeting_bp)
     
     return app

@@ -1,5 +1,7 @@
-import pytest  # Add this import statement
+from flask import Blueprint, jsonify
 
-@pytest.fixture
-def db(_db):
-    return _db
+greeting_bp = Blueprint('greeting', __name__)
+
+@greeting_bp.route('/greet', methods=['GET'])
+def greet():
+    return jsonify({"message": "Hey there!"})
