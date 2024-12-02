@@ -41,24 +41,20 @@ def db_session(test_db):
     connection.close()
     session.remove()
 
+@pytest.fixture(scope='function')
+def user(db_session):
+    # Create a test user with admin privileges
+    user = User(username='testuser', email='testuser@example.com', is_admin=True)
+    user.set_password('testpassword')  # Use set_password method to set the password
+    db_session.add(user)
+    db_session.commit()
+    return user
 
 @pytest.fixture(scope='function')
-def logged_in_client(app, db_session):
-    """
-    Logged-in client fixture to simulate a user session for testing protected routes.
-    """
-    client = app.test_client()
-    with app.app_context():
-        # Create a test user
-        user = User(username='testuser', email='testuser@example.com', is_admin=True)
-        user.set_password('testpassword')  # Use set_password method to set the password
-        db_session.add(user)
-        db_session.commit()
-
-        # Log in the user
-        login_user(user)
-        yield client
-
-        # Clean up the user after test
-        db_session.delete(user)
-        db_session.commit()
+def logged_in_client(client, user, app):
+    # Log in the test user by making a POST request to the login endpoint
+    client.post('/login', data={
+        'username': user.username,
+        'password': 'testpassword'
+    })
+    return client

@@ -29,37 +29,23 @@ def logged_in_client(client, user, app):
 @pytest.mark.usefixtures("db_session")
 class TestOrganizationRoutes:
 
-    def test_list_organizations(self, logged_in_client, app):
-        # Ensure no existing app context
-        if hasattr(flask.g, 'app'):
-            flask.g.pop('app', None)
-        
-        with app.app_context():
-            response = logged_in_client.get('/admin/organizations/')
-            assert response.status_code == 200
+    def test_list_organizations(self, logged_in_client):
+        response = logged_in_client.get('/admin/organizations/')
+        assert response.status_code == 200
 
     def test_create_organization(self, logged_in_client, app, db_session):
-        # Ensure no existing app context
-        if hasattr(flask.g, 'app'):
-            flask.g.pop('app', None)
-        
-        with app.app_context():
-            response = logged_in_client.post(
-                '/admin/organizations/create',
-                data={
-                    'name': 'Test Org',
-                    'description': 'A test organization for coverage',
-                    'homepage_url': 'http://test.org'
-                },
-                follow_redirects=True
-            )
-            assert response.status_code == 200
+        response = logged_in_client.post(
+            '/admin/organizations/create',
+            data={
+                'name': 'Test Org',
+                'description': 'A test organization for coverage',
+                'homepage_url': 'http://test.org'
+            },
+            follow_redirects=True
+        )
+        assert response.status_code == 200
 
     def test_update_organization(self, logged_in_client, app, db_session):
-        # Ensure no existing app context
-        if hasattr(flask.g, 'app'):
-            flask.g.pop('app', None)
-        
         # Create an organization first
         with app.app_context():
             org = Organization(
@@ -85,10 +71,6 @@ class TestOrganizationRoutes:
             assert updated_org.name == 'Updated Name'
 
     def test_delete_organization(self, logged_in_client, app, db_session):
-        # Ensure no existing app context
-        if hasattr(flask.g, 'app'):
-            flask.g.pop('app', None)
-        
         # Create an organization first
         with app.app_context():
             org = Organization(
