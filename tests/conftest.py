@@ -4,6 +4,7 @@ from app import create_app
 from app.extensions import db
 from flask_login import login_user
 from app.models.user import User
+from app.services.user_service import create_user  # Add this import
 
 @pytest.fixture(scope='module')
 def app():
