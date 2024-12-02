@@ -30,6 +30,8 @@ def create_app(config_name='development'):
     with app.app_context():
         if config_name == 'testing':
             db.create_all()  # Create tables for the in-memory SQLite database
+        else:
+            db.create_all()  # Ensure tables are created for other configurations
     
     # Initialize LoginManager
     login_manager = LoginManager()
