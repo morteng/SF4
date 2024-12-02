@@ -10,7 +10,7 @@ class TestOrganizationRoutes:
         response = logged_in_client.get('/admin/organizations/')
         assert response.status_code == 200
         soup = BeautifulSoup(response.data.decode(), 'html.parser')
-        assert soup.find('h1', string='List of Organizations')
+        assert soup.find('h1', string='ManageOrganizations')
 
     def test_create_organization(self, logged_in_client):
         # Test creating a new organization
