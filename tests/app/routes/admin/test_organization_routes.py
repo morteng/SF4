@@ -28,7 +28,10 @@ def logged_in_client(client, user):
 class TestOrganizationRoutes:
 
     def test_list_organizations(self, logged_in_client, app):
-        # Test listing organizations
+        # Ensure no existing app context
+        if hasattr(flask.g, 'app'):
+            flask.g.pop('app', None)
+        
         with app.app_context():
             response = logged_in_client.get('/admin/organizations/')
             assert response.status_code == 200
@@ -36,7 +39,10 @@ class TestOrganizationRoutes:
             assert soup.find('h1', string='Manage Organizations')
 
     def test_create_organization(self, logged_in_client, app, db_session):
-        # Test creating a new organization
+        # Ensure no existing app context
+        if hasattr(flask.g, 'app'):
+            flask.g.pop('app', None)
+        
         with app.app_context():
             response = logged_in_client.post(
                 '/admin/organizations/create',
@@ -51,6 +57,10 @@ class TestOrganizationRoutes:
             assert Organization.query.filter_by(name='Test Org').first() is not None
 
     def test_update_organization(self, logged_in_client, app, db_session):
+        # Ensure no existing app context
+        if hasattr(flask.g, 'app'):
+            flask.g.pop('app', None)
+        
         # Create an organization first
         with app.app_context():
             org = Organization(
@@ -76,6 +86,10 @@ class TestOrganizationRoutes:
             assert updated_org.name == 'Updated Name'
 
     def test_delete_organization(self, logged_in_client, app, db_session):
+        # Ensure no existing app context
+        if hasattr(flask.g, 'app'):
+            flask.g.pop('app', None)
+        
         # Create an organization first
         with app.app_context():
             org = Organization(
