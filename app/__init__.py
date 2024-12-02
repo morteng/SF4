@@ -1,5 +1,6 @@
 # app/__init__.py
 
+import os
 from flask import Flask
 from flask_login import LoginManager
 from app.extensions import db
@@ -23,8 +24,15 @@ from app.models.tag import Tag
 from app.models.association_tables import user_organization, bot_tag
 
 def create_app(config_name='development'):
-    app = Flask(__name__)
+    app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(config_by_name[config_name])
+    
+    # Ensure the instance folder exists
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
+
     db.init_app(app)
 
     with app.app_context():
