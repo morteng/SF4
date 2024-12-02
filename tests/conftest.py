@@ -1,7 +1,7 @@
 import pytest
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from app import create_app  # Adjust this based on your application structure
+from app.extensions import db  # Import the existing SQLAlchemy instance
 
 # Define the app fixture
 @pytest.fixture(scope='module')
@@ -12,7 +12,6 @@ def app():
 # Define the _db fixture
 @pytest.fixture(scope='module')
 def _db(app):
-    db = SQLAlchemy(app)
     with app.app_context():
         db.create_all()
         yield db
