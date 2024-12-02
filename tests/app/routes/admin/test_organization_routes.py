@@ -17,12 +17,13 @@ def user(db_session):
     return user
 
 @pytest.fixture
-def logged_in_client(client, user):
-    # Log in the test user
-    client.post('/login', data={
-        'username': user.username,
-        'password': 'testpassword'
-    })
+def logged_in_client(client, user, app):
+    with app.app_context():
+        # Log in the test user
+        client.post('/login', data={
+            'username': user.username,
+            'password': 'testpassword'
+        })
     return client
 
 @pytest.mark.usefixtures("db_session")
