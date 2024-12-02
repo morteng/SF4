@@ -1,48 +1,63 @@
 import pytest
-from flask import Flask
-from app import create_app  # Adjust this based on your application structure
-from app.extensions import db  # Import the existing SQLAlchemy instance
+from app import create_app
+from app.extensions import db
 from flask_login import login_user
-from app.models.user import User  # Import the User model
+from app.models.user import User
 
-# Define the app fixture
+
 @pytest.fixture(scope='module')
 def app():
-    app = create_app('testing')  # or whichever config you use for testing
-    return app
+    """
+    Flask application fixture for testing.
+    """
+    app = create_app('testing')  # Use the testing configuration
+    with app.app_context():
+        yield app
 
-# Define the _db fixture
+
 @pytest.fixture(scope='module')
-def _db(app):
+def test_db(app):
+    """
+    Database fixture for setting up and tearing down the test database.
+    """
     with app.app_context():
         db.create_all()
         yield db
         db.drop_all()
 
-# Optionally, define a db fixture that provides the session
-@pytest.fixture(scope='function')
-def db(_db):
-    connection = _db.engine.connect()
-    transaction = connection.begin()
-    session = _db.session
 
-    yield session  # provide the session to tests
+@pytest.fixture(scope='function')
+def db_session(test_db):
+    """
+    Database session fixture to provide a fresh transactional scope for each test.
+    """
+    connection = test_db.engine.connect()
+    transaction = connection.begin()
+    session = test_db.session
+
+    yield session
 
     transaction.rollback()
     connection.close()
     session.remove()
 
-# Define the logged_in_client fixture
+
 @pytest.fixture(scope='function')
-def logged_in_client(app, db):
+def logged_in_client(app, db_session):
+    """
+    Logged-in client fixture to simulate a user session for testing protected routes.
+    """
     client = app.test_client()
     with app.app_context():
-        # Create a user and log them in
-        user = User(username='testuser', password='testpassword')
-        db.session.add(user)
-        db.session.commit()
+        # Create a test user
+        user = User(username='testuser', password='testpassword', email='testuser@example.com', is_admin=True)
+        db_session.add(user)
+        db_session.commit()
+
+        # Log in the user
         login_user(user)
         yield client
-        # Clean up after the test
-        db.session.delete(user)
-        db.session.commit()
+
+        # Clean up the user after test
+        db_session.delete(user)
+        db_session.commit()
