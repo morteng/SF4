@@ -16,7 +16,7 @@ class TestingConfig(Config):
     DEBUG = False
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    SQLALCHEMY_ECHO = True  # Enable echo to see SQL statements
+    SQLALCHEMY_ECHO = False  # Enable echo to see SQL statements
     WTF_CSRF_ENABLED = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.environ.get('SECRET_TEST_KEY', 'insecure-test-key')  # Change this in production
