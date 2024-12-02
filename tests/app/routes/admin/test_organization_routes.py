@@ -2,6 +2,7 @@ import pytest
 from bs4 import BeautifulSoup
 from app.models.organization import Organization
 from app.services.user_service import create_user
+import flask  # Add this import
 
 @pytest.fixture
 def user(db_session):
