@@ -8,14 +8,14 @@ from flask import url_for  # Import url_for from flask
 @pytest.mark.usefixtures("db")
 class TestBotRoutes:
 
-    def test_list_bots(self, admin_auth_client):
+    def test_list_bots(self, admin_auth_client, db):
         # Test listing bots
         response = admin_auth_client.get(url_for('admin_bot.index'))
         assert response.status_code == 200
         soup = BeautifulSoup(response.data.decode(), 'html.parser')
         assert soup.find('h1', string='List of Bots')
 
-    def test_create_bot(self, admin_auth_client):
+    def test_create_bot(self, admin_auth_client, db):
         # Test creating a new bot
         response = admin_auth_client.post(url_for('admin_bot.create'), data={
             'name': 'Test Bot',
