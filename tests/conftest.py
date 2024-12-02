@@ -34,15 +34,15 @@ def db(_db):
 
 # Define the logged_in_client fixture
 @pytest.fixture(scope='function')
-def logged_in_client(app, _db):
+def logged_in_client(app, db):
     client = app.test_client()
     with app.app_context():
         # Create a user and log them in
         user = User(username='testuser', password='testpassword')
-        _db.session.add(user)
-        _db.session.commit()
+        db.session.add(user)
+        db.session.commit()
         login_user(user)
         yield client
         # Clean up after the test
-        _db.session.delete(user)
-        _db.session.commit()
+        db.session.delete(user)
+        db.session.commit()
