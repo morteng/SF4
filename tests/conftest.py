@@ -2,6 +2,8 @@ import pytest
 from flask import Flask
 from app import create_app  # Adjust this based on your application structure
 from app.extensions import db  # Import the existing SQLAlchemy instance
+from flask_login import login_user
+from app.models.user import User  # Import the User model
 
 # Define the app fixture
 @pytest.fixture(scope='module')
@@ -29,3 +31,18 @@ def db(_db):
     transaction.rollback()
     connection.close()
     session.remove()
+
+# Define the logged_in_client fixture
+@pytest.fixture(scope='function')
+def logged_in_client(app, _db):
+    client = app.test_client()
+    with app.app_context():
+        # Create a user and log them in
+        user = User(username='testuser', password='testpassword')
+        _db.session.add(user)
+        _db.session.commit()
+        login_user(user)
+        yield client
+        # Clean up after the test
+        _db.session.delete(user)
+        _db.session.commit()
