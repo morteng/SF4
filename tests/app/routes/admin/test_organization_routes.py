@@ -6,13 +6,20 @@ import flask  # Add this import
 
 @pytest.fixture
 def user(db_session):
+    # Check if a user with the same credentials already exists
+    existing_user = db_session.query(User).filter_by(email='test@example.com').first()
+    if existing_user:
+        db_session.delete(existing_user)
+        db_session.commit()
+
     # Create a test user with admin privileges
-    user = create_user({
+    user_data = {
         'username': 'testuser',
         'email': 'test@example.com',
         'password': 'testpassword',
         'is_admin': True  # Set is_admin to True
-    })
+    }
+    user = create_user(user_data)
     db_session.commit()
     return user
 
