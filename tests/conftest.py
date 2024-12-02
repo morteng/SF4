@@ -50,7 +50,8 @@ def logged_in_client(app, db_session):
     client = app.test_client()
     with app.app_context():
         # Create a test user
-        user = User(username='testuser', password='testpassword', email='testuser@example.com', is_admin=True)
+        user = User(username='testuser', email='testuser@example.com', is_admin=True)
+        user.set_password('testpassword')  # Use set_password method to set the password
         db_session.add(user)
         db_session.commit()
 
