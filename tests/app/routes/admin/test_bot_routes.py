@@ -5,6 +5,9 @@ from app.services.bot_service import run_bot
 from sqlalchemy import inspect
 from flask import url_for  # Import url_for from flask
 
+# Import the db fixture
+from tests.conftest import db
+
 @pytest.mark.usefixtures("db")
 class TestBotRoutes:
 
