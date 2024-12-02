@@ -2,22 +2,16 @@ import pytest
 from bs4 import BeautifulSoup
 from app.models.organization import Organization
 from app.services.user_service import create_user
-from app.models.role import Role  # Assuming Role model exists
 
 @pytest.fixture
 def user(db_session):
-    # Create a test user with admin role
+    # Create a test user with admin privileges
     user = create_user({
         'username': 'testuser',
         'email': 'test@example.com',
-        'password': 'testpassword'
+        'password': 'testpassword',
+        'is_admin': True  # Set is_admin to True
     })
-    admin_role = Role.query.filter_by(name='admin').first()
-    if not admin_role:
-        admin_role = Role(name='admin')
-        db_session.add(admin_role)
-        db_session.commit()
-    user.roles.append(admin_role)
     db_session.commit()
     return user
 
