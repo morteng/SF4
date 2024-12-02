@@ -16,9 +16,9 @@ def create_user(form_data):
     username = form_data['username']
     email = form_data['email']
     password = form_data['password']
-    is_admin = form_data.get('is_admin', False)
+    is_admin = form_data.get('is_admin', False)  # Accept is_admin parameter
 
-    new_user = User(username=username, email=email, is_admin=is_admin)
+    new_user = User(username=username, email=email, is_admin=is_admin)  # Set is_admin attribute
     new_user.set_password(password)
     
     try:
