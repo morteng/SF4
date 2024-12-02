@@ -12,3 +12,6 @@ def admin_required(f):
 
 # Define login_required in utils.py
 login_required = _login_required
+
+def greeting(name):
+    print(f"Hey {name}")
