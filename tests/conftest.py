@@ -3,6 +3,7 @@ from app.models.user import User
 from flask import session
 from app.extensions import db  # Import the db object
 from app import create_app
+import pytest_flask_sqlalchemy
 
 @pytest.fixture
 def app():
@@ -50,3 +51,7 @@ def admin_user():
 @pytest.fixture
 def admin_auth_client(authenticate_client, admin_user):
     return authenticate_client(admin_user)
+
+@pytest.fixture
+def db(_db):
+    return _db
