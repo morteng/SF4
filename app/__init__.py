@@ -4,6 +4,7 @@ from flask import Flask
 from flask_login import LoginManager
 from app.extensions import db
 from app.config import config_by_name
+from app.services.user_service import ensure_default_admin_exists
 # Importing admin blueprints
 from app.routes.admin import admin_bp
 from app.routes.user_routes import user_bp
@@ -56,6 +57,9 @@ def create_app(config_name='development'):
         engine = db.engine
         connection = engine.connect()
         connection.close()
+
+        # Ensure default admin user exists
+        ensure_default_admin_exists()
 
     # Initialize LoginManager
     login_manager = LoginManager()
