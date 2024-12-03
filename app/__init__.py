@@ -48,6 +48,11 @@ def create_app(config_name='development'):
         else:
             db.create_all()  # Ensure tables are created for other configurations
 
+        # Manually test database connection
+        engine = db.engine
+        connection = engine.connect()
+        connection.close()
+
     # Initialize LoginManager
     login_manager = LoginManager()
     login_manager.init_app(app)
