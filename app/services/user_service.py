@@ -1,6 +1,6 @@
-from sqlalchemy.exc import IntegrityError
 from app.models.user import User
 from app.extensions import db
+import os
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)
@@ -34,17 +34,16 @@ def update_user(user):
     db.session.commit()
 
 def ensure_default_admin_exists():
-    admin_username = 'admin'
-    admin_email = 'admin@example.com'
-    admin_password = 'admin123'  # This should be hashed and secure in production
-    admin_is_admin = True
+    admin_username = os.getenv('ADMIN_USERNAME', 'admin')
+    admin_email = os.getenv('ADMIN_EMAIL', 'admin@example.com')
+    admin_password = os.getenv('ADMIN_PASSWORD', 'admin123')  # This should be hashed and secure in production
 
     user = User.query.filter_by(username=admin_username).first()
     if user is None:
         new_user = User(
             username=admin_username,
             email=admin_email,
-            is_admin=admin_is_admin
+            is_admin=True
         )
         new_user.set_password(admin_password)
         db.session.add(new_user)
