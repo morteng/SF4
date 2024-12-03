@@ -1,7 +1,7 @@
 from flask import Flask, flash, redirect, url_for, render_template
 from flask_login import LoginManager  # Import LoginManager
-
 from app.routes.visitor_routes import visitor_bp  # Import the blueprint
+from app.models.user import User  # Import the User model
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -23,8 +23,6 @@ def index():
     return render_template('index.html')
 
 # User loader callback function
-from app.models.user import User  # Make sure to import your User model
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
