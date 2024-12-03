@@ -21,11 +21,11 @@ from app.models.association_tables import user_organization, bot_tag
 def create_app(config_name='development'):
     # Load environment variables from .env file
     load_dotenv()
-    
+
     app = Flask(__name__, instance_relative_config=True)
     print(f"DATABASE_URL from env: {os.environ.get('DATABASE_URL')}")
     app.config.from_object(config_by_name[config_name])
-    
+
     # Ensure the instance folder exists
     try:
         os.makedirs(app.instance_path)
@@ -34,6 +34,10 @@ def create_app(config_name='development'):
 
     print(f"Instance path: {app.instance_path}")
     print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
+    print(f"Database file path: {os.path.join(app.instance_path, 'site.db')}")
+    print(f"Loaded SECRET_KEY: {os.environ.get('SECRET_KEY')}")
+    print(f"Loaded DATABASE_URL: {os.environ.get('DATABASE_URL')}")
+    print(f"Loaded FLASK_CONFIG: {os.environ.get('FLASK_CONFIG')}")
 
     db.init_app(app)
 
@@ -42,7 +46,7 @@ def create_app(config_name='development'):
             db.create_all()  # Create tables for the in-memory SQLite database
         else:
             db.create_all()  # Ensure tables are created for other configurations
-    
+
     # Initialize LoginManager
     login_manager = LoginManager()
     login_manager.init_app(app)
@@ -50,12 +54,12 @@ def create_app(config_name='development'):
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
-    
+
     # Registering admin blueprint
     app.register_blueprint(admin_bp)
-    
+
     # Registering user and visitor blueprints
     app.register_blueprint(user_bp)
     app.register_blueprint(visitor_bp)
-    
+
     return app
