@@ -1,6 +1,7 @@
 from app.models.user import User
 from app.extensions import db
 import os
+from sqlalchemy.exc import IntegrityError  # Import IntegrityError
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)
@@ -24,7 +25,7 @@ def create_user(form_data):
     try:
         db.session.add(new_user)
         db.session.commit()
-    except IntegrityError:
+    except IntegrityError:  # IntegrityError is now defined
         db.session.rollback()
         raise ValueError("Username or email already exists")
     
