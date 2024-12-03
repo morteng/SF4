@@ -21,7 +21,7 @@ from app.models.association_tables import user_organization, bot_tag
 def create_app(config_name='development'):
     # Load environment variables from .env file
     load_dotenv()
-
+    
     app = Flask(__name__, instance_relative_config=True)
     print(f"DATABASE_URL from env: {os.environ.get('DATABASE_URL')}")
     app.config.from_object(config_by_name[config_name])
@@ -29,8 +29,9 @@ def create_app(config_name='development'):
     # Ensure the instance folder exists
     try:
         os.makedirs(app.instance_path)
+        print(f"Instance folder created at: {app.instance_path}")
     except OSError:
-        pass
+        print(f"Instance folder already exists at: {app.instance_path}")
 
     print(f"Instance path: {app.instance_path}")
     print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
