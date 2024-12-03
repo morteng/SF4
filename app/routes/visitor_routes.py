@@ -27,10 +27,14 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        username = form.username.data
+        password = form.password.data
+        user = User.query.filter_by(username=username).first()
+        print(f"User retrieved: {user}")
         if user:
-            print(f"User found: {user.username}")
-            if user.check_password(form.password.data):
+            print("User found.")
+            if user.check_password(password):
+                print("Password matched.")
                 login_user(user)
                 flash('Login successful.', 'success')
                 if user.is_admin:
@@ -38,10 +42,10 @@ def login():
                 else:
                     return redirect(url_for('user.profile'))
             else:
-                print("Password check failed")
+                print("Password mismatch.")
                 flash('Invalid username or password.', 'danger')
         else:
-            print("User not found")
+            print("User not found.")
             flash('Invalid username or password.', 'danger')
     return render_template('login.html', form=form)
 
