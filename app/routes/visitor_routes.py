@@ -21,7 +21,7 @@ def login():
     """Handle user login."""
     if current_user.is_authenticated:
         if current_user.is_admin:
-            return redirect(url_for('admin.admin_stipend.index'))
+            return redirect(url_for('admin_stipend.index'))
         else:
             return redirect(url_for('user.profile'))
     
@@ -32,7 +32,7 @@ def login():
             login_user(user)
             flash('Login successful.', 'success')
             if user.is_admin:
-                return redirect(url_for('admin.admin_stipend.index'))
+                return redirect(url_for('admin_stipend.index'))
             else:
                 return redirect(url_for('user.profile'))
         else:
