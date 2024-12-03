@@ -34,8 +34,12 @@ def create_app(config_name='development'):
         print(f"Instance folder already exists at: {app.instance_path}")
 
     print(f"Instance path: {app.instance_path}")
+    
+    # Construct the database URI using app.instance_path
+    database_file = os.path.join(app.instance_path, 'site.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{database_file}"
+    
     print(f"Database URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
-    print(f"Database file path: {os.path.join(app.instance_path, 'site.db')}")
     print(f"Loaded SECRET_KEY: {os.environ.get('SECRET_KEY')}")
     print(f"Loaded DATABASE_URL: {os.environ.get('DATABASE_URL')}")
     print(f"Loaded FLASK_CONFIG: {os.environ.get('FLASK_CONFIG')}")
