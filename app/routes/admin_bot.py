@@ -7,4 +7,4 @@ def create():
     # Your code here
     pass
 
-# Define other routes similarly
+# Define other bot-related routes similarly
