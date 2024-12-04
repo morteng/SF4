@@ -6,6 +6,7 @@ from app.extensions import db
 from app.config import config_by_name
 from app.services.user_service import ensure_default_admin_exists
 from app.routes.admin_bot import admin_bot_bp
+from app.routes.admin_org import admin_org_bp
 from app.routes.user_routes import user_bp
 from app.routes.visitor_routes import visitor_bp
 from app.models.user import User
@@ -66,8 +67,9 @@ def create_app(config_name='development'):
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    # Registering admin blueprint
+    # Registering admin-related blueprints with /admin prefix
     app.register_blueprint(admin_bot_bp, url_prefix='/admin')
+    app.register_blueprint(admin_org_bp, url_prefix='/admin')
 
     # Registering user and visitor blueprints
     app.register_blueprint(user_bp)
