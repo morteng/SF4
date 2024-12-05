@@ -3,9 +3,9 @@ from flask_login import login_required
 from app.forms.admin_forms import UserForm
 from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user
 
-user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
+admin_user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
 
-@user_bp.route('/create', methods=['GET', 'POST'])
+@admin_user_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     form = UserForm()
@@ -18,7 +18,7 @@ def create():
             flash(str(e), 'danger')
     return render_template('admin/user/create.html', form=form)
 
-@user_bp.route('/delete/<int:id>', methods=['POST'])
+@admin_user_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
     """Delete a user by ID."""
@@ -30,14 +30,14 @@ def delete(id):
         flash('User not found.', 'danger')
     return redirect(url_for('admin_user.index'))
 
-@user_bp.route('/', methods=['GET'])
+@admin_user_bp.route('/', methods=['GET'])
 @login_required
 def index():
     """List all users."""
     users = get_all_users()
     return render_template('admin/user/index.html', users=users)
 
-@user_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@admin_user_bp.route('/update/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update(id):
     user = get_user_by_id(id)
