@@ -34,12 +34,6 @@ def get_stipend_by_id(stipend_id):
         return None
 
 def update_stipend(stipend, data):
-    stipend.name = data['name']
-    stipend.summary = data['summary']
-    stipend.description = data['description']
-    stipend.homepage_url = data['homepage_url']
-    stipend.application_procedure = data['application_procedure']
-    stipend.eligibility_criteria = data['eligibility_criteria']
-    stipend.application_deadline = data['application_deadline']
-    stipend.open_for_applications = data['open_for_applications']
+    for key, value in data.items():
+        setattr(stipend, key, value)
     db.session.commit()

@@ -34,6 +34,6 @@ def get_tag_by_id(tag_id):
         return None
 
 def update_tag(tag, data):
-    tag.name = data['name']
-    tag.category = data['category']
+    for key, value in data.items():
+        setattr(tag, key, value)
     db.session.commit()
