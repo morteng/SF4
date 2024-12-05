@@ -20,6 +20,11 @@ def delete(id):
         return redirect(url_for('admin_bot.index'))
     return "Bot not found", 404
 
+@admin_bot_bp.route('/bots/', methods=['GET'])
+def index():
+    bots = get_all_bots()
+    return render_template('admin/bot_dashboard.html', bots=bots)
+
 @admin_bot_bp.route('/bots/run/<int:id>', methods=['POST'])
 def run(id):
     bot = get_bot_by_id(id)
@@ -38,8 +43,3 @@ def update(id):
         update_bot(bot, form.data)
         return redirect(url_for('admin_bot.index'))
     return render_template('admin/bot_form.html', form=form)
-
-@admin_bot_bp.route('/bots/', methods=['GET'])
-def index():
-    bots = get_all_bots()
-    return render_template('admin/bot_dashboard.html', bots=bots)
