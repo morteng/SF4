@@ -2,14 +2,14 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import create_stipend, get_stipend_by_id, get_all_stipends, update_stipend, delete_stipend
 
-admin_stipend_bp = Blueprint('stipend_bp', __name__)
+admin_stipend_bp = Blueprint('admin.stipend', __name__)
 
 @admin_stipend_bp.route('/stipends/create', methods=['GET', 'POST'])
 def create():
     form = StipendForm()
     if form.validate_on_submit():
         stipend = create_stipend(form.data)
-        return redirect(url_for('stipend_bp.index'))
+        return redirect(url_for('admin.stipend.index'))
     return render_template('admin/stipend_form.html', form=form)
 
 @admin_stipend_bp.route('/stipends/delete/<int:id>', methods=['POST'])
@@ -17,7 +17,7 @@ def delete(id):
     stipend = get_stipend_by_id(id)
     if stipend:
         delete_stipend(stipend)
-        return redirect(url_for('stipend_bp.index'))
+        return redirect(url_for('admin.stipend.index'))
     return "Stipend not found", 404
 
 @admin_stipend_bp.route('/stipends/', methods=['GET'])
@@ -33,5 +33,5 @@ def update(id):
     form = StipendForm(obj=stipend)
     if form.validate_on_submit():
         update_stipend(stipend, form.data)
-        return redirect(url_for('stipend_bp.index'))
+        return redirect(url_for('admin.stipend.index'))
     return render_template('admin/stipend_form.html', form=form)
