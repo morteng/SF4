@@ -5,7 +5,7 @@ from .admin.bot_routes import admin_bot_bp
 from .admin.organization_routes import org_bp as admin_org_bp
 from .admin.stipend_routes import admin_stipend_bp
 from .admin.tag_routes import admin_tag_bp  # Corrected import
-from .admin.user_routes import user_bp as admin_user_bp
+from .admin.user_routes import admin_user_bp  # Updated import
 
 # Create a blueprint for the routes
 routes_bp = Blueprint('routes', __name__)
