@@ -8,6 +8,11 @@
     {% if current_user.is_authenticated %}
         {% if current_user.is_admin %}
             <a href="{{ url_for('admin_stipend.index') }}">Admin Dashboard</a>
+            <a href="{{ url_for('admin_bot.index') }}">Manage Bots</a>
+            <a href="{{ url_for('org_bp.index') }}">Manage Organizations</a>
+            <a href="{{ url_for('stipend_bp.index') }}">Manage Stipends</a>
+            <a href="{{ url_for('tag_bp.index') }}">Manage Tags</a>
+            <a href="{{ url_for('user_bp.index') }}">Manage Users</a>
         {% endif %}
         <a href="{{ url_for('visitor.logout') }}">Logout</a>
     {% else %}
