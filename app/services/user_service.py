@@ -50,5 +50,8 @@ def ensure_default_admin_exists():
         db.session.add(new_user)
         db.session.commit()
         print("Default admin user created.")
+        print(admin_username)
+        print(admin_email)
+        print(admin_password)
     else:
         print("Default admin user already exists.")
