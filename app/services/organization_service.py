@@ -32,3 +32,9 @@ def get_organization_by_id(organization_id):
         # Log the error
         print(str(e))
         return None
+
+def update_organization(organization, data):
+    organization.name = data['name']
+    organization.description = data['description']
+    organization.homepage_url = data['homepage_url']
+    db.session.commit()

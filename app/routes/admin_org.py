@@ -8,7 +8,7 @@ admin_org_bp = Blueprint('org_bp', __name__)
 def create():
     form = OrganizationForm()
     if form.validate_on_submit():
-        organization = create_organization(form.name.data, form.description.data, form.homepage_url.data)
+        organization = create_organization(form.data)
         return redirect(url_for('org_bp.index'))
     return render_template('admin/organization_form.html', form=form)
 
