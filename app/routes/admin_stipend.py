@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from app.forms.admin_forms import StipendForm
-from app.services.stipend_service import create_stipend, get_stipend_by_id, get_all_stipends, update_stipend
+from app.services.stipend_service import create_stipend, get_stipend_by_id, get_all_stipends, update_stipend, delete_stipend
 
 admin_stipend_bp = Blueprint('stipend_bp', __name__)
 
@@ -16,7 +16,7 @@ def create():
 def delete(id):
     stipend = get_stipend_by_id(id)
     if stipend:
-        # Implement stipend deletion logic here
+        delete_stipend(stipend)
         return redirect(url_for('stipend_bp.index'))
     return "Stipend not found", 404
 

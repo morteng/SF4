@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from app.forms.admin_forms import TagForm
-from app.services.tag_service import create_tag, get_tag_by_id, get_all_tags, update_tag
+from app.services.tag_service import create_tag, get_tag_by_id, get_all_tags, update_tag, delete_tag
 
 admin_tag_bp = Blueprint('tag_bp', __name__)
 
@@ -8,7 +8,7 @@ admin_tag_bp = Blueprint('tag_bp', __name__)
 def create():
     form = TagForm()
     if form.validate_on_submit():
-        tag = create_tag(form.name.data, form.category.data)
+        tag = create_tag(form.data)
         return redirect(url_for('tag_bp.index'))
     return render_template('admin/tag_form.html', form=form)
 
@@ -16,7 +16,7 @@ def create():
 def delete(id):
     tag = get_tag_by_id(id)
     if tag:
-        # Implement tag deletion logic here
+        delete_tag(tag)
         return redirect(url_for('tag_bp.index'))
     return "Tag not found", 404
 
