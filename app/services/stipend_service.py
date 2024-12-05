@@ -21,10 +21,15 @@ def delete_stipend(stipend):
         db.session.rollback()
 
 def create_stipend(data):
-    new_stipend = Stipend(**data)
-    db.session.add(new_stipend)
-    db.session.commit()
-    return new_stipend
+    try:
+        new_stipend = Stipend(**data)
+        db.session.add(new_stipend)
+        db.session.commit()
+        return new_stipend
+    except SQLAlchemyError as e:
+        logging.error(str(e))
+        db.session.rollback()
+        return None
 
 def get_stipend_by_id(stipend_id):
     try:
@@ -34,6 +39,10 @@ def get_stipend_by_id(stipend_id):
         return None
 
 def update_stipend(stipend, data):
-    for key, value in data.items():
-        setattr(stipend, key, value)
-    db.session.commit()
+    try:
+        for key, value in data.items():
+            setattr(stipend, key, value)
+        db.session.commit()
+    except SQLAlchemyError as e:
+        logging.error(str(e))
+        db.session.rollback()

@@ -21,10 +21,15 @@ def delete_tag(tag):
         db.session.rollback()
 
 def create_tag(data):
-    new_tag = Tag(**data)
-    db.session.add(new_tag)
-    db.session.commit()
-    return new_tag
+    try:
+        new_tag = Tag(**data)
+        db.session.add(new_tag)
+        db.session.commit()
+        return new_tag
+    except SQLAlchemyError as e:
+        logging.error(str(e))
+        db.session.rollback()
+        return None
 
 def get_tag_by_id(tag_id):
     try:
@@ -34,6 +39,10 @@ def get_tag_by_id(tag_id):
         return None
 
 def update_tag(tag, data):
-    for key, value in data.items():
-        setattr(tag, key, value)
-    db.session.commit()
+    try:
+        for key, value in data.items():
+            setattr(tag, key, value)
+        db.session.commit()
+    except SQLAlchemyError as e:
+        logging.error(str(e))
+        db.session.rollback()

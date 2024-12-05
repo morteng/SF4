@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for
+from flask_login import login_required
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import create_stipend, get_stipend_by_id, get_all_stipends, update_stipend, delete_stipend
 
 admin_stipend_bp = Blueprint('admin.stipend', __name__)
 
 @admin_stipend_bp.route('/stipends/create', methods=['GET', 'POST'])
+@login_required
 def create():
     form = StipendForm()
     if form.validate_on_submit():
@@ -13,6 +15,7 @@ def create():
     return render_template('admin/stipend_form.html', form=form)
 
 @admin_stipend_bp.route('/stipends/delete/<int:id>', methods=['POST'])
+@login_required
 def delete(id):
     stipend = get_stipend_by_id(id)
     if stipend:
@@ -21,11 +24,13 @@ def delete(id):
     return "Stipend not found", 404
 
 @admin_stipend_bp.route('/stipends/', methods=['GET'])
+@login_required
 def index():
     stipends = get_all_stipends()
     return render_template('admin/stipend_dashboard.html', stipends=stipends)
 
 @admin_stipend_bp.route('/stipends/update/<int:id>', methods=['GET', 'POST'])
+@login_required
 def update(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
