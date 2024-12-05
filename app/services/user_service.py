@@ -1,7 +1,7 @@
 from app.models.user import User
 from app.extensions import db
 import os
-from sqlalchemy.exc import IntegrityError  # Import IntegrityError
+from sqlalchemy.exc import IntegrityError
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)
@@ -17,27 +17,32 @@ def create_user(form_data):
     username = form_data['username']
     email = form_data['email']
     password = form_data['password']
-    is_admin = form_data.get('is_admin', False)  # Accept is_admin parameter
+    is_admin = form_data.get('is_admin', False)
 
-    new_user = User(username=username, email=email, is_admin=is_admin)  # Set is_admin attribute
+    new_user = User(username=username, email=email, is_admin=is_admin)
     new_user.set_password(password)
     
     try:
         db.session.add(new_user)
         db.session.commit()
-    except IntegrityError:  # IntegrityError is now defined
+    except IntegrityError:
         db.session.rollback()
         raise ValueError("Username or email already exists")
     
     return new_user
 
-def update_user(user):
+def update_user(user, form_data):
+    user.username = form_data['username']
+    user.email = form_data['email']
+    user.is_admin = form_data.get('is_admin', False)
+    if form_data['password']:
+        user.set_password(form_data['password'])
     db.session.commit()
 
 def ensure_default_admin_exists():
     admin_username = os.getenv('ADMIN_USERNAME', 'admin')
     admin_email = os.getenv('ADMIN_EMAIL', 'admin@example.com')
-    admin_password = os.getenv('ADMIN_PASSWORD', 'admin123')  # This should be hashed and secure in production
+    admin_password = os.getenv('ADMIN_PASSWORD', 'admin123')
 
     user = User.query.filter_by(username=admin_username).first()
     if user is None:
