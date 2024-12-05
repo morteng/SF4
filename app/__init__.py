@@ -8,8 +8,8 @@ from app.services.user_service import ensure_default_admin_exists
 from app.routes.admin.bot_routes import admin_bot_bp
 from app.routes.admin.organization_routes import admin_org_bp
 from app.routes.admin.stipend_routes import admin_stipend_bp
-from app.routes.admin.tag_routes import admin_tag_bp
-from app.routes.admin.user_routes import user_bp  # Ensure consistent naming
+from app.routes.admin.tag_routes import admin_tag_bp  # Adjusted import
+from app.routes.admin.user_routes import admin_user_bp  # Adjusted import
 from app.routes.user_routes import user_bp
 from app.routes.visitor_routes import visitor_bp
 from app.models.user import User
@@ -74,8 +74,8 @@ def create_app(config_name='development'):
     app.register_blueprint(admin_bot_bp, url_prefix='/admin')
     app.register_blueprint(admin_org_bp, url_prefix='/admin')
     app.register_blueprint(admin_stipend_bp, url_prefix='/admin')
-    app.register_blueprint(admin_tag_bp, url_prefix='/admin')
-    app.register_blueprint(user_bp, url_prefix='/admin')  # Ensure consistent naming
+    app.register_blueprint(admin_tag_bp, url_prefix='/admin')  # Adjusted blueprint name
+    app.register_blueprint(admin_user_bp, url_prefix='/admin')  # Adjusted blueprint name
 
     # Registering user and visitor blueprints
     app.register_blueprint(user_bp)
