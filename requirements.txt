@@ -9,3 +9,4 @@ Flask-WTF
 WTForms
 flask-migrate
 pytest-flask-sqlalchemy
+email-validator
