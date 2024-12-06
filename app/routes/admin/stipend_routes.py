@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, abort
+from flask import Blueprint, render_template, redirect, url_for, flash, abort, request
 from flask_login import login_required, current_user
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import get_all_stipends, delete_stipend, create_stipend, get_stipend_by_id, update_stipend
@@ -43,12 +43,14 @@ def create():
             'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S') if form.application_deadline.data else None,
             'open_for_applications': form.open_for_applications.data
         }
+        print(f"Form data: {new_stipend_data}")  # Debugging statement
         new_stipend = create_stipend(new_stipend_data)
         if new_stipend:
             flash('Stipend created successfully.', 'success')
             return redirect(url_for('admin_stipend.index'))
         else:
             flash('Stipend with this name already exists or invalid application deadline.', 'danger')
+    print(f"Form errors: {form.errors}")  # Debugging statement
     return render_template('admin/stipend/create.html', form=form)
 
 @admin_stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
