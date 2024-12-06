@@ -6,6 +6,8 @@ from app.services.user_service import ensure_default_admin_exists
 from flask_login import LoginManager
 from dotenv import load_dotenv  # Added this line to import load_dotenv
 
+# add docstring to all functions and classes AI!
+
 # Import your blueprints
 from app.routes.admin_bot import admin_bot_bp
 from app.routes.admin_org import admin_org_bp
