@@ -43,7 +43,9 @@ def create():
             'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S') if form.application_deadline.data else None,
             'open_for_applications': form.open_for_applications.data
         }
+        print(f"Form data: {new_stipend_data}")  # Debugging statement
         new_stipend = create_stipend(new_stipend_data)
+        print(f"Result of create_stipend: {new_stipend}")  # Debugging statement
         if new_stipend:
             flash('Stipend created successfully.', 'success')
             return redirect(url_for('admin_stipend.index'))

@@ -22,6 +22,7 @@ def delete_stipend(stipend):
 
 def create_stipend(data):
     if Stipend.query.filter_by(name=data['name']).first():
+        print("Stipend with this name already exists.")  # Debugging statement
         return None  # or raise an exception, depending on your preference
     try:
         application_deadline = data.get('application_deadline')
@@ -30,12 +31,18 @@ def create_stipend(data):
         else:
             data['application_deadline'] = None
     except ValueError as e:
-        print(str(e))
+        print(f"Invalid application deadline: {e}")  # Debugging statement
         return None
     new_stipend = Stipend(**data)
     db.session.add(new_stipend)
-    db.session.commit()
-    return new_stipend
+    try:
+        db.session.commit()
+        print("Stipend added to the database successfully.")  # Debugging statement
+        return new_stipend
+    except SQLAlchemyError as e:
+        print(f"Database error: {e}")  # Debugging statement
+        db.session.rollback()
+        return None
 
 def get_stipend_by_id(stipend_id):
     try:
