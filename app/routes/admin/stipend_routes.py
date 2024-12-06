@@ -6,7 +6,7 @@ from app.extensions import db
 from datetime import datetime
 import logging
 
-# Ensure the blueprint name is 'stipend_bp'
+# Ensure the blueprint name is 'admin_stipend'
 stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
 
 @stipend_bp.route('/', methods=['GET'])
