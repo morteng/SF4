@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import create_organization, get_organization_by_id, get_all_organizations, update_organization
+from app.extensions import db
 
 admin_org_bp = Blueprint('admin_org', __name__, url_prefix='/admin/organizations')
 
@@ -16,7 +17,8 @@ def create():
 def delete(id):
     organization = get_organization_by_id(id)
     if organization:
-        # Implement organization deletion logic here
+        db.session.delete(organization)
+        db.session.commit()
         return redirect(url_for('admin_org.index'))
     return "Organization not found", 404
 

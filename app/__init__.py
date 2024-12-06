@@ -1,11 +1,16 @@
 from dotenv import load_dotenv
 import os
 from flask import Flask
-from flask_login import LoginManager
 from app.extensions import db
 from app.config import config_by_name
 from app.services.user_service import ensure_default_admin_exists
-from app.routes import routes_bp
+
+# Import your blueprints
+from app.routes.admin_bot import admin_bot_bp
+from app.routes.admin_org import admin_org_bp
+from app.routes.admin_stipend import admin_stipend_bp
+from app.routes.admin_tag import admin_tag_bp
+from app.routes.admin_user import admin_user_bp
 
 def create_app(config_name=None):
     load_dotenv()
@@ -26,7 +31,11 @@ def create_app(config_name=None):
         return User.query.get(int(user_id))
     
     # Register blueprints
-    app.register_blueprint(routes_bp)
+    app.register_blueprint(admin_bot_bp, url_prefix='/admin/bots')
+    app.register_blueprint(admin_org_bp, url_prefix='/admin/organizations')
+    app.register_blueprint(admin_stipend_bp, url_prefix='/admin/stipends')
+    app.register_blueprint(admin_tag_bp, url_prefix='/admin/tags')
+    app.register_blueprint(admin_user_bp, url_prefix='/admin/users')
     
     with app.app_context():
         db.create_all()

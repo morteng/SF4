@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from app.forms.admin_forms import BotForm
 from app.services.bot_service import create_bot, get_bot_by_id, run_bot, get_all_bots, update_bot
+from app.extensions import db
 
 admin_bot_bp = Blueprint('admin_bot', __name__)
 
@@ -16,7 +17,8 @@ def create():
 def delete(id):
     bot = get_bot_by_id(id)
     if bot:
-        # Implement bot deletion logic here
+        db.session.delete(bot)
+        db.session.commit()
         return redirect(url_for('admin_bot.index'))
     return "Bot not found", 404
 

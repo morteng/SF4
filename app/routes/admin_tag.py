@@ -2,15 +2,16 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required
 from app.forms.admin_forms import TagForm
 from app.services.tag_service import create_tag, get_tag_by_id, get_all_tags, update_tag, delete_tag
+from app.extensions import db
 
-admin_tag_bp = Blueprint('admin_tag', __name__)
+admin_tag_bp = Blueprint('admin_tag', __name__, url_prefix='/admin/tags')
 
 @admin_tag_bp.route('/tags/create', methods=['GET', 'POST'])
 @login_required
 def create():
     form = TagForm()
     if form.validate_on_submit():
-        tag = create_tag(form.data)
+        tag = create_tag(form.name.data, form.category.data)
         return redirect(url_for('admin_tag.index'))
     return render_template('admin/tag_form.html', form=form)
 
@@ -19,7 +20,8 @@ def create():
 def delete(id):
     tag = get_tag_by_id(id)
     if tag:
-        delete_tag(tag)
+        db.session.delete(tag)
+        db.session.commit()
         return redirect(url_for('admin_tag.index'))
     return "Tag not found", 404
 
@@ -37,6 +39,6 @@ def update(id):
         return "Tag not found", 404
     form = TagForm(obj=tag)
     if form.validate_on_submit():
-        update_tag(tag, form.data)
+        update_tag(tag, form.name.data, form.category.data)
         return redirect(url_for('admin_tag.index'))
     return render_template('admin/tag_form.html', form=form)
