@@ -1,7 +1,8 @@
 from .association_tables import stipend_tag_association, organization_stipends
 from app.extensions import db
-# AI: add docstrings to each class and method
+
 class Stipend(db.Model):
+    """Stipend model representing a financial aid or scholarship opportunity."""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     summary = db.Column(db.Text, nullable=True)
@@ -15,4 +16,5 @@ class Stipend(db.Model):
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
 
     def __repr__(self):
+        """Return a string representation of the Stipend object."""
         return f'<Stipend {self.name}>'

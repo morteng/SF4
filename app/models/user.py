@@ -1,8 +1,9 @@
 from app.extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-# AI: add docstrings to each class and method AI!
+
 class User(db.Model, UserMixin):
+    """User model representing a user in the system."""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
@@ -12,9 +13,11 @@ class User(db.Model, UserMixin):
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
 
     def set_password(self, password):
+        """Set the user's password using a hashed value."""
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
+        """Check if the provided password matches the stored hash."""
         return check_password_hash(self.password_hash, password)
     
     # Flask-Login required properties and methods are now provided by UserMixin

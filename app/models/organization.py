@@ -1,6 +1,7 @@
 from app.extensions import db
-# AI: add docstrings to each class and method
+
 class Organization(db.Model):
+    """Organization model representing an organization in the system."""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
@@ -9,9 +10,11 @@ class Organization(db.Model):
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
 
     def __repr__(self):
+        """Return a string representation of the Organization object."""
         return f'<Organization {self.name}>'
 
     def to_dict(self):
+        """Convert the Organization object to a dictionary."""
         return {
             'id': self.id,
             'name': self.name,
