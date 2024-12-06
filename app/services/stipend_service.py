@@ -20,6 +20,8 @@ def delete_stipend(stipend):
         db.session.rollback()
 
 def create_stipend(data):
+    if Stipend.query.filter_by(name=data['name']).first():
+        return None  # or raise an exception, depending on your preference
     new_stipend = Stipend(**data)
     db.session.add(new_stipend)
     db.session.commit()

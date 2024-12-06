@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField, BooleanField, PasswordField
-from wtforms.validators import DataRequired, Length, Email
+from wtforms.validators import DataRequired, Length, Email, ValidationError
+from app.models.stipend import Stipend
 
 class OrganizationForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
@@ -18,6 +19,11 @@ class StipendForm(FlaskForm):
     application_deadline = StringField('Application Deadline')
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
+
+    def validate_name(self, name):
+        stipend = Stipend.query.filter_by(name=name.data).first()
+        if stipend:
+            raise ValidationError('Stipend with this name already exists.')
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])

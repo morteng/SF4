@@ -33,7 +33,6 @@ def create():
         abort(403)
     form = StipendForm()
     if form.validate_on_submit():
-        print(f"Form data: {form.data}")  # Debugging statement
         new_stipend_data = {
             'name': form.name.data,
             'summary': form.summary.data,
@@ -45,8 +44,11 @@ def create():
             'open_for_applications': form.open_for_applications.data
         }
         new_stipend = create_stipend(new_stipend_data)
-        flash('Stipend created successfully.', 'success')
-        return redirect(url_for('admin_stipend.index'))
+        if new_stipend:
+            flash('Stipend created successfully.', 'success')
+            return redirect(url_for('admin_stipend.index'))
+        else:
+            flash('Stipend with this name already exists.', 'danger')
     return render_template('admin/stipend/create.html', form=form)
 
 @admin_stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
