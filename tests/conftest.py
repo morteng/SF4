@@ -10,17 +10,19 @@ def app():
 
     # Create an application context before running tests
     with app.app_context():
+        from app.models import init_models
+        init_models(app)  # Ensure models are initialized
+        _db.create_all()  # Create all tables
+
         yield app
+
+        # Drop all tables after tests are done
+        _db.drop_all()
 
 @pytest.fixture(scope='session')
 def db(app):
     """Create a new database for the test session."""
-    _db.create_all()
-
-    yield _db
-
-    # Drop all tables after tests are done
-    _db.drop_all()
+    return _db
 
 @pytest.fixture(scope='function')
 def session(db, request):

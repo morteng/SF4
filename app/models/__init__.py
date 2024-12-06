@@ -1,10 +1,11 @@
 from .user import User
-from .stipend import Stipend
-from .tag import Tag
-from .organization import Organization
 from .bot import Bot
 from .notification import Notification
+from .organization import Organization
+from .stipend import Stipend
+from .tag import Tag
 
 def init_models(app):
-    # Maybe perform some initialization here if needed
-    pass
+    from app.extensions import db
+    with app.app_context():
+        db.create_all()
