@@ -9,8 +9,7 @@ from .routes.admin.auth_routes import auth_bp
 from .routes.admin.__init__ import register_admin_blueprints
 from .routes.user_routes import user_bp
 from .routes.visitor_routes import visitor_bp
-
-# AI ensure db file is created if it does not already exist, and make sure tables are created and default admin user is added. read all the impåortant values from .env file (it's there even if you cannot see it). AI!
+import os
 
 def create_app(config_name='development'):
     app = Flask(__name__)
@@ -26,9 +25,25 @@ def create_app(config_name='development'):
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    # Initialize models
+    # Ensure the database file exists and tables are created
     with app.app_context():
         init_models(app)
+        db.create_all()
+
+        # Add default admin user if it does not exist
+        admin_username = os.getenv('ADMIN_USERNAME')
+        admin_password = os.getenv('ADMIN_PASSWORD')
+        admin_email = os.getenv('ADMIN_EMAIL')
+
+        if not User.query.filter_by(username=admin_username).first():
+            new_admin = User(
+                username=admin_username,
+                email=admin_email,
+                is_admin=True
+            )
+            new_admin.set_password(admin_password)
+            db.session.add(new_admin)
+            db.session.commit()
 
     # Register blueprints
     app.register_blueprint(api_bp)
