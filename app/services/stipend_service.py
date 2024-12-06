@@ -24,6 +24,7 @@ def create_stipend(data):
     if Stipend.query.filter_by(name=data['name']).first():
         print("Stipend with this name already exists.")
         return None  # or raise an exception, depending on your preference
+    
     try:
         application_deadline = data.get('application_deadline')
         if application_deadline:
@@ -33,8 +34,10 @@ def create_stipend(data):
     except ValueError as e:
         print(f"Invalid application deadline: {e}")  # Debugging statement
         return None
+    
     new_stipend = Stipend(**data)
     db.session.add(new_stipend)
+    
     try:
         db.session.commit()
         print("Stipend added to the database successfully.")  # Debugging statement
@@ -59,6 +62,7 @@ def update_stipend(stipend, data):
     stipend.homepage_url = data.get('homepage_url', stipend.homepage_url)
     stipend.application_procedure = data.get('application_procedure', stipend.application_procedure)
     stipend.eligibility_criteria = data.get('eligibility_criteria', stipend.eligibility_criteria)
+    
     try:
         application_deadline = data.get('application_deadline')
         if application_deadline:
@@ -68,5 +72,14 @@ def update_stipend(stipend, data):
     except ValueError as e:
         print(str(e))
         return None
+    
     stipend.open_for_applications = data.get('open_for_applications', stipend.open_for_applications)
-    db.session.commit()
+    
+    try:
+        db.session.commit()
+        print("Stipend updated successfully.")  # Debugging statement
+        return True
+    except SQLAlchemyError as e:
+        print(f"Database error: {e}")  # Debugging statement
+        db.session.rollback()
+        return False
