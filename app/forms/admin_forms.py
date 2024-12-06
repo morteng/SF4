@@ -30,4 +30,9 @@ class TagForm(FlaskForm):
     category = StringField('Category', validators=[DataRequired()])
     submit = SubmitField('Save')
 
-# Create UserForm AI!
+class UserForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(max=255)])
+    email = StringField('Email', validators=[DataRequired(), Length(max=255)])
+    password = StringField('Password', validators=[DataRequired()])
+    is_admin = BooleanField('Is Admin')
+    submit = SubmitField('Save')
