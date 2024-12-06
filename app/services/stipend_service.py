@@ -1,6 +1,5 @@
 from app.models.stipend import Stipend
 from sqlalchemy.exc import SQLAlchemyError
-from app.extensions import db
 from datetime import datetime
 
 def get_all_stipends():
@@ -27,8 +26,8 @@ def create_stipend(data, session):
     
     try:
         application_deadline = data.get('application_deadline')
-        if application_deadline and isinstance(application_deadline, datetime):
-            pass
+        if application_deadline and isinstance(application_deadline, str):
+            data['application_deadline'] = datetime.strptime(application_deadline, '%Y-%m-%d %H:%M:%S')
         else:
             data['application_deadline'] = None
     except ValueError as e:
@@ -65,8 +64,8 @@ def update_stipend(stipend, data):
     
     try:
         application_deadline = data.get('application_deadline')
-        if application_deadline and isinstance(application_deadline, datetime):
-            pass
+        if application_deadline and isinstance(application_deadline, str):
+            stipend.application_deadline = datetime.strptime(application_deadline, '%Y-%m-%d %H:%M:%S')
         else:
             stipend.application_deadline = None
     except ValueError as e:

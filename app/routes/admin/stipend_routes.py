@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, abort, r
 from flask_login import login_required, current_user
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import get_all_stipends, delete_stipend, create_stipend, get_stipend_by_id, update_stipend
+from app.extensions import db
 
 # Ensure the blueprint name is 'stipend_bp'
 stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
@@ -21,7 +22,7 @@ def delete(id):
         abort(403)
     stipend = get_stipend_by_id(id)
     if stipend:
-        delete_stipend(stipend)
+        delete_stipend(stipend, db.session)
         flash('Stipend deleted.', 'success')
     else:
         flash('Stipend not found.', 'danger')
@@ -50,7 +51,7 @@ def create():
         }
         print(f"Form data: {new_stipend_data}")  # Debugging statement
         
-        new_stipend = create_stipend(new_stipend_data)
+        new_stipend = create_stipend(new_stipend_data, db.session)
         
         if new_stipend:
             flash('Stipend created successfully.', 'success')
