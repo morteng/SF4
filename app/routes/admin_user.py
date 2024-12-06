@@ -1,14 +1,15 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required
 from app.forms.admin_forms import UserForm
-from app.services.user_service import create_user, get_user_by_id, update_user, delete_user, get_all_users  # Added get_all_users here
+from app.services.user_service import create_user, get_user_by_id, update_user, delete_user, get_all_users  
 from app.extensions import db
-# AI: add docstrings to all functions, methods, and classes
+
 admin_user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
 
 @admin_user_bp.route('/users/create', methods=['GET', 'POST'])
 @login_required
 def create():
+    """Handle creation of a new user."""
     form = UserForm()
     if form.validate_on_submit():
         user = create_user(form.username.data, form.password_hash.data, form.email.data, form.is_admin.data)
@@ -18,6 +19,7 @@ def create():
 @admin_user_bp.route('/users/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
+    """Handle deletion of a user by ID."""
     user = get_user_by_id(id)
     if user:
         db.session.delete(user)
@@ -28,12 +30,14 @@ def delete(id):
 @admin_user_bp.route('/users/', methods=['GET'])
 @login_required
 def index():
+    """Display the dashboard for users."""
     users = get_all_users()
     return render_template('admin/user_dashboard.html', users=users)
 
 @admin_user_bp.route('/users/update/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update(id):
+    """Handle updating a user by ID."""
     user = get_user_by_id(id)
     if not user:
         return "User not found", 404

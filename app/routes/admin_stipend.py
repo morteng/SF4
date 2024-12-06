@@ -3,12 +3,13 @@ from flask_login import login_required
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import create_stipend, get_stipend_by_id, get_all_stipends, update_stipend, delete_stipend
 from app.extensions import db
-# AI: add docstrings to all functions, methods, and classes
+
 admin_stipend_bp = Blueprint('admin_stipend', __name__)
 
 @admin_stipend_bp.route('/stipends/create', methods=['GET', 'POST'])
 @login_required
 def create():
+    """Handle creation of a new stipend."""
     form = StipendForm()
     if form.validate_on_submit():
         stipend = create_stipend(form.data)
@@ -18,6 +19,7 @@ def create():
 @admin_stipend_bp.route('/stipends/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
+    """Handle deletion of a stipend by ID."""
     stipend = get_stipend_by_id(id)
     if stipend:
         db.session.delete(stipend)
@@ -28,12 +30,14 @@ def delete(id):
 @admin_stipend_bp.route('/stipends/', methods=['GET'])
 @login_required
 def index():
+    """Display the dashboard for stipends."""
     stipends = get_all_stipends()
     return render_template('admin/stipend_dashboard.html', stipends=stipends)
 
 @admin_stipend_bp.route('/stipends/update/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update(id):
+    """Handle updating a stipend by ID."""
     stipend = get_stipend_by_id(id)
     if not stipend:
         return "Stipend not found", 404

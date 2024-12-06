@@ -2,10 +2,11 @@ from app.models.tag import Tag
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
 import logging
-# AI: add docstrings to all functions, methods, and classes
+
 logging.basicConfig(level=logging.ERROR)
 
 def get_all_tags():
+    """Retrieve all tags."""
     try:
         return Tag.query.all()
     except SQLAlchemyError as e:
@@ -13,6 +14,7 @@ def get_all_tags():
         return []
 
 def delete_tag(tag):
+    """Delete the specified tag."""
     try:
         db.session.delete(tag)
         db.session.commit()
@@ -21,6 +23,7 @@ def delete_tag(tag):
         db.session.rollback()
 
 def create_tag(data):
+    """Create a new tag."""
     try:
         new_tag = Tag(**data)
         db.session.add(new_tag)
@@ -32,6 +35,7 @@ def create_tag(data):
         return None
 
 def get_tag_by_id(tag_id):
+    """Retrieve a tag by its ID."""
     try:
         return Tag.query.get(tag_id)
     except SQLAlchemyError as e:
@@ -39,6 +43,7 @@ def get_tag_by_id(tag_id):
         return None
 
 def update_tag(tag, data):
+    """Update the specified tag with new data."""
     try:
         for key, value in data.items():
             setattr(tag, key, value)

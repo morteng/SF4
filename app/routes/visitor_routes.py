@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from app.forms.user_forms import LoginForm, RegisterForm
 from app.models.user import User
 from app.extensions import db
-# AI: add docstrings to all functions, methods, and classes
+
 visitor_bp = Blueprint('visitor', __name__)
 
 @visitor_bp.route('/', methods=['GET'])

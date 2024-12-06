@@ -2,11 +2,12 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from app.forms.admin_forms import BotForm
 from app.services.bot_service import create_bot, get_bot_by_id, run_bot, get_all_bots, update_bot
 from app.extensions import db
-# AI: add docstrings to all functions, methods, and classes
+
 admin_bot_bp = Blueprint('admin_bot', __name__)
 
 @admin_bot_bp.route('/bots/create', methods=['GET', 'POST'])
 def create():
+    """Handle creation of a new bot."""
     form = BotForm()
     if form.validate_on_submit():
         bot = create_bot(form.name.data, form.description.data, 'idle')
@@ -15,6 +16,7 @@ def create():
 
 @admin_bot_bp.route('/bots/delete/<int:id>', methods=['POST'])
 def delete(id):
+    """Handle deletion of a bot by ID."""
     bot = get_bot_by_id(id)
     if bot:
         db.session.delete(bot)
@@ -24,11 +26,13 @@ def delete(id):
 
 @admin_bot_bp.route('/bots/', methods=['GET'])
 def index():
+    """Display the dashboard for bots."""
     bots = get_all_bots()
     return render_template('admin/bot_dashboard.html', bots=bots)
 
 @admin_bot_bp.route('/bots/run/<int:id>', methods=['POST'])
 def run(id):
+    """Handle running a bot by ID."""
     bot = get_bot_by_id(id)
     if bot:
         run_bot(bot)
@@ -37,6 +41,7 @@ def run(id):
 
 @admin_bot_bp.route('/bots/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
+    """Handle updating a bot by ID."""
     bot = get_bot_by_id(id)
     if not bot:
         return "Bot not found", 404

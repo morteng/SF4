@@ -2,19 +2,22 @@ from app.models.user import User
 from app.extensions import db
 import os
 from sqlalchemy.exc import IntegrityError
-# AI: add docstrings to all functions, methods, and classes AI!
 
 def get_user_by_id(user_id):
+    """Retrieve a user by their ID."""
     return User.query.get(user_id)
 
 def delete_user(user):
+    """Delete the specified user."""
     db.session.delete(user)
     db.session.commit()
 
 def get_all_users():
+    """Retrieve all users."""
     return User.query.all()
 
 def create_user(form_data):
+    """Create a new user."""
     username = form_data['username']
     email = form_data['email']
     password = form_data['password']
@@ -33,6 +36,7 @@ def create_user(form_data):
     return new_user
 
 def update_user(user, form_data):
+    """Update the specified user with new data."""
     user.username = form_data['username']
     user.email = form_data['email']
     user.is_admin = form_data.get('is_admin', False)
@@ -40,8 +44,8 @@ def update_user(user, form_data):
         user.set_password(form_data['password'])
     db.session.commit()
 
-
 def ensure_default_admin_exists():
+    """Ensure that a default admin user exists."""
     admin_username = os.getenv('ADMIN_USERNAME', 'admin')
     admin_email = os.getenv('ADMIN_EMAIL', 'admin@example.com')
     admin_password = os.getenv('ADMIN_PASSWORD', 'admin123')
