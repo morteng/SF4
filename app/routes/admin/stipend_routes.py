@@ -7,7 +7,7 @@ from datetime import datetime
 import logging
 
 # Ensure the blueprint name is 'stipend_bp'
-stipend_bp = Blueprint('admin.admin_stipend', __name__, url_prefix='/stipends')
+stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
 
 @stipend_bp.route('/', methods=['GET'])
 @login_required
@@ -28,7 +28,7 @@ def delete(id):
         flash('Stipend deleted.', 'success')
     else:
         flash('Stipend not found.', 'danger')
-    return redirect(url_for('admin.admin_stipend.index'))
+    return redirect(url_for('admin_stipend.index'))
 
 @stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
@@ -59,7 +59,7 @@ def create():
                 
                 if new_stipend:
                     flash('Stipend created successfully.', 'success')
-                    return redirect(url_for('admin.admin_stipend.index'))
+                    return redirect(url_for('admin_stipend.index'))
                 else:
                     flash('Stipend with this name already exists or invalid application deadline.', 'danger')
             except Exception as e:
@@ -70,7 +70,7 @@ def create():
                 for error in errors:
                     flash(f"{field}: {error}", 'danger')
     
-    return render_template('admin/stipend_form.html', form=form, action=url_for('admin.admin_stipend.create'))
+    return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.create'))
 
 @stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -80,7 +80,7 @@ def update(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
         flash('Stipend not found.', 'danger')
-        return redirect(url_for('admin.admin_stipend.index'))
+        return redirect(url_for('admin_stipend.index'))
     form = StipendForm(obj=stipend)
     
     if request.method == 'POST':
@@ -103,7 +103,7 @@ def update(id):
                 
                 if update_stipend(stipend, update_data):
                     flash('Stipend updated successfully.', 'success')
-                    return redirect(url_for('admin.admin_stipend.index'))
+                    return redirect(url_for('admin_stipend.index'))
                 else:
                     flash('Invalid application deadline.', 'danger')
             except Exception as e:
@@ -114,4 +114,4 @@ def update(id):
                 for error in errors:
                     flash(f"{field}: {error}", 'danger')
     
-    return render_template('admin/stipend_form.html', form=form, stipend=stipend, action=url_for('admin.admin_stipend.update', id=id))
+    return render_template('admin/stipend_form.html', form=form, stipend=stipend, action=url_for('admin_stipend.update', id=id))
