@@ -15,6 +15,14 @@ from app.routes.admin_user import admin_user_bp
 
 def create_app(config_name=None):
     load_dotenv()
+    
+    # Print environment variables for debugging
+    print(f"FLASK_CONFIG: {os.getenv('FLASK_CONFIG')}")
+    print(f"DATABASE_URL: {os.getenv('DATABASE_URL')}")
+    print(f"ADMIN_USERNAME: {os.getenv('ADMIN_USERNAME')}")
+    print(f"ADMIN_PASSWORD: {os.getenv('ADMIN_PASSWORD')}")
+    print(f"ADMIN_EMAIL: {os.getenv('ADMIN_EMAIL')}")
+
     app = Flask(__name__)
     
     if config_name is None:
