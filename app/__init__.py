@@ -48,6 +48,18 @@ def create_app(config_name=None):
     
     with app.app_context():
         print(f"Creating Database URL: {app.config['SQLALCHEMY_DATABASE_URI']}")
+        
+        # Ensure the instance directory exists
+        instance_path = os.path.dirname(app.config['SQLALCHEMY_DATABASE_URI'].split('///')[1])
+        if not os.path.exists(instance_path):
+            os.makedirs(instance_path)
+        
+        # Create the database file if it doesn't exist
+        db_file_path = app.config['SQLALCHEMY_DATABASE_URI'].split('///')[1]
+        if not os.path.isfile(db_file_path):
+            with open(db_file_path, 'w') as f:
+                pass  # Creating an empty file
+
         db.create_all()
         
         # Ensure default admin user exists
