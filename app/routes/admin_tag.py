@@ -3,7 +3,7 @@ from flask_login import login_required
 from app.forms.admin_forms import TagForm
 from app.services.tag_service import create_tag, get_tag_by_id, get_all_tags, update_tag, delete_tag
 from app.extensions import db
-
+# AI: add docstrings to all functions, methods, and classes
 admin_tag_bp = Blueprint('admin_tag', __name__, url_prefix='/admin/tags')
 
 @admin_tag_bp.route('/tags/create', methods=['GET', 'POST'])

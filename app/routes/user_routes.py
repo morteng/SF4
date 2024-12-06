@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from app.forms.user_forms import ProfileForm, LoginForm
 from app.services.user_service import update_user
-
+# AI: add docstrings to all functions, methods, and classes
 user_bp = Blueprint('user', __name__)
 
 @user_bp.route('/profile', methods=['GET'])

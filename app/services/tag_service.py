@@ -2,7 +2,7 @@ from app.models.tag import Tag
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
 import logging
-
+# AI: add docstrings to all functions, methods, and classes
 logging.basicConfig(level=logging.ERROR)
 
 def get_all_tags():

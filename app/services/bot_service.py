@@ -1,6 +1,6 @@
 from app.models.bot import Bot
 from app.extensions import db
-
+# AI: add docstrings to all functions, methods, and classes
 def create_bot(name, description, status):
     bot = Bot(name=name, description=description, status=status)
     return bot

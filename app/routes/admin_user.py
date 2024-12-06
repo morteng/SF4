@@ -3,7 +3,7 @@ from flask_login import login_required
 from app.forms.admin_forms import UserForm
 from app.services.user_service import create_user, get_user_by_id, update_user, delete_user, get_all_users  # Added get_all_users here
 from app.extensions import db
-
+# AI: add docstrings to all functions, methods, and classes
 admin_user_bp = Blueprint('admin_user', __name__, url_prefix='/admin/users')
 
 @admin_user_bp.route('/users/create', methods=['GET', 'POST'])

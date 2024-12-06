@@ -1,7 +1,7 @@
 from app.models.organization import Organization
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
-
+# AI: add docstrings to all functions, methods, and classes
 def get_all_organizations():
     try:
         return Organization.query.all()

@@ -2,6 +2,7 @@ from app.models.user import User
 from app.extensions import db
 import os
 from sqlalchemy.exc import IntegrityError
+# AI: add docstrings to all functions, methods, and classes AI!
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)
@@ -38,6 +39,7 @@ def update_user(user, form_data):
     if form_data['password']:
         user.set_password(form_data['password'])
     db.session.commit()
+
 
 def ensure_default_admin_exists():
     admin_username = os.getenv('ADMIN_USERNAME', 'admin')

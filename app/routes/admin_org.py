@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import create_organization, get_organization_by_id, get_all_organizations, update_organization
 from app.extensions import db
-
+# AI: add docstrings to all functions, methods, and classes
 admin_org_bp = Blueprint('admin_org', __name__, url_prefix='/admin/organizations')
 
 @admin_org_bp.route('/create', methods=['GET', 'POST'])

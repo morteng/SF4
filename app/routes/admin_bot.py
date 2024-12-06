@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from app.forms.admin_forms import BotForm
 from app.services.bot_service import create_bot, get_bot_by_id, run_bot, get_all_bots, update_bot
 from app.extensions import db
-
+# AI: add docstrings to all functions, methods, and classes
 admin_bot_bp = Blueprint('admin_bot', __name__)
 
 @admin_bot_bp.route('/bots/create', methods=['GET', 'POST'])

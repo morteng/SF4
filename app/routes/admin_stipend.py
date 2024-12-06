@@ -3,7 +3,7 @@ from flask_login import login_required
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import create_stipend, get_stipend_by_id, get_all_stipends, update_stipend, delete_stipend
 from app.extensions import db
-
+# AI: add docstrings to all functions, methods, and classes
 admin_stipend_bp = Blueprint('admin_stipend', __name__)
 
 @admin_stipend_bp.route('/stipends/create', methods=['GET', 'POST'])
