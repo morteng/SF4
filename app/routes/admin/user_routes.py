@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required
 from app.forms.admin_forms import UserForm
 from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user
-
+# AI: add docstrings to each class, method and function AI!
 admin_user_bp = Blueprint('admin_user', __name__)
 
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
