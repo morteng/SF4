@@ -35,12 +35,12 @@ def create():
     if form.validate_on_submit():
         new_stipend_data = {
             'name': form.name.data,
-            'summary': form.summary.data,
-            'description': form.description.data,
-            'homepage_url': form.homepage_url.data,
-            'application_procedure': form.application_procedure.data,
-            'eligibility_criteria': form.eligibility_criteria.data,
-            'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S'),
+            'summary': form.summary.data or None,
+            'description': form.description.data or None,
+            'homepage_url': form.homepage_url.data or None,
+            'application_procedure': form.application_procedure.data or None,
+            'eligibility_criteria': form.eligibility_criteria.data or None,
+            'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S') if form.application_deadline.data else None,
             'open_for_applications': form.open_for_applications.data
         }
         new_stipend = create_stipend(new_stipend_data)
@@ -64,12 +64,12 @@ def update(id):
     if form.validate_on_submit():
         update_data = {
             'name': form.name.data,
-            'summary': form.summary.data,
-            'description': form.description.data,
-            'homepage_url': form.homepage_url.data,
-            'application_procedure': form.application_procedure.data,
-            'eligibility_criteria': form.eligibility_criteria.data,
-            'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S'),
+            'summary': form.summary.data or stipend.summary,
+            'description': form.description.data or stipend.description,
+            'homepage_url': form.homepage_url.data or stipend.homepage_url,
+            'application_procedure': form.application_procedure.data or stipend.application_procedure,
+            'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
+            'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S') if form.application_deadline.data else stipend.application_deadline,
             'open_for_applications': form.open_for_applications.data
         }
         if update_stipend(stipend, update_data):

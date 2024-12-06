@@ -24,7 +24,11 @@ def create_stipend(data):
     if Stipend.query.filter_by(name=data['name']).first():
         return None  # or raise an exception, depending on your preference
     try:
-        data['application_deadline'] = datetime.strptime(data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+        application_deadline = data.get('application_deadline')
+        if application_deadline:
+            data['application_deadline'] = datetime.strptime(application_deadline, '%Y-%m-%d %H:%M:%S')
+        else:
+            data['application_deadline'] = None
     except ValueError as e:
         print(str(e))
         return None
@@ -43,15 +47,19 @@ def get_stipend_by_id(stipend_id):
 
 def update_stipend(stipend, data):
     stipend.name = data['name']
-    stipend.summary = data['summary']
-    stipend.description = data['description']
-    stipend.homepage_url = data['homepage_url']
-    stipend.application_procedure = data['application_procedure']
-    stipend.eligibility_criteria = data['eligibility_criteria']
+    stipend.summary = data.get('summary', stipend.summary)
+    stipend.description = data.get('description', stipend.description)
+    stipend.homepage_url = data.get('homepage_url', stipend.homepage_url)
+    stipend.application_procedure = data.get('application_procedure', stipend.application_procedure)
+    stipend.eligibility_criteria = data.get('eligibility_criteria', stipend.eligibility_criteria)
     try:
-        stipend.application_deadline = datetime.strptime(data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+        application_deadline = data.get('application_deadline')
+        if application_deadline:
+            stipend.application_deadline = datetime.strptime(application_deadline, '%Y-%m-%d %H:%M:%S')
+        else:
+            stipend.application_deadline = None
     except ValueError as e:
         print(str(e))
         return None
-    stipend.open_for_applications = data['open_for_applications']
+    stipend.open_for_applications = data.get('open_for_applications', stipend.open_for_applications)
     db.session.commit()
