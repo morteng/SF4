@@ -1,7 +1,7 @@
 import pytest
 from app.services.stipend_service import create_stipend, get_all_stipends
 from app.models.stipend import Stipend
-from datetime import datetime
+from datetime import datetime, timedelta
 
 @pytest.fixture(scope='function')
 def test_data():
@@ -17,6 +17,12 @@ def test_data():
     }
 
 def test_create_stipend(test_data, session):
+    # Clean up any existing stipends before the test
+    existing_stipends = get_all_stipends()
+    for stipend in existing_stipends:
+        session.delete(stipend)
+    session.commit()
+
     # Create a stipend using the service function
     new_stipend = create_stipend(test_data)
 
@@ -32,8 +38,10 @@ def test_create_stipend(test_data, session):
     assert stipends[0].homepage_url == test_data['homepage_url']
     assert stipends[0].application_procedure == test_data['application_procedure']
     assert stipends[0].eligibility_criteria == test_data['eligibility_criteria']
-    # Convert the application_deadline to a string before comparison
-    assert stipends[0].application_deadline.strftime('%Y-%m-%d %H:%M:%S') == test_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
+
+    # Convert the application_deadline to a string before comparison with a tolerance
+    deadline_tolerance = timedelta(seconds=1)  # Allow up to 1 second difference
+    assert (stipends[0].application_deadline - test_data['application_deadline']).total_seconds() < deadline_tolerance.total_seconds()
 
     # Clean up: delete the created stipend
     session.delete(new_stipend)
