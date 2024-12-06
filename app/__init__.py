@@ -4,7 +4,6 @@ from app.extensions import db
 from app.config import config_by_name
 from app.services.user_service import ensure_default_admin_exists
 from flask_login import LoginManager
-from dotenv import load_dotenv
 
 # Import your blueprints
 from app.routes.admin_bot import admin_bot_bp
@@ -60,10 +59,15 @@ def create_app(config_name=None):
                 pass  # Creating an empty file
 
         print(f"Database file path: {db_file_path}")
+        print(f"Instance path: {app.instance_path}")
         print(f"Does directory exist? {os.path.exists(os.path.dirname(db_file_path))}")
         print(f"Does database file exist? {os.path.isfile(db_file_path)}")
+        print(f"File permissions: {oct(os.stat(db_file_path).st_mode & 0o777)}")
 
-        db.create_all()
+        try:
+            db.create_all()
+        except Exception as e:
+            print(f"Error creating tables: {e}")
         
         # Ensure default admin user exists
         ensure_default_admin_exists()
