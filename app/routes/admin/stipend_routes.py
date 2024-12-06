@@ -71,7 +71,7 @@ def create():
         # Debugging statement to print form errors
         print(f"Form errors: {form.errors}")  # Debugging statement
     
-    return render_template('admin/stipend_form.html', form=form, action=url_for('admin.admin_stipend.create'))
+    return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.create'))
 
 @stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
 @login_required

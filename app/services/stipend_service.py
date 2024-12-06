@@ -5,7 +5,9 @@ from app.extensions import db  # Importing db from extensions
 
 def get_all_stipends():
     try:
-        return Stipend.query.all()
+        stipends = Stipend.query.all()
+        print(f"Retrieved {len(stipends)} stipends.")  # Debugging statement
+        return stipends
     except SQLAlchemyError as e:
         # Log the error
         print(str(e))
@@ -15,6 +17,7 @@ def delete_stipend(stipend, session):
     try:
         session.delete(stipend)
         session.commit()
+        print("Stipend deleted successfully.")  # Debugging statement
     except SQLAlchemyError as e:
         # Log the error and possibly handle it more gracefully
         print(f"Error deleting stipend: {e}")
@@ -48,7 +51,12 @@ def create_stipend(data, session):
 
 def get_stipend_by_id(stipend_id):
     try:
-        return Stipend.query.get(stipend_id)
+        stipend = Stipend.query.get(stipend_id)
+        if stipend:
+            print(f"Stipend found with ID {stipend_id}: {stipend.name}")  # Debugging statement
+        else:
+            print(f"No stipend found with ID {stipend_id}.")  # Debugging statement
+        return stipend
     except SQLAlchemyError as e:
         # Log the error
         print(str(e))
