@@ -53,6 +53,10 @@ def register():
 @login_required
 def logout():
     """Handle user logout."""
-    logout_user()
-    flash('You have been logged out.', 'info')
-    return redirect(url_for('visitor.index'))
+    print(f"Request method: {request.method}")  # Debugging statement
+    if request.method == 'POST':
+        logout_user()
+        flash('You have been logged out.', 'info')
+        return redirect(url_for('visitor.index'))
+    else:
+        return "Method not allowed", 405
