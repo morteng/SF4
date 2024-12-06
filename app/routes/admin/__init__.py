@@ -1,18 +1,20 @@
 from flask import Blueprint
+from .auth_routes import auth_bp
+from .bot_routes import bot_bp
+from .organization_routes import organization_bp
+from .stipend_routes import stipend_bp
+from .tag_routes import tag_bp
+from .user_routes import user_bp
 
-# Import individual admin route modules
-from .bot_routes import admin_bot_bp
-from .organization_routes import org_bp as admin_org_bp
-from .stipend_routes import admin_stipend_bp
-from .tag_routes import tag_bp as admin_tag_bp
-from .user_routes import user_bp as admin_user_bp
-from .dashboard_routes import dashboard_bp  # Import the new dashboard blueprint
-
-# Register blueprints
 def register_admin_blueprints(app):
-    app.register_blueprint(admin_bot_bp, url_prefix='/admin/bots')
-    app.register_blueprint(admin_org_bp, url_prefix='/admin/organizations')
-    app.register_blueprint(admin_stipend_bp, url_prefix='/admin/stipends')  # Ensure this is correct
-    app.register_blueprint(admin_tag_bp, url_prefix='/admin/tags')
-    app.register_blueprint(admin_user_bp, url_prefix='/admin/users')
-    app.register_blueprint(dashboard_bp, url_prefix='/admin')  # Register the dashboard blueprint
+    admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
+    
+    # Register sub-blueprints
+    admin_bp.register_blueprint(auth_bp)
+    admin_bp.register_blueprint(bot_bp)
+    admin_bp.register_blueprint(organization_bp)
+    admin_bp.register_blueprint(stipend_bp)
+    admin_bp.register_blueprint(tag_bp)
+    admin_bp.register_blueprint(user_bp)
+    
+    app.register_blueprint(admin_bp)

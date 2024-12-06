@@ -4,8 +4,6 @@ from .config import config_by_name
 from .extensions import db, login_manager
 from .models import init_models
 from .models.user import User
-from .routes.api import api_bp
-from .routes.admin.auth_routes import auth_bp
 from .routes.admin.__init__ import register_admin_blueprints
 from .routes.user_routes import user_bp
 from .routes.visitor_routes import visitor_bp
@@ -25,30 +23,15 @@ def create_app(config_name='development'):
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    # Ensure the database file exists and tables are created
+    # Ensure the database is initialized and the admin user is set up
     with app.app_context():
-        init_models(app)
-        db.create_all()
-
-        # Add default admin user if it does not exist
-        admin_username = os.getenv('ADMIN_USERNAME')
-        admin_password = os.getenv('ADMIN_PASSWORD')
-        admin_email = os.getenv('ADMIN_EMAIL')
-
-        if not User.query.filter_by(username=admin_username).first():
-            new_admin = User(
-                username=admin_username,
-                email=admin_email,
-                is_admin=True
-            )
-            new_admin.set_password(admin_password)
-            db.session.add(new_admin)
-            db.session.commit()
+        init_models()
+        from app.utils import init_admin_user
+        init_admin_user()
 
     # Register blueprints
-    
-    register_admin_blueprints(app)  # This function handles all admin-related blueprints
-    app.register_blueprint(user_bp)
+    register_admin_blueprints(app)
+    app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(visitor_bp)
 
     return app
