@@ -19,4 +19,8 @@ class BotForm(FlaskForm):
     status = StringField('Status', validators=[DataRequired()])
     submit = SubmitField('Save')
 
-# create OrganizationForm AI!
+class OrganizationForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(max=255)])
+    description = TextAreaField('Description')
+    homepage_url = URLField('Homepage URL')
+    submit = SubmitField('Save')
