@@ -29,3 +29,5 @@ class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=255)])
     category = StringField('Category', validators=[DataRequired()])
     submit = SubmitField('Save')
+
+# Create UserForm AI!
