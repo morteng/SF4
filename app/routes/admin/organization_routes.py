@@ -9,10 +9,23 @@ from urllib.parse import urlparse
 # Define the organization blueprint without url_prefix
 admin_org_bp = Blueprint('admin_org', __name__)
 
-#add docstrings to all functions AI!
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
+    """
+    Handle the creation of a new organization.
+    
+    If the request method is POST, it expects JSON data containing:
+    - name (str): The name of the organization.
+    - description (str): A brief description of the organization.
+    - homepage_url (str): The URL to the organization's homepage.
+    
+    Validates the input data and creates a new organization if valid.
+    
+    Returns:
+        jsonify: JSON response with the newly created organization's details and 201 status code on success.
+        abort: 400 error with description if input data is invalid.
+    """
     if request.method == 'POST':
         data = request.get_json()
         if not data:
@@ -49,6 +62,15 @@ def create():
 @admin_org_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
+    """
+    Delete an organization by its ID.
+    
+    Args:
+        id (int): The ID of the organization to be deleted.
+    
+    Returns:
+        redirect: Redirects to the index page with a success or danger flash message.
+    """
     organization = get_organization_by_id(id)
     if organization:
         delete_organization(organization)
@@ -60,12 +82,36 @@ def delete(id):
 @admin_org_bp.route('/', methods=['GET'])
 @login_required
 def index():
+    """
+    Display a list of all organizations.
+    
+    Returns:
+        render_template: Renders the index page with a list of organizations.
+    """
     organizations = get_all_organizations()
     return render_template('admin/organization/index.html', organizations=organizations)
 
 @admin_org_bp.route('/<int:id>', methods=['PUT'])
 @login_required
 def update(id):
+    """
+    Update an organization's details by its ID.
+    
+    Args:
+        id (int): The ID of the organization to be updated.
+    
+    If the request method is PUT, it expects JSON data containing:
+    - name (str): The new name of the organization.
+    - description (str): A new brief description of the organization.
+    - homepage_url (str): The new URL to the organization's homepage.
+    
+    Validates the input data and updates the organization if valid.
+    
+    Returns:
+        jsonify: JSON response with the updated organization's details and 200 status code on success.
+        abort: 400 error with description if input data is invalid.
+        abort: 404 error with description if the organization is not found.
+    """
     organization = get_organization_by_id(id)
     if not organization:
         abort(404, description='Organization not found.')
