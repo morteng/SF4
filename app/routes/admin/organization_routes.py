@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
 from flask_login import login_required
 from app.forms.admin_forms import OrganizationForm
-from app.services.organization_service import get_organization_by_id, delete_organization, get_all_abot_bporganizations, create_organization
+from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization
 from werkzeug.exceptions import abort
 from app.extensions import db
 from urllib.parse import urlparse
