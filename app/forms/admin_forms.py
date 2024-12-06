@@ -25,4 +25,7 @@ class OrganizationForm(FlaskForm):
     homepage_url = URLField('Homepage URL')
     submit = SubmitField('Save')
 
-#create TagForm AI!
+class TagForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(max=255)])
+    category = StringField('Category', validators=[DataRequired()])
+    submit = SubmitField('Save')
