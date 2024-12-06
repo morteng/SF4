@@ -9,6 +9,7 @@ from urllib.parse import urlparse
 # Define the organization blueprint without url_prefix
 admin_org_bp = Blueprint('admin_org', __name__)
 
+#add docstrings to all functions AI!
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
