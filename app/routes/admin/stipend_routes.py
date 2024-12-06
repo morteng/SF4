@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import get_all_stipends, delete_stipend, create_stipend, get_stipend_by_id, update_stipend
 
-admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
+admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
 
 @admin_stipend_bp.route('/', methods=['GET'])
 @login_required
@@ -43,9 +43,7 @@ def create():
             'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S') if form.application_deadline.data else None,
             'open_for_applications': form.open_for_applications.data
         }
-        print(f"Form data: {new_stipend_data}")  # Debugging statement
         new_stipend = create_stipend(new_stipend_data)
-        print(f"Result of create_stipend: {new_stipend}")  # Debugging statement
         if new_stipend:
             flash('Stipend created successfully.', 'success')
             return redirect(url_for('admin_stipend.index'))
