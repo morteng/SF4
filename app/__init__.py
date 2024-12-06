@@ -4,7 +4,7 @@ from flask import Flask
 from app.extensions import db
 from app.config import config_by_name
 from app.services.user_service import ensure_default_admin_exists
-from flask_login import LoginManager  # Added this import
+from flask_login import LoginManager
 
 # Import your blueprints
 from app.routes.admin_bot import admin_bot_bp
@@ -23,7 +23,7 @@ def create_app(config_name=None):
     
     # Initialize extensions
     db.init_app(app)
-    login_manager = LoginManager()  # This line is now correct
+    login_manager = LoginManager()
     login_manager.init_app(app)
     
     @login_manager.user_loader
@@ -39,6 +39,7 @@ def create_app(config_name=None):
     app.register_blueprint(admin_user_bp, url_prefix='/admin/users')
     
     with app.app_context():
+        print(f"Database URL: {app.config['SQLALCHEMY_DATABASE_URI']}")
         db.create_all()
         
         # Ensure default admin user exists
