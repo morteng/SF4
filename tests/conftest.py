@@ -32,7 +32,7 @@ def session(db, request):
     transaction = connection.begin()
 
     options = dict(bind=connection)
-    Session = scoped_session(sessionmaker(options=options))
+    Session = scoped_session(sessionmaker(bind=db.engine))
     session = Session()
 
     yield session
