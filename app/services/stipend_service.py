@@ -1,6 +1,7 @@
 from app.models.stipend import Stipend
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
+from app.extensions import db  # Importing db from extensions
 
 def get_all_stipends():
     try:
