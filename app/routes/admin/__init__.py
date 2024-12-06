@@ -2,7 +2,7 @@ from flask import Blueprint
 from .auth_routes import auth_bp
 from .bot_routes import admin_bot_bp  # Ensure this line is correct
 from .organization_routes import org_bp  # Corrected import name
-from .stipend_routes import stipend_bp
+from .stipend_routes import admin_stipend_bp as stipend_bp
 from .tag_routes import tag_bp
 from .user_routes import user_bp
 
