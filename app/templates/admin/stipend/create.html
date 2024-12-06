@@ -10,7 +10,34 @@
         {{ form.name.label }}<br>
         {{ form.name(size=32) }}
     </div>
-    <!-- Add other fields here -->
+    <div>
+        {{ form.summary.label }}<br>
+        {{ form.summary(size=64) }}
+    </div>
+    <div>
+        {{ form.description.label }}<br>
+        {{ form.description() }}
+    </div>
+    <div>
+        {{ form.homepage_url.label }}<br>
+        {{ form.homepage_url(size=64) }}
+    </div>
+    <div>
+        {{ form.application_procedure.label }}<br>
+        {{ form.application_procedure() }}
+    </div>
+    <div>
+        {{ form.eligibility_criteria.label }}<br>
+        {{ form.eligibility_criteria() }}
+    </div>
+    <div>
+        {{ form.application_deadline.label }}<br>
+        {{ form.application_deadline(size=32) }}
+    </div>
+    <div>
+        {{ form.open_for_applications.label }}<br>
+        {{ form.open_for_applications() }}
+    </div>
     <button type="submit">Create</button>
 </form>
 {% endblock %}

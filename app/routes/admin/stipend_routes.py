@@ -33,7 +33,18 @@ def create():
         abort(403)
     form = StipendForm()
     if form.validate_on_submit():
-        new_stipend = create_stipend(form.data)
+        print(f"Form data: {form.data}")  # Debugging statement
+        new_stipend_data = {
+            'name': form.name.data,
+            'summary': form.summary.data,
+            'description': form.description.data,
+            'homepage_url': form.homepage_url.data,
+            'application_procedure': form.application_procedure.data,
+            'eligibility_criteria': form.eligibility_criteria.data,
+            'application_deadline': form.application_deadline.data,
+            'open_for_applications': form.open_for_applications.data
+        }
+        new_stipend = create_stipend(new_stipend_data)
         flash('Stipend created successfully.', 'success')
         return redirect(url_for('admin_stipend.index'))
     return render_template('admin/stipend/create.html', form=form)
@@ -49,7 +60,17 @@ def update(id):
         return redirect(url_for('admin_stipend.index'))
     form = StipendForm(obj=stipend)
     if form.validate_on_submit():
-        update_stipend(stipend, form.data)
+        update_data = {
+            'name': form.name.data,
+            'summary': form.summary.data,
+            'description': form.description.data,
+            'homepage_url': form.homepage_url.data,
+            'application_procedure': form.application_procedure.data,
+            'eligibility_criteria': form.eligibility_criteria.data,
+            'application_deadline': form.application_deadline.data,
+            'open_for_applications': form.open_for_applications.data
+        }
+        update_stipend(stipend, update_data)
         flash('Stipend updated successfully.', 'success')
         return redirect(url_for('admin_stipend.index'))
     return render_template('admin/stipend/update.html', form=form, stipend=stipend)
