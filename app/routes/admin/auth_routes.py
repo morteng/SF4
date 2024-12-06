@@ -3,7 +3,8 @@ from flask_login import login_user, logout_user, current_user, login_required
 from app.forms.user_forms import LoginForm
 from app.models.user import User
 
-auth_bp = Blueprint('admin_auth', __name__, url_prefix='/admin/auth', template_folder='templates')
+# Ensure the blueprint name is 'auth_bp'
+auth_bp = Blueprint('admin_auth', __name__, url_prefix='/auth')
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
