@@ -16,6 +16,15 @@ from app.routes.admin_tag import admin_tag_bp
 from app.routes.admin_user import admin_user_bp
 
 def create_app(config_name=None):
+    """
+    Create and configure the Flask application.
+
+    Args:
+        config_name (str, optional): The name of the configuration to use. Defaults to None.
+
+    Returns:
+        Flask: The configured Flask application.
+    """
     load_dotenv()
     
     # Print environment variables for debugging
@@ -38,6 +47,15 @@ def create_app(config_name=None):
     
     @login_manager.user_loader
     def load_user(user_id):
+        """
+        Load a user by their ID.
+
+        Args:
+            user_id (int): The ID of the user to load.
+
+        Returns:
+            User: The loaded user object.
+        """
         from app.models.user import User
         return User.query.get(int(user_id))
     
