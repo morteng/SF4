@@ -49,12 +49,11 @@ def register():
         return redirect(url_for('visitor.login'))
     return render_template('register.html', form=form)
 
-@visitor_bp.route('/logout', methods=['POST'])
-@login_required
+@visitor_bp.route('/logout', methods=['GET'])
 def logout():
     """Handle user logout."""
     print(f"Request method: {request.method}")  # Debugging statement
-    if request.method == 'POST':
+    if request.method == 'GET':
         logout_user()
         flash('You have been logged out.', 'info')
         return redirect(url_for('visitor.index'))

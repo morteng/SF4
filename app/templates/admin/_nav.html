@@ -5,6 +5,10 @@
         <li><a href="{{ url_for('admin_org.index') }}">Manage Organizations</a></li>
         <li><a href="{{ url_for('admin_user.index') }}">Manage Users</a></li>
         <li><a href="{{ url_for('admin_bot.index') }}">Manage Bots</a></li>
-        <li><a href="{{ url_for('visitor.logout') }}">Logout</a></li>
+        {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('visitor.logout') }}">Logout</a></li>
+            {% else %}
+            <li><a href="{{ url_for('visitor.login') }}">Login</a></li>
+        {% endif %}
     </ul>
 </nav>
