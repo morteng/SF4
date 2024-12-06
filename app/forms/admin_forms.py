@@ -12,3 +12,9 @@ class StipendForm(FlaskForm):
     application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S')
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
+
+class BotForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(max=255)])
+    description = TextAreaField('Description')
+    status = StringField('Status', validators=[DataRequired()])
+    submit = SubmitField('Save')
