@@ -6,7 +6,8 @@ from werkzeug.exceptions import abort
 from app.extensions import db
 from urllib.parse import urlparse
 
-org_bp = Blueprint('admin_org', __name__, url_prefix='/admin/organizations')
+# Define the blueprint for organization routes
+org_bp = Blueprint('admin_org', __name__, url_prefix='/organizations')
 
 @org_bp.route('/create', methods=['GET', 'POST'])
 @login_required
