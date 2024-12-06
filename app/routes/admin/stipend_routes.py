@@ -40,7 +40,7 @@ def create():
             'homepage_url': form.homepage_url.data,
             'application_procedure': form.application_procedure.data,
             'eligibility_criteria': form.eligibility_criteria.data,
-            'application_deadline': form.application_deadline.data,
+            'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S'),
             'open_for_applications': form.open_for_applications.data
         }
         new_stipend = create_stipend(new_stipend_data)
@@ -48,7 +48,7 @@ def create():
             flash('Stipend created successfully.', 'success')
             return redirect(url_for('admin_stipend.index'))
         else:
-            flash('Stipend with this name already exists.', 'danger')
+            flash('Stipend with this name already exists or invalid application deadline.', 'danger')
     return render_template('admin/stipend/create.html', form=form)
 
 @admin_stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
@@ -69,10 +69,12 @@ def update(id):
             'homepage_url': form.homepage_url.data,
             'application_procedure': form.application_procedure.data,
             'eligibility_criteria': form.eligibility_criteria.data,
-            'application_deadline': form.application_deadline.data,
+            'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S'),
             'open_for_applications': form.open_for_applications.data
         }
-        update_stipend(stipend, update_data)
-        flash('Stipend updated successfully.', 'success')
-        return redirect(url_for('admin_stipend.index'))
+        if update_stipend(stipend, update_data):
+            flash('Stipend updated successfully.', 'success')
+            return redirect(url_for('admin_stipend.index'))
+        else:
+            flash('Invalid application deadline.', 'danger')
     return render_template('admin/stipend/update.html', form=form, stipend=stipend)

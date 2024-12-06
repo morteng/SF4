@@ -1,6 +1,7 @@
 from app.models.stipend import Stipend
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
+from datetime import datetime
 
 def get_all_stipends():
     try:
@@ -22,6 +23,11 @@ def delete_stipend(stipend):
 def create_stipend(data):
     if Stipend.query.filter_by(name=data['name']).first():
         return None  # or raise an exception, depending on your preference
+    try:
+        data['application_deadline'] = datetime.strptime(data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+    except ValueError as e:
+        print(str(e))
+        return None
     new_stipend = Stipend(**data)
     db.session.add(new_stipend)
     db.session.commit()
@@ -42,6 +48,10 @@ def update_stipend(stipend, data):
     stipend.homepage_url = data['homepage_url']
     stipend.application_procedure = data['application_procedure']
     stipend.eligibility_criteria = data['eligibility_criteria']
-    stipend.application_deadline = data['application_deadline']
+    try:
+        stipend.application_deadline = datetime.strptime(data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+    except ValueError as e:
+        print(str(e))
+        return None
     stipend.open_for_applications = data['open_for_applications']
     db.session.commit()
