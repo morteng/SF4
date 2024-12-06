@@ -16,13 +16,12 @@ def delete_stipend(stipend):
         db.session.delete(stipend)
         db.session.commit()
     except SQLAlchemyError as e:
-        # Log the error and possibly handle it
-        print(str(e))
+        # Log the error and possibly handle it more gracefully
+        print(f"Error deleting stipend: {e}")
         db.session.rollback()
-# Ensure user is returned to "manage stipends" after creating a new stipend AI!
 def create_stipend(data):
     if Stipend.query.filter_by(name=data['name']).first():
-        print("Stipend with this name already exists.")  # Debugging statement
+        print("Stipend with this name already exists.")
         return None  # or raise an exception, depending on your preference
     try:
         application_deadline = data.get('application_deadline')
