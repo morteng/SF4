@@ -2,7 +2,7 @@ from flask_login import current_user
 from flask import redirect, url_for, flash
 from functools import wraps
 from flask_login import login_required
-
+# AI: add docstrings to all functions, methods, and classes
 def admin_required(func):
     @login_required
     @wraps(func)

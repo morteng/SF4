@@ -1,7 +1,7 @@
 # app/utils.py
 from flask import abort, redirect, url_for
 from flask_login import current_user, login_required as _login_required  # Import the original login_required
-
+# AI: add docstrings to all functions, methods, and classes AI!
 def admin_required(f):
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated or not current_user.is_admin:

@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 
+# AI ensure database uri is loaded from .env file.
+
 # Load environment variables from .env file
 load_dotenv()
 
