@@ -51,7 +51,7 @@ def create():
         else:
             flash('Stipend with this name already exists or invalid application deadline.', 'danger')
     print(f"Form errors: {form.errors}")  # Debugging statement
-    return render_template('admin/stipend/create.html', form=form)
+    return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.create'))
 
 @admin_stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -79,4 +79,4 @@ def update(id):
             return redirect(url_for('admin_stipend.index'))
         else:
             flash('Invalid application deadline.', 'danger')
-    return render_template('admin/stipend/update.html', form=form, stipend=stipend)
+    return render_template('admin/stipend_form.html', form=form, stipend=stipend, action=url_for('admin_stipend.update', id=id))
