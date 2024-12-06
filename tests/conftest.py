@@ -2,6 +2,7 @@ import pytest
 from app import create_app
 from app.extensions import db as _db
 from app.models import init_models
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 @pytest.fixture(scope='session')
 def app():
@@ -31,7 +32,8 @@ def session(db, request):
     transaction = connection.begin()
 
     options = dict(bind=connection)
-    session = db.create_scoped_session(options=options)
+    Session = scoped_session(sessionmaker(options=options))
+    session = Session()
 
     yield session
 
