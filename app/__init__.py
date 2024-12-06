@@ -4,6 +4,7 @@ from app.extensions import db
 from app.config import config_by_name
 from app.services.user_service import ensure_default_admin_exists
 from flask_login import LoginManager
+from dotenv import load_dotenv
 
 # Import your blueprints
 from app.routes.admin_bot import admin_bot_bp
