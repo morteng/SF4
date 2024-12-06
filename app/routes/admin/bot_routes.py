@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required
 from app.forms.admin_forms import BotForm
 from app.services.bot_service import get_bot_by_id, run_bot, get_all_bots, create_bot, update_bot
-from app.extensions import db
 
 # Define the blueprint for bot routes
 admin_bot_bp = Blueprint('admin_bot', __name__, url_prefix='/bots')
@@ -13,6 +12,7 @@ def delete(id):
     """Delete a bot by ID."""
     bot = get_bot_by_id(id)
     if bot:
+        from app.extensions import db
         db.session.delete(bot)
         db.session.commit()
         flash(f'Bot {bot.name} deleted.', 'success')
