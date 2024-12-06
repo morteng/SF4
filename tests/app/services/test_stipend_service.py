@@ -32,7 +32,6 @@ def test_create_stipend(test_data, session):
     assert stipends[0].homepage_url == test_data['homepage_url']
     assert stipends[0].application_procedure == test_data['application_procedure']
     assert stipends[0].eligibility_criteria == test_data['eligibility_criteria']
-    #AI! Make sure we retrives the correct date time object from the database, deadline isn't it?
     # Convert the application_deadline to a string before comparison
     assert stipends[0].application_deadline.strftime('%Y-%m-%d %H:%M:%S') == test_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
 
