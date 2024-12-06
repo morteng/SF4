@@ -7,8 +7,7 @@
 <body>
     {% include 'admin/_nav.html' %}
     {% block content %}{% endblock %}
-    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
-
+    
     <!-- Logout form -->
     {% if current_user.is_authenticated %}
         <form action="{{ url_for('visitor.logout') }}" method="post">
