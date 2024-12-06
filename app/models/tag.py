@@ -1,5 +1,5 @@
 from app.extensions import db
-
+# AI: add docstrings to each class and method
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)

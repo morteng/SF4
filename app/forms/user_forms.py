@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired, Email, ValidationError
 from app.models.user import User
 from wtforms.validators import DataRequired, Email, EqualTo
 
+# AI: add docstrings to each class and method
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])

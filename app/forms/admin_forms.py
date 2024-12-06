@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField, BooleanField, PasswordField
 from wtforms.validators import DataRequired, Length, Email
 
+# AI: add docstrings to each class and method
 class OrganizationForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
     description = TextAreaField('Description', validators=[Length(max=255)])

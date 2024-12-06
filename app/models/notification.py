@@ -1,6 +1,6 @@
 from app.extensions import db
 from datetime import datetime
-
+# AI: add docstrings to each class and method
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(255), nullable=False)
