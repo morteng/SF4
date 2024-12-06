@@ -27,12 +27,11 @@ def create_stipend(data, session):
     
     try:
         application_deadline = data.get('application_deadline')
-        if application_deadline and isinstance(application_deadline, str):
-            data['application_deadline'] = datetime.strptime(application_deadline, '%Y-%m-%d %H:%M:%S')
-        else:
-            data['application_deadline'] = None
-    except ValueError as e:
-        print(f"Invalid application deadline: {e}")  # Debugging statement
+        if application_deadline and not isinstance(application_deadline, datetime):
+            print(f"Invalid application deadline type: {type(application_deadline)}")
+            return None
+    except Exception as e:
+        print(f"Error processing application deadline: {e}")
         return None
     
     new_stipend = Stipend(**data)
@@ -65,12 +64,11 @@ def update_stipend(stipend, data):
     
     try:
         application_deadline = data.get('application_deadline')
-        if application_deadline and isinstance(application_deadline, str):
-            stipend.application_deadline = datetime.strptime(application_deadline, '%Y-%m-%d %H:%M:%S')
-        else:
-            stipend.application_deadline = None
-    except ValueError as e:
-        print(str(e))
+        if application_deadline and not isinstance(application_deadline, datetime):
+            print(f"Invalid application deadline type: {type(application_deadline)}")
+            return None
+    except Exception as e:
+        print(f"Error processing application deadline: {e}")
         return None
     
     stipend.open_for_applications = data.get('open_for_applications', stipend.open_for_applications)

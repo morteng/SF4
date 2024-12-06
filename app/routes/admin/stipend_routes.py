@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import get_all_stipends, delete_stipend, create_stipend, get_stipend_by_id, update_stipend
 from app.extensions import db
+from datetime import datetime
 
 # Ensure the blueprint name is 'stipend_bp'
 stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
@@ -39,25 +40,33 @@ def create():
     print(f"Form data: {request.form}")  # Debugging statement
     
     if form.validate_on_submit():
-        new_stipend_data = {
-            'name': form.name.data,
-            'summary': form.summary.data or None,
-            'description': form.description.data or None,
-            'homepage_url': form.homepage_url.data or None,
-            'application_procedure': form.application_procedure.data or None,
-            'eligibility_criteria': form.eligibility_criteria.data or None,
-            'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S') if form.application_deadline.data else None,
-            'open_for_applications': form.open_for_applications.data
-        }
-        print(f"Form data: {new_stipend_data}")  # Debugging statement
-        
-        new_stipend = create_stipend(new_stipend_data, db.session)
-        
-        if new_stipend:
-            flash('Stipend created successfully.', 'success')
-            return redirect(url_for('admin_stipend.index'))
-        else:
-            flash('Stipend with this name already exists or invalid application deadline.', 'danger')
+        try:
+            application_deadline = None
+            if form.application_deadline.data:
+                application_deadline = datetime.strptime(form.application_deadline.data, '%Y-%m-%d %H:%M:%S')
+            
+            new_stipend_data = {
+                'name': form.name.data,
+                'summary': form.summary.data or None,
+                'description': form.description.data or None,
+                'homepage_url': form.homepage_url.data or None,
+                'application_procedure': form.application_procedure.data or None,
+                'eligibility_criteria': form.eligibility_criteria.data or None,
+                'application_deadline': application_deadline,
+                'open_for_applications': form.open_for_applications.data
+            }
+            print(f"Processed Form data: {new_stipend_data}")  # Debugging statement
+            
+            new_stipend = create_stipend(new_stipend_data, db.session)
+            
+            if new_stipend:
+                flash('Stipend created successfully.', 'success')
+                return redirect(url_for('admin_stipend.index'))
+            else:
+                flash('Stipend with this name already exists or invalid application deadline.', 'danger')
+        except Exception as e:
+            print(f"Exception occurred: {e}")  # Debugging statement
+            flash('An error occurred while creating the stipend.', 'danger')
     else:
         # Debugging statement to print form errors
         print(f"Form errors: {form.errors}")  # Debugging statement
@@ -79,24 +88,32 @@ def update(id):
     print(f"Form data: {request.form}")  # Debugging statement
     
     if form.validate_on_submit():
-        update_data = {
-            'name': form.name.data,
-            'summary': form.summary.data or stipend.summary,
-            'description': form.description.data or stipend.description,
-            'homepage_url': form.homepage_url.data or stipend.homepage_url,
-            'application_procedure': form.application_procedure.data or stipend.application_procedure,
-            'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
-            'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S') if form.application_deadline.data else stipend.application_deadline,
-            'open_for_applications': form.open_for_applications.data
-        }
-        
-        print(f"Form data: {update_data}")  # Debugging statement
-        
-        if update_stipend(stipend, update_data):
-            flash('Stipend updated successfully.', 'success')
-            return redirect(url_for('admin_stipend.index'))
-        else:
-            flash('Invalid application deadline.', 'danger')
+        try:
+            application_deadline = stipend.application_deadline
+            if form.application_deadline.data:
+                application_deadline = datetime.strptime(form.application_deadline.data, '%Y-%m-%d %H:%M:%S')
+            
+            update_data = {
+                'name': form.name.data,
+                'summary': form.summary.data or stipend.summary,
+                'description': form.description.data or stipend.description,
+                'homepage_url': form.homepage_url.data or stipend.homepage_url,
+                'application_procedure': form.application_procedure.data or stipend.application_procedure,
+                'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
+                'application_deadline': application_deadline,
+                'open_for_applications': form.open_for_applications.data
+            }
+            
+            print(f"Processed Form data: {update_data}")  # Debugging statement
+            
+            if update_stipend(stipend, update_data):
+                flash('Stipend updated successfully.', 'success')
+                return redirect(url_for('admin_stipend.index'))
+            else:
+                flash('Invalid application deadline.', 'danger')
+        except Exception as e:
+            print(f"Exception occurred: {e}")  # Debugging statement
+            flash('An error occurred while updating the stipend.', 'danger')
     else:
         # Debugging statement to print form errors
         print(f"Form errors: {form.errors}")  # Debugging statement
