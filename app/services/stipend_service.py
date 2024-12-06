@@ -19,7 +19,7 @@ def delete_stipend(stipend):
         # Log the error and possibly handle it
         print(str(e))
         db.session.rollback()
-
+# Ensure user is returned to "manage stipends" after creating a new stipend AI!
 def create_stipend(data):
     if Stipend.query.filter_by(name=data['name']).first():
         print("Stipend with this name already exists.")  # Debugging statement
