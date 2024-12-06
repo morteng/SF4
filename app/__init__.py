@@ -4,8 +4,8 @@ from app.extensions import db
 from app.config import config_by_name
 from app.services.user_service import ensure_default_admin_exists
 from flask_login import LoginManager
-from dotenv import load_dotenv  # Added this line to import load_dotenv
-# AI: add docstrings to all functions, methods, and classes
+from dotenv import load_dotenv
+
 # Import your blueprints
 from app.routes.admin_bot import admin_bot_bp
 from app.routes.admin_org import admin_org_bp

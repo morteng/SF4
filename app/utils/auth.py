@@ -2,8 +2,17 @@ from flask_login import current_user
 from flask import redirect, url_for, flash
 from functools import wraps
 from flask_login import login_required
-# AI: add docstrings to all functions, methods, and classes
+
 def admin_required(func):
+    """
+    Decorator to restrict access to views to admin users only.
+
+    Args:
+        func (function): The view function to decorate.
+
+    Returns:
+        function: The decorated function.
+    """
     @login_required
     @wraps(func)
     def decorated_view(*args, **kwargs):
