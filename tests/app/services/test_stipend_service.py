@@ -41,7 +41,7 @@ def test_create_stipend(test_data, session):
 
     # Convert the application_deadline to a string before comparison with a tolerance
     deadline_tolerance = timedelta(seconds=1)  # Allow up to 1 second difference
-    assert (stipends[0].application_deadline - test_data['application_deadline']).total_seconds() < deadline_tolerance.total_seconds()
+    assert abs((stipends[0].application_deadline - test_data['application_deadline']).total_seconds()) < deadline_tolerance.total_seconds()
 
     # Clean up: delete the created stipend
     session.delete(new_stipend)

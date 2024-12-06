@@ -27,8 +27,8 @@ def create_stipend(data):
     
     try:
         application_deadline = data.get('application_deadline')
-        if application_deadline and isinstance(application_deadline, str):
-            data['application_deadline'] = datetime.strptime(application_deadline, '%Y-%m-%d %H:%M:%S')
+        if application_deadline and isinstance(application_deadline, datetime):
+            pass
         else:
             data['application_deadline'] = None
     except ValueError as e:
@@ -65,8 +65,8 @@ def update_stipend(stipend, data):
     
     try:
         application_deadline = data.get('application_deadline')
-        if application_deadline and isinstance(application_deadline, str):
-            stipend.application_deadline = datetime.strptime(application_deadline, '%Y-%m-%d %H:%M:%S')
+        if application_deadline and isinstance(application_deadline, datetime):
+            pass
         else:
             stipend.application_deadline = None
     except ValueError as e:
