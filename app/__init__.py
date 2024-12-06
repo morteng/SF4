@@ -12,7 +12,7 @@ def create_app(config_name='development'):
     login_manager.init_app(app)
 
     # Register blueprints
-    from app.routes import public_routes
+    from app.routes.public_routes import public_routes
     app.register_blueprint(public_routes, url_prefix='/')
 
     register_admin_blueprints(app)  # Ensure this is called
