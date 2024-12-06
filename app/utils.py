@@ -1,6 +1,9 @@
 # app/utils.py
+import os
 from flask import abort, redirect, url_for
 from flask_login import current_user, login_required as _login_required  # Import the original login_required
+from .models.user import User
+from werkzeug.security import generate_password_hash
 
 def admin_required(f):
     def decorated_function(*args, **kwargs):
@@ -12,3 +15,19 @@ def admin_required(f):
 
 # Define login_required in utils.py
 login_required = _login_required
+
+def init_admin_user():
+    from .extensions import db
+    username = os.environ.get('ADMIN_USERNAME')
+    password = os.environ.get('ADMIN_PASSWORD')
+    email = os.environ.get('ADMIN_EMAIL')
+
+    if not User.query.filter_by(username=username).first():
+        admin_user = User(
+            username=username,
+            password_hash=generate_password_hash(password),
+            email=email,
+            is_admin=True
+        )
+        db.session.add(admin_user)
+        db.session.commit()
