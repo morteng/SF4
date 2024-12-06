@@ -8,10 +8,19 @@ from app.models.bot import Bot
 
 admin_dashboard_bp = Blueprint('admin_dashboard', __name__)
 
-# add docstrings to all functions AI!
 @admin_dashboard_bp.route('/', methods=['GET'])
 @login_required
 def index():
+    """
+    Render the admin dashboard page.
+
+    This function checks if the current user is an admin. If not, it aborts with a 403 error.
+    It counts the number of stipends, tags, organizations, users, and bots in the database,
+    then renders the 'admin/dashboard.html' template with these counts.
+
+    Returns:
+        Rendered HTML page for the admin dashboard.
+    """
     if not current_user.is_admin:
         abort(403)
     
