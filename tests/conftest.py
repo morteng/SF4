@@ -10,7 +10,6 @@ def app():
 
     # Create an application context before running tests
     with app.app_context():
-        from app.models import init_models
         init_models(app)  # Ensure models are initialized
         _db.create_all()  # Create all tables
 
