@@ -47,7 +47,7 @@ def create_app(config_name=None):
     app.register_blueprint(admin_user_bp, url_prefix='/admin/users')
     
     with app.app_context():
-        print(f"Database URL: {app.config['SQLALCHEMY_DATABASE_URI']}")
+        print(f"Creating Database URL: {app.config['SQLALCHEMY_DATABASE_URI']}")
         db.create_all()
         
         # Ensure default admin user exists
