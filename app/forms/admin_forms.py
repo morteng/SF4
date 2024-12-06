@@ -24,3 +24,5 @@ class OrganizationForm(FlaskForm):
     description = TextAreaField('Description')
     homepage_url = URLField('Homepage URL')
     submit = SubmitField('Save')
+
+#create TagForm AI!
