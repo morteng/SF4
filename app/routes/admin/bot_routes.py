@@ -7,7 +7,7 @@ from app.extensions import db  # Import the db object
 # Define the bot blueprint without url_prefix
 admin_bot_bp = Blueprint('admin_bot', __name__)
 
-@admin_bot_bp.route('/bots/delete/<int:id>', methods=['POST'])
+@admin_bot_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
     """Delete a bot by ID."""
@@ -20,7 +20,7 @@ def delete(id):
         flash('Bot not found.', 'danger')
     return redirect(url_for('admin_bot.index'))
 
-@admin_bot_bp.route('/bots/run/<int:id>', methods=['POST'])
+@admin_bot_bp.route('/run/<int:id>', methods=['POST'])
 @login_required
 def run(id):
     """Run a bot by ID."""
@@ -32,14 +32,14 @@ def run(id):
         flash('Bot not found.', 'danger')
     return redirect(url_for('admin_bot.index'))
 
-@admin_bot_bp.route('/bots/', methods=['GET'])
+@admin_bot_bp.route('/', methods=['GET'])
 @login_required
 def index():
     """List all bots."""
     bots = get_all_bots()
     return render_template('admin/bot/index.html', bots=bots)
 
-@admin_bot_bp.route('/bots/create', methods=['GET', 'POST'])
+@admin_bot_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     form = BotForm()
@@ -49,7 +49,7 @@ def create():
         return redirect(url_for('admin_bot.index'))
     return render_template('admin/bot/create.html', form=form)
 
-@admin_bot_bp.route('/bots/update/<int:id>', methods=['GET', 'POST'])
+@admin_bot_bp.route('/update/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update(id):
     bot = get_bot_by_id(id)

@@ -5,9 +5,7 @@ from flask_login import LoginManager
 from app.extensions import db
 from app.config import config_by_name
 from app.services.user_service import ensure_default_admin_exists
-from app.routes.admin import admin_bp
-from app.routes.user_routes import user_bp
-from app.routes.visitor_routes import visitor_bp
+from app.routes import routes_bp
 
 def create_app(config_name=None):
     load_dotenv()
@@ -28,9 +26,7 @@ def create_app(config_name=None):
         return User.query.get(int(user_id))
     
     # Register blueprints
-    app.register_blueprint(admin_bp)
-    app.register_blueprint(user_bp)
-    app.register_blueprint(visitor_bp)
+    app.register_blueprint(routes_bp)
     
     with app.app_context():
         db.create_all()

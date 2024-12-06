@@ -3,7 +3,7 @@ from flask_login import login_required
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import get_all_stipends, delete_stipend, create_stipend, get_stipend_by_id, update_stipend
 
-admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
+admin_stipend_bp = Blueprint('admin_stipend', __name__)
 
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
