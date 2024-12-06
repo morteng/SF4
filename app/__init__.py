@@ -25,7 +25,7 @@ def create_app(config_name='development'):
 
     # Ensure the database is initialized and the admin user is set up
     with app.app_context():
-        init_models()
+        init_models(app)  # Pass the app instance here
         from app.utils import init_admin_user
         init_admin_user()
 
