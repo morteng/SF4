@@ -18,3 +18,5 @@ class BotForm(FlaskForm):
     description = TextAreaField('Description')
     status = StringField('Status', validators=[DataRequired()])
     submit = SubmitField('Save')
+
+# create OrganizationForm AI!
