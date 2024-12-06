@@ -1,4 +1,3 @@
-from dotenv import load_dotenv
 import os
 from flask import Flask
 from app.extensions import db
@@ -50,15 +49,18 @@ def create_app(config_name=None):
         print(f"Creating Database URL: {app.config['SQLALCHEMY_DATABASE_URI']}")
         
         # Ensure the instance directory exists
-        instance_path = os.path.dirname(app.config['SQLALCHEMY_DATABASE_URI'].split('///')[1])
-        if not os.path.exists(instance_path):
-            os.makedirs(instance_path)
+        db_file_path = os.path.join(app.instance_path, 'site.db')
+        if not os.path.exists(os.path.dirname(db_file_path)):
+            os.makedirs(os.path.dirname(db_file_path))
         
         # Create the database file if it doesn't exist
-        db_file_path = app.config['SQLALCHEMY_DATABASE_URI'].split('///')[1]
         if not os.path.isfile(db_file_path):
             with open(db_file_path, 'w') as f:
                 pass  # Creating an empty file
+
+        print(f"Database file path: {db_file_path}")
+        print(f"Does directory exist? {os.path.exists(os.path.dirname(db_file_path))}")
+        print(f"Does database file exist? {os.path.isfile(db_file_path)}")
 
         db.create_all()
         
