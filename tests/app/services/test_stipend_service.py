@@ -1,5 +1,5 @@
 import pytest
-from app.services.stipend_service import create_stipend, get_all_stipends
+from app.services.stipend_service import create_stipend, get_all_stipends, delete_stipend
 from app.models.stipend import Stipend
 from datetime import datetime, timedelta
 
@@ -20,11 +20,11 @@ def test_create_stipend(test_data, session):
     # Clean up any existing stipends before the test
     existing_stipends = get_all_stipends()
     for stipend in existing_stipends:
-        session.delete(stipend)
+        delete_stipend(stipend, session)
     session.commit()
 
-    # Create a stipend using the service function
-    new_stipend = create_stipend(test_data)
+    # Create a stipend using the service function with the provided session
+    new_stipend = create_stipend(test_data, session)
 
     # Assert that the stipend was created successfully
     assert new_stipend is not None
@@ -43,6 +43,6 @@ def test_create_stipend(test_data, session):
     deadline_tolerance = timedelta(seconds=1)  # Allow up to 1 second difference
     assert abs((stipends[0].application_deadline - test_data['application_deadline']).total_seconds()) < deadline_tolerance.total_seconds()
 
-    # Clean up: delete the created stipend
-    session.delete(new_stipend)
+    # Clean up: delete the created stipend using the provided session
+    delete_stipend(new_stipend, session)
     session.commit()

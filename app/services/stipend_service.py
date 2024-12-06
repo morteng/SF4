@@ -11,16 +11,16 @@ def get_all_stipends():
         print(str(e))
         return []
 
-def delete_stipend(stipend):
+def delete_stipend(stipend, session):
     try:
-        db.session.delete(stipend)
-        db.session.commit()
+        session.delete(stipend)
+        session.commit()
     except SQLAlchemyError as e:
         # Log the error and possibly handle it more gracefully
         print(f"Error deleting stipend: {e}")
-        db.session.rollback()
+        session.rollback()
 
-def create_stipend(data):
+def create_stipend(data, session):
     if Stipend.query.filter_by(name=data['name']).first():
         print("Stipend with this name already exists.")
         return None  # or raise an exception, depending on your preference
@@ -36,15 +36,15 @@ def create_stipend(data):
         return None
     
     new_stipend = Stipend(**data)
-    db.session.add(new_stipend)
+    session.add(new_stipend)
     
     try:
-        db.session.commit()
+        session.commit()
         print("Stipend added to the database successfully.")  # Debugging statement
         return new_stipend
     except SQLAlchemyError as e:
         print(f"Database error: {e}")  # Debugging statement
-        db.session.rollback()
+        session.rollback()
         return None
 
 def get_stipend_by_id(stipend_id):
