@@ -10,6 +10,7 @@ from .routes.admin.__init__ import register_admin_blueprints
 from .routes.user_routes import user_bp
 from .routes.visitor_routes import visitor_bp
 
+# AI ensure db file is created if it does not already exist, and make sure tables are created and default admin user is added. read all the impåortant values from .env file (it's there even if you cannot see it). AI!
 
 def create_app(config_name='development'):
     app = Flask(__name__)
