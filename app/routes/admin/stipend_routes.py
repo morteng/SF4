@@ -1,125 +1,92 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, abort, request
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user
 from app.forms.admin_forms import StipendForm
-from app.services.stipend_service import get_all_stipends, delete_stipend, create_stipend, get_stipend_by_id, update_stipend
-from app.extensions import db
+from app.services.stipend_service import create_stipend, get_all_stipends, delete_stipend, update_stipend, get_stipend_by_id
 from datetime import datetime
-import logging
 
-# Ensure the blueprint name is 'admin_stipend'
-stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
+admin_stipend = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
 
-@stipend_bp.route('/', methods=['GET'])
+@admin_stipend.route('/')
 @login_required
 def index():
     if not current_user.is_admin:
         abort(403)
     stipends = get_all_stipends()
-    return render_template('admin/stipend/index.html', stipends=stipends)
+    return render_template('admin/stipends/index.html', stipends=stipends)
 
-@stipend_bp.route('/delete/<int:id>', methods=['POST'])
-@login_required
-def delete(id):
-    if not current_user.is_admin:
-        abort(403)
-    stipend = get_stipend_by_id(id)
-    if stipend:
-        delete_stipend(stipend, db.session)
-        flash('Stipend deleted.', 'success')
-    else:
-        flash('Stipend not found.', 'danger')
-    return redirect(url_for('admin.admin_stipend.index'))
-
-@stipend_bp.route('/create', methods=['GET', 'POST'])
+@admin_stipend.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     if not current_user.is_admin:
         abort(403)
     form = StipendForm()
-    
-    if request.method == 'POST':
-        logging.info("Create stipend form submitted.")
-        logging.debug(f"Form data: {request.form}")
+    if request.method == 'POST' and form.validate_on_submit():
+        data = {
+            'name': form.name.data,
+            'summary': form.summary.data or None,
+            'description': form.description.data or None,
+            'homepage_url': form.homepage_url.data or None,
+            'application_procedure': form.application_procedure.data or None,
+            'eligibility_criteria': form.eligibility_criteria.data or None,
+            'open_for_applications': form.open_for_applications.data
+        }
         
-        if form.validate_on_submit():
-            try:
-                application_deadline = None
-                if form.application_deadline.data:
-                    application_deadline = datetime.strptime(form.application_deadline.data, '%Y-%m-%d %H:%M:%S')
-                
-                new_stipend_data = {
-                    'name': form.name.data,
-                    'summary': form.summary.data or None,
-                    'description': form.description.data or None,
-                    'homepage_url': form.homepage_url.data or None,
-                    'application_procedure': form.application_procedure.data or None,
-                    'eligibility_criteria': form.eligibility_criteria.data or None,
-                    'application_deadline': application_deadline,
-                    'open_for_applications': form.open_for_applications.data
-                }
-                
-                logging.info(f"Creating stipend with data: {new_stipend_data}")
-                new_stipend = create_stipend(new_stipend_data, db.session)
-                
-                if new_stipend:
-                    flash('Stipend created successfully.', 'success')
-                    return redirect(url_for('admin.admin_stipend.index'))
-                else:
-                    logging.warning("Failed to create stipend.")
-                    flash('Stipend with this name already exists or invalid application deadline.', 'danger')
-            except Exception as e:
-                logging.error(f"Exception occurred: {e}")
-                flash('An error occurred while creating the stipend.', 'danger')
+        application_deadline = form.application_deadline.data
+        if application_deadline:
+            data['application_deadline'] = application_deadline
+        
+        stipend = create_stipend(data, db.session)
+        if stipend:
+            flash('Stipend created successfully.', 'success')
+            return redirect(url_for('admin_stipend.index'))
         else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    logging.warning(f"{field}: {error}")
-                    flash(f"{field}: {error}", 'danger')
-    
-    return render_template('admin/stipend_form.html', form=form, action=url_for('admin.admin_stipend.create'))
+            flash('Failed to create stipend.', 'danger')
+    return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.create'))
 
-@stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@admin_stipend.route('/<int:stipend_id>/edit', methods=['GET', 'POST'])
 @login_required
-def update(id):
+def edit(stipend_id):
     if not current_user.is_admin:
         abort(403)
-    stipend = get_stipend_by_id(id)
+    stipend = get_stipend_by_id(stipend_id)
     if not stipend:
         flash('Stipend not found.', 'danger')
-        return redirect(url_for('admin.admin_stipend.index'))
+        return redirect(url_for('admin_stipend.index'))
+    
     form = StipendForm(obj=stipend)
-    
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            try:
-                application_deadline = stipend.application_deadline
-                if form.application_deadline.data:
-                    application_deadline = datetime.strptime(form.application_deadline.data, '%Y-%m-%d %H:%M:%S')
-                
-                update_data = {
-                    'name': form.name.data,
-                    'summary': form.summary.data or stipend.summary,
-                    'description': form.description.data or stipend.description,
-                    'homepage_url': form.homepage_url.data or stipend.homepage_url,
-                    'application_procedure': form.application_procedure.data or stipend.application_procedure,
-                    'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
-                    'application_deadline': application_deadline,
-                    'open_for_applications': form.open_for_applications.data
-                }
-                
-                if update_stipend(stipend, update_data):
-                    flash('Stipend updated successfully.', 'success')
-                    return redirect(url_for('admin.admin_stipend.index'))
-                else:
-                    logging.warning("Failed to update stipend.")
-                    flash('Invalid application deadline.', 'danger')
-            except Exception as e:
-                logging.error(f"Exception occurred: {e}")
-                flash('An error occurred while updating the stipend.', 'danger')
+    if request.method == 'POST' and form.validate_on_submit():
+        data = {
+            'name': form.name.data,
+            'summary': form.summary.data or stipend.summary,
+            'description': form.description.data or stipend.description,
+            'homepage_url': form.homepage_url.data or stipend.homepage_url,
+            'application_procedure': form.application_procedure.data or stipend.application_procedure,
+            'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
+            'open_for_applications': form.open_for_applications.data
+        }
+        
+        application_deadline = form.application_deadline.data
+        if application_deadline:
+            data['application_deadline'] = application_deadline
+        
+        success = update_stipend(stipend, data)
+        if success:
+            flash('Stipend updated successfully.', 'success')
+            return redirect(url_for('admin_stipend.index'))
         else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    logging.warning(f"{field}: {error}")
-                    flash(f"{field}: {error}", 'danger')
+            flash('Failed to update stipend.', 'danger')
+    return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.edit', stipend_id=stipend.id))
+
+@admin_stipend.route('/<int:stipend_id>/delete', methods=['POST'])
+@login_required
+def delete(stipend_id):
+    if not current_user.is_admin:
+        abort(403)
+    stipend = get_stipend_by_id(stipend_id)
+    if not stipend:
+        flash('Stipend not found.', 'danger')
+        return redirect(url_for('admin_stipend.index'))
     
-    return render_template('admin/stipend_form.html', form=form, stipend=stipend, action=url_for('admin.admin_stipend.update', id=id))
+    delete_stipend(stipend, db.session)
+    flash('Stipend deleted successfully.', 'success')
+    return redirect(url_for('admin_stipend.index'))

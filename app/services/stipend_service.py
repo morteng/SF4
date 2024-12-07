@@ -52,7 +52,7 @@ def get_stipend_by_id(stipend_id):
     try:
         stipend = Stipend.query.get(stipend_id)
         if stipend:
-            logging.info(f"Stipend found with ID {stipend_id}: {stipend.name}")
+            logging.info(f"Stipend with ID {stipend_id} retrieved successfully.")
         else:
             logging.warning(f"No stipend found with ID {stipend_id}.")
         return stipend
