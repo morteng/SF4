@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2>{% if stipend %}Edit{% else %}Create{% endif %} Stipend</h2>
-<form hx-post="{{ action }}" hx-target="#stipends" hx-swap="outerHTML">
+<form method="post" hx-post="{{ action }}" hx-target="#stipends" hx-swap="outerHTML">
     {{ form.hidden_tag() }}
     <div>
         {{ form.name.label }}<br>
