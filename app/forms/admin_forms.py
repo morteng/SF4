@@ -10,7 +10,7 @@ class StipendForm(FlaskForm):
     homepage_url = URLField('Homepage URL')
     application_procedure = TextAreaField('Application Procedure')
     eligibility_criteria = TextAreaField('Eligibility Criteria')
-    application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S')
+    application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S')  # Removed DataRequired()
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
 
