@@ -35,7 +35,7 @@ def create_stipend(data, session):
             application_deadline = datetime.strptime(application_deadline, '%Y-%m-%d %H:%M:%S')
         except ValueError:
             logging.error(f"Invalid application deadline format: {application_deadline}")
-            return None
+            application_deadline = None  # Set to None if invalid
     
     new_stipend = Stipend(
         name=data['name'],
@@ -73,7 +73,7 @@ def update_stipend(stipend, data):
             application_deadline = datetime.strptime(application_deadline, '%Y-%m-%d %H:%M:%S')
         except ValueError:
             logging.error(f"Invalid application deadline format: {application_deadline}")
-            return None
+            application_deadline = None  # Set to None if invalid
     stipend.application_deadline = application_deadline
     
     stipend.open_for_applications = data.get('open_for_applications', stipend.open_for_applications)
