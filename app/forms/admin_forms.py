@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, DateTimeField, SubmitField
-from wtforms.validators import Length, ValidationError
+from wtforms.validators import Length, DataRequired, ValidationError
 from datetime import datetime
 
 class StipendForm(FlaskForm):
-    name = StringField('Name', validators=[Length(max=255)])
+    name = StringField('Name', validators=[Length(max=255), DataRequired()])
     summary = TextAreaField('Summary')
     description = TextAreaField('Description')
     homepage_url = URLField('Homepage URL')
