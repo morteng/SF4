@@ -2,7 +2,7 @@ import pytest
 from app.services.stipend_service import create_stipend, get_all_stipends, delete_stipend
 from app.models.stipend import Stipend
 from datetime import datetime, timedelta
-# AI ensure application deadline is nullable and validates datetime format AI!
+
 @pytest.fixture(scope='function')
 def test_data():
     return {
@@ -12,7 +12,8 @@ def test_data():
         'homepage_url': 'http://example.com/test-stipend',
         'application_procedure': 'Apply online at http://example.com/apply',
         'eligibility_criteria': 'Open to all students.',
-        'application_deadline': datetime.now(),
+        # Convert datetime object to string
+        'application_deadline': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'open_for_applications': True
     }
 
@@ -41,7 +42,7 @@ def test_create_stipend(test_data, session):
 
     # Convert the application_deadline to a string before comparison with a tolerance
     deadline_tolerance = timedelta(seconds=1)  # Allow up to 1 second difference
-    assert abs((stipends[0].application_deadline - test_data['application_deadline']).total_seconds()) < deadline_tolerance.total_seconds()
+    assert abs((stipends[0].application_deadline - datetime.strptime(test_data['application_deadline'], '%Y-%m-%d %H:%M:%S')).total_seconds()) < deadline_tolerance.total_seconds()
 
     # Clean up: delete the created stipend using the provided session
     delete_stipend(new_stipend, session)
