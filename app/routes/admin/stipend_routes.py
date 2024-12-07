@@ -15,7 +15,7 @@ def index():
         abort(403)
     stipends = get_all_stipends()
     return render_template('admin/stipend/index.html', stipends=stipends)
-
+# AI ensure application deadline is nullable and validates datetime format
 @stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
