@@ -39,6 +39,8 @@ def create():
     
     if request.method == 'POST':
         logging.info("Create stipend form submitted.")
+        logging.debug(f"Form data: {request.form}")
+        
         if form.validate_on_submit():
             try:
                 application_deadline = None
