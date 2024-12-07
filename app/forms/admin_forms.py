@@ -3,8 +3,6 @@ from wtforms import StringField, TextAreaField, URLField, BooleanField, DateTime
 from wtforms.validators import Length, ValidationError
 from datetime import datetime
 
-# AI ensure application deadline is nullable and validates datetime format AI!
-
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[Length(max=255)])
     summary = TextAreaField('Summary')
