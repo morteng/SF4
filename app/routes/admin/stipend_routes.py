@@ -14,7 +14,7 @@ def index():
     if not current_user.is_admin:
         abort(403)
     stipends = get_all_stipends()
-    return render_template('admin/stipends/index.html', stipends=stipends)
+    return render_template('admin/stipend/index.html', stipends=stipends)
 
 @stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
@@ -40,10 +40,10 @@ def create():
         stipend = create_stipend(data, db.session)
         if stipend:
             flash('Stipend created successfully.', 'success')
-            return redirect(url_for('admin_stipend.index'))
+            return redirect(url_for('admin.admin_stipend.index'))
         else:
             flash('Failed to create stipend.', 'danger')
-    return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.create'))
+    return render_template('admin/stipend_form.html', form=form, action=url_for('admin.admin_stipend.create'))
 
 @stipend_bp.route('/<int:stipend_id>/edit', methods=['GET', 'POST'])
 @login_required
@@ -53,7 +53,7 @@ def edit(stipend_id):
     stipend = get_stipend_by_id(stipend_id)
     if not stipend:
         flash('Stipend not found.', 'danger')
-        return redirect(url_for('admin_stipend.index'))
+        return redirect(url_for('admin.admin_stipend.index'))
     
     form = StipendForm(obj=stipend)
     if request.method == 'POST' and form.validate_on_submit():
@@ -74,10 +74,10 @@ def edit(stipend_id):
         success = update_stipend(stipend, data)
         if success:
             flash('Stipend updated successfully.', 'success')
-            return redirect(url_for('admin_stipend.index'))
+            return redirect(url_for('admin.admin_stipend.index'))
         else:
             flash('Failed to update stipend.', 'danger')
-    return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.edit', stipend_id=stipend.id))
+    return render_template('admin/stipend_form.html', form=form, action=url_for('admin.admin_stipend.edit', stipend_id=stipend.id))
 
 @stipend_bp.route('/<int:stipend_id>/delete', methods=['POST'])
 @login_required
@@ -87,8 +87,8 @@ def delete(stipend_id):
     stipend = get_stipend_by_id(stipend_id)
     if not stipend:
         flash('Stipend not found.', 'danger')
-        return redirect(url_for('admin_stipend.index'))
+        return redirect(url_for('admin.admin_stipend.index'))
     
     delete_stipend(stipend, db.session)
     flash('Stipend deleted successfully.', 'success')
-    return redirect(url_for('admin_stipend.index'))
+    return redirect(url_for('admin.admin_stipend.index'))
