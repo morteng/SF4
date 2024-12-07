@@ -86,4 +86,16 @@ def update_stipend(stipend, data):
         logging.error(f"Database error: {e}")
         db.session.rollback()
         return False
-#create get_stipend_by_id function AI!
+
+def get_stipend_by_id(stipend_id):
+    try:
+        stipend = Stipend.query.get(stipend_id)
+        if stipend:
+            logging.info(f"Retrieved stipend with ID {stipend_id}.")
+            return stipend
+        else:
+            logging.warning(f"No stipend found with ID {stipend_id}.")
+            return None
+    except SQLAlchemyError as e:
+        logging.error(f"Database error: {e}")
+        return None
