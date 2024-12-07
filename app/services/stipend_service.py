@@ -86,3 +86,4 @@ def update_stipend(stipend, data):
         logging.error(f"Database error: {e}")
         db.session.rollback()
         return False
+#create get_stipend_by_id function AI!
