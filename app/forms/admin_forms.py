@@ -13,7 +13,7 @@ class StipendForm(FlaskForm):
     application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S')  # Removed DataRequired()
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
-
+# Ensure the application is either a valid datetime, or set it to none. do not raise an error if it is empty, just set it to none (null) if it does not validate AI!
     def validate_application_deadline(self, field):
         if field.data:
             try:
@@ -26,3 +26,31 @@ class StipendForm(FlaskForm):
                 raise ValidationError('Not a valid datetime value. Please use the format YYYY-MM-DD HH:MM:SS.')
         else:
             field.data = None  # Set to None if the field is empty
+
+class BotForm(FlaskForm):
+    name = StringField('Name', validators=[Length(max=255)])
+    description = TextAreaField('Description')
+    status = StringField('Status')
+    submit = SubmitField('Create')
+
+    def validate_status(self, field):
+        if field.data not in ['active', 'inactive']:
+            raise ValidationError('Status must be either "active" or "inactive".')
+
+class OrganizationForm(FlaskForm):
+    name = StringField('Name', validators=[Length(max=255)])
+    description = TextAreaField('Description')
+    homepage_url = URLField('Homepage URL')
+    submit = SubmitField('Create')
+
+class TagForm(FlaskForm):
+    name = StringField('Name', validators=[Length(max=255)])
+    category = StringField('Category')
+    submit = SubmitField('Create')
+
+class UserForm(FlaskForm):
+    username = StringField('Username', validators=[Length(max=255)])
+    email = StringField('Email')
+    password = StringField('Password')
+    is_admin = BooleanField('Is Admin')
+    submit = SubmitField('Create')
