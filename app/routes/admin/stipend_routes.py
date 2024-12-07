@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, abort
 from flask_login import login_required, current_user
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import create_stipend, get_all_stipends, delete_stipend, update_stipend, get_stipend_by_id
 from datetime import datetime
+from app.extensions import db  # Importing db from extensions
 
 admin_stipend = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
 
