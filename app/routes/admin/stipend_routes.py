@@ -45,7 +45,7 @@ def create():
         for field, errors in form.errors.items():
             for error in errors:
                 flash(f"{field}: {error}", 'danger')
-    return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.create'))
+    return render_template('admin/stipend_form.html', form=form, action=url_for('admin.admin_stipend.create'))
 
 @stipend_bp.route('/<int:stipend_id>/edit', methods=['GET', 'POST'])
 @login_required
@@ -56,7 +56,7 @@ def edit(stipend_id):
     if stipend is None:
         flash('Stipend not found.', 'danger')
         return redirect(url_for('admin_stipend.index'))
-    
+    #Ensure the application deadline can be either a valid datetime oject or None. if it does not validate, set it to none so we can store the stipend. AI! 
     form = StipendForm(obj=stipend)
     if request.method == 'POST' and form.validate_on_submit():
         stipend_data = {
@@ -66,7 +66,7 @@ def edit(stipend_id):
             'homepage_url': form.homepage_url.data or stipend.homepage_url,
             'application_procedure': form.application_procedure.data or stipend.application_procedure,
             'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
-            'application_deadline': form.application_deadline.data,  # Ensure this is correctly formatted
+            'application_deadline': form.application_deadline.data,  
             'open_for_applications': form.open_for_applications.data
         }
         
