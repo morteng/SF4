@@ -56,7 +56,7 @@ def edit(stipend_id):
     if stipend is None:
         flash('Stipend not found.', 'danger')
         return redirect(url_for('admin_stipend.index'))
-    #Ensure the application deadline can be either a valid datetime oject or None. if it does not validate, set it to none so we can store the stipend. AI! 
+    
     form = StipendForm(obj=stipend)
     if request.method == 'POST' and form.validate_on_submit():
         stipend_data = {
@@ -69,6 +69,10 @@ def edit(stipend_id):
             'application_deadline': form.application_deadline.data,  
             'open_for_applications': form.open_for_applications.data
         }
+        
+        # Ensure the application deadline can be either a valid datetime object or None.
+        if not form.validate_application_deadline(form.application_deadline):
+            stipend_data['application_deadline'] = None
         
         updated = update_stipend(stipend, stipend_data)
         if updated:
