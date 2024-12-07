@@ -38,6 +38,7 @@ def create():
     form = StipendForm()
     
     if request.method == 'POST':
+        logging.info("Create stipend form submitted.")
         if form.validate_on_submit():
             try:
                 application_deadline = None
@@ -55,12 +56,14 @@ def create():
                     'open_for_applications': form.open_for_applications.data
                 }
                 
+                logging.info(f"Creating stipend with data: {new_stipend_data}")
                 new_stipend = create_stipend(new_stipend_data, db.session)
                 
                 if new_stipend:
                     flash('Stipend created successfully.', 'success')
                     return redirect(url_for('admin.admin_stipend.index'))
                 else:
+                    logging.warning("Failed to create stipend.")
                     flash('Stipend with this name already exists or invalid application deadline.', 'danger')
             except Exception as e:
                 logging.error(f"Exception occurred: {e}")
@@ -68,6 +71,7 @@ def create():
         else:
             for field, errors in form.errors.items():
                 for error in errors:
+                    logging.warning(f"{field}: {error}")
                     flash(f"{field}: {error}", 'danger')
     
     return render_template('admin/stipend_form.html', form=form, action=url_for('admin.admin_stipend.create'))
@@ -105,6 +109,7 @@ def update(id):
                     flash('Stipend updated successfully.', 'success')
                     return redirect(url_for('admin.admin_stipend.index'))
                 else:
+                    logging.warning("Failed to update stipend.")
                     flash('Invalid application deadline.', 'danger')
             except Exception as e:
                 logging.error(f"Exception occurred: {e}")
@@ -112,6 +117,7 @@ def update(id):
         else:
             for field, errors in form.errors.items():
                 for error in errors:
+                    logging.warning(f"{field}: {error}")
                     flash(f"{field}: {error}", 'danger')
     
     return render_template('admin/stipend_form.html', form=form, stipend=stipend, action=url_for('admin.admin_stipend.update', id=id))
