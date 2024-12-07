@@ -23,7 +23,7 @@ def delete_stipend(stipend, session):
         logging.error(f"Error deleting stipend: {e}")
         session.rollback()
         return False
-
+# AI ensure application deadline is nullable and validates datetime format AI!
 def create_stipend(data, session):
     if Stipend.query.filter_by(name=data['name']).first():
         logging.warning("Stipend with this name already exists.")
@@ -61,7 +61,7 @@ def get_stipend_by_id(stipend_id):
     except SQLAlchemyError as e:
         logging.error(str(e))
         return None
-
+# AI ensure application deadline is nullable and validates datetime format
 def update_stipend(stipend, data):
     stipend.name = data['name']
     stipend.summary = data.get('summary', stipend.summary)
