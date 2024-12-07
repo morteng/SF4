@@ -70,14 +70,14 @@ def edit(stipend_id):
             'open_for_applications': form.open_for_applications.data
         }
         
-        # Ensure the application deadline can be either a valid datetime object or None.
+        # Ensure the application deadline can be either a valid datetime object or None. AI!
         if not form.validate_application_deadline(form.application_deadline):
             stipend_data['application_deadline'] = None
         
         updated = update_stipend(stipend, stipend_data)
         if updated:
             flash('Stipend updated successfully.', 'success')
-            return redirect(url_for('admin_stipend.index'))
+            return redirect(url_for('admin.admin_stipend.index'))
         else:
             flash('Failed to update stipend.', 'danger')
     else:
