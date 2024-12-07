@@ -17,30 +17,12 @@ class StipendForm(FlaskForm):
     def validate_application_deadline(self, field):
         if field.data:
             try:
-                datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+                # Ensure the data is a string before parsing
+                if isinstance(field.data, datetime):
+                    field.data = field.data.strftime('%Y-%m-%d %H:%M:%S')
+                else:
+                    datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
             except ValueError:
                 raise ValidationError('Not a valid datetime value. Please use the format YYYY-MM-DD HH:MM:SS.')
-
-class BotForm(FlaskForm):
-    name = StringField('Name', validators=[Length(max=255)])
-    description = TextAreaField('Description')
-    status = StringField('Status')
-    submit = SubmitField('Save')
-
-class OrganizationForm(FlaskForm):
-    name = StringField('Name', validators=[Length(max=255)])
-    description = TextAreaField('Description')
-    homepage_url = URLField('Homepage URL')
-    submit = SubmitField('Save')
-
-class TagForm(FlaskForm):
-    name = StringField('Name', validators=[Length(max=255)])
-    category = StringField('Category')
-    submit = SubmitField('Save')
-
-class UserForm(FlaskForm):
-    username = StringField('Username', validators=[Length(max=255)])
-    email = StringField('Email', validators=[Length(max=255)])
-    password = StringField('Password')
-    is_admin = BooleanField('Is Admin')
-    submit = SubmitField('Save')
+        else:
+            field.data = None  # Set to None if the field is empty
