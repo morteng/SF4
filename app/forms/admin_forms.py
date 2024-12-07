@@ -13,7 +13,7 @@ class StipendForm(FlaskForm):
     application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S')  # Removed DataRequired()
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
-# Ensure the application is either a valid datetime, or set it to none. do not raise an error if it is empty, just set it to none (null) if it does not validate AI!
+
     def validate_application_deadline(self, field):
         if field.data:
             try:
@@ -23,7 +23,7 @@ class StipendForm(FlaskForm):
                 else:
                     datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
             except ValueError:
-                raise ValidationError('Not a valid datetime value. Please use the format YYYY-MM-DD HH:MM:SS.')
+                field.data = None  # Set to None if the data is not a valid datetime
         else:
             field.data = None  # Set to None if the field is empty
 
