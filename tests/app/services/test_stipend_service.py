@@ -17,6 +17,9 @@ def test_data():
         'open_for_applications': True
     }
 
+# ensure we test with both a valid application deadline, an invalid application deadline, and a null application deadline. if the application deadline is invalid then it should be set to null. if the application deadline is null then it should be set to null. if the application deadline is valid then it should be set to the provided value. AI!
+
+
 def test_create_stipend(test_data, session):
     # Clean up any existing stipends before the test
     existing_stipends = get_all_stipends()
