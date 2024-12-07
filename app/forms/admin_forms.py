@@ -26,3 +26,5 @@ class StipendForm(FlaskForm):
                 raise ValidationError('Not a valid datetime value. Please use the format YYYY-MM-DD HH:MM:SS.')
         else:
             field.data = None  # Set to None if the field is empty
+
+# create BotForm, OrganizationForm, TagForm, and UserForm similarly, following the same structure and validations AI!
