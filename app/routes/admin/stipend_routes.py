@@ -5,9 +5,10 @@ from app.services.stipend_service import create_stipend, get_all_stipends, delet
 from datetime import datetime
 from app.extensions import db  # Importing db from extensions
 
-admin_stipend = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
+# Create the Blueprint instance
+stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
 
-@admin_stipend.route('/')
+@stipend_bp.route('/')
 @login_required
 def index():
     if not current_user.is_admin:
@@ -15,7 +16,7 @@ def index():
     stipends = get_all_stipends()
     return render_template('admin/stipends/index.html', stipends=stipends)
 
-@admin_stipend.route('/create', methods=['GET', 'POST'])
+@stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     if not current_user.is_admin:
@@ -44,7 +45,7 @@ def create():
             flash('Failed to create stipend.', 'danger')
     return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.create'))
 
-@admin_stipend.route('/<int:stipend_id>/edit', methods=['GET', 'POST'])
+@stipend_bp.route('/<int:stipend_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit(stipend_id):
     if not current_user.is_admin:
@@ -78,7 +79,7 @@ def edit(stipend_id):
             flash('Failed to update stipend.', 'danger')
     return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.edit', stipend_id=stipend.id))
 
-@admin_stipend.route('/<int:stipend_id>/delete', methods=['POST'])
+@stipend_bp.route('/<int:stipend_id>/delete', methods=['POST'])
 @login_required
 def delete(stipend_id):
     if not current_user.is_admin:
