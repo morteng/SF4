@@ -2,7 +2,7 @@ import pytest
 from app.services.stipend_service import create_stipend, get_all_stipends, delete_stipend
 from app.models.stipend import Stipend
 from datetime import datetime, timedelta
-
+# AI ensure application deadline is nullable and validates datetime format AI!
 @pytest.fixture(scope='function')
 def test_data():
     return {
