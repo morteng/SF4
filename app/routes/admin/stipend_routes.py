@@ -45,7 +45,7 @@ def create():
         for field, errors in form.errors.items():
             for error in errors:
                 flash(f"{field}: {error}", 'danger')
-    return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.create'))
+    return render_template('admin/stipend_form.html', form=form, action=url_for('admin.admin_stipend.create'))
 
 @stipend_bp.route('/<int:stipend_id>/edit', methods=['GET', 'POST'])
 @login_required
