@@ -66,13 +66,14 @@ def edit(stipend_id):
             'homepage_url': form.homepage_url.data or stipend.homepage_url,
             'application_procedure': form.application_procedure.data or stipend.application_procedure,
             'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
-            'application_deadline': form.application_deadline.data,  
             'open_for_applications': form.open_for_applications.data
         }
         
-        # Ensure the application deadline can be either a valid datetime object or None. AI!
-        if not form.validate_application_deadline(form.application_deadline):
+        # Ensure the application deadline can be either a valid datetime object or None.
+        if form.application_deadline.errors:
             stipend_data['application_deadline'] = None
+        else:
+            stipend_data['application_deadline'] = form.application_deadline.data
         
         updated = update_stipend(stipend, stipend_data)
         if updated:
