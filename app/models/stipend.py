@@ -9,7 +9,7 @@ class Stipend(db.Model):
     homepage_url = db.Column(db.String(255), nullable=True)
     application_procedure = db.Column(db.Text, nullable=True)
     eligibility_criteria = db.Column(db.Text, nullable=True)
-    application_deadline = db.Column(db.DateTime, nullable=True)
+    application_deadline = db.Column(db.DateTime, nullable=True)  # Ensure this is nullable
     open_for_applications = db.Column(db.Boolean, default=True, nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
