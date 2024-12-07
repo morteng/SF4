@@ -23,22 +23,31 @@ def delete_stipend(stipend, session):
         logging.error(f"Error deleting stipend: {e}")
         session.rollback()
         return False
-# AI ensure application deadline is nullable and validates datetime format AI!
+
 def create_stipend(data, session):
     if Stipend.query.filter_by(name=data['name']).first():
         logging.warning("Stipend with this name already exists.")
         return None  # or raise an exception, depending on your preference
     
-    try:
-        application_deadline = data.get('application_deadline')
-        if application_deadline and not isinstance(application_deadline, datetime):
-            logging.error(f"Invalid application deadline type: {type(application_deadline)}")
+    application_deadline = data.get('application_deadline')
+    if application_deadline:
+        try:
+            application_deadline = datetime.strptime(application_deadline, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            logging.error(f"Invalid application deadline format: {application_deadline}")
             return None
-    except Exception as e:
-        logging.error(f"Error processing application deadline: {e}")
-        return None
     
-    new_stipend = Stipend(**data)
+    new_stipend = Stipend(
+        name=data['name'],
+        summary=data.get('summary'),
+        description=data.get('description'),
+        homepage_url=data.get('homepage_url'),
+        application_procedure=data.get('application_procedure'),
+        eligibility_criteria=data.get('eligibility_criteria'),
+        application_deadline=application_deadline,
+        open_for_applications=data.get('open_for_applications')
+    )
+    
     session.add(new_stipend)
     
     try:
@@ -50,18 +59,6 @@ def create_stipend(data, session):
         session.rollback()
         return None
 
-def get_stipend_by_id(stipend_id):
-    try:
-        stipend = Stipend.query.get(stipend_id)
-        if stipend:
-            logging.info(f"Stipend with ID {stipend_id} retrieved successfully.")
-        else:
-            logging.warning(f"No stipend found with ID {stipend_id}.")
-        return stipend
-    except SQLAlchemyError as e:
-        logging.error(str(e))
-        return None
-# AI ensure application deadline is nullable and validates datetime format
 def update_stipend(stipend, data):
     stipend.name = data['name']
     stipend.summary = data.get('summary', stipend.summary)
@@ -70,14 +67,14 @@ def update_stipend(stipend, data):
     stipend.application_procedure = data.get('application_procedure', stipend.application_procedure)
     stipend.eligibility_criteria = data.get('eligibility_criteria', stipend.eligibility_criteria)
     
-    try:
-        application_deadline = data.get('application_deadline')
-        if application_deadline and not isinstance(application_deadline, datetime):
-            logging.error(f"Invalid application deadline type: {type(application_deadline)}")
+    application_deadline = data.get('application_deadline')
+    if application_deadline:
+        try:
+            application_deadline = datetime.strptime(application_deadline, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            logging.error(f"Invalid application deadline format: {application_deadline}")
             return None
-    except Exception as e:
-        logging.error(f"Error processing application deadline: {e}")
-        return None
+    stipend.application_deadline = application_deadline
     
     stipend.open_for_applications = data.get('open_for_applications', stipend.open_for_applications)
     
