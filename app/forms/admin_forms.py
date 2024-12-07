@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, DateTimeField, SubmitField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, ValidationError
+from datetime import datetime
 
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=255)])
@@ -9,9 +10,16 @@ class StipendForm(FlaskForm):
     homepage_url = URLField('Homepage URL')
     application_procedure = TextAreaField('Application Procedure')
     eligibility_criteria = TextAreaField('Eligibility Criteria')
-    application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S')
+    application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S', validators=[DataRequired()])
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
+
+    def validate_application_deadline(self, field):
+        if field.data:
+            try:
+                datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise ValidationError('Not a valid datetime value. Please use the format YYYY-MM-DD HH:MM:SS.')
 
 class BotForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=255)])
