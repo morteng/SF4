@@ -51,7 +51,7 @@ def edit(stipend_id):
     if not current_user.is_admin:
         abort(403)
     stipend = get_stipend_by_id(stipend_id)
-    if not stipend:
+    if stipend is None:
         flash('Stipend not found.', 'danger')
         return redirect(url_for('admin.admin_stipend.index'))
     
@@ -71,8 +71,8 @@ def edit(stipend_id):
         if application_deadline:
             data['application_deadline'] = application_deadline
         
-        success = update_stipend(stipend, data)
-        if success:
+        updated = update_stipend(stipend, data)
+        if updated:
             flash('Stipend updated successfully.', 'success')
             return redirect(url_for('admin.admin_stipend.index'))
         else:
@@ -85,10 +85,13 @@ def delete(stipend_id):
     if not current_user.is_admin:
         abort(403)
     stipend = get_stipend_by_id(stipend_id)
-    if not stipend:
+    if stipend is None:
         flash('Stipend not found.', 'danger')
         return redirect(url_for('admin.admin_stipend.index'))
     
-    delete_stipend(stipend, db.session)
-    flash('Stipend deleted successfully.', 'success')
+    deleted = delete_stipend(stipend, db.session)
+    if deleted:
+        flash('Stipend deleted successfully.', 'success')
+    else:
+        flash('Failed to delete stipend.', 'danger')
     return redirect(url_for('admin.admin_stipend.index'))

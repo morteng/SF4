@@ -18,9 +18,11 @@ def delete_stipend(stipend, session):
         session.delete(stipend)
         session.commit()
         logging.info("Stipend deleted successfully.")
+        return True
     except SQLAlchemyError as e:
         logging.error(f"Error deleting stipend: {e}")
         session.rollback()
+        return False
 
 def create_stipend(data, session):
     if Stipend.query.filter_by(name=data['name']).first():
