@@ -45,7 +45,7 @@ def create():
         for field, errors in form.errors.items():
             for error in errors:
                 flash(f"{field}: {error}", 'danger')
-    return render_template('admin/stipend_form.html', form=form, action=url_for('admin.admin_stipend.create'))
+    return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.create'))
 
 @stipend_bp.route('/<int:stipend_id>/edit', methods=['GET', 'POST'])
 @login_required
@@ -82,20 +82,3 @@ def edit(stipend_id):
             for error in errors:
                 flash(f"{field}: {error}", 'danger')
     return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.edit', stipend_id=stipend.id))
-
-@stipend_bp.route('/<int:stipend_id>/delete', methods=['POST'])
-@login_required
-def delete(stipend_id):
-    if not current_user.is_admin:
-        abort(403)
-    stipend = get_stipend_by_id(stipend_id)
-    if stipend is None:
-        flash('Stipend not found.', 'danger')
-        return redirect(url_for('admin_stipend.index'))
-    
-    deleted = delete_stipend(stipend, db.session)
-    if deleted:
-        flash('Stipend deleted successfully.', 'success')
-    else:
-        flash('Failed to delete stipend.', 'danger')
-    return redirect(url_for('admin_stipend.index'))
