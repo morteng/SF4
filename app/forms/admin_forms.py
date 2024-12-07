@@ -27,4 +27,30 @@ class StipendForm(FlaskForm):
         else:
             field.data = None  # Set to None if the field is empty
 
-# create BotForm, OrganizationForm, TagForm, and UserForm similarly, following the same structure and validations AI!
+class BotForm(FlaskForm):
+    name = StringField('Name', validators=[Length(max=255)])
+    description = TextAreaField('Description')
+    status = StringField('Status')
+    submit = SubmitField('Create')
+
+    def validate_status(self, field):
+        if field.data not in ['active', 'inactive']:
+            raise ValidationError('Status must be either "active" or "inactive".')
+
+class OrganizationForm(FlaskForm):
+    name = StringField('Name', validators=[Length(max=255)])
+    description = TextAreaField('Description')
+    homepage_url = URLField('Homepage URL')
+    submit = SubmitField('Create')
+
+class TagForm(FlaskForm):
+    name = StringField('Name', validators=[Length(max=255)])
+    category = StringField('Category')
+    submit = SubmitField('Create')
+
+class UserForm(FlaskForm):
+    username = StringField('Username', validators=[Length(max=255)])
+    email = StringField('Email')
+    password = StringField('Password')
+    is_admin = BooleanField('Is Admin')
+    submit = SubmitField('Create')
