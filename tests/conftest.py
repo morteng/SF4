@@ -42,16 +42,13 @@ def admin_user(db):  # Use the alias if necessary
 @pytest.fixture(scope='function')
 def db(app):
     """Create a new database session for a test."""
+    Session = scoped_session(sessionmaker(bind=_db.engine))
     with _db.engine.connect() as connection:
         transaction = connection.begin()
 
-        options = dict(bind=connection)
-        Session = scoped_session(sessionmaker(bind=_db.engine))
-        session = Session()
-
-        yield session
+        Session.configure(bind=connection)
+        yield Session
 
         # Rollback the transaction and close the session after each test
-        session.rollback()
-        connection.close()
-        session.remove()
+        transaction.rollback()
+        Session.remove()
