@@ -9,6 +9,11 @@ def app():
     app = create_app('testing')
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    # Add the following configurations
+    app.config['SERVER_NAME'] = 'localhost'
+    app.config['APPLICATION_ROOT'] = '/'
+    app.config['PREFERRED_URL_SCHEME'] = 'http'
+
     with app.app_context():
         _db.create_all()
         yield app
@@ -43,4 +48,4 @@ def db(app):
     # Rollback the transaction and close the session after each test
     session.rollback()
     connection.close()
-    session.close() 
+    session.close()
