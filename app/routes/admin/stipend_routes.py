@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, redirect, url_for, flash, abort, r
 from flask_login import login_required, current_user
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import get_all_stipends, delete_stipend, create_stipend, get_stipend_by_id, update_stipend
-from datetime import datetime
 
 stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
 
@@ -43,7 +42,7 @@ def create():
             'application_procedure': form.application_procedure.data or None,
             'eligibility_criteria': form.eligibility_criteria.data or None,
             # Ensure application_deadline is a string
-            'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S') if isinstance(form.application_deadline.data, datetime) else form.application_deadline.data,
+            'application_deadline': form.application_deadline.data,
             'open_for_applications': form.open_for_applications.data
         }
         
@@ -79,7 +78,7 @@ def update(id):
             'application_procedure': form.application_procedure.data or stipend.application_procedure,
             'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
             # Ensure application_deadline is a string
-            'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S') if isinstance(form.application_deadline.data, datetime) else form.application_deadline.data,
+            'application_deadline': form.application_deadline.data,
             'open_for_applications': form.open_for_applications.data
         }
         
