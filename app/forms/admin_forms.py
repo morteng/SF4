@@ -28,6 +28,7 @@ class StipendForm(FlaskForm):
 
     def validate_application_deadline(self, application_deadline):
         if self.application_deadline.data:
+            print(f"Type of application_deadline.data: {type(self.application_deadline.data)}")
             try:
                 # Convert the string to a datetime object for validation
                 parsed_date = datetime.strptime(self.application_deadline.data, '%Y-%m-%d %H:%M:%S')
