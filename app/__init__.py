@@ -8,6 +8,7 @@ from .models.user import User
 from .routes.admin.__init__ import register_admin_blueprints
 from .routes.user_routes import user_bp
 from .routes.public_routes import public_bp
+from sqlalchemy.orm import Session
 
 csrf = CSRFProtect()
 
@@ -24,7 +25,9 @@ def create_app(config_name='development'):
     # Set up user loader
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        with app.app_context():
+            session = Session(db.engine)
+            return session.get(User, int(user_id))
 
     # Ensure the database is initialized and the admin user is set up
     with app.app_context():
