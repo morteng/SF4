@@ -22,3 +22,4 @@ class StipendForm(FlaskForm):
             stipend = Stipend.query.filter_by(name=name.data).first()
             if stipend:
                 raise ValidationError('Stipend with this name already exists.')
+# create 3 more forms for Tag, User, and Bot with the same structure as StipendForm AI!
