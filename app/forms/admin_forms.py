@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField, BooleanField, DateTimeField, PasswordField
 from wtforms.validators import DataRequired, Length, ValidationError, Email
 from app.models.stipend import Stipend
+from datetime import datetime
 
 class OrganizationForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
@@ -26,12 +27,11 @@ class StipendForm(FlaskForm):
             raise ValidationError('Stipend with this name already exists.')
 
     def validate_application_deadline(self, application_deadline):
-        if self.application_deadline.data is not None and isinstance(self.application_deadline.data, str):
+        if self.application_deadline.data:
             try:
-                from datetime import datetime
                 self.application_deadline.data = datetime.strptime(self.application_deadline.data, '%Y-%m-%d %H:%M:%S')
             except ValueError:
-                self.application_deadline.data = None
+                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
