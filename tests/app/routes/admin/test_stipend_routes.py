@@ -18,7 +18,8 @@ def stipend_data():
 def test_create_stipend(client, app, stipend_data, admin_user):
     with app.app_context():
         # Log in the admin user
-        client.post(url_for('admin.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
+        login_response = client.post(url_for('admin.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
+        assert login_response.status_code == 200
         
         # Simulate form submission
         response = client.post(url_for('admin.stipend.create'), data=stipend_data, follow_redirects=True)
