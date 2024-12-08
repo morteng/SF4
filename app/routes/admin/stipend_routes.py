@@ -119,4 +119,4 @@ def index():
         abort(403)
     
     stipends = get_all_stipends()
-    return render_template('admin/stipend_index.html', stipends=stipends)
+    return render_template('admin/stipend/index.html', stipends=stipends)

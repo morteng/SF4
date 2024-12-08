@@ -2,6 +2,7 @@
 
 {% block content %}
 <h2>{% if stipend %}Edit{% else %}Create{% endif %} Stipend</h2>
+<div id="stipends">
 <form hx-post="{{ action }}" hx-target="#stipends" hx-swap="outerHTML">
     {{ form.hidden_tag() }}
     <div>
@@ -61,5 +62,6 @@
         {{ form.submit() }}
     </div>
 </form>
+</div>
 <a href="{{ url_for('admin.admin_stipend.index') }}">Back to Stipends</a>
 {% endblock %}
