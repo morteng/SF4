@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, BooleanField, DateTimeField, PasswordField
+from wtforms import StringField, TextAreaField, SubmitField, BooleanField, PasswordField
 from wtforms.validators import DataRequired, Length, ValidationError, Email, Optional
 from app.models.stipend import Stipend
 from datetime import datetime
@@ -17,10 +17,10 @@ class StipendForm(FlaskForm):
     homepage_url = StringField('Homepage URL', validators=[Length(max=255)])
     application_procedure = TextAreaField('Application Procedure')
     eligibility_criteria = TextAreaField('Eligibility Criteria')
-    application_deadline = DateTimeField(
+    # Change this to StringField
+    application_deadline = StringField(
         'Application Deadline', 
-        format='%Y-%m-%d %H:%M:%S', 
-        validators=[Optional()]
+        validators=[Optional(), Length(max=100)]
     )
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
@@ -30,21 +30,20 @@ class StipendForm(FlaskForm):
         if stipend:
             raise ValidationError('Stipend with this name already exists.')
 
-    def validate_application_deadline(self, application_deadline):
-        data = self.application_deadline.data
-
-        # If the data is None or an empty string, treat as None
-        if data is None or (isinstance(data, str) and not data.strip()):
-            self.application_deadline.data = None
+    def validate_application_deadline(self, field):
+        data = field.data
+        # If it's empty or just whitespace, set None
+        if not data or not data.strip():
+            field.data = None
             return
 
-        # If it's a string, try parsing
-        if isinstance(data, str):
-            try:
-                self.application_deadline.data = datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
-            except ValueError:
-                # Malformed date? Just store None instead of raising an error.
-                self.application_deadline.data = None
+        # If there's something in the field, try parsing it
+        try:
+            # Just try parsing to see if it's valid, but we won't store datetime directly
+            datetime.strptime(data.strip(), '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            # If it's invalid, just store None
+            field.data = None
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
