@@ -38,7 +38,7 @@ def login():
                 return redirect(url_for('user.profile'))
         else:
             flash('Invalid username or password.', 'danger')
-    return render_template('public/login.html', form=form)
+    return render_template('login.html', form=form)
 
 @public_bp.route('/register', methods=['GET', 'POST'])
 def register():

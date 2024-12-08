@@ -22,7 +22,7 @@ def test_dashboard_data(client, admin_user):
         assert response.status_code == 200
 
         # Access the dashboard route
-        response = client.get(url_for('admin.dashboard'))
+        response = client.get(url_for('admin.dashboard.dashboard'))
         
         assert response.status_code == 200
         assert b'Stipend Count:' in response.data
