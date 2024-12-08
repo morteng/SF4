@@ -28,10 +28,11 @@ class StipendForm(FlaskForm):
 
     def validate_application_deadline(self, application_deadline):
         if self.application_deadline.data:
-            try:
-                self.application_deadline.data = datetime.strptime(self.application_deadline.data, '%Y-%m-%d %H:%M:%S')
-            except ValueError:
-                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
+            if not isinstance(self.application_deadline.data, datetime):
+                try:
+                    self.application_deadline.data = datetime.strptime(self.application_deadline.data, '%Y-%m-%d %H:%M:%S')
+                except ValueError:
+                    raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
