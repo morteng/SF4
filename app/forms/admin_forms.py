@@ -43,7 +43,7 @@ class StipendForm(FlaskForm):
             try:
                 self.application_deadline.data = datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
             except ValueError:
-                # Instead of raising an error, just set to None
+                # Malformed date? Just store None instead of raising an error.
                 self.application_deadline.data = None
 
 class TagForm(FlaskForm):
