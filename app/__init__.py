@@ -1,13 +1,16 @@
 from flask import Flask
 from flask_migrate import Migrate
+from flask_wtf.csrf import CSRFProtect
 from .config import config_by_name
-from .extensions import db, login_manager, csrf  # Import csrf from extensions
+from .extensions import db, login_manager  # Removed csrf from extensions as it's now initialized here
 from .models import init_models
 from .models.user import User
 from .routes.admin.__init__ import register_admin_blueprints
 from .routes.user_routes import user_bp
 from .routes.public_routes import public_bp
 import os
+
+csrf = CSRFProtect()
 
 def create_app(config_name='development'):
     app = Flask(__name__)
