@@ -10,6 +10,11 @@ def app():
     # Use the testing configuration
     app = create_app('testing')
 
+    # Set necessary configurations for URL generation
+    app.config['SERVER_NAME'] = 'localhost'
+    app.config['APPLICATION_ROOT'] = '/'
+    app.config['PREFERRED_URL_SCHEME'] = 'http'
+
     # Create an application context before running tests
     with app.app_context():
         init_models(app)  # Ensure models are initialized
