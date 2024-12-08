@@ -2,6 +2,13 @@ from flask import Blueprint, render_template
 from app.services.stipend_service import get_stipend_count
 from app.services.bot_service import get_recent_logs
 
+# Import sub-blueprints
+from .bot_routes import admin_bot_bp
+from .organization_routes import org_bp
+from .stipend_routes import stipend_bp
+from .tag_routes import tag_bp
+from .user_routes import user_bp
+
 admin_dashboard_bp = Blueprint('admin_dashboard', __name__)
 
 @admin_dashboard_bp.route('/data')
