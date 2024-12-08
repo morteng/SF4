@@ -132,7 +132,7 @@ def test_create_stipend_with_htmx(client, app, stipend_data, admin_user):
                 'HX-Target': '#stipend-form-container'
             }
         )
-
+        
         assert response.status_code == 200
 
         # Check if the stipend was created in the database
@@ -218,7 +218,7 @@ def test_update_stipend(client, app, admin_user, test_stipend):
         assert response.status_code == 200
 
         # Check if the stipend was updated in the database
-        stipend = Stipend.query.get(test_stipend.id)
+        stipend = db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
         assert stipend.name == test_stipend.name
         assert stipend.summary == "Updated summary."
         assert stipend.description == "Updated description."
@@ -249,7 +249,7 @@ def test_update_stipend_with_unchecked_open_for_applications(client, app, admin_
         assert response.status_code == 200
 
         # Check if the stipend was updated in the database with open_for_applications as False
-        stipend = Stipend.query.get(test_stipend.id)
+        stipend = db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
         assert stipend.open_for_applications is False
 
 def test_update_stipend_with_blank_application_deadline(client, app, admin_user, test_stipend):
@@ -274,7 +274,7 @@ def test_update_stipend_with_blank_application_deadline(client, app, admin_user,
         assert response.status_code == 200
 
         # Check if the stipend was updated in the database with application_deadline as None
-        stipend = Stipend.query.get(test_stipend.id)
+        stipend = db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
         assert stipend.application_deadline is None
 
 def test_update_stipend_with_invalid_application_deadline(client, app, admin_user, test_stipend):
@@ -299,7 +299,7 @@ def test_update_stipend_with_invalid_application_deadline(client, app, admin_use
         assert response.status_code == 200
 
         # Check if the stipend was updated in the database with application_deadline as None
-        stipend = Stipend.query.get(test_stipend.id)
+        stipend = db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
         assert stipend.application_deadline is None
 
 def test_delete_stipend(client, app, admin_user, test_stipend):
@@ -313,7 +313,7 @@ def test_delete_stipend(client, app, admin_user, test_stipend):
         assert response.status_code == 200
 
         # Check if the stipend was deleted from the database
-        stipend = Stipend.query.get(test_stipend.id)
+        stipend = db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
         assert stipend is None
 
 def test_delete_non_existent_stipend(client, app, admin_user):

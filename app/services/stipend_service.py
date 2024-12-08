@@ -50,7 +50,7 @@ def create_stipend(data):
 
 def get_stipend_by_id(stipend_id):
     try:
-        return Stipend.query.get(stipend_id)
+        return db.session.get(Stipend, stipend_id)  # Updated to use Session.get()
     except SQLAlchemyError as e:
         # Log the error
         print(str(e))
