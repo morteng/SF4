@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user
 from app.forms.user_forms import LoginForm, RegisterForm
 from app.models.user import User
-from app.extensions import db  # Import db from extensions
 
 public_bp = Blueprint('public', __name__)
 
@@ -18,7 +17,6 @@ def about():
 
 @public_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    """Handle user login."""
     if current_user.is_authenticated:
         # Redirect to admin dashboard if user is an admin, else redirect to user profile
         if current_user.is_admin:
@@ -43,7 +41,6 @@ def login():
 
 @public_bp.route('/register', methods=['GET', 'POST'])
 def register():
-    """Handle user registration."""
     if current_user.is_authenticated:
         return redirect(url_for('user.profile'))
     

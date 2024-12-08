@@ -21,7 +21,7 @@ def client(app):
     return app.test_client()
 
 @pytest.fixture(scope='function')
-def admin_user(app, db_session):
+def admin_user(db_session):
     user = User(username='admin', email='admin@example.com', is_admin=True)
     user.set_password('password123')
     db_session.add(user)
@@ -42,4 +42,4 @@ def db_session(app, db):
     # Rollback the transaction and close the session after each test
     session.rollback()
     connection.close()
-    session.close()  # Use session.close() instead of session.remove()
+    session.remove()  # Use session.remove() instead of session.close()
