@@ -1,3 +1,4 @@
+# tests/app/routes/admin/test_dashboard_routes.py
 from flask import url_for, g
 import pytest
 

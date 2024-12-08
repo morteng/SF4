@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_migrate import Migrate
 from .config import config_by_name
-from .extensions import db, login_manager
+from .extensions import db, login_manager, csrf  # Import csrf from extensions
 from .models import init_models
 from .models.user import User
 from .routes.admin.__init__ import register_admin_blueprints
@@ -16,6 +16,7 @@ def create_app(config_name='development'):
     # Initialize extensions
     db.init_app(app)
     login_manager.init_app(app)
+    csrf.init_app(app)  # Initialize CSRF protection
     migrate = Migrate(app, db)
 
     # Set up user loader
