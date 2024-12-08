@@ -53,6 +53,16 @@ def create():
         print("Form validated successfully!")
         print("Form data after validation:", form.data)  # Debugging statement
         
+        deadline_str = form.application_deadline.data
+        if deadline_str:
+            try:
+                deadline_dt = datetime.strptime(deadline_str, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                # If parsing fails, fallback to None
+                deadline_dt = None
+        else:
+            deadline_dt = None
+
         new_stipend_data = {
             'name': form.name.data,
             'summary': form.summary.data or None,
@@ -61,7 +71,7 @@ def create():
             'application_procedure': form.application_procedure.data or None,
             'eligibility_criteria': form.eligibility_criteria.data or None,
             # Ensure application_deadline is a datetime object
-            'application_deadline': form.application_deadline.data if isinstance(form.application_deadline.data, datetime) else None,
+            'application_deadline': deadline_dt,
             'open_for_applications': form.open_for_applications.data
         }
         
@@ -108,6 +118,16 @@ def update(id):
         print("Form validated successfully!")
         print("Form data after validation:", form.data)  # Debugging statement
         
+        deadline_str = form.application_deadline.data
+        if deadline_str:
+            try:
+                deadline_dt = datetime.strptime(deadline_str, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                # If parsing fails, fallback to None
+                deadline_dt = None
+        else:
+            deadline_dt = None
+
         update_data = {
             'name': form.name.data,
             'summary': form.summary.data or stipend.summary,
@@ -116,7 +136,7 @@ def update(id):
             'application_procedure': form.application_procedure.data or stipend.application_procedure,
             'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
             # Ensure application_deadline is a datetime object
-            'application_deadline': form.application_deadline.data if isinstance(form.application_deadline.data, datetime) else None,
+            'application_deadline': deadline_dt,
             'open_for_applications': form.open_for_applications.data
         }
         
