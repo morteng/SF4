@@ -73,3 +73,5 @@ class BotForm(FlaskForm):
             bot = Bot.query.filter_by(name=name.data).first()
             if bot:
                 raise ValidationError('Bot with this name already exists.')
+
+# add organizaion form AI!
