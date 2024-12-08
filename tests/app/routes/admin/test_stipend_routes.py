@@ -5,9 +5,9 @@ from app.models.stipend import Stipend
 from app.extensions import db
 
 @pytest.fixture
-def stipend_data():
+def stipend_data(request):
     return {
-        'name': 'Test Stipend',
+        'name': f"Test Stipend {request.node.name}",
         'summary': 'This is a test stipend.',
         'description': 'Detailed description of the test stipend.',
         'homepage_url': 'http://example.com/stipend',
@@ -32,7 +32,7 @@ def test_create_stipend(client, app, stipend_data, admin_user):
         assert response.status_code == 200
         
         # Check if the stipend was created in the database
-        stipend = Stipend.query.filter_by(name='Test Stipend').first()
+        stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.summary == 'This is a test stipend.'
         assert stipend.description == 'Detailed description of the test stipend.'
@@ -55,7 +55,7 @@ def test_create_stipend_with_blank_application_deadline(client, app, stipend_dat
         assert response.status_code == 200
         
         # Check if the stipend was created in the database with application_deadline as None
-        stipend = Stipend.query.filter_by(name='Test Stipend').first()
+        stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None
 
@@ -72,6 +72,6 @@ def test_create_stipend_with_invalid_application_deadline(client, app, stipend_d
         assert response.status_code == 200
         
         # Check if the stipend was created in the database with application_deadline as None
-        stipend = Stipend.query.filter_by(name='Test Stipend').first()
+        stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None
