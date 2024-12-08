@@ -4,8 +4,9 @@ from flask import url_for
 
 @pytest.mark.usefixtures('app', 'client', 'admin_user')
 def test_dashboard_data(client, admin_user):
-    # Generate CSRF token
-    csrf_token = generate_csrf()
+    # Push a request context to generate CSRF token
+    with client.application.test_request_context():
+        csrf_token = generate_csrf()
 
     # Log in the admin user
     response = client.post(url_for('public.login'), data={
