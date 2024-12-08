@@ -1,5 +1,6 @@
 import pytest
-from flask import url_for, generate_csrf
+from flask import url_for
+from flask_wtf.csrf import generate_csrf
 
 @pytest.mark.usefixtures('app', 'client', 'admin_user')
 def test_dashboard_data(client, admin_user, app):
