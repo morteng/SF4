@@ -20,11 +20,11 @@ def test_create_stipend(test_data, db):
     # Clean up any existing stipends before the test
     existing_stipends = get_all_stipends()
     for stipend in existing_stipends:
-        delete_stipend(stipend, db)
+        delete_stipend(stipend)
     db.commit()
 
     # Create a stipend using the service function with the provided session
-    new_stipend = create_stipend(test_data, db)
+    new_stipend = create_stipend(test_data)
 
     # Assert that the stipend was created successfully
     assert new_stipend is not None
@@ -44,21 +44,21 @@ def test_create_stipend(test_data, db):
     assert abs((stipends[0].application_deadline - test_data['application_deadline']).total_seconds()) < deadline_tolerance.total_seconds()
 
     # Clean up: delete the created stipend using the provided session
-    delete_stipend(new_stipend, db)
+    delete_stipend(new_stipend)
     db.commit()
 
 def test_create_stipend_with_blank_deadline(test_data, db):
     # Clean up any existing stipends before the test
     existing_stipends = get_all_stipends()
     for stipend in existing_stipends:
-        delete_stipend(stipend, db)
+        delete_stipend(stipend)
     db.commit()
 
     # Set application deadline to None
     test_data['application_deadline'] = None
 
     # Create a stipend using the service function with the provided session
-    new_stipend = create_stipend(test_data, db)
+    new_stipend = create_stipend(test_data)
 
     # Assert that the stipend was created successfully
     assert new_stipend is not None
@@ -70,21 +70,21 @@ def test_create_stipend_with_blank_deadline(test_data, db):
     assert stipends[0].application_deadline is None
 
     # Clean up: delete the created stipend using the provided session
-    delete_stipend(new_stipend, db)
+    delete_stipend(new_stipend)
     db.commit()
 
 def test_create_stipend_with_invalid_deadline(test_data, db):
     # Clean up any existing stipends before the test
     existing_stipends = get_all_stipends()
     for stipend in existing_stipends:
-        delete_stipend(stipend, db)
+        delete_stipend(stipend)
     db.commit()
 
     # Set application deadline to an invalid datetime string
     test_data['application_deadline'] = "invalid-date"
 
     # Create a stipend using the service function with the provided session
-    new_stipend = create_stipend(test_data, db)
+    new_stipend = create_stipend(test_data)
 
     # Assert that the stipend was created successfully
     assert new_stipend is not None
@@ -96,5 +96,5 @@ def test_create_stipend_with_invalid_deadline(test_data, db):
     assert stipends[0].application_deadline is None
 
     # Clean up: delete the created stipend using the provided session
-    delete_stipend(new_stipend, db)
+    delete_stipend(new_stipend)
     db.commit()
