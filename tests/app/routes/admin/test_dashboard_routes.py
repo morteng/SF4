@@ -18,12 +18,15 @@ def test_dashboard_data(client, app, admin_user):
     }, follow_redirects=True)
     assert response.status_code == 200
 
-    # Ensure the user is logged in by setting the session variable
+    # Ensure the user is logged in by checking the session variable
     with client.session_transaction() as sess:
         print(f"Session after login: {sess}")  # Debugging statement
+        assert 'user_id' in sess and sess['user_id'] == admin_user.id
 
     # Access the dashboard data endpoint
     response = client.get(url_for('admin.dashboard.data'))
+    print(f"Response status code: {response.status_code}")  # Debugging statement
+    print(f"Response data: {response.data}")  # Debugging statement
     assert response.status_code == 200
     assert b'Stipend Count:' in response.data
     assert b'Recent Bot Logs:' in response.data
