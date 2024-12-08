@@ -1,4 +1,4 @@
-from flask import url_for
+from flask import url_for, g
 import pytest
 
 @pytest.fixture(scope='function')
@@ -30,3 +30,10 @@ def test_dashboard_data(client, app, admin_user):
     assert response.status_code == 200
     assert b'Stipend Count:' in response.data
     assert b'Recent Bot Logs:' in response.data
+
+    # Ensure current_user is set correctly
+    with app.test_request_context():
+        from flask_login import current_user
+        print(f"Current user: {current_user}")  # Debugging statement
+        assert current_user.is_authenticated
+        assert current_user.id == admin_user.id
