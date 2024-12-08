@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from app.services.stipend_service import get_stipend_count
 from app.services.bot_service import get_recent_logs
 
-dashboard_bp = Blueprint('dashboard', __name__)
+dashboard_bp = Blueprint('admin.dashboard', __name__)
 
 @dashboard_bp.route('/dashboard')
 @login_required
