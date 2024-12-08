@@ -1,3 +1,4 @@
+import pytest
 from flask_wtf.csrf import generate_csrf
 from flask import url_for
 
