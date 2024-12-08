@@ -1,3 +1,4 @@
+# app/services/stipend_service.py
 from app.models.stipend import Stipend
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
@@ -66,7 +67,7 @@ def update_stipend(stipend, data):
     try:
         application_deadline = data.get('application_deadline')
         if application_deadline and isinstance(application_deadline, datetime):
-            pass
+            stipend.application_deadline = application_deadline
         else:
             stipend.application_deadline = None
     except ValueError as e:
