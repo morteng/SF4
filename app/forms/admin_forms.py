@@ -28,18 +28,20 @@ class StipendForm(FlaskForm):
             raise ValidationError('Stipend with this name already exists.')
 
     def validate_application_deadline(self, application_deadline):
-        if self.application_deadline.data:
-            try:
-                # Parse datetime only if a value is provided
-                if isinstance(self.application_deadline.data, str):
-                    self.application_deadline.data = datetime.strptime(self.application_deadline.data, '%Y-%m-%d %H:%M:%S')
-                elif not isinstance(self.application_deadline.data, datetime):
-                    raise ValidationError("Not a valid datetime value.")
-            except ValueError:
-                raise ValidationError("Not a valid datetime value.")
-        else:
-            # Set to None explicitly if the field is blank
+        data = self.application_deadline.data
+        # If the field is blank, treat it as None
+        if not data or data.strip() == '':
             self.application_deadline.data = None
+            return
+        
+        # Otherwise, try to parse the date
+        try:
+            if isinstance(data, str):
+                self.application_deadline.data = datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
+            elif not isinstance(data, datetime):
+                raise ValidationError("Not a valid datetime value.")
+        except ValueError:
+            raise ValidationError("Not a valid datetime value.")
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
