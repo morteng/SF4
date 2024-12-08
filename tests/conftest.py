@@ -43,4 +43,4 @@ def db(app):
     # Rollback the transaction and close the session after each test
     session.rollback()
     connection.close()
-    session.remove()  # Use session.remove() instead of session.close()
+    session.close() 
