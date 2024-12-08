@@ -6,7 +6,6 @@ from werkzeug.exceptions import abort
 from app.extensions import db
 from urllib.parse import urlparse
 
-# Define the blueprint for organization routes
 org_bp = Blueprint('admin_org', __name__, url_prefix='/organizations')
 
 @org_bp.route('/create', methods=['GET', 'POST'])
@@ -17,7 +16,6 @@ def create():
         if not data:
             abort(400, description='No input data provided.')
         
-        # Validate required fields
         name = data.get('name')
         description = data.get('description')
         homepage_url = data.get('homepage_url')
@@ -25,7 +23,6 @@ def create():
         if not name or not homepage_url:
             abort(400, description='Name and Homepage URL are required.')
         
-        # Validate URL format
         try:
             result = urlparse(homepage_url)
             if not all([result.scheme, result.netloc]):
@@ -33,7 +30,6 @@ def create():
         except ValueError:
             abort(400, description='Homepage URL is invalid.')
         
-        # Create the organization
         new_org = create_organization({
             'name': name,
             'description': description,

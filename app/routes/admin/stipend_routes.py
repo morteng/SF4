@@ -33,9 +33,6 @@ def create():
         abort(403)
     form = StipendForm()
     
-    # Debugging statement to print form data before validation
-    print(f"Form data: {request.form}")  # Debugging statement
-    
     if form.validate_on_submit():
         new_stipend_data = {
             'name': form.name.data,
@@ -47,7 +44,6 @@ def create():
             'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S') if form.application_deadline.data else None,
             'open_for_applications': form.open_for_applications.data
         }
-        print(f"Form data: {new_stipend_data}")  # Debugging statement
         
         new_stipend = create_stipend(new_stipend_data)
         
@@ -57,7 +53,6 @@ def create():
         else:
             flash('Stipend with this name already exists or invalid application deadline.', 'danger')
     else:
-        # Debugging statement to print form errors
         print(f"Form errors: {form.errors}")  # Debugging statement
     
     return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.create'))
@@ -73,9 +68,6 @@ def update(id):
         return redirect(url_for('admin_stipend.index'))
     form = StipendForm(obj=stipend)
     
-    # Debugging statement to print form data before validation
-    print(f"Form data: {request.form}")  # Debugging statement
-    
     if form.validate_on_submit():
         update_data = {
             'name': form.name.data,
@@ -88,15 +80,12 @@ def update(id):
             'open_for_applications': form.open_for_applications.data
         }
         
-        print(f"Form data: {update_data}")  # Debugging statement
-        
         if update_stipend(stipend, update_data):
             flash('Stipend updated successfully.', 'success')
             return redirect(url_for('admin_stipend.index'))
         else:
             flash('Invalid application deadline.', 'danger')
     else:
-        # Debugging statement to print form errors
         print(f"Form errors: {form.errors}")  # Debugging statement
     
     return render_template('admin/stipend_form.html', form=form, stipend=stipend, action=url_for('admin_stipend.update', id=id))
