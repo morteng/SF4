@@ -6,7 +6,7 @@ from .models import init_models
 from .models.user import User
 from .routes.admin.__init__ import register_admin_blueprints
 from .routes.user_routes import user_bp
-from .routes.visitor_routes import visitor_bp
+from .routes.public_routes import public_bp
 import os
 
 def create_app(config_name='development'):
@@ -32,6 +32,6 @@ def create_app(config_name='development'):
     # Register blueprints
     register_admin_blueprints(app)
     app.register_blueprint(user_bp, url_prefix='/user')
-    app.register_blueprint(visitor_bp)
+    app.register_blueprint(public_bp)
 
     return app
