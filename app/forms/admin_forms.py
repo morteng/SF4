@@ -30,12 +30,15 @@ class StipendForm(FlaskForm):
         if self.application_deadline.data:
             print(f"Type of application_deadline.data: {type(self.application_deadline.data)}")
             try:
-                # Convert the string to a datetime object for validation
-                parsed_date = datetime.strptime(self.application_deadline.data, '%Y-%m-%d %H:%M:%S')
-                # Set the form data back to the original string after validation
-                self.application_deadline.data = parsed_date.strftime('%Y-%m-%d %H:%M:%S')
-            except ValueError:
-                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
+                # Check if the data is already a datetime object
+                if isinstance(self.application_deadline.data, str):
+                    parsed_date = datetime.strptime(self.application_deadline.data, '%Y-%m-%d %H:%M:%S')
+                elif isinstance(self.application_deadline.data, datetime):
+                    parsed_date = self.application_deadline.data
+                else:
+                    raise ValidationError("Invalid date format")
+            except (ValueError, TypeError):
+                raise ValidationError("Invalid date format")
         else:
             self.application_deadline.data = None  # Set to None if blank
 
