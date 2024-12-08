@@ -29,18 +29,21 @@ class StipendForm(FlaskForm):
 
     def validate_application_deadline(self, application_deadline):
         data = self.application_deadline.data
-        # If the field is blank, treat it as None
-        if not data or data.strip() == '':
+
+        # If the data is None or an empty string, treat as None
+        if data is None or (isinstance(data, str) and not data.strip()):
             self.application_deadline.data = None
             return
-        
-        # Otherwise, try to parse the date
-        try:
-            if isinstance(data, str):
+
+        # If it's a string, try parsing
+        if isinstance(data, str):
+            try:
                 self.application_deadline.data = datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
-            elif not isinstance(data, datetime):
+            except ValueError:
                 raise ValidationError("Not a valid datetime value.")
-        except ValueError:
+
+        # If it's already a datetime object, no further action needed
+        elif not isinstance(data, datetime):
             raise ValidationError("Not a valid datetime value.")
 
 class TagForm(FlaskForm):
