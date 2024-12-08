@@ -1,6 +1,5 @@
 import pytest
-from flask_wtf.csrf import generate_csrf
-from flask import url_for
+from flask import url_for, session
 
 @pytest.mark.usefixtures('app', 'client', 'admin_user')
 def test_dashboard_data(client, admin_user):
@@ -9,14 +8,15 @@ def test_dashboard_data(client, admin_user):
         # First, make a GET request to establish a request context
         client.get(url_for('public.login'))
 
-        # Generate CSRF token
-        csrf_token = generate_csrf()
+        # Manually set CSRF token in session for testing purposes
+        with client.session_transaction() as sess:
+            sess['csrf_token'] = 'test_csrf_token'
 
         # Log in the admin user
         response = client.post(url_for('public.login'), data={
             'username': admin_user.username,
             'password': 'password123',
-            'csrf_token': csrf_token
+            'csrf_token': 'test_csrf_token'
         }, follow_redirects=True)
         
         assert response.status_code == 200
