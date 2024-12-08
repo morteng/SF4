@@ -5,6 +5,7 @@ from app.models.stipend import Stipend
 from app.models.tag import Tag
 from app.models.user import User
 from app.models.bot import Bot
+from app.models.organization import Organization
 
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
@@ -74,4 +75,17 @@ class BotForm(FlaskForm):
             if bot:
                 raise ValidationError('Bot with this name already exists.')
 
-# add organizaion form AI!
+class OrganizationForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(max=100)])
+    description = TextAreaField('Description')
+    submit = SubmitField('Create')
+
+    def __init__(self, original_name=None, *args, **kwargs):
+        super(OrganizationForm, self).__init__(*args, **kwargs)
+        self.original_name = original_name
+
+    def validate_name(self, name):
+        if name.data != self.original_name:
+            organization = Organization.query.filter_by(name=name.data).first()
+            if organization:
+                raise ValidationError('Organization with this name already exists.')
