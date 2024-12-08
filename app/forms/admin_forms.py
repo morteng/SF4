@@ -25,7 +25,7 @@ class StipendForm(FlaskForm):
         stipend = Stipend.query.filter_by(name=name.data).first()
         if stipend:
             raise ValidationError('Stipend with this name already exists.')
-# if the datetime provided is not parsable, set it to none so we can save the data AI!
+
     def validate_application_deadline(self, application_deadline):
         if self.application_deadline.data:
             try:
