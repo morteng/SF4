@@ -20,7 +20,7 @@ def test_dashboard_data(client, app, admin_user):
 
     # Ensure the user is logged in by setting the session variable
     with client.session_transaction() as sess:
-        sess['user_id'] = admin_user.id
+        print(f"Session after login: {sess}")  # Debugging statement
 
     # Access the dashboard data endpoint
     response = client.get(url_for('admin.dashboard.data'))
