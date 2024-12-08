@@ -4,7 +4,7 @@
 
 {% block content %}
 <h1>Manage Stipends</h1>
-<a href="{{ url_for('admin_stipend.create') }}">Create New Stipend</a>
+<a href="{{ url_for('admin.admin_stipend.create') }}">Create New Stipend</a>
 
 <table>
     <thead>
@@ -20,7 +20,7 @@
             <td>{{ stipend.id }}</td>
             <td>{{ stipend.name }}</td>
             <td>
-                <form action="{{ url_for('admin_stipend.delete', id=stipend.id) }}" method="post">
+                <form action="{{ url_for('admin.admin_stipend.delete', id=stipend.id) }}" method="post">
                     <button type="submit">Delete</button>
                 </form>
             </td>
