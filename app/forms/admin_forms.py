@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, BooleanField, DateTimeField
-from wtforms.validators import DataRequired, Length, ValidationError
+from wtforms import StringField, TextAreaField, SubmitField, BooleanField, DateTimeField, PasswordField
+from wtforms.validators import DataRequired, Length, ValidationError, Email
 from app.models.stipend import Stipend
 
 class OrganizationForm(FlaskForm):
