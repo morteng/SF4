@@ -27,10 +27,15 @@ def client(app):
 
 @pytest.fixture(scope='function')
 def admin_user(db):  # Use the alias if necessary
-    user = User(username='admin', email='admin@example.com', is_admin=True)
-    user.set_password('password123')
-    db.add(user)
-    db.commit()
+    email = 'admin@example.com'
+    existing_user = User.query.filter_by(email=email).first()
+    if not existing_user:
+        user = User(username='admin', email=email, is_admin=True)
+        user.set_password('password123')
+        db.add(user)
+        db.commit()
+    else:
+        user = existing_user
     return user
 
 @pytest.fixture(scope='function')
