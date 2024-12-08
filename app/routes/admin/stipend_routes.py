@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 from app.forms.admin_forms import StipendForm
-from app.services.stipend_service import create_stipend, get_stipend_by_id, update_stipend
+from app.services.stipend_service import create_stipend, get_stipend_by_id, update_stipend, delete_stipend, get_all_stipends
 from datetime import datetime
 
 stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
@@ -94,4 +94,29 @@ def update(id):
     
     return render_template('admin/stipend_form.html', form=form, stipend=stipend, action=url_for('admin.admin_stipend.update', id=id))
 
-# create delete and index routes here AI!
+@stipend_bp.route('/delete/<int:id>', methods=['POST'])
+@login_required
+def delete(id):
+    if not current_user.is_admin:
+        abort(403)
+    
+    stipend = get_stipend_by_id(id)
+    if not stipend:
+        flash('Stipend not found.', 'danger')
+        return redirect(url_for('admin.admin_stipend.index'))
+    
+    if delete_stipend(stipend):
+        flash('Stipend deleted successfully.', 'success')
+    else:
+        flash('Failed to delete stipend.', 'danger')
+    
+    return redirect(url_for('admin.admin_stipend.index'))
+
+@stipend_bp.route('/', methods=['GET'])
+@login_required
+def index():
+    if not current_user.is_admin:
+        abort(403)
+    
+    stipends = get_all_stipends()
+    return render_template('admin/stipend_index.html', stipends=stipends)
