@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, HiddenField
-from wtforms.validators import DataRequired, Email, ValidationError, EqualTo  # Added EqualTo here
+from wtforms.validators import DataRequired, Email, ValidationError
 from app.models.user import User
 
 class ProfileForm(FlaskForm):
@@ -29,7 +29,6 @@ class ProfileForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    csrf_token = HiddenField()  # Add CSRF token field
     submit = SubmitField('Login')
 
 class RegisterForm(FlaskForm):

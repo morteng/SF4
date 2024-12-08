@@ -7,7 +7,7 @@
 <body>
     <h1>Login</h1>
     <form method="POST" action="{{ url_for('public.login') }}">
-        {{ form.hidden_tag() }}
+        {{ form.hidden_tag() }}  <!-- Ensure this line is present -->
         <p>
             {{ form.username.label }}<br>
             {{ form.username(size=32) }}<br>
