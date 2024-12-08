@@ -33,6 +33,21 @@ def create():
         abort(403)
     form = StipendForm()
     
+    if request.method == 'POST':
+        # Ensure application_deadline is a string
+        stipend_data = {
+            'name': request.form.get('name'),
+            'summary': request.form.get('summary') or None,
+            'description': request.form.get('description') or None,
+            'homepage_url': request.form.get('homepage_url') or None,
+            'application_procedure': request.form.get('application_procedure') or None,
+            'eligibility_criteria': request.form.get('eligibility_criteria') or None,
+            'application_deadline': request.form.get('application_deadline'),
+            'open_for_applications': request.form.get('open_for_applications', type=bool)
+        }
+        
+        form = StipendForm(data=stipend_data)
+    
     if form.validate_on_submit():
         new_stipend_data = {
             'name': form.name.data,
@@ -42,7 +57,7 @@ def create():
             'application_procedure': form.application_procedure.data or None,
             'eligibility_criteria': form.eligibility_criteria.data or None,
             # Ensure application_deadline is a string
-            'application_deadline': form.application_deadline.data,
+            'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S') if form.application_deadline.data else None,
             'open_for_applications': form.open_for_applications.data
         }
         
@@ -67,7 +82,23 @@ def update(id):
     if not stipend:
         flash('Stipend not found.', 'danger')
         return redirect(url_for('admin.admin_stipend.index'))
+    
     form = StipendForm(obj=stipend)
+    
+    if request.method == 'POST':
+        # Ensure application_deadline is a string
+        update_data = {
+            'name': request.form.get('name'),
+            'summary': request.form.get('summary') or stipend.summary,
+            'description': request.form.get('description') or stipend.description,
+            'homepage_url': request.form.get('homepage_url') or stipend.homepage_url,
+            'application_procedure': request.form.get('application_procedure') or stipend.application_procedure,
+            'eligibility_criteria': request.form.get('eligibility_criteria') or stipend.eligibility_criteria,
+            'application_deadline': request.form.get('application_deadline'),
+            'open_for_applications': request.form.get('open_for_applications', type=bool)
+        }
+        
+        form = StipendForm(data=update_data)
     
     if form.validate_on_submit():
         update_data = {
@@ -78,7 +109,7 @@ def update(id):
             'application_procedure': form.application_procedure.data or stipend.application_procedure,
             'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
             # Ensure application_deadline is a string
-            'application_deadline': form.application_deadline.data,
+            'application_deadline': form.application_deadline.data.strftime('%Y-%m-%d %H:%M:%S') if form.application_deadline.data else None,
             'open_for_applications': form.open_for_applications.data
         }
         
