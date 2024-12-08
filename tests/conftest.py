@@ -2,7 +2,6 @@
 import pytest
 from app import create_app, db as _db  # Import db with an alias if it's already defined in the app
 from app.models.user import User
-from sqlalchemy.orm import scoped_session, sessionmaker
 
 @pytest.fixture(scope='module')
 def app():
