@@ -83,3 +83,6 @@ def update_stipend(stipend, data):
         print(f"Database error: {e}")  # Debugging statement
         db.session.rollback()
         return False
+
+def get_stipend_count():
+    return Stipend.query.count()

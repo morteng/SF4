@@ -1,4 +1,5 @@
 from app.models.bot import Bot
+from app.models.notification import Notification
 from app.extensions import db
 
 def create_bot(name, description, status):
@@ -26,3 +27,6 @@ def update_bot(bot, data):
 def delete_bot(bot):
     db.session.delete(bot)
     db.session.commit()
+
+def get_recent_logs(limit=5):
+    return Notification.query.order_by(Notification.created_at.desc()).limit(limit).all()

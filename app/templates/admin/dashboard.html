@@ -5,3 +5,7 @@
 <div id="bots">
     <hx-get href="{{ url_for('admin_bot.index') }}" hx-target="#bots" hx-swap="innerHTML"></hx-get>
 </div>
+
+<div id="dashboard-data">
+    <hx-get href="{{ url_for('admin_dashboard.data') }}" hx-trigger="every 10s" hx-target="#dashboard-data" hx-swap="innerHTML"></hx-get>
+</div>

@@ -1,0 +1,9 @@
+<div>
+    <h2>Stipend Count: {{ stipend_count }}</h2>
+    <h2>Recent Bot Logs:</h2>
+    <ul>
+        {% for log in bot_logs %}
+            <li>{{ log.message }} - {{ log.created_at }}</li>
+        {% endfor %}
+    </ul>
+</div>
