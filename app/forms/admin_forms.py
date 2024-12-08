@@ -28,19 +28,17 @@ class StipendForm(FlaskForm):
 
     def validate_application_deadline(self, application_deadline):
         if self.application_deadline.data:
-            print(f"Type of application_deadline.data: {type(self.application_deadline.data)}")
             try:
-                # Check if the data is already a datetime object
+                # Parse datetime only if a value is provided
                 if isinstance(self.application_deadline.data, str):
-                    parsed_date = datetime.strptime(self.application_deadline.data, '%Y-%m-%d %H:%M:%S')
-                elif isinstance(self.application_deadline.data, datetime):
-                    parsed_date = self.application_deadline.data
-                else:
-                    raise ValidationError("Invalid date format")
-            except (ValueError, TypeError):
-                raise ValidationError("Invalid date format")
+                    self.application_deadline.data = datetime.strptime(self.application_deadline.data, '%Y-%m-%d %H:%M:%S')
+                elif not isinstance(self.application_deadline.data, datetime):
+                    raise ValidationError("Not a valid datetime value.")
+            except ValueError:
+                raise ValidationError("Not a valid datetime value.")
         else:
-            self.application_deadline.data = None  # Set to None if blank
+            # Set to None explicitly if the field is blank
+            self.application_deadline.data = None
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])

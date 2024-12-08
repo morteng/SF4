@@ -51,7 +51,7 @@ def create():
     
     if form.validate_on_submit():
         print("Form validated successfully!")
-        print("Form data:", form.data)  # Debugging statement
+        print("Form data after validation:", form.data)  # Debugging statement
         
         new_stipend_data = {
             'name': form.name.data,
@@ -106,7 +106,7 @@ def update(id):
     
     if form.validate_on_submit():
         print("Form validated successfully!")
-        print("Form data:", form.data)  # Debugging statement
+        print("Form data after validation:", form.data)  # Debugging statement
         
         update_data = {
             'name': form.name.data,
