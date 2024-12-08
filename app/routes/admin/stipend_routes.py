@@ -36,6 +36,9 @@ def create():
     
     if request.method == 'POST':
         # Ensure application_deadline is a string
+        open_for_apps_str = request.form.get('open_for_applications', '')
+        open_for_applications = True if open_for_apps_str.lower() == 'true' else False
+        
         stipend_data = {
             'name': request.form.get('name'),
             'summary': request.form.get('summary') or None,
@@ -44,7 +47,7 @@ def create():
             'application_procedure': request.form.get('application_procedure') or None,
             'eligibility_criteria': request.form.get('eligibility_criteria') or None,
             'application_deadline': request.form.get('application_deadline'),
-            'open_for_applications': request.form.get('open_for_applications', type=bool)
+            'open_for_applications': open_for_applications
         }
         
         form = StipendForm(data=stipend_data)
@@ -101,6 +104,9 @@ def update(id):
     
     if request.method == 'POST':
         # Ensure application_deadline is a string
+        open_for_apps_str = request.form.get('open_for_applications', '')
+        open_for_applications = True if open_for_apps_str.lower() == 'true' else False
+        
         update_data = {
             'name': request.form.get('name'),
             'summary': request.form.get('summary') or stipend.summary,
@@ -109,7 +115,7 @@ def update(id):
             'application_procedure': request.form.get('application_procedure') or stipend.application_procedure,
             'eligibility_criteria': request.form.get('eligibility_criteria') or stipend.eligibility_criteria,
             'application_deadline': request.form.get('application_deadline'),
-            'open_for_applications': request.form.get('open_for_applications', type=bool)
+            'open_for_applications': open_for_applications
         }
         
         form = StipendForm(data=update_data)
