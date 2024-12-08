@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user
 from app.forms.user_forms import LoginForm, RegisterForm
 from app.models.user import User
+from app.extensions import db  # Import db from extensions
 
 public_bp = Blueprint('public', __name__)
 
