@@ -35,7 +35,7 @@ def test_create_stipend(client, app, stipend_data, admin_user):
         assert stipend.application_procedure == 'Apply online at example.com'
         assert stipend.eligibility_criteria == 'Open to all students'
         assert stipend.open_for_applications is True
-        assert stipend.application_deadline is not None
+        assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
 
 def test_create_stipend_with_blank_application_deadline(client, app, stipend_data, admin_user):
     with app.app_context():
