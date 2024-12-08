@@ -16,15 +16,15 @@ def test_data():
         'open_for_applications': True
     }
 
-def test_create_stipend(test_data, session):
+def test_create_stipend(test_data, db):
     # Clean up any existing stipends before the test
     existing_stipends = get_all_stipends()
     for stipend in existing_stipends:
-        delete_stipend(stipend, session)
-    session.commit()
+        delete_stipend(stipend, db)
+    db.commit()
 
     # Create a stipend using the service function with the provided session
-    new_stipend = create_stipend(test_data, session)
+    new_stipend = create_stipend(test_data, db)
 
     # Assert that the stipend was created successfully
     assert new_stipend is not None
@@ -44,5 +44,5 @@ def test_create_stipend(test_data, session):
     assert abs((stipends[0].application_deadline - test_data['application_deadline']).total_seconds()) < deadline_tolerance.total_seconds()
 
     # Clean up: delete the created stipend using the provided session
-    delete_stipend(new_stipend, session)
-    session.commit()
+    delete_stipend(new_stipend, db)
+    db.commit()
