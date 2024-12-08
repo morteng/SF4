@@ -1,7 +1,6 @@
-# app/forms/admin_forms.py
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField, BooleanField, DateTimeField, PasswordField
-from wtforms.validators import DataRequired, Length, ValidationError, Email
+from wtforms.validators import DataRequired, Length, ValidationError, Email, Optional
 from app.models.stipend import Stipend
 from datetime import datetime
 
@@ -18,7 +17,11 @@ class StipendForm(FlaskForm):
     homepage_url = StringField('Homepage URL', validators=[Length(max=255)])
     application_procedure = TextAreaField('Application Procedure')
     eligibility_criteria = TextAreaField('Eligibility Criteria')
-    application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S', validators=[])
+    application_deadline = DateTimeField(
+        'Application Deadline', 
+        format='%Y-%m-%d %H:%M:%S', 
+        validators=[Optional()]
+    )
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
 
