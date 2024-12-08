@@ -15,3 +15,5 @@ def dashboard():
     stipend_count = get_stipend_count()
     bot_logs = get_recent_logs()
     return render_template('admin/_dashboard_data.html', stipend_count=stipend_count, bot_logs=bot_logs)
+
+# create dashboard_data endpoint to fetch data for the dashboard AI!
