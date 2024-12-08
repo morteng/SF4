@@ -58,7 +58,7 @@ def index():
     organizations = get_all_organizations()
     return render_template('admin/organization/index.html', organizations=organizations)
 
-@org_bp.route('/<int:id>', methods=['PUT'])
+@org_bp.route('/update/<int:id>', methods=['PUT'])
 @login_required
 def update(id):
     organization = get_organization_by_id(id)
