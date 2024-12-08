@@ -41,7 +41,7 @@ def create():
             'homepage_url': form.homepage_url.data or None,
             'application_procedure': form.application_procedure.data or None,
             'eligibility_criteria': form.eligibility_criteria.data or None,
-            'application_deadline': form.application_deadline.data,  # No need to format here
+            'application_deadline': form.application_deadline.data,  # This will be None if blank
             'open_for_applications': form.open_for_applications.data
         }
         
@@ -76,7 +76,7 @@ def update(id):
             'homepage_url': form.homepage_url.data or stipend.homepage_url,
             'application_procedure': form.application_procedure.data or stipend.application_procedure,
             'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
-            'application_deadline': form.application_deadline.data,  # No need to format here
+            'application_deadline': form.application_deadline.data,  # This will be None if blank
             'open_for_applications': form.open_for_applications.data
         }
         
