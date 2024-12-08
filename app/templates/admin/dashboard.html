@@ -1,11 +1,11 @@
-<a href="{{ url_for('admin_stipend.index') }}">Manage Stipends</a>
-<a href="{{ url_for('admin_tag.index') }}">Manage Tags</a>
-<a href="{{ url_for('admin_organization.index') }}">Manage Organizations</a>
-<a href="{{ url_for('admin_user.index') }}">Manage Users</a>
+<a href="{{ url_for('admin.admin_stipend.index') }}">Manage Stipends</a>
+<a href="{{ url_for('admin.admin_tag.index') }}">Manage Tags</a>
+<a href="{{ url_for('admin.admin_org.index') }}">Manage Organizations</a>
+<a href="{{ url_for('admin.admin_user.index') }}">Manage Users</a>
 <div id="bots">
-    <hx-get href="{{ url_for('admin_bot.index') }}" hx-target="#bots" hx-swap="innerHTML"></hx-get>
+    <hx-get href="{{ url_for('admin.admin_bot.index') }}" hx-target="#bots" hx-swap="innerHTML"></hx-get>
 </div>
 
 <div id="dashboard-data">
-    <hx-get href="{{ url_for('admin_dashboard.data') }}" hx-trigger="every 10s" hx-target="#dashboard-data" hx-swap="innerHTML"></hx-get>
+    <hx-get href="{{ url_for('admin.admin_dashboard.data') }}" hx-trigger="every 10s" hx-target="#dashboard-data" hx-swap="innerHTML"></hx-get>
 </div>

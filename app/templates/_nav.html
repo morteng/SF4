@@ -4,22 +4,17 @@
         {% if current_user.is_authenticated %}
             {% if current_user.is_admin %}
                 <li><a href="{{ url_for('admin.admin_stipend.index') }}">Admin Dashboard</a></li>
-                <li><a href="{{ url_for('admin.bot_routes.index') }}">Bots</a></li>
-                <li><a href="{{ url_for('admin.organization_routes.index') }}">Organizations</a></li>
-                <li><a href="{{ url_for('admin.stipend_routes.index') }}">Stipends</a></li>
-                <li><a href="{{ url_for('admin.tag_routes.index') }}">Tags</a></li>
-                <li><a href="{{ url_for('admin.user_routes.index') }}">Users</a></li>
+                <li><a href="{{ url_for('admin.admin_bot.index') }}">Bots</a></li>
+                <li><a href="{{ url_for('admin.admin_org.index') }}">Organizations</a></li>
+                <li><a href="{{ url_for('admin.admin_stipend.index') }}">Stipends</a></li>
+                <li><a href="{{ url_for('admin.admin_tag.index') }}" >Tags</a></li>
+                <li><a href="{{ url_for('admin.admin_user.index') }}">Users</a></li>
             {% else %}
-                <li><a href="{{ url_for('public.stipends') }}">Stipends</a></li>
-                <li><a href="{{ url_for('public.organizations') }}">Organizations</a></li>
-                <li><a href="{{ url_for('public.tags') }}">Tags</a></li>
+                <li><a href="{{ url_for('public.about') }}">About</a></li>
                 <li><a href="{{ url_for('user.profile') }}">Profile</a></li>
             {% endif %}
             <li><a href="{{ url_for('public.logout') }}">Logout</a></li>
         {% else %}
-            <li><a href="{{ url_for('public.stipends') }}">Stipends</a></li>
-            <li><a href="{{ url_for('public.organizations') }}">Organizations</a></li>
-            <li><a href="{{ url_for('public.tags') }}">Tags</a></li>
             <li><a href="{{ url_for('public.login') }}">Login</a></li>
             <li><a href="{{ url_for('public.register') }}">Register</a></li>
         {% endif %}
