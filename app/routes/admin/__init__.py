@@ -5,7 +5,7 @@ from app.services.bot_service import get_recent_logs
 # Import sub-blueprints
 from .bot_routes import admin_bot_bp
 from .organization_routes import org_bp
-from .stipend_routes import stipend_bp
+from .stipend_routes import stipend_bp  # Ensure this line is correct
 from .tag_routes import tag_bp
 from .user_routes import user_bp
 
