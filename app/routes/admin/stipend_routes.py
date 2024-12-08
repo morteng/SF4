@@ -36,8 +36,7 @@ def create():
     
     if request.method == 'POST':
         # Ensure application_deadline is a string
-        open_for_apps_str = request.form.get('open_for_applications', '')
-        open_for_applications = True if open_for_apps_str.lower() == 'true' else False
+        open_for_applications = 'open_for_applications' in request.form
         
         stipend_data = {
             'name': request.form.get('name'),
@@ -104,8 +103,7 @@ def update(id):
     
     if request.method == 'POST':
         # Ensure application_deadline is a string
-        open_for_apps_str = request.form.get('open_for_applications', '')
-        open_for_applications = True if open_for_apps_str.lower() == 'true' else False
+        open_for_applications = 'open_for_applications' in request.form
         
         update_data = {
             'name': request.form.get('name'),

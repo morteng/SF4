@@ -43,7 +43,7 @@ def test_create_stipend(client, app, stipend_data, admin_user):
         # Ensure application_deadline is a string
         stipend_data['application_deadline'] = '2023-12-31 23:59:59'
         
-        # Simulate form submission with valid application_deadline
+        # Simulate form submission with valid application_deadline and open_for_applications checked
         response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data, follow_redirects=True)
         
         assert response.status_code == 200
@@ -58,6 +58,26 @@ def test_create_stipend(client, app, stipend_data, admin_user):
         assert stipend.eligibility_criteria == 'Open to all students'
         assert stipend.open_for_applications is True
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
+
+def test_create_stipend_with_unchecked_open_for_applications(client, app, stipend_data, admin_user):
+    with app.app_context():
+        # Log in the admin user
+        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
+        assert login_response.status_code == 200
+        
+        # Simulate form submission with open_for_applications unchecked
+        stipend_data_no_open_for_apps = {
+            key: value for key, value in stipend_data.items() if key != 'open_for_applications'
+        }
+        
+        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data_no_open_for_apps, follow_redirects=True)
+        
+        assert response.status_code == 200
+        
+        # Check if the stipend was created in the database with open_for_applications as False
+        stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
+        assert stipend is not None
+        assert stipend.open_for_applications is False
 
 def test_create_stipend_with_blank_application_deadline(client, app, stipend_data, admin_user):
     with app.app_context():
@@ -190,7 +210,7 @@ def test_update_stipend(client, app, admin_user, test_stipend):
             'application_procedure': "Apply online at example.com/updated",
             'eligibility_criteria': "Open to all updated students",
             'application_deadline': '2024-12-31 23:59:59',
-            'open_for_applications': False
+            'open_for_applications': True
         }
 
         response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data, follow_redirects=True)
@@ -205,8 +225,26 @@ def test_update_stipend(client, app, admin_user, test_stipend):
         assert stipend.homepage_url == "http://example.com/updated-stipend"
         assert stipend.application_procedure == "Apply online at example.com/updated"
         assert stipend.eligibility_criteria == "Open to all updated students"
-        assert stipend.open_for_applications is False
+        assert stipend.open_for_applications is True
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
+
+def test_update_stipend_with_unchecked_open_for_applications(client, app, admin_user, test_stipend):
+    with app.app_context():
+        # Log in the admin user
+        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
+        assert login_response.status_code == 200
+
+        updated_data_no_open_for_apps = {
+            key: value for key, value in stipend_data.items() if key != 'open_for_applications'
+        }
+
+        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data_no_open_for_apps, follow_redirects=True)
+        
+        assert response.status_code == 200
+
+        # Check if the stipend was updated in the database with open_for_applications as False
+        stipend = Stipend.query.get(test_stipend.id)
+        assert stipend.open_for_applications is False
 
 def test_update_stipend_with_blank_application_deadline(client, app, admin_user, test_stipend):
     with app.app_context():
