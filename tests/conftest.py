@@ -2,7 +2,6 @@
 import pytest
 from app import create_app, db as _db  # Import db with an alias if it's already defined in the app
 from app.models.user import User
-from sqlalchemy.orm import scoped_session, sessionmaker
 
 @pytest.fixture(scope='module')
 def app():
@@ -42,16 +41,16 @@ def admin_user(db):  # Use the alias if necessary
 @pytest.fixture(scope='function')
 def db(app):
     """Create a new database session for a test."""
-    connection = _db.engine.connect()
-    transaction = connection.begin()
+    with _db.engine.connect() as connection:
+        transaction = connection.begin()
 
-    options = dict(bind=connection)
-    Session = scoped_session(sessionmaker(bind=_db.engine))
-    session = Session()
+        options = dict(bind=connection)
+        Session = scoped_session(sessionmaker(bind=_db.engine))
+        session = Session()
 
-    yield session
+        yield session
 
-    # Rollback the transaction and close the session after each test
-    session.rollback()
-    connection.close()
-    session.close()
+        # Rollback the transaction and close the session after each test
+        session.rollback()
+        connection.close()
+        session.remove()
