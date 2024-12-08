@@ -20,7 +20,7 @@ def stipend_data(request):
 
 @pytest.fixture
 def test_stipend(db, admin_user):
-    with db.session.begin():
+    with db.begin():
         stipend = Stipend(
             name="Test Stipend",
             summary="This is a test stipend.",
@@ -31,7 +31,7 @@ def test_stipend(db, admin_user):
             application_deadline=datetime.strptime('2023-12-31 23:59:59', '%Y-%m-%d %H:%M:%S'),
             open_for_applications=True
         )
-        db.session.add(stipend)
+        db.add(stipend)
     return stipend
 
 def test_create_stipend(client, app, stipend_data, admin_user):
