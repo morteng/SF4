@@ -1,38 +1,34 @@
 import pytest
-from app import create_app
-from app.extensions import db as _db
-from app.models import init_models
-from sqlalchemy.orm import scoped_session, sessionmaker
+from app import create_app, db
+from app.models.user import User
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='module')
 def app():
     """Create and configure a new app instance for each test session."""
-    # Use the testing configuration
     app = create_app('testing')
-
-    # Set necessary configurations for URL generation
-    app.config['SERVER_NAME'] = 'localhost'
-    app.config['APPLICATION_ROOT'] = '/'
-    app.config['PREFERRED_URL_SCHEME'] = 'http'
-
-    # Create an application context before running tests
+    app.config['TESTING'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     with app.app_context():
-        init_models(app)  # Ensure models are initialized
-        _db.create_all()  # Create all tables
-
+        db.create_all()
         yield app
+        db.session.remove()
+        db.drop_all()
 
-        # Drop all tables after tests are done
-        _db.drop_all()
-
-@pytest.fixture(scope='session')
-def db(app):
-    """Create a new database for the test session."""
-    return _db
+@pytest.fixture(scope='module')
+def client(app):
+    """Create a test client for the Flask application."""
+    return app.test_client()
 
 @pytest.fixture(scope='function')
-def session(db, request):
-    """Create a new database session for each test function."""
+def admin_user(app, db_session):
+    user = User(username='admin', email='admin@example.com', is_admin=True)
+    user.set_password('password123')
+    db_session.add(user)
+    db_session.commit()
+    return user
+
+@pytest.fixture(scope='function')
+def db_session(app, db):
     connection = db.engine.connect()
     transaction = connection.begin()
 
@@ -46,9 +42,3 @@ def session(db, request):
     session.rollback()
     connection.close()
     session.close()  # Use session.close() instead of session.remove()
-
-@pytest.fixture(scope='function')
-def client(app):
-    """Create a test client for the Flask application."""
-    with app.test_client() as client:
-        yield client

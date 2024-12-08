@@ -8,7 +8,6 @@ from .models.user import User
 from .routes.admin.__init__ import register_admin_blueprints
 from .routes.user_routes import user_bp
 from .routes.public_routes import public_bp
-import os
 
 csrf = CSRFProtect()
 

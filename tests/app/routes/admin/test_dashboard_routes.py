@@ -24,6 +24,5 @@ def test_dashboard_data(client, app, admin_user):
     # Ensure current_user is set correctly
     with app.test_request_context():
         from flask_login import current_user
-        print(f"Current user: {current_user}")  # Debugging statement
         assert current_user.is_authenticated
         assert current_user.id == admin_user.id

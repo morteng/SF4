@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
-from flask_login import login_user, logout_user, current_user, login_required  
+from flask_login import login_user, logout_user, current_user
 from app.forms.user_forms import LoginForm, RegisterForm
 from app.models.user import User
-from app.extensions import db
 
 public_bp = Blueprint('public', __name__)
 
@@ -27,16 +26,11 @@ def login():
             return redirect(url_for('user.profile'))
     
     form = LoginForm()
-    if request.method == 'POST':
-        print(f"Form data: {form.data}")  # Debugging statement
-        print(f"Form errors: {form.errors}")  # Debugging statement
-
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
             flash('Login successful.', 'success')
-            print(f"User {user.username} logged in successfully.")  # Debugging statement
             # Redirect to admin dashboard if user is an admin, else redirect to user profile
             if current_user.is_admin:
                 return redirect(url_for('admin.admin_stipend.index'))  # Assuming the admin stipends index is the dashboard
@@ -44,7 +38,7 @@ def login():
                 return redirect(url_for('user.profile'))
         else:
             flash('Invalid username or password.', 'danger')
-    return render_template('login.html', form=form)
+    return render_template('public/login.html', form=form)
 
 @public_bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -65,10 +59,6 @@ def register():
 @public_bp.route('/logout', methods=['GET'])
 def logout():
     """Handle user logout."""
-    print(f"Request method: {request.method}")  # Debugging statement
-    if request.method == 'GET':
-        logout_user()
-        flash('You have been logged out.', 'info')
-        return redirect(url_for('public.index'))
-    else:
-        return "Method not allowed", 405
+    logout_user()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('public.index'))
