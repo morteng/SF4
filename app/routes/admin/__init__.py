@@ -15,7 +15,7 @@ admin_dashboard_bp = Blueprint('admin_dashboard', __name__)
 def data():
     stipend_count = get_stipend_count()
     bot_logs = get_recent_logs()
-    return render_template('_dashboard_data.html', stipend_count=stipend_count, bot_logs=bot_logs)
+    return render_template('admin/_dashboard_data.html', stipend_count=stipend_count, bot_logs=bot_logs)
 
 # Register sub-blueprints
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
