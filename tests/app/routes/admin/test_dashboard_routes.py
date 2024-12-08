@@ -6,6 +6,9 @@ from flask import url_for
 def test_dashboard_data(client, admin_user):
     # Push an application context
     with client.application.app_context():
+        # First, make a GET request to establish a request context
+        client.get(url_for('public.login'))
+
         # Generate CSRF token
         csrf_token = generate_csrf()
 
