@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, BooleanField, PasswordField, DateTimeField
-from wtforms.validators import DataRequired, Length, Email, ValidationError
+from wtforms import StringField, TextAreaField, SubmitField, BooleanField, DateTimeField
+from wtforms.validators import DataRequired, Length, ValidationError
 from app.models.stipend import Stipend
 
 class OrganizationForm(FlaskForm):
@@ -16,7 +16,7 @@ class StipendForm(FlaskForm):
     homepage_url = StringField('Homepage URL', validators=[Length(max=255)])
     application_procedure = TextAreaField('Application Procedure')
     eligibility_criteria = TextAreaField('Eligibility Criteria')
-    application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S')
+    application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S', validators=[])
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
 
@@ -24,6 +24,14 @@ class StipendForm(FlaskForm):
         stipend = Stipend.query.filter_by(name=name.data).first()
         if stipend:
             raise ValidationError('Stipend with this name already exists.')
+
+    def validate_application_deadline(self, application_deadline):
+        if self.application_deadline.data is not None and isinstance(self.application_deadline.data, str):
+            try:
+                from datetime import datetime
+                self.application_deadline.data = datetime.strptime(self.application_deadline.data, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                self.application_deadline.data = None
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
