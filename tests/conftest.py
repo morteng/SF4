@@ -29,7 +29,8 @@ def admin_user(_db):  # Use the alias if necessary
     return user
 
 @pytest.fixture(scope='function')
-def _db(app, _db):  # Use the alias if necessary
+def _db(app):
+    """Create a new database session for a test."""
     connection = _db.engine.connect()
     transaction = connection.begin()
 
