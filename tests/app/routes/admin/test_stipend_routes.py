@@ -21,6 +21,9 @@ def test_create_stipend(client, app, stipend_data, admin_user):
         login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
         assert login_response.status_code == 200
         
+        # Ensure application_deadline is a string
+        stipend_data['application_deadline'] = '2023-12-31 23:59:59'
+        
         # Simulate form submission with valid application_deadline
         response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data, follow_redirects=True)
         
