@@ -2,7 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import DataRequired, Email, ValidationError
 from app.models.user import User
-from wtforms.validators import DataRequired, Email, EqualTo
 
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

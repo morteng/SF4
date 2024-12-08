@@ -12,9 +12,13 @@ def admin_user(client, session):
 
 def test_dashboard_data(client, app, admin_user):
     # Log in the admin user
+    with client.session_transaction() as sess:
+        csrf_token = sess.get_csrf_token()
+
     response = client.post(url_for('public.login'), data={
         'username': admin_user.username,
-        'password': 'password123'
+        'password': 'password123',
+        'csrf_token': csrf_token
     }, follow_redirects=True)
     assert response.status_code == 200
 
