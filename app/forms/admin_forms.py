@@ -46,10 +46,6 @@ class StipendForm(FlaskForm):
                 # Instead of raising an error, just set to None
                 self.application_deadline.data = None
 
-        # If it's already a datetime object, no further action needed
-        elif not isinstance(data, datetime):
-            self.application_deadline.data = None
-
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
     category = StringField('Category', validators=[Length(max=50)])
