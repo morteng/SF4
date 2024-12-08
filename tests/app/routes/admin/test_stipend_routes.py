@@ -228,7 +228,7 @@ def test_update_stipend(client, app, admin_user, test_stipend):
         assert stipend.open_for_applications is True
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
 
-def test_update_stipend_with_unchecked_open_for_applications(client, app, admin_user, test_stipend):
+def test_update_stipend_with_unchecked_open_for_applications(client, app, admin_user, test_stipend, stipend_data):
     with app.app_context():
         # Log in the admin user
         login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
