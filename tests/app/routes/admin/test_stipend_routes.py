@@ -17,13 +17,6 @@ def stipend_data():
         'open_for_applications': True
     }
 
-@pytest.fixture(autouse=True)
-def rollback_transaction():
-    """Fixture to ensure each test runs in a transaction and rolls back after the test."""
-    with db.session.begin_nested():
-        yield
-    db.session.rollback()
-
 def test_create_stipend(client, app, stipend_data, admin_user):
     with app.app_context():
         # Log in the admin user
