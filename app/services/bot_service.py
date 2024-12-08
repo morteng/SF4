@@ -23,4 +23,6 @@ def update_bot(bot, data):
     # Update other fields as necessary
     db.session.commit()
 
-#add delete bot function AI!
+def delete_bot(bot):
+    db.session.delete(bot)
+    db.session.commit()
