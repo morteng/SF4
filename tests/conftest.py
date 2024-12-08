@@ -21,15 +21,15 @@ def client(app):
     return app.test_client()
 
 @pytest.fixture(scope='function')
-def admin_user(_db):  # Use the alias if necessary
+def admin_user(db):  # Use the alias if necessary
     user = User(username='admin', email='admin@example.com', is_admin=True)
     user.set_password('password123')
-    _db.add(user)
-    _db.commit()
+    db.add(user)
+    db.commit()
     return user
 
 @pytest.fixture(scope='function')
-def _db(app):
+def db(app):
     """Create a new database session for a test."""
     connection = _db.engine.connect()
     transaction = connection.begin()
