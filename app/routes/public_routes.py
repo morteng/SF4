@@ -15,13 +15,16 @@ def index():
 def about():
     """Display the about page."""
     return render_template('about.html')
-# if user that logs in is admin, redirect to admin dashboard page, else redirect to user profile page AI!
 
 @public_bp.route('/login', methods=['GET', 'POST'])
 def login():
     """Handle user login."""
     if current_user.is_authenticated:
-        return redirect(url_for('user.profile'))
+        # Redirect to admin dashboard if user is an admin, else redirect to user profile
+        if current_user.is_admin:
+            return redirect(url_for('admin.admin_stipend.index'))  # Assuming the admin stipends index is the dashboard
+        else:
+            return redirect(url_for('user.profile'))
     
     form = LoginForm()
     if form.validate_on_submit():
@@ -29,7 +32,11 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
             flash('Login successful.', 'success')
-            return redirect(url_for('user.profile'))
+            # Redirect to admin dashboard if user is an admin, else redirect to user profile
+            if current_user.is_admin:
+                return redirect(url_for('admin.admin_stipend.index'))  # Assuming the admin stipends index is the dashboard
+            else:
+                return redirect(url_for('user.profile'))
         else:
             flash('Invalid username or password.', 'danger')
     return render_template('login.html', form=form)
