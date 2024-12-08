@@ -1,7 +1,8 @@
 from flask_wtf.csrf import generate_csrf
 from flask import url_for
 
-def test_dashboard_data(client, app, admin_user):
+@pytest.mark.usefixtures('app', 'client', 'admin_user')
+def test_dashboard_data(client, admin_user):
     # Generate CSRF token
     csrf_token = generate_csrf()
 
@@ -22,7 +23,7 @@ def test_dashboard_data(client, app, admin_user):
     assert b'Recent Bot Logs:' in response.data
 
     # Ensure current_user is set correctly
-    with app.test_request_context():
-        from flask_login import current_user
-        assert current_user.is_authenticated
-        assert current_user.id == admin_user.id
+    with client.session_transaction() as sess:
+        user_id = sess.get('_user_id')
+        assert user_id is not None
+        assert int(user_id) == admin_user.id
