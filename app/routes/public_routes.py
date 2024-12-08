@@ -15,6 +15,7 @@ def index():
 def about():
     """Display the about page."""
     return render_template('about.html')
+# if user that logs in is admin, redirect to admin dashboard page, else redirect to user profile page AI!
 
 @public_bp.route('/login', methods=['GET', 'POST'])
 def login():
