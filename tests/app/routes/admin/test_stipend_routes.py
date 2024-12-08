@@ -1,7 +1,8 @@
-# tests/app/routes/test_stipend_routes.py
+# tests/app/routes/admin/test_stipend_routes.py
 import pytest
 from flask import url_for
 from app.models.stipend import Stipend
+from app.extensions import db
 
 @pytest.fixture
 def stipend_data():
@@ -15,6 +16,13 @@ def stipend_data():
         'application_deadline': '2023-12-31 23:59:59',  # Valid datetime format
         'open_for_applications': True
     }
+
+@pytest.fixture(autouse=True)
+def rollback_transaction():
+    """Fixture to ensure each test runs in a transaction and rolls back after the test."""
+    with db.session.begin_nested():
+        yield
+    db.session.rollback()
 
 def test_create_stipend(client, app, stipend_data, admin_user):
     with app.app_context():
