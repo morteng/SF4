@@ -4,7 +4,7 @@ from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import create_stipend, get_stipend_by_id, update_stipend
 from datetime import datetime
 
-stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
+stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
 
 @stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
@@ -93,3 +93,5 @@ def update(id):
         print(f"Form errors: {form.errors}")  # Debugging statement
     
     return render_template('admin/stipend_form.html', form=form, stipend=stipend, action=url_for('admin.admin_stipend.update', id=id))
+
+# create delete and index routes here AI!
