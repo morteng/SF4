@@ -46,3 +46,55 @@ def test_create_stipend(test_data, db):
     # Clean up: delete the created stipend using the provided session
     delete_stipend(new_stipend, db)
     db.commit()
+
+def test_create_stipend_with_blank_deadline(test_data, db):
+    # Clean up any existing stipends before the test
+    existing_stipends = get_all_stipends()
+    for stipend in existing_stipends:
+        delete_stipend(stipend, db)
+    db.commit()
+
+    # Set application deadline to None
+    test_data['application_deadline'] = None
+
+    # Create a stipend using the service function with the provided session
+    new_stipend = create_stipend(test_data, db)
+
+    # Assert that the stipend was created successfully
+    assert new_stipend is not None
+
+    # Retrieve all stipends from the database and check if the new stipend is in the list
+    stipends = get_all_stipends()
+    assert len(stipends) == 1
+    assert stipends[0].name == test_data['name']
+    assert stipends[0].application_deadline is None
+
+    # Clean up: delete the created stipend using the provided session
+    delete_stipend(new_stipend, db)
+    db.commit()
+
+def test_create_stipend_with_invalid_deadline(test_data, db):
+    # Clean up any existing stipends before the test
+    existing_stipends = get_all_stipends()
+    for stipend in existing_stipends:
+        delete_stipend(stipend, db)
+    db.commit()
+
+    # Set application deadline to an invalid datetime string
+    test_data['application_deadline'] = "invalid-date"
+
+    # Create a stipend using the service function with the provided session
+    new_stipend = create_stipend(test_data, db)
+
+    # Assert that the stipend was created successfully
+    assert new_stipend is not None
+
+    # Retrieve all stipends from the database and check if the new stipend is in the list
+    stipends = get_all_stipends()
+    assert len(stipends) == 1
+    assert stipends[0].name == test_data['name']
+    assert stipends[0].application_deadline is None
+
+    # Clean up: delete the created stipend using the provided session
+    delete_stipend(new_stipend, db)
+    db.commit()

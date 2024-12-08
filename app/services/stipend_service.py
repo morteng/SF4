@@ -33,7 +33,7 @@ def create_stipend(data, session):
             data['application_deadline'] = None
     except ValueError as e:
         print(f"Invalid application deadline: {e}")  # Debugging statement
-        return None
+        data['application_deadline'] = None
     
     new_stipend = Stipend(**data)
     session.add(new_stipend)
