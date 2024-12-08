@@ -43,11 +43,12 @@ class StipendForm(FlaskForm):
             try:
                 self.application_deadline.data = datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
             except ValueError:
-                raise ValidationError("Not a valid datetime value.")
+                # Instead of raising an error, just set to None
+                self.application_deadline.data = None
 
         # If it's already a datetime object, no further action needed
         elif not isinstance(data, datetime):
-            raise ValidationError("Not a valid datetime value.")
+            self.application_deadline.data = None
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
