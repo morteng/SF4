@@ -32,6 +32,7 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
             flash('Login successful.', 'success')
+            print(f"User {user.username} logged in successfully.")  # Debugging statement
             # Redirect to admin dashboard if user is an admin, else redirect to user profile
             if current_user.is_admin:
                 return redirect(url_for('admin.admin_stipend.index'))  # Assuming the admin stipends index is the dashboard
@@ -39,6 +40,8 @@ def login():
                 return redirect(url_for('user.profile'))
         else:
             flash('Invalid username or password.', 'danger')
+    print(f"Form data: {form.data}")  # Debugging statement
+    print(f"Form errors: {form.errors}")  # Debugging statement
     return render_template('login.html', form=form)
 
 @public_bp.route('/register', methods=['GET', 'POST'])
