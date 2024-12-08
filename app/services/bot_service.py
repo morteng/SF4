@@ -22,3 +22,5 @@ def update_bot(bot, data):
     bot.description = data['description']
     # Update other fields as necessary
     db.session.commit()
+
+#add delete bot function AI!
