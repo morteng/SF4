@@ -41,3 +41,9 @@ def session(db, request):
     session.rollback()
     connection.close()
     session.close()  # Use session.close() instead of session.remove()
+
+@pytest.fixture(scope='function')
+def client(app):
+    """Create a test client for the Flask application."""
+    with app.test_client() as client:
+        yield client
