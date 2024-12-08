@@ -18,6 +18,10 @@ def test_dashboard_data(client, app, admin_user):
     }, follow_redirects=True)
     assert response.status_code == 200
 
+    # Ensure the user is logged in by setting the session variable
+    with client.session_transaction() as sess:
+        sess['user_id'] = admin_user.id
+
     # Access the dashboard data endpoint
     response = client.get(url_for('admin.dashboard.data'))
     assert response.status_code == 200
