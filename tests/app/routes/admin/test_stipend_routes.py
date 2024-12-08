@@ -18,7 +18,7 @@ def stipend_data():
 def test_create_stipend(client, app, stipend_data, admin_user):
     with app.app_context():
         # Log in the admin user
-        login_response = client.post(url_for('admin.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
+        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
         assert login_response.status_code == 200
         
         # Simulate form submission with valid application_deadline
@@ -40,7 +40,7 @@ def test_create_stipend(client, app, stipend_data, admin_user):
 def test_create_stipend_with_blank_application_deadline(client, app, stipend_data, admin_user):
     with app.app_context():
         # Log in the admin user
-        login_response = client.post(url_for('admin.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
+        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
         assert login_response.status_code == 200
         
         # Simulate form submission with blank application_deadline
@@ -57,7 +57,7 @@ def test_create_stipend_with_blank_application_deadline(client, app, stipend_dat
 def test_create_stipend_with_invalid_application_deadline(client, app, stipend_data, admin_user):
     with app.app_context():
         # Log in the admin user
-        login_response = client.post(url_for('admin.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
+        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
         assert login_response.status_code == 200
         
         # Simulate form submission with invalid application_deadline
