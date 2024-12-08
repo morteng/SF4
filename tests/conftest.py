@@ -1,7 +1,7 @@
 import pytest
-from app import create_app, db
+from app import create_app, db as _db  # Import db with an alias if it's already defined in the app
 from app.models.user import User
-from sqlalchemy.orm import scoped_session, sessionmaker  # Import scoped_session and sessionmaker
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 @pytest.fixture(scope='module')
 def app():
@@ -10,10 +10,10 @@ def app():
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     with app.app_context():
-        db.create_all()
+        _db.create_all()
         yield app
-        db.session.remove()
-        db.drop_all()
+        _db.session.remove()
+        _db.drop_all()
 
 @pytest.fixture(scope='module')
 def client(app):
@@ -29,12 +29,12 @@ def admin_user(db_session):
     return user
 
 @pytest.fixture(scope='function')
-def db_session(app, db):
-    connection = db.engine.connect()
+def db_session(app, _db):  # Use the alias if necessary
+    connection = _db.engine.connect()
     transaction = connection.begin()
 
     options = dict(bind=connection)
-    Session = scoped_session(sessionmaker(bind=db.engine))
+    Session = scoped_session(sessionmaker(bind=_db.engine))
     session = Session()
 
     yield session
