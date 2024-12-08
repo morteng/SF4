@@ -12,7 +12,7 @@ def admin_user(client, session):
 
 def test_dashboard_data(client, app, admin_user):
     # Log in the admin user
-    response = client.post(url_for('user.login'), data={
+    response = client.post(url_for('public.login'), data={
         'username': admin_user.username,
         'password': 'password123'
     }, follow_redirects=True)

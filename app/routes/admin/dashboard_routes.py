@@ -16,9 +16,9 @@ def dashboard():
     bot_logs = get_recent_logs()
     return render_template('admin/_dashboard_data.html', stipend_count=stipend_count, bot_logs=bot_logs)
 
-@dashboard_bp.route('/dashboard_data')
+@dashboard_bp.route('/data')
 @login_required
-def dashboard_data():
+def data():
     if not current_user.is_admin:
         # Handle non-admin users, e.g., abort with a 403 Forbidden status
         abort(403)
