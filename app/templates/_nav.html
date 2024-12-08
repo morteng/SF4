@@ -3,7 +3,7 @@
         <li><a href="{{ url_for('public.index') }}">Home</a></li>
         {% if current_user.is_authenticated %}
             {% if current_user.is_admin %}
-                <li><a href="{{ url_for('admin.admin_stipend.index') }}">Admin Dashboard</a></li>
+                <li><a href="{{ url_for('admin.dashboard.dashboard') }}">Admin Dashboard</a></li>
                 <li><a href="{{ url_for('admin.admin_bot.index') }}">Bots</a></li>
                 <li><a href="{{ url_for('admin.admin_org.index') }}">Organizations</a></li>
                 <li><a href="{{ url_for('admin.admin_stipend.index') }}">Stipends</a></li>
