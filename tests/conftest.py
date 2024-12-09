@@ -2,7 +2,7 @@
 import pytest
 from flask import url_for
 from app import create_app
-from app.extensions import db, login_manager  # Import login_manager
+from app.extensions import db, login_manager  # Correct imports
 from app.models.user import User
 
 @pytest.fixture(scope='session')
@@ -18,17 +18,12 @@ def app():
         def load_user(user_id):
             return db.session.get(User, int(user_id))  # Use session.get instead of query.get
 
-        # Register blueprints
-        from app.routes.admin import register_admin_blueprints
-        register_admin_blueprints(app)  # For admin routes
-
-        from app.routes.__init__ import register_blueprints  # Correct import path
-        register_blueprints(app)        # Register other blueprints
-
-        db.create_all()  # Create tables
+        # Create all tables
+        db.create_all()
 
         yield app
 
+        # Teardown: Remove session and drop all tables
         db.session.remove()
         db.drop_all()
 
