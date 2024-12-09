@@ -1,11 +1,22 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, URLField, BooleanField, DateTimeField, SubmitField
+from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Length, ValidationError
 from app.models.stipend import Stipend
 from app.models.tag import Tag
 from app.models.user import User
 from app.models.bot import Bot
 from app.models.organization import Organization
+from datetime import datetime
+
+class NullableDateTimeField(StringField):
+    def process_formdata(self, valuelist):
+        if valuelist and valuelist[0].strip():
+            try:
+                self.data = datetime.strptime(valuelist[0], '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                self.data = None
+        else:
+            self.data = None
 
 class StipendEditForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
@@ -14,7 +25,7 @@ class StipendEditForm(FlaskForm):
     homepage_url = URLField('Homepage URL')
     application_procedure = TextAreaField('Application Procedure')
     eligibility_criteria = TextAreaField('Eligibility Criteria')
-    application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S')
+    application_deadline = NullableDateTimeField('Application Deadline (YYYY-MM-DD HH:MM:SS)')  # Use the custom field
     open_for_applications = BooleanField('Open for Applications')
 
 class StipendForm(FlaskForm):
@@ -24,7 +35,7 @@ class StipendForm(FlaskForm):
     homepage_url = StringField('Homepage URL', validators=[Length(max=255)])
     application_procedure = TextAreaField('Application Procedure')
     eligibility_criteria = TextAreaField('Eligibility Criteria')
-    application_deadline = StringField('Application Deadline (YYYY-MM-DD HH:MM:SS)')
+    application_deadline = NullableDateTimeField('Application Deadline (YYYY-MM-DD HH:MM:SS)')  # Use the custom field
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
 

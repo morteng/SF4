@@ -1,4 +1,3 @@
-# tests/app/routes/admin/test_stipend_routes.py
 import pytest
 from flask import url_for
 from app.models.stipend import Stipend
@@ -41,11 +40,8 @@ def logged_in_admin(client, admin_user):
 
 def test_create_stipend(client, app, stipend_data, logged_in_admin):
     with app.app_context():
-        # Ensure application_deadline is a string
-        stipend_data['application_deadline'] = '2023-12-31 23:59:59'
-        
         # Simulate form submission with valid application_deadline and open_for_applications checked
-        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data)
+        response = client.post(url_for('admin_stipend.create'), data=stipend_data)
         
         assert response.status_code in (200, 302)
         
@@ -67,7 +63,7 @@ def test_create_stipend_with_unchecked_open_for_applications(client, app, stipen
             key: value for key, value in stipend_data.items() if key != 'open_for_applications'
         }
         
-        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data_no_open_for_apps)
+        response = client.post(url_for('admin_stipend.create'), data=stipend_data_no_open_for_apps)
         
         assert response.status_code in (200, 302)
         
@@ -80,7 +76,7 @@ def test_create_stipend_with_blank_application_deadline(client, app, stipend_dat
     with app.app_context():
         # Simulate form submission with blank application_deadline
         stipend_data['application_deadline'] = ''
-        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data)
+        response = client.post(url_for('admin_stipend.create'), data=stipend_data)
         
         assert response.status_code in (200, 302)
         
@@ -93,7 +89,7 @@ def test_create_stipend_with_invalid_application_deadline(client, app, stipend_d
     with app.app_context():
         # Simulate form submission with invalid application_deadline
         stipend_data['application_deadline'] = 'invalid-date'
-        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data)
+        response = client.post(url_for('admin_stipend.create'), data=stipend_data)
         
         assert response.status_code in (200, 302)
         
@@ -104,12 +100,9 @@ def test_create_stipend_with_invalid_application_deadline(client, app, stipend_d
 
 def test_create_stipend_with_htmx(client, app, stipend_data, logged_in_admin):
     with app.app_context():
-        # Ensure application_deadline is a string
-        stipend_data['application_deadline'] = '2023-12-31 23:59:59'
-
         # Simulate form submission with valid application_deadline using HTMX headers
         response = client.post(
-            url_for('admin.admin_stipend.create'),
+            url_for('admin_stipend.create'),
             data=stipend_data,
             headers={
                 'HX-Request': 'true',
@@ -135,7 +128,7 @@ def test_create_stipend_with_blank_application_deadline_htmx(client, app, stipen
         # Simulate form submission with blank application_deadline using HTMX headers
         stipend_data['application_deadline'] = ''
         response = client.post(
-            url_for('admin.admin_stipend.create'),
+            url_for('admin_stipend.create'),
             data=stipend_data,
             headers={
                 'HX-Request': 'true',
@@ -155,7 +148,7 @@ def test_create_stipend_with_invalid_application_deadline_htmx(client, app, stip
         # Simulate form submission with invalid application_deadline using HTMX headers
         stipend_data['application_deadline'] = 'invalid-date'
         response = client.post(
-            url_for('admin.admin_stipend.create'),
+            url_for('admin_stipend.create'),
             data=stipend_data,
             headers={
                 'HX-Request': 'true',
@@ -183,7 +176,7 @@ def test_update_stipend(client, app, logged_in_admin, test_stipend, db):
             'open_for_applications': True
         }
 
-        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data)
+        response = client.post(url_for('admin_stipend.update', id=test_stipend.id), data=updated_data)
 
         assert response.status_code in (200, 302)
 
@@ -197,7 +190,6 @@ def test_update_stipend(client, app, logged_in_admin, test_stipend, db):
         assert stipend.eligibility_criteria == "Open to all updated students"
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
 
-
 def test_update_stipend_with_unchecked_open_for_applications(client, app, logged_in_admin, test_stipend, db):
     with app.app_context():
         updated_data_no_open_for_apps = {
@@ -210,7 +202,7 @@ def test_update_stipend_with_unchecked_open_for_applications(client, app, logged
             'application_deadline': '2024-12-31 23:59:59',
         }
 
-        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data_no_open_for_apps)
+        response = client.post(url_for('admin_stipend.update', id=test_stipend.id), data=updated_data_no_open_for_apps)
 
         assert response.status_code in (200, 302)
 
@@ -231,7 +223,7 @@ def test_update_stipend_with_blank_application_deadline(client, app, logged_in_a
             'open_for_applications': False
         }
 
-        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data)
+        response = client.post(url_for('admin_stipend.update', id=test_stipend.id), data=updated_data)
         
         assert response.status_code in (200, 302)
 
@@ -252,7 +244,7 @@ def test_update_stipend_with_invalid_application_deadline(client, app, logged_in
             'open_for_applications': False
         }
 
-        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data)
+        response = client.post(url_for('admin_stipend.update', id=test_stipend.id), data=updated_data)
         
         assert response.status_code in (200, 302)
 
@@ -262,7 +254,7 @@ def test_update_stipend_with_invalid_application_deadline(client, app, logged_in
 
 def test_delete_stipend(client, app, logged_in_admin, test_stipend, db):
     with app.app_context():
-        response = client.post(url_for('admin.admin_stipend.delete', id=test_stipend.id))
+        response = client.post(url_for('admin_stipend.delete', id=test_stipend.id))
         
         assert response.status_code in (200, 302)
 
@@ -272,6 +264,6 @@ def test_delete_stipend(client, app, logged_in_admin, test_stipend, db):
 
 def test_delete_non_existent_stipend(client, app, logged_in_admin):
     with app.app_context():
-        response = client.post(url_for('admin.admin_stipend.delete', id=999))
+        response = client.post(url_for('admin_stipend.delete', id=999))
         
         assert response.status_code in (200, 302)
