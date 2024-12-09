@@ -17,7 +17,7 @@ def stipend_data(request):
     }
 
 @pytest.fixture
-def test_stipend(db, admin_user):
+def test_stipend(db_session, admin_user):
     stipend = Stipend(
         name="Test Stipend",
         summary="This is a test stipend.",
@@ -28,10 +28,10 @@ def test_stipend(db, admin_user):
         application_deadline=datetime.strptime('2023-12-31 23:59:59', '%Y-%m-%d %H:%M:%S'),
         open_for_applications=True
     )
-    db.add(stipend)
-    db.flush()
+    db_session.add(stipend)
+    db_session.flush()
     yield stipend
-    db.rollback()
+    db_session.rollback()
 
 def test_create_stipend(stipend_data, logged_in_admin):
     with logged_in_admin.application.app_context():
@@ -158,7 +158,7 @@ def test_create_stipend_with_invalid_application_deadline_htmx(stipend_data, log
         assert stipend is not None
         assert stipend.application_deadline is None
 
-def test_update_stipend(logged_in_admin, test_stipend, db):
+def test_update_stipend(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,  # Retain the original name
@@ -187,7 +187,7 @@ def test_update_stipend(logged_in_admin, test_stipend, db):
         assert stipend.eligibility_criteria == "Open to all updated students"
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
 
-def test_update_stipend_with_unchecked_open_for_applications(logged_in_admin, test_stipend, db):
+def test_update_stipend_with_unchecked_open_for_applications(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
         updated_data_no_open_for_apps = {
             'name': test_stipend.name,  # Retain the original name
@@ -204,10 +204,10 @@ def test_update_stipend_with_unchecked_open_for_applications(logged_in_admin, te
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with open_for_applications as False
-        stipend = db.session.get(Stipend, test_stipend.id)
+        stipend = db_session.get(Stipend, test_stipend.id)
         assert stipend.open_for_applications is False
 
-def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_stipend, db):
+def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,  # Retain the original name
@@ -225,10 +225,10 @@ def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_st
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with application_deadline as None
-        stipend = db.session.get(Stipend, test_stipend.id)
+        stipend = db_session.get(Stipend, test_stipend.id)
         assert stipend.application_deadline is None
 
-def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_stipend, db):
+def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,  # Retain the original name
@@ -246,17 +246,17 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with application_deadline as None
-        stipend = db.session.get(Stipend, test_stipend.id)
+        stipend = db_session.get(Stipend, test_stipend.id)
         assert stipend.application_deadline is None
 
-def test_delete_stipend(logged_in_admin, test_stipend, db):
+def test_delete_stipend(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
         response = logged_in_admin.post(url_for('admin.admin_stipend.delete', id=test_stipend.id))
         
         assert response.status_code in (200, 302)
 
         # Check if the stipend was deleted from the database
-        stipend = db.session.get(Stipend, test_stipend.id)
+        stipend = db_session.get(Stipend, test_stipend.id)
         assert stipend is None
 
 def test_delete_non_existent_stipend(logged_in_admin):
