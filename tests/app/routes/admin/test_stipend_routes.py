@@ -33,7 +33,7 @@ def test_stipend(db_session, admin_user):
     yield stipend
     db_session.rollback()
 
-def test_create_stipend(stipend_data, logged_in_admin):
+def test_create_stipend(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         # Simulate form submission with valid application_deadline and open_for_applications checked
         response = logged_in_admin.post(url_for('admin.admin_stipend.create'), data=stipend_data)
@@ -41,7 +41,7 @@ def test_create_stipend(stipend_data, logged_in_admin):
         assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database
-        stipend = db_session.get(Stipend, test_stipend.id)
+        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.summary == 'This is a test stipend.'
         assert stipend.description == 'Detailed description of the test stipend.'
