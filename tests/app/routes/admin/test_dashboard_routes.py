@@ -1,7 +1,6 @@
 import pytest
 from flask import url_for, session
 
-@pytest.mark.usefixtures('app', 'client', 'admin_user')
 def test_dashboard_data(client, admin_user):
     # Push an application context
     with client.application.app_context():

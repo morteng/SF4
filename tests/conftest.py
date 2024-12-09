@@ -52,7 +52,7 @@ def db_session(_db):
     connection.close()
     _db.session.remove()
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='function')
 def admin_user(db_session):
     email = 'admin@example.com'
     existing_user = db_session.query(User).filter_by(email=email).first()
