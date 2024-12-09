@@ -176,6 +176,8 @@ def test_update_stipend(client, app, logged_in_admin, test_stipend, db):
             'open_for_applications': True
         }
 
+        assert updated_data['application_deadline'] == '2024-12-31 23:59:59'  # Sanity check
+
         response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data)
 
         assert response.status_code in (200, 302)
