@@ -2,7 +2,6 @@
 import pytest
 from app import create_app, db as _db  # Import db with an alias if it's already defined in the app
 from app.models.user import User
-from sqlalchemy.orm import scoped_session, sessionmaker
 
 @pytest.fixture(scope='module')
 def app():
@@ -14,6 +13,7 @@ def app():
     app.config['SERVER_NAME'] = 'localhost'
     app.config['APPLICATION_ROOT'] = '/'
     app.config['PREFERRED_URL_SCHEME'] = 'http'
+    app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for testing
 
     with app.app_context():
         _db.create_all()
@@ -27,28 +27,28 @@ def client(app):
     return app.test_client()
 
 @pytest.fixture(scope='function')
-def admin_user(db):  # Use the alias if necessary
+def admin_user(db):
     email = 'admin@example.com'
     existing_user = User.query.filter_by(email=email).first()
     if not existing_user:
         user = User(username='admin', email=email, is_admin=True)
         user.set_password('password123')
-        db.add(user)
-        db.commit()
+        db.session.add(user)
+        db.session.flush()
     else:
         user = existing_user
-    return user
+    yield user
+    db.session.rollback()
 
 @pytest.fixture(scope='function')
 def db(app):
     """Create a new database session for a test."""
-    Session = scoped_session(sessionmaker(bind=_db.engine))
     with _db.engine.connect() as connection:
         transaction = connection.begin()
 
-        Session.configure(bind=connection)
-        yield Session
+        _db.session.configure(bind=connection)
+        yield _db.session
 
         # Rollback the transaction and close the session after each test
         transaction.rollback()
-        Session.remove()
+        _db.session.remove()

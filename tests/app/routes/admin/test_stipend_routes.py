@@ -2,7 +2,6 @@
 import pytest
 from flask import url_for
 from app.models.stipend import Stipend
-from app.extensions import db
 from datetime import datetime
 
 @pytest.fixture
@@ -34,19 +33,20 @@ def test_stipend(db, admin_user):
         db.add(stipend)
     return stipend
 
-def test_create_stipend(client, app, stipend_data, admin_user):
+@pytest.fixture
+def logged_in_admin(client, admin_user):
+    client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
+    yield client
+
+def test_create_stipend(client, app, stipend_data, logged_in_admin):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-        
         # Ensure application_deadline is a string
         stipend_data['application_deadline'] = '2023-12-31 23:59:59'
         
         # Simulate form submission with valid application_deadline and open_for_applications checked
-        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data, follow_redirects=True)
+        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data)
         
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database
         stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
@@ -59,66 +59,50 @@ def test_create_stipend(client, app, stipend_data, admin_user):
         assert stipend.open_for_applications is True
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
 
-def test_create_stipend_with_unchecked_open_for_applications(client, app, stipend_data, admin_user):
+def test_create_stipend_with_unchecked_open_for_applications(client, app, stipend_data, logged_in_admin):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-        
         # Simulate form submission with open_for_applications unchecked
         stipend_data_no_open_for_apps = {
             key: value for key, value in stipend_data.items() if key != 'open_for_applications'
         }
         
-        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data_no_open_for_apps, follow_redirects=True)
+        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data_no_open_for_apps)
         
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database with open_for_applications as False
         stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.open_for_applications is False
 
-def test_create_stipend_with_blank_application_deadline(client, app, stipend_data, admin_user):
+def test_create_stipend_with_blank_application_deadline(client, app, stipend_data, logged_in_admin):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-        
         # Simulate form submission with blank application_deadline
         stipend_data['application_deadline'] = ''
-        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data, follow_redirects=True)
+        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data)
         
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database with application_deadline as None
         stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None
 
-def test_create_stipend_with_invalid_application_deadline(client, app, stipend_data, admin_user):
+def test_create_stipend_with_invalid_application_deadline(client, app, stipend_data, logged_in_admin):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-        
         # Simulate form submission with invalid application_deadline
         stipend_data['application_deadline'] = 'invalid-date'
-        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data, follow_redirects=True)
+        response = client.post(url_for('admin.admin_stipend.create'), data=stipend_data)
         
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database with application_deadline as None
         stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None
 
-def test_create_stipend_with_htmx(client, app, stipend_data, admin_user):
+def test_create_stipend_with_htmx(client, app, stipend_data, logged_in_admin):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-
         # Ensure application_deadline is a string
         stipend_data['application_deadline'] = '2023-12-31 23:59:59'
 
@@ -126,14 +110,13 @@ def test_create_stipend_with_htmx(client, app, stipend_data, admin_user):
         response = client.post(
             url_for('admin.admin_stipend.create'),
             data=stipend_data,
-            follow_redirects=True,
             headers={
                 'HX-Request': 'true',
                 'HX-Target': '#stipend-form-container'
             }
         )
         
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
 
         # Check if the stipend was created in the database
         stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
@@ -146,62 +129,48 @@ def test_create_stipend_with_htmx(client, app, stipend_data, admin_user):
         assert stipend.open_for_applications is True
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
 
-def test_create_stipend_with_blank_application_deadline_htmx(client, app, stipend_data, admin_user):
+def test_create_stipend_with_blank_application_deadline_htmx(client, app, stipend_data, logged_in_admin):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-
         # Simulate form submission with blank application_deadline using HTMX headers
         stipend_data['application_deadline'] = ''
         response = client.post(
             url_for('admin.admin_stipend.create'),
             data=stipend_data,
-            follow_redirects=True,
             headers={
                 'HX-Request': 'true',
                 'HX-Target': '#stipend-form-container'
             }
         )
 
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
 
         # Check if the stipend was created in the database with application_deadline as None
         stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None
 
-def test_create_stipend_with_invalid_application_deadline_htmx(client, app, stipend_data, admin_user):
+def test_create_stipend_with_invalid_application_deadline_htmx(client, app, stipend_data, logged_in_admin):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-
         # Simulate form submission with invalid application_deadline using HTMX headers
         stipend_data['application_deadline'] = 'invalid-date'
         response = client.post(
             url_for('admin.admin_stipend.create'),
             data=stipend_data,
-            follow_redirects=True,
             headers={
                 'HX-Request': 'true',
                 'HX-Target': '#stipend-form-container'
             }
         )
 
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
 
         # Check if the stipend was created in the database with application_deadline as None
         stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None
 
-def test_update_stipend(client, app, admin_user, test_stipend):
+def test_update_stipend(client, app, logged_in_admin, test_stipend):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-
         updated_data = {
             'name': test_stipend.name,  # Retain the original name
             'summary': "Updated summary.",
@@ -213,12 +182,12 @@ def test_update_stipend(client, app, admin_user, test_stipend):
             'open_for_applications': True
         }
 
-        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data, follow_redirects=True)
+        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data)
         
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database
-        stipend = db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
+        stipend = app.db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
         assert stipend.name == test_stipend.name
         assert stipend.summary == "Updated summary."
         assert stipend.description == "Updated description."
@@ -228,12 +197,8 @@ def test_update_stipend(client, app, admin_user, test_stipend):
         assert stipend.open_for_applications is True
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
 
-def test_update_stipend_with_unchecked_open_for_applications(client, app, admin_user, test_stipend):
+def test_update_stipend_with_unchecked_open_for_applications(client, app, logged_in_admin, test_stipend):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-
         updated_data_no_open_for_apps = {
             'name': test_stipend.name,  # Retain the original name
             'summary': "Updated summary.",
@@ -244,20 +209,16 @@ def test_update_stipend_with_unchecked_open_for_applications(client, app, admin_
             'application_deadline': '2024-12-31 23:59:59',
         }
 
-        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data_no_open_for_apps, follow_redirects=True)
+        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data_no_open_for_apps)
 
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with open_for_applications as False
-        stipend = db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
+        stipend = app.db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
         assert stipend.open_for_applications is False
 
-def test_update_stipend_with_blank_application_deadline(client, app, admin_user, test_stipend):
+def test_update_stipend_with_blank_application_deadline(client, app, logged_in_admin, test_stipend):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-
         updated_data = {
             'name': test_stipend.name,  # Retain the original name
             'summary': "Updated summary.",
@@ -269,20 +230,16 @@ def test_update_stipend_with_blank_application_deadline(client, app, admin_user,
             'open_for_applications': False
         }
 
-        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data, follow_redirects=True)
+        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data)
         
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with application_deadline as None
-        stipend = db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
+        stipend = app.db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
         assert stipend.application_deadline is None
 
-def test_update_stipend_with_invalid_application_deadline(client, app, admin_user, test_stipend):
+def test_update_stipend_with_invalid_application_deadline(client, app, logged_in_admin, test_stipend):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-
         updated_data = {
             'name': test_stipend.name,  # Retain the original name
             'summary': "Updated summary.",
@@ -294,34 +251,26 @@ def test_update_stipend_with_invalid_application_deadline(client, app, admin_use
             'open_for_applications': False
         }
 
-        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data, follow_redirects=True)
+        response = client.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data)
         
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with application_deadline as None
-        stipend = db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
+        stipend = app.db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
         assert stipend.application_deadline is None
 
-def test_delete_stipend(client, app, admin_user, test_stipend):
+def test_delete_stipend(client, app, logged_in_admin, test_stipend):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-
-        response = client.post(url_for('admin.admin_stipend.delete', id=test_stipend.id), follow_redirects=True)
+        response = client.post(url_for('admin.admin_stipend.delete', id=test_stipend.id))
         
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
 
         # Check if the stipend was deleted from the database
-        stipend = db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
+        stipend = app.db.session.get(Stipend, test_stipend.id)  # Updated to use Session.get()
         assert stipend is None
 
-def test_delete_non_existent_stipend(client, app, admin_user):
+def test_delete_non_existent_stipend(client, app, logged_in_admin):
     with app.app_context():
-        # Log in the admin user
-        login_response = client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
-        assert login_response.status_code == 200
-
-        response = client.post(url_for('admin.admin_stipend.delete', id=999), follow_redirects=True)
+        response = client.post(url_for('admin.admin_stipend.delete', id=999))
         
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)

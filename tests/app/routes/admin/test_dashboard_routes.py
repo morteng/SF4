@@ -8,15 +8,10 @@ def test_dashboard_data(client, admin_user):
         # First, make a GET request to establish a request context
         client.get(url_for('public.login'))
 
-        # Manually set CSRF token in session for testing purposes
-        with client.session_transaction() as sess:
-            sess['csrf_token'] = 'test_csrf_token'
-
         # Log in the admin user
         response = client.post(url_for('public.login'), data={
             'username': admin_user.username,
-            'password': 'password123',
-            'csrf_token': 'test_csrf_token'
+            'password': 'password123'
         }, follow_redirects=True)
         
         assert response.status_code == 200
