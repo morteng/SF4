@@ -4,6 +4,9 @@ from app.extensions import db
 def get_all_stipends():
     return Stipend.query.all()
 
+# create get_stipend_count function AI!
+
+
 def delete_stipend(stipend):
     db.session.delete(stipend)
     db.session.commit()
