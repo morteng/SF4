@@ -12,7 +12,9 @@ def create_app(config_name='development'):
         app.config['APPLICATION_ROOT'] = '/'
         app.config['PREFERRED_URL_SCHEME'] = 'http'
     else:
-        app.config.from_object(f'app.config.{config_name}_config')
+        from app.config import config_by_name
+        app.config.from_object(config_by_name[config_name])
+
 
     # Initialize extensions
     db.init_app(app)
