@@ -84,6 +84,6 @@ def logged_in_admin(client, admin_user):
     yield client
 
 @pytest.fixture
-def db(db_session):
+def legacy_db(db_session):
     """Alias fixture for db_session to support legacy tests."""
     return db_session
