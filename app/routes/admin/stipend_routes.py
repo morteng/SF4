@@ -13,24 +13,14 @@ def create():
     form = StipendForm()
     
     if request.method == 'POST' and form.validate_on_submit():
-        new_stipend_data = {
-            'name': form.name.data,
-            'summary': form.summary.data or None,
-            'description': form.description.data or None,
-            'homepage_url': form.homepage_url.data or None,
-            'application_procedure': form.application_procedure.data or None,
-            'eligibility_criteria': form.eligibility_criteria.data or None,
-            'application_deadline': form.application_deadline.data or None,  # Explicitly handle blank or None values
-            'open_for_applications': form.open_for_applications.data
-        }
+        stipend = Stipend()
+        form.populate_obj(stipend)  # Automatically maps form data
         
-        stipend = create_stipend(new_stipend_data)
-        
-        if stipend:
+        if create_stipend(stipend):
             flash('Stipend created successfully!', 'success')
             return redirect(url_for('admin.admin_stipend.index'))
         else:
-            flash('Stipend with this name already exists or invalid application deadline.', 'danger')
+            flash('Stipend with this name already exists.', 'danger')
     else:
         print(f"Form errors: {form.errors}")  # Debugging statement
     
@@ -47,18 +37,8 @@ def update(id):
     form = StipendEditForm(obj=stipend)
     
     if request.method == 'POST' and form.validate_on_submit():
-        updated_data = {
-            'name': form.name.data,
-            'summary': form.summary.data or stipend.summary,
-            'description': form.description.data or stipend.description,
-            'homepage_url': form.homepage_url.data or stipend.homepage_url,
-            'application_procedure': form.application_procedure.data or stipend.application_procedure,
-            'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
-            'application_deadline': form.application_deadline.data or None,  # Explicitly handle blank or None values
-            'open_for_applications': form.open_for_applications.data
-        }
-        
-        update_stipend(stipend, updated_data)
+        form.populate_obj(stipend)
+        update_stipend(stipend)
         
         flash('Stipend updated successfully!', 'success')
         return redirect(url_for('admin.admin_stipend.index'))
