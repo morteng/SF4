@@ -1,10 +1,9 @@
 # tests/conftest.py
 import pytest
-from flask import url_for  # Import url_for here
-from app import create_app, db as _database  # Import db with an alias if it's already defined in the app
+from flask import url_for
+from app import create_app
+from app.extensions import db
 from app.models.user import User
-from app.extensions import db, login_manager
-from app import register_blueprints  # Import register_blueprints
 
 @pytest.fixture(scope='session')
 def app():
@@ -20,12 +19,9 @@ def app():
     with app.app_context():
         # Initialize extensions
         db.init_app(app)
-        login_manager.init_app(app)
 
         # Prevent SQLAlchemy from expiring objects after commit
         db.session.expire_on_commit = False
-
-        from app.models.user import User  # Ensure models are imported for table creation
 
         @login_manager.user_loader
         def load_user(user_id):
@@ -37,48 +33,48 @@ def app():
 
         register_blueprints(app)        # Register other blueprints
 
-        _database.create_all()  # Create tables
+        db.create_all()  # Create tables
 
         yield app
 
-        _database.session.remove()
-        _database.drop_all()
+        db.session.remove()
+        db.drop_all()
 
 @pytest.fixture(scope='session')
 def _db(app):
     """Provide the SQLAlchemy database session for pytest-flask-sqlalchemy plugin."""
     with app.app_context():
-        _database.create_all()
-        yield _database  # Provide the actual database session
-        _database.drop_all()
-        _database.session.remove()
+        db.create_all()
+        yield db  # Provide the actual database session
+        db.drop_all()
+        db.session.remove()
 
 @pytest.fixture(scope='function')
-def db(_db):
+def db_session(_db):
     """Provide a clean database session for each test function."""
     connection = _db.engine.connect()
     transaction = connection.begin()
 
     _db.session.bind = connection
-    yield _db  # Provide the session
+    yield _db.session  # Provide the session
 
     transaction.rollback()
     connection.close()
-    _database.session.remove()
+    _db.session.remove()
 
 @pytest.fixture(scope='function')
-def admin_user(db):
+def admin_user(db_session):
     email = 'admin@example.com'
-    existing_user = db.session.query(User).filter_by(email=email).first()
+    existing_user = db_session.query(User).filter_by(email=email).first()
     if not existing_user:
         user = User(username='admin', email=email, is_admin=True)
         user.set_password('password123')  # Ensure correct password hash
-        db.session.add(user)
-        db.session.commit()  # Commit to persist the user
+        db_session.add(user)
+        db_session.commit()  # Commit to persist the user
     else:
         user = existing_user
     yield user
-    db.session.rollback()
+    db_session.rollback()
 
 @pytest.fixture(scope='function')
 def client(app):
