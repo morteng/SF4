@@ -3,6 +3,7 @@ import pytest
 from flask import url_for  # Import url_for here
 from app import create_app, db as _database  # Import db with an alias if it's already defined in the app
 from app.models.user import User
+from app.extensions import db, login_manager
 
 @pytest.fixture(scope='session')
 def app():
@@ -10,15 +11,35 @@ def app():
     app = create_app('testing')
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['SECRET_KEY'] = 'test_secret_key'  # Static for tests
+    app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for testing
     app.config['SERVER_NAME'] = 'localhost'
     app.config['APPLICATION_ROOT'] = '/'
     app.config['PREFERRED_URL_SCHEME'] = 'http'
-    app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for testing
 
     with app.app_context():
-        _database.create_all()
+        # Initialize extensions
+        db.init_app(app)
+        login_manager.init_app(app)
+
+        # Prevent SQLAlchemy from expiring objects after commit
+        db.session.expire_on_commit = False
+
+        from app.models.user import User  # Ensure models are imported for table creation
+
+        @login_manager.user_loader
+        def load_user(user_id):
+            return db.session.get(User, int(user_id))  # Use session.get instead of query.get
+
+        # Register blueprints
+        from app.routes.admin import register_admin_blueprints
+        register_admin_blueprints(app)  # For admin routes
+
+        register_blueprints(app)        # Register other blueprints
+
+        _database.create_all()  # Create tables
+
         yield app
+
         _database.session.remove()
         _database.drop_all()
 
