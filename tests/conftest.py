@@ -82,3 +82,8 @@ def logged_in_admin(client, admin_user):
     with client.session_transaction() as session:
         assert '_user_id' in session, "Admin session not established."
     yield client
+
+@pytest.fixture
+def db(db_session):
+    """Alias fixture for db_session to support legacy tests."""
+    return db_session
