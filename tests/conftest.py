@@ -61,3 +61,14 @@ def admin_user(db):
 def client(app):
     """Provides a test client for the application."""
     return app.test_client()
+
+@pytest.fixture
+def logged_in_admin(client, admin_user):
+    response = client.post(url_for('public.login'), data={
+        'username': admin_user.username,
+        'password': 'password123'
+    }, follow_redirects=True)
+    assert response.status_code == 200, "Admin login failed."
+    with client.session_transaction() as session:
+        assert '_user_id' in session, "Admin session not established."
+    yield client
