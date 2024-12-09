@@ -1,5 +1,6 @@
 from app.models.stipend import Stipend
 from app.extensions import db
+from datetime import datetime
 
 def get_all_stipends():
     return Stipend.query.all()
@@ -16,10 +17,16 @@ def create_stipend(data):
         print("Stipend with this name already exists.")
         return None  # or raise an exception, depending on your preference
     
+    if 'application_deadline' in data and isinstance(data['application_deadline'], str):
+        try:
+            data['application_deadline'] = datetime.strptime(data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            data['application_deadline'] = None  # Default to None if parsing fails
+
     new_stipend = Stipend(**data)
-    db.session.add(new_stipend)
     
     try:
+        db.session.add(new_stipend)
         db.session.commit()
         print("Stipend added to the database successfully.")  # Debugging statement
         return new_stipend
