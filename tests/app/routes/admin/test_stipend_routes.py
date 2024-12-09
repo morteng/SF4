@@ -41,7 +41,7 @@ def test_create_stipend(stipend_data, logged_in_admin):
         assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database
-        stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
+        stipend = db_session.get(Stipend, test_stipend.id)
         assert stipend is not None
         assert stipend.summary == 'This is a test stipend.'
         assert stipend.description == 'Detailed description of the test stipend.'
