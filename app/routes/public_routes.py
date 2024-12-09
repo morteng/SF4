@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user  # Import logout_user
 from app.forms.user_forms import LoginForm
 from app.models.user import User
 
@@ -36,4 +36,9 @@ def login():
 def index():
     return render_template('index.html')
 
-# add logout route here AI!
+@public_bp.route('/logout')
+@login_required  # Ensure the user is logged in to log out
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('public.index'))
