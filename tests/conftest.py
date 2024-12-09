@@ -2,7 +2,7 @@
 import pytest
 from flask import url_for
 from app import create_app
-from app.extensions import db
+from app.extensions import db, login_manager  # Import login_manager
 from app.models.user import User
 
 @pytest.fixture(scope='session')
@@ -31,6 +31,7 @@ def app():
         from app.routes.admin import register_admin_blueprints
         register_admin_blueprints(app)  # For admin routes
 
+        from app.__init__ import register_blueprints  # Import register_blueprints
         register_blueprints(app)        # Register other blueprints
 
         db.create_all()  # Create tables
