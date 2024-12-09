@@ -31,3 +31,7 @@ def login():
             print("Login failed.")
             flash('Invalid username or password.', 'danger')
     return render_template('login.html', form=form)
+
+@public_bp.route('/')
+def index():
+    return render_template('index.html')
