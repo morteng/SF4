@@ -9,7 +9,7 @@ def app():
     app = create_app('testing')
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    # Add the following configurations
+    app.config['SECRET_KEY'] = 'test_secret_key'
     app.config['SERVER_NAME'] = 'localhost'
     app.config['APPLICATION_ROOT'] = '/'
     app.config['PREFERRED_URL_SCHEME'] = 'http'
@@ -33,12 +33,13 @@ def admin_user(db):
     if not existing_user:
         user = User(username='admin', email=email, is_admin=True)
         user.set_password('password123')
-        db.session.add(user)
-        db.session.flush()
+        db.add(user)
+        db.flush()
+
     else:
         user = existing_user
     yield user
-    db.session.rollback()
+    db.rollback()
 
 @pytest.fixture(scope='function')
 def db(app):
