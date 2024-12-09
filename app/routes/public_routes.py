@@ -29,6 +29,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
+            print(f"Login success for: {user.username}")
             login_user(user)
             flash('Login successful.', 'success')
             # Redirect to admin dashboard if user is an admin, else redirect to user profile
@@ -37,6 +38,7 @@ def login():
             else:
                 return redirect(url_for('user.profile'))
         else:
+            print("Login failed.")
             flash('Invalid username or password.', 'danger')
     return render_template('login.html', form=form)
 
