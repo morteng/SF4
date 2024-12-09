@@ -29,14 +29,7 @@ def create_app(config_name='development'):
     from app.routes.admin import register_admin_blueprints
     register_admin_blueprints(app)  # For admin routes
 
-    from app.routes.__init__ import register_blueprints  # Ensure correct import path
+    from app.routes import register_blueprints
     register_blueprints(app)        # Register other blueprints
 
     return app
-
-def register_blueprints(app):
-    from app.routes.user_routes import user_bp
-    from app.routes.public_routes import public_bp
-
-    app.register_blueprint(user_bp)    # Register user routes
-    app.register_blueprint(public_bp)  # Register public routes
