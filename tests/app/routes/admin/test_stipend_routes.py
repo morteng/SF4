@@ -41,7 +41,7 @@ def test_create_stipend(stipend_data, logged_in_admin):
         assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database
-        stipend = db_session.get(Stipend, test_stipend.id)
+        stipend = db.session.get(Stipend, test_stipend.id)
         assert stipend is not None
         assert stipend.summary == 'This is a test stipend.'
         assert stipend.description == 'Detailed description of the test stipend.'
@@ -178,7 +178,7 @@ def test_update_stipend(logged_in_admin, test_stipend, db_session):
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database
-        stipend = db.session.get(Stipend, test_stipend.id)  # Use session.get instead of get
+        stipend = db_session.get(Stipend, test_stipend.id)
         assert stipend.name == test_stipend.name
         assert stipend.summary == "Updated summary."
         assert stipend.description == "Updated description."
