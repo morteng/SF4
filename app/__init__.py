@@ -19,6 +19,12 @@ def create_app(config_name='development'):
     db.init_app(app)
     login_manager.init_app(app)
 
+    from app.models.user import User  # Import the User model
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
     # Register blueprints
     from app.routes.admin import register_admin_blueprints
     register_admin_blueprints(app)  # For admin routes
