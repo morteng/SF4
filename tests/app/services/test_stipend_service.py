@@ -17,12 +17,12 @@ def test_data():
     }
 
 @pytest.fixture(scope='function', autouse=True)
-def clean_stipends(db):
+def clean_stipends(db_session):
     yield
-    db.query(Stipend).delete()
-    db.commit()
+    db_session.query(Stipend).delete()
+    db_session.commit()
 
-def test_create_stipend(test_data, db):
+def test_create_stipend(test_data, db_session):
     # Create a stipend using the service function with the provided session
     stipend = Stipend(**test_data)
     new_stipend = create_stipend(stipend)
@@ -45,7 +45,7 @@ def test_create_stipend(test_data, db):
     assert abs(stipends[0].application_deadline - test_data['application_deadline']) < deadline_tolerance
     assert stipends[0].open_for_applications == test_data['open_for_applications']
 
-def test_create_stipend_duplicate_name(test_data, db):
+def test_create_stipend_duplicate_name(test_data, db_session):
     # Create a stipend using the service function with the provided session
     stipend = Stipend(**test_data)
     new_stipend = create_stipend(stipend)
@@ -60,7 +60,7 @@ def test_create_stipend_duplicate_name(test_data, db):
     # Assert that the creation failed due to duplicate name
     assert result is None
 
-def test_create_stipend_invalid_deadline(test_data, db):
+def test_create_stipend_invalid_deadline(test_data, db_session):
     # Modify test data with an invalid deadline
     test_data['application_deadline'] = "invalid-date"
     stipend = Stipend(**test_data)
@@ -70,7 +70,7 @@ def test_create_stipend_invalid_deadline(test_data, db):
     assert new_stipend is not None
     assert new_stipend.application_deadline is None
 
-def test_update_stipend(test_data, db):
+def test_update_stipend(test_data, db_session):
     # Create a stipend using the service function with the provided session
     stipend = Stipend(**test_data)
     new_stipend = create_stipend(stipend)
@@ -107,7 +107,7 @@ def test_update_stipend(test_data, db):
     assert abs(updated_stipend.application_deadline - updated_data['application_deadline']) < deadline_tolerance
     assert updated_stipend.open_for_applications == updated_data['open_for_applications']
 
-def test_delete_stipend(test_data, db):
+def test_delete_stipend(test_data, db_session):
     # Create a stipend using the service function with the provided session
     stipend = Stipend(**test_data)
     new_stipend = create_stipend(stipend)
