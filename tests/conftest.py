@@ -1,5 +1,6 @@
 # tests/conftest.py
 import pytest
+from flask import url_for  # Import url_for here
 from app import create_app, db as _database  # Import db with an alias if it's already defined in the app
 from app.models.user import User
 
