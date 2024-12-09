@@ -5,9 +5,9 @@ from app import create_app
 from app.extensions import db, login_manager  # Correct imports
 from app.models.user import User
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='function')
 def app():
-    """Create and configure a new app instance for each test session."""
+    """Create and configure a new app instance for each test function."""
     app = create_app('testing')  # 'create_app' already sets testing configs
 
     with app.app_context():
