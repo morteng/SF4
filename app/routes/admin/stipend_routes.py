@@ -28,13 +28,13 @@ def create():
         
         if new_stipend:
             flash('Stipend created successfully.', 'success')
-            return redirect(url_for('admin_stipend.index'))
+            return redirect(url_for('admin.admin_stipend.index'))
         else:
             flash('Stipend with this name already exists or invalid application deadline.', 'danger')
     else:
         print(f"Form errors: {form.errors}")  # Debugging statement
     
-    return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.create'))
+    return render_template('admin/stipend_form.html', form=form, action=url_for('admin.admin_stipend.create'))
 
 @admin_stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -51,13 +51,13 @@ def update(id):
             'application_procedure': form.application_procedure.data or stipend.application_procedure,
             'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
             # Ensure application_deadline is a datetime object
-            'application_deadline': form.application_deadline.data if form.application_deadline.data else None,
+            'application_deadline': form.application_deadline.data or None,
             'open_for_applications': form.open_for_applications.data
         }
         
         update_stipend(stipend, updated_data)
         flash('Stipend updated successfully.', 'success')
-        return redirect(url_for('admin_stipend.update', id=stipend.id))
+        return redirect(url_for('admin.admin_stipend.update', id=stipend.id))
 
     return render_template('admin/stipend_edit.html', form=form, stipend=stipend)
 
@@ -71,7 +71,7 @@ def delete(id):
     else:
         flash('Failed to delete stipend.', 'danger')
     
-    return redirect(url_for('admin_stipend.index'))
+    return redirect(url_for('admin.admin_stipend.index'))
 
 @admin_stipend_bp.route('/', methods=['GET'])
 @login_required
