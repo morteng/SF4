@@ -27,7 +27,7 @@ def create():
         
         if stipend:
             flash('Stipend created successfully!', 'success')
-            return redirect(url_for('admin_stipend.index'))
+            return redirect(url_for('admin.admin_stipend.index'))
         else:
             flash('Stipend with this name already exists or invalid application deadline.', 'danger')
     else:
@@ -41,7 +41,7 @@ def update(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
         flash('Stipend not found!', 'danger')
-        return redirect(url_for('admin_stipend.index'))
+        return redirect(url_for('admin.admin_stipend.index'))
     
     form = StipendEditForm(obj=stipend)
     
@@ -60,7 +60,7 @@ def update(id):
         update_stipend(stipend, updated_data)
         
         flash('Stipend updated successfully!', 'success')
-        return redirect(url_for('admin_stipend.index'))
+        return redirect(url_for('admin.admin_stipend.index'))
     
     return render_template('admin/stipend_form.html', form=form)
 
@@ -70,15 +70,15 @@ def delete(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
         flash('Stipend not found!', 'danger')
-        return redirect(url_for('admin_stipend.index'))
+        return redirect(url_for('admin.admin_stipend.index'))
     
     delete_stipend(stipend)
     
     flash('Stipend deleted successfully!', 'success')
-    return redirect(url_for('admin_stipend.index'))
+    return redirect(url_for('admin.admin_stipend.index'))
 
 @admin_stipend_bp.route('/', methods=['GET'])
 @login_required
 def index():
     stipends = get_all_stipends()
-    return render_template('admin/stipend_index.html', stipends=stipends)
+    return render_template('admin/stipend/index.html', stipends=stipends)
