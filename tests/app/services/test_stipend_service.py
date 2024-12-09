@@ -1,5 +1,5 @@
 import pytest
-from app.services.stipend_service import create_stipend, get_all_stipends, delete_stipend
+from app.services.stipend_service import create_stipend, get_all_stipends, delete_stipend, update_stipend, get_stipend_by_id
 from app.models.stipend import Stipend
 from datetime import datetime, timedelta
 
