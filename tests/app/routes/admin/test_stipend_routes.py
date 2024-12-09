@@ -35,7 +35,13 @@ def test_stipend(db, admin_user):
 
 @pytest.fixture
 def logged_in_admin(client, admin_user):
-    client.post(url_for('public.login'), data={'username': admin_user.username, 'password': 'password123'}, follow_redirects=True)
+    response = client.post(url_for('public.login'), data={
+        'username': admin_user.username,
+        'password': 'password123'
+    }, follow_redirects=True)  # Ensures redirects finalize session login
+    assert response.status_code == 200, "Admin login failed."
+    with client.session_transaction() as session:
+        assert '_user_id' in session, "Admin session not established."
     yield client
 
 def test_create_stipend(client, app, stipend_data, logged_in_admin):
@@ -58,6 +64,10 @@ def test_create_stipend(client, app, stipend_data, logged_in_admin):
 
 def test_create_stipend_with_unchecked_open_for_applications(client, app, stipend_data, logged_in_admin):
     with app.app_context():
+        # Debug: Check session before sending the request
+        with logged_in_admin.session_transaction() as session:
+            print("Session before POST:", session)
+
         # Simulate form submission with open_for_applications unchecked
         stipend_data_no_open_for_apps = {
             key: value for key, value in stipend_data.items() if key != 'open_for_applications'

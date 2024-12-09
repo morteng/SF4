@@ -10,7 +10,7 @@ def app():
     app = create_app('testing')
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['SECRET_KEY'] = 'test_secret_key'
+    app.config['SECRET_KEY'] = 'test_secret_key'  # Static for tests
     app.config['SERVER_NAME'] = 'localhost'
     app.config['APPLICATION_ROOT'] = '/'
     app.config['PREFERRED_URL_SCHEME'] = 'http'
@@ -68,7 +68,7 @@ def logged_in_admin(client, admin_user):
     response = client.post(url_for('public.login'), data={
         'username': admin_user.username,
         'password': 'password123'
-    }, follow_redirects=True)
+    }, follow_redirects=True)  # Ensures redirects finalize session login
     assert response.status_code == 200, "Admin login failed."
     with client.session_transaction() as session:
         assert '_user_id' in session, "Admin session not established."
