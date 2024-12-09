@@ -16,10 +16,7 @@ def app():
 
         @login_manager.user_loader
         def load_user(user_id):
-            user = db.session.get(User, int(user_id))
-            if user:
-                db.session.add(user)
-            return user
+            return db.session.get(User, int(user_id))
 
         # Create all tables
         db.create_all()
