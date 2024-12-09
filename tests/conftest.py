@@ -8,18 +8,9 @@ from app.models.user import User
 @pytest.fixture(scope='session')
 def app():
     """Create and configure a new app instance for each test session."""
-    app = create_app('testing')
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for testing
-    app.config['SERVER_NAME'] = 'localhost'
-    app.config['APPLICATION_ROOT'] = '/'
-    app.config['PREFERRED_URL_SCHEME'] = 'http'
+    app = create_app('testing')  # 'create_app' already sets testing configs
 
     with app.app_context():
-        # Initialize extensions
-        db.init_app(app)
-
         # Prevent SQLAlchemy from expiring objects after commit
         db.session.expire_on_commit = False
 
@@ -31,7 +22,7 @@ def app():
         from app.routes.admin import register_admin_blueprints
         register_admin_blueprints(app)  # For admin routes
 
-        from app.__init__ import register_blueprints  # Import register_blueprints
+        from app.routes.__init__ import register_blueprints  # Correct import path
         register_blueprints(app)        # Register other blueprints
 
         db.create_all()  # Create tables
