@@ -56,3 +56,8 @@ def admin_user(db):
         user = existing_user
     yield user
     db.session.rollback()
+
+@pytest.fixture(scope='function')
+def client(app):
+    """Provides a test client for the application."""
+    return app.test_client()
