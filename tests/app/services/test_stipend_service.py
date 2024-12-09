@@ -18,7 +18,6 @@ def test_data():
 
 @pytest.fixture(scope='function', autouse=True)
 def clean_stipends(db_session):
-    yield
     db_session.query(Stipend).delete()
     db_session.commit()
 
