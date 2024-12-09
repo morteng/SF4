@@ -11,6 +11,7 @@ def create_app(config_name='development'):
         app.config['SERVER_NAME'] = 'localhost'
         app.config['APPLICATION_ROOT'] = '/'
         app.config['PREFERRED_URL_SCHEME'] = 'http'
+        app.config['SECRET_KEY'] = 'test_secret_key'  # Add this line
     else:
         from app.config import config_by_name
         app.config.from_object(config_by_name[config_name])
