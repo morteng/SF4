@@ -2,6 +2,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, DateTimeField, SubmitField
 from wtforms.validators import DataRequired, Length, ValidationError
 from app.models.stipend import Stipend
+from app.models.tag import Tag
+from app.models.user import User
+from app.models.bot import Bot
+from app.models.organization import Organization
 
 class StipendEditForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
