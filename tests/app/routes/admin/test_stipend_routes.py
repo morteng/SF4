@@ -183,7 +183,7 @@ def test_update_stipend(client, app, logged_in_admin, test_stipend, db):
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database
-        stipend = db.get(Stipend, test_stipend.id)
+        stipend = db.session.get(Stipend, test_stipend.id)  # Use session.get instead of get
         assert stipend.name == test_stipend.name
         assert stipend.summary == "Updated summary."
         assert stipend.description == "Updated description."
@@ -209,7 +209,7 @@ def test_update_stipend_with_unchecked_open_for_applications(client, app, logged
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with open_for_applications as False
-        stipend = db.get(Stipend, test_stipend.id)
+        stipend = db.session.get(Stipend, test_stipend.id)
         assert stipend.open_for_applications is False
 
 def test_update_stipend_with_blank_application_deadline(client, app, logged_in_admin, test_stipend, db):
@@ -230,7 +230,7 @@ def test_update_stipend_with_blank_application_deadline(client, app, logged_in_a
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with application_deadline as None
-        stipend = db.get(Stipend, test_stipend.id)
+        stipend = db.session.get(Stipend, test_stipend.id)
         assert stipend.application_deadline is None
 
 def test_update_stipend_with_invalid_application_deadline(client, app, logged_in_admin, test_stipend, db):
@@ -251,21 +251,21 @@ def test_update_stipend_with_invalid_application_deadline(client, app, logged_in
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with application_deadline as None
-        stipend = db.get(Stipend, test_stipend.id)
+        stipend = db.session.get(Stipend, test_stipend.id)
         assert stipend.application_deadline is None
 
 def test_delete_stipend(client, app, logged_in_admin, test_stipend, db):
     with app.app_context():
-        response = client.post(url_for('admin_stipend.delete', id=test_stipend.id))
+        response = client.post(url_for('admin.admin_stipend.delete', id=test_stipend.id))
         
         assert response.status_code in (200, 302)
 
         # Check if the stipend was deleted from the database
-        stipend = db.get(Stipend, test_stipend.id)
+        stipend = db.session.get(Stipend, test_stipend.id)
         assert stipend is None
 
 def test_delete_non_existent_stipend(client, app, logged_in_admin):
     with app.app_context():
-        response = client.post(url_for('admin_stipend.delete', id=999))
+        response = client.post(url_for('admin.admin_stipend.delete', id=999))
         
         assert response.status_code in (200, 302)

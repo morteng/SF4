@@ -38,7 +38,7 @@ def create():
 @admin_stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update(id):
-    stipend = get_stipend_by_id(id)
+    stipend = db.session.get(Stipend, id)  # Use session.get instead of get
     if not stipend:
         flash('Stipend not found!', 'danger')
         return redirect(url_for('admin.admin_stipend.index'))
@@ -67,7 +67,7 @@ def update(id):
 @admin_stipend_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
-    stipend = get_stipend_by_id(id)
+    stipend = db.session.get(Stipend, id)  # Use session.get instead of get
     if not stipend:
         flash('Stipend not found!', 'danger')
         return redirect(url_for('admin.admin_stipend.index'))

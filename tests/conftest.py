@@ -29,7 +29,7 @@ def client(app):
 @pytest.fixture(scope='function')
 def admin_user(db):
     email = 'admin@example.com'
-    existing_user = User.query.filter_by(email=email).first()
+    existing_user = db.session.get(User, email)  # Use session.get instead of get
     if not existing_user:
         user = User(username='admin', email=email, is_admin=True)
         user.set_password('password123')
@@ -40,16 +40,3 @@ def admin_user(db):
         user = existing_user
     yield user
     db.rollback()
-
-@pytest.fixture(scope='function')
-def db(app):
-    """Create a new database session for a test."""
-    with _db.engine.connect() as connection:
-        transaction = connection.begin()
-
-        _db.session.configure(bind=connection)
-        yield _db.session
-
-        # Rollback the transaction and close the session after each test
-        transaction.rollback()
-        _db.session.remove()

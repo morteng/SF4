@@ -45,17 +45,17 @@ def update_stipend(stipend, data):
     stipend.homepage_url = data.get('homepage_url', stipend.homepage_url)
     stipend.application_procedure = data.get('application_procedure', stipend.application_procedure)
     stipend.eligibility_criteria = data.get('eligibility_criteria', stipend.eligibility_criteria)
-    print(stipend.application_deadline)
+
     # Handle application_deadline
     if 'application_deadline' in data:
         deadline = data['application_deadline']
-        if isinstance(deadline, str) and deadline.strip():
+        if isinstance(deadline, str) and deadline.strip():  # Check for non-blank string
             try:
                 stipend.application_deadline = datetime.strptime(deadline, '%Y-%m-%d %H:%M:%S')
             except ValueError:
                 stipend.application_deadline = None
         else:
-            stipend.application_deadline = None
+            stipend.application_deadline = None  # Explicitly handle empty input
 
     stipend.open_for_applications = data.get('open_for_applications', stipend.open_for_applications)
     db.session.commit()
