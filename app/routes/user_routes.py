@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from app.forms.user_forms import ProfileForm, LoginForm
 from app.services.user_service import update_user
 
-user_bp = Blueprint('user', __name__)
+user_bp = Blueprint('user', __name__, url_prefix='/user')
 
 @user_bp.route('/profile', methods=['GET'])
 @login_required
