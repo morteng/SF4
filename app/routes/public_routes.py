@@ -35,3 +35,5 @@ def login():
 @public_bp.route('/')
 def index():
     return render_template('index.html')
+
+# add logout route here AI!
