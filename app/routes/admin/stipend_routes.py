@@ -3,6 +3,7 @@ from flask_login import login_required
 from app.forms.admin_forms import StipendEditForm, StipendForm
 from app.models.stipend import Stipend
 from app.services.stipend_service import create_stipend, get_stipend_by_id, update_stipend, delete_stipend, get_all_stipends
+from app.extensions import db  # Import the db object
 
 admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
 
