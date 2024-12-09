@@ -50,9 +50,9 @@ def admin_user(db):
     existing_user = db.session.query(User).filter_by(email=email).first()
     if not existing_user:
         user = User(username='admin', email=email, is_admin=True)
-        user.set_password('password123')
+        user.set_password('password123')  # Ensure correct password hash
         db.session.add(user)
-        db.session.flush()
+        db.session.commit()  # Commit to persist the user
     else:
         user = existing_user
     yield user
@@ -67,8 +67,9 @@ def client(app):
 def logged_in_admin(client, admin_user):
     response = client.post(url_for('public.login'), data={
         'username': admin_user.username,
-        'password': 'password123'
-    }, follow_redirects=True)  # Ensures redirects finalize session login
+        'password': 'password123',
+        'csrf_token': ''  # Add this to bypass CSRF during tests
+    }, follow_redirects=True)
     assert response.status_code == 200, "Admin login failed."
     with client.session_transaction() as session:
         assert '_user_id' in session, "Admin session not established."
