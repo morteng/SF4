@@ -33,17 +33,6 @@ def test_stipend(db, admin_user):
     yield stipend
     db.rollback()
 
-@pytest.fixture
-def logged_in_admin(client, admin_user):
-    response = client.post(url_for('public.login'), data={
-        'username': admin_user.username,
-        'password': 'password123'
-    }, follow_redirects=True)  # Ensures redirects finalize session login
-    assert response.status_code == 200, "Admin login failed."
-    with client.session_transaction() as session:
-        assert '_user_id' in session, "Admin session not established."
-    yield client
-
 def test_create_stipend(client, app, stipend_data, logged_in_admin):
     with app.app_context():
         # Simulate form submission with valid application_deadline and open_for_applications checked

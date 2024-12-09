@@ -16,7 +16,10 @@ def app():
 
         @login_manager.user_loader
         def load_user(user_id):
-            return db.session.get(User, int(user_id))  # Use session.get instead of query.get
+            user = db.session.get(User, int(user_id))
+            if user:
+                db.session.add(user)
+            return user
 
         # Create all tables
         db.create_all()
@@ -49,7 +52,7 @@ def db_session(_db):
     connection.close()
     _db.session.remove()
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='session')
 def admin_user(db_session):
     email = 'admin@example.com'
     existing_user = db_session.query(User).filter_by(email=email).first()
@@ -67,15 +70,3 @@ def admin_user(db_session):
 def client(app):
     """Provides a test client for the application."""
     return app.test_client()
-
-@pytest.fixture
-def logged_in_admin(client, admin_user):
-    response = client.post(url_for('public.login'), data={
-        'username': admin_user.username,
-        'password': 'password123',
-        'csrf_token': ''  # Add this to bypass CSRF during tests
-    }, follow_redirects=True)
-    assert response.status_code == 200, "Admin login failed."
-    with client.session_transaction() as session:
-        assert '_user_id' in session, "Admin session not established."
-    yield client
