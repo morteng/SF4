@@ -1,6 +1,6 @@
 # tests/conftest.py
 import pytest
-from app import create_app, db as database  # Import db with an alias if it's already defined in the app
+from app import create_app, db as _database  # Import db with an alias if it's already defined in the app
 from app.models.user import User
 
 @pytest.fixture(scope='session')
@@ -16,15 +16,32 @@ def app():
     app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for testing
 
     with app.app_context():
-        database.create_all()
+        _database.create_all()
         yield app
-        database.session.remove()
-        database.drop_all()
+        _database.session.remove()
+        _database.drop_all()
 
-@pytest.fixture(scope='module')
-def client(app, _db):
-    """Create a test client for the Flask application."""
-    return app.test_client()
+@pytest.fixture(scope='session')
+def _db(app):
+    """Provide the SQLAlchemy database session for pytest-flask-sqlalchemy plugin."""
+    with app.app_context():
+        _database.create_all()
+        yield _database  # Provide the actual database session
+        _database.drop_all()
+        _database.session.remove()
+
+@pytest.fixture(scope='function')
+def db(_db):
+    """Provide a clean database session for each test function."""
+    connection = _db.engine.connect()
+    transaction = connection.begin()
+
+    _db.session.bind = connection
+    yield _db  # Provide the session
+
+    transaction.rollback()
+    connection.close()
+    _database.session.remove()
 
 @pytest.fixture(scope='function')
 def admin_user(db):
@@ -39,17 +56,3 @@ def admin_user(db):
         user = existing_user
     yield user
     db.session.rollback()
-
-@pytest.fixture(scope='function')
-def db(_db):
-    """Provide a transactional database session for the tests."""
-    connection = _db.engine.connect()
-    transaction = connection.begin()
-
-    database.session.bind = connection
-    yield database
-
-    transaction.rollback()
-    connection.close()
-    database.session.remove()
-
