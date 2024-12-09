@@ -30,9 +30,9 @@ def app():
         db.session.remove()
         db.drop_all()
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='function')
 def _db(app):
-    """Provide the SQLAlchemy database session for pytest-flask-sqlalchemy plugin."""
+    """Provide the SQLAlchemy database session for each test function."""
     with app.app_context():
         db.create_all()
         yield db  # Provide the actual database session
