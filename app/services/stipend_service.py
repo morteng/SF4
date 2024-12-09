@@ -1,40 +1,17 @@
-# app/services/stipend_service.py
 from app.models.stipend import Stipend
-from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
-from datetime import datetime
 
 def get_all_stipends():
-    try:
-        return Stipend.query.all()
-    except SQLAlchemyError as e:
-        # Log the error
-        print(str(e))
-        return []
+    return Stipend.query.all()
 
 def delete_stipend(stipend):
-    try:
-        db.session.delete(stipend)
-        db.session.commit()
-    except SQLAlchemyError as e:
-        # Log the error and possibly handle it more gracefully
-        print(f"Error deleting stipend: {e}")
-        db.session.rollback()
+    db.session.delete(stipend)
+    db.session.commit()
 
 def create_stipend(data):
     if Stipend.query.filter_by(name=data['name']).first():
         print("Stipend with this name already exists.")
         return None  # or raise an exception, depending on your preference
-    
-    try:
-        application_deadline = data.get('application_deadline')
-        if application_deadline and isinstance(application_deadline, datetime):
-            pass
-        else:
-            data['application_deadline'] = None
-    except ValueError as e:
-        print(f"Invalid application deadline: {e}")  # Debugging statement
-        data['application_deadline'] = None
     
     new_stipend = Stipend(**data)
     db.session.add(new_stipend)
@@ -43,47 +20,22 @@ def create_stipend(data):
         db.session.commit()
         print("Stipend added to the database successfully.")  # Debugging statement
         return new_stipend
-    except SQLAlchemyError as e:
+    except Exception as e:
         print(f"Database error: {e}")  # Debugging statement
         db.session.rollback()
         return None
 
 def get_stipend_by_id(stipend_id):
-    try:
-        return db.session.get(Stipend, stipend_id)  # Updated to use Session.get()
-    except SQLAlchemyError as e:
-        # Log the error
-        print(str(e))
-        return None
+    return Stipend.query.get_or_404(stipend_id)
 
 def update_stipend(stipend, data):
-    stipend.name = data['name']
+    stipend.name = data.get('name', stipend.name)
     stipend.summary = data.get('summary', stipend.summary)
     stipend.description = data.get('description', stipend.description)
     stipend.homepage_url = data.get('homepage_url', stipend.homepage_url)
     stipend.application_procedure = data.get('application_procedure', stipend.application_procedure)
     stipend.eligibility_criteria = data.get('eligibility_criteria', stipend.eligibility_criteria)
-    
-    try:
-        application_deadline = data.get('application_deadline')
-        if application_deadline and isinstance(application_deadline, datetime):
-            stipend.application_deadline = application_deadline
-        else:
-            stipend.application_deadline = None
-    except ValueError as e:
-        print(str(e))
-        return None
-    
+    stipend.application_deadline = data.get('application_deadline', stipend.application_deadline)
     stipend.open_for_applications = data.get('open_for_applications', stipend.open_for_applications)
-    
-    try:
-        db.session.commit()
-        print("Stipend updated successfully.")  # Debugging statement
-        return True
-    except SQLAlchemyError as e:
-        print(f"Database error: {e}")  # Debugging statement
-        db.session.rollback()
-        return False
 
-def get_stipend_count():
-    return Stipend.query.count()
+    db.session.commit()

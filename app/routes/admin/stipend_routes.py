@@ -1,30 +1,17 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
-from flask_login import login_required, current_user
-from app.forms.admin_forms import StipendForm
+from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask_login import login_required
+from app.forms.admin_forms import StipendEditForm, StipendForm
+from app.models.stipend import Stipend
 from app.services.stipend_service import create_stipend, get_stipend_by_id, update_stipend, delete_stipend, get_all_stipends
-from datetime import datetime
 
-stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
+admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
 
-@stipend_bp.route('/create', methods=['GET', 'POST'])
+@admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
-    if not current_user.is_admin:
-        abort(403)
-    
     form = StipendForm()
     
-    if request.method == 'POST':
-        deadline_str = form.application_deadline.data
-        if deadline_str:
-            try:
-                deadline_dt = datetime.strptime(deadline_str, '%Y-%m-%d %H:%M:%S')
-            except ValueError:
-                # If parsing fails, fallback to None
-                deadline_dt = None
-        else:
-            deadline_dt = None
-
+    if request.method == 'POST' and form.validate_on_submit():
         new_stipend_data = {
             'name': form.name.data,
             'summary': form.summary.data or None,
@@ -33,7 +20,7 @@ def create():
             'application_procedure': form.application_procedure.data or None,
             'eligibility_criteria': form.eligibility_criteria.data or None,
             # Ensure application_deadline is a datetime object
-            'application_deadline': deadline_dt,
+            'application_deadline': form.application_deadline.data if form.application_deadline.data else None,
             'open_for_applications': form.open_for_applications.data
         }
         
@@ -41,38 +28,22 @@ def create():
         
         if new_stipend:
             flash('Stipend created successfully.', 'success')
-            return redirect(url_for('admin.admin_stipend.index'))
+            return redirect(url_for('admin_stipend.index'))
         else:
             flash('Stipend with this name already exists or invalid application deadline.', 'danger')
     else:
         print(f"Form errors: {form.errors}")  # Debugging statement
     
-    return render_template('admin/stipend_form.html', form=form, action=url_for('admin.admin_stipend.create'))
+    return render_template('admin/stipend_form.html', form=form, action=url_for('admin_stipend.create'))
 
-@stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@admin_stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update(id):
-    if not current_user.is_admin:
-        abort(403)
-    stipend = get_stipend_by_id(id)
-    if not stipend:
-        flash('Stipend not found.', 'danger')
-        return redirect(url_for('admin.admin_stipend.index'))
-    
-    form = StipendForm(obj=stipend, original_name=stipend.name)
-    
-    if request.method == 'POST':
-        deadline_str = form.application_deadline.data
-        if deadline_str:
-            try:
-                deadline_dt = datetime.strptime(deadline_str, '%Y-%m-%d %H:%M:%S')
-            except ValueError:
-                # If parsing fails, fallback to None
-                deadline_dt = None
-        else:
-            deadline_dt = None
+    stipend = Stipend.query.get_or_404(id)
+    form = StipendEditForm(obj=stipend)
 
-        update_data = {
+    if request.method == 'POST' and form.validate_on_submit():
+        updated_data = {
             'name': form.name.data,
             'summary': form.summary.data or stipend.summary,
             'description': form.description.data or stipend.description,
@@ -80,43 +51,30 @@ def update(id):
             'application_procedure': form.application_procedure.data or stipend.application_procedure,
             'eligibility_criteria': form.eligibility_criteria.data or stipend.eligibility_criteria,
             # Ensure application_deadline is a datetime object
-            'application_deadline': deadline_dt,
+            'application_deadline': form.application_deadline.data if form.application_deadline.data else None,
             'open_for_applications': form.open_for_applications.data
         }
         
-        if update_stipend(stipend, update_data):
-            flash('Stipend updated successfully.', 'success')
-            return redirect(url_for('admin.admin_stipend.index'))
-        else:
-            flash('Invalid application deadline.', 'danger')
-    else:
-        print(f"Form errors: {form.errors}")  # Debugging statement
-    
-    return render_template('admin/stipend_form.html', form=form, stipend=stipend, action=url_for('admin.admin_stipend.update', id=id))
+        update_stipend(stipend, updated_data)
+        flash('Stipend updated successfully.', 'success')
+        return redirect(url_for('admin_stipend.update', id=stipend.id))
 
-@stipend_bp.route('/delete/<int:id>', methods=['POST'])
+    return render_template('admin/stipend_edit.html', form=form, stipend=stipend)
+
+@admin_stipend_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
-    if not current_user.is_admin:
-        abort(403)
-    
-    stipend = get_stipend_by_id(id)
-    if not stipend:
-        flash('Stipend not found.', 'danger')
-        return redirect(url_for('admin.admin_stipend.index'))
+    stipend = Stipend.query.get_or_404(id)
     
     if delete_stipend(stipend):
         flash('Stipend deleted successfully.', 'success')
     else:
         flash('Failed to delete stipend.', 'danger')
     
-    return redirect(url_for('admin.admin_stipend.index'))
+    return redirect(url_for('admin_stipend.index'))
 
-@stipend_bp.route('/', methods=['GET'])
+@admin_stipend_bp.route('/', methods=['GET'])
 @login_required
 def index():
-    if not current_user.is_admin:
-        abort(403)
-    
     stipends = get_all_stipends()
     return render_template('admin/stipend/index.html', stipends=stipends)
