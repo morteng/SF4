@@ -3,12 +3,16 @@ from app.extensions import db
 from app.models import Stipend
 from datetime import datetime
 
-
 logging.basicConfig(level=logging.ERROR)
 
 def update_stipend(stipend, data):
     try:
         for key, value in data.items():
+            if key == 'application_deadline' and isinstance(value, str):
+                try:
+                    value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+                except ValueError:
+                    value = None  # Handle invalid date format
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
         db.session.commit()
@@ -17,7 +21,6 @@ def update_stipend(stipend, data):
         logging.error(f"Failed to update stipend: {e}")
         db.session.rollback()
         return None
-
 
 def create_stipend(stipend):
     if Stipend.query.filter_by(name=stipend.name).first():
