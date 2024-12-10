@@ -56,7 +56,7 @@ footer {
     margin-bottom: 0.5rem;
 }
 
-/* Add a media query for small screens */
+/* Responsive tables */
 @media (max-width: 768px) {
     table {
         display: block;
@@ -68,12 +68,15 @@ footer {
         display: block; /* Stack nav items vertically */
         margin-bottom: 0.5rem;
     }
+}
 
-    form div {
-        margin-bottom: 1rem;
-    }
+/* Form inputs on mobile */
+form div input, form div textarea, form div button {
+    width: 100%;
+    margin-bottom: 1rem;
+}
 
-    form button {
-        width: 100%;
-    }
+/* Reduce padding for mobile */
+header, footer {
+    padding: 0.5rem;
 }
