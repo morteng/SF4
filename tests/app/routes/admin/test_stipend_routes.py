@@ -36,7 +36,7 @@ def test_stipend(db_session, admin_user):
 def test_create_stipend(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         # Simulate form submission with valid application_deadline and open_for_applications checked
-        response = logged_in_admin.post(url_for('admin.admin_stipend.create'), data=stipend_data)
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
         assert response.status_code in (200, 302)
         
@@ -58,7 +58,7 @@ def test_create_stipend_with_unchecked_open_for_applications(stipend_data, logge
             key: value for key, value in stipend_data.items() if key != 'open_for_applications'
         }
         
-        response = logged_in_admin.post(url_for('admin.admin_stipend.create'), data=stipend_data_no_open_for_apps)
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data_no_open_for_apps)
         
         assert response.status_code in (200, 302)
         
@@ -71,7 +71,7 @@ def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_
     with logged_in_admin.application.app_context():
         # Simulate form submission with blank application_deadline
         stipend_data['application_deadline'] = ''
-        response = logged_in_admin.post(url_for('admin.admin_stipend.create'), data=stipend_data)
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
         assert response.status_code in (200, 302)
         
@@ -84,7 +84,7 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
     with logged_in_admin.application.app_context():
         # Simulate form submission with invalid application_deadline
         stipend_data['application_deadline'] = 'invalid-date'
-        response = logged_in_admin.post(url_for('admin.admin_stipend.create'), data=stipend_data)
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
         assert response.status_code in (200, 302)
         
@@ -97,7 +97,7 @@ def test_create_stipend_with_htmx(stipend_data, logged_in_admin):
     with logged_in_admin.application.app_context():
         # Simulate form submission with valid application_deadline using HTMX headers
         response = logged_in_admin.post(
-            url_for('admin.admin_stipend.create'),
+            url_for('admin.stipend.create'),
             data=stipend_data,
             headers={
                 'HX-Request': 'true',
@@ -123,7 +123,7 @@ def test_create_stipend_with_blank_application_deadline_htmx(stipend_data, logge
         # Simulate form submission with blank application_deadline using HTMX headers
         stipend_data['application_deadline'] = ''
         response = logged_in_admin.post(
-            url_for('admin.admin_stipend.create'),
+            url_for('admin.stipend.create'),
             data=stipend_data,
             headers={
                 'HX-Request': 'true',
@@ -143,7 +143,7 @@ def test_create_stipend_with_invalid_application_deadline_htmx(stipend_data, log
         # Simulate form submission with invalid application_deadline using HTMX headers
         stipend_data['application_deadline'] = 'invalid-date'
         response = logged_in_admin.post(
-            url_for('admin.admin_stipend.create'),
+            url_for('admin.stipend.create'),
             data=stipend_data,
             headers={
                 'HX-Request': 'true',
@@ -173,7 +173,7 @@ def test_update_stipend(logged_in_admin, test_stipend, db_session):
 
         assert updated_data['application_deadline'] == '2024-12-31 23:59:59'  # Sanity check
 
-        response = logged_in_admin.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data)
+        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
 
         assert response.status_code in (200, 302)
 
@@ -199,7 +199,7 @@ def test_update_stipend_with_unchecked_open_for_applications(logged_in_admin, te
             'application_deadline': '2024-12-31 23:59:59',
         }
 
-        response = logged_in_admin.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data_no_open_for_apps)
+        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data_no_open_for_apps)
 
         assert response.status_code in (200, 302)
 
@@ -220,7 +220,7 @@ def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_st
             'open_for_applications': False
         }
 
-        response = logged_in_admin.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data)
+        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
         
         assert response.status_code in (200, 302)
 
@@ -241,7 +241,7 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
             'open_for_applications': False
         }
 
-        response = logged_in_admin.post(url_for('admin.admin_stipend.update', id=test_stipend.id), data=updated_data)
+        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
         
         assert response.status_code in (200, 302)
 
@@ -251,7 +251,7 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
 
 def test_delete_stipend(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
-        response = logged_in_admin.post(url_for('admin.admin_stipend.delete', id=test_stipend.id))
+        response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id))
         
         assert response.status_code in (200, 302)
 
@@ -261,6 +261,6 @@ def test_delete_stipend(logged_in_admin, test_stipend, db_session):
 
 def test_delete_non_existent_stipend(logged_in_admin):
     with logged_in_admin.application.app_context():
-        response = logged_in_admin.post(url_for('admin.admin_stipend.delete', id=999))
+        response = logged_in_admin.post(url_for('admin.stipend.delete', id=999))
         
         assert response.status_code in (200, 302)
