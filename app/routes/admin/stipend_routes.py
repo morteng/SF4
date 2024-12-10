@@ -53,7 +53,7 @@ def delete(id):
         flash('Stipend not found!', 'danger')
         return redirect(url_for('admin.stipend.index'))
     
-    delete_stipend(stipend)
+    delete_stipend(stipend.id)
     
     flash('Stipend deleted successfully!', 'success')
     return redirect(url_for('admin.stipend.index'))
