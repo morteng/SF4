@@ -37,18 +37,8 @@ def update(id):
     form = StipendForm(obj=stipend)
     
     if form.validate_on_submit():
-        update_data = {
-            'name': form.name.data,
-            'summary': form.summary.data,
-            'description': form.description.data,
-            'homepage_url': form.homepage_url.data,
-            'application_procedure': form.application_procedure.data,
-            'eligibility_criteria': form.eligibility_criteria.data,
-            'application_deadline': form.application_deadline.data,
-            'open_for_applications': form.open_for_applications.data
-        }
-        
-        update_stipend(stipend, update_data)
+        form.populate_obj(stipend)  # Use this to populate the stipend object
+        update_stipend(stipend, stipend.__dict__)
         
         flash('Stipend updated successfully!', 'success')
         return redirect(url_for('admin.stipend.index'))
