@@ -283,8 +283,11 @@ def test_update_stipend_with_database_error(logged_in_admin, test_stipend, stipe
         
         assert response.status_code in (200, 302)
 
-        # Check if the stipend was not updated in the database
+        # Check if the stipend still exists in the database
         stipend = db_session.get(Stipend, test_stipend.id)
+        assert stipend is not None
+
+        # Check that the summary has not been updated
         assert stipend.summary != "Updated summary."
 
 def test_delete_stipend(logged_in_admin, test_stipend, db_session):
