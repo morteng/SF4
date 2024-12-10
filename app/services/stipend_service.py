@@ -16,6 +16,11 @@ def update_stipend(stipend, data):
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
                 logging.info(f"Setting {key} to {value}")  # Add this line for logging
+        
+        # If 'open_for_applications' is not in the data, set it to False
+        if 'open_for_applications' not in data:
+            stipend.open_for_applications = False
+
         db.session.commit()
         return stipend
     except Exception as e:
