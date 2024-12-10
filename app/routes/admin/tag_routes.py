@@ -3,9 +3,9 @@ from flask_login import login_required
 from app.forms.admin_forms import TagForm
 from app.services.tag_service import get_tag_by_id, delete_tag, get_all_tags, create_tag, update_tag
 
-tag_bp = Blueprint('admin_tag', __name__, url_prefix='/tags')
+admin_tag_bp = Blueprint('admin_tag', __name__, url_prefix='/tags')
 
-@tag_bp.route('/create', methods=['GET', 'POST'])
+@admin_tag_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     form = TagForm()
@@ -15,7 +15,7 @@ def create():
         return redirect(url_for('admin_tag.index'))
     return render_template('admin/tag/create.html', form=form)
 
-@tag_bp.route('/delete/<int:id>', methods=['POST'])
+@admin_tag_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
 def delete(id):
     tag = get_tag_by_id(id)
@@ -26,13 +26,13 @@ def delete(id):
         flash('Tag not found.', 'danger')
     return redirect(url_for('admin_tag.index'))
 
-@tag_bp.route('/', methods=['GET'])
+@admin_tag_bp.route('/', methods=['GET'])
 @login_required
 def index():
     tags = get_all_tags()
     return render_template('admin/tag/index.html', tags=tags)
 
-@tag_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@admin_tag_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
 def update(id):
     tag = get_tag_by_id(id)

@@ -10,7 +10,7 @@ user_bp = Blueprint('user', __name__, url_prefix='/user')
 def profile():
     return render_template('user/profile.html', user=current_user)
 
-@user_bp.route('/edit_profile', methods=['GET', 'POST'])
+@user_bp.route('/profile/edit', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
     form = ProfileForm(original_username=current_user.username, original_email=current_user.email)

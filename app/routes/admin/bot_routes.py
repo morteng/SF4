@@ -15,7 +15,7 @@ def create():
         return redirect(url_for('admin_bot.index'))
     return render_template('admin/bot/create.html', form=form)
 
-@admin_bot_bp.route('/delete/<int:id>', methods=['POST'])
+@admin_bot_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
 def delete(id):
     bot = get_bot_by_id(id)
@@ -43,7 +43,7 @@ def run(id):
         flash('Bot not found.', 'danger')
     return redirect(url_for('admin_bot.index'))
 
-@admin_bot_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@admin_bot_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
 def update(id):
     bot = get_bot_by_id(id)

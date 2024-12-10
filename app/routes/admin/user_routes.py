@@ -5,9 +5,9 @@ from app.services.user_service import get_user_by_id, delete_user, get_all_users
 from sqlalchemy.orm import Session
 from app.models.user import User
 
-user_bp = Blueprint('admin_user', __name__, url_prefix='/users')
+admin_user_bp = Blueprint('admin_user', __name__, url_prefix='/users')
 
-@user_bp.route('/create', methods=['GET', 'POST'])
+@admin_user_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     form = UserForm()
@@ -20,7 +20,7 @@ def create():
             flash(str(e), 'danger')
     return render_template('admin/user/create.html', form=form)
 
-@user_bp.route('/delete/<int:id>', methods=['POST'])
+@admin_user_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
 def delete(id):
     with current_app.app_context():
@@ -33,7 +33,7 @@ def delete(id):
             flash('User not found.', 'danger')
     return redirect(url_for('admin_user.index'))
 
-@user_bp.route('/', methods=['GET'])
+@admin_user_bp.route('/', methods=['GET'])
 @login_required
 def index():
     with current_app.app_context():
@@ -41,22 +41,20 @@ def index():
         users = session.query(User).all()
     return render_template('admin/user/index.html', users=users)
 
-@user_bp.route('/update/<int:id>', methods=['GET'])
+@admin_user_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
 def update(id):
-    user = get_user_by_id(id)  # Fetch user data
-    form = UserForm(obj=user)
+    if request.method == 'POST':
+        form = UserForm()
+        if form.validate_on_submit():
+            user = get_user_by_id(id)
+            if user:
+                update_user(user, form.data)
+                flash('User updated successfully.', 'success')
+            else:
+                flash('User not found.', 'danger')
+    else:
+        user = get_user_by_id(id)  # Fetch user data
+        form = UserForm(obj=user)
+    
     return render_template('admin/user/_edit_row.html', form=form, user=user)
-
-@user_bp.route('/update/<int:id>', methods=['POST'])
-@login_required
-def update_post(id):
-    form = UserForm()
-    if form.validate_on_submit():
-        user = get_user_by_id(id)
-        if user:
-            update_user(user, form.data)
-            flash('User updated successfully.', 'success')
-        else:
-            flash('User not found.', 'danger')
-    return redirect(url_for('admin_user.index'))

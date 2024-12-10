@@ -26,7 +26,7 @@ def create():
     
     return render_template('admin/stipend_form.html', form=form)
 
-@admin_stipend_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@admin_stipend_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
 def update(id):
     stipend = db.session.get(Stipend, id)  # Use session.get instead of get
@@ -45,7 +45,7 @@ def update(id):
     
     return render_template('admin/stipend_form.html', form=form)
 
-@admin_stipend_bp.route('/delete/<int:id>', methods=['POST'])
+@admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
 def delete(id):
     stipend = db.session.get(Stipend, id)  # Use session.get instead of get
