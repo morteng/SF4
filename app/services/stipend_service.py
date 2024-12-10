@@ -24,10 +24,11 @@ def create_stipend(stipend):
         db.session.rollback()
         return None
 
-def update_stipend(stipend):
+def update_stipend(stipend, data):
     try:
+        for key, value in data.items():
+            setattr(stipend, key, value)
         db.session.commit()
-        db.session.refresh(stipend)
     except Exception as e:
         logging.error(f"Failed to update stipend: {e}")
         db.session.rollback()
