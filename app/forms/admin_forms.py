@@ -30,11 +30,11 @@ class StipendEditForm(FlaskForm):
 
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
-    summary = TextAreaField('Summary', validators=[Length(max=255)])
+    summary = StringField('Summary', validators=[DataRequired(), Length(max=200)])
     description = TextAreaField('Description')
-    homepage_url = StringField('Homepage URL', validators=[Length(max=255)])
-    application_procedure = TextAreaField('Application Procedure')
-    eligibility_criteria = TextAreaField('Eligibility Criteria')
+    homepage_url = URLField('Homepage URL', validators=[Length(max=255)])
+    application_procedure = StringField('Application Procedure', validators=[DataRequired()])
+    eligibility_criteria = StringField('Eligibility Criteria', validators=[DataRequired()])
     application_deadline = NullableDateTimeField('Application Deadline (YYYY-MM-DD HH:MM:SS)')  # Use the custom field
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
