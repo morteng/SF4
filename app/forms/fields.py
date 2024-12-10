@@ -1,7 +1,10 @@
 from wtforms import Field
+from wtforms.widgets import TextInput
 from datetime import datetime
 
 class NullableDateTimeField(Field):
+    widget = TextInput()
+
     def process_formdata(self, valuelist):
         if valuelist:
             date_str = valuelist[0]
