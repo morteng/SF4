@@ -9,7 +9,7 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
-    form = StipendForm()
+    form = StipendForm(original_name=None)  # Ensure original_name is set to None for new stipends
     if form.validate_on_submit():
         valid_fields = {key: value for key, value in form.data.items() if hasattr(Stipend, key)}
         stipend = Stipend(**valid_fields)
@@ -34,7 +34,7 @@ def update(id):
         flash('Stipend not found!', 'danger')
         return redirect(url_for('admin.stipend.index'))
     
-    form = StipendForm(obj=stipend)
+    form = StipendForm(obj=stipend, original_name=stipend.name)  # Set original_name to the current stipend's name
     
     if form.validate_on_submit():
         form.populate_obj(stipend)  # Use this to populate the stipend object

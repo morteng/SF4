@@ -31,11 +31,10 @@ class StipendForm(FlaskForm):
 
     def __init__(self, original_name=None, *args, **kwargs):
         super(StipendForm, self).__init__(*args, **kwargs)
-        if original_name:
-            self.name.data = original_name
+        self.original_name = original_name
 
     def validate_name(self, name):
-        if name.data != self.original_name:
+        if self.original_name is not None and name.data != self.original_name:
             stipend = Stipend.query.filter_by(name=name.data).first()
             if stipend:
                 raise ValidationError('Stipend with this name already exists.')
