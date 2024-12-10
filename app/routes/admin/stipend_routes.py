@@ -62,4 +62,4 @@ def delete(id):
 @login_required
 def index():
     stipends = get_all_stipends()
-    return render_template('admin/stipend/index.html', stipends=stipends)
+    return render_template('admin/stipends/index.html', stipends=stipends)
