@@ -43,4 +43,4 @@ def delete_stipend(stipend):
     db.session.commit()
 
 def get_stipend_by_id(stipend_id):
-    return Stipend.query.get(stipend_id)
+    return db.session.get(Stipend, stipend_id)
