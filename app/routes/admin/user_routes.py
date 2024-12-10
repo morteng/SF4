@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required
 from app.forms.admin_forms import UserForm
 from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user
