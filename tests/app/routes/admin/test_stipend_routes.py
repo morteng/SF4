@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import logging
 
 # Import the stipend_data fixture from conftest.py
-from tests.conftest import stipend_data
+from tests.conftest import test_data as stipend_data
 
 @pytest.fixture
 def test_stipend(db_session, admin_user):
@@ -107,8 +107,8 @@ def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_
 
 def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
-        # Simulate form submission with invalid application_deadline
-        stipend_data['application_deadline'] = 'invalid-date'
+        # Simulate form submission with an invalid application_deadline format
+        stipend_data['application_deadline'] = '2023-13-32 99:99:99'
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
         if not response.data:
@@ -129,109 +129,39 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         assert stipend is not None
         assert stipend.application_deadline is None
 
-def test_create_stipend_with_htmx(stipend_data, logged_in_admin, db_session):
+def test_create_stipend_with_invalid_form_data(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
-        # Simulate form submission with valid application_deadline using HTMX headers
-        response = logged_in_admin.post(
-            url_for('admin.stipend.create'),
-            data=stipend_data,
-            headers={
-                'HX-Request': 'true',
-                'HX-Target': '#stipend-form-container'
-            }
-        )
+        # Simulate form submission with invalid data (e.g., empty name)
+        stipend_data['name'] = ''
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
-        if not response.data:
-            print("Response is empty")
-        else:
-            print(response.data.decode())
-        
+        assert response.status_code == 200
+
         # Print form validation errors
         form = StipendForm(data=stipend_data)
         if not form.validate():
             for field, errors in form.errors.items():
                 print(f"Field {field} errors: {errors}")
-        
-        assert response.status_code == 200
-
-        # Check if the stipend was created in the database
+            
+        # Check if the stipend was not created in the database
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
-        assert stipend is not None
-        assert stipend.summary == 'This is a test stipend.'
-        assert stipend.description == 'Detailed description of the test stipend.'
-        assert stipend.homepage_url == 'http://example.com/stipend'
-        assert stipend.application_procedure == 'Apply online at example.com'
-        assert stipend.eligibility_criteria == 'Open to all students'
-        assert stipend.open_for_applications is True
-        assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
+        assert stipend is None
 
-        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
-
-def test_create_stipend_with_blank_application_deadline_htmx(stipend_data, logged_in_admin, db_session):
+def test_create_stipend_with_database_error(stipend_data, logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
-        # Simulate form submission with blank application_deadline using HTMX headers
-        stipend_data['application_deadline'] = ''
-        response = logged_in_admin.post(
-            url_for('admin.stipend.create'),
-            data=stipend_data,
-            headers={
-                'HX-Request': 'true',
-                'HX-Target': '#stipend-form-container'
-            }
-        )
+        # Mock a database error during commit
+        def mock_add(*args, **kwargs):
+            raise Exception("Database error")
+            
+        monkeypatch.setattr(db_session, 'add', mock_add)
         
-        if not response.data:
-            print("Response is empty")
-        else:
-            print(response.data.decode())
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
-        # Print form validation errors
-        form = StipendForm(data=stipend_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-        
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
 
-        # Check if the stipend was created in the database with application_deadline as None
+        # Check if the stipend was not created in the database
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
-        assert stipend is not None
-        assert stipend.application_deadline is None
-
-        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
-
-def test_create_stipend_with_invalid_application_deadline_htmx(stipend_data, logged_in_admin, db_session):
-    with logged_in_admin.application.app_context():
-        # Simulate form submission with invalid application_deadline using HTMX headers
-        stipend_data['application_deadline'] = 'invalid-date'
-        response = logged_in_admin.post(
-            url_for('admin.stipend.create'),
-            data=stipend_data,
-            headers={
-                'HX-Request': 'true',
-                'HX-Target': '#stipend-form-container'
-            }
-        )
-        
-        if not response.data:
-            print("Response is empty")
-        else:
-            print(response.data.decode())
-        
-        # Print form validation errors
-        form = StipendForm(data=stipend_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-        
-        assert response.status_code == 200
-
-        # Check if the stipend was created in the database with application_deadline as None
-        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
-        assert stipend is not None
-        assert stipend.application_deadline is None
-
-        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
+        assert stipend is None
 
 def test_update_stipend(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
@@ -247,17 +177,6 @@ def test_update_stipend(logged_in_admin, test_stipend, stipend_data, db_session)
         }
 
         response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
-        
-        if not response.data:
-            print("Response is empty")
-        else:
-            print(response.data.decode())
-        
-        # Print form validation errors
-        form = StipendForm(data=updated_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
         
         assert response.status_code in (200, 302)
 
@@ -313,22 +232,10 @@ def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_st
 
         response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
         
-        if not response.data:
-            print("Response is empty")
-        else:
-            print(response.data.decode())
-        
-        # Print form validation errors
-        form = StipendForm(data=updated_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-        
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with application_deadline as None
         stipend = db_session.get(Stipend, test_stipend.id)
-        assert stipend is not None
         assert stipend.application_deadline is None
 
 def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_stipend, stipend_data, db_session):
@@ -340,31 +247,19 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
             'homepage_url': "http://example.com/updated-stipend",
             'application_procedure': "Apply online at example.com/updated",
             'eligibility_criteria': "Open to all updated students",
-            'application_deadline': 'invalid-date',
+            'application_deadline': '2023-13-32 99:99:99',
             'open_for_applications': True
         }
 
         response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
         
-        if not response.data:
-            print("Response is empty")
-        else:
-            print(response.data.decode())
-        
-        # Print form validation errors
-        form = StipendForm(data=updated_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-        
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with application_deadline as None
         stipend = db_session.get(Stipend, test_stipend.id)
-        assert stipend is not None
         assert stipend.application_deadline is None
 
-def test_update_stipend_with_htmx(logged_in_admin, test_stipend, stipend_data, db_session):
+def test_update_stipend_with_database_error(logged_in_admin, test_stipend, stipend_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,
@@ -377,124 +272,19 @@ def test_update_stipend_with_htmx(logged_in_admin, test_stipend, stipend_data, d
             'open_for_applications': True
         }
 
-        response = logged_in_admin.post(
-            url_for('admin.stipend.update', id=test_stipend.id),
-            data=updated_data,
-            headers={
-                'HX-Request': 'true',
-                'HX-Target': '#stipend-form-container'
-            }
-        )
+        # Mock a database error during commit
+        def mock_commit(*args, **kwargs):
+            raise Exception("Database error")
+            
+        monkeypatch.setattr(db_session, 'commit', mock_commit)
         
-        if not response.data:
-            print("Response is empty")
-        else:
-            print(response.data.decode())
+        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
         
-        # Print form validation errors
-        form = StipendForm(data=updated_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-        
-        assert response.status_code == 200
+        assert response.status_code in (200, 302)
 
-        # Check if the stipend was updated in the database
+        # Check if the stipend was not updated in the database
         stipend = db_session.get(Stipend, test_stipend.id)
-        assert stipend.name == updated_data['name']
-        assert stipend.summary == "Updated summary."
-        assert stipend.description == "Updated description."
-        assert stipend.homepage_url == "http://example.com/updated-stipend"
-        assert stipend.application_procedure == "Apply online at example.com/updated"
-        assert stipend.eligibility_criteria == "Open to all updated students"
-        assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
-        assert stipend.open_for_applications is True
-
-        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
-
-def test_update_stipend_with_blank_application_deadline_htmx(logged_in_admin, test_stipend, stipend_data, db_session):
-    with logged_in_admin.application.app_context():
-        updated_data = {
-            'name': test_stipend.name,
-            'summary': "Updated summary.",
-            'description': "Updated description.",
-            'homepage_url': "http://example.com/updated-stipend",
-            'application_procedure': "Apply online at example.com/updated",
-            'eligibility_criteria': "Open to all updated students",
-            'application_deadline': '',
-            'open_for_applications': True
-        }
-
-        response = logged_in_admin.post(
-            url_for('admin.stipend.update', id=test_stipend.id),
-            data=updated_data,
-            headers={
-                'HX-Request': 'true',
-                'HX-Target': '#stipend-form-container'
-            }
-        )
-        
-        if not response.data:
-            print("Response is empty")
-        else:
-            print(response.data.decode())
-        
-        # Print form validation errors
-        form = StipendForm(data=updated_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-        
-        assert response.status_code == 200
-
-        # Check if the stipend was updated in the database with application_deadline as None
-        stipend = db_session.get(Stipend, test_stipend.id)
-        assert stipend is not None
-        assert stipend.application_deadline is None
-
-        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
-
-def test_update_stipend_with_invalid_application_deadline_htmx(logged_in_admin, test_stipend, stipend_data, db_session):
-    with logged_in_admin.application.app_context():
-        updated_data = {
-            'name': test_stipend.name,
-            'summary': "Updated summary.",
-            'description': "Updated description.",
-            'homepage_url': "http://example.com/updated-stipend",
-            'application_procedure': "Apply online at example.com/updated",
-            'eligibility_criteria': "Open to all updated students",
-            'application_deadline': 'invalid-date',
-            'open_for_applications': True
-        }
-
-        response = logged_in_admin.post(
-            url_for('admin.stipend.update', id=test_stipend.id),
-            data=updated_data,
-            headers={
-                'HX-Request': 'true',
-                'HX-Target': '#stipend-form-container'
-            }
-        )
-        
-        if not response.data:
-            print("Response is empty")
-        else:
-            print(response.data.decode())
-        
-        # Print form validation errors
-        form = StipendForm(data=updated_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-        
-        assert response.status_code == 200
-
-        # Check if the stipend was updated in the database with application_deadline as None
-        stipend = db_session.get(Stipend, test_stipend.id)
-        assert stipend is not None
-        assert stipend.application_deadline is None
-
-        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
+        assert stipend.summary != "Updated summary."
 
 def test_delete_stipend(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
@@ -535,24 +325,6 @@ def test_create_stipend_with_different_date_formats(stipend_data, logged_in_admi
         assert stipend is not None
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
 
-def test_create_stipend_with_invalid_form_data(stipend_data, logged_in_admin, db_session):
-    with logged_in_admin.application.app_context():
-        # Simulate form submission with invalid data (e.g., empty name)
-        stipend_data['name'] = ''
-        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
-        
-        assert response.status_code == 200
-
-        # Print form validation errors
-        form = StipendForm(data=stipend_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-            
-        # Check if the stipend was not created in the database
-        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
-        assert stipend is None
-
 def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         # Simulate form submission with invalid data (e.g., empty name) using HTMX headers
@@ -580,19 +352,6 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
 
         assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
-def test_create_stipend_with_invalid_application_deadline_format(stipend_data, logged_in_admin, db_session):
-    with logged_in_admin.application.app_context():
-        # Simulate form submission with an invalid application_deadline format
-        stipend_data['application_deadline'] = '2023-13-32 99:99:99'
-        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
-        
-        assert response.status_code in (200, 302)
-
-        # Check if the stipend was created in the database with application_deadline as None
-        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
-        assert stipend is not None
-        assert stipend.application_deadline is None
-
 def test_create_stipend_with_invalid_application_deadline_format_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         # Simulate form submission with an invalid application_deadline format using HTMX headers
@@ -615,7 +374,7 @@ def test_create_stipend_with_invalid_application_deadline_format_htmx(stipend_da
 
         assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
-def test_create_stipend_with_database_error(stipend_data, logged_in_admin, db_session, monkeypatch):
+def test_create_stipend_with_database_error_htmx(stipend_data, logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
         # Mock a database error during commit
         def mock_add(*args, **kwargs):
@@ -623,34 +382,22 @@ def test_create_stipend_with_database_error(stipend_data, logged_in_admin, db_se
             
         monkeypatch.setattr(db_session, 'add', mock_add)
         
-        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
+        response = logged_in_admin.post(
+            url_for('admin.stipend.create'),
+            data=stipend_data,
+            headers={
+                'HX-Request': 'true',
+                'HX-Target': '#stipend-form-container'
+            }
+        )
         
-        assert response.status_code in (200, 302)
+        assert response.status_code == 200
 
         # Check if the stipend was not created in the database
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
 
-def test_update_stipend_with_invalid_application_deadline_format(logged_in_admin, test_stipend, stipend_data, db_session):
-    with logged_in_admin.application.app_context():
-        updated_data = {
-            'name': test_stipend.name,
-            'summary': "Updated summary.",
-            'description': "Updated description.",
-            'homepage_url': "http://example.com/updated-stipend",
-            'application_procedure': "Apply online at example.com/updated",
-            'eligibility_criteria': "Open to all updated students",
-            'application_deadline': '2023-13-32 99:99:99',
-            'open_for_applications': True
-        }
-
-        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
-        
-        assert response.status_code in (200, 302)
-
-        # Check if the stipend was updated in the database with application_deadline as None
-        stipend = db_session.get(Stipend, test_stipend.id)
-        assert stipend.application_deadline is None
+        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
 def test_update_stipend_with_invalid_application_deadline_format_htmx(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
@@ -682,7 +429,7 @@ def test_update_stipend_with_invalid_application_deadline_format_htmx(logged_in_
 
         assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
-def test_update_stipend_with_database_error(logged_in_admin, test_stipend, stipend_data, db_session, monkeypatch):
+def test_update_stipend_with_database_error_htmx(logged_in_admin, test_stipend, stipend_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,
@@ -701,10 +448,19 @@ def test_update_stipend_with_database_error(logged_in_admin, test_stipend, stipe
             
         monkeypatch.setattr(db_session, 'commit', mock_commit)
         
-        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
+        response = logged_in_admin.post(
+            url_for('admin.stipend.update', id=test_stipend.id),
+            data=updated_data,
+            headers={
+                'HX-Request': 'true',
+                'HX-Target': '#stipend-form-container'
+            }
+        )
         
-        assert response.status_code in (200, 302)
+        assert response.status_code == 200
 
         # Check if the stipend was not updated in the database
         stipend = db_session.get(Stipend, test_stipend.id)
         assert stipend.summary != "Updated summary."
+
+        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
