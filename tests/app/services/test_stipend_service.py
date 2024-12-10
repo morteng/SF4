@@ -89,8 +89,6 @@ def test_update_stipend(test_data, db_session):
         'open_for_applications': True
     }
 
-    assert updated_data['application_deadline'] == '2024-12-31 23:59:59'  # Sanity check
-
     response = update_stipend(stipend.id, updated_data)
 
     # Check if the stipend was updated in the database
@@ -101,5 +99,99 @@ def test_update_stipend(test_data, db_session):
     assert stipend.homepage_url == "http://example.com/updated-stipend"
     assert stipend.application_procedure == "Updated application procedure"
     assert stipend.eligibility_criteria == "Updated eligibility criteria"
+    assert isinstance(stipend.application_deadline, datetime)  # Check if it's a datetime object
     assert abs(stipend.application_deadline - updated_data['application_deadline']) < timedelta(seconds=1)
     assert stipend.open_for_applications is True
+
+def test_update_stipend_with_unchecked_open_for_applications(test_data, db_session):
+    # Create a stipend using the service function with the provided session
+    stipend = Stipend(**test_data)
+    new_stipend = create_stipend(stipend)
+
+    # Assert that the stipend was created successfully
+    assert new_stipend is not None
+
+    # Update the stipend with open_for_applications unchecked
+    updated_data_no_open_for_apps = {
+        key: value for key, value in test_data.items() if key != 'open_for_applications'
+    }
+
+    response = update_stipend(stipend.id, updated_data_no_open_for_apps)
+
+    # Check if the stipend was updated in the database with open_for_applications as False
+    stipend = db_session.get(Stipend, stipend.id)
+    assert stipend.open_for_applications is False
+
+def test_update_stipend_with_blank_application_deadline(test_data, db_session):
+    # Create a stipend using the service function with the provided session
+    stipend = Stipend(**test_data)
+    new_stipend = create_stipend(stipend)
+
+    # Assert that the stipend was created successfully
+    assert new_stipend is not None
+
+    # Update the stipend with blank application_deadline
+    updated_data = {
+        'name': test_data['name'],  # Retain the original name
+        'summary': "Updated summary.",
+        'description': "Updated description.",
+        'homepage_url': "http://example.com/updated-stipend",
+        'application_procedure': "Apply online at example.com/updated",
+        'eligibility_criteria': "Open to all updated students",
+        'application_deadline': '',
+        'open_for_applications': False
+    }
+
+    response = update_stipend(stipend.id, updated_data)
+
+    # Check if the stipend was updated in the database with application_deadline as None
+    stipend = db_session.get(Stipend, stipend.id)
+    assert stipend.application_deadline is None
+
+def test_update_stipend_with_invalid_application_deadline(test_data, db_session):
+    # Create a stipend using the service function with the provided session
+    stipend = Stipend(**test_data)
+    new_stipend = create_stipend(stipend)
+
+    # Assert that the stipend was created successfully
+    assert new_stipend is not None
+
+    # Update the stipend with invalid application_deadline
+    updated_data = {
+        'name': test_data['name'],  # Retain the original name
+        'summary': "Updated summary.",
+        'description': "Updated description.",
+        'homepage_url': "http://example.com/updated-stipend",
+        'application_procedure': "Apply online at example.com/updated",
+        'eligibility_criteria': "Open to all updated students",
+        'application_deadline': 'invalid-date',
+        'open_for_applications': False
+    }
+
+    response = update_stipend(stipend.id, updated_data)
+
+    # Check if the stipend was updated in the database with application_deadline as None
+    stipend = db_session.get(Stipend, stipend.id)
+    assert stipend.application_deadline is None
+
+def test_delete_stipend(test_data, db_session):
+    # Create a stipend using the service function with the provided session
+    stipend = Stipend(**test_data)
+    new_stipend = create_stipend(stipend)
+
+    # Assert that the stipend was created successfully
+    assert new_stipend is not None
+
+    # Delete the stipend
+    delete_stipend(new_stipend)
+
+    # Check if the stipend was deleted from the database
+    stipend = db_session.get(Stipend, new_stipend.id)
+    assert stipend is None
+
+def test_delete_non_existent_stipend(db_session):
+    # Attempt to delete a non-existent stipend
+    response = delete_stipend(999)
+
+    # Check if the deletion was handled correctly (e.g., no exceptions raised)
+    assert response is None
