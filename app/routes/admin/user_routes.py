@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, current_app
 from flask_login import login_required
 from app.forms.admin_forms import UserForm
 from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user
@@ -23,8 +23,8 @@ def create():
 @user_bp.route('/delete/<int:id>', methods=['POST'])
 @login_required
 def delete(id):
-    with user_bp.app_context():
-        session = Session(user_bp._get_current_object().app.extensions['sqlalchemy'].db.engine)
+    with current_app.app_context():
+        session = Session(current_app.extensions['sqlalchemy'].db.engine)
         user = session.get(User, id)
         if user:
             delete_user(user)
@@ -36,16 +36,16 @@ def delete(id):
 @user_bp.route('/', methods=['GET'])
 @login_required
 def index():
-    with user_bp.app_context():
-        session = Session(user_bp._get_current_object().app.extensions['sqlalchemy'].db.engine)
+    with current_app.app_context():
+        session = Session(current_app.extensions['sqlalchemy'].db.engine)
         users = session.query(User).all()
     return render_template('admin/user/index.html', users=users)
 
 @user_bp.route('/update/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update(id):
-    with user_bp.app_context():
-        session = Session(user_bp._get_current_object().app.extensions['sqlalchemy'].db.engine)
+    with current_app.app_context():
+        session = Session(current_app.extensions['sqlalchemy'].db.engine)
         user = session.get(User, id)
         if not user:
             flash('User not found.', 'danger')
