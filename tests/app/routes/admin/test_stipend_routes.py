@@ -401,5 +401,5 @@ def test_delete_non_existent_stipend(logged_in_admin):
         else:
             print(response.data.decode())
         
-        assert response.status_code in (200, 302)
-        assert b'Stipend not found!' in response.data
+        assert response.status_code == 302
+        assert response.location.endswith('/admin/stipends/')
