@@ -24,7 +24,7 @@ def update_stipend(stipend, data):
         return stipend
     except Exception as e:
         logging.error(f"Failed to update stipend: {e}")
-        db.session.rollback()
+        db.session.rollback()  # Ensure the session is rolled back on error
         return None
 
 def create_stipend(stipend):
