@@ -298,11 +298,11 @@ def test_delete_stipend(logged_in_admin, test_stipend, db_session):
 
 def test_delete_stipend_with_database_error(logged_in_admin, test_stipend, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
-        # Mock a database error during commit
-        def mock_commit(*args, **kwargs):
+        # Mock a database error during delete
+        def mock_delete(*args, **kwargs):
             raise Exception("Database error")
-        
-        monkeypatch.setattr(db_session, 'commit', mock_commit)
+            
+        monkeypatch.setattr(db_session, 'delete', mock_delete)
         
         response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id))
         
