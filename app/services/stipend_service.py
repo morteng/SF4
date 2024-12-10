@@ -3,7 +3,7 @@ from app.extensions import db
 from app.models import Stipend
 from datetime import datetime
 
-logging.basicConfig(level=logging.ERROR)
+logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
 def update_stipend(stipend, data):
     try:
@@ -15,6 +15,7 @@ def update_stipend(stipend, data):
                     value = None  # Handle invalid date format
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
+                logging.info(f"Setting {key} to {value}")  # Add this line for logging
         db.session.commit()
         return stipend
     except Exception as e:
