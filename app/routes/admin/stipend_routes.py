@@ -11,14 +11,19 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 def create():
     form = StipendForm()
     if form.validate_on_submit():
-        # Filter valid fields for the Stipend model
         valid_fields = {key: value for key, value in form.data.items() if hasattr(Stipend, key)}
         stipend = Stipend(**valid_fields)
         new_stipend = create_stipend(stipend)
         flash('Stipend created successfully.', 'success')
+
+        if request.headers.get('HX-Request'):
+            # Render only the stipend list or a fragment for HTMX
+            stipends = get_all_stipends()
+            return render_template('admin/stipends/_stipend_list.html', stipends=stipends), 200
+        
         return redirect(url_for('admin.stipend.index'))
-    else:
-        print(f"Form errors: {form.errors}")  # Debugging statement
+    
+    print(f"Form errors: {form.errors}")
     return render_template('admin/stipend_form.html', form=form)
 
 @admin_stipend_bp.route('/<int:id>/update', methods=['GET', 'POST'])
