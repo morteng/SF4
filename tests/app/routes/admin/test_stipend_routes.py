@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import logging
 
 # Import the stipend_data fixture from conftest.py
-from tests.conftest import test_data as stipend_data
+from tests.conftest import stipend_data
 
 @pytest.fixture
 def test_stipend(db_session, admin_user):

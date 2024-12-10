@@ -83,7 +83,21 @@ def logged_in_admin(client, admin_user):
         assert '_user_id' in session, "Admin session not established."
     yield client
 
-@pytest.fixture
+@pytest.fixture(scope='function')
 def legacy_db(db_session):
     """Alias fixture for db_session to support legacy tests."""
     return db_session
+
+@pytest.fixture
+def stipend_data():
+    """Provide test data for stipends."""
+    return {
+        'name': 'Test Stipend',
+        'summary': 'This is a test stipend.',
+        'description': 'Detailed description of the test stipend.',
+        'homepage_url': 'http://example.com/stipend',
+        'application_procedure': 'Apply online at example.com',
+        'eligibility_criteria': 'Open to all students',
+        'application_deadline': '2023-12-31 23:59:59',
+        'open_for_applications': True
+    }
