@@ -7,7 +7,6 @@ from app.models.tag import Tag
 from app.models.user import User
 from app.models.bot import Bot
 from app.models.organization import Organization
-from datetime import datetime
 
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
@@ -16,7 +15,7 @@ class StipendForm(FlaskForm):
     homepage_url = URLField('Homepage URL', validators=[Length(max=255)])
     application_procedure = TextAreaField('Application Procedure')
     eligibility_criteria = TextAreaField('Eligibility Criteria')
-    application_deadline = NullableDateTimeField('Application Deadline (YYYY-MM-DD HH:MM:SS)')
+    application_deadline = NullableDateTimeField('Application Deadline (YYYY-MM-DD HH:MM:SS)')  # Use the custom field
     open_for_applications = BooleanField('Open for Applications')
     submit = SubmitField('Create')
 

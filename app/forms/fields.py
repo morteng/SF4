@@ -1,7 +1,7 @@
-from wtforms import FormField
+from wtforms import Field
 from datetime import datetime
 
-class NullableDateTimeField(FormField):
+class NullableDateTimeField(Field):
     def process_formdata(self, valuelist):
         if valuelist:
             date_str = valuelist[0]
@@ -11,3 +11,8 @@ class NullableDateTimeField(FormField):
                 self.data = None
         else:
             self.data = None
+
+    def _value(self):
+        if self.data is not None:
+            return self.data.strftime('%Y-%m-%d %H:%M:%S')
+        return ''
