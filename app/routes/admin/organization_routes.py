@@ -6,9 +6,9 @@ from werkzeug.exceptions import abort
 from app.extensions import db
 from urllib.parse import urlparse
 
-admin_org_bp = Blueprint('admin_org', __name__, url_prefix='/organizations')
+admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 
-@admin_org_bp.route('/create', methods=['GET', 'POST'])
+@organization.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     if request.method == 'POST':
@@ -41,7 +41,7 @@ def create():
         form = OrganizationForm()
         return render_template('admin/organization/create.html', form=form)
 
-@admin_org_bp.route('/<int:id>/delete', methods=['POST'])
+@organization.route('/<int:id>/delete', methods=['POST'])
 @login_required
 def delete(id):
     organization = get_organization_by_id(id)
@@ -50,15 +50,15 @@ def delete(id):
         flash(f'Organization {organization.name} deleted.', 'success')
     else:
         flash('Organization not found.', 'danger')
-    return redirect(url_for('admin_org.index'))
+    return redirect(url_for('admin.organization.index'))
 
-@admin_org_bp.route('/', methods=['GET'])
+@organization.route('/', methods=['GET'])
 @login_required
 def index():
     organizations = get_all_organizations()
     return render_template('admin/organization/index.html', organizations=organizations)
 
-@admin_org_bp.route('/<int:id>/update', methods=['GET', 'POST'])
+@organization.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
 def update(id):
     organization = get_organization_by_id(id)
