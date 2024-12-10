@@ -117,15 +117,15 @@ def test_update_stipend_with_unchecked_open_for_applications(test_data, db_sessi
     # Assert that the stipend was created successfully
     assert new_stipend is not None
 
-    # Update the stipend with open_for_applications unchecked
+    # Update the stipend without providing open_for_applications
     updated_data_no_open_for_apps = {
         key: value for key, value in test_data.items() if key != 'open_for_applications'
     }
 
-    response = update_stipend(stipend.id, updated_data_no_open_for_apps)
+    response = update_stipend(new_stipend, updated_data_no_open_for_apps)
 
     # Check if the stipend was updated in the database with open_for_applications as False
-    stipend = db_session.get(Stipend, stipend.id)
+    stipend = db_session.get(Stipend, new_stipend.id)
     assert stipend.open_for_applications is False
 
 def test_update_stipend_with_blank_application_deadline(test_data, db_session):
