@@ -24,7 +24,7 @@ def create():
         return redirect(url_for('admin.stipend.index'))
     
     print(f"Form errors: {form.errors}")
-    return render_template('admin/stipend_form.html', form=form)
+    return render_template('admin/stipends/form.html', form=form)
 
 @admin_stipend_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
@@ -43,7 +43,7 @@ def update(id):
         flash('Stipend updated successfully!', 'success')
         return redirect(url_for('admin.stipend.index'))
     
-    return render_template('admin/stipend_form.html', form=form)
+    return render_template('admin/stipends/form.html', form=form)
 
 @admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
