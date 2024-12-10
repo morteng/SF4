@@ -51,7 +51,7 @@ def test_create_stipend(stipend_data, logged_in_admin, db_session):
         assert stipend.open_for_applications is True
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
 
-def test_create_stipend_with_unchecked_open_for_applications(stipend_data, logged_in_admin):
+def test_create_stipend_with_unchecked_open_for_applications(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         # Simulate form submission with open_for_applications unchecked
         stipend_data_no_open_for_apps = {
@@ -67,7 +67,7 @@ def test_create_stipend_with_unchecked_open_for_applications(stipend_data, logge
         assert stipend is not None
         assert stipend.open_for_applications is False
 
-def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_admin):
+def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         # Simulate form submission with blank application_deadline
         stipend_data['application_deadline'] = ''
@@ -80,7 +80,7 @@ def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_
         assert stipend is not None
         assert stipend.application_deadline is None
 
-def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin):
+def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         # Simulate form submission with invalid application_deadline
         stipend_data['application_deadline'] = 'invalid-date'
@@ -93,7 +93,7 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         assert stipend is not None
         assert stipend.application_deadline is None
 
-def test_create_stipend_with_htmx(stipend_data, logged_in_admin):
+def test_create_stipend_with_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         # Simulate form submission with valid application_deadline using HTMX headers
         response = logged_in_admin.post(
@@ -120,7 +120,7 @@ def test_create_stipend_with_htmx(stipend_data, logged_in_admin):
 
         assert b'#stipend-form-container' in response.data  # Validate target container exists
 
-def test_create_stipend_with_blank_application_deadline_htmx(stipend_data, logged_in_admin):
+def test_create_stipend_with_blank_application_deadline_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         # Simulate form submission with blank application_deadline using HTMX headers
         stipend_data['application_deadline'] = ''
@@ -142,7 +142,7 @@ def test_create_stipend_with_blank_application_deadline_htmx(stipend_data, logge
 
         assert b'#stipend-form-container' in response.data  # Validate target container exists
 
-def test_create_stipend_with_invalid_application_deadline_htmx(stipend_data, logged_in_admin):
+def test_create_stipend_with_invalid_application_deadline_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         # Simulate form submission with invalid application_deadline using HTMX headers
         stipend_data['application_deadline'] = 'invalid-date'
