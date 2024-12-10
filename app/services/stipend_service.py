@@ -17,9 +17,8 @@ def update_stipend(stipend, data):
                 setattr(stipend, key, value)
                 logging.info(f"Setting {key} to {value}")  # Add this line for logging
         
-        # If 'open_for_applications' is not in the data, set it to False
-        if 'open_for_applications' not in data:
-            stipend.open_for_applications = False
+        # Ensure 'open_for_applications' is set to False if not provided in data
+        stipend.open_for_applications = data.get('open_for_applications', False)
 
         db.session.commit()
         return stipend
