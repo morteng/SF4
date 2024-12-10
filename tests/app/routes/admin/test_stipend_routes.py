@@ -105,7 +105,7 @@ def test_create_stipend_with_htmx(stipend_data, logged_in_admin, db_session):
             }
         )
         
-        assert response.status_code in (200, 302)
+        assert response.status_code == 200
 
         # Check if the stipend was created in the database
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
@@ -118,7 +118,7 @@ def test_create_stipend_with_htmx(stipend_data, logged_in_admin, db_session):
         assert stipend.open_for_applications is True
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
 
-        assert b'#stipend-form-container' in response.data  # Validate target container exists
+        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
 def test_create_stipend_with_blank_application_deadline_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
@@ -133,14 +133,14 @@ def test_create_stipend_with_blank_application_deadline_htmx(stipend_data, logge
             }
         )
 
-        assert response.status_code in (200, 302)
+        assert response.status_code == 200
 
         # Check if the stipend was created in the database with application_deadline as None
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None
 
-        assert b'#stipend-form-container' in response.data  # Validate target container exists
+        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
 def test_create_stipend_with_invalid_application_deadline_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
@@ -155,14 +155,14 @@ def test_create_stipend_with_invalid_application_deadline_htmx(stipend_data, log
             }
         )
 
-        assert response.status_code in (200, 302)
+        assert response.status_code == 200
 
         # Check if the stipend was created in the database with application_deadline as None
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None
 
-        assert b'#stipend-form-container' in response.data  # Validate target container exists
+        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
 def test_update_stipend(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
