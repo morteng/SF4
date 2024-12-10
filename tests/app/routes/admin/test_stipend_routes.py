@@ -379,6 +379,8 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
 
 def test_delete_stipend(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
+        print(f"Type of test_stipend: {type(test_stipend)}")
+        print(f"ID of test_stipend: {test_stipend.id}")
         response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id))
         
         if not response.data:
