@@ -54,7 +54,11 @@ def get_all_stipends():
 def get_stipend_count():
     return Stipend.query.count()
 
-def delete_stipend(stipend):
+def delete_stipend(stipend_id):
+    stipend = get_stipend_by_id(stipend_id)
+    if stipend is None:
+        raise Exception("Stipend not found")
+    
     db.session.delete(stipend)
     db.session.commit()
 

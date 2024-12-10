@@ -189,7 +189,7 @@ def test_delete_stipend(test_data, db_session):
     assert new_stipend is not None
 
     # Delete the stipend
-    delete_stipend(new_stipend)
+    delete_stipend(new_stipend.id)
 
     # Check if the stipend was deleted from the database
     stipend = db_session.get(Stipend, new_stipend.id)
@@ -197,7 +197,8 @@ def test_delete_stipend(test_data, db_session):
 
 def test_delete_non_existent_stipend(db_session):
     # Attempt to delete a non-existent stipend
-    response = delete_stipend(999)
-
-    # Check if the deletion was handled correctly (e.g., no exceptions raised)
-    assert response is None
+    try:
+        response = delete_stipend(999)
+        assert False, "Expected an exception to be raised"
+    except Exception as e:
+        assert str(e) == "Stipend not found", f"Unexpected error: {e}"
