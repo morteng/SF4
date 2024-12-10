@@ -1,0 +1,12 @@
+<tr>
+    <td>{{ form.hidden_tag() }}{{ form.id.data }}</td>
+    <td><input type="text" name="username" value="{{ user.username }}"></td>
+    <td><input type="email" name="email" value="{{ user.email }}"></td>
+    <td>
+        <button hx-post="{{ url_for('admin_user.update_post', id=form.id.data) }}"
+                hx-target="closest tr"
+                hx-swap="outerHTML">
+            Save
+        </button>
+    </td>
+</tr>

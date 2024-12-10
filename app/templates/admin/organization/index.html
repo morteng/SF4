@@ -4,9 +4,9 @@
 
 {% block content %}
 <h1>Manage Organizations</h1>
-<a href="{{ url_for('admin.admin_org.create') }}">Create New Organization</a>
+<a href="{{ url_for('admin_org.create') }}">Create New Organization</a>
 
-<table>
+<table id="organizations">
     <thead>
         <tr>
             <th>ID</th>
@@ -20,9 +20,11 @@
             <td>{{ organization.id }}</td>
             <td>{{ organization.name }}</td>
             <td>
-                <form action="{{ url_for('admin_org.delete', id=organization.id) }}" method="post">
-                    <button type="submit">Delete</button>
-                </form>
+                <button hx-delete="{{ url_for('admin_org.delete', id=organization.id) }}"
+                        hx-target="closest tr"
+                        hx-swap="outerHTML swap:0.5s">
+                    Delete
+                </button>
             </td>
         </tr>
         {% endfor %}

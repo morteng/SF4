@@ -4,9 +4,9 @@
 
 {% block content %}
 <h1>Manage Users</h1>
-<a href="{{ url_for('admin.admin_user.create') }}">Create New User</a>
+<a href="{{ url_for('admin_user.create') }}">Create New User</a>
 
-<table>
+<table id="users">
     <thead>
         <tr>
             <th>ID</th>
@@ -22,9 +22,16 @@
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
             <td>
-                <form action="{{ url_for('admin.admin_user.delete', id=user.id) }}" method="post">
-                    <button type="submit">Delete</button>
-                </form>
+                <button hx-get="{{ url_for('admin_user.update', id=user.id) }}"
+                        hx-target="closest tr"
+                        hx-swap="outerHTML">
+                    Edit
+                </button>
+                <button hx-delete="{{ url_for('admin_user.delete', id=user.id) }}"
+                        hx-target="closest tr"
+                        hx-swap="outerHTML swap:0.5s">
+                    Delete
+                </button>
             </td>
         </tr>
         {% endfor %}

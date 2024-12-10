@@ -1,22 +1,27 @@
-<nav>
-    <ul>
-        <li><a href="{{ url_for('public.index') }}">Home</a></li>
-        {% if current_user.is_authenticated %}
-            {% if current_user.is_admin %}
-                <li><a href="{{ url_for('admin.dashboard.dashboard') }}">Admin Dashboard</a></li>
-                <li><a href="{{ url_for('admin.admin_bot.index') }}">Bots</a></li>
-                <li><a href="{{ url_for('admin.admin_org.index') }}">Organizations</a></li>
-                <li><a href="{{ url_for('admin.admin_stipend.index') }}">Stipends</a></li>
-                <li><a href="{{ url_for('admin.admin_tag.index') }}" >Tags</a></li>
-                <li><a href="{{ url_for('admin.admin_user.index') }}">Users</a></li>
-            {% else %}
-                <li><a href="{{ url_for('public.about') }}">About</a></li>
-                <li><a href="{{ url_for('user.profile') }}">Profile</a></li>
-            {% endif %}
-            <li><a href="{{ url_for('public.logout') }}">Logout</a></li>
+<button id="menu-toggle">Menu</button>
+<ul id="nav-menu" style="display: none;">
+    <li><a href="{{ url_for('public.index') }}">Home</a></li>
+    {% if current_user.is_authenticated %}
+        {% if current_user.is_admin %}
+            <li><a href="{{ url_for('admin.dashboard.dashboard') }}">Admin Dashboard</a></li>
+            <li><a href="{{ url_for('admin_bot.index') }}">Bots</a></li>
+            <li><a href="{{ url_for('admin_org.index') }}">Organizations</a></li>
+            <li><a href="{{ url_for('admin_stipend.index') }}">Stipends</a></li>
+            <li><a href="{{ url_for('admin_tag.index') }}">Tags</a></li>
+            <li><a href="{{ url_for('admin_user.index') }}">Users</a></li>
         {% else %}
-            <li><a href="{{ url_for('public.login') }}">Login</a></li>
-            <li><a href="{{ url_for('public.register') }}">Register</a></li>
+            <li><a href="{{ url_for('public.about') }}">About</a></li>
+            <li><a href="{{ url_for('user.profile') }}">Profile</a></li>
         {% endif %}
-    </ul>
-</nav>
+        <li><a href="{{ url_for('public.logout') }}">Logout</a></li>
+    {% else %}
+        <li><a href="{{ url_for('public.login') }}">Login</a></li>
+        <li><a href="{{ url_for('public.register') }}">Register</a></li>
+    {% endif %}
+</ul>
+<script>
+    document.getElementById('menu-toggle').addEventListener('click', function () {
+        const menu = document.getElementById('nav-menu');
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    });
+</script>

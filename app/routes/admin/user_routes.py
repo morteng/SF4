@@ -41,18 +41,22 @@ def index():
         users = session.query(User).all()
     return render_template('admin/user/index.html', users=users)
 
-@user_bp.route('/update/<int:id>', methods=['GET', 'POST'])
+@user_bp.route('/update/<int:id>', methods=['GET'])
 @login_required
 def update(id):
-    with current_app.app_context():
-        session = Session(current_app.extensions['sqlalchemy'].db.engine)
-        user = session.get(User, id)
-        if not user:
-            flash('User not found.', 'danger')
-            return redirect(url_for('admin_user.index'))
-        form = UserForm(obj=user)
-        if form.validate_on_submit():
+    user = get_user_by_id(id)  # Fetch user data
+    form = UserForm(obj=user)
+    return render_template('admin/user/_edit_row.html', form=form, user=user)
+
+@user_bp.route('/update/<int:id>', methods=['POST'])
+@login_required
+def update_post(id):
+    form = UserForm()
+    if form.validate_on_submit():
+        user = get_user_by_id(id)
+        if user:
             update_user(user, form.data)
             flash('User updated successfully.', 'success')
-            return redirect(url_for('admin_user.index'))
-    return render_template('admin/user/update.html', form=form, user=user)
+        else:
+            flash('User not found.', 'danger')
+    return redirect(url_for('admin_user.index'))

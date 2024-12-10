@@ -5,7 +5,7 @@
 {% block content %}
 <h1>Manage Bots</h1>
 
-<table>
+<table id="bots">
     <thead>
         <tr>
             <th>ID</th>
@@ -23,12 +23,11 @@
             <td>{{ bot.description }}</td>
             <td>{{ bot.status }}</td>
             <td>
-                <form action="{{ url_for('admin_bot.run', id=bot.id) }}" method="post">
-                    <button type="submit">Run</button>
-                </form>
-                <form action="{{ url_for('admin_bot.delete', id=bot.id) }}" method="post">
-                    <button type="submit">Delete</button>
-                </form>
+                <button hx-delete="{{ url_for('admin_bot.delete', id=bot.id) }}"
+                        hx-target="closest tr"
+                        hx-swap="outerHTML swap:0.5s">
+                    Delete
+                </button>
             </td>
         </tr>
         {% endfor %}

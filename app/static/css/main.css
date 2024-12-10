@@ -55,3 +55,25 @@ footer {
     padding: 0.5rem;
     margin-bottom: 0.5rem;
 }
+
+/* Add a media query for small screens */
+@media (max-width: 768px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    nav ul li {
+        display: block; /* Stack nav items vertically */
+        margin-bottom: 0.5rem;
+    }
+
+    form div {
+        margin-bottom: 1rem;
+    }
+
+    form button {
+        width: 100%;
+    }
+}
