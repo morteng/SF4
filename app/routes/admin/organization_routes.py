@@ -1,47 +1,26 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from app.forms.admin_forms import OrganizationForm
-from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization
-from werkzeug.exceptions import abort
-from app.extensions import db
-from urllib.parse import urlparse
+from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization, update_organization
 
 admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 
-@organization.route('/create', methods=['GET', 'POST'])
+@admin_org_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     if request.method == 'POST':
-        data = request.get_json()
-        if not data:
-            abort(400, description='No input data provided.')
-        
-        name = data.get('name')
-        description = data.get('description')
-        homepage_url = data.get('homepage_url')
-        
-        if not name or not homepage_url:
-            abort(400, description='Name and Homepage URL are required.')
-        
-        try:
-            result = urlparse(homepage_url)
-            if not all([result.scheme, result.netloc]):
-                abort(400, description='Homepage URL is invalid.')
-        except ValueError:
-            abort(400, description='Homepage URL is invalid.')
-        
-        new_org = create_organization({
-            'name': name,
-            'description': description,
-            'homepage_url': homepage_url
-        })
-        
-        return jsonify(new_org.to_dict()), 201
+        form = OrganizationForm(request.form)
+        if form.validate_on_submit():
+            new_organization = create_organization(form.data)
+            flash('Organization created successfully.', 'success')
+            return redirect(url_for('admin.organization.index'))
+        else:
+            flash('Failed to create organization.', 'danger')
     else:
         form = OrganizationForm()
-        return render_template('admin/organization/create.html', form=form)
+    return render_template('admin/organization/create.html', form=form)
 
-@organization.route('/<int:id>/delete', methods=['POST'])
+@admin_org_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
 def delete(id):
     organization = get_organization_by_id(id)
@@ -52,44 +31,24 @@ def delete(id):
         flash('Organization not found.', 'danger')
     return redirect(url_for('admin.organization.index'))
 
-@organization.route('/', methods=['GET'])
+@admin_org_bp.route('/', methods=['GET'])
 @login_required
 def index():
     organizations = get_all_organizations()
     return render_template('admin/organization/index.html', organizations=organizations)
 
-@organization.route('/<int:id>/update', methods=['GET', 'POST'])
+@admin_org_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
 def update(id):
     organization = get_organization_by_id(id)
     if not organization:
-        abort(404, description='Organization not found.')
+        flash('Organization not found.', 'danger')
+        return redirect(url_for('admin.organization.index'))
     
     form = OrganizationForm(obj=organization)
-    if request.method == 'POST':
-        data = request.get_json()
-        if not data:
-            abort(400, description='No input data provided.')
-        
-        name = data.get('name')
-        description = data.get('description')
-        homepage_url = data.get('homepage_url')
-        
-        if not name or not homepage_url:
-            abort(400, description='Name and Homepage URL are required.')
-        
-        try:
-            result = urlparse(homepage_url)
-            if not all([result.scheme, result.netloc]):
-                abort(400, description='Homepage URL is invalid.')
-        except ValueError:
-            abort(400, description='Homepage URL is invalid.')
-        
-        organization.name = name
-        organization.description = description
-        organization.homepage_url = homepage_url
-        db.session.commit()
-        
-        return jsonify(organization.to_dict()), 200
+    if request.method == 'POST' and form.validate_on_submit():
+        update_organization(organization, form.data)
+        flash('Organization updated successfully.', 'success')
+        return redirect(url_for('admin.organization.index'))
     
     return render_template('admin/organization/update.html', form=form, organization=organization)

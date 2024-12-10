@@ -5,7 +5,7 @@ from app.services.user_service import get_user_by_id, delete_user, get_all_users
 
 admin_user_bp = Blueprint('user', __name__, url_prefix='/users')
 
-@user.route('/create', methods=['GET', 'POST'])
+@admin_user_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     form = UserForm()
@@ -18,7 +18,7 @@ def create():
             flash(str(e), 'danger')
     return render_template('admin/user/create.html', form=form)
 
-@user.route('/<int:id>/delete', methods=['POST'])
+@admin_user_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
 def delete(id):
     user = get_user_by_id(id)
@@ -29,13 +29,13 @@ def delete(id):
         flash('User not found.', 'danger')
     return redirect(url_for('admin.user.index'))
 
-@user.route('/', methods=['GET'])
+@admin_user_bp.route('/', methods=['GET'])
 @login_required
 def index():
     users = get_all_users()
     return render_template('admin/user/index.html', users=users)
 
-@user.route('/<int:id>/update', methods=['GET', 'POST'])
+@admin_user_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
 def update(id):
     user = get_user_by_id(id)  # Fetch user data

@@ -1,40 +1,31 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required
-from app.forms.admin_forms import StipendEditForm, StipendForm
-from app.models.stipend import Stipend
-from app.services.stipend_service import create_stipend, get_stipend_by_id, update_stipend, delete_stipend, get_all_stipends
-from app.extensions import db  # Import the db object
+from app.forms.admin_forms import StipendForm
+from app.services.stipend_service import get_stipend_by_id, delete_stipend, get_all_stipends, create_stipend, update_stipend
 
 admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 
-@stipend.route('/create', methods=['GET', 'POST'])
+@admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
     form = StipendForm()
-    
-    if request.method == 'POST' and form.validate_on_submit():
-        stipend = Stipend()
-        form.populate_obj(stipend)  # Automatically maps form data
-        
-        if create_stipend(stipend):
-            flash('Stipend created successfully!', 'success')
-            return redirect(url_for('admin.stipend.index'))
-        else:
-            flash('Stipend with this name already exists.', 'danger')
+    if form.validate_on_submit():
+        new_stipend = create_stipend(form.data)
+        flash('Stipend created successfully.', 'success')
+        return redirect(url_for('admin.stipend.index'))
     else:
         print(f"Form errors: {form.errors}")  # Debugging statement
-    
     return render_template('admin/stipend_form.html', form=form)
 
-@stipend.route('/<int:id>/update', methods=['GET', 'POST'])
+@admin_stipend_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
 def update(id):
-    stipend = db.session.get(Stipend, id)  # Use session.get instead of get
+    stipend = get_stipend_by_id(id)  # Use session.get instead of get
     if not stipend:
         flash('Stipend not found!', 'danger')
         return redirect(url_for('admin.stipend.index'))
     
-    form = StipendEditForm(obj=stipend)
+    form = StipendForm(obj=stipend)
     
     if request.method == 'POST' and form.validate_on_submit():
         form.populate_obj(stipend)
@@ -45,10 +36,10 @@ def update(id):
     
     return render_template('admin/stipend_form.html', form=form)
 
-@stipend.route('/<int:id>/delete', methods=['POST'])
+@admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
 def delete(id):
-    stipend = db.session.get(Stipend, id)  # Use session.get instead of get
+    stipend = get_stipend_by_id(id)  # Use session.get instead of get
     if not stipend:
         flash('Stipend not found!', 'danger')
         return redirect(url_for('admin.stipend.index'))
@@ -58,7 +49,7 @@ def delete(id):
     flash('Stipend deleted successfully!', 'success')
     return redirect(url_for('admin.stipend.index'))
 
-@stipend.route('/', methods=['GET'])
+@admin_stipend_bp.route('/', methods=['GET'])
 @login_required
 def index():
     stipends = get_all_stipends()
