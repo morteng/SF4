@@ -89,10 +89,10 @@ def test_update_stipend(test_data, db_session):
         'open_for_applications': True
     }
 
-    response = update_stipend(stipend.id, updated_data)
+    response = update_stipend(new_stipend, updated_data)  # Pass the stipend object directly
 
     # Check if the stipend was updated in the database
-    stipend = db_session.get(Stipend, stipend.id)
+    stipend = db_session.get(Stipend, new_stipend.id)
     assert stipend.name == 'Updated Test Stipend'
     assert stipend.summary == "Updated summary."
     assert stipend.description == "Updated description."
