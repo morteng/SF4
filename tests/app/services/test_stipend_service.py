@@ -148,10 +148,10 @@ def test_update_stipend_with_blank_application_deadline(test_data, db_session):
         'open_for_applications': False
     }
 
-    response = update_stipend(stipend.id, updated_data)
+    response = update_stipend(new_stipend, updated_data)  # Pass the stipend object
 
     # Check if the stipend was updated in the database with application_deadline as None
-    stipend = db_session.get(Stipend, stipend.id)
+    stipend = db_session.get(Stipend, new_stipend.id)
     assert stipend.application_deadline is None
 
 def test_update_stipend_with_invalid_application_deadline(test_data, db_session):
@@ -174,10 +174,10 @@ def test_update_stipend_with_invalid_application_deadline(test_data, db_session)
         'open_for_applications': False
     }
 
-    response = update_stipend(stipend.id, updated_data)
+    response = update_stipend(new_stipend, updated_data)  # Pass the stipend object
 
     # Check if the stipend was updated in the database with application_deadline as None
-    stipend = db_session.get(Stipend, stipend.id)
+    stipend = db_session.get(Stipend, new_stipend.id)
     assert stipend.application_deadline is None
 
 def test_delete_stipend(test_data, db_session):
