@@ -100,8 +100,8 @@ def test_update_stipend(test_data, db_session):
     # Check if the stipend was updated in the database
     stipend = db_session.get(Stipend, new_stipend.id)
     assert stipend.name == 'Updated Test Stipend'
-    assert stipend.summary == "Updated summary."
-    assert stipend.description == "Updated description."
+    assert stipend.summary == "Updated summary"
+    assert stipend.description == "Updated description"
     assert stipend.homepage_url == "http://example.com/updated-stipend"
     assert stipend.application_procedure == "Updated application procedure"
     assert stipend.eligibility_criteria == "Updated eligibility criteria"
