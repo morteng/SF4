@@ -38,6 +38,17 @@ def test_create_stipend(stipend_data, logged_in_admin, db_session):
         # Simulate form submission with valid application_deadline and open_for_applications checked
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
+        
+        # Print form validation errors
+        form = StipendForm(data=stipend_data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
+        
         assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database
@@ -60,6 +71,17 @@ def test_create_stipend_with_unchecked_open_for_applications(stipend_data, logge
         
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data_no_open_for_apps)
         
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
+        
+        # Print form validation errors
+        form = StipendForm(data=stipend_data_no_open_for_apps)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
+        
         assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database with open_for_applications as False
@@ -73,6 +95,17 @@ def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_
         stipend_data['application_deadline'] = ''
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
+        
+        # Print form validation errors
+        form = StipendForm(data=stipend_data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
+        
         assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database with application_deadline as None
@@ -85,6 +118,17 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         # Simulate form submission with invalid application_deadline
         stipend_data['application_deadline'] = 'invalid-date'
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
+        
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
+        
+        # Print form validation errors
+        form = StipendForm(data=stipend_data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
         
         assert response.status_code in (200, 302)
         
@@ -104,6 +148,17 @@ def test_create_stipend_with_htmx(stipend_data, logged_in_admin, db_session):
                 'HX-Target': '#stipend-form-container'
             }
         )
+        
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
+        
+        # Print form validation errors
+        form = StipendForm(data=stipend_data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
         
         assert response.status_code == 200
 
@@ -133,6 +188,17 @@ def test_create_stipend_with_blank_application_deadline_htmx(stipend_data, logge
             }
         )
 
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
+        
+        # Print form validation errors
+        form = StipendForm(data=stipend_data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
+        
         assert response.status_code == 200
 
         # Check if the stipend was created in the database with application_deadline as None
@@ -155,6 +221,17 @@ def test_create_stipend_with_invalid_application_deadline_htmx(stipend_data, log
             }
         )
 
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
+        
+        # Print form validation errors
+        form = StipendForm(data=stipend_data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
+        
         assert response.status_code == 200
 
         # Check if the stipend was created in the database with application_deadline as None
@@ -181,6 +258,17 @@ def test_update_stipend(logged_in_admin, test_stipend, db_session):
 
         response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
 
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
+        
+        # Print form validation errors
+        form = StipendForm(data=updated_data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
+        
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database
@@ -207,6 +295,17 @@ def test_update_stipend_with_unchecked_open_for_applications(logged_in_admin, te
 
         response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data_no_open_for_apps)
 
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
+        
+        # Print form validation errors
+        form = StipendForm(data=updated_data_no_open_for_apps)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
+        
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with open_for_applications as False
@@ -227,6 +326,17 @@ def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_st
         }
 
         response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
+        
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
+        
+        # Print form validation errors
+        form = StipendForm(data=updated_data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
         
         assert response.status_code in (200, 302)
 
@@ -249,6 +359,17 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
 
         response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
         
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
+        
+        # Print form validation errors
+        form = StipendForm(data=updated_data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
+        
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with application_deadline as None
@@ -259,6 +380,11 @@ def test_delete_stipend(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
         response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id))
         
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
+        
         assert response.status_code in (200, 302)
 
         # Check if the stipend was deleted from the database
@@ -268,6 +394,11 @@ def test_delete_stipend(logged_in_admin, test_stipend, db_session):
 def test_delete_non_existent_stipend(logged_in_admin):
     with logged_in_admin.application.app_context():
         response = logged_in_admin.post(url_for('admin.stipend.delete', id=999))
+        
+        if not response.data:
+            print("Response is empty")
+        else:
+            print(response.data.decode())
         
         assert response.status_code in (200, 302)
         assert b'Stipend not found!' in response.data
