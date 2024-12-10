@@ -63,7 +63,7 @@ def test_create_stipend_with_unchecked_open_for_applications(stipend_data, logge
         assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database with open_for_applications as False
-        stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
+        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.open_for_applications is False
 
@@ -76,7 +76,7 @@ def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_
         assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database with application_deadline as None
-        stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
+        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None
 
@@ -89,7 +89,7 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         assert response.status_code in (200, 302)
         
         # Check if the stipend was created in the database with application_deadline as None
-        stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
+        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None
 
@@ -108,7 +108,7 @@ def test_create_stipend_with_htmx(stipend_data, logged_in_admin):
         assert response.status_code in (200, 302)
 
         # Check if the stipend was created in the database
-        stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
+        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.summary == 'This is a test stipend.'
         assert stipend.description == 'Detailed description of the test stipend.'
@@ -117,6 +117,8 @@ def test_create_stipend_with_htmx(stipend_data, logged_in_admin):
         assert stipend.eligibility_criteria == 'Open to all students'
         assert stipend.open_for_applications is True
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
+
+        assert b'#stipend-form-container' in response.data  # Validate target container exists
 
 def test_create_stipend_with_blank_application_deadline_htmx(stipend_data, logged_in_admin):
     with logged_in_admin.application.app_context():
@@ -134,9 +136,11 @@ def test_create_stipend_with_blank_application_deadline_htmx(stipend_data, logge
         assert response.status_code in (200, 302)
 
         # Check if the stipend was created in the database with application_deadline as None
-        stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
+        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None
+
+        assert b'#stipend-form-container' in response.data  # Validate target container exists
 
 def test_create_stipend_with_invalid_application_deadline_htmx(stipend_data, logged_in_admin):
     with logged_in_admin.application.app_context():
@@ -154,9 +158,11 @@ def test_create_stipend_with_invalid_application_deadline_htmx(stipend_data, log
         assert response.status_code in (200, 302)
 
         # Check if the stipend was created in the database with application_deadline as None
-        stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
+        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None
+
+        assert b'#stipend-form-container' in response.data  # Validate target container exists
 
 def test_update_stipend(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
@@ -264,3 +270,4 @@ def test_delete_non_existent_stipend(logged_in_admin):
         response = logged_in_admin.post(url_for('admin.stipend.delete', id=999))
         
         assert response.status_code in (200, 302)
+        assert b'Stipend not found!' in response.data

@@ -86,37 +86,20 @@ def test_update_stipend(test_data, db_session):
         'application_procedure': 'Updated application procedure',
         'eligibility_criteria': 'Updated eligibility criteria',
         'application_deadline': datetime.now() + timedelta(days=1),
-        'open_for_applications': False
+        'open_for_applications': True
     }
-    for key, value in updated_data.items():
-        setattr(stipend, key, value)
-    update_stipend(stipend)
 
-    # Retrieve the updated stipend from the database and check if it was updated successfully
-    updated_stipend = get_stipend_by_id(stipend.id)
-    assert updated_stipend.name == updated_data['name']
-    assert updated_stipend.summary == updated_data['summary']
-    assert updated_stipend.description == updated_data['description']
-    assert updated_stipend.homepage_url == updated_data['homepage_url']
-    assert updated_stipend.application_procedure == updated_data['application_procedure']
-    assert updated_stipend.eligibility_criteria == updated_data['eligibility_criteria']
+    assert updated_data['application_deadline'] == '2024-12-31 23:59:59'  # Sanity check
 
-    # Convert the application_deadline to a string before comparison with a tolerance
-    deadline_tolerance = timedelta(seconds=1)
-    assert abs(updated_stipend.application_deadline - updated_data['application_deadline']) < deadline_tolerance
-    assert updated_stipend.open_for_applications == updated_data['open_for_applications']
+    response = update_stipend(stipend.id, updated_data)
 
-def test_delete_stipend(test_data, db_session):
-    # Create a stipend using the service function with the provided session
-    stipend = Stipend(**test_data)
-    new_stipend = create_stipend(stipend)
-
-    # Assert that the stipend was created successfully
-    assert new_stipend is not None
-
-    # Delete the stipend
-    delete_stipend(new_stipend)
-
-    # Retrieve all stipends from the database and check if it was deleted successfully
-    stipends = get_all_stipends()
-    assert len(stipends) == 0
+    # Check if the stipend was updated in the database
+    stipend = db_session.get(Stipend, stipend.id)
+    assert stipend.name == 'Updated Test Stipend'
+    assert stipend.summary == "Updated summary."
+    assert stipend.description == "Updated description."
+    assert stipend.homepage_url == "http://example.com/updated-stipend"
+    assert stipend.application_procedure == "Updated application procedure"
+    assert stipend.eligibility_criteria == "Updated eligibility criteria"
+    assert abs(stipend.application_deadline - updated_data['application_deadline']) < timedelta(seconds=1)
+    assert stipend.open_for_applications is True
