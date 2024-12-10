@@ -5,18 +5,8 @@ from app.forms.admin_forms import StipendForm  # Import the StipendForm class
 from datetime import datetime, timedelta
 import logging
 
-@pytest.fixture
-def stipend_data(request):
-    return {
-        'name': f"Test Stipend {request.node.name}",
-        'summary': 'This is a test stipend.',
-        'description': 'Detailed description of the test stipend.',
-        'homepage_url': 'http://example.com/stipend',
-        'application_procedure': 'Apply online at example.com',
-        'eligibility_criteria': 'Open to all students',
-        'application_deadline': '2023-12-31 23:59:59',  # Valid datetime format
-        'open_for_applications': True
-    }
+# Import the stipend_data fixture from conftest.py
+from tests.conftest import stipend_data
 
 @pytest.fixture
 def test_stipend(db_session, admin_user):
@@ -189,7 +179,7 @@ def test_create_stipend_with_blank_application_deadline_htmx(stipend_data, logge
                 'HX-Target': '#stipend-form-container'
             }
         )
-
+        
         if not response.data:
             print("Response is empty")
         else:
@@ -222,7 +212,7 @@ def test_create_stipend_with_invalid_application_deadline_htmx(stipend_data, log
                 'HX-Target': '#stipend-form-container'
             }
         )
-
+        
         if not response.data:
             print("Response is empty")
         else:
@@ -243,10 +233,10 @@ def test_create_stipend_with_invalid_application_deadline_htmx(stipend_data, log
 
         assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
-def test_update_stipend(logged_in_admin, test_stipend, db_session):
+def test_update_stipend(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
         updated_data = {
-            'name': test_stipend.name,  # Retain the original name
+            'name': test_stipend.name,
             'summary': "Updated summary.",
             'description': "Updated description.",
             'homepage_url': "http://example.com/updated-stipend",
@@ -256,10 +246,8 @@ def test_update_stipend(logged_in_admin, test_stipend, db_session):
             'open_for_applications': True
         }
 
-        assert updated_data['application_deadline'] == '2024-12-31 23:59:59'  # Sanity check
-
         response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
-
+        
         if not response.data:
             print("Response is empty")
         else:
@@ -282,8 +270,9 @@ def test_update_stipend(logged_in_admin, test_stipend, db_session):
         assert stipend.application_procedure == "Apply online at example.com/updated"
         assert stipend.eligibility_criteria == "Open to all updated students"
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
+        assert stipend.open_for_applications is True
 
-def test_update_stipend_with_unchecked_open_for_applications(logged_in_admin, test_stipend, db_session):
+def test_update_stipend_with_unchecked_open_for_applications(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
         updated_data = {
             key: value for key, value in stipend_data.items() if key != 'open_for_applications'
@@ -309,7 +298,7 @@ def test_update_stipend_with_unchecked_open_for_applications(logged_in_admin, te
         assert stipend is not None
         assert stipend.open_for_applications is False
 
-def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_stipend, db_session):
+def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,
@@ -342,7 +331,7 @@ def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_st
         assert stipend is not None
         assert stipend.application_deadline is None
 
-def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_stipend, db_session):
+def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,
@@ -375,7 +364,7 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
         assert stipend is not None
         assert stipend.application_deadline is None
 
-def test_update_stipend_with_htmx(logged_in_admin, test_stipend, db_session):
+def test_update_stipend_with_htmx(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,
@@ -419,10 +408,11 @@ def test_update_stipend_with_htmx(logged_in_admin, test_stipend, db_session):
         assert stipend.application_procedure == "Apply online at example.com/updated"
         assert stipend.eligibility_criteria == "Open to all updated students"
         assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
+        assert stipend.open_for_applications is True
 
         assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
-def test_update_stipend_with_blank_application_deadline_htmx(logged_in_admin, test_stipend, db_session):
+def test_update_stipend_with_blank_application_deadline_htmx(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,
@@ -464,7 +454,7 @@ def test_update_stipend_with_blank_application_deadline_htmx(logged_in_admin, te
 
         assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
-def test_update_stipend_with_invalid_application_deadline_htmx(logged_in_admin, test_stipend, db_session):
+def test_update_stipend_with_invalid_application_deadline_htmx(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,
@@ -641,7 +631,7 @@ def test_create_stipend_with_database_error(stipend_data, logged_in_admin, db_se
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
 
-def test_update_stipend_with_invalid_application_deadline_format(logged_in_admin, test_stipend, db_session):
+def test_update_stipend_with_invalid_application_deadline_format(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,
@@ -662,7 +652,7 @@ def test_update_stipend_with_invalid_application_deadline_format(logged_in_admin
         stipend = db_session.get(Stipend, test_stipend.id)
         assert stipend.application_deadline is None
 
-def test_update_stipend_with_invalid_application_deadline_format_htmx(logged_in_admin, test_stipend, db_session):
+def test_update_stipend_with_invalid_application_deadline_format_htmx(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,
@@ -692,7 +682,7 @@ def test_update_stipend_with_invalid_application_deadline_format_htmx(logged_in_
 
         assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
-def test_update_stipend_with_database_error(logged_in_admin, test_stipend, db_session, monkeypatch):
+def test_update_stipend_with_database_error(logged_in_admin, test_stipend, stipend_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,
