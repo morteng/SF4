@@ -11,7 +11,9 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 def create():
     form = StipendForm()
     if form.validate_on_submit():
-        stipend = Stipend(**form.data)
+        # Filter valid fields for the Stipend model
+        valid_fields = {key: value for key, value in form.data.items() if hasattr(Stipend, key)}
+        stipend = Stipend(**valid_fields)
         new_stipend = create_stipend(stipend)
         flash('Stipend created successfully.', 'success')
         return redirect(url_for('admin.stipend.index'))
