@@ -185,7 +185,7 @@ def test_update_stipend(logged_in_admin, test_stipend, db_session):
 
         # Check if the stipend was updated in the database
         stipend = db_session.get(Stipend, test_stipend.id)
-        assert stipend.name == test_stipend.name
+        assert stipend.name == updated_data['name']
         assert stipend.summary == "Updated summary."
         assert stipend.description == "Updated description."
         assert stipend.homepage_url == "http://example.com/updated-stipend"

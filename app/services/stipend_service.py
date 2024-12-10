@@ -27,11 +27,14 @@ def create_stipend(stipend):
 def update_stipend(stipend, data):
     try:
         for key, value in data.items():
-            setattr(stipend, key, value)
+            if hasattr(stipend, key):
+                setattr(stipend, key, value)
         db.session.commit()
+        return stipend
     except Exception as e:
         logging.error(f"Failed to update stipend: {e}")
         db.session.rollback()
+        return None
 
 def get_all_stipends():
     return Stipend.query.all()

@@ -37,10 +37,7 @@ def update(id):
     form = StipendForm(obj=stipend)
     
     if form.validate_on_submit():
-        for field in form:
-            if hasattr(stipend, field.name):
-                setattr(stipend, field.name, field.data)
-        update_stipend(stipend)
+        update_stipend(stipend, form.data)
         
         flash('Stipend updated successfully!', 'success')
         return redirect(url_for('admin.stipend.index'))
