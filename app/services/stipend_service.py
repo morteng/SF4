@@ -63,4 +63,6 @@ def delete_stipend(stipend_id):
     db.session.commit()
 
 def get_stipend_by_id(stipend_id):
+    logging.info(f"Type of stipend_id: {type(stipend_id)}")
+    logging.info(f"Value of stipend_id: {stipend_id}")
     return db.session.get(Stipend, stipend_id)

@@ -381,6 +381,9 @@ def test_delete_stipend(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
         print(f"Type of test_stipend: {type(test_stipend)}")
         print(f"ID of test_stipend: {test_stipend.id}")
+        
+        # Log the type and value of the ID being passed to the delete endpoint
+        logging.info(f"Deleting stipend with ID: {test_stipend.id}")
         response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id))
         
         if not response.data:
