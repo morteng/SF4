@@ -1,4 +1,5 @@
 import logging
+from app.extensions import db
 
 logging.basicConfig(level=logging.ERROR)
 
