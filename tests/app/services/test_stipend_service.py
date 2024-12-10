@@ -77,6 +77,9 @@ def test_update_stipend(test_data, db_session):
     # Assert that the stipend was created successfully
     assert new_stipend is not None
 
+    # Print initial stipend data for debugging
+    print(f"Initial stipend name: {new_stipend.name}")
+
     # Update the stipend
     updated_data = {
         'name': 'Updated Test Stipend',
@@ -88,6 +91,9 @@ def test_update_stipend(test_data, db_session):
         'application_deadline': datetime.now() + timedelta(days=1),
         'open_for_applications': True
     }
+
+    # Print updated data for debugging
+    print(f"Updated data: {updated_data}")
 
     response = update_stipend(new_stipend, updated_data)  # Pass the stipend object directly
 
