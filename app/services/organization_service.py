@@ -32,3 +32,4 @@ def get_organization_by_id(organization_id):
         # Log the error
         print(str(e))
         return None
+# add update_organization function here AI!
