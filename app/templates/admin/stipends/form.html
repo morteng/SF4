@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>{% if form.id.data %}Edit{% else %}Create{% endif %} Stipend</h2>
+<h2>{% if form.name.data %}Edit{% else %}Create{% endif %} Stipend</h2>
 {% include 'admin/stipends/_form.html' %}
 <a href="{{ url_for('admin.stipend.index') }}">Back to Stipends</a>
 {% endblock %}
