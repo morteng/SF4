@@ -58,27 +58,38 @@ def index():
     organizations = get_all_organizations()
     return render_template('admin/organization/index.html', organizations=organizations)
 
-@admin_org_bp.route('/<int:id>/update', methods=['PUT'])
+@admin_org_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
 def update(id):
     organization = get_organization_by_id(id)
     if not organization:
         abort(404, description='Organization not found.')
     
-    data = request.get_json()
-    if not data:
-        abort(400, description='No input data provided.')
+    form = OrganizationForm(obj=organization)
+    if request.method == 'POST':
+        data = request.get_json()
+        if not data:
+            abort(400, description='No input data provided.')
+        
+        name = data.get('name')
+        description = data.get('description')
+        homepage_url = data.get('homepage_url')
+        
+        if not name or not homepage_url:
+            abort(400, description='Name and Homepage URL are required.')
+        
+        try:
+            result = urlparse(homepage_url)
+            if not all([result.scheme, result.netloc]):
+                abort(400, description='Homepage URL is invalid.')
+        except ValueError:
+            abort(400, description='Homepage URL is invalid.')
+        
+        organization.name = name
+        organization.description = description
+        organization.homepage_url = homepage_url
+        db.session.commit()
+        
+        return jsonify(organization.to_dict()), 200
     
-    name = data.get('name')
-    description = data.get('description')
-    homepage_url = data.get('homepage_url')
-    
-    if not name or not homepage_url:
-        abort(400, description='Name and Homepage URL are required.')
-    
-    organization.name = name
-    organization.description = description
-    organization.homepage_url = homepage_url
-    db.session.commit()
-    
-    return jsonify(organization.to_dict()), 200
+    return render_template('admin/organization/update.html', form=form, organization=organization)

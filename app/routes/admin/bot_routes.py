@@ -32,7 +32,7 @@ def index():
     bots = get_all_bots()
     return render_template('admin/bot/index.html', bots=bots)
 
-@admin_bot_bp.route('/run/<int:id>', methods=['POST'])
+@admin_bot_bp.route('/<int:id>/run', methods=['POST'])
 @login_required
 def run(id):
     bot = get_bot_by_id(id)

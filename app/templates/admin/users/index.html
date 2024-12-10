@@ -24,7 +24,7 @@
                 <td>{{ user.email }}</td>
                 <td>
                     <button 
-                        hx-get="{{ url_for('admin_user.edit_form', id=user.id) }}"
+                        hx-get="{{ url_for('admin_user.update', id=user.id) }}"
                         hx-target="body"
                         hx-swap="afterbegin">
                          Edit

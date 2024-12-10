@@ -18,7 +18,7 @@ def create():
         
         if create_stipend(stipend):
             flash('Stipend created successfully!', 'success')
-            return redirect(url_for('admin.admin_stipend.index'))
+            return redirect(url_for('admin_stipend.index'))
         else:
             flash('Stipend with this name already exists.', 'danger')
     else:
@@ -32,7 +32,7 @@ def update(id):
     stipend = db.session.get(Stipend, id)  # Use session.get instead of get
     if not stipend:
         flash('Stipend not found!', 'danger')
-        return redirect(url_for('admin.admin_stipend.index'))
+        return redirect(url_for('admin_stipend.index'))
     
     form = StipendEditForm(obj=stipend)
     
@@ -41,7 +41,7 @@ def update(id):
         update_stipend(stipend)
         
         flash('Stipend updated successfully!', 'success')
-        return redirect(url_for('admin.admin_stipend.index'))
+        return redirect(url_for('admin_stipend.index'))
     
     return render_template('admin/stipend_form.html', form=form)
 
@@ -51,12 +51,12 @@ def delete(id):
     stipend = db.session.get(Stipend, id)  # Use session.get instead of get
     if not stipend:
         flash('Stipend not found!', 'danger')
-        return redirect(url_for('admin.admin_stipend.index'))
+        return redirect(url_for('admin_stipend.index'))
     
     delete_stipend(stipend)
     
     flash('Stipend deleted successfully!', 'success')
-    return redirect(url_for('admin.admin_stipend.index'))
+    return redirect(url_for('admin_stipend.index'))
 
 @admin_stipend_bp.route('/', methods=['GET'])
 @login_required
