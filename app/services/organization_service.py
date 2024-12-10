@@ -27,7 +27,7 @@ def create_organization(data):
 
 def get_organization_by_id(organization_id):
     try:
-        return Organization.query.get(organization_id)
+        return Organization.session.get(organization_id)
     except SQLAlchemyError as e:
         # Log the error
         print(str(e))

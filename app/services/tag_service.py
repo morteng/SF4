@@ -27,7 +27,7 @@ def create_tag(data):
 
 def get_tag_by_id(tag_id):
     try:
-        return Tag.query.get(tag_id)
+        return Tag.session.get(tag_id)
     except SQLAlchemyError as e:
         # Log the error
         print(str(e))
