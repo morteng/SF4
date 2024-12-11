@@ -51,7 +51,7 @@ def create():
         return render_template('admin/stipends/_stipend_form.html', form=form), 200
     else:
         # Render the full page with form and errors for non-HTMX requests
-        return render_template('admin/stipends/create.html', form=form), 200
+        return render_template('admin/stipends/form.html', form=form), 200
 
 
 @admin_stipend_bp.route('/<int:id>/update', methods=['GET', 'POST'])
