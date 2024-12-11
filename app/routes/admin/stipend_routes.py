@@ -47,8 +47,8 @@ def create():
     
     # Handle form validation failure
     if request.headers.get('HX-Request'):
-        # Render the form template with errors for HTMX requests
-        return render_template('admin/stipends/form.html', form=form), 200
+        # Return only the targeted container for HTMX
+        return render_template('admin/stipends/_stipend_form.html', form=form), 200
     else:
         # Render the full page with form and errors for non-HTMX requests
         return render_template('admin/stipends/create.html', form=form), 200
