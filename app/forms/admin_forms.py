@@ -2,6 +2,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, DateTimeField, SubmitField
 from wtforms.validators import DataRequired, Length, Optional, ValidationError
 from datetime import datetime  # Ensure this is imported
+from app.models.tag import Tag  # Import the Tag model
+from app.models.user import User  # Import the User model
+from app.models.bot import Bot  # Import the Bot model
+from app.models.organization import Organization  # Import the Organization model
 
 def validate_application_deadline(form, field):
     if field.data:
