@@ -20,7 +20,9 @@ def delete_organization(organization):
         db.session.rollback()
 
 def create_organization(data):
-    new_organization = Organization(**data)
+    valid_keys = {'name', 'description', 'homepage_url'}  # Adjust based on Organization fields
+    filtered_data = {k: v for k, v in data.items() if k in valid_keys}
+    new_organization = Organization(**filtered_data)
     db.session.add(new_organization)
     db.session.commit()
     return new_organization

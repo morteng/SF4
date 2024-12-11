@@ -11,7 +11,8 @@ def create():
     if request.method == 'POST':
         form = OrganizationForm(request.form)
         if form.validate_on_submit():
-            new_organization = create_organization(form.data)
+            organization_data = {k: v for k, v in form.data.items() if k != 'submit'}
+            new_organization = create_organization(organization_data)
             flash('Organization created successfully.', 'success')
             return redirect(url_for('admin.organization.index'))
         else:
