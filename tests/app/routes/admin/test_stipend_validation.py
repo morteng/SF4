@@ -68,7 +68,7 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
 
         db_session.expire_all()
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
-        assert stipend.application_deadline is None
+        assert stipend.application_deadline == test_stipend.application_deadline
 
 def test_create_stipend_with_invalid_form_data(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
