@@ -22,11 +22,11 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         stipend_data['application_deadline'] = '2023-13-32 99:99:99'
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
-        assert response.status_code in (200, 302)
+        assert response.status_code == 200  # Ensure form re-renders
 
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
-        assert stipend is not None
-        assert stipend.application_deadline is None
+        assert stipend is None  # Ensure stipend is not created with invalid date
+        assert b'Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data
 
 def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
