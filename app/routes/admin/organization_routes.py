@@ -48,7 +48,8 @@ def update(id):
     
     form = OrganizationForm(obj=organization)
     if request.method == 'POST' and form.validate_on_submit():
-        update_organization(organization, form.data)
+        update_data = {k: v for k, v in form.data.items() if k != 'submit'}
+        update_organization(organization, update_data)
         flash('Organization updated successfully.', 'success')
         return redirect(url_for('admin.organization.index'))
     
