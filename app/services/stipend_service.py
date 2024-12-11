@@ -9,11 +9,12 @@ logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 def update_stipend(stipend, data):
     try:
         for key, value in data.items():
-            if key == 'application_deadline' and isinstance(value, str):
-                try:
-                    value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
-                except ValueError:
-                    value = None  # Handle invalid date format
+            if key == 'application_deadline':
+                if isinstance(value, str):
+                    try:
+                        value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+                    except ValueError:
+                        raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
                 logging.info(f"Setting {key} to {value}")  # Add this line for logging

@@ -104,4 +104,4 @@ def test_update_stipend_with_invalid_application_deadline_format_htmx(logged_in_
 
         db_session.expire_all()
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
-        assert stipend.application_deadline is None
+        assert stipend.application_deadline == test_stipend.application_deadline
