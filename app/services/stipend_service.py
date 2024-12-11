@@ -29,14 +29,21 @@ def update_stipend(stipend, data):
 
 def create_stipend(stipend, session=db.session):
     try:
+        if isinstance(stipend.application_deadline, str):
+            datetime.strptime(stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
         session.add(stipend)
         session.commit()
         flash('Stipend created successfully.', 'success')
         return stipend
+    except ValueError as ve:
+        session.rollback()
+        flash(str(ve), 'danger')
+        logging.error(f"Invalid date format: {ve}")
+        return None
     except Exception as e:
         session.rollback()
         logging.error(f"Failed to create stipend: {e}")
-        logging.error('Failed to create stipend. Please try again.')
+        flash('Failed to create stipend. Please try again.', 'danger')
         return None
 
 def delete_stipend(stipend_id):

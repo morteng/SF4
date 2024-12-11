@@ -31,19 +31,29 @@ def create():
                 application_deadline=form.application_deadline.data,
                 open_for_applications=form.open_for_applications.data
             )
-            create_stipend(stipend)
-            db.session.commit()
-            flash('Stipend created successfully.', 'success')
+            result = create_stipend(stipend)
+            if not result:
+                raise ValueError("Stipend creation failed due to invalid input.")
             
             if request.headers.get('HX-Request'):
-                # Render only the stipend list or a fragment for HTMX
                 stipends = get_all_stipends()
                 return render_template('admin/stipends/_stipend_list.html', stipends=stipends, form=form), 200
             
             return redirect(url_for('admin.stipend.index'))
+        except ValueError as ve:
+            flash(str(ve), 'danger')
+            if request.headers.get('HX-Request'):
+                return render_template('admin/stipends/_stipend_form.html', form=form), 200
+            else:
+                return render_template('admin/stipends/form.html', form=form), 200
         except Exception as e:
             db.session.rollback()  # Explicitly rollback session on failure
             logging.error(f"Failed to create stipend: {e}")
+            flash('Failed to create stipend. Please try again.', 'danger')
+            if request.headers.get('HX-Request'):
+                return render_template('admin/stipends/_stipend_form.html', form=form), 200
+            else:
+                return render_template('admin/stipends/form.html', form=form), 200
     
     # Handle form validation failure
     if request.headers.get('HX-Request'):
