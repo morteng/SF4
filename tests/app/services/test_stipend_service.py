@@ -2,9 +2,6 @@ import pytest
 from app.models.stipend import Stipend
 from app.services.stipend_service import create_stipend, update_stipend, delete_stipend
 from datetime import datetime
-from flask import current_app as app
-
-
 
 @pytest.fixture
 def test_data():
@@ -19,16 +16,12 @@ def test_data():
         'open_for_applications': True
     }
 
-def test_create_stipend(test_data, db_session):
+def test_create_stipend(test_data, db_session, app):
     stipend = Stipend(**test_data)
 
-    with app.app_context():  # Correct way to bind the app context
+    with app.app_context(), app.test_request_context():
         new_stipend = create_stipend(stipend)
 
-    # Check if the stipend was created successfully
-    assert new_stipend is not None
-
-    
     # Check if the stipend was created successfully
     assert new_stipend is not None
     assert new_stipend.name == test_data['name']
@@ -40,19 +33,23 @@ def test_create_stipend(test_data, db_session):
     assert new_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
     assert new_stipend.open_for_applications is True
 
-def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session):
+def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app):
     # Modify test data with an invalid application_deadline format
     test_data['application_deadline'] = '2023-13-32 99:99:99'
     stipend = Stipend(**test_data)
-    new_stipend = create_stipend(stipend)
+
+    with app.app_context(), app.test_request_context():
+        new_stipend = create_stipend(stipend)
 
     # Assert that the stipend was created successfully with application_deadline set to None
     assert new_stipend is not None
     assert new_stipend.application_deadline is None
 
-def test_update_stipend(test_data, db_session):
+def test_update_stipend(test_data, db_session, app):
     stipend = Stipend(**test_data)
-    new_stipend = create_stipend(stipend)
+    
+    with app.app_context(), app.test_request_context():
+        new_stipend = create_stipend(stipend)
 
     # Check if the stipend was created successfully
     assert new_stipend is not None
@@ -68,7 +65,8 @@ def test_update_stipend(test_data, db_session):
         'open_for_applications': True
     }
 
-    response = update_stipend(new_stipend, updated_data)
+    with app.app_context(), app.test_request_context():
+        response = update_stipend(new_stipend, updated_data)
 
     # Check if the stipend was updated successfully
     assert response is not None
@@ -81,9 +79,11 @@ def test_update_stipend(test_data, db_session):
     assert response.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
     assert response.open_for_applications is True
 
-def test_update_stipend_with_invalid_application_deadline_format(test_data, db_session):
+def test_update_stipend_with_invalid_application_deadline_format(test_data, db_session, app):
     stipend = Stipend(**test_data)
-    new_stipend = create_stipend(stipend)
+    
+    with app.app_context(), app.test_request_context():
+        new_stipend = create_stipend(stipend)
 
     # Check if the stipend was created successfully
     assert new_stipend is not None
@@ -99,14 +99,17 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
         'open_for_applications': True
     }
 
-    response = update_stipend(new_stipend, updated_data)
+    with app.app_context(), app.test_request_context():
+        response = update_stipend(new_stipend, updated_data)
 
     # Check if the stipend was updated in the database with application_deadline as None
     assert response.application_deadline is None
 
-def test_update_stipend_with_database_error(test_data, db_session, monkeypatch):
+def test_update_stipend_with_database_error(test_data, db_session, monkeypatch, app):
     stipend = Stipend(**test_data)
-    new_stipend = create_stipend(stipend)
+    
+    with app.app_context(), app.test_request_context():
+        new_stipend = create_stipend(stipend)
 
     # Check if the stipend was created successfully
     assert new_stipend is not None
@@ -118,49 +121,54 @@ def test_update_stipend_with_database_error(test_data, db_session, monkeypatch):
         'homepage_url': "http://example.com/updated-stipend",
         'application_procedure': "Apply online at example.com/updated",
         'eligibility_criteria': "Open to all updated students",
-        'application_deadline': datetime.strptime('2024-12-31 23:59:59', '%Y-%m-%d %H:%M:%S'),
+        'application_deadline': '2024-12-31 23:59:59',
         'open_for_applications': True
     }
 
-    # Mock a database error during commit
     def mock_commit(*args, **kwargs):
         raise Exception("Database error")
         
     monkeypatch.setattr(db_session, 'commit', mock_commit)
-    
-    response = update_stipend(new_stipend, updated_data)
 
-    # Check if the stipend was not updated in the database
+    with app.app_context(), app.test_request_context():
+        response = update_stipend(new_stipend, updated_data)
+
+    assert response is not None
     assert response.summary != "Updated summary."
 
-def test_delete_stipend(test_data, db_session):
+def test_delete_stipend(test_data, db_session, app):
     stipend = Stipend(**test_data)
-    new_stipend = create_stipend(stipend)
+    
+    with app.app_context(), app.test_request_context():
+        new_stipend = create_stipend(stipend)
 
     # Check if the stipend was created successfully
     assert new_stipend is not None
 
-    response = delete_stipend(new_stipend.id)
+    with app.app_context(), app.test_request_context():
+        delete_stipend(new_stipend.id)
+        db_session.commit()
 
-    # Check if the stipend was deleted from the database
-    stipend = db_session.get(Stipend, new_stipend.id)
-    assert stipend is None
+    stipend_from_db = Stipend.query.get(new_stipend.id)
+    assert stipend_from_db is None
 
-def test_delete_stipend_with_database_error(test_data, db_session, monkeypatch):
+def test_delete_stipend_with_database_error(test_data, db_session, monkeypatch, app):
     stipend = Stipend(**test_data)
-    new_stipend = create_stipend(stipend)
+    
+    with app.app_context(), app.test_request_context():
+        new_stipend = create_stipend(stipend)
 
     # Check if the stipend was created successfully
     assert new_stipend is not None
 
-    # Mock a database error during commit
     def mock_commit(*args, **kwargs):
         raise Exception("Database error")
         
     monkeypatch.setattr(db_session, 'commit', mock_commit)
-    
-    response = delete_stipend(new_stipend.id)
 
-    # Check if the stipend was not deleted from the database
-    stipend = db_session.get(Stipend, new_stipend.id)
-    assert stipend is not None
+    with app.app_context(), app.test_request_context():
+        delete_stipend(new_stipend.id)
+        db_session.commit()
+
+    stipend_from_db = Stipend.query.get(new_stipend.id)
+    assert stipend_from_db is not None
