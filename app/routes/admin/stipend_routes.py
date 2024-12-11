@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from app.forms.admin_forms import StipendForm
-from app.services.stipend_service import get_stipend_by_id, delete_stipend, get_all_stipends, create_stipend, update_stipend
+from app.services.stipend_service import get_stipend_by_id, delete_stipend, get_all_stipends, create_stipend, update_stipend, stipend_service  # Added stipend_service import
 from app.models.stipend import Stipend
 from app.extensions import db  # Import db
 import logging  # Import logging
