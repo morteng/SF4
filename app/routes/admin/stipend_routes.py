@@ -11,7 +11,7 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
-    form = StipendForm(original_name=None)  # Ensure original_name is set to None for new stipends
+    form = StipendForm()
     if form.validate_on_submit():
         valid_fields = {key: value for key, value in form.data.items() if hasattr(Stipend, key)}
         stipend = Stipend(**valid_fields)
@@ -30,12 +30,12 @@ def create():
             db.session.rollback()  # Explicitly rollback session on failure
             logging.error(f"Failed to create stipend: {e}")
     
-    print(f"Form errors: {form.errors}")
     if request.headers.get('HX-Request'):
-        # Return the partial form wrapped in the target container
-        return render_template('admin/stipends/_stipend_list.html', form=form), 200
-
-    return render_template('admin/stipends/form.html', form=form)
+        # Render the form template with errors for HTMX requests
+        return render_template('admin/stipends/form.html', form=form), 400
+    
+    # Render the full page for non-HTMX requests
+    return render_template('admin/stipends/create.html', form=form)
 
 
 @admin_stipend_bp.route('/<int:id>/update', methods=['GET', 'POST'])
