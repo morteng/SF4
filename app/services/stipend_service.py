@@ -14,9 +14,8 @@ def update_stipend(stipend, data):
                     try:
                         value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
                     except ValueError:
-                        raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
-                else:
-                    raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
+                        logging.error(f"Skipping invalid date format for '{key}': {value}")
+                        continue  # Skip this field, but allow the rest of the update
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
                 logging.info(f"Setting {key} to {value}")  # Add this line for logging

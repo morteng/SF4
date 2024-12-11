@@ -58,3 +58,25 @@ def test_delete_stipend(logged_in_admin, test_stipend, db_session):
 
         stipend = db_session.get(Stipend, test_stipend.id)
         assert stipend is None
+
+def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_stipend, stipend_data, db_session):
+    with logged_in_admin.application.app_context():
+        updated_data = {
+            'name': test_stipend.name,
+            'summary': "Updated summary.",
+            'description': "Updated description.",
+            'homepage_url': "http://example.com/updated-stipend",
+            'application_procedure': "Apply online at example.com/updated",
+            'eligibility_criteria': "Open to all updated students",
+            'application_deadline': '2023-13-32 99:99:99',
+            'open_for_applications': True
+        }
+
+        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
+        
+        assert response.status_code in (200, 302)
+
+        db_session.expire_all()
+        stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
+        assert stipend.application_deadline == test_stipend.application_deadline
+        assert b"Invalid date format" not in response.data  # Ensure no lingering error messages
