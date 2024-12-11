@@ -1,21 +1,13 @@
-from wtforms import Field
-from wtforms.widgets import TextInput
+from wtforms.fields import DateTimeField
+from wtforms.validators import ValidationError
 from datetime import datetime
 
-class NullableDateTimeField(Field):
-    widget = TextInput()
-
+class CustomDateTimeField(DateTimeField):
     def process_formdata(self, valuelist):
         if valuelist:
-            date_str = valuelist[0]
+            date_str = ' '.join(valuelist)
             try:
-                self.data = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+                self.data = datetime.strptime(date_str, self.format)
             except ValueError:
                 self.data = None
-        else:
-            self.data = None
-
-    def _value(self):
-        if self.data is not None:
-            return self.data.strftime('%Y-%m-%d %H:%M:%S')
-        return ''
+                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
