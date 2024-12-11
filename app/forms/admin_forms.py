@@ -2,6 +2,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Length, ValidationError
 from app.models.stipend import Stipend
+from app.models.tag import Tag  # Import the Tag model
+from app.models.user import User  # Import the User model
+from app.models.bot import Bot  # Import the Bot model
+from app.models.organization import Organization  # Import the Organization model
 from .fields import NullableDateTimeField  # Import the custom field
 
 class StipendForm(FlaskForm):
