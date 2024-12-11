@@ -59,7 +59,8 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
             
             return
         
-        stipend = Stipend(**form.data)
+        stipend_data = {k: v for k, v in form.data.items() if k != 'submit'}
+        stipend = Stipend(**stipend_data)
         new_stipend = create_stipend(stipend, session=db_session)
 
     # Assert that the stipend was not created due to validation errors
