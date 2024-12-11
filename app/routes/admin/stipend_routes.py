@@ -15,15 +15,20 @@ def create():
     if form.validate_on_submit():
         valid_fields = {key: value for key, value in form.data.items() if hasattr(Stipend, key)}
         stipend = Stipend(**valid_fields)
-        new_stipend = create_stipend(stipend)
-        flash('Stipend created successfully.', 'success')
+        try:
+            new_stipend = create_stipend(stipend)
+            db.session.commit()
+            flash('Stipend created successfully.', 'success')
 
-        if request.headers.get('HX-Request'):
-            # Render only the stipend list or a fragment for HTMX
-            stipends = get_all_stipends()
-            return render_template('admin/stipends/_stipend_list.html', stipends=stipends, form=form), 200
-        
-        return redirect(url_for('admin.stipend.index'))
+            if request.headers.get('HX-Request'):
+                # Render only the stipend list or a fragment for HTMX
+                stipends = get_all_stipends()
+                return render_template('admin/stipends/_stipend_list.html', stipends=stipends, form=form), 200
+            
+            return redirect(url_for('admin.stipend.index'))
+        except Exception as e:
+            db.session.rollback()  # Explicitly rollback session on failure
+            logging.error(f"Failed to create stipend: {e}")
     
     print(f"Form errors: {form.errors}")
     if request.headers.get('HX-Request'):
@@ -64,10 +69,15 @@ def delete(id):
         flash('Stipend not found!', 'danger')
         return redirect(url_for('admin.stipend.index'))
     
-    delete_stipend(stipend.id)
-    
-    flash('Stipend deleted successfully!', 'success')
-    return redirect(url_for('admin.stipend.index'))
+    try:
+        delete_stipend(stipend.id)
+        db.session.commit()
+        
+        flash('Stipend deleted successfully!', 'success')
+        return redirect(url_for('admin.stipend.index'))
+    except Exception as e:
+        db.session.rollback()  # Explicitly rollback session on failure
+        logging.error(f"Failed to delete stipend: {e}")
 
 @admin_stipend_bp.route('/', methods=['GET'])
 @login_required

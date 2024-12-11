@@ -17,13 +17,9 @@ def test_data():
     }
 
 def test_create_stipend(test_data, db_session):
-    from app import create_app  # Import the create_app function
-
     stipend = Stipend(**test_data)
 
-    app = create_app('testing')  # Create a testing app instance
-    with app.app_context():  # Ensure we are in an application context
-        new_stipend = create_stipend(stipend)
+    new_stipend = create_stipend(stipend)
     
     # Check if the stipend was created successfully
     assert new_stipend is not None
@@ -47,14 +43,9 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
     assert new_stipend.application_deadline is None
 
 def test_update_stipend(test_data, db_session):
-    from app import create_app  # Import the create_app function
-
     stipend = Stipend(**test_data)
+    new_stipend = create_stipend(stipend)
 
-    app = create_app('testing')  # Create a testing app instance
-    with app.app_context():  # Ensure we are in an application context
-        new_stipend = create_stipend(stipend)
-    
     # Check if the stipend was created successfully
     assert new_stipend is not None
 
@@ -69,8 +60,7 @@ def test_update_stipend(test_data, db_session):
         'open_for_applications': True
     }
 
-    with app.app_context():  # Ensure we are in an application context
-        response = update_stipend(new_stipend, updated_data)
+    response = update_stipend(new_stipend, updated_data)
 
     # Check if the stipend was updated successfully
     assert response is not None
@@ -84,14 +74,9 @@ def test_update_stipend(test_data, db_session):
     assert response.open_for_applications is True
 
 def test_update_stipend_with_invalid_application_deadline_format(test_data, db_session):
-    from app import create_app  # Import the create_app function
-
     stipend = Stipend(**test_data)
+    new_stipend = create_stipend(stipend)
 
-    app = create_app('testing')  # Create a testing app instance
-    with app.app_context():  # Ensure we are in an application context
-        new_stipend = create_stipend(stipend)
-    
     # Check if the stipend was created successfully
     assert new_stipend is not None
 
@@ -106,21 +91,15 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
         'open_for_applications': True
     }
 
-    with app.app_context():  # Ensure we are in an application context
-        response = update_stipend(new_stipend, updated_data)
+    response = update_stipend(new_stipend, updated_data)
 
     # Check if the stipend was updated in the database with application_deadline as None
     assert response.application_deadline is None
 
 def test_update_stipend_with_database_error(test_data, db_session, monkeypatch):
-    from app import create_app  # Import the create_app function
-
     stipend = Stipend(**test_data)
+    new_stipend = create_stipend(stipend)
 
-    app = create_app('testing')  # Create a testing app instance
-    with app.app_context():  # Ensure we are in an application context
-        new_stipend = create_stipend(stipend)
-    
     # Check if the stipend was created successfully
     assert new_stipend is not None
 
@@ -141,40 +120,28 @@ def test_update_stipend_with_database_error(test_data, db_session, monkeypatch):
         
     monkeypatch.setattr(db_session, 'commit', mock_commit)
     
-    with app.app_context():  # Ensure we are in an application context
-        response = update_stipend(new_stipend, updated_data)
+    response = update_stipend(new_stipend, updated_data)
 
     # Check if the stipend was not updated in the database
     assert response.summary != "Updated summary."
 
 def test_delete_stipend(test_data, db_session):
-    from app import create_app  # Import the create_app function
-
     stipend = Stipend(**test_data)
+    new_stipend = create_stipend(stipend)
 
-    app = create_app('testing')  # Create a testing app instance
-    with app.app_context():  # Ensure we are in an application context
-        new_stipend = create_stipend(stipend)
-    
     # Check if the stipend was created successfully
     assert new_stipend is not None
 
-    with app.app_context():  # Ensure we are in an application context
-        response = delete_stipend(new_stipend.id)
+    response = delete_stipend(new_stipend.id)
 
     # Check if the stipend was deleted from the database
     stipend = db_session.get(Stipend, new_stipend.id)
     assert stipend is None
 
 def test_delete_stipend_with_database_error(test_data, db_session, monkeypatch):
-    from app import create_app  # Import the create_app function
-
     stipend = Stipend(**test_data)
+    new_stipend = create_stipend(stipend)
 
-    app = create_app('testing')  # Create a testing app instance
-    with app.app_context():  # Ensure we are in an application context
-        new_stipend = create_stipend(stipend)
-    
     # Check if the stipend was created successfully
     assert new_stipend is not None
 
@@ -184,8 +151,7 @@ def test_delete_stipend_with_database_error(test_data, db_session, monkeypatch):
         
     monkeypatch.setattr(db_session, 'commit', mock_commit)
     
-    with app.app_context():  # Ensure we are in an application context
-        response = delete_stipend(new_stipend.id)
+    response = delete_stipend(new_stipend.id)
 
     # Check if the stipend was not deleted from the database
     stipend = db_session.get(Stipend, new_stipend.id)

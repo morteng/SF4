@@ -3,10 +3,6 @@ from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitFi
 from wtforms.validators import DataRequired, Length, ValidationError
 from app.models.stipend import Stipend
 from .fields import NullableDateTimeField  # Import the custom field
-from app.models.tag import Tag
-from app.models.user import User
-from app.models.bot import Bot
-from app.models.organization import Organization
 
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
