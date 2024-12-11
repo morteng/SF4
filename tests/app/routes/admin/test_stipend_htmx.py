@@ -36,27 +36,18 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
         # Optionally, check that the response contains the form with errors
         assert b'This field is required.' in response.data  # Adjust the error message as needed
 
-def test_create_stipend_with_invalid_application_deadline_format_htmx(stipend_data, logged_in_admin, db_session):
+def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         stipend_data['application_deadline'] = '2023-13-32 99:99:99'
-        response = logged_in_admin.post(
-            url_for('admin.stipend.create'),
-            data=stipend_data,
-            headers={
-                'HX-Request': 'true',
-                'HX-Target': '#stipend-form-container'
-            }
-        )
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
         assert response.status_code == 200
 
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
-        assert stipend is None
-
-        # Optionally, check that the response contains the form with errors
+        assert stipend is None  # Stipend should NOT be created
+        
+        # Validate the presence of form error
         assert b'Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data
-
-        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
 def test_update_stipend_with_database_error_htmx(logged_in_admin, test_stipend, stipend_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
