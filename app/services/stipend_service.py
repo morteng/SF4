@@ -22,7 +22,8 @@ def update_stipend(stipend, data):
         flash('Stipend updated successfully.', 'success')
     except Exception as e:
         db.session.rollback()
-        db.session.refresh(stipend)  # Ensure the object state is reset
+        if stipend not in db.session:
+            db.session.add(stipend)  # Re-attach the stipend object to the session
         logging.error(f"Failed to update stipend: {e}")
         flash('Failed to update stipend. Please try again.', 'danger')
 

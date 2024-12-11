@@ -182,7 +182,7 @@ def test_update_stipend(logged_in_admin, test_stipend, stipend_data, db_session)
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database
-        db_session.rollback()  # Explicit rollback
+        db_session.expire_all()  # Expire all objects to ensure they are reloaded properly
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
         assert stipend.name == updated_data['name']
         assert stipend.summary == "Updated summary."
@@ -215,7 +215,7 @@ def test_update_stipend_with_unchecked_open_for_applications(logged_in_admin, te
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with open_for_applications as False
-        db_session.rollback()  # Explicit rollback
+        db_session.expire_all()  # Expire all objects to ensure they are reloaded properly
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
         assert stipend is not None
         assert stipend.open_for_applications is False
@@ -238,7 +238,7 @@ def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_st
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with application_deadline as None
-        db_session.rollback()  # Explicit rollback
+        db_session.expire_all()  # Expire all objects to ensure they are reloaded properly
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
         assert stipend.application_deadline is None
 
@@ -260,7 +260,7 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
         assert response.status_code in (200, 302)
 
         # Check if the stipend was updated in the database with application_deadline as None
-        db_session.rollback()  # Explicit rollback
+        db_session.expire_all()  # Expire all objects to ensure they are reloaded properly
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
         assert stipend.application_deadline is None
 
@@ -288,7 +288,7 @@ def test_update_stipend_with_database_error(logged_in_admin, test_stipend, stipe
         assert response.status_code in (200, 302)
 
         # Check if the stipend still exists in the database
-        db_session.rollback()  # Explicit rollback
+        db_session.expire_all()  # Expire all objects to ensure they are reloaded properly
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
         assert stipend is not None
 
@@ -433,7 +433,7 @@ def test_update_stipend_with_invalid_application_deadline_format_htmx(logged_in_
         assert response.status_code == 200
 
         # Check if the stipend was updated in the database with application_deadline as None
-        db_session.rollback()  # Explicit rollback
+        db_session.expire_all()  # Expire all objects to ensure they are reloaded properly
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
         assert stipend.application_deadline is None
 
@@ -469,9 +469,12 @@ def test_update_stipend_with_database_error_htmx(logged_in_admin, test_stipend, 
         
         assert response.status_code == 200
 
-        # Check if the stipend was not updated in the database
-        db_session.rollback()  # Explicit rollback
+        # Check if the stipend still exists in the database
+        db_session.expire_all()  # Expire all objects to ensure they are reloaded properly
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
+        assert stipend is not None
+
+        # Check that the summary has not been updated
         assert stipend.summary != "Updated summary."
 
         assert b'id="stipend-form-container"' in response.data  # Validate target container exists
