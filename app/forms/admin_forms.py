@@ -1,20 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, DateTimeField, SubmitField
 from wtforms.validators import DataRequired, Length, Optional, ValidationError
-from datetime import datetime
-from app.models.stipend import Stipend
-from app.models.tag import Tag 
-from app.models.user import User  
-from app.models.bot import Bot  
-from app.models.organization import Organization  
-from .fields import NullableDateTimeField  
+from datetime import datetime  # Ensure this is imported
 
 def validate_application_deadline(form, field):
     if field.data:
-        try:
-            datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-        except ValueError:
-            raise ValidationError(f"Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
+        if not isinstance(field.data, datetime):
+            raise ValidationError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
 
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
@@ -23,7 +15,7 @@ class StipendForm(FlaskForm):
     homepage_url = URLField('Homepage URL', validators=[Optional()])
     application_procedure = TextAreaField('Application Procedure', validators=[Optional()])
     eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[Optional()])
-    application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S', validators=[Optional(), validate_application_deadline])
+    application_deadline = DateTimeField('Application Deadline', format='%Y-%m-%d %H:%M:%S', validators=[Optional()])
     open_for_applications = BooleanField('Open for Applications')
 
 class TagForm(FlaskForm):
