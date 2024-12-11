@@ -17,7 +17,7 @@ def test_create_organization(logged_in_admin, db_session, organization_data):
         assert new_organization is not None
         assert new_organization.name == organization_data['name']
         assert new_organization.description == organization_data['description']
-        assert new_organization.homepage_url == organization_data['homepage_url']
+        assert new_organization.homepage_url == organization_data['homepage_url']  # Ensure this line checks the correct field
 
 def test_create_organization_with_invalid_form_data(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
@@ -57,7 +57,7 @@ def test_update_organization(logged_in_admin, test_organization, db_session):
         organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
         assert organization.name == updated_data['name']
         assert organization.description == updated_data['description']
-        assert organization.homepage_url == updated_data['homepage_url']
+        assert organization.homepage_url == updated_data['homepage_url']  # Ensure this line checks the correct field
 
 def test_update_organization_with_invalid_form_data(logged_in_admin, test_organization, db_session):
     with logged_in_admin.application.app_context():
