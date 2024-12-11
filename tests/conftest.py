@@ -4,6 +4,8 @@ from flask import url_for
 from app import create_app
 from app.extensions import db, login_manager  # Correct imports
 from app.models.user import User
+from datetime import datetime
+
 
 @pytest.fixture(scope='function')
 def app():
@@ -101,3 +103,23 @@ def stipend_data():
         'application_deadline': '2023-12-31 23:59:59',
         'open_for_applications': True
     }
+
+@pytest.fixture
+def test_stipend(db_session):
+    """Provide a test stipend for use in tests."""
+    from app.models.stipend import Stipend
+    stipend = Stipend(
+        name='Test Stipend',
+        summary='This is a test stipend.',
+        description='Detailed description of the test stipend.',
+        homepage_url='http://example.com/stipend',
+        application_procedure='Apply online at example.com',
+        eligibility_criteria='Open to all students',
+        application_deadline=datetime(2023, 12, 31, 23, 59, 59),
+        open_for_applications=True
+    )
+    db_session.add(stipend)
+    db_session.commit()
+    yield stipend
+    db_session.delete(stipend)
+    db_session.commit()
