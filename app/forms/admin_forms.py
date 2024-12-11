@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Length, Optional
+from wtforms.validators import DataRequired, Length, Optional, ValidationError  # Import ValidationError
 from app.forms.fields import CustomDateTimeField
 from datetime import datetime  # Ensure this is imported
 from app.models.tag import Tag  # Import the Tag model
