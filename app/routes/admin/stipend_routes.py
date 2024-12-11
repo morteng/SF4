@@ -21,7 +21,17 @@ def create():
     
     if form.validate_on_submit():
         try:
-            create_stipend(form.data)
+            stipend = Stipend(
+                name=form.name.data,
+                summary=form.summary.data,
+                description=form.description.data,
+                homepage_url=form.homepage_url.data,
+                application_procedure=form.application_procedure.data,
+                eligibility_criteria=form.eligibility_criteria.data,
+                application_deadline=form.application_deadline.data,
+                open_for_applications=form.open_for_applications.data
+            )
+            create_stipend(stipend)
             db.session.commit()
             flash('Stipend created successfully.', 'success')
             
