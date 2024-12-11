@@ -2,6 +2,9 @@ import pytest
 from app.models.stipend import Stipend
 from app.services.stipend_service import create_stipend, update_stipend, delete_stipend
 from datetime import datetime
+from flask import current_app as app
+
+
 
 @pytest.fixture
 def test_data():
@@ -19,7 +22,12 @@ def test_data():
 def test_create_stipend(test_data, db_session):
     stipend = Stipend(**test_data)
 
-    new_stipend = create_stipend(stipend)
+    with app.app_context():  # Correct way to bind the app context
+        new_stipend = create_stipend(stipend)
+
+    # Check if the stipend was created successfully
+    assert new_stipend is not None
+
     
     # Check if the stipend was created successfully
     assert new_stipend is not None
