@@ -26,14 +26,14 @@ def update_stipend(stipend, data):
             db.session.add(stipend)
         logging.error(f"Failed to update stipend: {e}")
 
-def create_stipend(stipend):
+def create_stipend(stipend, session=db.session):
     try:
-        db.session.add(stipend)
-        db.session.commit()
+        session.add(stipend)
+        session.commit()
         flash('Stipend created successfully.', 'success')
         return stipend
     except Exception as e:
-        db.session.rollback()
+        session.rollback()
         logging.error(f"Failed to create stipend: {e}")
         logging.error('Failed to create stipend. Please try again.')
         return None
