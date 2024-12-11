@@ -10,7 +10,7 @@ def test_create_organization(logged_in_admin, db_session, organization_data):
         response = logged_in_admin.post(url_for('admin.organization.create'), data=organization_data)
         
         assert response.status_code == 302
-        assert url_for('admin.organization.index') in response.headers['Location']
+        assert url_for('admin.organization.index', _external=False) == response.headers['Location']
 
         # Check if the organization was created successfully
         new_organization = db_session.query(Organization).filter_by(name=organization_data['name']).first()
@@ -51,7 +51,7 @@ def test_update_organization(logged_in_admin, test_organization, db_session):
         response = logged_in_admin.post(url_for('admin.organization.update', id=test_organization.id), data=updated_data)
         
         assert response.status_code == 302
-        assert url_for('admin.organization.index') in response.headers['Location']
+        assert url_for('admin.organization.index', _external=False) == response.headers['Location']
 
         db_session.expire_all()
         organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
@@ -88,7 +88,7 @@ def test_delete_organization(logged_in_admin, test_organization, db_session):
         response = logged_in_admin.post(url_for('admin.organization.delete', id=test_organization.id))
         
         assert response.status_code == 302
-        assert url_for('admin.organization.index') in response.headers['Location']
+        assert url_for('admin.organization.index', _external=False) == response.headers['Location']
 
         # Check if the organization was deleted successfully
         deleted_organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
@@ -99,7 +99,7 @@ def test_delete_nonexistent_organization(logged_in_admin, db_session):
         response = logged_in_admin.post(url_for('admin.organization.delete', id=9999))
         
         assert response.status_code == 302
-        assert url_for('admin.organization.index') in response.headers['Location']
+        assert url_for('admin.organization.index', _external=False) == response.headers['Location']
 
         # Check that no organization was deleted
         organizations_count = db_session.query(Organization).count()
@@ -144,7 +144,7 @@ def test_update_organization_with_duplicate_name(logged_in_admin, test_organizat
         response = logged_in_admin.post(url_for('admin.organization.update', id=test_organization.id), data=duplicate_data)
         
         assert response.status_code == 302
-        assert url_for('admin.organization.index') in response.headers['Location']
+        assert url_for('admin.organization.index', _external=False) == response.headers['Location']
 
         db_session.expire_all()
         organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
