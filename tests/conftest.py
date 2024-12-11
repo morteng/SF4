@@ -124,7 +124,7 @@ def test_stipend(db_session):
     db_session.delete(stipend)
     db_session.commit()
 
-@pytest.fixture
+@pytest.fixture(scope='function')
 def organization_data():
     """Provide test data for organizations."""
     return {
