@@ -25,7 +25,6 @@ def update_stipend(stipend, data):
         if db.session.is_active and db.inspect(stipend).detached:
             db.session.add(stipend)
         logging.error(f"Failed to update stipend: {e}")
-        flash('Failed to update stipend. Please try again.', 'danger')
 
 def create_stipend(stipend):
     try:
@@ -36,7 +35,7 @@ def create_stipend(stipend):
     except Exception as e:
         db.session.rollback()
         logging.error(f"Failed to create stipend: {e}")
-        flash('Failed to create stipend. Please try again.', 'danger')
+        logging.error('Failed to create stipend. Please try again.')
         return None
 
 def delete_stipend(stipend_id):
@@ -46,13 +45,12 @@ def delete_stipend(stipend_id):
             db.session.commit()  # Commit first to ensure no errors before deleting
             db.session.delete(stipend)
             db.session.commit()
-            flash('Stipend deleted successfully.', 'success')
+            logging.info('Stipend deleted successfully.')
         else:
-            flash('Stipend not found!', 'danger')
+            logging.error('Stipend not found!')
     except Exception as e:
         db.session.rollback()
         logging.error(f"Failed to delete stipend: {e}")
-        flash('Failed to delete stipend. Please try again.', 'danger')
 
 def get_stipend_by_id(id):
     return db.session.get(Stipend, id)
