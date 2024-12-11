@@ -123,3 +123,27 @@ def test_stipend(db_session):
     yield stipend
     db_session.delete(stipend)
     db_session.commit()
+
+@pytest.fixture
+def organization_data():
+    """Provide test data for organizations."""
+    return {
+        'name': 'Test Organization',
+        'description': 'This is a test organization.',
+        'homepage_url': 'http://example.com/organization'
+    }
+
+@pytest.fixture(scope='function')
+def test_organization(db_session):
+    """Provide a test organization for use in tests."""
+    from app.models.organization import Organization
+    organization = Organization(
+        name='Test Organization',
+        description='This is a test organization.',
+        homepage_url='http://example.com/organization'
+    )
+    db_session.add(organization)
+    db_session.commit()
+    yield organization
+    db_session.delete(organization)
+    db_session.commit()
