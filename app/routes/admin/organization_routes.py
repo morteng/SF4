@@ -13,10 +13,10 @@ def create():
         if form.validate_on_submit():
             organization_data = {k: v for k, v in form.data.items() if k != 'submit'}
             new_organization = create_organization(organization_data)
-            flash('Organization created successfully.', 'success')
+            flash('Organization created!', 'success')
             return redirect(url_for('admin.organization.index'))
         else:
-            flash('Failed to create organization.', 'danger')
+            flash('Oops! Failed to create organization.', 'danger')
     else:
         form = OrganizationForm()
     return render_template('admin/organization/create.html', form=form)
@@ -27,7 +27,7 @@ def delete(id):
     organization = get_organization_by_id(id)
     if organization:
         delete_organization(organization)
-        flash(f'Organization {organization.name} deleted.', 'success')
+        flash(f'{organization.name} deleted!', 'success')
     else:
         flash('Organization not found.', 'danger')
     return redirect(url_for('admin.organization.index'))
@@ -50,7 +50,7 @@ def update(id):
     if request.method == 'POST' and form.validate_on_submit():
         update_data = {k: v for k, v in form.data.items() if k != 'submit'}
         update_organization(organization, update_data)
-        flash('Organization updated successfully.', 'success')
+        flash('Organization updated!', 'success')
         return redirect(url_for('admin.organization.index'))
     
     return render_template('admin/organization/update.html', form=form, organization=organization)
