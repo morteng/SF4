@@ -1,4 +1,5 @@
 import logging
+from flask import flash  # Import the flash function
 from app.extensions import db
 from app.models import Stipend
 from datetime import datetime
