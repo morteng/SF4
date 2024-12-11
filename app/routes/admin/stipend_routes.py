@@ -78,6 +78,9 @@ def delete(id):
     except Exception as e:
         db.session.rollback()  # Explicitly rollback session on failure
         logging.error(f"Failed to delete stipend: {e}")
+        flash('An error occurred while deleting the stipend.', 'danger')
+        return redirect(url_for('admin.stipend.index'))
+
 
 @admin_stipend_bp.route('/', methods=['GET'])
 @login_required
