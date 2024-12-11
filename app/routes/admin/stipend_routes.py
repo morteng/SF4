@@ -21,15 +21,14 @@ def create():
         if request.headers.get('HX-Request'):
             # Render only the stipend list or a fragment for HTMX
             stipends = get_all_stipends()
-            return render_template('admin/stipends/_stipend_list.html', stipends=stipends), 200
+            return render_template('admin/stipends/_stipend_list.html', stipends=stipends, form=form), 200
         
         return redirect(url_for('admin.stipend.index'))
     
     print(f"Form errors: {form.errors}")
     if request.headers.get('HX-Request'):
         # Return the partial form wrapped in the target container
-        return render_template('admin/stipends/_form.html', form=form), 200
-
+        return render_template('admin/stipends/_stipend_list.html', form=form), 200
 
     return render_template('admin/stipends/form.html', form=form)
 

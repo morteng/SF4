@@ -1,7 +1,11 @@
 <div id="stipend-form-container">
-    <div id="stipend-list-container">
-        {% for stipend in stipends %}
-            <div>{{ stipend.name }}</div>
-        {% endfor %}
-    </div>
+    {% if form %}
+        {% include 'admin/stipends/_form.html' %}
+    {% else %}
+        <div id="stipend-list-container">
+            {% for stipend in stipends %}
+                <div>{{ stipend.name }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
