@@ -45,8 +45,10 @@ def test_create_stipend_with_invalid_application_deadline_format_htmx(stipend_da
         assert response.status_code == 200
 
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
-        assert stipend is not None
-        assert stipend.application_deadline is None
+        assert stipend is None
+
+        # Optionally, check that the response contains the form with errors
+        assert b'Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data
 
         assert b'id="stipend-form-container"' in response.data  # Validate target container exists
 
