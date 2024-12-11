@@ -1,16 +1,16 @@
-# tests/conftest.py
 import pytest
 from flask import url_for
 from app import create_app
-from app.extensions import db, login_manager  # Correct imports
+from app.extensions import db, login_manager
 from app.models.user import User
+from app.models.organization import Organization
 from datetime import datetime
 
 
 @pytest.fixture(scope='function')
 def app():
     """Create and configure a new app instance for each test function."""
-    app = create_app('testing')  # 'create_app' already sets testing configs
+    app = create_app('testing')
 
     with app.app_context():
         # Prevent SQLAlchemy from expiring objects after commit
@@ -124,7 +124,7 @@ def test_stipend(db_session):
     db_session.delete(stipend)
     db_session.commit()
 
-@pytest.fixture(scope='function')
+@pytest.fixture
 def organization_data():
     """Provide test data for organizations."""
     return {
@@ -133,10 +133,9 @@ def organization_data():
         'homepage_url': 'http://example.com/organization'
     }
 
-@pytest.fixture(scope='function')
+@pytest.fixture
 def test_organization(db_session):
     """Provide a test organization for use in tests."""
-    from app.models.organization import Organization
     organization = Organization(
         name='Test Organization',
         description='This is a test organization.',
