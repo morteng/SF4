@@ -38,10 +38,14 @@ def update(id):
     
     if form.validate_on_submit():
         form.populate_obj(stipend)  # Use this to populate the stipend object
-        update_stipend(stipend, stipend.__dict__)
-        
-        flash('Stipend updated successfully!', 'success')
-        return redirect(url_for('admin.stipend.index'))
+        try:
+            update_stipend(stipend, stipend.__dict__)
+            
+            flash('Stipend updated successfully!', 'success')
+            return redirect(url_for('admin.stipend.index'))
+        except Exception as e:
+            db.session.rollback()  # Explicitly rollback session on failure
+            logging.error(f"Failed to update stipend: {e}")
     
     return render_template('admin/stipends/form.html', form=form)
 
