@@ -79,4 +79,4 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
         db_session.expire_all()
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
         assert stipend.application_deadline == test_stipend.application_deadline
-        assert b"Invalid date format" not in response.data  # Ensure no lingering error messages
+        assert b"Invalid date format. Please use YYYY-MM-DD HH:MM:SS." in response.data  # Ensure the correct error message appears
