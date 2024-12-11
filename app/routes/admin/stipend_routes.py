@@ -26,7 +26,13 @@ def create():
         return redirect(url_for('admin.stipend.index'))
     
     print(f"Form errors: {form.errors}")
+    if request.headers.get('HX-Request'):
+        # Return the partial form wrapped in the target container
+        return render_template('admin/stipends/_form.html', form=form), 200
+
+
     return render_template('admin/stipends/form.html', form=form)
+
 
 @admin_stipend_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
