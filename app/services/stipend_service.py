@@ -17,52 +17,42 @@ def update_stipend(stipend, data):
                 setattr(stipend, key, value)
                 logging.info(f"Setting {key} to {value}")  # Add this line for logging
         
-        # Ensure 'open_for_applications' is set to False if not provided in data
-        stipend.open_for_applications = data.get('open_for_applications', False)
-
         db.session.commit()
-        return stipend
+        flash('Stipend updated successfully.', 'success')
     except Exception as e:
+        db.session.rollback()
+        db.session.refresh(stipend)  # Ensure the object state is reset
         logging.error(f"Failed to update stipend: {e}")
-        db.session.rollback()  # Ensure the session is rolled back on error
-        return None
+        flash('Failed to update stipend. Please try again.', 'danger')
 
 def create_stipend(stipend):
-    if Stipend.query.filter_by(name=stipend.name).first():
-        return None  # Duplicate name detected
     try:
-        # Validate and parse application_deadline
-        if isinstance(stipend.application_deadline, str):
-            try:
-                stipend.application_deadline = datetime.strptime(
-                    stipend.application_deadline, '%Y-%m-%d %H:%M:%S'
-                )
-            except ValueError:
-                # Invalid date format; set to None
-                stipend.application_deadline = None
         db.session.add(stipend)
         db.session.commit()
+        flash('Stipend created successfully.', 'success')
         return stipend
     except Exception as e:
-        logging.error(f"Failed to create stipend: {e}")
         db.session.rollback()
+        logging.error(f"Failed to create stipend: {e}")
+        flash('Failed to create stipend. Please try again.', 'danger')
         return None
+
+def delete_stipend(stipend_id):
+    try:
+        stipend = get_stipend_by_id(stipend_id)
+        if stipend:
+            db.session.delete(stipend)
+            db.session.commit()
+            flash('Stipend deleted successfully.', 'success')
+        else:
+            flash('Stipend not found!', 'danger')
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Failed to delete stipend: {e}")
+        flash('Failed to delete stipend. Please try again.', 'danger')
+
+def get_stipend_by_id(id):
+    return db.session.get(Stipend, id)
 
 def get_all_stipends():
     return Stipend.query.all()
-
-def get_stipend_count():
-    return Stipend.query.count()
-
-def delete_stipend(stipend_id):
-    stipend = get_stipend_by_id(stipend_id)
-    if stipend is None:
-        raise Exception("Stipend not found")
-    
-    db.session.delete(stipend)
-    db.session.commit()
-
-def get_stipend_by_id(stipend_id):
-    logging.info(f"Type of stipend_id: {type(stipend_id)}")
-    logging.info(f"Value of stipend_id: {stipend_id}")
-    return db.session.get(Stipend, stipend_id)
