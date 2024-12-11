@@ -12,6 +12,7 @@ def test_create_stipend(stipend_data, logged_in_admin, db_session):
         
         assert response.status_code in (200, 302)
 
+        stipend_data = {k: v for k, v in stipend_data.items() if k != 'submit'}
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is not None
         assert stipend.summary == 'This is a test stipend.'

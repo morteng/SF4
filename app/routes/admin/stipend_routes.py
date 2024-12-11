@@ -21,16 +21,8 @@ def create():
     
     if form.validate_on_submit():
         try:
-            stipend = Stipend(
-                name=form.name.data,
-                summary=form.summary.data,
-                description=form.description.data,
-                homepage_url=form.homepage_url.data,
-                application_procedure=form.application_procedure.data,
-                eligibility_criteria=form.eligibility_criteria.data,
-                application_deadline=form.application_deadline.data,
-                open_for_applications=form.open_for_applications.data
-            )
+            stipend_data = {k: v for k, v in form.data.items() if k != 'submit'}
+            stipend = Stipend(**stipend_data)
             result = create_stipend(stipend)
             if not result:
                 raise ValueError("Stipend creation failed due to invalid input.")
