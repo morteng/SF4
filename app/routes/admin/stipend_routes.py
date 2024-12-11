@@ -12,14 +12,13 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @login_required
 def create():
     form = StipendForm()
+    
     if form.validate_on_submit():
-        valid_fields = {key: value for key, value in form.data.items() if hasattr(Stipend, key)}
-        stipend = Stipend(**valid_fields)
         try:
-            new_stipend = create_stipend(stipend)
+            stipend_service.create_stipend(form.data)
             db.session.commit()
             flash('Stipend created successfully.', 'success')
-
+            
             if request.headers.get('HX-Request'):
                 # Render only the stipend list or a fragment for HTMX
                 stipends = get_all_stipends()
@@ -30,12 +29,13 @@ def create():
             db.session.rollback()  # Explicitly rollback session on failure
             logging.error(f"Failed to create stipend: {e}")
     
+    # Handle form validation failure
     if request.headers.get('HX-Request'):
         # Render the form template with errors for HTMX requests
-        return render_template('admin/stipends/form.html', form=form), 400
-    
-    # Render the full page for non-HTMX requests
-    return render_template('admin/stipends/create.html', form=form)
+        return render_template('admin/stipends/form.html', form=form), 200
+    else:
+        # Render the full page with form and errors for non-HTMX requests
+        return render_template('admin/stipends/create.html', form=form), 200
 
 
 @admin_stipend_bp.route('/<int:id>/update', methods=['GET', 'POST'])

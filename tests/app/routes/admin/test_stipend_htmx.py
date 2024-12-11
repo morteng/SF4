@@ -8,7 +8,17 @@ from tests.conftest import logged_in_admin, db_session, test_stipend, stipend_da
 
 def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
-        stipend_data['name'] = ''
+        stipend_data['name'] = ''  # Intentionally invalid
+        # Ensure all required fields are present
+        stipend_data.setdefault('summary', 'Test Summary')
+        stipend_data.setdefault('description', 'Test Description')
+        stipend_data.setdefault('homepage_url', 'http://example.com')
+        stipend_data.setdefault('application_procedure', 'Apply online')
+        stipend_data.setdefault('eligibility_criteria', 'Open to all')
+        stipend_data.setdefault('application_deadline', '2023-12-31 23:59:59')
+        stipend_data.setdefault('open_for_applications', True)
+        stipend_data.setdefault('submit', 'Create')  # If your form expects a submit field
+
         response = logged_in_admin.post(
             url_for('admin.stipend.create'),
             data=stipend_data,
@@ -17,18 +27,14 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
                 'HX-Target': '#stipend-form-container'
             }
         )
-        
+
         assert response.status_code == 200
 
-        form = StipendForm(data=stipend_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-            
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
 
-        assert b'id="stipend-form-container"' in response.data  # Validate target container exists
+        # Optionally, check that the response contains the form with errors
+        assert b'This field is required.' in response.data  # Adjust the error message as needed
 
 def test_create_stipend_with_invalid_application_deadline_format_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
