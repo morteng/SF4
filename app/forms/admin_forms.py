@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField
+from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, PasswordField
 from wtforms.validators import DataRequired, Length, Optional, ValidationError
 from app.models.organization import Organization
 from app.forms.fields import CustomDateTimeField
@@ -40,6 +40,7 @@ class TagForm(FlaskForm):
 class UserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(max=100)])
     email = StringField('Email', validators=[DataRequired(), Length(max=255)])
+    password = PasswordField('Password', validators=[DataRequired()])
     is_admin = BooleanField('Is Admin')
     submit = SubmitField('Create')
 
