@@ -39,9 +39,12 @@ def update(id):
     if not tag:
         flash('Tag not found.', 'danger')
         return redirect(url_for('admin.tag.index'))
-    form = TagForm(obj=tag)
+    
+    form = TagForm(obj=tag, original_name=tag.name)  # Pass the original name to the form
+    
     if form.validate_on_submit():
         update_tag(tag, form.data)
         flash('Tag updated successfully.', 'success')
         return redirect(url_for('admin.tag.index'))
+    
     return render_template('admin/tags/update.html', form=form, tag=tag)
