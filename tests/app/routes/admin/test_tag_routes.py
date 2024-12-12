@@ -73,12 +73,13 @@ def test_create_tag_route(logged_in_admin, tag_data):
     csrf_token = extract_csrf_token(create_response.data)
     response = logged_in_admin.post(url_for('admin.tag.create'), data={
         'name': tag_data['name'],
+        'category': tag_data['category'],  # Added this line
         'csrf_token': csrf_token
     }, follow_redirects=True)
 
     assert response.status_code == 200
     tags = get_all_tags()
-    assert any(tag.name == tag_data['name'] for tag in tags)
+    assert any(tag.name == tag_data['name'] and tag.category == tag_data['category'] for tag in tags)
 
 def test_index_tag_route(logged_in_admin, test_tag):
     index_response = logged_in_admin.get(url_for('admin.tag.index'))
