@@ -23,7 +23,6 @@ def test_user_form_validate(app, client):
         db.session.add(user)
         db.session.commit()
 
-
         form = UserForm(
             original_username='test_user',
             original_email='test@example.com',
@@ -35,6 +34,3 @@ def test_user_form_validate(app, client):
             }
         )
         assert form.validate() == True
-
-
-
