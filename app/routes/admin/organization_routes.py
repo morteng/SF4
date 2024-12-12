@@ -46,7 +46,7 @@ def update(id):
         flash('Organization not found.', 'danger')
         return redirect(url_for('admin.organization.index'))
     
-    form = OrganizationForm(obj=organization)
+    form = OrganizationForm(original_name=organization.name, obj=organization)
     if request.method == 'POST' and form.validate_on_submit():
         update_data = {k: v for k, v in form.data.items() if k != 'submit'}
         update_organization(organization, update_data)

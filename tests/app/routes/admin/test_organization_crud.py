@@ -74,7 +74,7 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, test_organi
         
         assert response.status_code == 200
 
-        form = OrganizationForm(data=invalid_data)
+        form = OrganizationForm(original_name=test_organization.name, data=invalid_data)
         if not form.validate():
             for field, errors in form.errors.items():
                 print(f"Field {field} errors: {errors}")
