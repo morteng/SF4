@@ -16,7 +16,7 @@ def create():
             return redirect(url_for('admin.user.index'))
         except ValueError as e:
             flash(str(e), 'danger')
-    return render_template('admin/user/create.html', form=form)
+    return render_template('admin/users/create.html', form=form)
 
 @admin_user_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
@@ -33,7 +33,7 @@ def delete(id):
 @login_required
 def index():
     users = get_all_users()
-    return render_template('admin/user/index.html', users=users)
+    return render_template('admin/users/index.html', users=users)
 
 @admin_user_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
@@ -49,4 +49,4 @@ def update(id):
         flash('User updated successfully.', 'success')
         return redirect(url_for('admin.user.index'))
     
-    return render_template('admin/user/_edit_row.html', form=form, user=user)
+    return render_template('admin/users/_edit_row.html', form=form, user=user)
