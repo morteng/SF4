@@ -2,6 +2,7 @@ import pytest
 from app.models.user import User
 from app.services.user_service import create_user, delete_user, get_user_by_id, get_all_users
 from app.forms.admin_forms import UserForm  # Import the UserForm class
+from tests.conftest import app  # Import the app fixture
 
 def test_create_user(db_session, user_data):
     user = create_user(user_data)
