@@ -2,10 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Length, Optional, ValidationError
 from app.models.organization import Organization
-from app.forms.fields import CustomDateTimeField
-from app.models.tag import Tag  
-from app.models.user import User
-from app.models.bot import Bot
 
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
@@ -80,7 +76,7 @@ class OrganizationForm(FlaskForm):
         self.original_name = original_name or None
 
     def validate_name(self, name):
-        if self.original_name and name.data != self.original_name:
+        if name.data != self.original_name:
             organization = Organization.query.filter_by(name=name.data).first()
-            if organization and organization.id != self._obj.id:
+            if organization:
                 raise ValidationError('Organization with this name already exists.')
