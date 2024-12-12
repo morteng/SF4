@@ -4,7 +4,7 @@
 
 {% block content %}
 <h1>Manage Organizations</h1>
-<a href="{{ url_for('admin_org.create') }}">Create New Organization</a>
+<a href="{{ url_for('admin.organization.create') }}">Create New Organization</a>
 
 <div style="overflow-x: auto;">
     <table id="organizations">
@@ -23,7 +23,7 @@
                 <td>
                     <button 
                         hx-confirm="Are you sure you want to delete this organization?"
-                        hx-delete="{{ url_for('admin_org.delete', id=organization.id) }}"
+                        hx-delete="{{ url_for('admin.organization.delete', id=organization.id) }}"
                         hx-target="closest tr"
                         hx-swap="outerHTML swap:0.5s">
                          Delete
