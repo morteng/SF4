@@ -43,6 +43,9 @@ def test_update_user(logged_in_admin, admin_user, db_session):
     }
 
     response = logged_in_admin.post(url_for('admin.user.update', id=admin_user.id), data=updated_data)
+    
+    print(response.data.decode())  # Debugging: Print response content
+
     assert response.status_code == 302
 
     db_session.expire_all()
