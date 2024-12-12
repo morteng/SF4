@@ -67,7 +67,7 @@ def logged_in_admin(client, admin_user):
     yield client
 
 def test_create_tag_route(logged_in_admin, tag_data):
-    create_response = logged_in_admin.get(url_for('admin.tag.create'))
+    create_response = logged_in_admin.get(url_for('admin.tag.create'))  # Updated line
     assert create_response.status_code == 200
 
     csrf_token = extract_csrf_token(create_response.data)
