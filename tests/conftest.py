@@ -148,5 +148,6 @@ def test_organization(db_session):
     db_session.add(organization)
     db_session.commit()
     yield organization
+    db_session.expire_all()  # Ensure the session is clean before deletion
     db_session.delete(organization)
     db_session.commit()

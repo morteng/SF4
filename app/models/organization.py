@@ -1,6 +1,7 @@
 from app.extensions import db
 
 class Organization(db.Model):
+    __mapper_args__ = {'confirm_deleted_rows': False}  # Suppress delete confirmation warnings
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
