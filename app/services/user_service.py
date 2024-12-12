@@ -3,7 +3,7 @@ from app.models.user import User
 from app.extensions import db
 
 def get_user_by_id(user_id):
-    return User.session.get(user_id)
+    return db.session.get(User, user_id)
 
 def delete_user(user):
     db.session.delete(user)
@@ -30,5 +30,11 @@ def create_user(form_data):
     
     return new_user
 
-def update_user(user):
+def update_user(user, form_data):
+    user.username = form_data['username']
+    user.email = form_data['email']
+    if 'password' in form_data and form_data['password']:
+        user.set_password(form_data['password'])
+    user.is_admin = form_data.get('is_admin', False)
+    
     db.session.commit()
