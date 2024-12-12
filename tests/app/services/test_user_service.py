@@ -10,6 +10,8 @@ def test_create_user(db_session, user_data):
     db_session.expire_all()
     saved_user = db_session.query(User).filter_by(email=user_data['email']).first()
     assert saved_user is not None
+    assert saved_user.username == user_data['username']
+    assert saved_user.email == user_data['email']
 
 
 def test_create_user_duplicate_email(db_session, admin_user, user_data):
@@ -26,6 +28,7 @@ def test_get_user_by_id(db_session, admin_user):
     user = get_user_by_id(admin_user.id)
     assert user is not None
     assert user.username == admin_user.username
+    assert user.email == admin_user.email
 
 
 def test_get_all_users(db_session, admin_user):

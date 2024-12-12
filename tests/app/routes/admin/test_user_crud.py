@@ -11,6 +11,7 @@ def extract_csrf_token(response_data):
 def test_create_user(logged_in_admin, db_session, user_data):
     response = logged_in_admin.get(url_for('admin.user.create'))
     csrf_token = extract_csrf_token(response.data)
+    assert csrf_token is not None  # Ensure CSRF token is present
 
     user_data_with_csrf = user_data.copy()
     user_data_with_csrf['csrf_token'] = csrf_token
@@ -28,6 +29,7 @@ def test_create_user(logged_in_admin, db_session, user_data):
 def test_update_user(logged_in_admin, admin_user, db_session):
     response = logged_in_admin.get(url_for('admin.user.update', id=admin_user.id))
     csrf_token = extract_csrf_token(response.data)
+    assert csrf_token is not None  # Ensure CSRF token is present
 
     updated_data = {
         'username': 'updated_admin',
@@ -43,6 +45,7 @@ def test_update_user(logged_in_admin, admin_user, db_session):
     user = db_session.query(User).get(admin_user.id)
     assert user.username == 'updated_admin'
     assert user.email == 'updated_admin@example.com'
+    assert user.is_admin is True
 
 
 def test_delete_user(logged_in_admin, admin_user, db_session):
