@@ -84,10 +84,13 @@ def client(app):
 
 @pytest.fixture
 def logged_in_admin(client, admin_user):
+    login_response = client.get(url_for('public.login'))  # Fetch the login page to get CSRF token
+    csrf_token = extract_csrf_token(login_response.data)
+    
     response = client.post(url_for('public.login'), data={
         'username': admin_user.username,
         'password': 'password123',
-        'csrf_token': ''  # Bypass CSRF for testing purposes
+        'csrf_token': csrf_token  # Use the extracted CSRF token
     }, follow_redirects=True)
     assert response.status_code == 200, "Admin login failed."
     with client.session_transaction() as session:
@@ -188,3 +191,8 @@ def test_organization(db_session, organization_data):
     if db_session.is_active:
         db_session.rollback()  # Ensure no pending changes
     db_session.expunge_all()  # Detach all objects to clean up session state
+
+
+def extract_csrf_token(response_data):
+    csrf_match = re.search(r'name="csrf_token" type="hidden" value="(.+?)"', response_data.decode('utf-8'))
+    return csrf_match.group(1) if csrf_match else None
