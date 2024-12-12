@@ -50,13 +50,13 @@ class UserForm(FlaskForm):
         self.original_email = original_email
 
     def validate_username(self, username):
-        if self.original_username and username.data != self.original_username:
+        if not self.original_username or username.data != self.original_username:
             user = User.query.filter_by(username=username.data).first()
             if user:
                 raise ValidationError('User with this username already exists.')
 
     def validate_email(self, email):
-        if self.original_email and email.data != self.original_email:
+        if not self.original_email or email.data != self.original_email:
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('User with this email already exists.')

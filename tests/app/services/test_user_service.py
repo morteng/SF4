@@ -47,6 +47,15 @@ def test_delete_user(db_session, admin_user):
 
 def test_user_form_validate(app):
     with app.app_context():
-        form = UserForm(original_username='test_user', original_email='test@example.com')
+        form = UserForm(
+            original_username='test_user',
+            original_email='test@example.com',
+            data={
+                'username': 'test_user',  # Matches the original
+                'email': 'test@example.com',  # Matches the original
+                'password': 'secure_password',  # Required field
+                'is_admin': False
+            }
+        )
         # Add more assertions as needed to validate the form
         assert form.validate() == True  # Example assertion, adjust as necessary

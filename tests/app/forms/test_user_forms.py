@@ -35,8 +35,8 @@ def test_user_form_validate(app):
             data={
                 'username': 'test_user',  # Matches the original
                 'email': 'test@example.com',  # Matches the original
-                'password': 'new_secure_password',  # Optional new password
-                'is_admin': False
+                'password': 'new_secure_password',  # Required field
+                'is_admin': False  # Required checkbox
             }
         )
 
