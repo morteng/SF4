@@ -148,6 +148,6 @@ def test_organization(db_session):
     db_session.add(organization)
     db_session.commit()
     yield organization
-    db_session.delete(organization)
-    db_session.commit()
-    db_session.expunge(organization)  # Detach the object from the session
+    if db_session.is_active:
+        db_session.rollback()  # Ensure no pending changes
+    db_session.expunge_all()  # Detach all objects to clean up session state
