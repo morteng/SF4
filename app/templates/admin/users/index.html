@@ -4,7 +4,7 @@
 
 {% block content %}
 <h1>Manage Users</h1>
-<a href="{{ url_for('admin_user.create') }}">Create New User</a>
+<a href="{{ url_for('admin.user.create') }}">Create New User</a>
 
 <div style="overflow-x: auto;">
     <table id="users">
@@ -24,14 +24,14 @@
                 <td>{{ user.email }}</td>
                 <td>
                     <button 
-                        hx-get="{{ url_for('admin_user.update', id=user.id) }}"
+                        hx-get="{{ url_for('admin.user.update', id=user.id) }}"
                         hx-target="body"
                         hx-swap="afterbegin">
                          Edit
                     </button>
                     <button 
                         hx-confirm="Are you sure you want to delete this user?"
-                        hx-delete="{{ url_for('admin_user.delete', id=user.id) }}"
+                        hx-delete="{{ url_for('admin.user.delete', id=user.id) }}"
                         hx-target="closest tr"
                         hx-swap="outerHTML swap:0.5s">
                          Delete
