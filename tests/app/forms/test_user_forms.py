@@ -16,13 +16,25 @@ def client(app):
 
 def test_user_form_validate(app, client):
     with app.app_context():
-        # Ensure a user exists in the database for validation logic
+        db.create_all()  # Ensure all tables are created
+
         user = User(username='test_user', email='test@example.com')
+        user.set_password('secure_password')  # Ensure the password is hashed
         db.session.add(user)
         db.session.commit()
 
-        form = UserForm(original_username='test_user', original_email='test@example.com', data={
-            'username': 'test_user',
-            'email': 'test@example.com'
-        })
-        assert form.validate() == True  # Assuming you want to check if the form validates correctly
+
+        form = UserForm(
+            original_username='test_user',
+            original_email='test@example.com',
+            data={
+                'username': 'test_user',
+                'email': 'test@example.com',
+                'password': 'secure_password',  # Password is required
+                'is_admin': False  # Optional field
+            }
+        )
+        assert form.validate() == True
+
+
+
