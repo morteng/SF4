@@ -15,9 +15,10 @@ def delete_tag(tag):
         db.session.delete(tag)
         db.session.commit()
     except SQLAlchemyError as e:
-        # Log the error and possibly handle it
+        # Log the error and re-raise it
         print(str(e))
         db.session.rollback()
+        raise  # Re-raise the exception
 
 def create_tag(data):
     new_tag = Tag(**data)
