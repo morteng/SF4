@@ -4,11 +4,11 @@
     {% if current_user.is_authenticated %}
         {% if current_user.is_admin %}
             <li><a href="{{ url_for('admin.dashboard.dashboard') }}">Admin Dashboard</a></li>
-            <li><a href="{{ url_for('admin_bot.index') }}">Bots</a></li>
-            <li><a href="{{ url_for('admin_org.index') }}">Organizations</a></li>
-            <li><a href="{{ url_for('admin_stipend.index') }}">Stipends</a></li>
-            <li><a href="{{ url_for('admin_tag.index') }}">Tags</a></li>
-            <li><a href="{{ url_for('admin_user.index') }}">Users</a></li>
+            <li><a href="{{ url_for('admin.bot.index') }}">Bots</a></li>
+            <li><a href="{{ url_for('admin.organization.index') }}">Organizations</a></li>
+            <li><a href="{{ url_for('admin.stipend.index') }}">Stipends</a></li>
+            <li><a href="{{ url_for('admin.tag.index') }}">Tags</a></li>
+            <li><a href="{{ url_for('admin.user.index') }}">Users</a></li>
         {% else %}
             <li><a href="{{ url_for('public.about') }}">About</a></li>
             <li><a href="{{ url_for('user.profile') }}">Profile</a></li>

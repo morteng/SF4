@@ -23,7 +23,9 @@ def test_create_user(logged_in_admin, db_session, user_data):
     assert response.status_code == 302
     assert url_for('admin.user.index', _external=False) == response.headers['Location']
 
-    new_user = db_session.get(User, user_data['email'])
+    new_user = db_session.query(User).filter_by(email=user_data['email']).first()
+    print("Users in DB:", db_session.query(User).all())
+
     assert new_user is not None
     assert new_user.username == user_data['username']
     assert new_user.email == user_data['email']

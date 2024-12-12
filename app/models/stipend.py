@@ -13,6 +13,7 @@ class Stipend(db.Model):
     open_for_applications = db.Column(db.Boolean, default=True, nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
+    __mapper_args__ = {"confirm_deleted_rows": False}
 
     def __repr__(self):
         return f'<Stipend {self.name}>'
