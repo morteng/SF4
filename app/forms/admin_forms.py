@@ -32,10 +32,11 @@ class TagForm(FlaskForm):
         self.original_name = original_name
 
     def validate_name(self, name):
-        if name.data != self.original_name:
-            tag = Tag.query.filter_by(name=name.data).first()
-            if tag:
-                raise ValidationError('Tag with this name already exists.')
+        if self.original_name and name.data == self.original_name:
+            return  # Skip validation if the name hasn't changed
+        tag = Tag.query.filter_by(name=name.data).first()
+        if tag:
+            raise ValidationError('Tag with this name already exists.')
 
 class UserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(max=100)])
