@@ -9,6 +9,7 @@ from app.extensions import db, login_manager
 from app.models.user import User
 from app.models.organization import Organization
 from datetime import datetime
+import re  # Import the re module
 
 
 @pytest.fixture(scope='function')
