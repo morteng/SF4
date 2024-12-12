@@ -42,7 +42,7 @@ def test_get_all_users(db_session, admin_user):
 def test_delete_user(db_session, admin_user):
     delete_user(admin_user)
     db_session.expire_all()
-    user = db_session.query(User).get(admin_user.id)
+    user = db_session.get(User, admin_user.id)
     assert user is None
 
 def test_user_form_validate(app):

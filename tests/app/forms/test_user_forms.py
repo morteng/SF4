@@ -14,23 +14,31 @@ def client(app):
     with app.test_client() as client:
         yield client
 
-def test_user_form_validate(app, client):
+def test_user_form_validate(app):
     with app.app_context():
-        db.create_all()  # Ensure all tables are created
+        from app.models.user import User
+        from app.extensions import db
 
-        user = User(username='test_user', email='test@example.com')
-        user.set_password('secure_password')  # Ensure the password is hashed
-        db.session.add(user)
+        # Create the database schema
+        db.create_all()
+
+        # Add a user to the database
+        existing_user = User(username='test_user', email='test@example.com')
+        existing_user.set_password('secure_password')
+        db.session.add(existing_user)
         db.session.commit()
 
+        # Provide form data matching the original user's data
         form = UserForm(
             original_username='test_user',
             original_email='test@example.com',
             data={
-                'username': 'test_user',
-                'email': 'test@example.com',
-                'password': 'secure_password',  # Password is required
-                'is_admin': False  # Optional field
+                'username': 'test_user',  # Matches the original
+                'email': 'test@example.com',  # Matches the original
+                'password': 'new_secure_password',  # Optional new password
+                'is_admin': False
             }
         )
+
+        # Assert that the form validates successfully
         assert form.validate() == True
