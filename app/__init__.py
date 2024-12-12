@@ -12,6 +12,7 @@ def create_app(config_name='development'):
         app.config['APPLICATION_ROOT'] = '/'
         app.config['PREFERRED_URL_SCHEME'] = 'http'
         app.config['SECRET_KEY'] = 'test_secret_key'  # Add this line
+        app.config['TEMPLATES_AUTO_RELOAD'] = True  # Enable template auto-reload for testing
     else:
         from app.config import config_by_name
         app.config.from_object(config_by_name[config_name])
