@@ -13,7 +13,7 @@ def create():
         new_tag = create_tag(form.data)
         flash('Tag created successfully.', 'success')
         return redirect(url_for('admin.tag.index'))
-    return render_template('admin/tag/create.html', form=form)
+    return render_template('admin/tags/create.html', form=form)
 
 @admin_tag_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
@@ -30,7 +30,7 @@ def delete(id):
 @login_required
 def index():
     tags = get_all_tags()
-    return render_template('admin/tag/index.html', tags=tags)
+    return render_template('admin/tags/index.html', tags=tags)
 
 @admin_tag_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
@@ -44,4 +44,4 @@ def update(id):
         update_tag(tag, form.data)
         flash('Tag updated successfully.', 'success')
         return redirect(url_for('admin.tag.index'))
-    return render_template('admin/tag/update.html', form=form, tag=tag)
+    return render_template('admin/tags/update.html', form=form, tag=tag)
