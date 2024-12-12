@@ -36,6 +36,7 @@ def app():
         db.session.remove()
         db.drop_all()
 
+
 @pytest.fixture(scope='function')
 def _db(app):
     """Provide the SQLAlchemy database session for each test function."""
@@ -44,6 +45,7 @@ def _db(app):
         yield db  # Provide the actual database session
         db.drop_all()
         db.session.remove()
+
 
 @pytest.fixture(scope='function')
 def db_session(_db):
@@ -57,6 +59,7 @@ def db_session(_db):
     transaction.rollback()
     connection.close()
     _db.session.remove()
+
 
 @pytest.fixture(scope='function')
 def admin_user(db_session):
@@ -72,10 +75,12 @@ def admin_user(db_session):
     yield user
     db_session.rollback()
 
+
 @pytest.fixture(scope='function')
 def client(app):
     """Provides a test client for the application."""
     return app.test_client()
+
 
 @pytest.fixture
 def logged_in_admin(client, admin_user):
@@ -89,10 +94,39 @@ def logged_in_admin(client, admin_user):
         assert '_user_id' in session, "Admin session not established."
     yield client
 
+
 @pytest.fixture(scope='function')
 def legacy_db(db_session):
     """Alias fixture for db_session to support legacy tests."""
     return db_session
+
+
+@pytest.fixture
+def user_data():
+    """Provide test data for users."""
+    return {
+        'username': 'test_user',
+        'email': 'test_user@example.com',
+        'password': 'password123',
+        'is_admin': False
+    }
+
+
+@pytest.fixture
+def test_user(db_session, user_data):
+    """Provide a test user for use in tests."""
+    user = User(
+        username=user_data['username'],
+        email=user_data['email'],
+        is_admin=user_data['is_admin']
+    )
+    user.set_password(user_data['password'])
+    db_session.add(user)
+    db_session.commit()
+    yield user
+    db_session.delete(user)
+    db_session.commit()
+
 
 @pytest.fixture
 def stipend_data():
@@ -108,25 +142,27 @@ def stipend_data():
         'open_for_applications': True
     }
 
+
 @pytest.fixture
-def test_stipend(db_session):
+def test_stipend(db_session, stipend_data):
     """Provide a test stipend for use in tests."""
     from app.models.stipend import Stipend
     stipend = Stipend(
-        name='Test Stipend',
-        summary='This is a test stipend.',
-        description='Detailed description of the test stipend.',
-        homepage_url='http://example.com/stipend',
-        application_procedure='Apply online at example.com',
-        eligibility_criteria='Open to all students',
-        application_deadline=datetime(2023, 12, 31, 23, 59, 59),
-        open_for_applications=True
+        name=stipend_data['name'],
+        summary=stipend_data['summary'],
+        description=stipend_data['description'],
+        homepage_url=stipend_data['homepage_url'],
+        application_procedure=stipend_data['application_procedure'],
+        eligibility_criteria=stipend_data['eligibility_criteria'],
+        application_deadline=datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'),
+        open_for_applications=stipend_data['open_for_applications']
     )
     db_session.add(stipend)
     db_session.commit()
     yield stipend
     db_session.delete(stipend)
     db_session.commit()
+
 
 @pytest.fixture
 def organization_data():
@@ -137,13 +173,14 @@ def organization_data():
         'homepage_url': 'http://example.com/organization'
     }
 
+
 @pytest.fixture
-def test_organization(db_session):
+def test_organization(db_session, organization_data):
     """Provide a test organization for use in tests."""
     organization = Organization(
-        name='Test Organization',
-        description='This is a test organization.',
-        homepage_url='http://example.com/organization'
+        name=organization_data['name'],
+        description=organization_data['description'],
+        homepage_url=organization_data['homepage_url']
     )
     db_session.add(organization)
     db_session.commit()
