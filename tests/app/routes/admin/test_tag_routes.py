@@ -67,11 +67,11 @@ def logged_in_admin(client, admin_user):
     yield client
 
 def test_create_tag_route(logged_in_admin, tag_data):
-    create_response = logged_in_admin.get(url_for('tag.create'))
+    create_response = logged_in_admin.get(url_for('admin.tag.create'))
     assert create_response.status_code == 200
 
     csrf_token = extract_csrf_token(create_response.data)
-    response = logged_in_admin.post(url_for('tag.create'), data={
+    response = logged_in_admin.post(url_for('admin.tag.create'), data={
         'name': tag_data['name'],
         'category': tag_data['category'],
         'csrf_token': csrf_token
@@ -82,17 +82,17 @@ def test_create_tag_route(logged_in_admin, tag_data):
     assert any(tag.name == tag_data['name'] for tag in tags)
 
 def test_index_tag_route(logged_in_admin, test_tag):
-    index_response = logged_in_admin.get(url_for('tag.index'))
+    index_response = logged_in_admin.get(url_for('admin.tag.index'))
     assert index_response.status_code == 200
 
 def test_delete_tag_route(logged_in_admin, test_tag):
-    delete_response = logged_in_admin.post(url_for('tag.delete', id=test_tag.id))
+    delete_response = logged_in_admin.post(url_for('admin.tag.delete', id=test_tag.id))
     assert delete_response.status_code == 302
     tags = get_all_tags()
     assert not any(tag.id == test_tag.id for tag in tags)
 
 def test_update_tag_route(logged_in_admin, test_tag, another_test_tag):
-    update_response = logged_in_admin.get(url_for('tag.update', id=test_tag.id))
+    update_response = logged_in_admin.get(url_for('admin.tag.update', id=test_tag.id))
     assert update_response.status_code == 200
 
     csrf_token = extract_csrf_token(update_response.data)
@@ -101,7 +101,7 @@ def test_update_tag_route(logged_in_admin, test_tag, another_test_tag):
         'category': 'UpdatedCategory',
         'csrf_token': csrf_token
     }
-    response = logged_in_admin.post(url_for('tag.update', id=test_tag.id), data=updated_data, follow_redirects=True)
+    response = logged_in_admin.post(url_for('admin.tag.update', id=test_tag.id), data=updated_data, follow_redirects=True)
 
     assert response.status_code == 200
     updated_tag = get_tag_by_id(test_tag.id)
@@ -109,8 +109,8 @@ def test_update_tag_route(logged_in_admin, test_tag, another_test_tag):
     assert updated_tag.category == updated_data['category']
 
 def test_get_tag_by_id_route(logged_in_admin, test_tag):
-    index_response = logged_in_admin.get(url_for('tag.index'))
+    index_response = logged_in_admin.get(url_for('admin.tag.index'))
     assert index_response.status_code == 200
 
-    update_response = logged_in_admin.get(url_for('tag.update', id=test_tag.id))
+    update_response = logged_in_admin.get(url_for('admin.tag.update', id=test_tag.id))
     assert update_response.status_code == 200
