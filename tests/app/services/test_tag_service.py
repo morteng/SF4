@@ -21,8 +21,14 @@ def test_tag(db_session, tag_data):
     db_session.add(tag)
     db_session.commit()
     yield tag
-    db_session.delete(tag)
-    db_session.commit()
+
+    # Teardown: Attempt to delete the tag and rollback if an error occurs
+    try:
+        db_session.delete(tag)
+        db_session.commit()
+    except SQLAlchemyError as e:
+        print(f"Failed to delete test tag during teardown: {e}")
+        db_session.rollback()
 
 def test_get_all_tags(db_session, test_tag):
     tags = get_all_tags()
@@ -32,7 +38,7 @@ def test_get_all_tags(db_session, test_tag):
 def test_delete_tag(db_session, test_tag):
     delete_tag(test_tag)
     db_session.expire_all()
-    tag = db_session.query(Tag).get(test_tag.id)
+    tag = db_session.get(Tag, test_tag.id)  # Updated line
     assert tag is None
 
 def test_create_tag(db_session, tag_data):
@@ -60,7 +66,7 @@ def test_update_tag(db_session, test_tag, tag_data):
     update_tag(test_tag, updated_data)
     
     db_session.expire_all()
-    tag = db_session.query(Tag).get(test_tag.id)
+    tag = db_session.get(Tag, test_tag.id)  # Updated line
     assert tag.name == updated_data['name']
     assert tag.category == updated_data['category']
 
