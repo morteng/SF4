@@ -42,3 +42,9 @@ def test_delete_user(db_session, admin_user):
     db_session.expire_all()
     user = db_session.query(User).get(admin_user.id)
     assert user is None
+
+def test_user_form_validate(app):
+    with app.app_context():
+        form = UserForm(original_username='test_user', original_email='test@example.com')
+        # Add more assertions as needed to validate the form
+        assert form.validate() == True  # Example assertion, adjust as necessary
