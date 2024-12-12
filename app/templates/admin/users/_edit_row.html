@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="user-edit-form">
+    <h2>Edit User</h2>
+    <form method="POST" action="">
+        {{ form.hidden_tag() | safe }}  <!-- Ensure CSRF token renders correctly -->
+        <div class="form-group">
+            {{ form.username.label }}<br>
+            {{ form.username(size=32, class_="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.email.label }}<br>
+            {{ form.email(size=64, class_="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.password.label }}<br>
+            {{ form.password(size=32, class_="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.is_admin.label }}<br>
+            {{ form.is_admin(class_="form-check-input") }}
+        </div>
+        <input type="submit" value="Update" class="btn btn-primary">
+    </form>
+</div>
+{% endblock %}
