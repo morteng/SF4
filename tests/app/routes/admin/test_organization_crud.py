@@ -4,9 +4,21 @@ from app.models.organization import Organization
 from app.forms.admin_forms import OrganizationForm
 from datetime import datetime, timedelta
 from tests.conftest import logged_in_admin, db_session, test_organization, organization_data
+import re
+
+def extract_csrf_token(response_data):
+    """Extract CSRF token from the response HTML."""
+    csrf_match = re.search(r'name="csrf_token" type="hidden" value="(.+?)"', response_data.decode('utf-8'))
+    return csrf_match.group(1) if csrf_match else None
 
 def test_create_organization(logged_in_admin, db_session, organization_data):
     with logged_in_admin.application.app_context():
+        # Fetch CSRF token from the form page
+        response = logged_in_admin.get(url_for('admin.organization.create'))
+        csrf_token = extract_csrf_token(response.data)
+
+        organization_data['csrf_token'] = csrf_token
+
         response = logged_in_admin.post(url_for('admin.organization.create'), data=organization_data)
         
         assert response.status_code == 302
@@ -21,33 +33,41 @@ def test_create_organization(logged_in_admin, db_session, organization_data):
 
 def test_create_organization_with_invalid_form_data(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
+        # Fetch CSRF token from the form page
+        response = logged_in_admin.get(url_for('admin.organization.create'))
+        csrf_token = extract_csrf_token(response.data)
+
         invalid_data = {
             'name': '',  # Intentionally invalid
             'description': 'Test Description',
             'homepage_url': 'http://example.com',
-            'csrf_token': logged_in_admin.csrf_token  # Fetch CSRF token from the client session
+            'csrf_token': csrf_token
         }
         
         response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data)
         
         assert response.status_code == 200
 
-        form = OrganizationForm(data=invalid_data)
+        form = OrganizationForm(original_name=None, data=invalid_data)
         if not form.validate():
             for field, errors in form.errors.items():
                 print(f"Field {field} errors: {errors}")
-            
+                
         # Check that the organization was not created
         new_organization = db_session.query(Organization).filter_by(name=invalid_data['name']).first()
         assert new_organization is None
 
 def test_update_organization(logged_in_admin, test_organization, db_session):
     with logged_in_admin.application.app_context():
+        # Fetch CSRF token from the form page
+        response = logged_in_admin.get(url_for('admin.organization.update', id=test_organization.id))
+        csrf_token = extract_csrf_token(response.data)
+
         updated_data = {
             'name': 'Updated Organization',
             'description': "Updated description.",
             'homepage_url': "http://example.com/updated-organization",
-            'csrf_token': logged_in_admin.csrf_token  # Fetch CSRF token from the client session
+            'csrf_token': csrf_token
         }
 
         response = logged_in_admin.post(url_for('admin.organization.update', id=test_organization.id), data=updated_data)
@@ -63,11 +83,15 @@ def test_update_organization(logged_in_admin, test_organization, db_session):
 
 def test_update_organization_with_invalid_form_data(logged_in_admin, test_organization, db_session):
     with logged_in_admin.application.app_context():
+        # Fetch CSRF token from the form page
+        response = logged_in_admin.get(url_for('admin.organization.update', id=test_organization.id))
+        csrf_token = extract_csrf_token(response.data)
+
         invalid_data = {
             'name': '',  # Intentionally invalid
             'description': "Updated description.",
             'homepage_url': "http://example.com/updated-organization",
-            'csrf_token': logged_in_admin.csrf_token  # Fetch CSRF token from the client session
+            'csrf_token': csrf_token
         }
 
         response = logged_in_admin.post(url_for('admin.organization.update', id=test_organization.id), data=invalid_data)
@@ -117,11 +141,15 @@ def test_index_organizations(logged_in_admin, test_organization, db_session):
 
 def test_create_organization_with_duplicate_name(logged_in_admin, db_session, test_organization):
     with logged_in_admin.application.app_context():
+        # Fetch CSRF token from the form page
+        response = logged_in_admin.get(url_for('admin.organization.create'))
+        csrf_token = extract_csrf_token(response.data)
+
         duplicate_data = {
             'name': test_organization.name,
             'description': "Duplicate description.",
             'homepage_url': "http://example.com/duplicate-organization",
-            'csrf_token': logged_in_admin.csrf_token  # Fetch CSRF token from the client session
+            'csrf_token': csrf_token
         }
         
         response = logged_in_admin.post(url_for('admin.organization.create'), data=duplicate_data)
@@ -139,11 +167,15 @@ def test_create_organization_with_duplicate_name(logged_in_admin, db_session, te
 
 def test_update_organization_with_duplicate_name(logged_in_admin, test_organization, db_session):
     with logged_in_admin.application.app_context():
+        # Fetch CSRF token from the form page
+        response = logged_in_admin.get(url_for('admin.organization.update', id=test_organization.id))
+        csrf_token = extract_csrf_token(response.data)
+
         duplicate_data = {
             'name': test_organization.name,
             'description': "Updated description.",
             'homepage_url': "http://example.com/updated-organization",
-            'csrf_token': logged_in_admin.csrf_token  # Fetch CSRF token from the client session
+            'csrf_token': csrf_token
         }
 
         response = logged_in_admin.post(url_for('admin.organization.update', id=test_organization.id), data=duplicate_data)
