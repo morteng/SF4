@@ -19,7 +19,7 @@ def create():
             flash('Oops! Failed to create organization.', 'danger')
     else:
         form = OrganizationForm()
-    return render_template('admin/organization/create.html', form=form)
+    return render_template('admin/organizations/create.html', form=form)
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
@@ -36,7 +36,7 @@ def delete(id):
 @login_required
 def index():
     organizations = get_all_organizations()
-    return render_template('admin/organization/index.html', organizations=organizations)
+    return render_template('admin/organizations/index.html', organizations=organizations)
 
 @admin_org_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
@@ -53,4 +53,4 @@ def update(id):
         flash('Organization updated!', 'success')
         return redirect(url_for('admin.organization.index'))
     
-    return render_template('admin/organization/update.html', form=form, organization=organization)
+    return render_template('admin/organizations/update.html', form=form, organization=organization)
