@@ -36,10 +36,11 @@ def test_update_user(logged_in_admin, admin_user, db_session):
         csrf_token = "dummy_csrf_token"
 
     updated_data = {
-        'username': 'updated_admin',
-        'email': 'updated_admin@example.com',
-        'is_admin': True,
-        'csrf_token': csrf_token
+    'username': 'updated_admin',
+    'email': 'updated_admin@example.com',
+    'password': 'new_password123',  # Add this line
+    'is_admin': True,
+    'csrf_token': csrf_token
     }
 
     response = logged_in_admin.post(url_for('admin.user.update', id=admin_user.id), data=updated_data)
