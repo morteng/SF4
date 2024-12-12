@@ -1,5 +1,5 @@
 <form method="POST" action="">
-    {{ form.hidden_tag() }}  <!-- Add this line for CSRF token -->
+    {{ form.hidden_tag() | safe }}  <!-- Ensure CSRF token renders correctly -->
     {{ form.username.label }} {{ form.username(size=32) }}
     {{ form.email.label }} {{ form.email(size=64) }}
     {{ form.password.label }} {{ form.password(size=32) }}

@@ -195,5 +195,5 @@ def test_organization(db_session, organization_data):
 
 
 def extract_csrf_token(response_data):
-    csrf_match = re.search(r'name="csrf_token" type="hidden" value="(.+?)"', response_data.decode('utf-8'))
+    csrf_match = re.search(r'name="csrf_token".*?value="(.+?)"', response_data.decode('utf-8'))
     return csrf_match.group(1) if csrf_match else None

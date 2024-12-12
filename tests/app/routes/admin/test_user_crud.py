@@ -5,11 +5,13 @@ from tests.conftest import logged_in_admin, db_session, user_data
 import re
 
 def extract_csrf_token(response_data):
-    csrf_match = re.search(r'name="csrf_token" type="hidden" value="(.+?)"', response_data.decode('utf-8'))
+    csrf_match = re.search(r'name="csrf_token".*?value="(.+?)"', response_data.decode('utf-8'))
     return csrf_match.group(1) if csrf_match else None
 
 def test_create_user(logged_in_admin, db_session, user_data):
     response = logged_in_admin.get(url_for('admin.user.create'))
+    print(response.data.decode('utf-8'))  # Debugging step: Print the response data
+
     csrf_token = extract_csrf_token(response.data)
     assert csrf_token is not None  # Ensure CSRF token is present
 
