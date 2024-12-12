@@ -1,5 +1,6 @@
 from flask import Flask
 from app.extensions import db, login_manager
+from flask_wtf import CSRFProtect
 
 def create_app(config_name='development'):
     app = Flask(__name__)
@@ -7,7 +8,7 @@ def create_app(config_name='development'):
     if config_name == 'testing':
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-        app.config['WTF_CSRF_ENABLED'] = False
+        app.config['WTF_CSRF_ENABLED'] = False  # Keep this as False for testing
         app.config['SERVER_NAME'] = 'localhost'
         app.config['APPLICATION_ROOT'] = '/'
         app.config['PREFERRED_URL_SCHEME'] = 'http'
@@ -20,6 +21,9 @@ def create_app(config_name='development'):
     # Initialize extensions
     db.init_app(app)
     login_manager.init_app(app)
+
+    csrf = CSRFProtect()
+    csrf.init_app(app)  # Initialize CSRF protection
 
     from app.models.user import User  # Import the User model
 
