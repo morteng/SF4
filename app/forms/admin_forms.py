@@ -81,7 +81,7 @@ class OrganizationForm(FlaskForm):
         self.original_name = original_name
 
     def validate_name(self, name):
-        if name.data != self.original_name:
-            organization = Organization.query.filter_by(name=name.data).first()
+        if name.data != self._obj.name:
+            organization = Organization.query.filter(Organization.name == name.data, Organization.id != self._obj.id).first()
             if organization:
                 raise ValidationError('Organization with this name already exists.')

@@ -25,7 +25,7 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
             'name': '',  # Intentionally invalid
             'description': 'Test Description',
             'homepage_url': 'http://example.com',
-            'csrf_token': ''  # Bypass CSRF for testing purposes
+            'csrf_token': logged_in_admin.csrf_token  # Fetch CSRF token from the client session
         }
         
         response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data)
@@ -47,7 +47,7 @@ def test_update_organization(logged_in_admin, test_organization, db_session):
             'name': 'Updated Organization',
             'description': "Updated description.",
             'homepage_url': "http://example.com/updated-organization",
-            'csrf_token': ''  # Bypass CSRF for testing purposes
+            'csrf_token': logged_in_admin.csrf_token  # Fetch CSRF token from the client session
         }
 
         response = logged_in_admin.post(url_for('admin.organization.update', id=test_organization.id), data=updated_data)
@@ -67,7 +67,7 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, test_organi
             'name': '',  # Intentionally invalid
             'description': "Updated description.",
             'homepage_url': "http://example.com/updated-organization",
-            'csrf_token': ''  # Bypass CSRF for testing purposes
+            'csrf_token': logged_in_admin.csrf_token  # Fetch CSRF token from the client session
         }
 
         response = logged_in_admin.post(url_for('admin.organization.update', id=test_organization.id), data=invalid_data)
@@ -121,7 +121,7 @@ def test_create_organization_with_duplicate_name(logged_in_admin, db_session, te
             'name': test_organization.name,
             'description': "Duplicate description.",
             'homepage_url': "http://example.com/duplicate-organization",
-            'csrf_token': ''  # Bypass CSRF for testing purposes
+            'csrf_token': logged_in_admin.csrf_token  # Fetch CSRF token from the client session
         }
         
         response = logged_in_admin.post(url_for('admin.organization.create'), data=duplicate_data)
@@ -143,7 +143,7 @@ def test_update_organization_with_duplicate_name(logged_in_admin, test_organizat
             'name': test_organization.name,
             'description': "Updated description.",
             'homepage_url': "http://example.com/updated-organization",
-            'csrf_token': ''  # Bypass CSRF for testing purposes
+            'csrf_token': logged_in_admin.csrf_token  # Fetch CSRF token from the client session
         }
 
         response = logged_in_admin.post(url_for('admin.organization.update', id=test_organization.id), data=duplicate_data)
