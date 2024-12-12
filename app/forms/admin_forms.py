@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Length, Optional, ValidationError  # Import ValidationError
-from app.models.organization import Organization  # Add import for Organization model
-from app.forms.custom_fields import CustomDateTimeField  # Import CustomDateTimeField
-from app.models.tag import Tag  # Import Tag model
-from app.models.user import User  # Import User model
-from app.models.bot import Bot  # Import Bot model
+from wtforms.validators import DataRequired, Length, Optional, ValidationError
+from app.models.organization import Organization
+from app.forms.fields import CustomDateTimeField
+from app.models.tag import Tag  
+from app.models.user import User
+from app.models.bot import Bot
 
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
