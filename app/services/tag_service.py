@@ -21,7 +21,7 @@ def delete_tag(tag):
         raise  # Re-raise the exception
 
 def create_tag(data):
-    new_tag = Tag(**data)
+    new_tag = Tag(name=data['name'], category=data['category'])
     db.session.add(new_tag)
     db.session.commit()
     return new_tag

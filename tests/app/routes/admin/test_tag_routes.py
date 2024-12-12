@@ -73,7 +73,6 @@ def test_create_tag_route(logged_in_admin, tag_data):
     csrf_token = extract_csrf_token(create_response.data)
     response = logged_in_admin.post(url_for('admin.tag.create'), data={
         'name': tag_data['name'],
-        'category': tag_data['category'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
 
