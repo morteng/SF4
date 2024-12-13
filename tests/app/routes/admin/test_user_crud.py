@@ -72,6 +72,7 @@ def test_update_user_route(logged_in_admin, test_user, db_session):
         'username': 'updateduser',
         'password': 'newpassword123',  # Use a new password string
         'email': test_user.email,
+        'is_admin': False,  # Ensure this field is included if it's required by the form
         'csrf_token': csrf_token
     }
     response = logged_in_admin.post(url_for('admin.user.update', id=test_user.id), data=updated_data, follow_redirects=True)
