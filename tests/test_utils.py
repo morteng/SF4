@@ -2,7 +2,7 @@
 
 import os
 from unittest.mock import patch, MagicMock
-from flask import Flask, request
+from flask import Flask, request, abort
 from werkzeug.security import generate_password_hash
 from app.utils import admin_required, init_admin_user
 from app.models.user import User
@@ -27,7 +27,8 @@ class TestAdminRequiredDecorator:
             db.drop_all()
 
     @patch('app.utils.current_user')
-    def test_admin_required_with_non_authenticated_user(self, mock_current_user):
+    @patch('flask.abort', side_effect=MagicMock())
+    def test_admin_required_with_non_authenticated_user(self, mock_abort, mock_current_user):
         mock_current_user.is_authenticated = False
         mock_current_user.is_admin = False
 
@@ -37,10 +38,11 @@ class TestAdminRequiredDecorator:
 
         with self.app.test_request_context('/'):
             response = test_function()
-            assert response.status_code == 403
+            mock_abort.assert_called_with(403)
 
     @patch('app.utils.current_user')
-    def test_admin_required_with_non_admin_user(self, mock_current_user):
+    @patch('flask.abort', side_effect=MagicMock())
+    def test_admin_required_with_non_admin_user(self, mock_abort, mock_current_user):
         mock_current_user.is_authenticated = True
         mock_current_user.is_admin = False
 
@@ -50,7 +52,7 @@ class TestAdminRequiredDecorator:
 
         with self.app.test_request_context('/'):
             response = test_function()
-            assert response.status_code == 403
+            mock_abort.assert_called_with(403)
 
     @patch('app.utils.current_user')
     def test_admin_required_with_admin_user(self, mock_current_user):
