@@ -15,7 +15,7 @@ def create():
             flash('Tag created successfully.', 'success')
             return redirect(url_for('admin.tag.index'))
         except Exception as e:
-            flash(f'Failed to create tag: {str(e)}', 'danger')
+            flash(f'Failed to create tag: {str(e)}', 'danger')  # Include the specific error message
     return render_template('admin/tags/create.html', form=form)
 
 @admin_tag_bp.route('/<int:id>/delete', methods=['POST'])

@@ -135,6 +135,7 @@ def test_create_tag_route_with_database_error(logged_in_admin, tag_data, db_sess
         response = logged_in_admin.post(url_for('admin.tag.create'), data=data)
         
         assert response.status_code == 200
+        # Check for the flash message in the response data
         assert b"Failed to create tag: Database error." in response.data  # Confirm error message is present
 
         tags = db_session.query(Tag).all()
