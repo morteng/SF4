@@ -10,9 +10,14 @@ admin_bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
 def create():
     form = BotForm()
     if form.validate_on_submit():
-        new_bot = create_bot(form.data)
-        flash('Bot created successfully.', 'success')
-        return redirect(url_for('admin.bot.index'))
+        try:
+            new_bot = create_bot(form.data)
+            flash('Bot created successfully.', 'success')
+            return redirect(url_for('admin.bot.index'))
+        except Exception as e:
+            db.session.rollback()  # Ensure the session is rolled back on error
+            flash('Failed to create bot.', 'danger')
+            return render_template('admin/bots/create.html', form=form), 200
     return render_template('admin/bots/create.html', form=form)
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])
