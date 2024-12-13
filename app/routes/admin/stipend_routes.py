@@ -68,24 +68,24 @@ def update(id):
     
     if form.validate_on_submit():
         try:
-            try:
-                form.populate_obj(stipend)
-            except ValueError as ve:
-                flash(str(ve), 'danger')
-                return render_template('admin/stipends/form.html', form=form)
-
+            form.populate_obj(stipend)
             update_stipend(stipend, stipend.__dict__)
             
             flash('Stipend updated successfully!', 'success')
             return redirect(url_for('admin.stipend.index'))
         except ValueError as e:
+            db.session.rollback()  # Explicitly rollback session on failure
+            logging.error(f"Failed to update stipend: {e}")
             flash(str(e), 'danger')
-            return render_template('admin/stipends/form.html', form=form)
+            return render_template('admin/stipends/form.html', form=form), 200
         except Exception as e:
             db.session.rollback()  # Explicitly rollback session on failure
             logging.error(f"Failed to update stipend: {e}")
-        
-    return render_template('admin/stipends/form.html', form=form)
+            flash('An error occurred while updating the stipend.', 'danger')
+            return render_template('admin/stipends/form.html', form=form), 200
+    
+    return render_template('admin/stipends/form.html', form=form), 200
+
 
 @admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
