@@ -71,6 +71,8 @@ def update(id):
             # Populate other fields from the form
             form.populate_obj(stipend)
             
+            logging.info(f"Updating stipend with data: {form.data}")  # Add this line for debugging
+            
             update_stipend(stipend, stipend.__dict__)
             db.session.commit()
             flash('Stipend updated successfully!', 'success')
