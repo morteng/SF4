@@ -1,38 +1,71 @@
 import pytest
 from app.forms.user_forms import ProfileForm, LoginForm
 from app import create_app
+from app.models.user import User
+from app.extensions import db
+
+@pytest.fixture(scope='function', autouse=True)
+def setup_database(_db):
+    """Ensure the User table exists before running tests."""
+    _db.create_all()
+    yield
+    _db.session.rollback()
+    _db.drop_all()
 
 @pytest.fixture(scope='module')
-def test_client():
-    """Create and configure a new app instance for each test."""
-    app = create_app('testing')
+def app():
+    app = create_app('testing')  # Ensures 'testing' config is loaded
+    with app.app_context():
+        db.create_all()
+        yield app
+        db.drop_all()
 
-    with app.test_client() as client:
-        with app.app_context():
-            yield client
+@pytest.fixture(scope='function')
+def client(app):
+    return app.test_client()
 
-def test_profile_form_validation(test_client):
-    form = ProfileForm(original_username='testuser', original_email='test@example.com')
-    form.username.data = 'newusername'
-    form.email.data = 'newemail@example.com'
-    assert form.validate() is True
+def test_profile_form_valid(client, setup_database):
+    form = ProfileForm(original_username="testuser", original_email="test@example.com")
+    form.username.data = "newusername"
+    form.email.data = "newemail@example.com"
+    assert form.validate() == True
 
-def test_profile_form_invalid_username():
-    form = ProfileForm(original_username='testuser', original_email='test@example.com')
-    form.username.data = ''
-    form.email.data = 'newemail@example.com'
-    assert form.validate() is False
-    assert 'This field is required.' in form.username.errors[0]
+def test_profile_form_invalid_same_username(client, setup_database):
+    user = User(username="existinguser", email="existing@example.com")
+    db.session.add(user)
+    db.session.commit()
 
-def test_login_form_validation():
+    form = ProfileForm(original_username="testuser", original_email="test@example.com")
+    form.username.data = "existinguser"
+    form.email.data = "newemail@example.com"
+    assert form.validate() == False
+    assert 'Please use a different username.' in form.username.errors
+
+def test_profile_form_invalid_same_email(client, setup_database):
+    user = User(username="existinguser", email="existing@example.com")
+    db.session.add(user)
+    db.session.commit()
+
+    form = ProfileForm(original_username="testuser", original_email="test@example.com")
+    form.username.data = "newusername"
+    form.email.data = "existing@example.com"
+    assert form.validate() == False
+    assert 'Please use a different email address.' in form.email.errors
+
+def test_login_form_valid(client):
     form = LoginForm()
-    form.username.data = 'testuser'
-    form.password.data = 'password123'
-    assert form.validate() is True
+    form.username.data = "testuser"
+    form.password.data = "password123"
+    assert form.validate() == True
 
-def test_login_form_invalid_username():
+def test_login_form_invalid_missing_username(client):
     form = LoginForm()
-    form.username.data = ''
-    form.password.data = 'password123'
-    assert form.validate() is False
-    assert 'This field is required.' in form.username.errors[0]
+    form.password.data = "password123"
+    assert form.validate() == False
+    assert 'This field is required.' in form.username.errors
+
+def test_login_form_invalid_missing_password(client):
+    form = LoginForm()
+    form.username.data = "testuser"
+    assert form.validate() == False
+    assert 'This field is required.' in form.password.errors
