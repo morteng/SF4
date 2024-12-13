@@ -25,15 +25,19 @@ def create():
                 flash(f'Failed to create organization. Error: {str(e)}', 'danger')
     else:
         form = OrganizationForm()
-    return render_template('admin/organizations/create.html', form=form)
+    return render_template('admin/organizations/form.html', form=form)
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
 def delete(id):
     organization = get_organization_by_id(id)
     if organization:
-        delete_organization(organization)
-        flash(f'{organization.name} deleted!', 'success')
+        try:
+            delete_organization(organization)
+            flash(f'{organization.name} deleted!', 'success')
+        except SQLAlchemyError as e:
+            current_app.db_session.rollback()
+            flash(f'Failed to delete organization. Error: {str(e)}', 'danger')
     else:
         flash('Organization not found.', 'danger')
     return redirect(url_for('admin.organization.index'))
@@ -51,12 +55,19 @@ def update(id):
     if not organization:
         flash('Organization not found.', 'danger')
         return redirect(url_for('admin.organization.index'))
-    
+
     form = OrganizationForm(original_name=organization.name, obj=organization)
     if request.method == 'POST' and form.validate_on_submit():
         update_data = {k: v for k, v in form.data.items() if k != 'submit'}
-        update_organization(organization, update_data)
-        flash('Organization updated!', 'success')
-        return redirect(url_for('admin.organization.index'))
-    
-    return render_template('admin/organizations/update.html', form=form, organization=organization)
+        try:
+            success, error_message = update_organization(organization, update_data)
+            if success:
+                flash('Organization updated!', 'success')
+                return redirect(url_for('admin.organization.index'))
+            else:
+                flash(error_message, 'danger')
+        except SQLAlchemyError as e:
+            current_app.db_session.rollback()
+            flash(f'Failed to update organization. Error: {str(e)}', 'danger')
+
+    return render_template('admin/organizations/form.html', form=form, organization=organization)
