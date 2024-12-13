@@ -1,27 +1,5 @@
 # Project Specification: Stipend Discovery Website
 
-## Table of Contents
-
-1. [Introduction](#introduction)  
-2. [Project Overview](#project-overview)  
-3. [Key Features](#key-features)  
-4. [Technical Stack](#technical-stack)  
-5. [Database Schema](#database-schema)  
-6. [System Components](#system-components)  
-7. [Coding Conventions](#coding-conventions)  
-8. [Coding Practices](#coding-practices)  
-9. [Testing Specification](#testing-specification)  
-10. [Environment and Configuration](#environment-and-configuration)  
-11. [Security Considerations](#security-considerations)  
-12. [System Flow](#system-flow)  
-13. [Collaboration Guidelines](#collaboration-guidelines)  
-14. [Documentation](#documentation)  
-15. [Folder Structure](#folder-structure)  
-16. [Additional Components](#additional-components)  
-17. [Conclusion](#conclusion)
-
----
-
 ## Introduction
 
 This document provides a comprehensive guide for developing the **Stipend Discovery Website**. It consolidates project requirements, coding conventions, architecture, testing, and more. The goal is to ensure a crystal-clear blueprint for all team members.
