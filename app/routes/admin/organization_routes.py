@@ -13,12 +13,17 @@ def create():
         form = OrganizationForm(request.form)
         if form.validate_on_submit():
             organization_data = {k: v for k, v in form.data.items() if k != 'submit'}
-            success, error_message = create_organization(organization_data)
-            if success:
-                flash('Organization created!', 'success')
-                return redirect(url_for('admin.organization.index'))
-            else:
-                flash(error_message, 'danger')
+            try:
+                success, error_message = create_organization(organization_data)
+                if success:
+                    flash('Organization created!', 'success')
+                    return redirect(url_for('admin.organization.index'))
+                else:
+                    flash(error_message, 'danger')
+            except SQLAlchemyError as e:
+                current_app.db_session.rollback()
+                flash(f"Failed to create organization. Error: {str(e)}", 'danger')
+                return render_template('admin/organizations/form.html', form=form)
     else:
         form = OrganizationForm()
     return render_template('admin/organizations/form.html', form=form)
