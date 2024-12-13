@@ -25,7 +25,7 @@ def get_all_tags():
     return Tag.query.all()
 
 def get_tag_by_id(tag_id):
-    return Tag.query.get(tag_id)
+    return db.session.get(Tag, tag_id)
 
 def create_tag(data):
     if not data.get('name') or not data.get('category'):

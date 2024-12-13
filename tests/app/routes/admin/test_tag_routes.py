@@ -2,7 +2,7 @@ import pytest
 from flask import url_for
 from app.models.tag import Tag
 from app.services.tag_service import get_all_tags, delete_tag, create_tag, get_tag_by_id, update_tag
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError  # Added IntegrityError
 from tests.conftest import extract_csrf_token
 
 @pytest.fixture(scope='function')
@@ -144,7 +144,7 @@ def test_create_tag_route_with_database_error(logged_in_admin, tag_data, db_sess
 def test_update_tag_with_database_error(logged_in_admin, test_tag, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
         def mock_commit(*args, **kwargs):
-            raise Exception("Database error")
+            raise IntegrityError("Database error", params=None, orig=None)
             
         monkeypatch.setattr(db_session, 'commit', mock_commit)
         
@@ -157,7 +157,11 @@ def test_update_tag_with_database_error(logged_in_admin, test_tag, db_session, m
             'category': test_tag.category,
             'csrf_token': csrf_token
         }
-        response = logged_in_admin.post(url_for('admin.tag.update', id=test_tag.id), data=updated_data, follow_redirects=True)
+        response = logged_in_admin.post(
+            url_for('admin.tag.update', id=test_tag.id),
+            data=updated_data,
+            follow_redirects=True
+        )
         
         assert response.status_code == 200
         # Check for the flash message in the response data
