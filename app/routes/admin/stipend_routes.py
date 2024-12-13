@@ -79,6 +79,7 @@ def update(id):
             flash('An error occurred while updating the stipend.', 'danger')
             return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
     
+    # Ensure the form is re-rendered with errors and a 200 status code
     return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
 
 
