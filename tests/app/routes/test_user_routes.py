@@ -19,11 +19,18 @@ def test_user(db_session):
         print(f"Failed to delete test user during teardown: {e}")
         db_session.rollback()
 
+@pytest.fixture(scope='function')
+def db_session(app):
+    with app.app_context():
+        session = app.db.session
+        yield session
+        session.rollback()
+
 def test_profile_route(logged_in_client, test_user):
     profile_response = logged_in_client.get(url_for('user.profile'))
     assert profile_response.status_code == 200
 
-def test_edit_profile_route(logged_in_client, test_user):
+def test_edit_profile_route(logged_in_client, test_user, db_session):
     edit_response = logged_in_client.get(url_for('user.edit_profile'))
     assert edit_response.status_code == 200
 

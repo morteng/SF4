@@ -26,6 +26,13 @@ def test_bot(db_session, bot_data):
         print(f"Failed to delete test bot during teardown: {e}")
         db_session.rollback()
 
+@pytest.fixture(scope='function')
+def db_session(app):
+    with app.app_context():
+        session = app.db.session
+        yield session
+        session.rollback()
+
 def test_create_bot_route(logged_in_admin, bot_data):
     create_response = logged_in_admin.get(url_for('admin.bot.create'))
     assert create_response.status_code == 200
@@ -48,7 +55,7 @@ def test_delete_bot_route(logged_in_admin, test_bot):
     bots = Bot.query.all()
     assert not any(bot.id == test_bot.id for bot in bots)
 
-def test_update_bot_route(logged_in_admin, test_bot):
+def test_update_bot_route(logged_in_admin, test_bot, db_session):
     update_response = logged_in_admin.get(url_for('admin.bot.update', id=test_bot.id))
     assert update_response.status_code == 200
 
