@@ -2,7 +2,6 @@ from app.models.tag import Tag
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
 from flask import flash  # Import flash to display messages
-from wtforms.validators import ValidationError  # Import ValidationError
 
 def update_tag(tag, data):
     if not data['name']:
