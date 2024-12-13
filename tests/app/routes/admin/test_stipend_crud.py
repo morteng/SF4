@@ -1,29 +1,120 @@
-# tests/app/routes/admin/test_stipend_crud.py
 import pytest
 from flask import url_for
 from app.models.stipend import Stipend
-from app.forms.admin_forms import StipendForm
 from datetime import datetime, timedelta
 from tests.conftest import logged_in_admin, db_session, test_stipend, stipend_data
+import re
 
-def test_create_stipend(stipend_data, logged_in_admin, db_session):
+def extract_csrf_token(response_data):
+    csrf_match = re.search(r'name="csrf_token" type="hidden" value="(.+?)"', response_data.decode('utf-8'))
+    return csrf_match.group(1) if csrf_match else None  # Fallback
+
+def test_create_stipend(logged_in_admin, db_session, stipend_data):
     with logged_in_admin.application.app_context():
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
-        assert response.status_code in (200, 302)
+        assert response.status_code == 302
+        assert url_for('admin.stipend.index', _external=False) == response.headers['Location']
 
-        stipend_data = {k: v for k, v in stipend_data.items() if k != 'submit'}
-        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
-        assert stipend is not None
-        assert stipend.summary == 'This is a test stipend.'
-        assert stipend.description == 'Detailed description of the test stipend.'
-        assert stipend.homepage_url == 'http://example.com/stipend'
-        assert stipend.application_procedure == 'Apply online at example.com'
-        assert stipend.eligibility_criteria == 'Open to all students'
+        new_stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
+        assert new_stipend is not None
+        assert new_stipend.name == stipend_data['name']
+        assert new_stipend.summary == stipend_data['summary']
+        assert new_stipend.description == stipend_data['description']
+        assert new_stipend.homepage_url == stipend_data['homepage_url']
+        assert new_stipend.application_procedure == stipend_data['application_procedure']
+        assert new_stipend.eligibility_criteria == stipend_data['eligibility_criteria']
+        assert new_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
+        assert new_stipend.open_for_applications is True
+
+def test_create_stipend_with_invalid_form_data(logged_in_admin, db_session):
+    with logged_in_admin.application.app_context():
+        stipend_data['name'] = ''  # Intentionally invalid
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
+        
+        assert response.status_code == 200
+
+        form = StipendForm(data=stipend_data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
+            
+        # Check that the stipend was not created
+        new_stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
+        assert new_stipend is None
+
+def test_create_stipend_with_database_error(logged_in_admin, stipend_data, db_session, monkeypatch):
+    with logged_in_admin.application.app_context():
+        def mock_commit(*args, **kwargs):
+            raise Exception("Database error")
+            
+        monkeypatch.setattr(db_session, 'commit', mock_commit)
+        
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
+        
+        assert response.status_code == 200
+
+        # Check that the stipend was not created
+        new_stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
+        assert new_stipend is None
+
+def test_update_stipend(logged_in_admin, test_stipend, db_session):
+    with logged_in_admin.application.app_context():
+        updated_data = {
+            'name': "Updated Stipend",
+            'summary': "Updated summary.",
+            'description': "Updated description.",
+            'homepage_url': "http://example.com/updated-stipend",
+            'application_procedure': "Apply online at example.com/updated",
+            'eligibility_criteria': "Open to all updated students",
+            'application_deadline': '2024-12-31 23:59:59',
+            'open_for_applications': True
+        }
+
+        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
+        
+        assert response.status_code == 302
+
+        db_session.expire_all()
+        stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
+        assert stipend.name == updated_data['name']
+        assert stipend.summary == updated_data['summary']
+        assert stipend.description == updated_data['description']
+        assert stipend.homepage_url == updated_data['homepage_url']
+        assert stipend.application_procedure == updated_data['application_procedure']
+        assert stipend.eligibility_criteria == updated_data['eligibility_criteria']
+        assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
         assert stipend.open_for_applications is True
-        assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
 
-def test_update_stipend(logged_in_admin, test_stipend, stipend_data, db_session):
+def test_update_stipend_with_invalid_form_data(logged_in_admin, test_stipend, db_session):
+    with logged_in_admin.application.app_context():
+        updated_data = {
+            'name': '',  # Intentionally invalid
+            'summary': "Updated summary.",
+            'description': "Updated description.",
+            'homepage_url': "http://example.com/updated-stipend",
+            'application_procedure': "Apply online at example.com/updated",
+            'eligibility_criteria': "Open to all updated students",
+            'application_deadline': '2024-12-31 23:59:59',
+            'open_for_applications': True
+        }
+
+        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
+        
+        assert response.status_code == 200
+
+        form = StipendForm(data=updated_data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
+            
+        # Check that the stipend was not updated
+        db_session.expire_all()
+        stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
+        assert stipend.name != updated_data['name']
+        assert stipend.summary == test_stipend.summary
+
+def test_update_stipend_with_database_error(logged_in_admin, test_stipend, stipend_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
         updated_data = {
             'name': test_stipend.name,
@@ -36,48 +127,39 @@ def test_update_stipend(logged_in_admin, test_stipend, stipend_data, db_session)
             'open_for_applications': True
         }
 
+        def mock_commit(*args, **kwargs):
+            raise Exception("Database error")
+            
+        monkeypatch.setattr(db_session, 'commit', mock_commit)
+        
         response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
         
-        assert response.status_code in (200, 302)
+        assert response.status_code == 200
 
         db_session.expire_all()
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
-        assert stipend.name == updated_data['name']
-        assert stipend.summary == "Updated summary."
-        assert stipend.description == "Updated description."
-        assert stipend.homepage_url == "http://example.com/updated-stipend"
-        assert stipend.application_procedure == "Apply online at example.com/updated"
-        assert stipend.eligibility_criteria == "Open to all updated students"
-        assert stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
-        assert stipend.open_for_applications is True
+        assert stipend.summary != "Updated summary."
 
 def test_delete_stipend(logged_in_admin, test_stipend, db_session):
     with logged_in_admin.application.app_context():
         response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id))
         
-        assert response.status_code in (200, 302)
+        assert response.status_code == 302
 
-        stipend = db_session.get(Stipend, test_stipend.id)
-        assert stipend is None
+        deleted_stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
+        assert deleted_stipend is None
 
-def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_stipend, stipend_data, db_session):
+def test_delete_stipend_with_database_error(logged_in_admin, test_stipend, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
-        updated_data = {
-            'name': test_stipend.name,
-            'summary': "Updated summary.",
-            'description': "Updated description.",
-            'homepage_url': "http://example.com/updated-stipend",
-            'application_procedure': "Apply online at example.com/updated",
-            'eligibility_criteria': "Open to all updated students",
-            'application_deadline': '2023-13-32 99:99:99',
-            'open_for_applications': True
-        }
-
-        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
+        def mock_commit(*args, **kwargs):
+            raise Exception("Database error")
+            
+        monkeypatch.setattr(db_session, 'commit', mock_commit)
         
-        assert response.status_code in (200, 302)
+        response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id))
+        
+        assert response.status_code == 200
 
-        db_session.expire_all()
+        # Check that the stipend was not deleted
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
-        assert stipend.application_deadline == test_stipend.application_deadline
-        assert b"Invalid date format. Please use YYYY-MM-DD HH:MM:SS." in response.data  # Ensure the correct error message appears
+        assert stipend is not None
