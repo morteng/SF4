@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization, update_organization
+from sqlalchemy.exc import SQLAlchemyError
 
 admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 
@@ -12,14 +13,16 @@ def create():
         form = OrganizationForm(request.form)
         if form.validate_on_submit():
             organization_data = {k: v for k, v in form.data.items() if k != 'submit'}
-            success, error_message = create_organization(organization_data)
-            if success:
-                flash('Organization created!', 'success')
-                return redirect(url_for('admin.organization.index'))
-            else:
-                flash(error_message, 'danger')
-        else:
-            flash('Oops! Failed to create organization.', 'danger')
+            try:
+                success, error_message = create_organization(organization_data)
+                if success:
+                    flash('Organization created!', 'success')
+                    return redirect(url_for('admin.organization.index'))
+                else:
+                    flash(error_message, 'danger')
+            except SQLAlchemyError as e:
+                db_session.rollback()
+                flash(f'Failed to create organization. Error: {str(e)}', 'danger')
     else:
         form = OrganizationForm()
     return render_template('admin/organizations/create.html', form=form)
