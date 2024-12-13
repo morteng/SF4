@@ -119,14 +119,17 @@ def stipend_data():
         'homepage_url': 'http://example.com/stipend',
         'application_procedure': 'Apply online at example.com',
         'eligibility_criteria': 'Open to all students',
-        'application_deadline': datetime.strptime('2023-12-31 23:59:59', '%Y-%m-%d %H:%M:%S'),
+        'application_deadline': '2023-12-31 23:59:59',  # Keep as string
         'open_for_applications': True
     }
 
 @pytest.fixture(scope='function')
 def test_stipend(db_session, stipend_data):
     """Provide a test stipend."""
-    stipend = Stipend(**stipend_data)
+    stipend = Stipend(
+        **stipend_data,
+        application_deadline=datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')  # Convert to datetime here
+    )
     db_session.add(stipend)
     db_session.commit()
     yield stipend
