@@ -1,5 +1,6 @@
 from app.models.bot import Bot
 from app.extensions import db
+from app.models.notification import Notification  # Import the Notification model
 
 def create_bot(data):
     bot = Bot(name=data['name'], description=data['description'], status=data['status'])
