@@ -1,9 +1,10 @@
 from app.models.bot import Bot
-from app.models.notification import Notification
 from app.extensions import db
 
-def create_bot(name, description, status):
-    bot = Bot(name=name, description=description, status=status)
+def create_bot(data):
+    bot = Bot(name=data['name'], description=data['description'], status=data['status'])
+    db.session.add(bot)
+    db.session.commit()
     return bot
 
 def get_bot_by_id(bot_id):
