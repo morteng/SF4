@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required
 from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization, update_organization
@@ -21,7 +21,7 @@ def create():
                 else:
                     flash(error_message, 'danger')
             except SQLAlchemyError as e:
-                db_session.rollback()
+                current_app.db_session.rollback()
                 flash(f'Failed to create organization. Error: {str(e)}', 'danger')
     else:
         form = OrganizationForm()
