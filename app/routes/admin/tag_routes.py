@@ -10,9 +10,12 @@ admin_tag_bp = Blueprint('tag', __name__, url_prefix='/tags')
 def create():
     form = TagForm()
     if form.validate_on_submit():
-        new_tag = create_tag(form.data)
-        flash('Tag created successfully.', 'success')
-        return redirect(url_for('admin.tag.index'))
+        try:
+            new_tag = create_tag(form.data)
+            flash('Tag created successfully.', 'success')
+            return redirect(url_for('admin.tag.index'))
+        except Exception as e:
+            flash(f'Failed to create tag: {str(e)}', 'danger')
     return render_template('admin/tags/create.html', form=form)
 
 @admin_tag_bp.route('/<int:id>/delete', methods=['POST'])
