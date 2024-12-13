@@ -17,7 +17,13 @@ def edit_profile():
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
-        update_user(current_user)
+        # Pass the form data to update_user
+        update_user(current_user, {
+            'username': form.username.data,
+            'email': form.email.data,
+            'password': form.password.data if form.password.data else None,
+            'is_admin': current_user.is_admin  # Assuming is_admin should not be changed via this form
+        })
         flash('Your changes have been saved.')
         return redirect(url_for('user.profile'))
     elif request.method == 'GET':
