@@ -70,5 +70,5 @@ def test_update_bot_route(logged_in_admin, test_bot, db_session):
     response = logged_in_admin.post(url_for('admin.bot.update', id=test_bot.id), data=updated_data, follow_redirects=True)
 
     assert response.status_code == 200
-    updated_bot = db_session.get(Bot, test_bot.id)  # Update this line to use db_session.get
+    updated_bot = db_session.get(Bot, test_bot.id)  # Use db_session.get to retrieve the bot
     assert updated_bot.name == 'Updated Bot Name'
