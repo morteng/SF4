@@ -160,7 +160,8 @@ def test_update_tag_with_database_error(logged_in_admin, test_tag, db_session, m
         response = logged_in_admin.post(url_for('admin.tag.update', id=test_tag.id), data=updated_data, follow_redirects=True)
         
         assert response.status_code == 200
-        assert b"Failed to update tag." in response.data  # Confirm error message is present
+        # Check for the flash message in the response data
+        assert b"Failed to update tag: Database error." in response.data  # Confirm error message is present
 
         updated_tag = db_session.get(Tag, test_tag.id)  # Use db_session.get to retrieve the tag
         assert updated_tag.name != 'Updated Tag Name'

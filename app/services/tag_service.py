@@ -1,44 +1,7 @@
 from app.models.tag import Tag
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
-from wtforms.validators import ValidationError
-
-def get_all_tags():
-    try:
-        return Tag.query.all()
-    except SQLAlchemyError as e:
-        # Log the error
-        print(str(e))
-        return []
-
-def delete_tag(tag):
-    try:
-        db.session.delete(tag)
-        db.session.commit()
-    except SQLAlchemyError as e:
-        # Log the error and re-raise it
-        print(str(e))
-        db.session.rollback()
-        raise  # Re-raise the exception
-
-def create_tag(data):
-    if not data.get('name'):
-        raise ValidationError('Name cannot be empty.')
-    if not data.get('category'):
-        raise ValidationError('Category cannot be empty.')
-
-    new_tag = Tag(name=data['name'], category=data['category'])
-    db.session.add(new_tag)
-    db.session.commit()
-    return new_tag
-
-def get_tag_by_id(tag_id):
-    try:
-        return db.session.get(Tag, tag_id)  # Corrected line
-    except SQLAlchemyError as e:
-        # Log the error
-        print(str(e))
-        return None
+from flask import flash  # Import flash to display messages
 
 def update_tag(tag, data):
     if not data['name']:
@@ -48,4 +11,11 @@ def update_tag(tag, data):
 
     tag.name = data['name']
     tag.category = data['category']
-    db.session.commit()
+    try:
+        db.session.commit()
+    except SQLAlchemyError as e:
+        # Log the error and flash a message
+        print(str(e))
+        flash(f"Failed to update tag: {str(e)}.", 'danger')
+        db.session.rollback()
+        raise  # Re-raise the exception if needed for further handling
