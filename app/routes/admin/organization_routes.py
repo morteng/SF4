@@ -38,6 +38,7 @@ def delete(id):
         except SQLAlchemyError as e:
             current_app.db_session.rollback()
             flash(f'Failed to delete organization. Error: {str(e)}', 'danger')
+            return render_template('admin/organizations/form.html', form=form)
     else:
         flash('Organization not found.', 'danger')
     return redirect(url_for('admin.organization.index'))
