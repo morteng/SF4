@@ -156,3 +156,20 @@ def test_organization(db_session, organization_data):
 def extract_csrf_token(response_data):
     match = re.search(r'name="csrf_token".*?value="(.+?)"', response_data.decode('utf-8'))
     return match.group(1) if match else "dummy_csrf_token"
+
+@pytest.fixture(scope='function')
+def logged_in_client(client, test_user):
+    """Log in as a regular user."""
+    login_response = client.get(url_for('public.login'))
+    csrf_token = extract_csrf_token(login_response.data)
+
+    response = client.post(url_for('public.login'), data={
+        'username': test_user.username,
+        'password': 'password123',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+
+    assert response.status_code == 200, "User login failed."
+    with client.session_transaction() as session:
+        assert '_user_id' in session, "User session not established."
+    yield client
