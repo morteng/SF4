@@ -2,6 +2,7 @@ import pytest
 from flask import url_for, get_flashed_messages
 from app.models.tag import Tag
 from tests.conftest import extract_csrf_token
+from app.forms.admin_forms import TagForm  # Added this line
 
 @pytest.fixture(scope='function')
 def tag_data():

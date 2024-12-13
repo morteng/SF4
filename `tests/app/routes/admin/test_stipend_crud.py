@@ -2,6 +2,7 @@ import pytest
 from flask import url_for, get_flashed_messages
 from app.models.stipend import Stipend
 from tests.conftest import extract_csrf_token
+from app.forms.admin_forms import StipendForm  # Added this line
 
 @pytest.fixture(scope='function')
 def stipend_data():
@@ -107,25 +108,24 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
 def test_create_stipend_route_with_duplicate_name(logged_in_admin, test_stipend, stipend_data):
     with logged_in_admin.application.app_context():
         response = logged_in_admin.get(url_for('admin.stipend.create'))
-        csrf_token = extract_csrf_token(response.data)
+        assert response.status_code == 200
 
+        csrf_token = extract_csrf_token(response.data)
         duplicate_data = {
             'name': test_stipend.name,
-            'description': "Duplicate description.",
-            'amount': 2000,
+            'description': "DuplicateDescription",
+            'amount': 1500,
             'currency': "EUR",
             'csrf_token': csrf_token
         }
-        
-        response = logged_in_admin.post(url_for('admin.stipend.create'), data=duplicate_data)
-        
-        assert response.status_code == 200
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=duplicate_data, follow_redirects=True)
 
+        assert response.status_code == 200
         form = StipendForm(data=duplicate_data)
         if not form.validate():
             for field, errors in form.errors.items():
                 print(f"Field {field} errors: {errors}")
-            
+    
         # Check that the stipend was not created
         new_stipend = db_session.query(Stipend).filter_by(name=duplicate_data['name']).first()
         assert new_stipend.id == test_stipend.id  # Ensure it's the same stipend

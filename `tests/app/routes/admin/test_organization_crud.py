@@ -2,6 +2,7 @@ import pytest
 from flask import url_for, get_flashed_messages
 from app.models.organization import Organization
 from tests.conftest import extract_csrf_token
+from app.forms.admin_forms import OrganizationForm  # Added this line
 
 @pytest.fixture(scope='function')
 def organization_data():
