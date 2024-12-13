@@ -21,7 +21,6 @@ def edit_profile():
         update_user(current_user, {
             'username': form.username.data,
             'email': form.email.data,
-            'password': form.password.data if form.password.data else None,
             'is_admin': current_user.is_admin  # Assuming is_admin should not be changed via this form
         })
         flash('Your changes have been saved.')
