@@ -2,6 +2,7 @@ import pytest
 from app.models.tag import Tag
 from app.services.tag_service import get_all_tags, delete_tag, create_tag, get_tag_by_id, update_tag
 from sqlalchemy.exc import SQLAlchemyError
+from wtforms.validators import ValidationError
 
 @pytest.fixture(scope='function')
 def tag_data():
