@@ -15,6 +15,7 @@ def tag_data():
 @pytest.fixture(scope='function')
 def test_tag(db_session, tag_data):
     """Provide a test tag for use in tests."""
+    db_session.rollback()  # Ensure a clean session
     tag = Tag(
         name=tag_data['name'],
         category=tag_data['category']
@@ -109,6 +110,7 @@ def test_update_tag_with_error(monkeypatch, db_session, test_tag, tag_data):
 # Additional tests for edge cases
 
 def test_create_tag_duplicate_name(db_session, test_tag, tag_data):
+    db_session.rollback()  # Ensure a clean session
     duplicate_tag_data = {
         'name': test_tag.name,
         'category': 'AnotherCategory'
@@ -118,6 +120,7 @@ def test_create_tag_duplicate_name(db_session, test_tag, tag_data):
     assert "UNIQUE constraint failed" in str(excinfo.value)
 
 def test_update_tag_duplicate_name(db_session, test_tag, another_test_tag):
+    db_session.rollback()  # Ensure a clean session
     updated_data = {
         'name': another_test_tag.name,
         'category': 'UpdatedCategory'
@@ -129,6 +132,7 @@ def test_update_tag_duplicate_name(db_session, test_tag, another_test_tag):
 @pytest.fixture(scope='function')
 def another_test_tag(db_session, tag_data):
     """Provide another test tag for use in tests."""
+    db_session.rollback()  # Ensure a clean session
     another_tag = Tag(
         name='Another Test Tag',
         category=tag_data['category']

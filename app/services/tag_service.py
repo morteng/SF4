@@ -22,6 +22,11 @@ def delete_tag(tag):
         raise  # Re-raise the exception
 
 def create_tag(data):
+    if not data.get('name'):
+        raise ValidationError('Name cannot be empty.')
+    if not data.get('category'):
+        raise ValidationError('Category cannot be empty.')
+
     new_tag = Tag(name=data['name'], category=data['category'])
     db.session.add(new_tag)
     db.session.commit()
