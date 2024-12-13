@@ -4,6 +4,13 @@
 {% block content %}
 <div class="container">
     <h1>Create Tag</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
     <form method="POST" action="{{ url_for('admin.tag.create') }}">
         {{ form.hidden_tag() }}
         <div class="form-group">
