@@ -1,0 +1,39 @@
+import pytest
+from flask import url_for
+from app.models.user import User
+
+@pytest.fixture(scope='function')
+def test_user(db_session):
+    user = User(username='testuser', email='test@example.com')
+    user.set_password('password123')
+    db_session.add(user)
+    db_session.commit()
+    yield user
+
+    # Teardown: Attempt to delete the user and rollback if an error occurs
+    try:
+        db_session.delete(user)
+        db_session.commit()
+    except Exception as e:
+        print(f"Failed to delete test user during teardown: {e}")
+        db_session.rollback()
+
+def test_profile_route(logged_in_client, test_user):
+    profile_response = logged_in_client.get(url_for('user.profile'))
+    assert profile_response.status_code == 200
+
+def test_edit_profile_route(logged_in_client, test_user):
+    edit_response = logged_in_client.get(url_for('user.edit_profile'))
+    assert edit_response.status_code == 200
+
+    csrf_token = extract_csrf_token(edit_response.data)
+    response = logged_in_client.post(url_for('user.edit_profile'), data={
+        'username': 'newusername',
+        'email': 'newemail@example.com',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+
+    assert response.status_code == 200
+    updated_user = User.query.get(test_user.id)
+    assert updated_user.username == 'newusername'
+    assert updated_user.email == 'newemail@example.com'
