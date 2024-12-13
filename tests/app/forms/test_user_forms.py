@@ -3,6 +3,7 @@ from app.forms.user_forms import ProfileForm, LoginForm
 from app import create_app
 from app.models.user import User
 from app.extensions import db
+from werkzeug.security import generate_password_hash
 
 @pytest.fixture(scope='function', autouse=True)
 def setup_database(_db):
@@ -31,7 +32,8 @@ def test_profile_form_valid(client, setup_database):
     assert form.validate() == True
 
 def test_profile_form_invalid_same_username(client, setup_database):
-    user = User(username="existinguser", email="existing@example.com")
+    password_hash = generate_password_hash("password123")
+    user = User(username="existinguser", email="existing@example.com", password_hash=password_hash)
     db.session.add(user)
     db.session.commit()
 
@@ -42,7 +44,8 @@ def test_profile_form_invalid_same_username(client, setup_database):
     assert 'Please use a different username.' in form.username.errors
 
 def test_profile_form_invalid_same_email(client, setup_database):
-    user = User(username="existinguser", email="existing@example.com")
+    password_hash = generate_password_hash("password123")
+    user = User(username="existinguser", email="existing@example.com", password_hash=password_hash)
     db.session.add(user)
     db.session.commit()
 
