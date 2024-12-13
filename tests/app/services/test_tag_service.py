@@ -189,11 +189,3 @@ def test_create_tag_with_empty_category(db_session):
     with pytest.raises(ValidationError) as excinfo:
         create_tag(invalid_tag_data)
     assert "Category cannot be empty." in str(excinfo.value)
-
-# Ensure proper session management
-@pytest.fixture(scope='function')
-def db_session(app):
-    with app.app_context():
-        session = db.session  # Use the imported db object
-        yield session
-        session.rollback()  # Rollback to ensure a clean state for the next test

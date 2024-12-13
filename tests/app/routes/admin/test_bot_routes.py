@@ -2,7 +2,6 @@ import pytest
 from flask import url_for
 from app.models.bot import Bot
 from tests.conftest import extract_csrf_token
-from app.extensions import db  # Import the db object from extensions
 
 @pytest.fixture(scope='function')
 def bot_data():
@@ -26,13 +25,6 @@ def test_bot(db_session, bot_data):
     except Exception as e:
         print(f"Failed to delete test bot during teardown: {e}")
         db_session.rollback()
-
-@pytest.fixture(scope='function')
-def db_session(app):
-    with app.app_context():
-        session = db.session  # Use the imported db object
-        yield session
-        session.rollback()
 
 def test_create_bot_route(logged_in_admin, bot_data):
     create_response = logged_in_admin.get(url_for('admin.bot.create'))
