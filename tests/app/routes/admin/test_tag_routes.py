@@ -33,25 +33,6 @@ def test_tag(db_session, tag_data):
         db_session.rollback()
 
 @pytest.fixture(scope='function')
-def another_test_tag(db_session, tag_data):
-    """Provide another test tag for use in tests."""
-    another_tag = Tag(
-        name='Another Test Tag',
-        category=tag_data['category']
-    )
-    db_session.add(another_tag)
-    db_session.commit()
-    yield another_tag
-
-    # Teardown: Attempt to delete the tag and rollback if an error occurs
-    try:
-        db_session.delete(another_tag)
-        db_session.commit()
-    except SQLAlchemyError as e:
-        print(f"Failed to delete test tag during teardown: {e}")
-        db_session.rollback()
-
-@pytest.fixture(scope='function')
 def logged_in_admin(client, admin_user):
     login_response = client.get(url_for('public.login'))  # Fetch the login page to get CSRF token
     csrf_token = extract_csrf_token(login_response.data)
@@ -91,13 +72,13 @@ def test_delete_tag_route(logged_in_admin, test_tag):
     tags = get_all_tags()
     assert not any(tag.id == test_tag.id for tag in tags)
 
-def test_update_tag_route(logged_in_admin, test_tag, another_test_tag):
+def test_update_tag_route(logged_in_admin, test_tag):
     update_response = logged_in_admin.get(url_for('admin.tag.update', id=test_tag.id))
     assert update_response.status_code == 200
 
     csrf_token = extract_csrf_token(update_response.data)
     updated_data = {
-        'name': another_test_tag.name,
+        'name': 'Updated Tag Name',  # Use a unique name
         'category': 'UpdatedCategory',
         'csrf_token': csrf_token
     }
