@@ -156,3 +156,47 @@ def invalid_tag_data():
         'name': None,
         'category': 'TestCategory'
     }
+
+# New tests for edge cases
+
+def test_update_tag_with_empty_name(db_session, test_tag):
+    updated_data = {
+        'name': '',
+        'category': 'UpdatedCategory'
+    }
+    with pytest.raises(SQLAlchemyError) as excinfo:
+        update_tag(test_tag, updated_data)
+    assert "NOT NULL constraint failed" in str(excinfo.value)
+
+def test_update_tag_with_empty_category(db_session, test_tag):
+    updated_data = {
+        'name': 'Updated Tag Name',
+        'category': ''
+    }
+    with pytest.raises(SQLAlchemyError) as excinfo:
+        update_tag(test_tag, updated_data)
+    assert "NOT NULL constraint failed" in str(excinfo.value)
+
+def test_create_tag_with_empty_name(db_session, tag_data):
+    invalid_tag_data = {
+        'name': '',
+        'category': 'TestCategory'
+    }
+    with pytest.raises(SQLAlchemyError) as excinfo:
+        create_tag(invalid_tag_data)
+    assert "NOT NULL constraint failed" in str(excinfo.value)
+
+def test_create_tag_with_empty_category(db_session, tag_data):
+    invalid_tag_data = {
+        'name': 'Test Tag',
+        'category': ''
+    }
+    with pytest.raises(SQLAlchemyError) as excinfo:
+        create_tag(invalid_tag_data)
+    assert "NOT NULL constraint failed" in str(excinfo.value)
+
+def test_delete_non_existent_tag(db_session):
+    non_existent_tag = Tag(id=9999, name='NonExistentTag', category='TestCategory')
+    with pytest.raises(SQLAlchemyError) as excinfo:
+        delete_tag(non_existent_tag)
+    assert "No row was deleted" in str(excinfo.value)
