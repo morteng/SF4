@@ -13,7 +13,7 @@ def create():
         new_bot = create_bot(form.data)
         flash('Bot created successfully.', 'success')
         return redirect(url_for('admin.bot.index'))
-    return render_template('admin/bot/create.html', form=form)
+    return render_template('admin/bots/create.html', form=form)
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
@@ -30,7 +30,7 @@ def delete(id):
 @login_required
 def index():
     bots = get_all_bots()
-    return render_template('admin/bot/index.html', bots=bots)
+    return render_template('admin/bots/index.html', bots=bots)
 
 @admin_bot_bp.route('/<int:id>/run', methods=['POST'])
 @login_required
@@ -57,4 +57,4 @@ def update(id):
         flash('Bot updated successfully.', 'success')
         return redirect(url_for('admin.bot.index'))
     
-    return render_template('admin/bot/_edit_row.html', form=form, bot=bot)
+    return render_template('admin/bots/_edit_row.html', form=form, bot=bot)

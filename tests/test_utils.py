@@ -45,8 +45,8 @@ class TestAdminRequiredDecorator:
             return "Success"
 
         with app.test_request_context('/'):
-            response = test_function()
-            mock_abort.assert_called_with(403)
+            with pytest.raises(Forbidden):
+                test_function()
 
     @patch('app.utils.current_user')
     def test_admin_required_with_admin_user(self, mock_current_user, app):

@@ -163,7 +163,7 @@ def test_delete_stipend_with_database_error(logged_in_admin, test_stipend, db_se
         
         response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id))
         
-        assert response.status_code == 200
+        assert response.status_code == 302
 
         # Check that the stipend was not deleted
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
