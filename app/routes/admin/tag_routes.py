@@ -3,6 +3,7 @@ from flask_login import login_required
 from app.forms.admin_forms import TagForm
 from app.services.tag_service import get_tag_by_id, delete_tag, get_all_tags, create_tag, update_tag
 from app.extensions import db
+from sqlalchemy.exc import IntegrityError  # Add this import
 
 admin_tag_bp = Blueprint('tag', __name__, url_prefix='/tags')
 
@@ -48,8 +49,15 @@ def update(id):
     form = TagForm(obj=tag, original_name=tag.name)  # Pass the original name to the form
     
     if form.validate_on_submit():
-        update_tag(tag, form.data)
-        flash('Tag updated successfully.', 'success')
-        return redirect(url_for('admin.tag.index'))
+        try:
+            update_tag(tag, form.data)
+            flash('Tag updated successfully.', 'success')
+            return redirect(url_for('admin.tag.index'))
+        except IntegrityError as e:
+            db.session.rollback()
+            flash(f'Failed to update tag: {str(e)}.', 'danger')
+        except Exception as e:
+            db.session.rollback()
+            flash(f'An error occurred while updating the tag: {str(e)}.', 'danger')
     
     return render_template('admin/tags/update.html', form=form, tag=tag)
