@@ -35,7 +35,7 @@ class TestAdminRequiredDecorator:
                 response = test_function()
 
     @patch('app.utils.current_user')
-    @patch('flask.abort')
+    @patch('flask.abort', side_effect=Forbidden)
     def test_admin_required_with_non_admin_user(self, mock_abort, mock_current_user, app):
         mock_current_user.is_authenticated = True
         mock_current_user.is_admin = False

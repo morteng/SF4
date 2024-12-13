@@ -1,6 +1,8 @@
 from app.extensions import db
 
 class Bot(db.Model):
+    __mapper_args__ = {"confirm_deleted_rows": False}
+    
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
