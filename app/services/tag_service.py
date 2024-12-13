@@ -1,6 +1,7 @@
 from app.models.tag import Tag
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
+from wtforms.validators import ValidationError
 
 def get_all_tags():
     try:
@@ -35,6 +36,11 @@ def get_tag_by_id(tag_id):
         return None
 
 def update_tag(tag, data):
+    if not data['name']:
+        raise ValidationError('Name cannot be empty.')
+    if not data['category']:
+        raise ValidationError('Category cannot be empty.')
+
     tag.name = data['name']
     tag.category = data['category']
     db.session.commit()
