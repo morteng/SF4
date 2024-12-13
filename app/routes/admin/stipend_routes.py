@@ -68,10 +68,8 @@ def update(id):
     
     if form.validate_on_submit():
         try:
-            
             # Populate other fields from the form
             form.populate_obj(stipend)
-            stipend.open_for_applications = 'open_for_applications' in request.form
             
             update_stipend(stipend, stipend.__dict__)
             db.session.commit()
