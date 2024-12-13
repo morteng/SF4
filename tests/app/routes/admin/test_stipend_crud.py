@@ -12,7 +12,7 @@ def extract_csrf_token(response_data):
 
 def test_create_stipend(logged_in_admin, db_session, stipend_data):
     with logged_in_admin.application.app_context():
-        data = stipend_data()
+        data = stipend_data
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=data)
         
         assert response.status_code == 302
@@ -32,7 +32,7 @@ def test_create_stipend(logged_in_admin, db_session, stipend_data):
 def test_create_stipend_with_invalid_form_data(logged_in_admin, db_session, stipend_data):
     with logged_in_admin.application.app_context():
         # Call the stipend_data function to get the dictionary
-        data = stipend_data()
+        data = stipend_data
         
         # Intentionally make the name field invalid
         data['name'] = ''
@@ -52,7 +52,7 @@ def test_create_stipend_with_invalid_form_data(logged_in_admin, db_session, stip
 
 def test_create_stipend_with_database_error(logged_in_admin, stipend_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
-        data = stipend_data()
+        data = stipend_data
 
         def mock_commit(*args, **kwargs):
             raise Exception("Database error")
@@ -69,7 +69,7 @@ def test_create_stipend_with_database_error(logged_in_admin, stipend_data, db_se
 
 def test_update_stipend(logged_in_admin, test_stipend, db_session, stipend_data):
     with logged_in_admin.application.app_context():
-        updated_data = stipend_data()
+        updated_data = stipend_data
         updated_data.update({
             'name': "Updated Stipend",
             'summary': "Updated summary.",
@@ -98,7 +98,7 @@ def test_update_stipend(logged_in_admin, test_stipend, db_session, stipend_data)
 
 def test_update_stipend_with_invalid_form_data(logged_in_admin, test_stipend, db_session, stipend_data):
     with logged_in_admin.application.app_context():
-        updated_data = stipend_data()
+        updated_data = stipend_data
         
         # Intentionally make the name field invalid
         updated_data['name'] = ''
@@ -120,7 +120,7 @@ def test_update_stipend_with_invalid_form_data(logged_in_admin, test_stipend, db
 
 def test_update_stipend_with_database_error(logged_in_admin, test_stipend, stipend_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
-        updated_data = stipend_data()
+        updated_data = stipend_data
         updated_data.update({
             'name': test_stipend.name,
             'summary': "Updated summary.",
