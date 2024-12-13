@@ -15,9 +15,9 @@ def user_data():
 def test_user(db_session, user_data):
     user = User(
         username=user_data['username'],
-        password=user_data['password'],
         email=user_data['email']
     )
+    user.set_password(user_data['password'])  # Use set_password method to hash the password
     db_session.add(user)
     db_session.commit()
     yield user
