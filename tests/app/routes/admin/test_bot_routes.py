@@ -51,18 +51,10 @@ def test_create_bot_route(logged_in_admin, bot_data):
     assert any(bot.name == bot_data['name'] and bot.description == bot_data['description'] for bot in bots)
 
 def test_delete_bot_route(logged_in_admin, test_bot, db_session):
+    # Perform the DELETE operation
     delete_response = logged_in_admin.post(url_for('admin.bot.delete', id=test_bot.id))
     assert delete_response.status_code == 302
     
-    # Ensure the bot is still in the session before deleting
-    db_session.expire_all()
-    updated_bot = db_session.get(Bot, test_bot.id)
-    assert updated_bot is not None
-
-    # Perform the DELETE operation again to ensure it works correctly
-    delete_response = logged_in_admin.post(url_for('admin.bot.delete', id=test_bot.id))
-    assert delete_response.status_code == 302
-
     # Ensure the bot is no longer in the session after deleting
     db_session.expire_all()
     updated_bot = db_session.get(Bot, test_bot.id)
