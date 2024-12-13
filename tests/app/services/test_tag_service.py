@@ -164,36 +164,36 @@ def test_update_tag_with_empty_name(db_session, test_tag):
         'name': '',
         'category': 'UpdatedCategory'
     }
-    with pytest.raises(SQLAlchemyError) as excinfo:
+    with pytest.raises(ValidationError) as excinfo:
         update_tag(test_tag, updated_data)
-    assert "NOT NULL constraint failed" in str(excinfo.value)
+    assert "Name cannot be empty." in str(excinfo.value)
 
 def test_update_tag_with_empty_category(db_session, test_tag):
     updated_data = {
         'name': 'Updated Tag Name',
         'category': ''
     }
-    with pytest.raises(SQLAlchemyError) as excinfo:
+    with pytest.raises(ValidationError) as excinfo:
         update_tag(test_tag, updated_data)
-    assert "NOT NULL constraint failed" in str(excinfo.value)
+    assert "Category cannot be empty." in str(excinfo.value)
 
 def test_create_tag_with_empty_name(db_session, tag_data):
     invalid_tag_data = {
         'name': '',
         'category': 'TestCategory'
     }
-    with pytest.raises(SQLAlchemyError) as excinfo:
+    with pytest.raises(ValidationError) as excinfo:
         create_tag(invalid_tag_data)
-    assert "NOT NULL constraint failed" in str(excinfo.value)
+    assert "Name cannot be empty." in str(excinfo.value)
 
 def test_create_tag_with_empty_category(db_session, tag_data):
     invalid_tag_data = {
         'name': 'Test Tag',
         'category': ''
     }
-    with pytest.raises(SQLAlchemyError) as excinfo:
+    with pytest.raises(ValidationError) as excinfo:
         create_tag(invalid_tag_data)
-    assert "NOT NULL constraint failed" in str(excinfo.value)
+    assert "Category cannot be empty." in str(excinfo.value)
 
 def test_delete_non_existent_tag(db_session):
     non_existent_tag = Tag(id=9999, name='NonExistentTag', category='TestCategory')
