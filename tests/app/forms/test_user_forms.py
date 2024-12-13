@@ -1,7 +1,17 @@
 import pytest
 from app.forms.user_forms import ProfileForm, LoginForm
+from app import create_app
 
-def test_profile_form_validation():
+@pytest.fixture(scope='module')
+def test_client():
+    """Create and configure a new app instance for each test."""
+    app = create_app('testing')
+
+    with app.test_client() as client:
+        with app.app_context():
+            yield client
+
+def test_profile_form_validation(test_client):
     form = ProfileForm(original_username='testuser', original_email='test@example.com')
     form.username.data = 'newusername'
     form.email.data = 'newemail@example.com'
