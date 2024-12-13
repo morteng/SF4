@@ -7,6 +7,8 @@ from app.utils import admin_required, init_admin_user
 from app.models.user import User
 from app.extensions import db
 from app import create_app  # Import the create_app function from __init__.py
+from werkzeug.exceptions import Forbidden
+import pytest
 
 class TestAdminRequiredDecorator:
     def setup_method(self):
@@ -20,8 +22,7 @@ class TestAdminRequiredDecorator:
             db.drop_all()
 
     @patch('app.utils.current_user')
-    @patch('flask.abort', side_effect=MagicMock())
-    def test_admin_required_with_non_authenticated_user(self, mock_abort, mock_current_user, app):
+    def test_admin_required_with_non_authenticated_user(self, mock_current_user, app):
         mock_current_user.is_authenticated = False
         mock_current_user.is_admin = False
 
@@ -30,8 +31,8 @@ class TestAdminRequiredDecorator:
             return "Success"
 
         with app.test_request_context('/'):
-            response = test_function()
-            mock_abort.assert_called_with(403)
+            with pytest.raises(Forbidden):
+                response = test_function()
 
     @patch('app.utils.current_user')
     @patch('flask.abort', side_effect=MagicMock())
