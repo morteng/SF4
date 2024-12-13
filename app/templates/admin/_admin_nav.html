@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
 <nav>
     <ul>
         <li><a href="{{ url_for('admin.stipend.index') }}">Manage Stipends</a></li>
@@ -6,3 +9,5 @@
         <li><a href="{{ url_for('admin.user.index') }}">Manage Users</a></li>
     </ul>
 </nav>
+{{ super() }}
+{% endblock %}
