@@ -12,9 +12,12 @@ def create():
         form = OrganizationForm(request.form)
         if form.validate_on_submit():
             organization_data = {k: v for k, v in form.data.items() if k != 'submit'}
-            new_organization = create_organization(organization_data)
-            flash('Organization created!', 'success')
-            return redirect(url_for('admin.organization.index'))
+            success, error_message = create_organization(organization_data)
+            if success:
+                flash('Organization created!', 'success')
+                return redirect(url_for('admin.organization.index'))
+            else:
+                flash(error_message, 'danger')
         else:
             flash('Oops! Failed to create organization.', 'danger')
     else:

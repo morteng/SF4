@@ -24,8 +24,14 @@ def create_organization(data):
     filtered_data = {k: v for k, v in data.items() if k in valid_keys}
     new_organization = Organization(**filtered_data)
     db.session.add(new_organization)
-    db.session.commit()
-    return new_organization
+    try:
+        db.session.commit()
+        return True, None
+    except SQLAlchemyError as e:
+        # Log the error and possibly handle it
+        print(str(e))
+        db.session.rollback()
+        return False, "Failed to create organization."
 
 def get_organization_by_id(organization_id):
     return db.session.get(Organization, organization_id)
