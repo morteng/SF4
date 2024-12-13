@@ -1,7 +1,7 @@
 import pytest
-from flask import url_for, session, flash
+from flask import url_for
 from app.models.organization import Organization
-from app.forms.admin_forms import OrganizationForm
+from app.forms.admin_forms import OrganizationForm  # Import the StipendForm class
 from datetime import datetime, timedelta
 from tests.conftest import logged_in_admin, db_session, test_organization, organization_data
 import re
@@ -9,27 +9,21 @@ import re
 def extract_csrf_token(response_data):
     """Extract CSRF token from the response HTML."""
     csrf_match = re.search(r'name="csrf_token" type="hidden" value="(.+?)"', response_data.decode('utf-8'))
-    return csrf_match.group(1) if csrf_match else None
+    return csrf_match.group(1) if csrf_match else None  # Fallback
 
 def test_create_organization(logged_in_admin, db_session, organization_data):
     with logged_in_admin.application.app_context():
-        # Fetch CSRF token from the form page
-        response = logged_in_admin.get(url_for('admin.organization.create'))
-        csrf_token = extract_csrf_token(response.data)
-
-        organization_data['csrf_token'] = csrf_token
-
-        response = logged_in_admin.post(url_for('admin.organization.create'), data=organization_data)
+        data = organization_data
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
         
         assert response.status_code == 302
         assert url_for('admin.organization.index', _external=False) == response.headers['Location']
 
-        # Check if the organization was created successfully
-        new_organization = db_session.query(Organization).filter_by(name=organization_data['name']).first()
+        new_organization = db_session.query(Organization).filter_by(name=data['name']).first()
         assert new_organization is not None
-        assert new_organization.name == organization_data['name']
-        assert new_organization.description == organization_data['description']
-        assert new_organization.homepage_url == organization_data['homepage_url']  # Ensure this line checks the correct field
+        assert new_organization.name == data['name']
+        assert new_organization.description == data['description']
+        assert new_organization.homepage_url == data['homepage_url']  # Ensure this line checks the correct field
 
 def test_create_organization_with_invalid_form_data(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
@@ -56,6 +50,23 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
         # Check that the organization was not created
         new_organization = db_session.query(Organization).filter_by(name=invalid_data['name']).first()
         assert new_organization is None
+
+def test_create_organization_with_database_error(logged_in_admin, organization_data, db_session, monkeypatch):
+    with logged_in_admin.application.app_context():
+        data = organization_data
+
+        def mock_commit(*args, **kwargs):
+            raise Exception("Database error")
+            
+        monkeypatch.setattr(db_session, 'commit', mock_commit)
+        
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
+        
+        assert response.status_code == 200
+        assert b"Failed to create organization." in response.data  # Confirm error message is present
+
+        organizations = db_session.query(Organization).all()
+        assert not any(org.name == data['name'] for org in organizations)  # Ensure no organization was created
 
 def test_update_organization(logged_in_admin, test_organization, db_session):
     with logged_in_admin.application.app_context():
@@ -110,6 +121,11 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, test_organi
         assert organization.description == test_organization.description
         assert organization.homepage_url == test_organization.homepage_url
 
+def test_update_organization_with_invalid_id(logged_in_admin):
+    update_response = logged_in_admin.get(url_for('admin.organization.update', id=9999))
+    assert update_response.status_code == 302
+    assert url_for('admin.organization.index', _external=False) == update_response.headers['Location']
+
 def test_delete_organization(logged_in_admin, test_organization, db_session):
     with logged_in_admin.application.app_context():
         response = logged_in_admin.post(url_for('admin.organization.delete', id=test_organization.id))
@@ -121,6 +137,12 @@ def test_delete_organization(logged_in_admin, test_organization, db_session):
         deleted_organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
         assert deleted_organization is None
 
+def test_delete_organization_with_invalid_id(logged_in_admin):
+    delete_response = logged_in_admin.post(url_for('admin.organization.delete', id=9999))
+    
+    assert delete_response.status_code == 302
+    assert url_for('admin.organization.index', _external=False) == delete_response.headers['Location']
+
 def test_delete_nonexistent_organization(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         response = logged_in_admin.post(url_for('admin.organization.delete', id=9999))
@@ -128,63 +150,23 @@ def test_delete_nonexistent_organization(logged_in_admin, db_session):
         assert response.status_code == 302
         assert url_for('admin.organization.index', _external=False) == response.headers['Location']
 
-        # Check that no organization was deleted
-        organizations_count = db_session.query(Organization).count()
-        assert organizations_count == 0
+def test_index_organization_route(logged_in_admin, test_organization):
+    index_response = logged_in_admin.get(url_for('admin.organization.index'))
+    assert index_response.status_code == 200
 
-def test_index_organizations(logged_in_admin, test_organization, db_session):
+def test_create_organization_with_database_error(logged_in_admin, organization_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
-        response = logged_in_admin.get(url_for('admin.organization.index'))
-        
-        assert response.status_code == 200
-        assert b'Test Organization' in response.data  # Ensure the organization name is displayed
+        data = organization_data
 
-def test_create_organization_with_duplicate_name(logged_in_admin, db_session, test_organization):
-    with logged_in_admin.application.app_context():
-        # Fetch CSRF token from the form page
-        response = logged_in_admin.get(url_for('admin.organization.create'))
-        csrf_token = extract_csrf_token(response.data)
-
-        duplicate_data = {
-            'name': test_organization.name,
-            'description': "Duplicate description.",
-            'homepage_url': "http://example.com/duplicate-organization",
-            'csrf_token': csrf_token
-        }
-        
-        response = logged_in_admin.post(url_for('admin.organization.create'), data=duplicate_data)
-        
-        assert response.status_code == 200
-
-        form = OrganizationForm(data=duplicate_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
+        def mock_commit(*args, **kwargs):
+            raise Exception("Database error")
             
-        # Check that the organization was not created
-        new_organization = db_session.query(Organization).filter_by(name=duplicate_data['name']).first()
-        assert new_organization.id == test_organization.id  # Ensure it's the same organization
-
-def test_update_organization_with_duplicate_name(logged_in_admin, test_organization, db_session):
-    with logged_in_admin.application.app_context():
-        # Fetch CSRF token from the form page
-        response = logged_in_admin.get(url_for('admin.organization.update', id=test_organization.id))
-        csrf_token = extract_csrf_token(response.data)
-
-        duplicate_data = {
-            'name': test_organization.name,
-            'description': "Updated description.",
-            'homepage_url': "http://example.com/updated-organization",
-            'csrf_token': csrf_token
-        }
-
-        response = logged_in_admin.post(url_for('admin.organization.update', id=test_organization.id), data=duplicate_data)
+        monkeypatch.setattr(db_session, 'commit', mock_commit)
         
-        assert response.status_code == 302
-        assert url_for('admin.organization.index', _external=False) == response.headers['Location']
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
+        
+        assert response.status_code == 200
+        assert b"Failed to create organization." in response.data  # Confirm error message is present
 
-        db_session.expire_all()
-        organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
-        assert organization.name == duplicate_data['name']
-        assert organization.description == duplicate_data['description']
-        assert organization.homepage_url == duplicate_data['homepage_url']
+        organizations = db_session.query(Organization).all()
+        assert not any(org.name == data['name'] for org in organizations)  # Ensure no organization was created

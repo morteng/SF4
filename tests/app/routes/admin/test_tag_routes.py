@@ -112,3 +112,54 @@ def test_get_tag_by_id_route(logged_in_admin, test_tag):
 
     update_response = logged_in_admin.get(url_for('admin.tag.update', id=test_tag.id))
     assert update_response.status_code == 200
+
+def test_update_tag_route_with_invalid_id(logged_in_admin):
+    update_response = logged_in_admin.get(url_for('admin.tag.update', id=9999))
+    assert update_response.status_code == 302
+    assert url_for('admin.tag.index', _external=False) == update_response.headers['Location']
+
+def test_delete_tag_route_with_invalid_id(logged_in_admin):
+    delete_response = logged_in_admin.post(url_for('admin.tag.delete', id=9999))
+    assert delete_response.status_code == 302
+    assert url_for('admin.tag.index', _external=False) == delete_response.headers['Location']
+
+def test_create_tag_route_with_database_error(logged_in_admin, tag_data, db_session, monkeypatch):
+    with logged_in_admin.application.app_context():
+        data = tag_data
+
+        def mock_commit(*args, **kwargs):
+            raise Exception("Database error")
+            
+        monkeypatch.setattr(db_session, 'commit', mock_commit)
+        
+        response = logged_in_admin.post(url_for('admin.tag.create'), data=data)
+        
+        assert response.status_code == 200
+        assert b"Failed to create tag." in response.data  # Confirm error message is present
+
+        tags = db_session.query(Tag).all()
+        assert not any(tag.name == data['name'] for tag in tags)  # Ensure no tag was created
+
+def test_update_tag_with_database_error(logged_in_admin, test_tag, db_session, monkeypatch):
+    with logged_in_admin.application.app_context():
+        def mock_commit(*args, **kwargs):
+            raise Exception("Database error")
+            
+        monkeypatch.setattr(db_session, 'commit', mock_commit)
+        
+        update_response = logged_in_admin.get(url_for('admin.tag.update', id=test_tag.id))
+        assert update_response.status_code == 200
+
+        csrf_token = extract_csrf_token(update_response.data)
+        updated_data = {
+            'name': 'Updated Tag Name',
+            'category': test_tag.category,
+            'csrf_token': csrf_token
+        }
+        response = logged_in_admin.post(url_for('admin.tag.update', id=test_tag.id), data=updated_data, follow_redirects=True)
+        
+        assert response.status_code == 200
+        assert b"Failed to update tag." in response.data  # Confirm error message is present
+
+        updated_tag = db_session.get(Tag, test_tag.id)  # Use db_session.get to retrieve the tag
+        assert updated_tag.name != 'Updated Tag Name'
