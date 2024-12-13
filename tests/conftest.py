@@ -126,10 +126,8 @@ def stipend_data():
 @pytest.fixture(scope='function')
 def test_stipend(db_session, stipend_data):
     """Provide a test stipend."""
-    stipend = Stipend(
-        **stipend_data,
-        application_deadline=datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')  # Convert to datetime here
-    )
+    stipend_data['application_deadline'] = datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')  # Convert to datetime here
+    stipend = Stipend(**stipend_data)
     db_session.add(stipend)
     db_session.commit()
     yield stipend
