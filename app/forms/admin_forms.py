@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, PasswordField
-from wtforms.validators import DataRequired, Length, Optional, ValidationError
+from wtforms.validators import DataRequired, Length, Optional, ValidationError, Email
 from app.models.organization import Organization
 from app.forms.fields import CustomDateTimeField
 from app.models.tag import Tag
@@ -51,8 +51,8 @@ class TagForm(FlaskForm):
 
 class UserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(max=100)])
-    email = StringField('Email', validators=[DataRequired(), Length(max=255)])
-    password = PasswordField('Password', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email(), Length(max=255)])
+    password = PasswordField('Password', validators=[Optional()])
     is_admin = BooleanField('Is Admin')
     submit = SubmitField('Create')
 
@@ -62,16 +62,16 @@ class UserForm(FlaskForm):
         self.original_email = original_email
 
     def validate_username(self, username):
-        if not self.original_username or username.data != self.original_username:
+        if username.data != self.original_username:
             user = User.query.filter_by(username=username.data).first()
-            if user:
-                raise ValidationError('User with this username already exists.')
+            if user is not None:
+                raise ValidationError('Please use a different username.')
 
     def validate_email(self, email):
-        if not self.original_email or email.data != self.original_email:
+        if email.data != self.original_email:
             user = User.query.filter_by(email=email.data).first()
-            if user:
-                raise ValidationError('User with this email already exists.')
+            if user is not None:
+                raise ValidationError('Please use a different email address.')
 
 class BotForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
