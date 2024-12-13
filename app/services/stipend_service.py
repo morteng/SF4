@@ -50,7 +50,6 @@ def delete_stipend(stipend_id):
     try:
         stipend = get_stipend_by_id(stipend_id)
         if stipend:
-            db.session.commit()  # Commit first to ensure no errors before deleting
             db.session.delete(stipend)
             db.session.commit()
             logging.info('Stipend deleted successfully.')
