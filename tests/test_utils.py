@@ -6,10 +6,11 @@ from werkzeug.security import generate_password_hash
 from app.utils import admin_required, init_admin_user
 from app.models.user import User
 from app.extensions import db
+from app import create_app  # Import the create_app function from __init__.py
 
 class TestAdminRequiredDecorator:
     def setup_method(self):
-        self.app = create_test_app()
+        self.app = create_app('testing')  # Use create_app instead of create_test_app
         with self.app.app_context():
             db.create_all()
 
@@ -61,7 +62,7 @@ class TestAdminRequiredDecorator:
 
 class TestInitAdminUser:
     def setup_method(self):
-        self.app = create_test_app()
+        self.app = create_app('testing')  # Use create_app instead of create_test_app
         with self.app.app_context():
             db.create_all()
 
