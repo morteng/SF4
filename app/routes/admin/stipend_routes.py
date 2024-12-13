@@ -68,6 +68,7 @@ def update(id):
     
     if form.validate_on_submit():
         try:
+            stipend.open_for_applications = form.open_for_applications.data == 'y' or bool(form.open_for_applications.data)
             form.populate_obj(stipend)
             update_stipend(stipend, stipend.__dict__)
             db.session.commit()
