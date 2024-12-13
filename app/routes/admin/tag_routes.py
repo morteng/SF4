@@ -55,7 +55,7 @@ def update(id):
             return redirect(url_for('admin.tag.index'))
         except IntegrityError as e:
             db.session.rollback()
-            flash(f'Failed to update tag: {str(e)}.', 'danger')  # Specific message for IntegrityError
+            flash(f'Failed to update tag: Database error.', 'danger')  # Specific message for IntegrityError
         except Exception as e:
             db.session.rollback()
             flash(f'An error occurred while updating the tag: {str(e)}.', 'danger')
