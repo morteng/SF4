@@ -76,7 +76,7 @@ def update(id):
         except Exception as e:
             db.session.rollback()  # Explicitly rollback session on failure
             current_app.logger.error(f"Failed to update stipend: {e}")
-            flash('An error occurred while updating the stipend.', 'danger')
+            flash('Failed to update stipend', 'danger')
             return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
     
     # Ensure the form is re-rendered with errors and a 200 status code
