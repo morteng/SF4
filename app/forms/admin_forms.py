@@ -22,6 +22,11 @@ class StipendForm(FlaskForm):
     open_for_applications = BooleanField('Open for Applications', default=False)
     submit = SubmitField('Create')
 
+    def validate_application_deadline(self, field):
+        # If user provided a value but it wasn't parsed into a datetime, raise the custom error.
+        if field.raw_data and field.raw_data[0] and field.data is None:
+            raise ValidationError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
+
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
     category = StringField('Category', validators=[DataRequired(), Length(max=100)])  # Added this line
