@@ -35,6 +35,6 @@ def test_edit_profile_route(logged_in_client, test_user):
     }, follow_redirects=True)
 
     assert response.status_code == 200
-    updated_user = User.query.get(test_user.id)
+    updated_user = db_session.get(User, test_user.id)  # Update this line to use db_session.get
     assert updated_user.username == 'newusername'
     assert updated_user.email == 'newemail@example.com'
