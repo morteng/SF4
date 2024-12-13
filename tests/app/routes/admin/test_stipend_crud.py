@@ -1,6 +1,7 @@
 import pytest
 from flask import url_for
 from app.models.stipend import Stipend
+from app.forms.admin_forms import StipendForm  # Import the StipendForm class
 from datetime import datetime, timedelta
 from tests.conftest import logged_in_admin, db_session, test_stipend, stipend_data
 import re
