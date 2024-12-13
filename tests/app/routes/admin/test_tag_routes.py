@@ -146,7 +146,7 @@ def test_update_tag_with_database_error(logged_in_admin, test_tag, db_session, m
         def mock_commit(*args, **kwargs):
             raise IntegrityError("Database error", params=None, orig=None)
             
-        monkeypatch.setattr(db_session, 'commit', lambda: mock_commit())
+        monkeypatch.setattr(db_session, 'commit', mock_commit)  # Corrected line
         
         update_response = logged_in_admin.get(url_for('admin.tag.update', id=test_tag.id))
         assert update_response.status_code == 200
