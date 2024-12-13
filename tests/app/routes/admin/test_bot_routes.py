@@ -50,7 +50,7 @@ def test_create_bot_route(logged_in_admin, bot_data):
     bots = Bot.query.all()
     assert any(bot.name == bot_data['name'] and bot.description == bot_data['description'] for bot in bots)
 
-def test_delete_bot_route(logged_in_admin, test_bot):
+def test_delete_bot_route(logged_in_admin, test_bot, db_session):
     delete_response = logged_in_admin.post(url_for('admin.bot.delete', id=test_bot.id))
     assert delete_response.status_code == 302
     
