@@ -30,7 +30,11 @@ def update_stipend(stipend, data):
 def create_stipend(stipend, session=db.session):
     try:
         if isinstance(stipend.application_deadline, str):
-            datetime.strptime(stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
+            try:
+                datetime.strptime(stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
+
         session.add(stipend)
         session.commit()
         flash('Stipend created successfully.', 'success')

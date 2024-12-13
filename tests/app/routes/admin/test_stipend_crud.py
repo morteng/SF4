@@ -59,7 +59,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'application_procedure': test_stipend.application_procedure,
         'eligibility_criteria': test_stipend.eligibility_criteria,
         'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if hasattr(test_stipend.application_deadline, 'strftime') else test_stipend.application_deadline,
-        'open_for_applications': False,  # Ensure this is set to False
+        'open_for_applications': '',  # Ensure this is set to False
         'csrf_token': csrf_token
     }
     
