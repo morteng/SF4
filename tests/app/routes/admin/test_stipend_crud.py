@@ -20,6 +20,8 @@ def stipend_data():
 @pytest.fixture(scope='function')
 def test_stipend(db_session, stipend_data):
     """Provide a test stipend for use in tests."""
+    from datetime import datetime
+
     stipend = Stipend(
         name=stipend_data['name'],
         summary=stipend_data['summary'],
@@ -27,7 +29,7 @@ def test_stipend(db_session, stipend_data):
         homepage_url=stipend_data['homepage_url'],
         application_procedure=stipend_data['application_procedure'],
         eligibility_criteria=stipend_data['eligibility_criteria'],
-        application_deadline=stipend_data['application_deadline'],
+        application_deadline=datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'),
         open_for_applications=stipend_data['open_for_applications']
     )
     db_session.add(stipend)
@@ -54,7 +56,7 @@ def test_create_stipend_route(logged_in_admin, stipend_data):
         'homepage_url': stipend_data['homepage_url'],
         'application_procedure': stipend_data['application_procedure'],
         'eligibility_criteria': stipend_data['eligibility_criteria'],
-        'application_deadline': stipend_data['application_deadline'],
+        'application_deadline': stipend_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S'),
         'open_for_applications': stipend_data['open_for_applications'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
@@ -106,7 +108,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'homepage_url': test_stipend.homepage_url,
         'application_procedure': test_stipend.application_procedure,
         'eligibility_criteria': test_stipend.eligibility_criteria,
-        'application_deadline': '2025-12-31 23:59:59',
+        'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S'),
         'open_for_applications': False,
         'csrf_token': csrf_token
     }
@@ -116,7 +118,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
     updated_stipend = db_session.get(Stipend, test_stipend.id)  # Use db_session.get to retrieve the stipend
     assert updated_stipend.name == 'Updated Stipend Name'
     assert updated_stipend.summary == 'Updated summary content.'
-    assert updated_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2025-12-31 23:59:59'
+    assert updated_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S')
     assert not updated_stipend.open_for_applications
 
 def test_update_stipend_route_with_invalid_id(logged_in_admin):
