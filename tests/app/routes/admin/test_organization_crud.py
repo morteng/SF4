@@ -64,8 +64,7 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
         response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
         
         assert response.status_code == 200
-        assert b"Failed to create organization. Error: Database error" in response.data or b"Failed to create organization. Error: 'Database error'" in response.data
-
+        assert b"Failed to create organization. Error: Database error" in response.data
 
         organizations = db_session.query(Organization).all()
         assert not any(org.name == data['name'] for org in organizations)  # Ensure no organization was created
