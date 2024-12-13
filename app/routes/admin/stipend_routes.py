@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import (
@@ -70,21 +70,16 @@ def update(id):
         try:
             form.populate_obj(stipend)
             update_stipend(stipend, stipend.__dict__)
-            
+            db.session.commit()
             flash('Stipend updated successfully!', 'success')
             return redirect(url_for('admin.stipend.index'))
-        except ValueError as e:
-            db.session.rollback()  # Explicitly rollback session on failure
-            logging.error(f"Failed to update stipend: {e}")
-            flash(str(e), 'danger')
-            return render_template('admin/stipends/form.html', form=form), 200
         except Exception as e:
             db.session.rollback()  # Explicitly rollback session on failure
-            logging.error(f"Failed to update stipend: {e}")
+            current_app.logger.error(f"Failed to update stipend: {e}")
             flash('An error occurred while updating the stipend.', 'danger')
-            return render_template('admin/stipends/form.html', form=form), 200
+            return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
     
-    return render_template('admin/stipends/form.html', form=form), 200
+    return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
 
 
 @admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])

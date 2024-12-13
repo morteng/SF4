@@ -140,6 +140,7 @@ def test_update_stipend_with_database_error(logged_in_admin, test_stipend, stipe
         response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
         
         assert response.status_code == 200
+        assert b"Failed to update stipend" in response.data  # Confirm error message is present
 
         db_session.expire_all()
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
