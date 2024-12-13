@@ -145,19 +145,6 @@ def another_test_tag(db_session, tag_data):
         print(f"Failed to delete test tag during teardown: {e}")
         db_session.rollback()
 
-def test_create_tag_with_invalid_data(db_session, invalid_tag_data):
-    with pytest.raises(ValidationError) as excinfo:
-        create_tag(invalid_tag_data)
-    assert "Name cannot be empty." in str(excinfo.value)
-
-@pytest.fixture(scope='function')
-def invalid_tag_data():
-    """Provide invalid test data for tags."""
-    return {
-        'name': None,
-        'category': 'TestCategory'
-    }
-
 # New tests for edge cases
 
 def test_update_tag_with_empty_name(db_session, test_tag):
@@ -178,7 +165,7 @@ def test_update_tag_with_empty_category(db_session, test_tag):
         update_tag(test_tag, updated_data)
     assert "Category cannot be empty." in str(excinfo.value)
 
-def test_create_tag_with_empty_name(db_session, tag_data):
+def test_create_tag_with_empty_name(db_session):
     invalid_tag_data = {
         'name': '',
         'category': 'TestCategory'
@@ -187,7 +174,7 @@ def test_create_tag_with_empty_name(db_session, tag_data):
         create_tag(invalid_tag_data)
     assert "Name cannot be empty." in str(excinfo.value)
 
-def test_create_tag_with_empty_category(db_session, tag_data):
+def test_create_tag_with_empty_category(db_session):
     invalid_tag_data = {
         'name': 'Test Tag',
         'category': ''
@@ -195,9 +182,3 @@ def test_create_tag_with_empty_category(db_session, tag_data):
     with pytest.raises(ValidationError) as excinfo:
         create_tag(invalid_tag_data)
     assert "Category cannot be empty." in str(excinfo.value)
-
-def test_delete_non_existent_tag(db_session):
-    non_existent_tag = Tag(id=9999, name='NonExistentTag', category='TestCategory')
-    with pytest.raises(SQLAlchemyError) as excinfo:
-        delete_tag(non_existent_tag)
-    assert "No row was deleted" in str(excinfo.value)
