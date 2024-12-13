@@ -170,6 +170,7 @@ def test_update_tag_with_empty_category(db_session, test_tag):
     assert "Category cannot be empty." in str(excinfo.value)
 
 def test_create_tag_with_empty_name(db_session):
+    db_session.rollback()  # Ensure a clean session
     invalid_tag_data = {
         'name': '',
         'category': 'TestCategory'
@@ -179,6 +180,7 @@ def test_create_tag_with_empty_name(db_session):
     assert "Name cannot be empty." in str(excinfo.value)
 
 def test_create_tag_with_empty_category(db_session):
+    db_session.rollback()  # Ensure a clean session
     invalid_tag_data = {
         'name': 'Test Tag',
         'category': ''
