@@ -71,7 +71,9 @@ def update(id):
             # Correctly handle the open_for_applications boolean field
             stipend.open_for_applications = form.open_for_applications.data
             
+            # Populate other fields from the form
             form.populate_obj(stipend)
+            
             update_stipend(stipend, stipend.__dict__)
             db.session.commit()
             flash('Stipend updated successfully!', 'success')
