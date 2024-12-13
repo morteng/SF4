@@ -5,6 +5,7 @@ from app.forms.admin_forms import OrganizationForm  # Import the StipendForm cla
 from datetime import datetime, timedelta
 from tests.conftest import logged_in_admin, db_session, test_organization, organization_data
 import re
+from sqlalchemy.exc import SQLAlchemyError
 
 def extract_csrf_token(response_data):
     """Extract CSRF token from the response HTML."""
@@ -56,7 +57,7 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
         data = organization_data
 
         def mock_commit(*args, **kwargs):
-            raise Exception("Database error")
+            raise SQLAlchemyError("Database error")
             
         monkeypatch.setattr(db_session, 'commit', mock_commit)
         
@@ -153,20 +154,3 @@ def test_delete_nonexistent_organization(logged_in_admin, db_session):
 def test_index_organization_route(logged_in_admin, test_organization):
     index_response = logged_in_admin.get(url_for('admin.organization.index'))
     assert index_response.status_code == 200
-
-def test_create_organization_with_database_error(logged_in_admin, organization_data, db_session, monkeypatch):
-    with logged_in_admin.application.app_context():
-        data = organization_data
-
-        def mock_commit(*args, **kwargs):
-            raise Exception("Database error")
-            
-        monkeypatch.setattr(db_session, 'commit', mock_commit)
-        
-        response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
-        
-        assert response.status_code == 200
-        assert b"Failed to create organization." in response.data  # Confirm error message is present
-
-        organizations = db_session.query(Organization).all()
-        assert not any(org.name == data['name'] for org in organizations)  # Ensure no organization was created
