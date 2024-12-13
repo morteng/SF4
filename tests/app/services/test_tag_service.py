@@ -146,9 +146,9 @@ def another_test_tag(db_session, tag_data):
         db_session.rollback()
 
 def test_create_tag_with_invalid_data(db_session, invalid_tag_data):
-    with pytest.raises(SQLAlchemyError) as excinfo:
+    with pytest.raises(ValidationError) as excinfo:
         create_tag(invalid_tag_data)
-    assert "NOT NULL constraint failed" in str(excinfo.value)
+    assert "Name cannot be empty." in str(excinfo.value)
 
 @pytest.fixture(scope='function')
 def invalid_tag_data():
