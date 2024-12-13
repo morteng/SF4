@@ -43,9 +43,7 @@ def update_organization(organization, data):
         organization.description = data.get('description', organization.description)
         organization.homepage_url = data.get('homepage_url', organization.homepage_url)
         db.session.commit()
-        return organization
+        return True, None  # Success
     except SQLAlchemyError as e:
-        # Log the error and possibly handle it
-        print(str(e))
         db.session.rollback()
-        return None
+        return False, str(e)  # Error message

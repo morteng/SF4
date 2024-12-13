@@ -19,7 +19,7 @@ class StipendForm(FlaskForm):
         format='%Y-%m-%d %H:%M:%S',
         validators=[Optional()]
     )
-    open_for_applications = BooleanField('Open for Applications')
+    open_for_applications = BooleanField('Open for Applications', default=False)
     submit = SubmitField('Create')
 
 class TagForm(FlaskForm):
