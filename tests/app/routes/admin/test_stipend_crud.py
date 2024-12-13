@@ -6,6 +6,8 @@ from tests.conftest import extract_csrf_token
 @pytest.fixture(scope='function')
 def stipend_data():
     """Provide test data for stipends."""
+    from datetime import datetime  # Add this import
+
     return {
         'name': 'Test Stipend',
         'summary': 'Test summary content.',
@@ -13,7 +15,7 @@ def stipend_data():
         'homepage_url': 'http://example.com',
         'application_procedure': 'Follow the steps outlined on the website.',
         'eligibility_criteria': 'Must be enrolled in a degree program.',
-        'application_deadline': '2024-12-31 23:59:59',
+        'application_deadline': datetime(2024, 12, 31, 23, 59, 59),  # Change here
         'open_for_applications': True
     }
 
@@ -29,7 +31,7 @@ def test_stipend(db_session, stipend_data):
         homepage_url=stipend_data['homepage_url'],
         application_procedure=stipend_data['application_procedure'],
         eligibility_criteria=stipend_data['eligibility_criteria'],
-        application_deadline=datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'),
+        application_deadline=datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S') if isinstance(stipend_data['application_deadline'], str) else stipend_data['application_deadline'],
         open_for_applications=stipend_data['open_for_applications']
     )
     db_session.add(stipend)
@@ -56,7 +58,7 @@ def test_create_stipend_route(logged_in_admin, stipend_data):
         'homepage_url': stipend_data['homepage_url'],
         'application_procedure': stipend_data['application_procedure'],
         'eligibility_criteria': stipend_data['eligibility_criteria'],
-        'application_deadline': stipend_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S'),
+        'application_deadline': stipend_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S') if hasattr(stipend_data['application_deadline'], 'strftime') else stipend_data['application_deadline'],  # Change here
         'open_for_applications': stipend_data['open_for_applications'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
@@ -108,7 +110,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'homepage_url': test_stipend.homepage_url,
         'application_procedure': test_stipend.application_procedure,
         'eligibility_criteria': test_stipend.eligibility_criteria,
-        'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S'),
+        'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if hasattr(test_stipend.application_deadline, 'strftime') else test_stipend.application_deadline,  # Change here
         'open_for_applications': False,
         'csrf_token': csrf_token
     }
@@ -176,7 +178,7 @@ def test_update_stipend_with_database_error(logged_in_admin, test_stipend, db_se
             'homepage_url': test_stipend.homepage_url,
             'application_procedure': test_stipend.application_procedure,
             'eligibility_criteria': test_stipend.eligibility_criteria,
-            'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S'),
+            'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if hasattr(test_stipend.application_deadline, 'strftime') else test_stipend.application_deadline,
             'open_for_applications': test_stipend.open_for_applications,
             'csrf_token': csrf_token
         }
