@@ -32,11 +32,17 @@ class TagForm(FlaskForm):
         self.original_name = original_name
 
     def validate_name(self, name):
+        if not name.data:
+            raise ValidationError('Name cannot be empty.')
         if self.original_name and name.data == self.original_name:
             return  # Skip validation if the name hasn't changed
         tag = Tag.query.filter_by(name=name.data).first()
         if tag:
             raise ValidationError('Tag with this name already exists.')
+
+    def validate_category(self, category):
+        if not category.data:
+            raise ValidationError('Category cannot be empty.')
 
 class UserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(max=100)])

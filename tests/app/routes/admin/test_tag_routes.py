@@ -78,7 +78,7 @@ def test_update_tag_route(logged_in_admin, test_tag):
 
     csrf_token = extract_csrf_token(update_response.data)
     updated_data = {
-        'name': 'Updated Tag Name',  # Use a unique name
+        'name': '',  # Use an empty name
         'category': 'UpdatedCategory',
         'csrf_token': csrf_token
     }
@@ -86,8 +86,25 @@ def test_update_tag_route(logged_in_admin, test_tag):
 
     assert response.status_code == 200
     updated_tag = get_tag_by_id(test_tag.id)
-    assert updated_tag.name == updated_data['name']
-    assert updated_tag.category == updated_data['category']
+    assert updated_tag.name != ''  # Ensure the name was not updated to an empty string
+    assert b'This field is required.' in response.data  # Check for validation error message
+
+def test_update_tag_route_with_empty_category(logged_in_admin, test_tag):
+    update_response = logged_in_admin.get(url_for('admin.tag.update', id=test_tag.id))
+    assert update_response.status_code == 200
+
+    csrf_token = extract_csrf_token(update_response.data)
+    updated_data = {
+        'name': 'Updated Tag Name',
+        'category': '',  # Use an empty category
+        'csrf_token': csrf_token
+    }
+    response = logged_in_admin.post(url_for('admin.tag.update', id=test_tag.id), data=updated_data, follow_redirects=True)
+
+    assert response.status_code == 200
+    updated_tag = get_tag_by_id(test_tag.id)
+    assert updated_tag.category != ''  # Ensure the category was not updated to an empty string
+    assert b'This field is required.' in response.data  # Check for validation error message
 
 def test_get_tag_by_id_route(logged_in_admin, test_tag):
     index_response = logged_in_admin.get(url_for('admin.tag.index'))
