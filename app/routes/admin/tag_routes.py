@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required
 from app.forms.admin_forms import TagForm
 from app.services.tag_service import get_tag_by_id, delete_tag, get_all_tags, create_tag, update_tag
+from app.extensions import db
 
 admin_tag_bp = Blueprint('tag', __name__, url_prefix='/tags')
 
@@ -15,6 +16,7 @@ def create():
             flash('Tag created successfully.', 'success')
             return redirect(url_for('admin.tag.index'))
         except Exception as e:
+            db.session.rollback()
             flash(f'Failed to create tag: {str(e)}.', 'danger')
     return render_template('admin/tags/create.html', form=form)
 
