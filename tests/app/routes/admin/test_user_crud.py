@@ -70,7 +70,7 @@ def test_update_user_route(logged_in_admin, test_user, db_session):
     csrf_token = extract_csrf_token(update_response.data)
     updated_data = {
         'username': 'updateduser',
-        'password': test_user.password,
+        'password': 'newpassword123',  # Use a new password string
         'email': test_user.email,
         'csrf_token': csrf_token
     }
@@ -79,6 +79,7 @@ def test_update_user_route(logged_in_admin, test_user, db_session):
     assert response.status_code == 200
     updated_user = db_session.get(User, test_user.id)  # Use db_session.get to retrieve the user
     assert updated_user.username == 'updateduser'
+    assert updated_user.check_password('newpassword123')  # Verify that the password was updated correctly
 
 def test_update_user_route_with_invalid_id(logged_in_admin):
     update_response = logged_in_admin.get(url_for('admin.user.update', id=9999))
