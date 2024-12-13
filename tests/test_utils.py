@@ -2,18 +2,10 @@
 
 import os
 from unittest.mock import patch, MagicMock
-from flask import Flask, request, abort
 from werkzeug.security import generate_password_hash
 from app.utils import admin_required, init_admin_user
 from app.models.user import User
 from app.extensions import db
-
-def create_test_app():
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['TESTING'] = True
-    db.init_app(app)
-    return app
 
 class TestAdminRequiredDecorator:
     def setup_method(self):
@@ -28,7 +20,7 @@ class TestAdminRequiredDecorator:
 
     @patch('app.utils.current_user')
     @patch('flask.abort', side_effect=MagicMock())
-    def test_admin_required_with_non_authenticated_user(self, mock_abort, mock_current_user):
+    def test_admin_required_with_non_authenticated_user(self, mock_abort, mock_current_user, app):
         mock_current_user.is_authenticated = False
         mock_current_user.is_admin = False
 
@@ -36,13 +28,13 @@ class TestAdminRequiredDecorator:
         def test_function():
             return "Success"
 
-        with self.app.test_request_context('/'):
+        with app.test_request_context('/'):
             response = test_function()
             mock_abort.assert_called_with(403)
 
     @patch('app.utils.current_user')
     @patch('flask.abort', side_effect=MagicMock())
-    def test_admin_required_with_non_admin_user(self, mock_abort, mock_current_user):
+    def test_admin_required_with_non_admin_user(self, mock_abort, mock_current_user, app):
         mock_current_user.is_authenticated = True
         mock_current_user.is_admin = False
 
@@ -50,12 +42,12 @@ class TestAdminRequiredDecorator:
         def test_function():
             return "Success"
 
-        with self.app.test_request_context('/'):
+        with app.test_request_context('/'):
             response = test_function()
             mock_abort.assert_called_with(403)
 
     @patch('app.utils.current_user')
-    def test_admin_required_with_admin_user(self, mock_current_user):
+    def test_admin_required_with_admin_user(self, mock_current_user, app):
         mock_current_user.is_authenticated = True
         mock_current_user.is_admin = True
 
@@ -63,7 +55,7 @@ class TestAdminRequiredDecorator:
         def test_function():
             return "Success"
 
-        with self.app.test_request_context('/'):
+        with app.test_request_context('/'):
             response = test_function()
             assert response == "Success"
 
@@ -79,8 +71,8 @@ class TestInitAdminUser:
             db.drop_all()
 
     @patch.dict(os.environ, {'ADMIN_USERNAME': 'admin', 'ADMIN_PASSWORD': 'password123', 'ADMIN_EMAIL': 'admin@example.com'})
-    def test_init_admin_user_creates_new_admin(self):
-        with self.app.app_context():
+    def test_init_admin_user_creates_new_admin(self, app, db_session):
+        with app.app_context():
             init_admin_user()
             admin = User.query.filter_by(username='admin').first()
             assert admin is not None
@@ -89,8 +81,8 @@ class TestInitAdminUser:
             assert admin.is_admin
 
     @patch.dict(os.environ, {'ADMIN_USERNAME': 'admin', 'ADMIN_PASSWORD': 'password123', 'ADMIN_EMAIL': 'admin@example.com'})
-    def test_init_admin_user_does_not_create_duplicate(self):
-        with self.app.app_context():
+    def test_init_admin_user_does_not_create_duplicate(self, app, db_session):
+        with app.app_context():
             init_admin_user()
             init_admin_user()  # Call it again to ensure no duplicates
             admins = User.query.filter_by(username='admin').all()
