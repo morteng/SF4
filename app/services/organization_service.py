@@ -24,6 +24,7 @@ def create_organization(data):
     filtered_data = {k: v for k, v in data.items() if k in valid_keys}
     new_organization = Organization(**filtered_data)
     db.session.add(new_organization)
+    db.session.commit()
     try:
         db.session.commit()
         return True, None
