@@ -110,8 +110,8 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'homepage_url': test_stipend.homepage_url,
         'application_procedure': test_stipend.application_procedure,
         'eligibility_criteria': test_stipend.eligibility_criteria,
-        'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if hasattr(test_stipend.application_deadline, 'strftime') else test_stipend.application_deadline,  # Change here
-        'open_for_applications': False,
+        'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if hasattr(test_stipend.application_deadline, 'strftime') else test_stipend.application_deadline,
+        'open_for_applications': False,  # Ensure this is set to False
         'csrf_token': csrf_token
     }
     response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data, follow_redirects=True)
@@ -121,7 +121,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
     assert updated_stipend.name == 'Updated Stipend Name'
     assert updated_stipend.summary == 'Updated summary content.'
     assert updated_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S')
-    assert not updated_stipend.open_for_applications
+    assert not updated_stipend.open_for_applications  # Ensure this is False
 
 def test_update_stipend_route_with_invalid_id(logged_in_admin):
     update_response = logged_in_admin.get(url_for('admin.stipend.update', id=9999))
