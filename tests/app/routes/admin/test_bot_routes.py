@@ -2,6 +2,7 @@ import pytest
 from flask import url_for
 from app.models.bot import Bot
 from tests.conftest import extract_csrf_token
+from app.extensions import db  # Import the db object from extensions
 
 @pytest.fixture(scope='function')
 def bot_data():
@@ -29,7 +30,7 @@ def test_bot(db_session, bot_data):
 @pytest.fixture(scope='function')
 def db_session(app):
     with app.app_context():
-        session = app.db.session
+        session = db.session  # Use the imported db object
         yield session
         session.rollback()
 
