@@ -1,8 +1,8 @@
 import pytest
 from flask import url_for, get_flashed_messages
 from app.models.stipend import Stipend
-from tests.conftest import extract_csrf_token
-from app.forms.admin_forms import StipendForm  # Added this line
+from tests.conftest import extract_csrf_token, db_session  # Added db_session here
+from app.forms.admin_forms import StipendForm
 
 @pytest.fixture(scope='function')
 def stipend_data():

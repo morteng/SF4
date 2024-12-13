@@ -1,8 +1,8 @@
 import pytest
 from flask import url_for, get_flashed_messages
 from app.models.user import User
-from tests.conftest import extract_csrf_token
-from app.forms.admin_forms import UserForm  # Added this line
+from tests.conftest import extract_csrf_token, db_session  # Added db_session here
+from app.forms.admin_forms import UserForm
 
 @pytest.fixture(scope='function')
 def user_data():

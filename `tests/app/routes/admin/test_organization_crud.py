@@ -1,8 +1,8 @@
 import pytest
 from flask import url_for, get_flashed_messages
 from app.models.organization import Organization
-from tests.conftest import extract_csrf_token
-from app.forms.admin_forms import OrganizationForm  # Added this line
+from tests.conftest import extract_csrf_token, db_session  # Added db_session here
+from app.forms.admin_forms import OrganizationForm
 
 @pytest.fixture(scope='function')
 def organization_data():
