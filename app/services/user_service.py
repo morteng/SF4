@@ -57,4 +57,5 @@ def update_user(user, form_data):
     except Exception as e:
         flash("Failed to update user.", 'danger')  # Flash the error message
         print(f"Failed to update user: {e}")  # Debug statement
+        db.session.rollback()  # Add this line to rollback the session
         raise ValueError("Failed to update user.")
