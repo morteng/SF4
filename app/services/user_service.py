@@ -6,8 +6,14 @@ def get_user_by_id(user_id):
     return db.session.get(User, user_id)
 
 def delete_user(user):
+    if not user:
+        raise ValueError("User does not exist.")
     db.session.delete(user)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise ValueError("Failed to delete user.")
 
 def get_all_users():
     return User.query.all()
@@ -27,6 +33,9 @@ def create_user(form_data):
     except IntegrityError:
         db.session.rollback()
         raise ValueError("Username or email already exists")
+    except Exception:
+        db.session.rollback()
+        raise ValueError("Failed to create user.")
     
     return new_user
 
@@ -43,3 +52,5 @@ def update_user(user, form_data):
         print(f"User {user.username} updated successfully.")  # Debug statement
     except Exception as e:
         print(f"Failed to update user: {e}")  # Debug statement
+        db.session.rollback()
+        raise ValueError("Failed to update user.")

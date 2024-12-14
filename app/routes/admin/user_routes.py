@@ -23,8 +23,11 @@ def create():
 def delete(id):
     user = get_user_by_id(id)
     if user:
-        delete_user(user)
-        flash(f'User {user.username} deleted.', 'success')
+        try:
+            delete_user(user)
+            flash(f'User {user.username} deleted.', 'success')
+        except ValueError as e:
+            flash(str(e), 'danger')
     else:
         flash('User not found.', 'danger')
     return redirect(url_for('admin.user.index'))
@@ -50,8 +53,11 @@ def update(id):
     )
     if request.method == 'POST' and form.validate_on_submit():
         print(f"Form data: {form.data}")  # Debug statement
-        update_user(user, form.data)
-        flash('User updated successfully.', 'success')
-        return redirect(url_for('admin.user.index'))
+        try:
+            update_user(user, form.data)
+            flash('User updated successfully.', 'success')
+            return redirect(url_for('admin.user.index'))
+        except ValueError as e:
+            flash(str(e), 'danger')
     
     return render_template('admin/users/_edit_row.html', form=form, user=user)
