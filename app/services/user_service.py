@@ -38,4 +38,8 @@ def update_user(user, form_data):
         user.set_password(form_data['password'])
     user.is_admin = form_data.get('is_admin', False)
     
-    db.session.commit()
+    try:
+        db.session.commit()
+        print(f"User {user.username} updated successfully.")  # Debug statement
+    except Exception as e:
+        print(f"Failed to update user: {e}")  # Debug statement
