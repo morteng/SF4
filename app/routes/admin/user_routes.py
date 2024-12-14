@@ -15,7 +15,8 @@ def create():
             flash('User created successfully.', 'success')
             return redirect(url_for('admin.user.index'))
         except ValueError as e:
-            flash(str(e), 'danger')
+            # The error message is already flashed in the service, so no need to flash it again here
+            pass  # Do nothing or handle if needed
     return render_template('admin/users/create.html', form=form)
 
 @admin_user_bp.route('/<int:id>/delete', methods=['POST'])

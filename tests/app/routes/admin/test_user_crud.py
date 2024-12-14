@@ -111,7 +111,7 @@ def test_create_user_route_with_database_error(logged_in_admin, user_data, db_se
             
         monkeypatch.setattr(db_session, 'commit', mock_commit)
         
-        response = logged_in_admin.post(url_for('admin.user.create'), data=data)
+        response = logged_in_admin.post(url_for('admin.user.create'), data=data, follow_redirects=True)  # Follow redirects to capture flashed messages
         
         assert response.status_code == 200
         assert b"Failed to create user." in response.data  # Confirm error message is present
