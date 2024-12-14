@@ -9,6 +9,7 @@ from unittest import mock
 
 # Create a test Flask app instance
 app = Flask(__name__)
+app.secret_key = 'test_secret_key'  # Add this line to set the secret key
 
 @pytest.fixture(scope='function')
 def tag_data():
@@ -112,7 +113,7 @@ def test_update_tag_with_error(monkeypatch, db_session, test_tag, tag_data):
     monkeypatch.setattr(db_session, 'commit', mock_commit)
     monkeypatch.setattr('flask.flash', mock.Mock())  # Mock the flash function
 
-    with app.test_request_context():
+    with app.app_context():  # Use app.app_context() instead of app.test_request_context()
         with pytest.raises(SQLAlchemyError) as excinfo:
             update_tag(test_tag, tag_data)
     assert "Database error" in str(excinfo.value)
