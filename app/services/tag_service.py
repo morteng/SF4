@@ -2,6 +2,7 @@ from app.models.tag import Tag
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
 import logging  # Import logging to log errors
+from wtforms.validators import ValidationError  # Import ValidationError
 
 # Configure logging
 logging.basicConfig(level=logging.ERROR)
