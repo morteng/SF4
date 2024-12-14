@@ -132,7 +132,7 @@ def test_update_user_with_database_error(logged_in_admin, test_user, db_session,
         csrf_token = extract_csrf_token(update_response.data)
         updated_data = {
             'username': 'updateduser',
-            'password': test_user.password,
+            'password': 'newpassword123',  # Use a new password string instead of test_user.password
             'email': test_user.email,
             'csrf_token': csrf_token
         }
