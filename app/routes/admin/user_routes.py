@@ -45,6 +45,7 @@ def update(id):
     
     form = UserForm(obj=user)
     if request.method == 'POST' and form.validate_on_submit():
+        print(f"Form data: {form.data}")  # Debug statement
         update_user(user, form.data)
         flash('User updated successfully.', 'success')
         return redirect(url_for('admin.user.index'))

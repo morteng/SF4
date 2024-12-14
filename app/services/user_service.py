@@ -31,6 +31,7 @@ def create_user(form_data):
     return new_user
 
 def update_user(user, form_data):
+    print(f"Updating user with data: {form_data}")  # Debug statement
     user.username = form_data['username']
     user.email = form_data['email']
     if 'password' in form_data and form_data['password']:
