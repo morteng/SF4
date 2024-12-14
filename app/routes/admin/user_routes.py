@@ -43,7 +43,11 @@ def update(id):
         flash('User not found.', 'danger')
         return redirect(url_for('admin.user.index'))
     
-    form = UserForm(obj=user)
+    form = UserForm(
+        original_username=user.username,
+        original_email=user.email,
+        obj=user
+    )
     if request.method == 'POST' and form.validate_on_submit():
         print(f"Form data: {form.data}")  # Debug statement
         update_user(user, form.data)
