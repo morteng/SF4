@@ -5,6 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from wtforms.validators import ValidationError
 from app.extensions import db  # Import the db object from extensions
 from flask import Flask  # Import Flask to create an application context
+from unittest import mock
 
 # Create a test Flask app instance
 app = Flask(__name__)
@@ -109,11 +110,10 @@ def test_update_tag_with_error(monkeypatch, db_session, test_tag, tag_data):
         raise SQLAlchemyError("Database error")
 
     monkeypatch.setattr(db_session, 'commit', mock_commit)
+    monkeypatch.setattr('flask.flash', mock.Mock())  # Mock the flash function
 
     with pytest.raises(SQLAlchemyError) as excinfo:
-        # Create an application context
-        with app.app_context():
-            update_tag(test_tag, tag_data)
+        update_tag(test_tag, tag_data)
     assert "Database error" in str(excinfo.value)
 
 # Additional tests for edge cases
