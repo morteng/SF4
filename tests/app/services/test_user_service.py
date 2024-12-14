@@ -2,7 +2,6 @@ import pytest
 from app.models.user import User
 from app.services.user_service import create_user, delete_user, get_user_by_id, get_all_users
 from app.forms.admin_forms import UserForm  # Import the UserForm class
-from tests.conftest import app  # Import the app fixture
 
 def test_create_user(db_session, user_data):
     user = create_user(user_data)
@@ -16,13 +15,13 @@ def test_create_user(db_session, user_data):
     assert saved_user.email == user_data['email']
 
 
-def test_create_user_duplicate_email(db_session, admin_user, user_data):
+def test_create_user_duplicate_email(db_session, admin_user, user_data, app):
     duplicate_user_data = {
         'username': 'duplicate_user',
         'email': admin_user.email,
         'password': 'password123'
     }
-    with app().test_request_context():
+    with app.test_request_context():
         with pytest.raises(ValueError):
             create_user(duplicate_user_data)
 
