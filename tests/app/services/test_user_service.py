@@ -22,8 +22,9 @@ def test_create_user_duplicate_email(db_session, admin_user, user_data):
         'email': admin_user.email,
         'password': 'password123'
     }
-    with pytest.raises(ValueError):
-        create_user(duplicate_user_data)
+    with app.test_request_context():
+        with pytest.raises(ValueError):
+            create_user(duplicate_user_data)
 
 
 def test_get_user_by_id(db_session, admin_user):
