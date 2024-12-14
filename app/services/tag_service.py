@@ -30,8 +30,10 @@ def get_tag_by_id(tag_id):
     return db.session.get(Tag, tag_id)
 
 def create_tag(data):
-    if not data.get('name') or not data.get('category'):
-        raise ValidationError('Name and category are required.')
+    if not data.get('name'):
+        raise ValidationError('Name cannot be empty.')
+    if not data.get('category'):
+        raise ValidationError('Category cannot be empty.')
 
     tag = Tag(name=data['name'], category=data['category'])
     db.session.add(tag)
