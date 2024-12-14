@@ -5,7 +5,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from wtforms.validators import ValidationError
 from app.extensions import db  # Import the db object from extensions
 from flask import Flask  # Import Flask to create an application context
-from unittest import mock
+import logging  # Import logging to check for error logs
+from unittest.mock import patch
 
 # Create a test Flask app instance
 app = Flask(__name__)
@@ -111,7 +112,6 @@ def test_update_tag_with_error(monkeypatch, db_session, test_tag, tag_data):
         raise SQLAlchemyError("Database error")
 
     monkeypatch.setattr(db_session, 'commit', mock_commit)
-    monkeypatch.setattr('flask.flash', mock.Mock())  # Mock the flash function
 
     with app.test_request_context():  # Use app.test_request_context() instead of app.app_context()
         with pytest.raises(SQLAlchemyError) as excinfo:
@@ -213,3 +213,18 @@ def test_create_tag_with_empty_category(db_session):
         with app.test_request_context():
             create_tag(invalid_tag_data)
     assert "Category cannot be empty." in str(excinfo.value)
+
+# Add a test to check for logging errors
+
+def test_create_tag_duplicate_name_logging(db_session, test_tag, tag_data):
+    if db_session.is_active:
+        db_session.rollback()  # Ensure a clean session
+    duplicate_tag_data = {
+        'name': test_tag.name,
+        'category': 'AnotherCategory'
+    }
+    with patch('app.services.tag_service.logging.error') as mock_logging_error:
+        with pytest.raises(SQLAlchemyError) as excinfo:
+            create_tag(duplicate_tag_data)
+        assert "UNIQUE constraint failed" in str(excinfo.value)
+        mock_logging_error.assert_called_once_with("Failed to create tag: UNIQUE constraint failed for column 'name'.")

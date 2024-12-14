@@ -1,8 +1,10 @@
 from app.models.tag import Tag
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
-from flask import flash  # Import flash to display messages
-from wtforms.validators import ValidationError
+import logging  # Import logging to log errors
+
+# Configure logging
+logging.basicConfig(level=logging.ERROR)
 
 def update_tag(tag, data):
     if not data['name']:
@@ -15,9 +17,8 @@ def update_tag(tag, data):
     try:
         db.session.commit()
     except SQLAlchemyError as e:
-        # Log the error and flash a message
-        print(str(e))
-        flash(f"Failed to update tag: {str(e)}.", 'danger')
+        # Log the error
+        logging.error(f"Failed to update tag: {str(e)}.")
         db.session.rollback()
         raise  # Re-raise the exception if needed for further handling
 
@@ -38,7 +39,7 @@ def create_tag(data):
         return tag
     except SQLAlchemyError as e:
         db.session.rollback()
-        flash(f"Failed to create tag: {str(e)}.", 'danger')
+        logging.error(f"Failed to create tag: {str(e)}.")
         raise
 
 def delete_tag(tag):
@@ -47,5 +48,5 @@ def delete_tag(tag):
         db.session.commit()
     except SQLAlchemyError as e:
         db.session.rollback()
-        flash(f"Failed to delete tag: {str(e)}.", 'danger')
+        logging.error(f"Failed to delete tag: {str(e)}.")
         raise
