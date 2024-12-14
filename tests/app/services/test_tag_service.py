@@ -228,4 +228,5 @@ def test_create_tag_duplicate_name_logging(db_session, test_tag, tag_data):
             create_tag(duplicate_tag_data)
         assert "UNIQUE constraint failed" in str(excinfo.value)
         # Adjust the expected logging message to match the actual one
-        mock_logging_error.assert_called_once_with(f"Failed to create tag: UNIQUE constraint failed: tags.name.")
+        expected_message = f"Failed to create tag: (sqlite3.IntegrityError) UNIQUE constraint failed: tags.name\n[SQL: INSERT INTO tag (name, category, created_at, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING id, created_at, updated_at]\n[parameters: ('{test_tag.name}', 'AnotherCategory')]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)."
+        mock_logging_error.assert_called_once_with(expected_message)
