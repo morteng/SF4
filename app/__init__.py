@@ -1,5 +1,5 @@
 from flask import Flask
-from app.extensions import db, login_manager
+from app.extensions import db, login_manager, migrate  # Add 'migrate' here
 from flask_wtf import CSRFProtect
 
 def create_app(config_name='development'):
@@ -24,6 +24,8 @@ def create_app(config_name='development'):
 
     csrf = CSRFProtect()
     csrf.init_app(app)  # Initialize CSRF protection
+
+    migrate.init_app(app, db)  # Initialize Flask-Migrate here
 
     from app.models.user import User  # Import the User model
 
