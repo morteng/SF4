@@ -58,4 +58,3 @@ def update_user(user, form_data):
         flash("Failed to update user.", 'danger')  # Flash the error message
         print(f"Failed to update user: {e}")  # Debug statement
         raise ValueError("Failed to update user.")
-
