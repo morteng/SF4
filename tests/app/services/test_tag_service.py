@@ -4,6 +4,10 @@ from app.services.tag_service import get_all_tags, delete_tag, create_tag, get_t
 from sqlalchemy.exc import SQLAlchemyError
 from wtforms.validators import ValidationError
 from app.extensions import db  # Import the db object from extensions
+from flask import Flask  # Import Flask to create an application context
+
+# Create a test Flask app instance
+app = Flask(__name__)
 
 @pytest.fixture(scope='function')
 def tag_data():
@@ -107,7 +111,9 @@ def test_update_tag_with_error(monkeypatch, db_session, test_tag, tag_data):
     monkeypatch.setattr(db_session, 'commit', mock_commit)
 
     with pytest.raises(SQLAlchemyError) as excinfo:
-        update_tag(test_tag, tag_data)
+        # Create an application context
+        with app.app_context():
+            update_tag(test_tag, tag_data)
     assert "Database error" in str(excinfo.value)
 
 # Additional tests for edge cases
@@ -164,7 +170,9 @@ def test_update_tag_with_empty_name(db_session, test_tag):
         'category': 'UpdatedCategory'
     }
     with pytest.raises(ValidationError) as excinfo:
-        update_tag(test_tag, updated_data)
+        # Create an application context
+        with app.app_context():
+            update_tag(test_tag, updated_data)
     assert "Name cannot be empty." in str(excinfo.value)
 
 def test_update_tag_with_empty_category(db_session, test_tag):
@@ -173,7 +181,9 @@ def test_update_tag_with_empty_category(db_session, test_tag):
         'category': ''
     }
     with pytest.raises(ValidationError) as excinfo:
-        update_tag(test_tag, updated_data)
+        # Create an application context
+        with app.app_context():
+            update_tag(test_tag, updated_data)
     assert "Category cannot be empty." in str(excinfo.value)
 
 def test_create_tag_with_empty_name(db_session):
@@ -184,7 +194,9 @@ def test_create_tag_with_empty_name(db_session):
         'category': 'TestCategory'
     }
     with pytest.raises(ValidationError) as excinfo:
-        create_tag(invalid_tag_data)
+        # Create an application context
+        with app.app_context():
+            create_tag(invalid_tag_data)
     assert "Name cannot be empty." in str(excinfo.value)
 
 def test_create_tag_with_empty_category(db_session):
@@ -195,5 +207,7 @@ def test_create_tag_with_empty_category(db_session):
         'category': ''
     }
     with pytest.raises(ValidationError) as excinfo:
-        create_tag(invalid_tag_data)
+        # Create an application context
+        with app.app_context():
+            create_tag(invalid_tag_data)
     assert "Category cannot be empty." in str(excinfo.value)
