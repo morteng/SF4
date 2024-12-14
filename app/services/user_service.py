@@ -41,3 +41,21 @@ def create_user(form_data):
         raise ValueError("Failed to create user.")
     
     return new_user
+
+def update_user(user, form_data):
+    print(f"Updating user with data: {form_data}")  # Debug statement
+    user.username = form_data['username']
+    user.email = form_data['email']
+    if 'password' in form_data and form_data['password']:
+        user.set_password(form_data['password'])
+    user.is_admin = form_data.get('is_admin', False)
+    
+    try:
+        db.session.commit()
+        flash("User updated successfully.", 'success')  # Flash the success message
+        print(f"User {user.username} updated successfully.")  # Debug statement
+    except Exception as e:
+        flash("Failed to update user.", 'danger')  # Flash the error message
+        print(f"Failed to update user: {e}")  # Debug statement
+        raise ValueError("Failed to update user.")
+
