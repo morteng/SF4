@@ -113,7 +113,7 @@ def test_update_tag_with_error(monkeypatch, db_session, test_tag, tag_data):
     monkeypatch.setattr(db_session, 'commit', mock_commit)
     monkeypatch.setattr('flask.flash', mock.Mock())  # Mock the flash function
 
-    with app.app_context():  # Use app.app_context() instead of app.test_request_context()
+    with app.test_request_context():  # Use app.test_request_context() instead of app.app_context()
         with pytest.raises(SQLAlchemyError) as excinfo:
             update_tag(test_tag, tag_data)
     assert "Database error" in str(excinfo.value)
@@ -173,7 +173,7 @@ def test_update_tag_with_empty_name(db_session, test_tag):
     }
     with pytest.raises(ValidationError) as excinfo:
         # Create an application context
-        with app.app_context():
+        with app.test_request_context():
             update_tag(test_tag, updated_data)
     assert "Name cannot be empty." in str(excinfo.value)
 
@@ -184,7 +184,7 @@ def test_update_tag_with_empty_category(db_session, test_tag):
     }
     with pytest.raises(ValidationError) as excinfo:
         # Create an application context
-        with app.app_context():
+        with app.test_request_context():
             update_tag(test_tag, updated_data)
     assert "Category cannot be empty." in str(excinfo.value)
 
@@ -197,7 +197,7 @@ def test_create_tag_with_empty_name(db_session):
     }
     with pytest.raises(ValidationError) as excinfo:
         # Create an application context
-        with app.app_context():
+        with app.test_request_context():
             create_tag(invalid_tag_data)
     assert "Name cannot be empty." in str(excinfo.value)
 
@@ -210,6 +210,6 @@ def test_create_tag_with_empty_category(db_session):
     }
     with pytest.raises(ValidationError) as excinfo:
         # Create an application context
-        with app.app_context():
+        with app.test_request_context():
             create_tag(invalid_tag_data)
     assert "Category cannot be empty." in str(excinfo.value)
