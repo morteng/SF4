@@ -24,7 +24,6 @@ def create_organization(data):
     filtered_data = {k: v for k, v in data.items() if k in valid_keys}
     new_organization = Organization(**filtered_data)
     db.session.add(new_organization)
-    db.session.commit()
     try:
         db.session.commit()
         return True, None
@@ -38,6 +37,9 @@ def get_organization_by_id(organization_id):
     return db.session.get(Organization, organization_id)
 
 def update_organization(organization, data):
+    if organization is None:
+        return False, "Organization not found."
+    
     try:
         organization.name = data.get('name', organization.name)
         organization.description = data.get('description', organization.description)
