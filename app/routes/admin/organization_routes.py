@@ -3,6 +3,7 @@ from flask_login import login_required
 from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization, update_organization
 from sqlalchemy.exc import SQLAlchemyError
+from app.extensions import db
 
 admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 
