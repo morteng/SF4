@@ -1,34 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>{% if organization %}Edit{% else %}Create{% endif %} Organization</h2>
+<h2 class="text-xl font-bold mb-4">{% if organization %}Edit{% else %}Create{% endif %} Organization</h2>
 <form hx-post="{{ url_for('admin.organization.update', id=organization.id) if organization else url_for('admin.organization.create') }}"
       hx-target="#content"
-      hx-swap="outerHTML">
+      hx-swap="outerHTML"
+      class="space-y-4">
     {{ form.hidden_tag() }}
-    <div>
-        {{ form.name.label }}<br>
-        {{ form.name(size=32) }}<br>
+    <div class="flex flex-col space-y-2">
+        {{ form.name.label(class_="text-gray-700") }}
+        {{ form.name(size=32, class_="border p-2 rounded w-full") }}
         {% for error in form.name.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <span class="text-red-500">{{ error }}</span>
         {% endfor %}
     </div>
-    <div>
-        {{ form.description.label }}<br>
-        {{ form.description(cols=40, rows=10) }}<br>
+    <div class="flex flex-col space-y-2">
+        {{ form.description.label(class_="text-gray-700") }}
+        {{ form.description(cols=40, rows=10, class_="border p-2 rounded w-full") }}
         {% for error in form.description.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <span class="text-red-500">{{ error }}</span>
         {% endfor %}
     </div>
-    <div>
-        {{ form.homepage_url.label }}<br>
-        {{ form.homepage_url(size=32) }}<br>
+    <div class="flex flex-col space-y-2">
+        {{ form.homepage_url.label(class_="text-gray-700") }}
+        {{ form.homepage_url(size=32, class_="border p-2 rounded w-full") }}
         {% for error in form.homepage_url.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+            <span class="text-red-500">{{ error }}</span>
         {% endfor %}
     </div>
-    <button type="submit">{% if organization %}Update{% else %}Create{% endif %}</button>
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">{% if organization %}Update{% else %}Create{% endif %}</button>
 </form>
 
-<a href="{{ url_for('admin.organization.index') }}">Back to Organizations</a>
+<a href="{{ url_for('admin.organization.index') }}" class="text-blue-500 hover:underline">Back to Organizations</a>
 {% endblock %}
