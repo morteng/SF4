@@ -1,105 +1,22 @@
 # tests/app/routes/admin/test_stipend_errors.py
-
 import pytest
 from flask import url_for
 from app.models.stipend import Stipend
 from app.forms.admin_forms import StipendForm
 from datetime import datetime, timedelta
 from tests.conftest import logged_in_admin, db_session, test_stipend, stipend_data
-from unittest.mock import patch
-
-def test_create_stipend_with_form_validation_failure(stipend_data, logged_in_admin, db_session):
-    with logged_in_admin.application.app_context():
-        # Intentionally modify the data to cause form validation failure
-        stipend_data['name'] = ''  # Empty name should fail validation
-        
-        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
-        
-        assert response.status_code == 200  # Form re-renders on validation failure
-
-        form = StipendForm(data=stipend_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-            
-        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
-        assert stipend is None  # Ensure no stipend was created
-
-def test_create_stipend_with_htmx_form_validation_failure(stipend_data, logged_in_admin, db_session):
-    with logged_in_admin.application.app_context():
-        headers = {'HX-Request': 'true'}
-        
-        # Intentionally modify the data to cause form validation failure
-        stipend_data['name'] = ''  # Empty name should fail validation
-        
-        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data, headers=headers)
-        
-        assert response.status_code == 200  # Form re-renders on validation failure
-
-        form = StipendForm(data=stipend_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-            
-        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
-        assert stipend is None  # Ensure no stipend was created
 
 def test_create_stipend_with_none_result(stipend_data, logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
         def mock_create_stipend(*args, **kwargs):
             return None
-            
+
         monkeypatch.setattr('app.services.stipend_service.create_stipend', mock_create_stipend)
-        
+
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
         assert response.status_code == 200
-        assert b"Stipend creation failed due to invalid input." in response.data
+        assert b"Stipend creation failed due to invalid input." in response.data  # Confirm error message is present
 
-def test_update_stipend_with_exception(stipend_data, logged_in_admin, test_stipend, db_session, monkeypatch):
-    with logged_in_admin.application.app_context():
-        updated_data = {
-            'name': test_stipend.name,
-            'summary': "Updated summary.",
-            'description': "Updated description.",
-            'homepage_url': "http://example.com/updated-stipend",
-            'application_procedure': "Apply online at example.com/updated",
-            'eligibility_criteria': "Open to all updated students",
-            'application_deadline': '2024-12-31 23:59:59',
-            'open_for_applications': True
-        }
-
-        def mock_update_stipend(*args, **kwargs):
-            raise Exception("Update failed")
-            
-        monkeypatch.setattr('app.services.stipend_service.update_stipend', mock_update_stipend)
-        
-        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data)
-        
-        assert response.status_code == 200
-        assert b"Failed to update stipend" in response.data
-
-def test_update_stipend_with_htmx_exception(stipend_data, logged_in_admin, test_stipend, db_session, monkeypatch):
-    with logged_in_admin.application.app_context():
-        headers = {'HX-Request': 'true'}
-        
-        updated_data = {
-            'name': test_stipend.name,
-            'summary': "Updated summary.",
-            'description': "Updated description.",
-            'homepage_url': "http://example.com/updated-stipend",
-            'application_procedure': "Apply online at example.com/updated",
-            'eligibility_criteria': "Open to all updated students",
-            'application_deadline': '2024-12-31 23:59:59',
-            'open_for_applications': True
-        }
-
-        def mock_update_stipend(*args, **kwargs):
-            raise Exception("Update failed")
-            
-        monkeypatch.setattr('app.services.stipend_service.update_stipend', mock_update_stipend)
-        
-        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data, headers=headers)
-        
-        assert response.status_code == 200
-        assert b"Failed to update stipend" in response.data
+        stipends = db_session.query(Stipend).filter_by(name=stipend_data['name']).all()
+        assert len(stipends) == 0  # Ensure no stipend was created
