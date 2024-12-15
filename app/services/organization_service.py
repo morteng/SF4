@@ -31,7 +31,7 @@ def create_organization(data):
         # Log the error and possibly handle it
         print(str(e))
         db.session.rollback()
-        return False, "Failed to create organization."
+        return False, f"Failed to create organization. Error: {str(e)}"
 
 def get_organization_by_id(organization_id):
     return db.session.get(Organization, organization_id)
