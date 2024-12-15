@@ -1,27 +1,27 @@
-<button id="menu-toggle">Menu</button>
-<ul id="nav-menu" style="display: none;">
-    <li><a href="{{ url_for('public.index') }}">Home</a></li>
+<button id="menu-toggle" class="bg-gray-200 p-2 rounded-md">Menu</button>
+<ul id="nav-menu" class="hidden mt-2 space-y-2">
+    <li><a href="{{ url_for('public.index') }}" class="text-blue-500 hover:underline">Home</a></li>
     {% if current_user.is_authenticated %}
         {% if current_user.is_admin %}
-            <li><a href="{{ url_for('admin.dashboard.dashboard') }}">Admin Dashboard</a></li>
-            <li><a href="{{ url_for('admin.bot.index') }}">Bots</a></li>
-            <li><a href="{{ url_for('admin.organization.index') }}">Organizations</a></li>
-            <li><a href="{{ url_for('admin.stipend.index') }}">Stipends</a></li>
-            <li><a href="{{ url_for('admin.tag.index') }}">Tags</a></li>
-            <li><a href="{{ url_for('admin.user.index') }}">Users</a></li>
+            <li><a href="{{ url_for('admin.dashboard.dashboard') }}" class="text-blue-500 hover:underline">Admin Dashboard</a></li>
+            <li><a href="{{ url_for('admin.bot.index') }}" class="text-blue-500 hover:underline">Bots</a></li>
+            <li><a href="{{ url_for('admin.organization.index') }}" class="text-blue-500 hover:underline">Organizations</a></li>
+            <li><a href="{{ url_for('admin.stipend.index') }}" class="text-blue-500 hover:underline">Stipends</a></li>
+            <li><a href="{{ url_for('admin.tag.index') }}" class="text-blue-500 hover:underline">Tags</a></li>
+            <li><a href="{{ url_for('admin.user.index') }}" class="text-blue-500 hover:underline">Users</a></li>
         {% else %}
-            <li><a href="{{ url_for('public.about') }}">About</a></li>
-            <li><a href="{{ url_for('user.profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('public.about') }}" class="text-blue-500 hover:underline">About</a></li>
+            <li><a href="{{ url_for('user.profile') }}" class="text-blue-500 hover:underline">Profile</a></li>
         {% endif %}
-        <li><a href="{{ url_for('public.logout') }}">Logout</a></li>
+        <li><a href="{{ url_for('public.logout') }}" class="text-red-500 hover:underline">Logout</a></li>
     {% else %}
-        <li><a href="{{ url_for('public.login') }}">Login</a></li>
-        <li><a href="{{ url_for('public.register') }}">Register</a></li>
+        <li><a href="{{ url_for('public.login') }}" class="text-blue-500 hover:underline">Login</a></li>
+        <li><a href="{{ url_for('public.register') }}" class="text-green-500 hover:underline">Register</a></li>
     {% endif %}
 </ul>
 <script>
     document.getElementById('menu-toggle').addEventListener('click', function () {
         const menu = document.getElementById('nav-menu');
-        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        menu.classList.toggle('hidden');
     });
 </script>

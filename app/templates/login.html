@@ -3,26 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Login</h1>
-    <form method="POST" action="{{ url_for('public.login') }}">
+<body class="bg-gray-100">
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Login</h1>
+    <form method="POST" action="{{ url_for('public.login') }}" class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
         {{ form.hidden_tag() }}  <!-- Ensure this line is present -->
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
+        <div class="mb-4">
+            {{ form.username.label(class_="block text-gray-700 font-bold mb-2") }}
+            {{ form.username(size=32, class_="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline") }}
             {% for error in form.username.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
+        </div>
+        <div class="mb-4">
+            {{ form.password.label(class_="block text-gray-700 font-bold mb-2") }}
+            {{ form.password(size=32, class_="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline") }}
             {% for error in form.password.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
+        </div>
+        <p>{{ form.submit(class_="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline") }}</p>
     </form>
+</div>
 </body>
 </html>
