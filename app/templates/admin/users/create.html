@@ -1,3 +1,4 @@
+{% extends "base.html" %}
 <form method="POST" action="">
     {{ form.hidden_tag() | safe }}  <!-- Ensure CSRF token renders correctly -->
     {{ form.username.label }} {{ form.username(size=32) }}

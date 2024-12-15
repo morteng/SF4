@@ -1,3 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Admin Dashboard</h1>
+
+
+
 <a href="{{ url_for('admin.stipend.index') }}">Manage Stipends</a>
 <a href="{{ url_for('admin.tag.index') }}">Manage Tags</a>
 <a href="{{ url_for('admin.organization.index') }}">Manage Organizations</a>
@@ -6,3 +13,4 @@
     <hx-get href="{{ url_for('admin.bot.index') }}" hx-target="#bots" hx-swap="innerHTML"></hx-get>
 </div>
 
+{% endblock %}
