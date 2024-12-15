@@ -1,13 +1,15 @@
-<form method="POST" action="{{ action_url }}">
+<form method="POST" action="{{ action_url }}" class="space-y-4">
     {{ form.hidden_tag() }}
     {% for field in form if field.widget.input_type != 'hidden' %}
         <div>
-            {{ field.label }}<br>
-            {{ field(size=32) }}<br>
+            {{ field.label(class_="block text-gray-700 font-bold mb-2") }}
+            {{ field(size=32, class_="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline") }}
             {% for error in field.errors %}
-                <span style="color: red;">{{ error }}</span>
+                <span class="text-red-500 text-sm">{{ error }}</span>
             {% endfor %}
         </div>
     {% endfor %}
-    <button type="submit">{{ button_text }}</button>
+    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        {{ button_text }}
+    </button>
 </form>
