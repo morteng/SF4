@@ -3,34 +3,34 @@
 
 {% block content %}
 <div class="container">
-    <h1>Create Tag</h1>
+    <h1 class="text-2xl font-bold mb-4">Create Tag</h1>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
-          <div class="{{ category }}">{{ message }}</div>
+          <div class="{{ category }} p-2 bg-blue-100 border-l-4 border-blue-500 text-blue-700">{{ message }}</div>
         {% endfor %}
       {% endif %}
     {% endwith %}
-    <form method="POST" action="{{ url_for('admin.tag.create') }}">
+    <form method="POST" action="{{ url_for('admin.tag.create') }}" class="space-y-4">
         {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.name.label(class_="form-label") }}
-            {{ form.name(class_="form-control", placeholder="Enter tag name") }}
+        <div class="flex flex-col space-y-1">
+            {{ form.name.label(class_="text-gray-700") }}
+            {{ form.name(class_="border border-gray-300 p-2 rounded w-full", placeholder="Enter tag name") }}
             {% for error in form.name.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+                <span class="text-red-500">{{ error }}</span>
             {% endfor %}
         </div>
 
         <!-- Add category field -->
-        <div class="form-group">
-            {{ form.category.label(class_="form-label") }}
-            {{ form.category(class_="form-control", placeholder="Enter tag category") }}
+        <div class="flex flex-col space-y-1">
+            {{ form.category.label(class_="text-gray-700") }}
+            {{ form.category(class_="border border-gray-300 p-2 rounded w-full", placeholder="Enter tag category") }}
             {% for error in form.category.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+                <span class="text-red-500">{{ error }}</span>
             {% endfor %}
         </div>
 
-        <button type="submit" class="btn btn-primary">Create Tag</button>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Create Tag</button>
     </form>
 </div>
 {% endblock %}
