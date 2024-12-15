@@ -86,4 +86,5 @@ def test_update_organization_with_invalid_id(db_session):
 
     success, error_message = update_organization(organization, updated_data)
     assert success == False
-    assert "No such instance exists" in error_message  # Adjust based on actual error message from SQLAlchemy
+    assert "Organization not found." in error_message
+
