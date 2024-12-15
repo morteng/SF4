@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required
 from app.forms.admin_forms import TagForm
 from app.models.tag import Tag
+from app.extensions import db  # Import the db object
 
 admin_tag_bp = Blueprint('admin_tag_bp', __name__)
 
