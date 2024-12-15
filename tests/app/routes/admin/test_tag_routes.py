@@ -60,7 +60,7 @@ def test_create_tag_route(logged_in_admin, tag_data):
 
     assert response.status_code == 200
     tags = get_all_tags()
-    assert any(tag.name == tag_data['name'] and tag.category == tag_data['category'] for tag in tags)
+    assert any(tag.name == tag_data['name'] and tag.category == tag_data['category'] for tag in tags), "Tag creation failed: tag not found in database."
 
 def test_index_tag_route(logged_in_admin, test_tag):
     index_response = logged_in_admin.get(url_for('admin.tag.index'))
