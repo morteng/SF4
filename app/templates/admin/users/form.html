@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>{% if form.id.data %}Edit{% else %}Create{% endif %} User</h2>
-{% include 'admin/_form.html' %}
-<a href="{{ url_for('admin.admin_user.index') }}">Back to Users</a>
+<h2 class="text-2xl font-bold mb-4">{% if form.id.data %}Edit{% else %}Create{% endif %} User</h2>
+<div class="mb-4">
+    {% include 'admin/_form.html' %}
+</div>
+<a href="{{ url_for('admin.admin_user.index') }}" class="text-blue-500 hover:underline">Back to Users</a>
 {% endblock %}
