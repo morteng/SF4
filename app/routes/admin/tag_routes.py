@@ -3,6 +3,8 @@ from flask_login import login_required
 from app.forms.admin_forms import TagForm
 from app.models.tag import Tag
 
+admin_tag_bp = Blueprint('admin_tag_bp', __name__)
+
 @admin_tag_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
