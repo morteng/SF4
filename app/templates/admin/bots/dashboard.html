@@ -1,16 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Bot Dashboard</h2>
-<div id="bots">
-    {% for bot in bots %}
-        <div>
-            <p><strong>{{ bot.name }}</strong>: {{ bot.description }}</p>
-            <form hx-post="{{ url_for('admin_bot_routes.run_bot', id=bot.id) }}" hx-target="#bots" hx-swap="outerHTML">
-                <button type="submit">Run Bot</button>
-            </form>
-        </div>
-    {% endfor %}
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <h2 class="text-2xl font-bold mb-4">Bot Dashboard</h2>
+    <div id="bots" class="space-y-4">
+        {% for bot in bots %}
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p><strong>{{ bot.name }}</strong>: {{ bot.description }}</p>
+                <form hx-post="{{ url_for('admin_bot_routes.run_bot', id=bot.id) }}" hx-target="#bots" hx-swap="outerHTML" class="mt-4">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Run Bot</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="{{ url_for('admin.dashboard.dashboard') }}" class="mt-6 inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">Back to Dashboard</a>
 </div>
-<a href="{{ url_for('admin.dashboard.dashboard') }}">Back to Dashboard</a>
 {% endblock %}

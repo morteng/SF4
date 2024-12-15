@@ -6,32 +6,32 @@ Edit Bot - Admin Panel
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Edit Bot: {{ bot.name }}</h1>
-    <form method="POST" action="{{ url_for('admin.bot.update', id=bot.id) }}">
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <h1 class="text-3xl font-bold mb-4">Edit Bot: {{ bot.name }}</h1>
+    <form method="POST" action="{{ url_for('admin.bot.update', id=bot.id) }}" class="space-y-4">
         {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.name.label(class_="form-label") }}
-            {{ form.name(class_="form-control", placeholder="Bot Name") }}
+        <div>
+            {{ form.name.label(class_="block text-sm font-medium text-gray-700") }}<br>
+            {{ form.name(size=32, class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}<br>
             {% for error in form.name.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+                <span class="text-red-600">{{ error }}</span>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.description.label(class_="form-label") }}
-            {{ form.description(class_="form-control", placeholder="Description") }}
+        <div>
+            {{ form.description.label(class_="block text-sm font-medium text-gray-700") }}<br>
+            {{ form.description(cols=40, rows=10, class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}<br>
             {% for error in form.description.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+                <span class="text-red-600">{{ error }}</span>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.status.label(class_="form-label") }}
-            {{ form.status(class_="form-control", placeholder="Status") }}
+        <div>
+            {{ form.status.label(class_="block text-sm font-medium text-gray-700") }}<br>
+            {{ form.status(size=32, class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}<br>
             {% for error in form.status.errors %}
-                <span style="color: red;">[{{ error }}]</span>
+                <span class="text-red-600">{{ error }}</span>
             {% endfor %}
         </div>
-        <button type="submit" class="btn btn-primary">Update Bot</button>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Update Bot</button>
     </form>
 </div>
 {% endblock %}

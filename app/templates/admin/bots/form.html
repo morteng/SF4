@@ -1,25 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Create Tag</h2>
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <div>
-        {{ form.name.label }}<br>
-        {{ form.name(size=32) }}<br>
-        {% for error in form.name.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </div>
-    <div>
-        {{ form.description.label }}<br>
-        {{ form.description(cols=40, rows=10) }}<br>
-        {% for error in form.description.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-        {% endfor %}
-    </div>
-    <button type="submit">Submit</button>
-</form>
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <h2 class="text-2xl font-bold mb-4">Create Bot</h2>
+    <form method="POST" class="space-y-4">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.name.label(class_="block text-sm font-medium text-gray-700") }}<br>
+            {{ form.name(size=32, class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}<br>
+            {% for error in form.name.errors %}
+                <span class="text-red-600">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.description.label(class_="block text-sm font-medium text-gray-700") }}<br>
+            {{ form.description(cols=40, rows=10, class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}<br>
+            {% for error in form.description.errors %}
+                <span class="text-red-600">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
+    </form>
 
-<a href="{{ url_for('admin.tag.index') }}">Back to Tags</a>
+    <a href="{{ url_for('admin.bot.index') }}" class="mt-6 inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">Back to Bots</a>
+</div>
 {% endblock %}
