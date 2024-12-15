@@ -49,29 +49,10 @@ class TagForm(FlaskForm):
         if not category.data:
             raise ValidationError('Category cannot be empty.')
 
-class UserForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(max=100)])
-    email = StringField('Email', validators=[DataRequired(), Email(), Length(max=255)])
-    password = PasswordField('Password', validators=[Optional()])
-    is_admin = BooleanField('Is Admin')
-    submit = SubmitField('Create')
-
-    def __init__(self, original_username=None, original_email=None, *args, **kwargs):
-        super(UserForm, self).__init__(*args, **kwargs)
-        self.original_username = original_username
-        self.original_email = original_email
-
-    def validate_username(self, username):
-        if username.data != self.original_username:
-            user = User.query.filter_by(username=username.data).first()
-            if user is not None:
-                raise ValidationError('Please use a different username.')
-
-    def validate_email(self, email):
-        if email.data != self.original_email:
-            user = User.query.filter_by(email=email.data).first()
-            if user is not None:
-                raise ValidationError('Please use a different email address.')
+class TagForm(FlaskForm):
+    name = StringField('Tag Name', validators=[DataRequired()])
+    description = StringField('Description')
+    submit = SubmitField('Submit')
 
 class BotForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
