@@ -94,7 +94,7 @@ class BotForm(FlaskForm):
                 raise ValidationError('Bot with this name already exists.')
 
     def validate_status(self, field):
-        if not isinstance(field.data, bool):
+        if field.data not in [True, False]:
             raise ValidationError("Invalid value for status. It must be true or false.")
 
 class OrganizationForm(FlaskForm):

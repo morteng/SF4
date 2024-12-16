@@ -12,6 +12,7 @@ admin_bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
 def create():
     form = BotForm()
     print(form.errors)  # Temporary debug line
+    print(form.errors)  # Debug: print form errors to console
     if form.validate_on_submit():
         try:
             new_bot = create_bot(form.data)
