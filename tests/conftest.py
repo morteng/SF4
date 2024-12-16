@@ -185,3 +185,13 @@ def logged_in_client(client, test_user):
     with client.session_transaction() as session:
         assert '_user_id' in session, "User session not established."
     yield client
+
+@pytest.fixture(scope='function')
+def test_tag(db_session):
+    """Provide a test tag."""
+    tag = Tag(name="TestTag", category="TestCategory")
+    db_session.add(tag)
+    db_session.commit()
+    yield tag
+    db_session.delete(tag)
+    db_session.commit()
