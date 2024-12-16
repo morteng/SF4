@@ -1,6 +1,7 @@
 from flask import url_for
 from app.models.stipend import Stipend
-from tests.conftest import logged_in_admin, stipend_data, db_session, monkeypatch
+from tests.conftest import logged_in_admin, stipend_data, db_session
+import pytest
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 
 def test_create_stipend_with_none_result(stipend_data, logged_in_admin, db_session, monkeypatch):
