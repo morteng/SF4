@@ -14,6 +14,8 @@ def test_create_stipend_with_none_result(stipend_data, logged_in_admin, db_sessi
         
         assert response.status_code == 200
         assert b"Stipend creation failed due to invalid input." in response.data  # Confirm error message is present
+        assert b'Create Stipend' in response.data  # Verify the page title
+        assert b'<input name="name"' in response.data  # Confirm 'name' field is present
 
         stipends = db_session.query(Stipend).filter_by(name=stipend_data['name']).all()
         assert len(stipends) == 0  # Ensure no stipend was created
