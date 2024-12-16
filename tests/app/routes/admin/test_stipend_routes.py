@@ -107,9 +107,12 @@ def test_update_stipend_route_with_invalid_id(logged_in_admin):
     assert url_for('admin.stipend.index', _external=False) == update_response.headers['Location']
 
 def test_delete_stipend_route(logged_in_admin, test_stipend, db_session):
-    # Perform the DELETE operation
-    delete_response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id))
-    assert delete_response.status_code == 302
+    # Perform the DELETE operation and follow the redirect
+    delete_response = logged_in_admin.post(
+        url_for('admin.stipend.delete', id=test_stipend.id),
+        follow_redirects=True
+    )
+    assert delete_response.status_code == 200
     
     # Ensure the stipend is no longer in the session after deleting
     db_session.expire_all()
