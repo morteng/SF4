@@ -27,7 +27,7 @@ def create():
             result = create_stipend(stipend)
             
             if not result:
-                flash("Stipend creation failed due to invalid input.", FLASH_CATEGORY_ERROR)
+                flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
                 if request.headers.get('HX-Request'):
                     return render_template('admin/stipends/_stipend_form.html', form=form), 200
                 else:
