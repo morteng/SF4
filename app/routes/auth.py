@@ -2,6 +2,9 @@ from flask import redirect, url_for, flash, render_template
 from flask_login import login_user, current_user
 from .forms import LoginForm
 from ..models import User
+from .. import create_app  # Import the create_app function
+
+app = create_app()  # Create the app instance
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
