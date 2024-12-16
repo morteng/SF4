@@ -29,8 +29,7 @@ class StipendForm(FlaskForm):
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
-    category = StringField('Category', validators=[DataRequired(), Length(max=100)])  # Added this line
-    category = StringField('Category', validators=[DataRequired(), Length(max=100)])  # Added this line
+    category = StringField('Category', validators=[DataRequired(), Length(max=100)])  # Keep only one
     submit = SubmitField('Create')
 
     def __init__(self, original_name=None, *args, **kwargs):
