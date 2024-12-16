@@ -93,6 +93,10 @@ class BotForm(FlaskForm):
             if bot:
                 raise ValidationError('Bot with this name already exists.')
 
+    def validate_status(self, field):
+        if not isinstance(field.data, bool):
+            raise ValidationError("Invalid value for status. It must be true or false.")
+
 class OrganizationForm(FlaskForm):
     name = StringField('Org Name', validators=[DataRequired(), Length(max=100)])
     description = TextAreaField('About')
