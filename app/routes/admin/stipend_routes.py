@@ -27,7 +27,11 @@ def create():
             result = create_stipend(stipend)
             
             if not result:
-                raise ValueError("Stipend creation failed due to invalid input.")
+                flash("Stipend creation failed due to invalid input.", FLASH_CATEGORY_ERROR)
+                if request.headers.get('HX-Request'):
+                    return render_template('admin/stipends/_stipend_form.html', form=form), 200
+                else:
+                    return render_template('admin/stipends/form.html', form=form), 200
             
             flash(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             
@@ -36,12 +40,6 @@ def create():
                 return render_template('admin/stipends/_stipend_list.html', stipends=stipends, form=form), 200
             
             return redirect(url_for('admin.stipend.index'))
-        except ValueError as ve:
-            flash(str(ve), FLASH_CATEGORY_ERROR)
-            if request.headers.get('HX-Request'):
-                return render_template('admin/stipends/_stipend_form.html', form=form), 200
-            else:
-                return render_template('admin/stipends/form.html', form=form), 200
         except Exception as e:
             db.session.rollback()  # Explicitly rollback session on failure
             logging.error(f"Failed to create stipend: {e}")
