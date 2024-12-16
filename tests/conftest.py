@@ -9,6 +9,7 @@ from app.extensions import db, login_manager
 from app.models.user import User
 from app.models.organization import Organization
 from app.models.stipend import Stipend
+from app.models.tag import Tag
 
 # Ignore SAWarnings for cleaner test output
 warnings.filterwarnings("ignore", category=SAWarning)
@@ -152,10 +153,20 @@ def test_organization(db_session, organization_data):
     db_session.delete(organization)
     db_session.commit()
 
+@pytest.fixture(scope='function')
+def tag_data():
+    return {
+        'name': 'Test Tag',
+        'category': 'Test Category'
+    }
+
 # Helper Function
 def extract_csrf_token(response_data):
     match = re.search(r'name="csrf_token".*?value="(.+?)"', response_data.decode('utf-8'))
     return match.group(1) if match else "dummy_csrf_token"
+
+def get_all_tags():
+    return Tag.query.all()
 
 @pytest.fixture(scope='function')
 def logged_in_client(client, test_user):
