@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
-from flask_login import login_required
+from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import TagForm
 from app.services.tag_service import get_tag_by_id, delete_tag, get_all_tags, create_tag, update_tag
 from app.extensions import db
-from sqlalchemy.exc import IntegrityError  # Add this import
+from sqlalchemy.exc import IntegrityError  # Add this import if not already present
 
 admin_tag_bp = Blueprint('tag', __name__, url_prefix='/tags')
 
@@ -14,11 +14,11 @@ def create():
     if form.validate_on_submit():
         try:
             new_tag = create_tag(form.data)
-            flash('Tag created successfully.', 'success')
+            flash(FLASH_MESSAGES["CREATE_TAG_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.tag.index'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Failed to create tag: {str(e)}.', 'danger')
+            flash(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
     return render_template('admin/tags/create.html', form=form)
 
 @admin_tag_bp.route('/<int:id>/delete', methods=['POST'])
@@ -26,10 +26,14 @@ def create():
 def delete(id):
     tag = get_tag_by_id(id)
     if tag:
-        delete_tag(tag)
-        flash(f'Tag {tag.name} deleted.', 'success')
+        try:
+            delete_tag(tag)
+            flash(FLASH_MESSAGES["DELETE_TAG_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+        except Exception as e:
+            db.session.rollback()
+            flash(FLASH_MESSAGES["DELETE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
     else:
-        flash('Tag not found.', 'danger')
+        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Use generic error if tag not found
     return redirect(url_for('admin.tag.index'))
 
 @admin_tag_bp.route('/', methods=['GET'])
@@ -43,7 +47,7 @@ def index():
 def update(id):
     tag = get_tag_by_id(id)
     if not tag:
-        flash('Tag not found.', 'danger')
+        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Use generic error if tag not found
         return redirect(url_for('admin.tag.index'))
     
     form = TagForm(obj=tag, original_name=tag.name)  # Pass the original name to the form
@@ -51,13 +55,13 @@ def update(id):
     if form.validate_on_submit():
         try:
             update_tag(tag, form.data)
-            flash('Tag updated successfully.', 'success')
+            flash(FLASH_MESSAGES["UPDATE_TAG_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.tag.index'))
         except IntegrityError as e:
             db.session.rollback()
-            flash(f'Failed to update tag: Database error.', 'danger')  # Specific message for IntegrityError
+            flash(FLASH_MESSAGES["UPDATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)  # Specific message for IntegrityError
         except Exception as e:
             db.session.rollback()
-            flash(f'An error occurred while updating the tag: {str(e)}.', 'danger')
+            flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
     
     return render_template('admin/tags/update.html', form=form, tag=tag)
