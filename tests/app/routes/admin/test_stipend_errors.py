@@ -10,13 +10,15 @@ def test_create_stipend_with_none_result(stipend_data, logged_in_admin, db_sessi
             return None
 
         monkeypatch.setattr('app.services.stipend_service.create_stipend', mock_create_stipend)
-
+    
+        stipend_data['submit'] = 'Submit'  # Add the submit field to stipend_data
+    
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
-        
+    
         assert response.status_code == 200
         assert FLASH_MESSAGES["CREATE_STIPEND_ERROR"].encode() in response.data
         assert b'Create Stipend' in response.data
         assert b'<input name="name"' in response.data
-
+    
         stipends = db_session.query(Stipend).filter_by(name=stipend_data['name']).all()
         assert len(stipends) == 0
