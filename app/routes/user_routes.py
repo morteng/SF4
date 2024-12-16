@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, current_user, login_required
 from app.forms.user_forms import ProfileForm, LoginForm
 from app.models.user import User  # Import the User model
+from app.extensions import db  # Import the db from extensions
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
@@ -34,12 +35,8 @@ def edit_profile():
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
-        # Pass the form data to update_user
-        update_user(current_user, {
-            'username': form.username.data,
-            'email': form.email.data,
-            'is_admin': current_user.is_admin  # Assuming is_admin should not be changed via this form
-        })
+        # Update the user directly in the database
+        db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('user.profile'))
     elif request.method == 'GET':
