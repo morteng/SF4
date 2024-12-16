@@ -1,5 +1,4 @@
 import logging
-from flask import flash  # Import the flash function
 from app.extensions import db
 from app.models import Stipend
 from datetime import datetime
@@ -20,7 +19,6 @@ def update_stipend(stipend, data):
                 setattr(stipend, key, value)
         
         db.session.commit()
-        flash('Stipend updated successfully.', 'success')
     except Exception as e:
         db.session.rollback()
         if db.session.is_active and db.inspect(stipend).detached:
@@ -37,11 +35,9 @@ def create_stipend(stipend, session=db.session):
 
         session.add(stipend)
         session.commit()
-        flash('Stipend created successfully.', 'success')
         return stipend
     except ValueError as ve:
         session.rollback()
-        flash(str(ve), 'danger')
         logging.error(f"Invalid date format: {ve}")
         return None
     except Exception as e:
