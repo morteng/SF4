@@ -82,11 +82,7 @@ class BotForm(FlaskForm):
     description = TextAreaField('Description')
     from wtforms.validators import AnyOf
 
-    status = BooleanField(
-        'Status',
-        default=False,
-        validators=[AnyOf([True, False], message="Invalid value for status.")]
-    )
+    status = BooleanField('Status', default=False)
     submit = SubmitField('Create')
 
     def __init__(self, original_name=None, *args, **kwargs):
@@ -98,10 +94,12 @@ class BotForm(FlaskForm):
             bot = Bot.query.filter_by(name=name.data).first()
             if bot:
                 raise ValidationError('Bot with this name already exists.')
-
+    
     def validate_status(self, field):
-        if field.data not in [True, False]:
-            raise ValidationError("Invalid value for status. It must be true or false.")
+        if field.raw_data:
+            value = field.raw_data[0].lower()
+            if value not in ['true', 'false', '1', '0', 'y', 'n', 'yes', 'no', 'on', 'off']:
+                raise ValidationError("Invalid value for status. It must be true or false.")
 
 class OrganizationForm(FlaskForm):
     name = StringField('Org Name', validators=[DataRequired(), Length(max=100)])

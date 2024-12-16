@@ -21,6 +21,10 @@ def create():
         except Exception as e:
             db.session.rollback()  # Ensure the session is rolled back on error
             flash(f"{FLASH_MESSAGES['CREATE_BOT_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(error, FLASH_CATEGORY_ERROR)
 
     return render_template('admin/bots/create.html', form=form)
 
@@ -77,5 +81,9 @@ def update(id):
             db.session.rollback()
             flash(FLASH_MESSAGES["UPDATE_BOT_ERROR"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.bot.index'))
-    
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(error, FLASH_CATEGORY_ERROR)
+
     return render_template('admin/bots/_edit_row.html', form=form, bot=bot)
