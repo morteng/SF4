@@ -24,10 +24,20 @@ def test_create_tag_route_with_none_result(logged_in_admin, tag_data, monkeypatc
         def mock_create_tag(*args, **kwargs):
             return None
 
-        monkeypatch.setattr('app.services.tag_service.create_tag', mock_create_tag)
+        # Corrected monkeypatch target
+        monkeypatch.setattr('app.routes.admin.tag_routes.create_tag', mock_create_tag)
 
-        response = logged_in_admin.post(url_for('admin.tag.create'), data=tag_data)
-        
+        # Extract CSRF token
+        create_response = logged_in_admin.get(url_for('admin.tag.create'))
+        csrf_token = extract_csrf_token(create_response.data)
+
+        # Include CSRF token in POST data
+        response = logged_in_admin.post(url_for('admin.tag.create'), data={
+            'name': tag_data['name'],
+            'category': tag_data['category'],
+            'csrf_token': csrf_token
+        })
+
         assert response.status_code == 200
         assert FLASH_MESSAGES["CREATE_TAG_ERROR"].encode() in response.data
 
