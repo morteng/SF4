@@ -17,6 +17,8 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     DEBUG = False
     TESTING = True
+    WTF_CSRF_ENABLED = False  # Disable CSRF in testing
+    WTF_CSRF_ENABLED = False  # Disable CSRF in testing
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     WTF_CSRF_ENABLED = False  # Disable CSRF for testing
 
