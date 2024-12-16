@@ -16,7 +16,7 @@ def test_create_stipend_with_none_result(stipend_data, logged_in_admin, db_sessi
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data, follow_redirects=True)
     
         assert response.status_code == 200
-        assert FLASH_MESSAGES["CREATE_STIPEND_ERROR"] in response.data.decode()
+        assert b'Stipend creation failed due to invalid input.' in response.data
         assert b'Create Stipend' in response.data
         assert b'<input name="name"' in response.data
     
