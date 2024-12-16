@@ -17,9 +17,8 @@ warnings.filterwarnings("ignore", category=SAWarning)
 @pytest.fixture(scope='function')
 def app():
     """Create and configure a new app instance for each test function."""
-    app = create_app('testing')
-    app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for testing
-    app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for testing
+    app = create_app('testing')  # Use 'testing' here, not TestConfig
+    app.config['WTF_CSRF_ENABLED'] = False  # Ensure CSRF is disabled
 
     with app.app_context():
         db.session.expire_on_commit = False
