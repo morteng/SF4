@@ -18,7 +18,8 @@ def create():
             return redirect(url_for('admin.bot.index'))
         except Exception as e:
             db.session.rollback()  # Ensure the session is rolled back on error
-            flash(FLASH_MESSAGES["CREATE_BOT_ERROR"], FLASH_CATEGORY_ERROR)
+            flash(f"{FLASH_MESSAGES['CREATE_BOT_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
+
     return render_template('admin/bots/create.html', form=form)
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])
