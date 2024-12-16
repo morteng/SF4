@@ -43,7 +43,6 @@ def create_stipend(stipend, session=db.session):
     except Exception as e:
         session.rollback()
         logging.error(f"Failed to create stipend: {e}")
-        flash('Failed to create stipend. Please try again.', 'danger')
         return None
 
 def delete_stipend(stipend_id):
