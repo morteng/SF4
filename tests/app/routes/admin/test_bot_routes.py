@@ -85,8 +85,11 @@ def test_update_bot_route_with_invalid_id(logged_in_admin):
 
 def test_delete_bot_route(logged_in_admin, test_bot, db_session):
     # Perform the DELETE operation
-    delete_response = logged_in_admin.post(url_for('admin.bot.delete', id=test_bot.id))
-    assert delete_response.status_code == 302
+    delete_response = logged_in_admin.post(
+        url_for('admin.bot.delete', id=test_bot.id),
+        follow_redirects=True  # Follow the redirect to capture flash messages
+    )
+    assert delete_response.status_code == 200  # After following redirects, status should be 200
     
     # Ensure the bot is no longer in the session after deleting
     db_session.expire_all()
