@@ -66,6 +66,6 @@ def update(id):
             flash(FLASH_MESSAGES["UPDATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)  # Specific message for IntegrityError
         except Exception as e:
             db.session.rollback()
-            flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+            flash(f'Failed to update tag: {str(e)}', FLASH_CATEGORY_ERROR)
     
     return render_template('admin/tags/update.html', form=form, tag=tag)
