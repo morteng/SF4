@@ -74,10 +74,13 @@ class UserForm(FlaskForm):
             if user is not None:
                 raise ValidationError('Please use a different email address.')
 
+from wtforms import BooleanField
+from wtforms.validators import InputRequired
+
 class BotForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired(), Length(max=100)])
+    name = StringField('Name', validators=[InputRequired(), Length(max=100)])
     description = TextAreaField('Description')
-    status = StringField('Status', validators=[Length(max=255)])
+    status = BooleanField('Status')
     submit = SubmitField('Create')
 
     def __init__(self, original_name=None, *args, **kwargs):
