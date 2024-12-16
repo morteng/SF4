@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, current_user, login_required
 from app.forms.user_forms import ProfileForm, LoginForm
 from app.models.user import User  # Import the User model
-from app.services.user_service import update_user
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
