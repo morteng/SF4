@@ -23,9 +23,11 @@ def create():
         except IntegrityError as e:
             db.session.rollback()
             flash(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
+            return render_template('admin/tags/create.html', form=form)  # Render the form again with an error message
         except Exception as e:
             db.session.rollback()
             flash(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
+            return render_template('admin/tags/create.html', form=form)  # Render the form again with an error message
     return render_template('admin/tags/create.html', form=form)
 
 @admin_tag_bp.route('/<int:id>/delete', methods=['POST'])
@@ -67,8 +69,10 @@ def update(id):
         except IntegrityError as e:
             db.session.rollback()
             flash(FLASH_MESSAGES["UPDATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)  # Specific message for IntegrityError
+            return render_template('admin/tags/update.html', form=form, tag=tag)  # Render the form again with an error message
         except Exception as e:
             db.session.rollback()
             flash(FLASH_MESSAGES["UPDATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)  # Use the same error message
+            return render_template('admin/tags/update.html', form=form, tag=tag)  # Render the form again with an error message
 
     return render_template('admin/tags/update.html', form=form, tag=tag)
