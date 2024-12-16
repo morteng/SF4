@@ -20,6 +20,9 @@ def create():
                 return render_template('admin/tags/create.html', form=form)  # Render the form again with an error message
             flash(FLASH_MESSAGES["CREATE_TAG_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.tag.index'))
+        except IntegrityError as e:
+            db.session.rollback()
+            flash(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
         except Exception as e:
             db.session.rollback()
             flash(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
