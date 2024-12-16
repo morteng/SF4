@@ -80,12 +80,12 @@ class BotForm(FlaskForm):
 
     name = StringField('Name', validators=[InputRequired(), Length(max=100)])
     description = TextAreaField('Description')
-from wtforms.validators import AnyOf
+    from wtforms.validators import AnyOf
 
     status = BooleanField(
         'Status',
         default=False,
-        validators=[AnyOf(values=[True, False], message="Invalid value for status.")]
+        validators=[AnyOf([True, False], message="Invalid value for status.")]
     )
     submit = SubmitField('Create')
 
