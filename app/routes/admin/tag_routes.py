@@ -15,6 +15,9 @@ def create():
     if form.validate_on_submit():
         try:
             new_tag = create_tag(form.data)
+            if new_tag is None:
+                flash(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
+                return render_template('admin/tags/create.html', form=form)  # Render the form again with an error message
             flash(FLASH_MESSAGES["CREATE_TAG_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.tag.index'))
         except Exception as e:
