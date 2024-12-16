@@ -1,9 +1,27 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
-from flask_login import login_required, current_user
+from flask_login import login_user, current_user, login_required
 from app.forms.user_forms import ProfileForm, LoginForm
+from app.models.user import User  # Import the User model
 from app.services.user_service import update_user
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
+
+@user_bp.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user)
+            flash('Logged in successfully.')
+            # Redirect based on user role
+            if current_user.is_admin:
+                return redirect(url_for('admin.dashboard.dashboard'))
+            else:
+                return redirect(url_for('user.profile'))
+        else:
+            flash('Invalid username or password.')
+    return render_template('public/login.html', form=form)
 
 @user_bp.route('/profile', methods=['GET'])
 @login_required
