@@ -9,7 +9,6 @@ from app.models.bot import Bot
 
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
-    submit = SubmitField('Submit')
     summary = TextAreaField('Summary', validators=[Optional()])
     description = TextAreaField('Description', validators=[Optional()])
     homepage_url = URLField('Homepage URL', validators=[Optional()])
