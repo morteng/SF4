@@ -132,9 +132,9 @@ def test_create_stipend_route_with_database_error(logged_in_admin, stipend_data,
 
         def mock_commit(*args, **kwargs):
             raise Exception("Database error")
-            
+
         monkeypatch.setattr(db_session, 'commit', mock_commit)
-        
+
         response = logged_in_admin.post(url_for('admin.stipend.create'), data={
             'name': data['name'],
             'summary': data['summary'],
@@ -142,16 +142,17 @@ def test_create_stipend_route_with_database_error(logged_in_admin, stipend_data,
             'homepage_url': data['homepage_url'],
             'application_procedure': data['application_procedure'],
             'eligibility_criteria': data['eligibility_criteria'],
-            'application_deadline': data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S'),
+            'application_deadline': data['application_deadline'],  # Edited Line
             'open_for_applications': data['open_for_applications'],
             'csrf_token': extract_csrf_token(logged_in_admin.get(url_for('admin.stipend.create')).data)
         }, follow_redirects=True)
-        
+
         assert response.status_code == 200
         assert FLASH_MESSAGES["CREATE_STIPEND_ERROR"].encode() in response.data  # Confirm error message is present
 
         stipends = Stipend.query.all()
         assert not any(stipend.name == data['name'] for stipend in stipends)  # Ensure no stipend was created
+
 
 def test_update_stipend_route_with_database_error(logged_in_admin, test_stipend, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
