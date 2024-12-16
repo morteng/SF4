@@ -2,6 +2,7 @@ from flask import url_for
 from app.models.stipend import Stipend
 from tests.conftest import logged_in_admin, stipend_data, db_session
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from app.forms import StipendForm  # Added import statement
 
 def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
