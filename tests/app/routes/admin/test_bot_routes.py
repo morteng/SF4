@@ -48,7 +48,7 @@ def test_create_bot_route_with_invalid_data(logged_in_admin, bot_data):
     invalid_data = {
         'name': '',  # Invalid name
         'description': bot_data['description'],
-        'status': bot_data['status'],
+        'status': 'y',  # Use this to simulate a boolean field submission
         'csrf_token': csrf_token
     }
     response = logged_in_admin.post(url_for('admin.bot.create'), data=invalid_data, follow_redirects=True)
