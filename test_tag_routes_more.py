@@ -4,6 +4,7 @@ from tests.conftest import logged_in_admin, tag_data, extract_csrf_token, get_al
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from sqlalchemy.exc import IntegrityError
 import pytest
+from app.services.tag_service import create_tag
 
 def test_create_tag_with_invalid_form_data(logged_in_admin):
     create_response = logged_in_admin.get(url_for('admin.tag.create'))
