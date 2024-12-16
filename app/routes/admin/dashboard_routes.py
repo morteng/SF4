@@ -7,4 +7,3 @@ admin_dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 @login_required
 def dashboard():
     return render_template('admin/dashboard.html')
-

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required
+from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import (
     get_stipend_by_id,
@@ -28,13 +29,15 @@ def create():
             if not result:
                 raise ValueError("Stipend creation failed due to invalid input.")
             
+            flash(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            
             if request.headers.get('HX-Request'):
                 stipends = get_all_stipends()
                 return render_template('admin/stipends/_stipend_list.html', stipends=stipends, form=form), 200
             
             return redirect(url_for('admin.stipend.index'))
         except ValueError as ve:
-            flash(str(ve), 'danger')
+            flash(str(ve), FLASH_CATEGORY_ERROR)
             if request.headers.get('HX-Request'):
                 return render_template('admin/stipends/_stipend_form.html', form=form), 200
             else:
@@ -42,7 +45,7 @@ def create():
         except Exception as e:
             db.session.rollback()  # Explicitly rollback session on failure
             logging.error(f"Failed to create stipend: {e}")
-            flash('Failed to create stipend. Please try again.', 'danger')
+            flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
             if request.headers.get('HX-Request'):
                 return render_template('admin/stipends/_stipend_form.html', form=form), 200
             else:
@@ -62,7 +65,7 @@ def create():
 def update(id):
     stipend = get_stipend_by_id(id)  # Use session.get instead of get
     if not stipend:
-        flash('Stipend not found!', 'danger')
+        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
     
     form = StipendForm(obj=stipend, original_name=stipend.name)  # Set original_name to the current stipend's name
@@ -76,12 +79,12 @@ def update(id):
             
             update_stipend(stipend, stipend.__dict__)
             db.session.commit()
-            flash('Stipend updated successfully!', 'success')
+            flash(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.stipend.index'))
         except Exception as e:
             db.session.rollback()  # Explicitly rollback session on failure
             current_app.logger.error(f"Failed to update stipend: {e}")
-            flash('Failed to update stipend', 'danger')
+            flash(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
             return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
     
     # Ensure the form is re-rendered with errors and a 200 status code
@@ -93,19 +96,19 @@ def update(id):
 def delete(id):
     stipend = get_stipend_by_id(id)  # Use session.get instead of get
     if not stipend:
-        flash('Stipend not found!', 'danger')
+        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
     
     try:
         delete_stipend(stipend.id)
         db.session.commit()
         
-        flash('Stipend deleted successfully!', 'success')
+        flash(FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         return redirect(url_for('admin.stipend.index'))
     except Exception as e:
         db.session.rollback()  # Explicitly rollback session on failure
         logging.error(f"Failed to delete stipend: {e}")
-        flash('An error occurred while deleting the stipend.', 'danger')
+        flash(FLASH_MESSAGES["DELETE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
 
 
