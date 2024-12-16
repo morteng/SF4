@@ -86,6 +86,11 @@ def update(id):
             return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
     
     # Ensure the form is re-rendered with errors and a 200 status code
+    if form.errors:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(error, FLASH_CATEGORY_ERROR)
+    
     return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
 
 
