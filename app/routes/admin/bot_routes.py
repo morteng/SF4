@@ -12,7 +12,7 @@ admin_bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
 def create():
     form = BotForm()
     print(form.errors)  # Temporary debug line
-    if form.validate_on_submit() and form.name.data.strip():
+    if form.validate_on_submit():
         try:
             new_bot = create_bot(form.data)
             flash(FLASH_MESSAGES["CREATE_BOT_SUCCESS"], FLASH_CATEGORY_SUCCESS)

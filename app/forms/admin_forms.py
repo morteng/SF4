@@ -78,9 +78,11 @@ from wtforms import BooleanField
 from wtforms.validators import InputRequired
 
 class BotForm(FlaskForm):
+    from wtforms import BooleanField
+
     name = StringField('Name', validators=[InputRequired(), Length(max=100)])
     description = TextAreaField('Description')
-    status = BooleanField('Status')
+    status = BooleanField('Status', default=False)
     submit = SubmitField('Create')
 
     def __init__(self, original_name=None, *args, **kwargs):
