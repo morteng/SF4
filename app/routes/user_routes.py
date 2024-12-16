@@ -21,7 +21,7 @@ def login():
                 return redirect(url_for('user.profile'))
         else:
             flash('Invalid username or password.')
-    return render_template('public/login.html', form=form)
+    return render_template('login.html', form=form)
 
 @user_bp.route('/profile', methods=['GET'])
 @login_required
