@@ -34,8 +34,9 @@ def test_create_tag_with_integrity_error(logged_in_admin, tag_data, db_session, 
         # Include CSRF token in POST data
         response = logged_in_admin.post(url_for('admin.tag.create'), data={
             'name': tag_data['name'],
+            'category': tag_data['category'],  # Include category
             'csrf_token': csrf_token
-        }, follow_redirects=True)  # Ensure follow_redirects is True to capture flash messages
+        }, follow_redirects=True)
 
         assert response.status_code == 200
         assert FLASH_MESSAGES["CREATE_TAG_ERROR"].encode() in response.data
