@@ -28,7 +28,11 @@
                 <li><a href="{{ url_for('public.register') }}" class="text-green-500 hover:underline">Register</a></li>
             {% endif %}
         </ul>
-        <button id="theme-toggle" class="bg-gray-200 p-2 rounded-md dark:bg-gray-700 dark:text-white">Toggle Theme</button>
+        <!-- Theme toggle switch -->
+        <label class="switch">
+            <input type="checkbox" id="theme-toggle">
+            <span class="slider round"></span>
+        </label>
     </nav>
 </header>
 <div class="flashes mb-4">
@@ -65,34 +69,6 @@
 <div id="htmx-indicator" style="display: none;">
     <p>Loading...</p>
 </div>
-<script>
-    document.body.addEventListener('htmx:configRequest', () => {
-        document.getElementById('htmx-indicator').style.display = 'block';
-    });
-    document.body.addEventListener('htmx:afterRequest', () => {
-        document.getElementById('htmx-indicator').style.display = 'none';
-    });
-
-    document.getElementById('menu-toggle').addEventListener('click', function () {
-        const menu = document.getElementById('nav-menu');
-        menu.classList.toggle('hidden');
-    });
-
-    // Theme toggle functionality
-    const toggleButton = document.getElementById('theme-toggle');
-    const currentTheme = localStorage.getItem('theme') || 'dark';
-    document.body.classList.add(currentTheme);
-
-    toggleButton.addEventListener('click', function () {
-        if (document.body.classList.contains('dark')) {
-            document.body.classList.remove('dark');
-            localStorage.setItem('theme', '');
-        } else {
-            document.body.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        }
-    });
-</script>
 {% block content %}{% endblock %}
 </main>
 <footer class="bg-gray-700 shadow-md text-center p-4 mt-8 dark:bg-gray-800">
