@@ -3,6 +3,7 @@ from flask import url_for
 from app.models.stipend import Stipend
 from tests.conftest import extract_csrf_token
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from datetime import datetime
 
 @pytest.fixture(scope='function')
 def stipend_data():
