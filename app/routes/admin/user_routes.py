@@ -18,6 +18,10 @@ def create():
         except ValueError as e:
             # The error message is already flashed in the service, so no need to flash it again here
             pass  # Do nothing or handle if needed
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
     return render_template('admin/users/create.html', form=form)
 
 @admin_user_bp.route('/<int:id>/delete', methods=['POST'])
