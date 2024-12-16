@@ -51,10 +51,10 @@ def create():
     
     # Handle form validation failure
     if request.headers.get('HX-Request'):
-        # Return only the targeted container for HTMX
+        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Ensure generic error message is set
         return render_template('admin/stipends/_stipend_form.html', form=form), 200
     else:
-        # Render the full page with form and errors for non-HTMX requests
+        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Ensure generic error message is set
         return render_template('admin/stipends/form.html', form=form), 200
 
 

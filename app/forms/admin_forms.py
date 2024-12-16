@@ -23,7 +23,6 @@ class StipendForm(FlaskForm):
     submit = SubmitField('Create')
 
     def validate_application_deadline(self, field):
-        # If user provided a value but it wasn't parsed into a datetime, raise the custom error.
         if field.raw_data and field.raw_data[0] and field.data is None:
             raise ValidationError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
 
@@ -79,8 +78,6 @@ class BotForm(FlaskForm):
 
     name = StringField('Name', validators=[InputRequired(), Length(max=100)])
     description = TextAreaField('Description')
-    from wtforms.validators import AnyOf
-
     status = BooleanField('Status', default=False)
     submit = SubmitField('Create')
 
