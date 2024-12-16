@@ -22,6 +22,7 @@ def create():
         for field, errors in form.errors.items():
             for error in errors:
                 flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
+        flash(FLASH_MESSAGES["CREATE_USER_ERROR"], FLASH_CATEGORY_ERROR)  # Add this line to set a generic creation error message
     return render_template('admin/users/create.html', form=form)
 
 @admin_user_bp.route('/<int:id>/delete', methods=['POST'])
