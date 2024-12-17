@@ -67,8 +67,6 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
 
         assert b"Failed to create organization. Error: Database error" in response.data
 
-
-
         organizations = db_session.query(Organization).all()
         assert not any(org.name == data['name'] for org in organizations)  # Ensure no organization was created
 
@@ -152,8 +150,50 @@ def test_delete_nonexistent_organization(logged_in_admin, db_session):
         response = logged_in_admin.post(url_for('admin.organization.delete', id=9999))
         
         assert response.status_code == 302
-        assert url_for('admin.organization.index', _external=False) == response.headers['Location']
+        assert url_for('admin.organization.index', _external=False) == delete_response.headers['Location']
 
 def test_index_organization_route(logged_in_admin, test_organization):
     index_response = logged_in_admin.get(url_for('admin.organization.index'))
     assert index_response.status_code == 200
+
+def test_create_organization_with_long_name(logged_in_admin, db_session):
+    with logged_in_admin.application.app_context():
+        data = {
+            'name': 'a' * 201,  # Exceeds max length of 100
+            'description': 'Test Description',
+            'homepage_url': 'http://example.com'
+        }
+        
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
+        
+        assert response.status_code == 200
+
+        form = OrganizationForm(original_name=None, data=data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
+                
+        # Check that the organization was not created
+        new_organization = db_session.query(Organization).filter_by(name=data['name']).first()
+        assert new_organization is None
+
+def test_create_organization_with_special_characters(logged_in_admin, db_session):
+    with logged_in_admin.application.app_context():
+        data = {
+            'name': '<script>alert("XSS")</script>',  # Special characters
+            'description': 'Test Description',
+            'homepage_url': 'http://example.com'
+        }
+        
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
+        
+        assert response.status_code == 200
+
+        form = OrganizationForm(original_name=None, data=data)
+        if not form.validate():
+            for field, errors in form.errors.items():
+                print(f"Field {field} errors: {errors}")
+                
+        # Check that the organization was not created
+        new_organization = db_session.query(Organization).filter_by(name=data['name']).first()
+        assert new_organization is None

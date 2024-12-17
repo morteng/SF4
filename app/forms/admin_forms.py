@@ -102,7 +102,7 @@ class BotForm(FlaskForm):
 class OrganizationForm(FlaskForm):
     name = StringField('Org Name', validators=[DataRequired(), Length(max=100)])
     description = TextAreaField('About')
-    homepage_url = URLField('Website', validators=[Optional()])
+    homepage_url = URLField('Website', validators=[Optional(), URL()])  # Add URL validator here
     submit = SubmitField('Create')
 
     def __init__(self, original_name=None, *args, **kwargs):
