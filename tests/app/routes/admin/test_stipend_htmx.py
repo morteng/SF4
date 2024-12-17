@@ -41,7 +41,8 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
 
-        assert FLASH_MESSAGES["GENERIC_ERROR"].encode() in response.data
+        # Check for the specific validation error message
+        assert b"Invalid date format. Please use YYYY-MM-DD HH:MM:SS." in response.data
 
 def test_update_stipend_with_database_error_htmx(logged_in_admin, test_stipend, stipend_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
