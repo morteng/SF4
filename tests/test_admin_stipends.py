@@ -86,7 +86,7 @@ class AdminStipendTestCase(unittest.TestCase):
         response = self.client.get(url_for('admin.stipend.update', id=stipend.id))
         self.assertEqual(response.status_code, 200)
 
-        # Update the stipend
+        # Update the stipend without including 'open_for_applications' to simulate unchecking
         response = self.client.post(url_for('admin.stipend.update', id=stipend.id), data={
             'name': 'Updated Test Stipend',
             'summary': 'Updated summary.',
@@ -94,8 +94,8 @@ class AdminStipendTestCase(unittest.TestCase):
             'homepage_url': 'http://example.com/updated-stipend',
             'application_procedure': 'Send an email to updated@example.com',
             'eligibility_criteria': 'Must be a student or recent graduate.',
-            'application_deadline': datetime(2024, 12, 31, 23, 59, 59).strftime('%Y-%m-%d %H:%M:%S'),  # Convert to string
-            'open_for_applications': 'n'  # Use 'y' or 'n' for boolean fields in form data
+            'application_deadline': datetime(2024, 12, 31, 23, 59, 59).strftime('%Y-%m-%d %H:%M:%S'),
+            # 'open_for_applications': 'n'  # Remove this line
         }, follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
@@ -107,7 +107,7 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(stipend.homepage_url, 'http://example.com/updated-stipend')
         self.assertEqual(stipend.application_procedure, 'Send an email to updated@example.com')
         self.assertEqual(stipend.eligibility_criteria, 'Must be a student or recent graduate.')
-        self.assertFalse(stipend.open_for_applications)
+        self.assertFalse(stipend.open_for_applications)  # This should now pass
 
     def test_delete_stipend(self):
         # Log in as admin

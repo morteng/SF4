@@ -73,28 +73,18 @@ def update(id):
     
     if form.validate_on_submit():
         try:
-            # Debugging: Print the form data
-            print(f"Form data: {form.data}")
-            
-            # Populate other fields from the form
+            # Populate the stipend object with form data
             form.populate_obj(stipend)
             
-            logging.info(f"Updating stipend with data: {stipend.__dict__}")
-            
-            # Debugging: Print the stipend data before updating
-            print(f"Stipend data before update: {stipend.__dict__}")
-            
-            update_stipend(stipend, stipend.__dict__)
             db.session.commit()
             flash(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.stipend.index'))
         except Exception as e:
-            db.session.rollback()  # Explicitly rollback session on failure
+            db.session.rollback()
             current_app.logger.error(f"Failed to update stipend: {e}")
             flash(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
             return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
     
-    # Ensure the form is re-rendered with errors and a 200 status code
     if form.errors:
         for field, errors in form.errors.items():
             for error in errors:

@@ -8,6 +8,9 @@ logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 def update_stipend(stipend, data):
     try:
         for key, value in data.items():
+            if key.startswith('_'):
+                continue  # Skip internal attributes
+
             if key == 'application_deadline':
                 if isinstance(value, str):
                     try:
