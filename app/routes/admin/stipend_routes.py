@@ -25,6 +25,7 @@ def create():
     if form.validate_on_submit():
         try:
             stipend_data = {k: v for k, v in form.data.items() if k != 'submit'}
+            logging.info(f"Stipend data to be created: {stipend_data}")  # Add this line
             stipend = Stipend(**stipend_data)
             result = create_stipend(stipend)
             
@@ -52,11 +53,13 @@ def create():
                 return render_template('admin/stipends/form.html', form=form), 200
     
     # Handle form validation failure
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(error, FLASH_CATEGORY_ERROR)
+    
     if request.headers.get('HX-Request'):
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Ensure generic error message is set
         return render_template('admin/stipends/_stipend_form.html', form=form), 200
     else:
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Ensure generic error message is set
         return render_template('admin/stipends/form.html', form=form), 200
 
 

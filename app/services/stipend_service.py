@@ -39,15 +39,17 @@ def create_stipend(stipend, session=db.session):
         if isinstance(stipend.application_deadline, str):
             try:
                 datetime.strptime(stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
-            except ValueError:
+            except ValueError as ve:
+                logging.error(f"Invalid date format: {ve}")
                 raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
 
         session.add(stipend)
         session.commit()
+        logging.info('Stipend created successfully.')
         return stipend
     except ValueError as ve:
         session.rollback()
-        logging.error(f"Invalid date format: {ve}")
+        logging.error(f"Failed to create stipend due to invalid input: {ve}")
         return None
     except Exception as e:
         session.rollback()
