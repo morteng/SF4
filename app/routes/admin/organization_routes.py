@@ -5,11 +5,13 @@ from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization, update_organization
 from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
+from app.utils import admin_required
 
 admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def create():
     if request.method == 'POST':
         form = OrganizationForm(request.form)
@@ -32,6 +34,7 @@ def create():
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
+@admin_required
 def delete(id):
     organization = get_organization_by_id(id)
     if organization:
@@ -48,12 +51,14 @@ def delete(id):
 
 @admin_org_bp.route('/', methods=['GET'])
 @login_required
+@admin_required
 def index():
     organizations = get_all_organizations()
     return render_template('admin/organizations/index.html', organizations=organizations)
 
 @admin_org_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def update(id):
     organization = get_organization_by_id(id)
     if not organization:

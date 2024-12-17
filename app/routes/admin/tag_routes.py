@@ -4,12 +4,14 @@ from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY
 from app.forms.admin_forms import TagForm
 from app.services.tag_service import get_tag_by_id, delete_tag, get_all_tags, create_tag, update_tag
 from app.extensions import db
-from sqlalchemy.exc import IntegrityError  # Add this import if not already present
+from sqlalchemy.exc import IntegrityError 
+from app.utils import admin_required
 
 admin_tag_bp = Blueprint('tag', __name__, url_prefix='/tags')
 
 @admin_tag_bp.route('/create', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def create():
     form = TagForm()
     if form.validate_on_submit():
@@ -32,6 +34,7 @@ def create():
 
 @admin_tag_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
+@admin_required
 def delete(id):
     tag = get_tag_by_id(id)
     if tag:
@@ -47,12 +50,14 @@ def delete(id):
 
 @admin_tag_bp.route('/', methods=['GET'])
 @login_required
+@admin_required
 def index():
     tags = get_all_tags()
     return render_template('admin/tags/index.html', tags=tags)
 
 @admin_tag_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def update(id):
     tag = get_tag_by_id(id)
     if not tag:

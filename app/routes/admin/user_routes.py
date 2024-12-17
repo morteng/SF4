@@ -3,11 +3,13 @@ from flask_login import login_required
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import UserForm
 from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user
+from app.utils import admin_required
 
 admin_user_bp = Blueprint('user', __name__, url_prefix='/users')
 
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def create():
     form = UserForm()
     if form.validate_on_submit():
@@ -27,6 +29,7 @@ def create():
 
 @admin_user_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
+@admin_required
 def delete(id):
     user = get_user_by_id(id)
     if user:
@@ -41,12 +44,14 @@ def delete(id):
 
 @admin_user_bp.route('/', methods=['GET'])
 @login_required
+@admin_required
 def index():
     users = get_all_users()
     return render_template('admin/users/index.html', users=users)
 
 @admin_user_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def update(id):
     user = get_user_by_id(id)  # Fetch user data
     if not user:

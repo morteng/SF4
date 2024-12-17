@@ -3,12 +3,14 @@ from flask_login import login_required
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import BotForm
 from app.services.bot_service import get_bot_by_id, run_bot, get_all_bots, create_bot, update_bot, delete_bot
-from app.extensions import db  # Import the db object
+from app.extensions import db 
+from app.utils import admin_required
 
 admin_bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
 
 @admin_bot_bp.route('/create', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def create():
     form = BotForm()
     print(form.errors)  # Temporary debug line
@@ -30,6 +32,7 @@ def create():
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
+@admin_required
 def delete(id):
     bot = get_bot_by_id(id)
     if bot:
@@ -45,12 +48,14 @@ def delete(id):
 
 @admin_bot_bp.route('/', methods=['GET'])
 @login_required
+@admin_required
 def index():
     bots = get_all_bots()
     return render_template('admin/bots/index.html', bots=bots)
 
 @admin_bot_bp.route('/<int:id>/run', methods=['POST'])
 @login_required
+@admin_required
 def run(id):
     bot = get_bot_by_id(id)
     if bot:
@@ -66,6 +71,7 @@ def run(id):
 
 @admin_bot_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def update(id):
     bot = get_bot_by_id(id)
     if not bot:

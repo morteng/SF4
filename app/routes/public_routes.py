@@ -11,7 +11,7 @@ def login():
     if current_user.is_authenticated:
         # Redirect to admin dashboard if user is an admin, else redirect to user profile
         if current_user.is_admin:
-            return redirect(url_for('admin.dashboard.dashboard'))  # Assuming the admin stipends index is the dashboard
+            return redirect(url_for('admin.dashboard.dashboard'))  
         else:
             return redirect(url_for('user.profile'))
     
@@ -25,7 +25,8 @@ def login():
             flash('Login successful.', 'success')
             # Redirect to admin dashboard if user is an admin, else redirect to user profile
             if current_user.is_admin:
-                return redirect(url_for('admin.dashboard.dashboard'))  # Assuming the admin stipends index is the dashboard
+                flash('Admin logged in.', 'success')
+                return redirect(url_for('admin.dashboard.dashboard'))  
             else:
                 return redirect(url_for('user.profile'))
         else:
