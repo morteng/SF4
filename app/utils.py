@@ -4,6 +4,7 @@ from flask import abort, redirect, url_for
 from flask_login import current_user, login_required as _login_required  # Import the original login_required
 from .models.user import User
 from werkzeug.security import generate_password_hash
+from dotenv import load_dotenv  # Add this import
 
 def admin_required(f):
     def decorated_function(*args, **kwargs):
@@ -17,7 +18,7 @@ def admin_required(f):
 login_required = _login_required
 
 def init_admin_user():
-    from .extensions import db
+    load_dotenv()  # Load environment variables from .env file
     username = os.environ.get('ADMIN_USERNAME')
     password = os.environ.get('ADMIN_PASSWORD')
     email = os.environ.get('ADMIN_EMAIL')
