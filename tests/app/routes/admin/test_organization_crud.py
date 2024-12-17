@@ -150,7 +150,7 @@ def test_delete_nonexistent_organization(logged_in_admin, db_session):
         response = logged_in_admin.post(url_for('admin.organization.delete', id=9999))
         
         assert response.status_code == 302
-        assert url_for('admin.organization.index', _external=False) == delete_response.headers['Location']
+        assert url_for('admin.organization.index', _external=False) == response.headers['Location']
 
 def test_index_organization_route(logged_in_admin, test_organization):
     index_response = logged_in_admin.get(url_for('admin.organization.index'))
