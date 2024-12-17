@@ -1,10 +1,11 @@
 # app/config.py
+
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-class Config:
+class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'a_very_secret_key'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = True  # Ensure CSRF protection is enabled
@@ -12,7 +13,7 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath('instance/site.db')}"
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath(os.path.join('instance', 'site.db'))}"
 
 class TestingConfig(Config):
     DEBUG = False
@@ -23,7 +24,7 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath('instance/site.db')}"
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath(os.path.join('instance', 'site.db'))}"
 
 config_by_name = {
     'development': DevelopmentConfig,
