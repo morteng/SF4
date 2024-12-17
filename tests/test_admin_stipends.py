@@ -60,7 +60,7 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(stipend.homepage_url, 'http://example.com/stipend')
         self.assertEqual(stipend.application_procedure, 'Send an email to admin@example.com')
         self.assertEqual(stipend.eligibility_criteria, 'Must be a student.')
-        self.assertEqual(stipend.open_for_applications, True)
+        self.assertTrue(stipend.open_for_applications)
 
     def test_update_stipend(self):
         # Log in as admin
@@ -106,7 +106,7 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(stipend.homepage_url, 'http://example.com/updated-stipend')
         self.assertEqual(stipend.application_procedure, 'Send an email to updated@example.com')
         self.assertEqual(stipend.eligibility_criteria, 'Must be a student or recent graduate.')
-        self.assertEqual(stipend.open_for_applications, False)
+        self.assertFalse(stipend.open_for_applications)
 
     def test_delete_stipend(self):
         # Log in as admin
