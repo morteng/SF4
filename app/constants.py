@@ -66,5 +66,6 @@ FLASH_MESSAGES = {
     "UPDATE_PROFILE_ERROR": "Failed to update profile.",
 
     # Others
+    "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS.",
     # Add more messages as needed
 }

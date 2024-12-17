@@ -24,7 +24,7 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
 
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
-        assert FLASH_MESSAGES["GENERIC_ERROR"].encode() in response.data
+        assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
 def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
@@ -67,7 +67,7 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
         db_session.expire_all()
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
         assert stipend.application_deadline == test_stipend.application_deadline
-        assert b'Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data  # Check for the specific validation error message
+        assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data  # Check for the specific validation error message
 
 def test_create_stipend_with_invalid_form_data(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
