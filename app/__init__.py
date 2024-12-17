@@ -1,18 +1,24 @@
+# app/__init__.py
+
 from flask import Flask
 from app.extensions import db, login_manager, migrate  # Add 'migrate' here
 from flask_wtf import CSRFProtect
+from dotenv import load_dotenv
 
 def create_app(config_name='development'):
     app = Flask(__name__)
 
+    # Load environment variables
+    load_dotenv()
+
     if config_name == 'testing':
         app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///:memory:')
         app.config['WTF_CSRF_ENABLED'] = False  # Keep this as False for testing
         app.config['SERVER_NAME'] = 'localhost'
         app.config['APPLICATION_ROOT'] = '/'
         app.config['PREFERRED_URL_SCHEME'] = 'http'
-        app.config['SECRET_KEY'] = 'test_secret_key'  # Add this line
+        app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'test_secret_key')  # Add this line
         app.config['TEMPLATES_AUTO_RELOAD'] = True  # Enable template auto-reload for testing
     else:
         from app.config import config_by_name
