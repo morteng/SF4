@@ -64,19 +64,25 @@ def create():
 @login_required
 @admin_required
 def update(id):
-    stipend = get_stipend_by_id(id)  # Use session.get instead of get
+    stipend = get_stipend_by_id(id)
     if not stipend:
         flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
     
-    form = StipendForm(obj=stipend, original_name=stipend.name)  # Set original_name to the current stipend's name
+    form = StipendForm(obj=stipend, original_name=stipend.name)
     
     if form.validate_on_submit():
         try:
+            # Debugging: Print the form data
+            print(f"Form data: {form.data}")
+            
             # Populate other fields from the form
             form.populate_obj(stipend)
             
-            logging.info(f"Updating stipend with data: {form.data}")  # Add this line for debugging
+            logging.info(f"Updating stipend with data: {stipend.__dict__}")
+            
+            # Debugging: Print the stipend data before updating
+            print(f"Stipend data before update: {stipend.__dict__}")
             
             update_stipend(stipend, stipend.__dict__)
             db.session.commit()
@@ -101,7 +107,7 @@ def update(id):
 @login_required
 @admin_required
 def delete(id):
-    stipend = get_stipend_by_id(id)  # Use session.get instead of get
+    stipend = get_stipend_by_id(id)
     if not stipend:
         flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))

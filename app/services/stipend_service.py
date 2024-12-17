@@ -14,7 +14,11 @@ def update_stipend(stipend, data):
                         value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
                     except ValueError:
                         raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
-            logging.info(f"Setting {key} to {value}")  # Add this line for logging
+            logging.info(f"Setting {key} to {value}")
+            
+            # Debugging: Print the key and value
+            print(f"Updating {key} to {value}")
+            
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
         
