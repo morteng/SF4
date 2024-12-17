@@ -55,6 +55,7 @@ def create():
     # Handle form validation failure
     for field, errors in form.errors.items():
         for error in errors:
+            logging.error(f"Flashing error: {error}")  # Add this line for debugging
             flash(error, FLASH_CATEGORY_ERROR)
     
     if request.headers.get('HX-Request'):

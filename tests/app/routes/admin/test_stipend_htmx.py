@@ -2,6 +2,7 @@ from flask import url_for
 from app.models.stipend import Stipend
 from tests.conftest import logged_in_admin, db_session, stipend_data
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR
+import logging  # Import logging
 
 def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
@@ -42,6 +43,7 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         assert stipend is None
 
         # Check for the specific validation error message
+        logging.info(f"Response data: {response.data}")  # Add this line for debugging
         assert b"Invalid date format. Please use YYYY-MM-DD HH:MM:SS." in response.data
 
 def test_update_stipend_with_database_error_htmx(logged_in_admin, test_stipend, stipend_data, db_session, monkeypatch):
