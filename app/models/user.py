@@ -10,6 +10,8 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
 
+    __mapper_args__ = {"confirm_deleted_rows": False}
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 

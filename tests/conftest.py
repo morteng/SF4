@@ -112,8 +112,9 @@ def test_user(db_session, user_data):
     db_session.add(user)
     db_session.commit()
     yield user
-    db_session.delete(user)
-    db_session.commit()
+    if db_session.query(User).filter_by(id=user.id).first():
+        db_session.delete(user)
+        db_session.commit()
 
 @pytest.fixture(scope='function')
 def stipend_data():
@@ -136,8 +137,9 @@ def test_stipend(db_session, stipend_data):
     db_session.add(stipend)
     db_session.commit()
     yield stipend
-    db_session.delete(stipend)
-    db_session.commit()
+    if db_session.query(Stipend).filter_by(id=stipend.id).first():
+        db_session.delete(stipend)
+        db_session.commit()
 
 @pytest.fixture(scope='function')
 def organization_data():
@@ -154,8 +156,9 @@ def test_organization(db_session, organization_data):
     db_session.add(organization)
     db_session.commit()
     yield organization
-    db_session.delete(organization)
-    db_session.commit()
+    if db_session.query(Organization).filter_by(id=organization.id).first():
+        db_session.delete(organization)
+        db_session.commit()
 
 @pytest.fixture(scope='function')
 def tag_data():
@@ -197,5 +200,6 @@ def test_tag(db_session):
     db_session.add(tag)
     db_session.commit()
     yield tag
-    db_session.delete(tag)
-    db_session.commit()
+    if db_session.query(Tag).filter_by(id=tag.id).first():
+        db_session.delete(tag)
+        db_session.commit()
