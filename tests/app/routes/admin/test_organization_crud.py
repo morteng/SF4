@@ -9,8 +9,11 @@ from sqlalchemy.exc import SQLAlchemyError
 
 def extract_csrf_token(response_data):
     """Extract CSRF token from the response HTML."""
-    csrf_match = re.search(r'name="csrf_token" type="hidden" value="(.+?)"', response_data.decode('utf-8'))
-    return csrf_match.group(1) if csrf_match else None  # Fallback
+    csrf_regex = r'<input[^>]+name="csrf_token"[^>]+value="([^"]+)"'
+    match = re.search(csrf_regex, response_data.decode('utf-8'))
+    if match:
+        return match.group(1)
+    return None
 
 def test_create_organization(logged_in_admin, db_session, organization_data):
     with logged_in_admin.application.app_context():
@@ -179,21 +182,26 @@ def test_create_organization_with_long_name(logged_in_admin, db_session):
 
 def test_create_organization_with_special_characters(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
+        # Fetch CSRF token from the form page
+        response = logged_in_admin.get(url_for('admin.organization.create'))
+        csrf_token = extract_csrf_token(response.data)
+
         data = {
             'name': '<script>alert("XSS")</script>',  # Special characters
             'description': 'Test Description',
-            'homepage_url': 'http://example.com'
+            'homepage_url': 'http://example.com',
+            'csrf_token': csrf_token
         }
-        
+
         response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
-        
+
+        if response.status_code != 200:
+            print(f"Response status code: {response.status_code}")
+            form_errors = response.get_data(as_text=True)
+            print(f"Form errors: {form_errors}")
+
         assert response.status_code == 200
 
-        form = OrganizationForm(original_name=None, data=data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-                
         # Check that the organization was not created
         new_organization = db_session.query(Organization).filter_by(name=data['name']).first()
         assert new_organization is None
