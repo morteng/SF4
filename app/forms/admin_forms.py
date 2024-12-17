@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, PasswordField
-from wtforms.validators import DataRequired, Length, Optional, ValidationError, Email, URL  # Add URL here
+from wtforms.validators import DataRequired, Length, Optional, ValidationError, Email, URL, Regexp  # Add URL and Regexp here
 from app.models.organization import Organization
 from app.forms.fields import CustomDateTimeField
 from app.models.tag import Tag
@@ -100,9 +100,13 @@ class BotForm(FlaskForm):
                 raise ValidationError("Invalid value for status. It must be true or false.")
 
 class OrganizationForm(FlaskForm):
-    name = StringField('Org Name', validators=[DataRequired(), Length(max=100)])
+    name = StringField('Org Name', validators=[
+        DataRequired(),
+        Length(max=100),
+        Regexp('^[A-Za-z0-9 ]*$', message='Name must contain only letters, numbers, and spaces.')
+    ])
     description = TextAreaField('About')
-    homepage_url = URLField('Website', validators=[Optional(), URL()])  # Add URL validator here
+    homepage_url = URLField('Website', validators=[Optional(), URL()])  # URL validator remains
     submit = SubmitField('Create')
 
     def __init__(self, original_name=None, *args, **kwargs):
