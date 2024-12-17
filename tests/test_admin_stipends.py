@@ -62,5 +62,175 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(stipend.eligibility_criteria, 'Must be a student.')
         self.assertEqual(stipend.open_for_applications, True)
 
+    def test_update_stipend(self):
+        # Log in as admin
+        response = self.login('admin', 'password')
+        self.assertEqual(response.status_code, 200)
+
+        # Create a new stipend
+        stipend = Stipend(
+            name='Test Stipend',
+            summary='This is a test stipend.',
+            description='Detailed description of the test stipend.',
+            homepage_url='http://example.com/stipend',
+            application_procedure='Send an email to admin@example.com',
+            eligibility_criteria='Must be a student.',
+            application_deadline='2023-12-31 23:59:59',
+            open_for_applications=True
+        )
+        db.session.add(stipend)
+        db.session.commit()
+
+        # Navigate to the stipend update page
+        response = self.client.get(url_for('admin.stipend.update', id=stipend.id))
+        self.assertEqual(response.status_code, 200)
+
+        # Update the stipend
+        response = self.client.post(url_for('admin.stipend.update', id=stipend.id), data={
+            'name': 'Updated Test Stipend',
+            'summary': 'Updated summary.',
+            'description': 'Updated description.',
+            'homepage_url': 'http://example.com/updated-stipend',
+            'application_procedure': 'Send an email to updated@example.com',
+            'eligibility_criteria': 'Must be a student or recent graduate.',
+            'application_deadline': '2024-12-31 23:59:59',
+            'open_for_applications': False
+        }, follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        # Check if the stipend was updated successfully
+        stipend = Stipend.query.filter_by(name='Updated Test Stipend').first()
+        self.assertIsNotNone(stipend)
+        self.assertEqual(stipend.summary, 'Updated summary.')
+        self.assertEqual(stipend.description, 'Updated description.')
+        self.assertEqual(stipend.homepage_url, 'http://example.com/updated-stipend')
+        self.assertEqual(stipend.application_procedure, 'Send an email to updated@example.com')
+        self.assertEqual(stipend.eligibility_criteria, 'Must be a student or recent graduate.')
+        self.assertEqual(stipend.open_for_applications, False)
+
+    def test_delete_stipend(self):
+        # Log in as admin
+        response = self.login('admin', 'password')
+        self.assertEqual(response.status_code, 200)
+
+        # Create a new stipend
+        stipend = Stipend(
+            name='Test Stipend',
+            summary='This is a test stipend.',
+            description='Detailed description of the test stipend.',
+            homepage_url='http://example.com/stipend',
+            application_procedure='Send an email to admin@example.com',
+            eligibility_criteria='Must be a student.',
+            application_deadline='2023-12-31 23:59:59',
+            open_for_applications=True
+        )
+        db.session.add(stipend)
+        db.session.commit()
+
+        # Delete the stipend
+        response = self.client.post(url_for('admin.stipend.delete', id=stipend.id), follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+
+        # Check if the stipend was deleted successfully
+        stipend = Stipend.query.filter_by(name='Test Stipend').first()
+        self.assertIsNone(stipend)
+
+    def test_stipend_index(self):
+        # Log in as admin
+        response = self.login('admin', 'password')
+        self.assertEqual(response.status_code, 200)
+
+        # Create a new stipend
+        stipend1 = Stipend(
+            name='Test Stipend 1',
+            summary='This is test stipend 1.',
+            description='Detailed description of test stipend 1.',
+            homepage_url='http://example.com/stipend1',
+            application_procedure='Send an email to admin@example.com',
+            eligibility_criteria='Must be a student.',
+            application_deadline='2023-12-31 23:59:59',
+            open_for_applications=True
+        )
+        stipend2 = Stipend(
+            name='Test Stipend 2',
+            summary='This is test stipend 2.',
+            description='Detailed description of test stipend 2.',
+            homepage_url='http://example.com/stipend2',
+            application_procedure='Send an email to admin@example.com',
+            eligibility_criteria='Must be a student.',
+            application_deadline='2023-12-31 23:59:59',
+            open_for_applications=True
+        )
+        db.session.add(stipend1)
+        db.session.add(stipend2)
+        db.session.commit()
+
+        # Navigate to the stipend index page
+        response = self.client.get(url_for('admin.stipend.index'))
+        self.assertEqual(response.status_code, 200)
+
+        # Check if both stipends are displayed on the index page
+        self.assertIn(b'Test Stipend 1', response.data)
+        self.assertIn(b'Test Stipend 2', response.data)
+
+    def test_stipend_validation_errors(self):
+        # Log in as admin
+        response = self.login('admin', 'password')
+        self.assertEqual(response.status_code, 200)
+
+        # Navigate to the stipend creation page
+        response = self.client.get(url_for('admin.stipend.create'))
+        self.assertEqual(response.status_code, 200)
+
+        # Create a new stipend with invalid data
+        response = self.client.post(url_for('admin.stipend.create'), data={
+            'name': '',  # Empty name should trigger validation error
+            'summary': 'This is a test stipend.',
+            'description': 'Detailed description of the test stipend.',
+            'homepage_url': 'invalid-url',  # Invalid URL should trigger validation error
+            'application_procedure': 'Send an email to admin@example.com',
+            'eligibility_criteria': 'Must be a student.',
+            'application_deadline': '2023-12-31 23:59:59',
+            'open_for_applications': True
+        }, follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        # Check if validation errors are displayed
+        self.assertIn(b'This field is required.', response.data)
+        self.assertIn(b'Invalid URL.', response.data)
+
+    def test_unauthorized_access(self):
+        # Create a non-admin user
+        user = User(username='user', email='user@example.com')
+        user.set_password('password')
+        db.session.add(user)
+        db.session.commit()
+
+        # Log in as the non-admin user
+        response = self.client.post(url_for('public.login'), data={
+            'username': 'user',
+            'password': 'password'
+        }, follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+
+        # Attempt to access the stipend creation page (should be unauthorized)
+        response = self.client.get(url_for('admin.stipend.create'))
+        self.assertEqual(response.status_code, 403)  # Assuming you return a 403 Forbidden
+
+        # Attempt to create a stipend (should be unauthorized)
+        response = self.client.post(url_for('admin.stipend.create'), data={
+            'name': 'Test Stipend',
+            'summary': 'This is a test stipend.',
+            'description': 'Detailed description of the test stipend.',
+            'homepage_url': 'http://example.com/stipend',
+            'application_procedure': 'Send an email to admin@example.com',
+            'eligibility_criteria': 'Must be a student.',
+            'application_deadline': '2023-12-31 23:59:59',
+            'open_for_applications': True
+        }, follow_redirects=True)
+
+        self.assertEqual(response.status_code, 403)  # Assuming you return a 403 Forbidden
+
 if __name__ == '__main__':
     unittest.main()
