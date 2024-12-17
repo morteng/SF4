@@ -3,6 +3,7 @@ from flask import url_for
 from app import create_app, db
 from app.models.user import User
 from app.models.stipend import Stipend
+from datetime import datetime  # Import datetime module
 
 class AdminStipendTestCase(unittest.TestCase):
     def setUp(self):
@@ -47,7 +48,7 @@ class AdminStipendTestCase(unittest.TestCase):
             'homepage_url': 'http://example.com/stipend',
             'application_procedure': 'Send an email to admin@example.com',
             'eligibility_criteria': 'Must be a student.',
-            'application_deadline': '2023-12-31 23:59:59',
+            'application_deadline': datetime(2023, 12, 31, 23, 59, 59),  # Convert string to datetime
             'open_for_applications': True
         }, follow_redirects=True)
 
@@ -75,7 +76,7 @@ class AdminStipendTestCase(unittest.TestCase):
             homepage_url='http://example.com/stipend',
             application_procedure='Send an email to admin@example.com',
             eligibility_criteria='Must be a student.',
-            application_deadline='2023-12-31 23:59:59',
+            application_deadline=datetime(2023, 12, 31, 23, 59, 59),  # Convert string to datetime
             open_for_applications=True
         )
         db.session.add(stipend)
@@ -93,7 +94,7 @@ class AdminStipendTestCase(unittest.TestCase):
             'homepage_url': 'http://example.com/updated-stipend',
             'application_procedure': 'Send an email to updated@example.com',
             'eligibility_criteria': 'Must be a student or recent graduate.',
-            'application_deadline': '2024-12-31 23:59:59',
+            'application_deadline': datetime(2024, 12, 31, 23, 59, 59),  # Convert string to datetime
             'open_for_applications': False
         }, follow_redirects=True)
 
@@ -121,7 +122,7 @@ class AdminStipendTestCase(unittest.TestCase):
             homepage_url='http://example.com/stipend',
             application_procedure='Send an email to admin@example.com',
             eligibility_criteria='Must be a student.',
-            application_deadline='2023-12-31 23:59:59',
+            application_deadline=datetime(2023, 12, 31, 23, 59, 59),  # Convert string to datetime
             open_for_applications=True
         )
         db.session.add(stipend)
@@ -148,7 +149,7 @@ class AdminStipendTestCase(unittest.TestCase):
             homepage_url='http://example.com/stipend1',
             application_procedure='Send an email to admin@example.com',
             eligibility_criteria='Must be a student.',
-            application_deadline='2023-12-31 23:59:59',
+            application_deadline=datetime(2023, 12, 31, 23, 59, 59),  # Convert string to datetime
             open_for_applications=True
         )
         stipend2 = Stipend(
@@ -158,7 +159,7 @@ class AdminStipendTestCase(unittest.TestCase):
             homepage_url='http://example.com/stipend2',
             application_procedure='Send an email to admin@example.com',
             eligibility_criteria='Must be a student.',
-            application_deadline='2023-12-31 23:59:59',
+            application_deadline=datetime(2023, 12, 31, 23, 59, 59),  # Convert string to datetime
             open_for_applications=True
         )
         db.session.add(stipend1)
@@ -190,7 +191,7 @@ class AdminStipendTestCase(unittest.TestCase):
             'homepage_url': 'invalid-url',  # Invalid URL should trigger validation error
             'application_procedure': 'Send an email to admin@example.com',
             'eligibility_criteria': 'Must be a student.',
-            'application_deadline': '2023-12-31 23:59:59',
+            'application_deadline': datetime(2023, 12, 31, 23, 59, 59),  # Convert string to datetime
             'open_for_applications': True
         }, follow_redirects=True)
 
@@ -226,7 +227,7 @@ class AdminStipendTestCase(unittest.TestCase):
             'homepage_url': 'http://example.com/stipend',
             'application_procedure': 'Send an email to admin@example.com',
             'eligibility_criteria': 'Must be a student.',
-            'application_deadline': '2023-12-31 23:59:59',
+            'application_deadline': datetime(2023, 12, 31, 23, 59, 59),  # Convert string to datetime
             'open_for_applications': True
         }, follow_redirects=True)
 
