@@ -76,18 +76,19 @@ def admin_user(db_session):
 @pytest.fixture(scope='function')
 def logged_in_admin(client, admin_user):
     """Log in as the admin user."""
-    login_response = client.get(url_for('public.login'))
-    csrf_token = extract_csrf_token(login_response.data)
+    with client.application.test_request_context():
+        login_response = client.get(url_for('public.login'))
+        csrf_token = extract_csrf_token(login_response.data)
 
-    response = client.post(url_for('public.login'), data={
-        'username': admin_user.username,
-        'password': 'password123',
-        'csrf_token': csrf_token
-    }, follow_redirects=True)
+        response = client.post(url_for('public.login'), data={
+            'username': admin_user.username,
+            'password': 'password123',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
 
-    assert response.status_code == 200, "Admin login failed."
-    with client.session_transaction() as session:
-        assert '_user_id' in session, "Admin session not established."
+        assert response.status_code == 200, "Admin login failed."
+        with client.session_transaction() as session:
+            assert '_user_id' in session, "Admin session not established."
     yield client
 
 @pytest.fixture(scope='function')
@@ -174,18 +175,19 @@ def get_all_tags():
 @pytest.fixture(scope='function')
 def logged_in_client(client, test_user):
     """Log in as a regular user."""
-    login_response = client.get(url_for('public.login'))
-    csrf_token = extract_csrf_token(login_response.data)
+    with client.application.test_request_context():
+        login_response = client.get(url_for('public.login'))
+        csrf_token = extract_csrf_token(login_response.data)
 
-    response = client.post(url_for('public.login'), data={
-        'username': test_user.username,
-        'password': 'password123',
-        'csrf_token': csrf_token
-    }, follow_redirects=True)
+        response = client.post(url_for('public.login'), data={
+            'username': test_user.username,
+            'password': 'password123',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
 
-    assert response.status_code == 200, "User login failed."
-    with client.session_transaction() as session:
-        assert '_user_id' in session, "User session not established."
+        assert response.status_code == 200, "User login failed."
+        with client.session_transaction() as session:
+            assert '_user_id' in session, "User session not established."
     yield client
 
 @pytest.fixture(scope='function')
