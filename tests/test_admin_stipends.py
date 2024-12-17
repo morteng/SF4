@@ -48,8 +48,8 @@ class AdminStipendTestCase(unittest.TestCase):
             'homepage_url': 'http://example.com/stipend',
             'application_procedure': 'Send an email to admin@example.com',
             'eligibility_criteria': 'Must be a student.',
-            'application_deadline': datetime(2023, 12, 31, 23, 59, 59),  # Convert string to datetime
-            'open_for_applications': True
+            'application_deadline': datetime(2023, 12, 31, 23, 59, 59).strftime('%Y-%m-%d %H:%M:%S'),  # Convert to string
+            'open_for_applications': 'y'  # Use 'y' or 'n' for boolean fields in form data
         }, follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
@@ -94,8 +94,8 @@ class AdminStipendTestCase(unittest.TestCase):
             'homepage_url': 'http://example.com/updated-stipend',
             'application_procedure': 'Send an email to updated@example.com',
             'eligibility_criteria': 'Must be a student or recent graduate.',
-            'application_deadline': datetime(2024, 12, 31, 23, 59, 59),  # Convert string to datetime
-            'open_for_applications': False
+            'application_deadline': datetime(2024, 12, 31, 23, 59, 59).strftime('%Y-%m-%d %H:%M:%S'),  # Convert to string
+            'open_for_applications': 'n'  # Use 'y' or 'n' for boolean fields in form data
         }, follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
@@ -191,8 +191,8 @@ class AdminStipendTestCase(unittest.TestCase):
             'homepage_url': 'invalid-url',  # Invalid URL should trigger validation error
             'application_procedure': 'Send an email to admin@example.com',
             'eligibility_criteria': 'Must be a student.',
-            'application_deadline': datetime(2023, 12, 31, 23, 59, 59),  # Convert string to datetime
-            'open_for_applications': True
+            'application_deadline': datetime(2023, 12, 31, 23, 59, 59).strftime('%Y-%m-%d %H:%M:%S'),  # Convert to string
+            'open_for_applications': 'y'  # Use 'y' or 'n' for boolean fields in form data
         }, follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
@@ -227,8 +227,8 @@ class AdminStipendTestCase(unittest.TestCase):
             'homepage_url': 'http://example.com/stipend',
             'application_procedure': 'Send an email to admin@example.com',
             'eligibility_criteria': 'Must be a student.',
-            'application_deadline': datetime(2023, 12, 31, 23, 59, 59),  # Convert string to datetime
-            'open_for_applications': True
+            'application_deadline': datetime(2023, 12, 31, 23, 59, 59).strftime('%Y-%m-%d %H:%M:%S'),  # Convert to string
+            'open_for_applications': 'y'  # Use 'y' or 'n' for boolean fields in form data
         }, follow_redirects=True)
 
         self.assertEqual(response.status_code, 403)  # Assuming you return a 403 Forbidden
