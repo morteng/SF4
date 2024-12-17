@@ -5,6 +5,7 @@ from flask_login import current_user, login_required as _login_required  # Impor
 from .models.user import User
 from werkzeug.security import generate_password_hash
 from dotenv import load_dotenv  # Add this import
+from app.extensions import db  # Import the db object
 
 def admin_required(f):
     def decorated_function(*args, **kwargs):
