@@ -14,14 +14,16 @@ def update_stipend(stipend, data):
                         value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
                     except ValueError:
                         raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
+            elif key == 'open_for_applications':
+                # Convert various representations of False to actual False
+                if isinstance(value, str):
+                    value = value.lower() in ['y', 'yes', 'true', '1']
+                else:
+                    value = bool(value)
             logging.info(f"Setting {key} to {value}")
-            
-            # Debugging: Print the key and value
             print(f"Updating {key} to {value}")
-            
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
-        
         db.session.commit()
     except Exception as e:
         db.session.rollback()
