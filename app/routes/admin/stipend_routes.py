@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required
+from app.utils import admin_required
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import (
@@ -17,6 +18,7 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def create():
     form = StipendForm()
     
@@ -60,6 +62,7 @@ def create():
 
 @admin_stipend_bp.route('/<int:id>/update', methods=['GET', 'POST'])
 @login_required
+@admin_required
 def update(id):
     stipend = get_stipend_by_id(id)  # Use session.get instead of get
     if not stipend:
@@ -96,6 +99,7 @@ def update(id):
 
 @admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
+@admin_required
 def delete(id):
     stipend = get_stipend_by_id(id)  # Use session.get instead of get
     if not stipend:
@@ -117,6 +121,7 @@ def delete(id):
 
 @admin_stipend_bp.route('/', methods=['GET'])
 @login_required
+@admin_required
 def index():
     stipends = get_all_stipends()
     return render_template('admin/stipends/index.html', stipends=stipends)
