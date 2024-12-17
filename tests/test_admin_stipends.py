@@ -198,7 +198,7 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         # Check if validation errors are displayed
         self.assertIn(b'This field is required.', response.data)
-        self.assertIn(b'Invalid URL.', response.data)
+        self.assertIn(b'Invalid URL.', response.data)  # Ensure this matches the expected error message
 
     def test_unauthorized_access(self):
         # Create a non-admin user

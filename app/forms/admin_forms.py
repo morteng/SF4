@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, PasswordField
-from wtforms.validators import DataRequired, Length, Optional, ValidationError, Email
+from wtforms.validators import DataRequired, Length, Optional, ValidationError, Email, URL  # Add URL here
 from app.models.organization import Organization
 from app.forms.fields import CustomDateTimeField
 from app.models.tag import Tag
@@ -11,7 +11,7 @@ class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
     summary = TextAreaField('Summary', validators=[Optional()])
     description = TextAreaField('Description', validators=[Optional()])
-    homepage_url = URLField('Homepage URL', validators=[Optional()])
+    homepage_url = URLField('Homepage URL', validators=[Optional(), URL()])  # Add URL validator here
     application_procedure = TextAreaField('Application Procedure', validators=[Optional()])
     eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[Optional()])
     application_deadline = CustomDateTimeField(
