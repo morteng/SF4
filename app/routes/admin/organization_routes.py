@@ -56,10 +56,10 @@ def index():
     organizations = get_all_organizations()
     return render_template('admin/organizations/index.html', organizations=organizations)
 
-@admin_org_bp.route('/<int:id>/update', methods=['GET', 'POST'])
+@admin_org_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def update(id):
+def edit(id):
     organization = get_organization_by_id(id)
     if not organization:
         flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Use generic error if organization not found

@@ -69,10 +69,10 @@ def run(id):
         flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Use generic error if bot not found
     return redirect(url_for('admin.bot.index'))
 
-@admin_bot_bp.route('/<int:id>/update', methods=['GET', 'POST'])
+@admin_bot_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def update(id):
+def edit(id):
     bot = get_bot_by_id(id)
     if not bot:
         flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Use generic error if bot not found

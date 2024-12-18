@@ -55,10 +55,10 @@ def index():
     tags = get_all_tags()
     return render_template('admin/tags/index.html', tags=tags)
 
-@admin_tag_bp.route('/<int:id>/update', methods=['GET', 'POST'])
+@admin_tag_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def update(id):
+def edit(id):
     tag = get_tag_by_id(id)
     if not tag:
         flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Use generic error if tag not found
