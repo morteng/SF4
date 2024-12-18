@@ -62,7 +62,7 @@ def create():
         return render_template('admin/stipends/form.html', form=form), 200
 
 
-@admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])  # Updated from .update to .edit
+@admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def edit(id):
