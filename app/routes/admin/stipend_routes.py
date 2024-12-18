@@ -64,13 +64,13 @@ def create():
         return render_template('admin/stipends/form.html', form=form), 200
 
 
-@admin_stipend_bp.route('/<int:id>/update', methods=['GET', 'POST'])
+@admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 @admin_required
-def update(id):
+def edit(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+        flash('Stipend not found.', FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
     
     form = StipendForm(obj=stipend, original_name=stipend.name)
