@@ -2,7 +2,6 @@ import pytest
 from flask import url_for
 from app.models.bot import Bot
 from tests.conftest import extract_csrf_token
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 
 @pytest.fixture(scope='function')
 def bot_data():
@@ -38,7 +37,7 @@ def test_create_bot_route(logged_in_admin, bot_data):
     bots = Bot.query.all()
     assert any(bot.name == bot_data['name'] and bot.description == bot_data['description'] for bot in bots)
     # Assert the flash message
-    assert FLASH_MESSAGES["CREATE_BOT_SUCCESS"].encode() in response.data
+    assert b"Bot created successfully!" in response.data
 
 def test_create_bot_route_with_invalid_data(logged_in_admin, bot_data):
     create_response = logged_in_admin.get(url_for('admin.bot.create'))
@@ -76,7 +75,7 @@ def test_update_bot_route(logged_in_admin, test_bot, db_session):
     updated_bot = db_session.get(Bot, test_bot.id)  # Use db_session.get to retrieve the bot
     assert updated_bot.name == 'Updated Bot Name'
     # Assert the flash message
-    assert FLASH_MESSAGES["UPDATE_BOT_SUCCESS"].encode() in response.data
+    assert b"Bot updated successfully!" in response.data
 
 def test_update_bot_route_with_invalid_id(logged_in_admin):
     update_response = logged_in_admin.get(url_for('admin.bot.edit', id=9999))
@@ -96,7 +95,7 @@ def test_delete_bot_route(logged_in_admin, test_bot, db_session):
     updated_bot = db_session.get(Bot, test_bot.id)
     assert updated_bot is None
     # Assert the flash message
-    assert FLASH_MESSAGES["DELETE_BOT_SUCCESS"].encode() in delete_response.data
+    assert b"Bot deleted successfully!" in delete_response.data
 
 def test_delete_bot_route_with_invalid_id(logged_in_admin):
     delete_response = logged_in_admin.post(url_for('admin.bot.delete', id=9999))
@@ -115,7 +114,7 @@ def test_create_bot_route_with_database_error(logged_in_admin, bot_data, db_sess
         response = logged_in_admin.post(url_for('admin.bot.create'), data=data)
         
         assert response.status_code == 200
-        assert FLASH_MESSAGES["CREATE_BOT_ERROR"].encode() in response.data  # Confirm error message is present
+        assert b"Failed to create bot. Please try again later." in response.data  # Confirm error message is present
 
         bots = Bot.query.all()
         assert not any(bot.name == data['name'] for bot in bots)  # Ensure no bot was created
