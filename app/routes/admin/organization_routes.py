@@ -4,7 +4,7 @@ from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY
 from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization, update_organization
 from sqlalchemy.exc import SQLAlchemyError
-from app.extensions import db
+from app.extensions import db, db_session  # Import db_session here
 from app.utils import admin_required
 
 admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
@@ -76,7 +76,7 @@ def edit(id):
             else:
                 flash(error_message, FLASH_CATEGORY_ERROR)
         except SQLAlchemyError as e:
-            db_session.rollback()
+            db_session.rollback()  # Use db_session here
             flash(f"Failed to update organization. Error: {str(e)}", FLASH_CATEGORY_ERROR)
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)
