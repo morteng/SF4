@@ -1,5 +1,3 @@
-# app/__init__.py
-
 import os  # Import the os module here
 from flask import Flask
 from app.extensions import db, login_manager, migrate, init_extensions  # Add 'migrate' and 'init_extensions' here
