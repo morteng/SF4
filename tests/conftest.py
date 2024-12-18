@@ -82,6 +82,9 @@ def admin_user(db_session, app):
 def logged_in_admin(client, admin_user, db_session, app):
     """Log in as the admin user."""
     with client.application.test_request_context():
+        # Merge the admin_user into the current session to ensure it's not detached
+        admin_user = db_session.merge(admin_user)
+        
         login_response = client.get(url_for('public.login'))
         csrf_token = extract_csrf_token(login_response.data)
 
