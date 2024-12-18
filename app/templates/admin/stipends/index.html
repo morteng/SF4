@@ -24,7 +24,7 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ stipend.name }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button 
-                        hx-get="{{ url_for('admin.stipend.update', id=stipend.id) }}"
+                        hx-get="{{ url_for('admin.stipend.edit', id=stipend.id) }}"
                         hx-target="body"
                         hx-swap="afterbegin"
                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
