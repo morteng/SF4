@@ -8,7 +8,7 @@ Edit Bot - Admin Panel
 {% block content %}
 <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
     <h1 class="text-3xl font-bold mb-4">Edit Bot: {{ bot.name }}</h1>
-    <form method="POST" action="{{ url_for('admin.bot.update', id=bot.id) }}" class="space-y-4">
+    <form method="POST" action="{{ url_for('admin.bot.edit', id=bot.id) }}" class="space-y-4">
         {{ form.hidden_tag() }}
         <div>
             {{ form.name.label(class_="block text-sm font-medium text-gray-700") }}<br>

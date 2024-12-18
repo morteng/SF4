@@ -59,7 +59,7 @@ def test_update_tag_with_invalid_form_data(logged_in_admin, test_tag, tag_data, 
             'name': '',
             'category': test_tag.category,
         }
-        response = logged_in_admin.post(url_for('admin.tag.update', id=test_tag.id), data=updated_data)
+        response = logged_in_admin.post(url_for('admin.tag.edit', id=test_tag.id), data=updated_data)
         
         assert response.status_code == 200
         assert b"This field is required." in response.data
@@ -71,7 +71,7 @@ def test_update_tag_with_database_error(logged_in_admin, test_tag, db_session, m
             
         monkeypatch.setattr(db_session, 'commit', mock_commit)
         
-        update_response = logged_in_admin.get(url_for('admin.tag.update', id=test_tag.id))
+        update_response = logged_in_admin.get(url_for('admin.tag.edit', id=test_tag.id))
         assert update_response.status_code == 200
 
         csrf_token = extract_csrf_token(update_response.data)
@@ -81,7 +81,7 @@ def test_update_tag_with_database_error(logged_in_admin, test_tag, db_session, m
             'csrf_token': csrf_token
         }
         response = logged_in_admin.post(
-            url_for('admin.tag.update', id=test_tag.id),
+            url_for('admin.tag.edit', id=test_tag.id),
             data=updated_data,
             follow_redirects=True
         )

@@ -78,7 +78,7 @@ def test_create_stipend_route_with_invalid_application_deadline_format(logged_in
     assert b'Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data  # Updated this line to match the validation error message
 
 def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
-    update_response = logged_in_admin.get(url_for('admin.stipend.update', id=test_stipend.id))
+    update_response = logged_in_admin.get(url_for('admin.stipend.edit', id=test_stipend.id))
     assert update_response.status_code == 200
 
     csrf_token = extract_csrf_token(update_response.data)
@@ -93,7 +93,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'open_for_applications': test_stipend.open_for_applications,
         'csrf_token': csrf_token
     }
-    response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data, follow_redirects=True)
+    response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data, follow_redirects=True)
 
     assert response.status_code == 200
     updated_stipend = db_session.get(Stipend, test_stipend.id)
@@ -102,7 +102,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
     assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
 
 def test_update_stipend_route_with_invalid_id(logged_in_admin):
-    update_response = logged_in_admin.get(url_for('admin.stipend.update', id=9999))
+    update_response = logged_in_admin.get(url_for('admin.stipend.edit', id=9999))
     assert update_response.status_code == 302
     assert url_for('admin.stipend.index', _external=False) == update_response.headers['Location']
 
@@ -172,7 +172,7 @@ def test_update_stipend_route_with_database_error(logged_in_admin, test_stipend,
             
         monkeypatch.setattr(db_session, 'commit', mock_commit)
         
-        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data={
+        response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data={
             'name': updated_data['name'],
             'summary': updated_data['summary'],
             'description': updated_data['description'],
@@ -181,7 +181,7 @@ def test_update_stipend_route_with_database_error(logged_in_admin, test_stipend,
             'eligibility_criteria': updated_data['eligibility_criteria'],
             'application_deadline': updated_data['application_deadline'],
             'open_for_applications': updated_data['open_for_applications'],
-            'csrf_token': extract_csrf_token(logged_in_admin.get(url_for('admin.stipend.update', id=test_stipend.id)).data)
+            'csrf_token': extract_csrf_token(logged_in_admin.get(url_for('admin.stipend.edit', id=test_stipend.id)).data)
         }, follow_redirects=True)
         
         assert response.status_code == 200
