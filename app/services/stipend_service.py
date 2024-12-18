@@ -38,6 +38,7 @@ def create_stipend(stipend, session=db.session):
     try:
         if isinstance(stipend.application_deadline, str):
             try:
+                logging.info(f"Attempting to parse application deadline: {stipend.application_deadline}")
                 stipend.application_deadline = datetime.strptime(stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
             except ValueError as ve:
                 logging.error(f"Invalid date format: {ve}")
