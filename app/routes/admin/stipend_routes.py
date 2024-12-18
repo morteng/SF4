@@ -24,7 +24,7 @@ def create():
     
     if form.validate_on_submit():
         try:
-            stipend_data = {k: v for k, v in form.data.items() if k != 'submit'}
+            stipend_data = {k: v for k, v in form.data.items() if k != 'submit' and k != 'csrf_token'}  # Exclude csrf_token
             logging.info(f"Stipend data to be created: {stipend_data}")  # Add this line
             stipend = Stipend(**stipend_data)
             result = create_stipend(stipend)
