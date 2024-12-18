@@ -45,15 +45,17 @@ def _db(app):
         db.session.remove()
 
 @pytest.fixture(scope='function')
-def db_session(_db):
+def db_session(_db, app):
     """Provide a clean database session for each test function."""
     connection = _db.engine.connect()
     transaction = connection.begin()
     _db.session.bind = connection
-    yield _db.session
-    transaction.rollback()
-    connection.close()
-    _db.session.remove()
+
+    with app.app_context():
+        yield _db.session
+        transaction.rollback()
+        connection.close()
+        _db.session.remove()
 
 @pytest.fixture(scope='function')
 def client(app):
@@ -61,20 +63,22 @@ def client(app):
     return app.test_client()
 
 @pytest.fixture(scope='function')
-def admin_user(db_session):
+def admin_user(db_session, app):
     """Provide an admin user for testing."""
     email = 'admin@example.com'
-    user = db_session.query(User).filter_by(email=email).first()
-    if not user:
-        user = User(username='admin', email=email, is_admin=True)
-        user.set_password('password123')
-        db_session.add(user)
-        db_session.commit()
+    with app.app_context():
+        user = db_session.query(User).filter_by(email=email).first()
+        if not user:
+            user = User(username='admin', email=email, is_admin=True)
+            user.set_password('password123')
+            db_session.add(user)
+            db_session.commit()
     yield user
-    db_session.rollback()
+    with app.app_context():
+        db_session.rollback()
 
 @pytest.fixture(scope='function')
-def logged_in_admin(client, admin_user):
+def logged_in_admin(client, admin_user, app):
     """Log in as the admin user."""
     with client.application.test_request_context():
         login_response = client.get(url_for('public.login'))
@@ -101,20 +105,22 @@ def user_data():
     }
 
 @pytest.fixture(scope='function')
-def test_user(db_session, user_data):
+def test_user(db_session, user_data, app):
     """Provide a test user."""
-    user = User(
-        username=user_data['username'],
-        email=user_data['email'],
-        is_admin=user_data['is_admin']
-    )
-    user.set_password(user_data['password'])
-    db_session.add(user)
-    db_session.commit()
-    yield user
-    if db_session.query(User).filter_by(id=user.id).first():
-        db_session.delete(user)
+    with app.app_context():
+        user = User(
+            username=user_data['username'],
+            email=user_data['email'],
+            is_admin=user_data['is_admin']
+        )
+        user.set_password(user_data['password'])
+        db_session.add(user)
         db_session.commit()
+    yield user
+    with app.app_context():
+        if db_session.query(User).filter_by(id=user.id).first():
+            db_session.delete(user)
+            db_session.commit()
 
 @pytest.fixture(scope='function')
 def stipend_data():
@@ -130,16 +136,18 @@ def stipend_data():
     }
 
 @pytest.fixture(scope='function')
-def test_stipend(db_session, stipend_data):
+def test_stipend(db_session, stipend_data, app):
     """Provide a test stipend."""
-    stipend_data['application_deadline'] = datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')  # Convert to datetime here
-    stipend = Stipend(**stipend_data)
-    db_session.add(stipend)
-    db_session.commit()
-    yield stipend
-    if db_session.query(Stipend).filter_by(id=stipend.id).first():
-        db_session.delete(stipend)
+    with app.app_context():
+        stipend_data['application_deadline'] = datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')  # Convert to datetime here
+        stipend = Stipend(**stipend_data)
+        db_session.add(stipend)
         db_session.commit()
+    yield stipend
+    with app.app_context():
+        if db_session.query(Stipend).filter_by(id=stipend.id).first():
+            db_session.delete(stipend)
+            db_session.commit()
 
 @pytest.fixture(scope='function')
 def organization_data():
@@ -150,15 +158,17 @@ def organization_data():
     }
 
 @pytest.fixture(scope='function')
-def test_organization(db_session, organization_data):
+def test_organization(db_session, organization_data, app):
     """Provide a test organization."""
-    organization = Organization(**organization_data)
-    db_session.add(organization)
-    db_session.commit()
-    yield organization
-    if db_session.query(Organization).filter_by(id=organization.id).first():
-        db_session.delete(organization)
+    with app.app_context():
+        organization = Organization(**organization_data)
+        db_session.add(organization)
         db_session.commit()
+    yield organization
+    with app.app_context():
+        if db_session.query(Organization).filter_by(id=organization.id).first():
+            db_session.delete(organization)
+            db_session.commit()
 
 @pytest.fixture(scope='function')
 def tag_data():
@@ -172,12 +182,12 @@ def extract_csrf_token(response_data):
     match = re.search(r'name="csrf_token".*?value="(.+?)"', response_data.decode('utf-8'))
     return match.group(1) if match else "dummy_csrf_token"
 
-def get_all_tags():
-    with current_app.app_context():  # Ensure application context is set
+def get_all_tags(app):
+    with app.app_context():  # Ensure application context is set
         return Tag.query.all()
 
 @pytest.fixture(scope='function')
-def logged_in_client(client, test_user):
+def logged_in_client(client, test_user, app):
     """Log in as a regular user."""
     with client.application.test_request_context():
         login_response = client.get(url_for('public.login'))
@@ -195,12 +205,14 @@ def logged_in_client(client, test_user):
     yield client
 
 @pytest.fixture(scope='function')
-def test_tag(db_session):
+def test_tag(db_session, app):
     """Provide a test tag."""
-    tag = Tag(name="TestTag", category="TestCategory")
-    db_session.add(tag)
-    db_session.commit()
-    yield tag
-    if db_session.query(Tag).filter_by(id=tag.id).first():
-        db_session.delete(tag)
+    with app.app_context():
+        tag = Tag(name="TestTag", category="TestCategory")
+        db_session.add(tag)
         db_session.commit()
+    yield tag
+    with app.app_context():
+        if db_session.query(Tag).filter_by(id=tag.id).first():
+            db_session.delete(tag)
+            db_session.commit()
