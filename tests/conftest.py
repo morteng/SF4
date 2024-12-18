@@ -73,12 +73,13 @@ def admin_user(db_session, app):
             user.set_password('password123')
             db_session.add(user)
             db_session.commit()
+        else:
+            # Ensure the user is merged into the current session
+            user = db_session.merge(user)
     yield user
-    with app.app_context():
-        db_session.rollback()
 
 @pytest.fixture(scope='function')
-def logged_in_admin(client, admin_user, app):
+def logged_in_admin(client, admin_user, db_session, app):
     """Log in as the admin user."""
     with client.application.test_request_context():
         login_response = client.get(url_for('public.login'))
