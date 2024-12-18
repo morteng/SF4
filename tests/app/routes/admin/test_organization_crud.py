@@ -76,7 +76,7 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
 def test_update_organization(logged_in_admin, test_organization, db_session):
     with logged_in_admin.application.app_context():
         # Fetch CSRF token from the form page
-        response = logged_in_admin.get(url_for('admin.organization.update', id=test_organization.id))
+        response = logged_in_admin.get(url_for('admin.organization.edit', id=test_organization.id))  # Updated to .edit
         csrf_token = extract_csrf_token(response.data)
 
         updated_data = {
@@ -86,7 +86,7 @@ def test_update_organization(logged_in_admin, test_organization, db_session):
             'csrf_token': csrf_token
         }
 
-        response = logged_in_admin.post(url_for('admin.organization.update', id=test_organization.id), data=updated_data)
+        response = logged_in_admin.post(url_for('admin.organization.edit', id=test_organization.id), data=updated_data)  # Updated to .edit
         
         assert response.status_code == 302
         assert url_for('admin.organization.index', _external=False) == response.headers['Location']
@@ -100,7 +100,7 @@ def test_update_organization(logged_in_admin, test_organization, db_session):
 def test_update_organization_with_invalid_form_data(logged_in_admin, test_organization, db_session):
     with logged_in_admin.application.app_context():
         # Fetch CSRF token from the form page
-        response = logged_in_admin.get(url_for('admin.organization.update', id=test_organization.id))
+        response = logged_in_admin.get(url_for('admin.organization.edit', id=test_organization.id))  # Updated to .edit
         csrf_token = extract_csrf_token(response.data)
 
         invalid_data = {
@@ -110,7 +110,7 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, test_organi
             'csrf_token': csrf_token
         }
 
-        response = logged_in_admin.post(url_for('admin.organization.update', id=test_organization.id), data=invalid_data)
+        response = logged_in_admin.post(url_for('admin.organization.edit', id=test_organization.id), data=invalid_data)  # Updated to .edit
         
         assert response.status_code == 200
 
@@ -127,7 +127,7 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, test_organi
         assert organization.homepage_url == test_organization.homepage_url
 
 def test_update_organization_with_invalid_id(logged_in_admin):
-    update_response = logged_in_admin.get(url_for('admin.organization.update', id=9999))
+    update_response = logged_in_admin.get(url_for('admin.organization.edit', id=9999))  # Updated to .edit
     assert update_response.status_code == 302
     assert url_for('admin.organization.index', _external=False) == update_response.headers['Location']
 

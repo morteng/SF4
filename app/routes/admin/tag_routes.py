@@ -55,7 +55,7 @@ def index():
     tags = get_all_tags()
     return render_template('admin/tags/index.html', tags=tags)
 
-@admin_tag_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
+@admin_tag_bp.route('/<int:id>/edit', methods=['GET', 'POST'])  # Updated from .update to .edit
 @login_required
 @admin_required
 def edit(id):

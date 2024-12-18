@@ -56,7 +56,7 @@ def index():
     organizations = get_all_organizations()
     return render_template('admin/organizations/index.html', organizations=organizations)
 
-@admin_org_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
+@admin_org_bp.route('/<int:id>/edit', methods=['GET', 'POST'])  # Updated from .update to .edit
 @login_required
 @admin_required
 def edit(id):
