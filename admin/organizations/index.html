@@ -1,0 +1,17 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<h1>Organizations</h1>
+<a href="{{ url_for('organization.create') }}">Create Organization</a>
+<ul>
+    {% for organization in organizations %}
+        <li>
+            {{ organization.name }}
+            <a href="{{ url_for('organization.edit', id=organization.id) }}">Edit</a>
+            <form action="{{ url_for('organization.delete', id=organization.id) }}" method="post" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

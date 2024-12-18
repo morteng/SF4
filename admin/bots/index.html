@@ -1,0 +1,20 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<h1>Bots</h1>
+<a href="{{ url_for('bot.create') }}">Create Bot</a>
+<ul>
+    {% for bot in bots %}
+        <li>
+            {{ bot.name }}
+            <a href="{{ url_for('bot.edit', id=bot.id) }}">Edit</a>
+            <form action="{{ url_for('bot.delete', id=bot.id) }}" method="post" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+            <form action="{{ url_for('bot.run', id=bot.id) }}" method="post" style="display:inline;">
+                <button type="submit">Run</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
