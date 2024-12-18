@@ -1,14 +1,13 @@
 import pytest
 from flask import url_for
 from app.models.organization import Organization
-from app.forms.admin_forms import OrganizationForm  # Import the StipendForm class
+from app.forms.admin_forms import OrganizationForm
 from datetime import datetime, timedelta
 from tests.conftest import logged_in_admin, db_session, test_organization, organization_data
 import re
 from sqlalchemy.exc import SQLAlchemyError
 
 def extract_csrf_token(response_data):
-    """Extract CSRF token from the response HTML."""
     csrf_regex = r'<input[^>]+name="csrf_token"[^>]+value="([^"]+)"'
     match = re.search(csrf_regex, response_data.decode('utf-8'))
     if match:
@@ -27,16 +26,15 @@ def test_create_organization(logged_in_admin, db_session, organization_data):
         assert new_organization is not None
         assert new_organization.name == data['name']
         assert new_organization.description == data['description']
-        assert new_organization.homepage_url == data['homepage_url']  # Ensure this line checks the correct field
+        assert new_organization.homepage_url == data['homepage_url']
 
 def test_create_organization_with_invalid_form_data(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
-        # Fetch CSRF token from the form page
         response = logged_in_admin.get(url_for('admin.organization.create'))
         csrf_token = extract_csrf_token(response.data)
 
         invalid_data = {
-            'name': '',  # Intentionally invalid
+            'name': '',
             'description': 'Test Description',
             'homepage_url': 'http://example.com',
             'csrf_token': csrf_token
@@ -51,7 +49,6 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
             for field, errors in form.errors.items():
                 print(f"Field {field} errors: {errors}")
                 
-        # Check that the organization was not created
         new_organization = db_session.query(Organization).filter_by(name=invalid_data['name']).first()
         assert new_organization is None
 
@@ -67,16 +64,14 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
         response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
 
         assert response.status_code == 200
-
         assert b"Failed to create organization. Error: Database error" in response.data
 
         organizations = db_session.query(Organization).all()
-        assert not any(org.name == data['name'] for org in organizations)  # Ensure no organization was created
+        assert not any(org.name == data['name'] for org in organizations)
 
 def test_update_organization(logged_in_admin, test_organization, db_session):
     with logged_in_admin.application.app_context():
-        # Fetch CSRF token from the form page
-        response = logged_in_admin.get(url_for('admin.organization.edit', id=test_organization.id))  # Updated to .edit
+        response = logged_in_admin.get(url_for('admin.organization.edit', id=test_organization.id))
         csrf_token = extract_csrf_token(response.data)
 
         updated_data = {
@@ -86,7 +81,7 @@ def test_update_organization(logged_in_admin, test_organization, db_session):
             'csrf_token': csrf_token
         }
 
-        response = logged_in_admin.post(url_for('admin.organization.edit', id=test_organization.id), data=updated_data)  # Updated to .edit
+        response = logged_in_admin.post(url_for('admin.organization.edit', id=test_organization.id), data=updated_data)
         
         assert response.status_code == 302
         assert url_for('admin.organization.index', _external=False) == response.headers['Location']
@@ -95,22 +90,21 @@ def test_update_organization(logged_in_admin, test_organization, db_session):
         organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
         assert organization.name == updated_data['name']
         assert organization.description == updated_data['description']
-        assert organization.homepage_url == updated_data['homepage_url']  # Ensure this line checks the correct field
+        assert organization.homepage_url == updated_data['homepage_url']
 
 def test_update_organization_with_invalid_form_data(logged_in_admin, test_organization, db_session):
     with logged_in_admin.application.app_context():
-        # Fetch CSRF token from the form page
-        response = logged_in_admin.get(url_for('admin.organization.edit', id=test_organization.id))  # Updated to .edit
+        response = logged_in_admin.get(url_for('admin.organization.edit', id=test_organization.id))
         csrf_token = extract_csrf_token(response.data)
 
         invalid_data = {
-            'name': '',  # Intentionally invalid
+            'name': '',
             'description': "Updated description.",
             'homepage_url': "http://example.com/updated-organization",
             'csrf_token': csrf_token
         }
 
-        response = logged_in_admin.post(url_for('admin.organization.edit', id=test_organization.id), data=invalid_data)  # Updated to .edit
+        response = logged_in_admin.post(url_for('admin.organization.edit', id=test_organization.id), data=invalid_data)
         
         assert response.status_code == 200
 
@@ -119,7 +113,6 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, test_organi
             for field, errors in form.errors.items():
                 print(f"Field {field} errors: {errors}")
             
-        # Check that the organization was not updated
         db_session.expire_all()
         organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
         assert organization.name != invalid_data['name']
@@ -127,7 +120,7 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, test_organi
         assert organization.homepage_url == test_organization.homepage_url
 
 def test_update_organization_with_invalid_id(logged_in_admin):
-    update_response = logged_in_admin.get(url_for('admin.organization.edit', id=9999))  # Updated to .edit
+    update_response = logged_in_admin.get(url_for('admin.organization.edit', id=9999))
     assert update_response.status_code == 302
     assert url_for('admin.organization.index', _external=False) == update_response.headers['Location']
 
@@ -138,7 +131,6 @@ def test_delete_organization(logged_in_admin, test_organization, db_session):
         assert response.status_code == 302
         assert url_for('admin.organization.index', _external=False) == response.headers['Location']
 
-        # Check if the organization was deleted successfully
         deleted_organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
         assert deleted_organization is None
 
@@ -162,7 +154,7 @@ def test_index_organization_route(logged_in_admin, test_organization):
 def test_create_organization_with_long_name(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         data = {
-            'name': 'a' * 201,  # Exceeds max length of 100
+            'name': 'a' * 201,
             'description': 'Test Description',
             'homepage_url': 'http://example.com'
         }
@@ -176,18 +168,16 @@ def test_create_organization_with_long_name(logged_in_admin, db_session):
             for field, errors in form.errors.items():
                 print(f"Field {field} errors: {errors}")
                 
-        # Check that the organization was not created
         new_organization = db_session.query(Organization).filter_by(name=data['name']).first()
         assert new_organization is None
 
 def test_create_organization_with_special_characters(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
-        # Fetch CSRF token from the form page
         response = logged_in_admin.get(url_for('admin.organization.create'))
         csrf_token = extract_csrf_token(response.data)
 
         data = {
-            'name': '<script>alert("XSS")</script>',  # Special characters
+            'name': '<script>alert("XSS")</script>',
             'description': 'Test Description',
             'homepage_url': 'http://example.com',
             'csrf_token': csrf_token
@@ -202,6 +192,5 @@ def test_create_organization_with_special_characters(logged_in_admin, db_session
 
         assert response.status_code == 200
 
-        # Check that the organization was not created
         new_organization = db_session.query(Organization).filter_by(name=data['name']).first()
         assert new_organization is None

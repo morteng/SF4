@@ -11,8 +11,8 @@ from app.services.stipend_service import (
     update_stipend
 )
 from app.models.stipend import Stipend
-from app.extensions import db  # Import db
-import logging  # Import logging
+from app.extensions import db
+import logging
 
 admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 
@@ -24,8 +24,8 @@ def create():
     
     if form.validate_on_submit():
         try:
-            stipend_data = {k: v for k, v in form.data.items() if k != 'submit' and k != 'csrf_token'}  # Exclude csrf_token
-            logging.info(f"Stipend data to be created: {stipend_data}")  # Add this line
+            stipend_data = {k: v for k, v in form.data.items() if k != 'submit' and k != 'csrf_token'}
+            logging.info(f"Stipend data to be created: {stipend_data}")
             stipend = Stipend(**stipend_data)
             result = create_stipend(stipend)
             
@@ -44,7 +44,7 @@ def create():
             
             return redirect(url_for('admin.stipend.index'))
         except Exception as e:
-            db.session.rollback()  # Explicitly rollback session on failure
+            db.session.rollback()
             logging.error(f"Failed to create stipend: {e}")
             flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
             if request.headers.get('HX-Request'):
@@ -52,11 +52,9 @@ def create():
             else:
                 return render_template('admin/stipends/form.html', form=form), 200
     
-    # Handle form validation failure
     for field, errors in form.errors.items():
         for error in errors:
-            logging.error(f"Flashing error: {error}")  # Add this line for debugging
-            flash(error, FLASH_CATEGORY_ERROR)
+            logging.error(f"Flashing error: {error}")
     
     if request.headers.get('HX-Request'):
         return render_template('admin/stipends/_stipend_form.html', form=form), 200
@@ -77,7 +75,6 @@ def edit(id):
     
     if form.validate_on_submit():
         try:
-            # Populate the stipend object with form data
             form.populate_obj(stipend)
             
             db.session.commit()
@@ -113,7 +110,7 @@ def delete(id):
         flash(FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         return redirect(url_for('admin.stipend.index'))
     except Exception as e:
-        db.session.rollback()  # Explicitly rollback session on failure
+        db.session.rollback()
         logging.error(f"Failed to delete stipend: {e}")
         flash(FLASH_MESSAGES["DELETE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))

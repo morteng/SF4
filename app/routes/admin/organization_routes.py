@@ -46,7 +46,7 @@ def delete(id):
             flash(f"Failed to delete organization. Error: {str(e)}", FLASH_CATEGORY_ERROR)
             return render_template('admin/organizations/form.html', form=OrganizationForm())
     else:
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Use generic error if organization not found
+        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
     return redirect(url_for('admin.organization.index'))
 
 @admin_org_bp.route('/', methods=['GET'])
@@ -62,7 +62,7 @@ def index():
 def edit(id):
     organization = get_organization_by_id(id)
     if not organization:
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Use generic error if organization not found
+        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.organization.index'))
 
     form = OrganizationForm(original_name=organization.name, obj=organization)
@@ -76,7 +76,7 @@ def edit(id):
             else:
                 flash(error_message, FLASH_CATEGORY_ERROR)
         except SQLAlchemyError as e:
-            db.session.rollback()
+            db_session.rollback()
             flash(f"Failed to update organization. Error: {str(e)}", FLASH_CATEGORY_ERROR)
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)
