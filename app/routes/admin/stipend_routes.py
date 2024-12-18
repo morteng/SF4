@@ -11,7 +11,7 @@ from app.services.stipend_service import (
     update_stipend
 )
 from app.models.stipend import Stipend
-from app.extensions import db
+from app.extensions import db, db_session  # Ensure this matches how db_session is defined or imported
 import logging
 
 admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
