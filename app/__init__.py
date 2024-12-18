@@ -2,7 +2,7 @@
 
 import os  # Import the os module here
 from flask import Flask
-from app.extensions import db, login_manager, migrate  # Add 'migrate' here
+from app.extensions import db, login_manager, migrate, init_extensions  # Add 'migrate' and 'init_extensions' here
 from flask_wtf import CSRFProtect
 from dotenv import load_dotenv
 from app.utils import init_admin_user  # Import the init_admin_user function
@@ -39,6 +39,7 @@ def create_app(config_name='development'):
     register_blueprints(app)        # Register other blueprints
 
     with app.app_context():
+        init_extensions(app)  # Initialize extensions within the application context
         db.create_all()  # Creates all tables if they don't exist
         init_admin_user()  # Initialize the admin user
 

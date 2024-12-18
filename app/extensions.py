@@ -9,6 +9,11 @@ login_manager = LoginManager()
 csrf = CSRFProtect()  # Initialize CSRF protection
 migrate = Migrate()
 
-# Define db_session as a scoped session if needed
-Session = sessionmaker(bind=db.engine)
-db_session = scoped_session(Session)
+Session = None
+db_session = None
+
+def init_extensions(app):
+    global Session, db_session
+    with app.app_context():
+        Session = sessionmaker(bind=db.engine)
+        db_session = scoped_session(Session)
