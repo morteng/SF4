@@ -5,7 +5,7 @@ import warnings
 import re
 from datetime import datetime
 from sqlalchemy.exc import SAWarning
-from flask import url_for
+from flask import url_for, current_app
 from app import create_app
 from app.extensions import db, login_manager
 from app.models.user import User
@@ -173,7 +173,8 @@ def extract_csrf_token(response_data):
     return match.group(1) if match else "dummy_csrf_token"
 
 def get_all_tags():
-    return Tag.query.all()
+    with current_app.app_context():  # Ensure application context is set
+        return Tag.query.all()
 
 @pytest.fixture(scope='function')
 def logged_in_client(client, test_user):
