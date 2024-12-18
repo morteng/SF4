@@ -60,7 +60,7 @@ def test_create_bot_route_with_invalid_data(logged_in_admin, bot_data):
     assert b"Invalid value for status. It must be true or false." in response.data
 
 def test_update_bot_route(logged_in_admin, test_bot, db_session):
-    update_response = logged_in_admin.get(url_for('admin.bot.update', id=test_bot.id))
+    update_response = logged_in_admin.get(url_for('admin.bot.edit', id=test_bot.id))
     assert update_response.status_code == 200
 
     csrf_token = extract_csrf_token(update_response.data)
@@ -70,7 +70,7 @@ def test_update_bot_route(logged_in_admin, test_bot, db_session):
         'status': test_bot.status,
         'csrf_token': csrf_token
     }
-    response = logged_in_admin.post(url_for('admin.bot.update', id=test_bot.id), data=updated_data, follow_redirects=True)
+    response = logged_in_admin.post(url_for('admin.bot.edit', id=test_bot.id), data=updated_data, follow_redirects=True)
 
     assert response.status_code == 200
     updated_bot = db_session.get(Bot, test_bot.id)  # Use db_session.get to retrieve the bot
@@ -79,7 +79,7 @@ def test_update_bot_route(logged_in_admin, test_bot, db_session):
     assert FLASH_MESSAGES["UPDATE_BOT_SUCCESS"].encode() in response.data
 
 def test_update_bot_route_with_invalid_id(logged_in_admin):
-    update_response = logged_in_admin.get(url_for('admin.bot.update', id=9999))
+    update_response = logged_in_admin.get(url_for('admin.bot.edit', id=9999))
     assert update_response.status_code == 302
     assert url_for('admin.bot.index', _external=False) == update_response.headers['Location']
 
