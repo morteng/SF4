@@ -75,7 +75,7 @@ def test_update_bot_route(logged_in_admin, test_bot, db_session):
     response = logged_in_admin.post(url_for('admin.bot.edit', id=test_bot.id), data={
         'name': updated_data['name'],
         'description': updated_data['description'],
-        'status': 'true' if updated_data['status'] else 'false',  # Explicitly set the string
+        'status': updated_data['status'],  # Directly pass the value
         'csrf_token': csrf_token
     }, follow_redirects=True)
 
