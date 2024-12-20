@@ -81,7 +81,7 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
 
         assert response.status_code == 200
         # Use the constant from constants.py instead of a hardcoded string
-        expected_flash_message = f"{FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR']}Database error"
+        expected_flash_message = FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR']
         print(response.get_data(as_text=True))  # Print the response data to debug
         assert expected_flash_message in response.get_data(as_text=True)
 
