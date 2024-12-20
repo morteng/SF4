@@ -55,5 +55,20 @@ FLASH_MESSAGES = {
     "UPDATE_TAG_SUCCESS": "Tag updated successfully.",
     "UPDATE_TAG_ERROR": "Failed to update tag.",
     "DELETE_TAG_SUCCESS": "Tag deleted successfully.",
-    "DELETE_TAG_ERROR": "Failed to delete tag."
+    "DELETE_TAG_ERROR": "Failed to delete tag.",
+
+    # Authentication
+    "LOGIN_SUCCESS": "Logged in successfully.",
+    "LOGIN_ERROR": "Invalid username or password.",
+    "LOGOUT_SUCCESS": "Logged out successfully.",
+    "REGISTER_SUCCESS": "Registered successfully.",
+    "REGISTER_ERROR": "Registration failed. Please try again.",
+
+    # Profile Management
+    "UPDATE_PROFILE_SUCCESS": "Profile updated successfully.",
+    "UPDATE_PROFILE_ERROR": "Failed to update profile.",
+
+    # Others
+    "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+    # Add more messages as needed
 }
