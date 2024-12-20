@@ -96,7 +96,11 @@ class BotForm(FlaskForm):
     def validate_status(self, field):
         if field.raw_data:
             value = field.raw_data[0].lower()
-            if value not in ['true', 'false', '1', '0', 'y', 'n', 'yes', 'no', 'on', 'off']:
+            if value in ['true', '1', 'y', 'yes', 'on']:
+                field.data = True
+            elif value in ['false', '0', 'n', 'no', 'off']:
+                field.data = False
+            else:
                 raise ValidationError("Invalid value for status. It must be true or false.")
 
 class OrganizationForm(FlaskForm):

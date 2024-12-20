@@ -8,7 +8,7 @@ def bot_data():
     return {
         'name': 'Test Bot',
         'description': 'This is a test bot.',
-        'status': True
+        'status': 'true'  # Change from True to 'true'
     }
 
 @pytest.fixture(scope='function')
@@ -32,6 +32,9 @@ def test_create_bot_route(logged_in_admin, bot_data):
         'status': bot_data['status'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
+
+    print(response.data)  # Print response data for debugging
+    print(logged_in_admin.get(url_for('admin.bot.create')).data)  # Debug: print form errors to console
 
     assert response.status_code == 200
     bots = Bot.query.all()
