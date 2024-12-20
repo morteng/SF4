@@ -13,6 +13,7 @@ admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 @login_required
 @admin_required
 def create():
+    form = OrganizationForm()  # Initialize the form for GET requests
     if request.method == 'POST':
         form = OrganizationForm(request.form)
         if form.validate_on_submit():
