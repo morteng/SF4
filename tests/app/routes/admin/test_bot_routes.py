@@ -60,7 +60,7 @@ def test_create_bot_route_with_invalid_data(logged_in_admin, bot_data):
     bots = Bot.query.all()
     assert not any(bot.name == '' for bot in bots)  # Ensure no bot with an empty name was created
     # Assert the flash message using constants
-    assert FLASH_MESSAGES["GENERIC_ERROR"].encode() in response.data
+    assert FLASH_MESSAGES["CREATE_BOT_INVALID_DATA"].encode() in response.data
 
 def test_update_bot_route(logged_in_admin, test_bot, db_session):
     update_response = logged_in_admin.get(url_for('admin.bot.edit', id=test_bot.id))

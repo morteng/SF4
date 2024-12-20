@@ -26,7 +26,7 @@ def create():
     else:
         for field, errors in form.errors.items():
             for error in errors:
-                flash(error, FLASH_CATEGORY_ERROR)
+                flash(FLASH_MESSAGES["CREATE_BOT_INVALID_DATA"], FLASH_CATEGORY_ERROR)  # Use specific invalid data message
 
     return render_template('admin/bots/create.html', form=form)
 
