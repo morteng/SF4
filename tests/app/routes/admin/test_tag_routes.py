@@ -62,8 +62,7 @@ def test_update_tag_with_invalid_form_data(logged_in_admin, test_tag, tag_data, 
         response = logged_in_admin.post(url_for('admin.tag.edit', id=test_tag.id), data=updated_data)
         
         assert response.status_code == 200
-        # ensure we test for the constant in constants.py, not hardcoded string AI
-        assert b"This field is required." in response.data
+        assert FLASH_MESSAGES["GENERIC_ERROR"].encode() in response.data
 
 def test_update_tag_with_database_error(logged_in_admin, test_tag, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
