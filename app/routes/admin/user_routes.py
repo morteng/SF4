@@ -24,6 +24,7 @@ def create():
     else:
         for field, errors in form.errors.items():
             for error in errors:
+                # ensure we use flash correct message defied in constans, create it if missing AI!
                 flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
         flash(FLASH_MESSAGES["CREATE_USER_ERROR"], FLASH_CATEGORY_ERROR)  # Add this line to set a generic creation error message
     return render_template('admin/users/create.html', form=form)

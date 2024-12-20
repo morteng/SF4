@@ -26,6 +26,7 @@ def create():
                     flash(error_message, FLASH_CATEGORY_ERROR)
             except SQLAlchemyError as e:
                 db.session.rollback()
+                # ensure we use flash correct message defied in constans, create it if missing AI
                 flash(f"Failed to create organization. Error: {str(e)}", FLASH_CATEGORY_ERROR)
         else:
             # Use a specific flash message for invalid form data

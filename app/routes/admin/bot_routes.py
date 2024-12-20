@@ -22,6 +22,7 @@ def create():
             return redirect(url_for('admin.bot.index'))
         except Exception as e:
             db.session.rollback()  # Ensure the session is rolled back on error
+            # ensure we use flash correct message defied in constans, create it if missing AI
             flash(f"{FLASH_MESSAGES['CREATE_BOT_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
     else:
         for field, errors in form.errors.items():
