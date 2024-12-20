@@ -18,7 +18,7 @@ def create():
     if form.validate_on_submit():
         try:
             new_bot = create_bot(form.data)
-            flash(FLASH_MESSAGES["CREATE_BOT_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            flash("Bot created successfully!", FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.bot.index'))
         except Exception as e:
             db.session.rollback()  # Ensure the session is rolled back on error

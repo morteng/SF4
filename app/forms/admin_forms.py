@@ -79,7 +79,7 @@ from wtforms.validators import InputRequired
 class BotForm(FlaskForm):
 
     name = StringField('Name', validators=[InputRequired(), Length(max=100)])
-    description = TextAreaField('Description')
+    description = TextAreaField('Description', validators=[InputRequired(), Length(max=500)])
     status = BooleanField('Status', default=False)
     submit = SubmitField('Create')
 

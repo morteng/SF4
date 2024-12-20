@@ -8,7 +8,7 @@ def bot_data():
     return {
         'name': 'Test Bot',
         'description': 'This is a test bot.',
-        'status': 'true'  # Change from True to 'true'
+        'status': True  # Change from 'true' to True
     }
 
 @pytest.fixture(scope='function')
@@ -29,7 +29,7 @@ def test_create_bot_route(logged_in_admin, bot_data):
     response = logged_in_admin.post(url_for('admin.bot.create'), data={
         'name': bot_data['name'],
         'description': bot_data['description'],
-        'status': bot_data['status'],
+        'status': 'true' if bot_data['status'] else 'false',  # Convert boolean to string
         'csrf_token': csrf_token
     }, follow_redirects=True)
 
@@ -69,7 +69,7 @@ def test_update_bot_route(logged_in_admin, test_bot, db_session):
     updated_data = {
         'name': 'Updated Bot Name',
         'description': test_bot.description,
-        'status': test_bot.status,
+        'status': 'true' if test_bot.status else 'false',  # Convert boolean to string
         'csrf_token': csrf_token
     }
     response = logged_in_admin.post(url_for('admin.bot.edit', id=test_bot.id), data=updated_data, follow_redirects=True)
