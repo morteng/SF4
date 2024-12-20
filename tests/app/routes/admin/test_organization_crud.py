@@ -81,7 +81,7 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
 
         assert response.status_code == 200
         # Use the constant from constants.py instead of a hardcoded string
-        expected_flash_message = f"{FLASH_MESSAGES['CREATE_ORGANIZATION_ERROR']}Database error"
+        expected_flash_message = f"{FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR']}Database error"
         print(response.get_data(as_text=True))  # Print the response data to debug
         assert expected_flash_message in response.get_data(as_text=True)
 
@@ -160,7 +160,7 @@ def test_delete_organization_with_invalid_id(logged_in_admin):
     delete_response = logged_in_admin.post(url_for('admin.organization.delete', id=9999), follow_redirects=True)
     
     assert delete_response.status_code == 200
-    assert url_for('admin.organization.index', _external=False) in delete_response.headers['Location']
+    assert url_for('admin.organization.index', _external=False) == delete_response.headers['Location']
 
 def test_delete_nonexistent_organization(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
