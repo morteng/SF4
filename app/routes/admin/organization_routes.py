@@ -45,6 +45,7 @@ def delete(id):
             flash(FLASH_MESSAGES["DELETE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         except SQLAlchemyError as e:
             db.session.rollback()
+            # Ensure we use constants from constants.py when flashing messages, create new flash message in constants.py if not laready present. AI
             flash(f"Failed to delete organization. Error: {str(e)}", FLASH_CATEGORY_ERROR)
             return render_template('admin/organizations/form.html', form=OrganizationForm())
     else:
@@ -76,9 +77,11 @@ def edit(id):
                 flash(FLASH_MESSAGES["UPDATE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
                 return redirect(url_for('admin.organization.index'))
             else:
+                # Ensure we use constants from constants.py when flashing messages, create new flash message in constants.py if not laready present. AI
                 flash(error_message, FLASH_CATEGORY_ERROR)
         except SQLAlchemyError as e:
             db_session.rollback()  # Use db_session here
+            # Ensure we use constants from constants.py when flashing messages, create new flash message in constants.py if not laready present. AI!
             flash(f"Failed to update organization. Error: {str(e)}", FLASH_CATEGORY_ERROR)
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)

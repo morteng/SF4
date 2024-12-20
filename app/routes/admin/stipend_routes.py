@@ -68,6 +68,7 @@ def create():
 def edit(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
+        # Ensure we use constants from constants.py when flashing messages, create new flash message in constants.py if not laready present. AI
         flash('Stipend not found.', FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
     
@@ -89,6 +90,7 @@ def edit(id):
     if form.errors:
         for field, errors in form.errors.items():
             for error in errors:
+                # Ensure we use constants from constants.py when flashing messages, create new flash message in constants.py if not laready present. AI
                 flash(error, FLASH_CATEGORY_ERROR)
     
     return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
