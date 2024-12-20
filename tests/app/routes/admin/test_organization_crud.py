@@ -21,7 +21,7 @@ def test_create_organization(logged_in_admin, db_session, organization_data):
         response = logged_in_admin.post(url_for('admin.organization.create'), data=data, follow_redirects=True)
         
         assert response.status_code == 200
-        assert url_for('admin.organization.index', _external=False) in response.data
+        assert url_for('admin.organization.index', _external=False) in response.get_data(as_text=True)
 
         new_organization = db_session.query(Organization).filter_by(name=data['name']).first()
         assert new_organization is not None
@@ -58,7 +58,7 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
         assert new_organization is None
 
         # Check flash message using constants
-        assert FLASH_MESSAGES["CREATE_ORGANIZATION_INVALID_DATA"].encode() in response.data
+        assert FLASH_MESSAGES["CREATE_ORGANIZATION_INVALID_DATA"] in response.get_data(as_text=True)
 
 def test_create_organization_with_database_error(logged_in_admin, organization_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
@@ -73,7 +73,7 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
 
         assert response.status_code == 200
         # Use the constant from constants.py instead of a hardcoded string
-        assert FLASH_MESSAGES["CREATE_ORGANIZATION_ERROR"].encode() in response.data
+        assert FLASH_MESSAGES["CREATE_ORGANIZATION_ERROR"] in response.get_data(as_text=True)
 
         organizations = db_session.query(Organization).all()
         assert not any(org.name == data['name'] for org in organizations)
@@ -93,7 +93,7 @@ def test_update_organization(logged_in_admin, test_organization, db_session):
         response = logged_in_admin.post(url_for('admin.organization.edit', id=test_organization.id), data=updated_data, follow_redirects=True)
         
         assert response.status_code == 200
-        assert url_for('admin.organization.index', _external=False) in response.data
+        assert url_for('admin.organization.index', _external=False) in response.get_data(as_text=True)
 
         db_session.expire_all()
         organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
@@ -102,7 +102,7 @@ def test_update_organization(logged_in_admin, test_organization, db_session):
         assert organization.homepage_url == updated_data['homepage_url']
 
         # Check flash message
-        assert FLASH_MESSAGES["UPDATE_ORGANIZATION_SUCCESS"].encode() in response.data
+        assert FLASH_MESSAGES["UPDATE_ORGANIZATION_SUCCESS"] in response.get_data(as_text=True)
 
 def test_update_organization_with_invalid_form_data(logged_in_admin, test_organization, db_session):
     with logged_in_admin.application.app_context():
@@ -132,7 +132,7 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, test_organi
         assert organization.homepage_url == test_organization.homepage_url
 
         # Check flash message
-        assert FLASH_MESSAGES["UPDATE_ORGANIZATION_ERROR"].encode() in response.data
+        assert FLASH_MESSAGES["UPDATE_ORGANIZATION_ERROR"] in response.get_data(as_text=True)
 
 def test_update_organization_with_invalid_id(logged_in_admin):
     update_response = logged_in_admin.get(url_for('admin.organization.edit', id=9999))
@@ -144,7 +144,7 @@ def test_delete_organization(logged_in_admin, test_organization, db_session):
         response = logged_in_admin.post(url_for('admin.organization.delete', id=test_organization.id), follow_redirects=True)
         
         assert response.status_code == 200
-        assert url_for('admin.organization.index', _external=False) in response.data
+        assert url_for('admin.organization.index', _external=False) in response.get_data(as_text=True)
 
         deleted_organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
         assert deleted_organization is None
@@ -160,7 +160,7 @@ def test_delete_nonexistent_organization(logged_in_admin, db_session):
         response = logged_in_admin.post(url_for('admin.organization.delete', id=9999), follow_redirects=True)
         
         assert response.status_code == 200
-        assert url_for('admin.organization.index', _external=False) in response.data
+        assert url_for('admin.organization.index', _external=False) in response.get_data(as_text=True)
 
 def test_index_organization_route(logged_in_admin, test_organization):
     index_response = logged_in_admin.get(url_for('admin.organization.index'))
