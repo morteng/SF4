@@ -46,7 +46,7 @@ FLASH_MESSAGES = {
 
     # Bot Management
     "CREATE_BOT_SUCCESS": "Bot created successfully.",
-    "CREATE_BOT_ERROR": "Failed to create bot: Invalid input.",
+    "CREATE_BOT_ERROR": "Failed to create bot.",
     "UPDATE_BOT_SUCCESS": "Bot updated successfully.",
     "UPDATE_BOT_ERROR": "Failed to update bot.",
     "DELETE_BOT_SUCCESS": "Bot deleted successfully.",
