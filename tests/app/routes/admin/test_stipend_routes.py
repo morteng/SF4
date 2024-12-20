@@ -75,6 +75,7 @@ def test_create_stipend_route_with_invalid_application_deadline_format(logged_in
     stipends = Stipend.query.all()
     assert not any(stipend.name == invalid_data['name'] for stipend in stipends)
     # Assert the flash message
+    # ensure we test for the constant in constants.py, not hardcoded string AI!
     assert b'Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data  # Updated this line to match the validation error message
 
 def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
