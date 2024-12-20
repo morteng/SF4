@@ -29,7 +29,7 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
 
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
-
+# ensure we test for the constant in constants.py, not hardcoded string AI
         assert b'This field is required.' in response.data
 
 def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
@@ -44,6 +44,7 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
 
         # Check for the specific validation error message
         logging.info(f"Response data: {response.data}")  # Add this line for debugging
+        # ensure we test for the constant in constants.py, not hardcoded string AI!
         assert b"Invalid date format. Please use YYYY-MM-DD HH:MM:SS." in response.data
 
 def test_update_stipend_with_database_error_htmx(logged_in_admin, test_stipend, stipend_data, db_session, monkeypatch):
@@ -86,4 +87,5 @@ def test_update_stipend_with_invalid_form_data_htmx(logged_in_admin, test_stipen
         response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data, headers=headers)
         
         assert response.status_code == 200
+        # ensure we test for the constant in constants.py, not hardcoded string AI!
         assert b"This field is required." in response.data
