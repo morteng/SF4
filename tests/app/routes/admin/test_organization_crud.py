@@ -77,7 +77,7 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
         # Print the response data to debug
         print(response.get_data(as_text=True))
 
-        expected_flash_message = FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'].format("Database error")
+        expected_flash_message = FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR']
         assert expected_flash_message.encode() in response.data
 
 def test_delete_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
