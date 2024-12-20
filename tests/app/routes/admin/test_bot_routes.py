@@ -72,7 +72,12 @@ def test_update_bot_route(logged_in_admin, test_bot, db_session):
         'status': 'true' if test_bot.status else 'false',  # Convert boolean to string
         'csrf_token': csrf_token
     }
-    response = logged_in_admin.post(url_for('admin.bot.edit', id=test_bot.id), data=updated_data, follow_redirects=True)
+    response = logged_in_admin.post(url_for('admin.bot.edit', id=test_bot.id), data={
+        'name': updated_data['name'],
+        'description': updated_data['description'],
+        'status': 'true' if updated_data['status'] else 'false',  # Explicitly set the string
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
 
     assert response.status_code == 200
     updated_bot = db_session.get(Bot, test_bot.id)  # Use db_session.get to retrieve the bot
