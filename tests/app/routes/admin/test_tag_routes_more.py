@@ -38,6 +38,7 @@ def test_create_tag_with_invalid_form_data(logged_in_admin):
     }, follow_redirects=True)
 
     assert response.status_code == 200
+    # ensure we test for the constant in constants.py, not hardcoded string AI
     assert b'This field is required.' in response.data
 
 def test_create_tag_with_integrity_error(logged_in_admin, tag_data, db_session, monkeypatch):
@@ -133,6 +134,7 @@ def test_update_tag_with_invalid_form_data(logged_in_admin, test_tag):
         )
         
         assert response.status_code == 200
+        # ensure we test for the constant in constants.py, not hardcoded string AI!
         assert b'This field is required.' in response.data
 
 def test_update_tag_with_integrity_error(logged_in_admin, test_tag, db_session, monkeypatch):
