@@ -40,7 +40,7 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
             'homepage_url': 'http://example.com',
             'csrf_token': csrf_token
         }
-        
+
         response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data)
         
         assert response.status_code == 200

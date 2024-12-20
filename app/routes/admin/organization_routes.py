@@ -28,9 +28,8 @@ def create():
                 db.session.rollback()
                 flash(f"Failed to create organization. Error: {str(e)}", FLASH_CATEGORY_ERROR)
         else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
+            # Use a specific flash message for invalid form data
+            flash(FLASH_MESSAGES["CREATE_ORGANIZATION_INVALID_DATA"], FLASH_CATEGORY_ERROR)
     else:
         form = OrganizationForm()
     return render_template('admin/organizations/form.html', form=form)
