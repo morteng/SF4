@@ -27,7 +27,10 @@ def create():
             except SQLAlchemyError as e:
                 db.session.rollback()
                 flash(f"Failed to create organization. Error: {str(e)}", FLASH_CATEGORY_ERROR)
-                return render_template('admin/organizations/form.html', form=form)
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
     else:
         form = OrganizationForm()
     return render_template('admin/organizations/form.html', form=form)

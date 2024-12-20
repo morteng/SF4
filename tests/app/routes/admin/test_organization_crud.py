@@ -49,13 +49,13 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
         if not form.validate():
             for field, errors in form.errors.items():
                 print(f"Field {field} errors: {errors}")
-                
+            
         new_organization = db_session.query(Organization).filter_by(name=invalid_data['name']).first()
         assert new_organization is None
 
         # Check flash message
         response = logged_in_admin.get(url_for('admin.organization.create'))
-        assert FLASH_MESSAGES["CREATE_ORGANIZATION_ERROR"].encode() in response.data
+        assert FLASH_MESSAGES["CREATE_ORGANIZATION_INVALID_DATA"].encode() in response.data
 
 def test_create_organization_with_database_error(logged_in_admin, organization_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
