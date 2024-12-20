@@ -5,6 +5,7 @@ from app.forms.admin_forms import UserForm
 from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user
 from app.utils import admin_required
 import logging
+from app.extensions import db  # Import the db object
 
 admin_user_bp = Blueprint('user', __name__, url_prefix='/users')
 
