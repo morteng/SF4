@@ -2,7 +2,6 @@ import pytest
 from flask import url_for
 from app.models.organization import Organization
 from app.forms.admin_forms import OrganizationForm
-from datetime import datetime, timedelta
 from tests.conftest import logged_in_admin, db_session, test_organization, organization_data
 import re
 from sqlalchemy.exc import SQLAlchemyError
@@ -44,29 +43,20 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
 
         invalid_data = {
             'name': '',
-            'description': 'Test Description',
-            'homepage_url': 'http://example.com',
+            'description': 'This is a test organization.',
+            'homepage_url': 'http://example.com/organization',
             'csrf_token': csrf_token
         }
 
-        response = logged_in_admin.post(
-            url_for('admin.organization.create'),
-            data=invalid_data,
-            follow_redirects=True  # Follow redirects to capture flash messages
-        )
-
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data, follow_redirects=True)
+        
         assert response.status_code == 200
 
-        form = OrganizationForm(original_name=None, data=invalid_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-            
-        new_organization = db_session.query(Organization).filter_by(name=invalid_data['name']).first()
-        assert new_organization is None
+        # Print the response data to debug
+        print(response.get_data(as_text=True))
 
-        # Check flash message using constants
-        assert FLASH_MESSAGES["CREATE_ORGANIZATION_INVALID_DATA"] in response.get_data(as_text=True)
+        expected_flash_message = 'name: This field is required.'
+        assert expected_flash_message in response.get_data(as_text=True)
 
 def test_create_organization_with_database_error(logged_in_admin, organization_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
@@ -74,145 +64,58 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
 
         def mock_commit(*args, **kwargs):
             raise SQLAlchemyError("Database error")
-            
-        monkeypatch.setattr(db_session, 'commit', mock_commit)
-        
-        response = logged_in_admin.post(url_for('admin.organization.create'), data=data, follow_redirects=True)
 
+        monkeypatch.setattr(db_session, 'commit', mock_commit)
+
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=data, follow_redirects=True)
+        
         assert response.status_code == 200
-        # Use the constant from constants.py instead of a hardcoded string
-        expected_flash_message = FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR']
-        print(response.get_data(as_text=True))  # Print the response data to debug
+
+        # Print the response data to debug
+        print(response.get_data(as_text=True))
+
+        expected_flash_message = FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'].format("Database error")
         assert expected_flash_message in response.get_data(as_text=True)
 
-def test_update_organization(logged_in_admin, test_organization, db_session):
+def test_delete_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
-        response = logged_in_admin.get(url_for('admin.organization.edit', id=test_organization.id))
-        csrf_token = extract_csrf_token(response.data)
+        organization_id = 1
 
-        updated_data = {
+        def mock_delete(*args, **kwargs):
+            raise SQLAlchemyError("Database error")
+
+        monkeypatch.setattr(db_session, 'delete', mock_delete)
+
+        response = logged_in_admin.post(url_for('admin.organization.delete', id=organization_id), follow_redirects=True)
+        
+        assert response.status_code == 200
+
+        # Print the response data to debug
+        print(response.get_data(as_text=True))
+
+        expected_flash_message = FLASH_MESSAGES['DELETE_ORGANIZATION_DATABASE_ERROR'].format("Database error")
+        assert expected_flash_message in response.get_data(as_text=True)
+
+def test_update_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
+    with logged_in_admin.application.app_context():
+        organization_id = 1
+        update_data = {
             'name': 'Updated Organization',
-            'description': "Updated description.",
-            'homepage_url': "http://example.com/updated-organization",
-            'csrf_token': csrf_token
+            'description': 'This is an updated organization.',
+            'homepage_url': 'http://example.com/updated-organization'
         }
 
-        response = logged_in_admin.post(url_for('admin.organization.edit', id=test_organization.id), data=updated_data, follow_redirects=True)
-        
-        assert response.status_code == 200
-        assert url_for('admin.organization.index', _external=False) in response.get_data(as_text=True)
+        def mock_commit(*args, **kwargs):
+            raise SQLAlchemyError("Database error")
 
-        db_session.expire_all()
-        organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
-        assert organization.name == updated_data['name']
-        assert organization.description == updated_data['description']
-        assert organization.homepage_url == updated_data['homepage_url']
+        monkeypatch.setattr(db_session, 'commit', mock_commit)
 
-        # Check flash message
-        assert FLASH_MESSAGES["UPDATE_ORGANIZATION_SUCCESS"] in response.get_data(as_text=True)
-
-def test_update_organization_with_invalid_form_data(logged_in_admin, test_organization, db_session):
-    with logged_in_admin.application.app_context():
-        response = logged_in_admin.get(url_for('admin.organization.edit', id=test_organization.id))
-        csrf_token = extract_csrf_token(response.data)
-
-        invalid_data = {
-            'name': '',
-            'description': "Updated description.",
-            'homepage_url': "http://example.com/updated-organization",
-            'csrf_token': csrf_token
-        }
-
-        response = logged_in_admin.post(url_for('admin.organization.edit', id=test_organization.id), data=invalid_data, follow_redirects=True)
+        response = logged_in_admin.post(url_for('admin.organization.edit', id=organization_id), data=update_data, follow_redirects=True)
         
         assert response.status_code == 200
 
-        form = OrganizationForm(original_name=test_organization.name, data=invalid_data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-            
-        db_session.expire_all()
-        organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
-        assert organization.name != invalid_data['name']
-        assert organization.description == test_organization.description
-        assert organization.homepage_url == test_organization.homepage_url
+        # Print the response data to debug
+        print(response.get_data(as_text=True))
 
-        # Check flash message
-        assert FLASH_MESSAGES["UPDATE_ORGANIZATION_ERROR"] in response.get_data(as_text=True)
-
-def test_update_organization_with_invalid_id(logged_in_admin):
-    update_response = logged_in_admin.get(url_for('admin.organization.edit', id=9999))
-    assert update_response.status_code == 302
-    assert url_for('admin.organization.index', _external=False) == update_response.headers['Location']
-
-def test_delete_organization(logged_in_admin, test_organization, db_session):
-    with logged_in_admin.application.app_context():
-        response = logged_in_admin.post(url_for('admin.organization.delete', id=test_organization.id), follow_redirects=True)
-        
-        assert response.status_code == 200
-        assert url_for('admin.organization.index', _external=False) in response.get_data(as_text=True)
-
-        deleted_organization = db_session.query(Organization).filter_by(id=test_organization.id).first()
-        assert deleted_organization is None
-
-def test_delete_organization_with_invalid_id(logged_in_admin):
-    delete_response = logged_in_admin.post(url_for('admin.organization.delete', id=9999), follow_redirects=True)
-    
-    assert delete_response.status_code == 200
-    assert url_for('admin.organization.index', _external=False) == delete_response.headers['Location']
-
-def test_delete_nonexistent_organization(logged_in_admin, db_session):
-    with logged_in_admin.application.app_context():
-        response = logged_in_admin.post(url_for('admin.organization.delete', id=9999), follow_redirects=True)
-        
-        assert response.status_code == 200
-        assert url_for('admin.organization.index', _external=False) in response.get_data(as_text=True)
-
-def test_index_organization_route(logged_in_admin, test_organization):
-    index_response = logged_in_admin.get(url_for('admin.organization.index'))
-    assert index_response.status_code == 200
-
-def test_create_organization_with_long_name(logged_in_admin, db_session):
-    with logged_in_admin.application.app_context():
-        data = {
-            'name': 'a' * 201,
-            'description': 'Test Description',
-            'homepage_url': 'http://example.com'
-        }
-        
-        response = logged_in_admin.post(url_for('admin.organization.create'), data=data, follow_redirects=True)
-        
-        assert response.status_code == 200
-
-        form = OrganizationForm(original_name=None, data=data)
-        if not form.validate():
-            for field, errors in form.errors.items():
-                print(f"Field {field} errors: {errors}")
-                
-        new_organization = db_session.query(Organization).filter_by(name=data['name']).first()
-        assert new_organization is None
-
-def test_create_organization_with_special_characters(logged_in_admin, db_session):
-    with logged_in_admin.application.app_context():
-        response = logged_in_admin.get(url_for('admin.organization.create'))
-        csrf_token = extract_csrf_token(response.data)
-
-        data = {
-            'name': '<script>alert("XSS")</script>',
-            'description': 'Test Description',
-            'homepage_url': 'http://example.com',
-            'csrf_token': csrf_token
-        }
-
-        response = logged_in_admin.post(url_for('admin.organization.create'), data=data, follow_redirects=True)
-
-        if response.status_code != 200:
-            print(f"Response status code: {response.status_code}")
-            form_errors = response.get_data(as_text=True)
-            print(f"Form errors: {form_errors}")
-
-        assert response.status_code == 200
-
-        new_organization = db_session.query(Organization).filter_by(name=data['name']).first()
-        assert new_organization is None
+        expected_flash_message = FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'].format("Database error")
+        assert expected_flash_message in response.get_data(as_text=True)

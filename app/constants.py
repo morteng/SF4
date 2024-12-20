@@ -15,34 +15,34 @@ FLASH_MESSAGES = {
     # User Management
     "CREATE_USER_SUCCESS": "User created successfully.",
     "CREATE_USER_ERROR": "Failed to create user: ",
-    "CREATE_USER_INVALID_DATA": "Invalid data provided for user creation.",  # New specific message for invalid data
+    "CREATE_USER_INVALID_DATA": "Invalid data provided for user creation.",
     "UPDATE_USER_SUCCESS": "User updated successfully.",
     "UPDATE_USER_ERROR": "Failed to update user.",
     "DELETE_USER_SUCCESS": "User deleted successfully.",
     "DELETE_USER_ERROR": "Failed to delete user.",
-    "USER_NOT_FOUND": "User not found.",  # New specific message for user not found
+    "USER_NOT_FOUND": "User not found.",
 
     # Bot Management
     "CREATE_BOT_SUCCESS": "Bot created successfully.",
     "CREATE_BOT_ERROR": "Failed to create bot: ",
-    "CREATE_BOT_INVALID_DATA": "Invalid data provided for bot creation.",  # New specific message for invalid data
+    "CREATE_BOT_INVALID_DATA": "Invalid data provided for bot creation.",
     "UPDATE_BOT_SUCCESS": "Bot updated successfully.",
     "UPDATE_BOT_ERROR": "Failed to update bot.",
     "DELETE_BOT_SUCCESS": "Bot deleted successfully.",
     "DELETE_BOT_ERROR": "Failed to delete bot.",
-    "BOT_NOT_FOUND": "Bot not found.",  # New specific message for bot not found
+    "BOT_NOT_FOUND": "Bot not found.",
 
     # Organization Management
     "CREATE_ORGANIZATION_SUCCESS": "Organization created successfully.",
     "CREATE_ORGANIZATION_ERROR": "Failed to create organization: ",
-    "CREATE_ORGANIZATION_INVALID_DATA": "Invalid data provided for organization creation.",  # New specific message for invalid data
-    "CREATE_ORGANIZATION_DATABASE_ERROR": "Database error while creating organization: ",  # New specific message for database error during creation
+    "CREATE_ORGANIZATION_INVALID_DATA": "Invalid data provided for organization creation.",
+    "CREATE_ORGANIZATION_DATABASE_ERROR": "Database error while creating organization: {}",  # New specific message for database error during creation
     "UPDATE_ORGANIZATION_SUCCESS": "Organization updated successfully.",
     "UPDATE_ORGANIZATION_ERROR": "Failed to update organization.",
-    "UPDATE_ORGANIZATION_DATABASE_ERROR": "Database error while updating organization: ",  # New specific message for database error during update
+    "UPDATE_ORGANIZATION_DATABASE_ERROR": "Database error while updating organization: {}",  # New specific message for database error during update
     "DELETE_ORGANIZATION_SUCCESS": "Organization deleted successfully.",
-    "DELETE_ORGANIZATION_DATABASE_ERROR": "Database error while deleting organization: ",
-    "ORGANIZATION_NOT_FOUND": "Organization not found.",  # New specific message for organization not found
+    "DELETE_ORGANIZATION_DATABASE_ERROR": "Database error while deleting organization: {}",
+    "ORGANIZATION_NOT_FOUND": "Organization not found.",
 
     # Stipend Management
     "UPDATE_STIPEND_SUCCESS": "Stipend updated successfully.",
@@ -70,5 +70,4 @@ FLASH_MESSAGES = {
 
     # Others
     "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-    # Add more messages as needed
 }

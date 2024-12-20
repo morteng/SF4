@@ -1,23 +1,24 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization, update_organization
 from sqlalchemy.exc import SQLAlchemyError
-from app.extensions import db, db_session  # Import db_session here
-from app.utils import admin_required
+from app.extensions import db
 
 admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
 @login_required
-@admin_required
 def create():
-    form = OrganizationForm()  # Initialize the form for GET requests
+    form = OrganizationForm()
     if request.method == 'POST':
-        form = OrganizationForm(request.form)
         if form.validate_on_submit():
-            organization_data = {k: v for k, v in form.data.items() if k != 'submit'}
+            organization_data = {
+                'name': form.name.data,
+                'description': form.description.data,
+                'homepage_url': form.homepage_url.data
+            }
             try:
                 success, error_message = create_organization(organization_data)
                 if success:
@@ -27,19 +28,15 @@ def create():
                     flash(error_message, FLASH_CATEGORY_ERROR)
             except SQLAlchemyError as e:
                 db.session.rollback()
-                flash(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)  # Use specific database error message
+                flash(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'].format(str(e)), FLASH_CATEGORY_ERROR)  # Use specific database error message
         else:
-            # Use a specific flash message for invalid form data
             for field, errors in form.errors.items():
                 for error in errors:
                     flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
-            if not form.validate_on_submit():
-                flash(FLASH_MESSAGES["CREATE_ORGANIZATION_INVALID_DATA"], FLASH_CATEGORY_ERROR)  # Use specific invalid data message
     return render_template('admin/organizations/form.html', form=form)
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
-@admin_required
 def delete(id):
     organization = get_organization_by_id(id)
     if organization:
@@ -48,7 +45,7 @@ def delete(id):
             flash(FLASH_MESSAGES["DELETE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         except SQLAlchemyError as e:
             db.session.rollback()
-            flash(FLASH_MESSAGES['DELETE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)  # Use specific database error message
+            flash(FLASH_MESSAGES['DELETE_ORGANIZATION_DATABASE_ERROR'].format(str(e)), FLASH_CATEGORY_ERROR)  # Use specific database error message
             return redirect(url_for('admin.organization.index'))
     else:
         flash(FLASH_MESSAGES["ORGANIZATION_NOT_FOUND"], FLASH_CATEGORY_ERROR)
@@ -56,14 +53,12 @@ def delete(id):
 
 @admin_org_bp.route('/', methods=['GET'])
 @login_required
-@admin_required
 def index():
     organizations = get_all_organizations()
     return render_template('admin/organizations/index.html', organizations=organizations)
 
-@admin_org_bp.route('/<int:id>/edit', methods=['GET', 'POST'])  # Updated from .update to .edit
+@admin_org_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
-@admin_required
 def edit(id):
     organization = get_organization_by_id(id)
     if not organization:
@@ -72,7 +67,11 @@ def edit(id):
 
     form = OrganizationForm(original_name=organization.name, obj=organization)
     if request.method == 'POST' and form.validate_on_submit():
-        update_data = {k: v for k, v in form.data.items() if k != 'submit'}
+        update_data = {
+            'name': form.name.data,
+            'description': form.description.data,
+            'homepage_url': form.homepage_url.data
+        }
         try:
             success, error_message = update_organization(organization, update_data)
             if success:
@@ -81,7 +80,7 @@ def edit(id):
             else:
                 flash(error_message, FLASH_CATEGORY_ERROR)
         except SQLAlchemyError as e:
-            db_session.rollback()
-            flash(FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)  # Use specific database error message
+            db.session.rollback()
+            flash(FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'].format(str(e)), FLASH_CATEGORY_ERROR)  # Use specific database error message
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)
