@@ -1,4 +1,5 @@
 from flask import url_for
+import logging  # Import the logging module
 from app.models.stipend import Stipend
 from tests.conftest import logged_in_admin, db_session, stipend_data
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR  # Import the constants
