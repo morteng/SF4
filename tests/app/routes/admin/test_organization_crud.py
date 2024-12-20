@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from tests.conftest import logged_in_admin, db_session, test_organization, organization_data
 import re
 from sqlalchemy.exc import SQLAlchemyError
+from app.constants import FLASH_MESSAGES
 
 def extract_csrf_token(response_data):
     csrf_regex = r'<input[^>]+name="csrf_token"[^>]+value="([^"]+)"'
@@ -52,6 +53,10 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
         new_organization = db_session.query(Organization).filter_by(name=invalid_data['name']).first()
         assert new_organization is None
 
+        # Check flash message
+        response = logged_in_admin.get(url_for('admin.organization.create'))
+        assert FLASH_MESSAGES["CREATE_ORGANIZATION_ERROR"].encode() in response.data
+
 def test_create_organization_with_database_error(logged_in_admin, organization_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
         data = organization_data
@@ -92,6 +97,10 @@ def test_update_organization(logged_in_admin, test_organization, db_session):
         assert organization.description == updated_data['description']
         assert organization.homepage_url == updated_data['homepage_url']
 
+        # Check flash message
+        response = logged_in_admin.get(url_for('admin.organization.index'))
+        assert FLASH_MESSAGES["UPDATE_ORGANIZATION_SUCCESS"].encode() in response.data
+
 def test_update_organization_with_invalid_form_data(logged_in_admin, test_organization, db_session):
     with logged_in_admin.application.app_context():
         response = logged_in_admin.get(url_for('admin.organization.edit', id=test_organization.id))
@@ -118,6 +127,10 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, test_organi
         assert organization.name != invalid_data['name']
         assert organization.description == test_organization.description
         assert organization.homepage_url == test_organization.homepage_url
+
+        # Check flash message
+        response = logged_in_admin.get(url_for('admin.organization.edit', id=test_organization.id))
+        assert FLASH_MESSAGES["UPDATE_ORGANIZATION_ERROR"].encode() in response.data
 
 def test_update_organization_with_invalid_id(logged_in_admin):
     update_response = logged_in_admin.get(url_for('admin.organization.edit', id=9999))
