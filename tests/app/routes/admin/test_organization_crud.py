@@ -69,6 +69,7 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
         response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
 
         assert response.status_code == 200
+        # ensure we test for the constant in constants.py, not hardcoded string AI!
         assert b"Failed to create organization. Error: Database error" in response.data
 
         organizations = db_session.query(Organization).all()
