@@ -53,6 +53,8 @@ FLASH_MESSAGES = {
     "DELETE_BOT_ERROR": "Failed to delete bot.",
     "RUN_BOT_SUCCESS": "Bot ran successfully.",
     "RUN_BOT_ERROR": "Failed to run bot.",
+    "BOT_NOT_FOUND": "Bot not found.",  # New specific message for bot not found
+    "INVALID_STATUS_VALUE": "Invalid value for status. It must be true or false.",  # New specific message for invalid status
 
     # Authentication
     "LOGIN_SUCCESS": "Logged in successfully.",

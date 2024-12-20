@@ -18,7 +18,7 @@ def create():
     if form.validate_on_submit():
         try:
             new_bot = create_bot(form.data)
-            flash("Bot created successfully!", FLASH_CATEGORY_SUCCESS)
+            flash(FLASH_MESSAGES["CREATE_BOT_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.bot.index'))
         except Exception as e:
             db.session.rollback()  # Ensure the session is rolled back on error
@@ -43,7 +43,7 @@ def delete(id):
             db.session.rollback()
             flash(FLASH_MESSAGES["DELETE_BOT_ERROR"], FLASH_CATEGORY_ERROR)
     else:
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Use generic error if bot not found
+        flash(FLASH_MESSAGES["BOT_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific bot not found message
     return redirect(url_for('admin.bot.index'))
 
 @admin_bot_bp.route('/', methods=['GET'])
@@ -66,7 +66,7 @@ def run(id):
             db.session.rollback()
             flash(FLASH_MESSAGES["RUN_BOT_ERROR"], FLASH_CATEGORY_ERROR)
     else:
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Use generic error if bot not found
+        flash(FLASH_MESSAGES["BOT_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific bot not found message
     return redirect(url_for('admin.bot.index'))
 
 @admin_bot_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
@@ -75,7 +75,7 @@ def run(id):
 def edit(id):
     bot = get_bot_by_id(id)
     if not bot:
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)  # Use generic error if bot not found
+        flash(FLASH_MESSAGES["BOT_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific bot not found message
         return redirect(url_for('admin.bot.index'))
     
     form = BotForm(obj=bot)
