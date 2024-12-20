@@ -45,11 +45,10 @@ def delete(id):
             flash(FLASH_MESSAGES["DELETE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         except SQLAlchemyError as e:
             db.session.rollback()
-            # Ensure we use constants from constants.py when flashing messages, create new flash message in constants.py if not laready present. AI
-            flash(f"Failed to delete organization. Error: {str(e)}", FLASH_CATEGORY_ERROR)
+            flash(FLASH_MESSAGES["DELETE_ORGANIZATION_DATABASE_ERROR"], FLASH_CATEGORY_ERROR)
             return render_template('admin/organizations/form.html', form=OrganizationForm())
     else:
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+        flash(FLASH_MESSAGES["ORGANIZATION_NOT_FOUND"], FLASH_CATEGORY_ERROR)
     return redirect(url_for('admin.organization.index'))
 
 @admin_org_bp.route('/', methods=['GET'])
@@ -65,7 +64,7 @@ def index():
 def edit(id):
     organization = get_organization_by_id(id)
     if not organization:
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+        flash(FLASH_MESSAGES["ORGANIZATION_NOT_FOUND"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.organization.index'))
 
     form = OrganizationForm(original_name=organization.name, obj=organization)
@@ -77,11 +76,9 @@ def edit(id):
                 flash(FLASH_MESSAGES["UPDATE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
                 return redirect(url_for('admin.organization.index'))
             else:
-                # Ensure we use constants from constants.py when flashing messages, create new flash message in constants.py if not laready present. AI
                 flash(error_message, FLASH_CATEGORY_ERROR)
         except SQLAlchemyError as e:
-            db_session.rollback()  # Use db_session here
-            # Ensure we use constants from constants.py when flashing messages, create new flash message in constants.py if not laready present. AI!
-            flash(f"Failed to update organization. Error: {str(e)}", FLASH_CATEGORY_ERROR)
+            db_session.rollback()
+            flash(FLASH_MESSAGES["UPDATE_ORGANIZATION_DATABASE_ERROR"], FLASH_CATEGORY_ERROR)
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)

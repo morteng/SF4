@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required
-from app.utils import admin_required
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import (
@@ -68,8 +67,7 @@ def create():
 def edit(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
-        # Ensure we use constants from constants.py when flashing messages, create new flash message in constants.py if not laready present. AI
-        flash('Stipend not found.', FLASH_CATEGORY_ERROR)
+        flash(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
     
     form = StipendForm(obj=stipend, original_name=stipend.name)
@@ -90,8 +88,7 @@ def edit(id):
     if form.errors:
         for field, errors in form.errors.items():
             for error in errors:
-                # Ensure we use constants from constants.py when flashing messages, create new flash message in constants.py if not laready present. AI
-                flash(error, FLASH_CATEGORY_ERROR)
+                flash(FLASH_MESSAGES["UPDATE_STIPEND_FORM_ERROR"], FLASH_CATEGORY_ERROR)
     
     return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
 

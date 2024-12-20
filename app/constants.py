@@ -45,6 +45,13 @@ FLASH_MESSAGES = {
     "DELETE_ORGANIZATION_SUCCESS": "Organization deleted successfully.",
     "DELETE_ORGANIZATION_ERROR": "Failed to delete organization.",
 
+    # New specific messages for stipend and organization
+    "STIPEND_NOT_FOUND": "Stipend not found.",
+    "ORGANIZATION_NOT_FOUND": "Organization not found.",
+    "UPDATE_STIPEND_FORM_ERROR": "Error updating stipend form.",
+    "DELETE_ORGANIZATION_DATABASE_ERROR": "Failed to delete organization: Database error.",
+    "UPDATE_ORGANIZATION_DATABASE_ERROR": "Failed to update organization: Database error.",
+
     # Bot Management
     "CREATE_BOT_SUCCESS": "Bot created successfully.",
     "CREATE_BOT_ERROR": "Failed to create bot.",
