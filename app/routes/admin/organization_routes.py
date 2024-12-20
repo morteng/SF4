@@ -26,13 +26,12 @@ def create():
                     flash(error_message, FLASH_CATEGORY_ERROR)
             except SQLAlchemyError as e:
                 db.session.rollback()
-                # ensure we use flash correct message defied in constans, create it if missing AI
-                flash(f"Failed to create organization. Error: {str(e)}", FLASH_CATEGORY_ERROR)
+                flash(f"{FLASH_MESSAGES['CREATE_ORGANIZATION_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
         else:
             # Use a specific flash message for invalid form data
-            flash(FLASH_MESSAGES["CREATE_ORGANIZATION_INVALID_DATA"], FLASH_CATEGORY_ERROR)
-    else:
-        form = OrganizationForm()
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
     return render_template('admin/organizations/form.html', form=form)
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
@@ -46,8 +45,8 @@ def delete(id):
             flash(FLASH_MESSAGES["DELETE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         except SQLAlchemyError as e:
             db.session.rollback()
-            flash(FLASH_MESSAGES["DELETE_ORGANIZATION_DATABASE_ERROR"], FLASH_CATEGORY_ERROR)
-            return render_template('admin/organizations/form.html', form=OrganizationForm())
+            flash(f"{FLASH_MESSAGES['DELETE_ORGANIZATION_DATABASE_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
+            return redirect(url_for('admin.organization.index'))
     else:
         flash(FLASH_MESSAGES["ORGANIZATION_NOT_FOUND"], FLASH_CATEGORY_ERROR)
     return redirect(url_for('admin.organization.index'))
@@ -80,6 +79,6 @@ def edit(id):
                 flash(error_message, FLASH_CATEGORY_ERROR)
         except SQLAlchemyError as e:
             db_session.rollback()
-            flash(FLASH_MESSAGES["UPDATE_ORGANIZATION_DATABASE_ERROR"], FLASH_CATEGORY_ERROR)
+            flash(f"{FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)

@@ -18,13 +18,12 @@ def create():
             new_user = create_user(form.data)
             flash(FLASH_MESSAGES["CREATE_USER_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.user.index'))
-        except ValueError as e:
-            logging.error(f"Failed to create user: {e}")
-            flash(str(e), FLASH_CATEGORY_ERROR)
+        except Exception as e:
+            db.session.rollback()  # Ensure the session is rolled back on error
+            flash(f"{FLASH_MESSAGES['CREATE_USER_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
     else:
         for field, errors in form.errors.items():
             for error in errors:
-                # ensure we use flash correct message defied in constans, create it if missing AI!
                 flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
         flash(FLASH_MESSAGES["CREATE_USER_ERROR"], FLASH_CATEGORY_ERROR)  # Add this line to set a generic creation error message
     return render_template('admin/users/create.html', form=form)
@@ -35,7 +34,7 @@ def create():
 def edit(id):
     user = get_user_by_id(id)
     if not user:
-        flash('User not found.', FLASH_CATEGORY_ERROR)
+        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.user.index'))
     
     form = UserForm(
@@ -48,9 +47,10 @@ def edit(id):
             update_user(user, form.data)
             flash(FLASH_MESSAGES["UPDATE_USER_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.user.index'))
-        except ValueError as e:
+        except Exception as e:
+            db.session.rollback()
             logging.error(f"Failed to update user {id}: {e}")
-            flash(str(e), FLASH_CATEGORY_ERROR)
+            flash(f"{FLASH_MESSAGES['UPDATE_USER_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
     
     return render_template('admin/users/_edit_row.html', form=form, user=user)
 
@@ -66,9 +66,10 @@ def delete(id):
     try:
         delete_user(user)
         flash(FLASH_MESSAGES["DELETE_USER_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-    except ValueError as e:
+    except Exception as e:
+        db.session.rollback()
         logging.error(f"Failed to delete user {id}: {e}")
-        flash(str(e), FLASH_CATEGORY_ERROR)
+        flash(f"{FLASH_MESSAGES['DELETE_USER_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
     
     return redirect(url_for('admin.user.index'))
 

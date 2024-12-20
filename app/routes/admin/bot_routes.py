@@ -13,8 +13,6 @@ admin_bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
 @admin_required
 def create():
     form = BotForm()
-    print(form.errors)  # Temporary debug line
-    print(form.errors)  # Debug: print form errors to console
     if form.validate_on_submit():
         try:
             new_bot = create_bot(form.data)
@@ -22,13 +20,11 @@ def create():
             return redirect(url_for('admin.bot.index'))
         except Exception as e:
             db.session.rollback()  # Ensure the session is rolled back on error
-            # ensure we use flash correct message defied in constans, create it if missing AI
-            flash(f"{FLASH_MESSAGES['CREATE_BOT_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
+            flash(f"{FLASH_MESSAGES['CREATE_BOT_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
     else:
         for field, errors in form.errors.items():
             for error in errors:
-                flash(FLASH_MESSAGES["CREATE_BOT_INVALID_DATA"], FLASH_CATEGORY_ERROR)  # Use specific invalid data message
-
+                flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
     return render_template('admin/bots/create.html', form=form)
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])
@@ -42,7 +38,7 @@ def delete(id):
             flash(FLASH_MESSAGES["DELETE_BOT_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         except Exception as e:
             db.session.rollback()
-            flash(FLASH_MESSAGES["DELETE_BOT_ERROR"], FLASH_CATEGORY_ERROR)
+            flash(f"{FLASH_MESSAGES['DELETE_BOT_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
     else:
         flash(FLASH_MESSAGES["BOT_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific bot not found message
     return redirect(url_for('admin.bot.index'))
@@ -65,7 +61,7 @@ def run(id):
             flash(FLASH_MESSAGES["RUN_BOT_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         except Exception as e:
             db.session.rollback()
-            flash(FLASH_MESSAGES["RUN_BOT_ERROR"], FLASH_CATEGORY_ERROR)
+            flash(f"{FLASH_MESSAGES['RUN_BOT_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
     else:
         flash(FLASH_MESSAGES["BOT_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific bot not found message
     return redirect(url_for('admin.bot.index'))
@@ -86,11 +82,11 @@ def edit(id):
             flash(FLASH_MESSAGES["UPDATE_BOT_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         except Exception as e:
             db.session.rollback()
-            flash(FLASH_MESSAGES["UPDATE_BOT_ERROR"], FLASH_CATEGORY_ERROR)
+            flash(f"{FLASH_MESSAGES['UPDATE_BOT_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.bot.index'))
     else:
         for field, errors in form.errors.items():
             for error in errors:
-                flash(error, FLASH_CATEGORY_ERROR)
+                flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
 
     return render_template('admin/bots/_edit_row.html', form=form, bot=bot)

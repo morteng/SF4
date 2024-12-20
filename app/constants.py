@@ -14,7 +14,7 @@ FLASH_MESSAGES = {
 
     # User Management
     "CREATE_USER_SUCCESS": "User created successfully.",
-    "CREATE_USER_ERROR": "Failed to create user.",
+    "CREATE_USER_ERROR": "Failed to create user: ",
     "UPDATE_USER_SUCCESS": "User updated successfully.",
     "UPDATE_USER_ERROR": "Failed to update user.",
     "DELETE_USER_SUCCESS": "User deleted successfully.",
@@ -38,7 +38,7 @@ FLASH_MESSAGES = {
 
     # Organization Management
     "CREATE_ORGANIZATION_SUCCESS": "Organization created successfully.",
-    "CREATE_ORGANIZATION_ERROR": "Failed to create organization: Database error.",
+    "CREATE_ORGANIZATION_ERROR": "Failed to create organization: ",
     "CREATE_ORGANIZATION_INVALID_DATA": "Failed to create organization: Invalid data provided.",  # New specific message for invalid data
     "UPDATE_ORGANIZATION_SUCCESS": "Organization updated successfully.",
     "UPDATE_ORGANIZATION_ERROR": "Failed to update organization: Database error.",
@@ -54,7 +54,7 @@ FLASH_MESSAGES = {
 
     # Bot Management
     "CREATE_BOT_SUCCESS": "Bot created successfully.",
-    "CREATE_BOT_ERROR": "Failed to create bot.",
+    "CREATE_BOT_ERROR": "Failed to create bot: ",
     "CREATE_BOT_INVALID_DATA": "Invalid data provided for bot creation.",  # New specific message for invalid data
     "UPDATE_BOT_SUCCESS": "Bot updated successfully.",
     "UPDATE_BOT_ERROR": "Failed to update bot.",
