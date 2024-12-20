@@ -25,6 +25,8 @@ def create():
         for field, errors in form.errors.items():
             for error in errors:
                 flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
+        if not form.validate_on_submit():
+            flash(FLASH_MESSAGES["CREATE_BOT_INVALID_DATA"], FLASH_CATEGORY_ERROR)  # Use specific invalid data message
     return render_template('admin/bots/create.html', form=form)
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])

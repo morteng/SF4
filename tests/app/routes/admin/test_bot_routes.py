@@ -34,9 +34,6 @@ def test_create_bot_route(logged_in_admin, bot_data):
         'csrf_token': csrf_token
     }, follow_redirects=True)
 
-    print(response.data)  # Print response data for debugging
-    print(logged_in_admin.get(url_for('admin.bot.create')).data)  # Debug: print form errors to console
-
     assert response.status_code == 200
     bots = Bot.query.all()
     assert any(bot.name == bot_data['name'] and bot.description == bot_data['description'] for bot in bots)

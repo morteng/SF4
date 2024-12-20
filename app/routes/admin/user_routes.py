@@ -26,7 +26,8 @@ def create():
         for field, errors in form.errors.items():
             for error in errors:
                 flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
-        flash(FLASH_MESSAGES["CREATE_USER_ERROR"], FLASH_CATEGORY_ERROR)  # Add this line to set a generic creation error message
+        if not form.validate_on_submit():
+            flash(FLASH_MESSAGES["CREATE_USER_INVALID_DATA"], FLASH_CATEGORY_ERROR)  # Use specific invalid data message
     return render_template('admin/users/create.html', form=form)
 
 @admin_user_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
@@ -35,7 +36,7 @@ def create():
 def edit(id):
     user = get_user_by_id(id)
     if not user:
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+        flash(FLASH_MESSAGES["USER_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific user not found message
         return redirect(url_for('admin.user.index'))
     
     form = UserForm(
@@ -61,7 +62,7 @@ def edit(id):
 def delete(id):
     user = get_user_by_id(id)
     if not user:
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+        flash(FLASH_MESSAGES["USER_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific user not found message
         return redirect(url_for('admin.user.index'))
     
     try:
