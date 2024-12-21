@@ -50,13 +50,8 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
 
-        with logged_in_admin.session_transaction() as sess:
-            flashed_messages = sess.get('_flashes', [])
-        
-        assert any(
-            cat == FLASH_CATEGORY_ERROR and msg == FLASH_MESSAGES["INVALID_DATE_FORMAT"]
-            for cat, msg in flashed_messages
-        )
+        # Check if the flash message is present in the response data
+        assert b'Invalid date format. Please use one of the following: %Y-%m-%d %H:%M:%S.' in response.data, "Flash message 'Invalid date format. Please use one of the following: %Y-%m-%d %H:%M:%S.' not found in response."
 
 def test_update_stipend_with_database_error_htmx(logged_in_admin, test_stipend, stipend_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
