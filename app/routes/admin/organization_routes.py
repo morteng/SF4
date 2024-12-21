@@ -28,7 +28,7 @@ def create():
                     flash(error_message, FLASH_CATEGORY_ERROR)
             except SQLAlchemyError as e:
                 db.session.rollback()
-                flash(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)  # Use static message
+                flash(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'].format(str(e)), FLASH_CATEGORY_ERROR)  # Use specific database error message
         else:
             for field, errors in form.errors.items():
                 for error in errors:
