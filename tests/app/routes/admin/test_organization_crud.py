@@ -153,7 +153,16 @@ def test_delete_organization_with_database_error(logged_in_admin, db_session, mo
 
 def test_update_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
-        organization_id = 1
+        # Create an organization first
+        new_org = Organization(
+            name="Test Org",
+            description="Initial Description",
+            homepage_url="http://example.com"
+        )
+        db_session.add(new_org)
+        db_session.commit()
+        organization_id = new_org.id
+
         update_data = {
             'name': 'Updated Organization',
             'description': 'This is an updated organization.',
@@ -161,12 +170,16 @@ def test_update_organization_with_database_error(logged_in_admin, db_session, mo
         }
 
         # Monkeypatch the update_organization in the organization_routes module
-        def mock_delete(*args, **kwargs):
+        def mock_update(*args, **kwargs):
             raise SQLAlchemyError("Database error")
-        monkeypatch.setattr("app.routes.admin.organization_routes.update_organization", mock_delete)
+        monkeypatch.setattr("app.routes.admin.organization_routes.update_organization", mock_update)
 
+        # Attempt to update the organization
         # Remove follow_redirects=True so the flash stays in the session.
-        response = logged_in_admin.post(url_for('admin.organization.edit', id=organization_id), data=update_data)
+        response = logged_in_admin.post(
+            url_for('admin.organization.edit', id=organization_id),
+            data=update_data
+        )
 
         # Expect a redirect (302), not a 200.
         assert response.status_code == 302
