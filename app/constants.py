@@ -36,7 +36,7 @@ FLASH_MESSAGES = {
     "CREATE_ORGANIZATION_SUCCESS": "Organization created successfully.",
     "CREATE_ORGANIZATION_ERROR": "Failed to create organization: ",
     "CREATE_ORGANIZATION_INVALID_DATA": "Invalid data provided for organization creation.",
-    "CREATE_ORGANIZATION_DATABASE_ERROR": "Database error while creating organization.",
+    "CREATE_ORGANIZATION_DATABASE_ERROR": "Failed to create organization. Error: {}",  # Updated specific message for database error during creation
     "UPDATE_ORGANIZATION_SUCCESS": "Organization updated successfully.",
     "UPDATE_ORGANIZATION_ERROR": "Failed to update organization.",
     "UPDATE_ORGANIZATION_DATABASE_ERROR": "Database error while updating organization: {}",  # New specific message for database error during update
