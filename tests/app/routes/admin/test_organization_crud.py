@@ -101,7 +101,8 @@ def test_delete_organization_with_database_error(logged_in_admin, db_session, mo
         def mock_delete(*args, **kwargs):
             raise SQLAlchemyError("Database error")
 
-        monkeypatch.setattr(db_session, 'delete', mock_delete)
+        # Correctly monkeypatch the delete method in the service
+        monkeypatch.setattr("app.services.organization_service.db.session.delete", mock_delete)
 
         response = logged_in_admin.post(url_for('admin.organization.delete', id=new_org.id), follow_redirects=True)
 
