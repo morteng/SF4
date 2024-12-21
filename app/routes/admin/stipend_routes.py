@@ -87,7 +87,7 @@ def edit(id):
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Failed to update stipend: {e}")
-            flash(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+            flash(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)  # Ensure this is the correct message
             return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
     
     if form.errors:
