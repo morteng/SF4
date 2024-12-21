@@ -14,10 +14,9 @@ def delete_organization(organization):
     try:
         db.session.delete(organization)
         db.session.commit()
-    except SQLAlchemyError as e:
-        # Log the error and possibly handle it
-        print(str(e))
+    except SQLAlchemyError:
         db.session.rollback()
+        raise
 
 def create_organization(data):
     valid_keys = {'name', 'description', 'homepage_url'}  # Adjust based on Organization fields
@@ -44,6 +43,6 @@ def update_organization(organization, data):
         organization.homepage_url = data.get('homepage_url', organization.homepage_url)
         db.session.commit()
         return True, None  # Success
-    except SQLAlchemyError as e:
+    except SQLAlchemyError:
         db.session.rollback()
-        return False, str(e)  # Error message
+        raise
