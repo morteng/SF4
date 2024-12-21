@@ -14,6 +14,17 @@ def extract_csrf_token(response_data):
         return match.group(1)
     return None
 
+def extract_flash_messages(response_data):
+    # Regex to find all flash messages within <div class="flashes">...</div>
+    flash_regex = r'<div class="flashes.*?">(.*?)</div>'
+    flash_content = re.search(flash_regex, response_data, re.DOTALL)
+    if flash_content:
+        # Extract individual flash messages
+        message_regex = r'<div class=".*?">(.*?)</div>'
+        messages = re.findall(message_regex, flash_content.group(1), re.DOTALL)
+        return [re.sub(r'\s+', ' ', msg.strip()).strip() for msg in messages]
+    return []
+
 def test_create_organization(logged_in_admin, db_session, organization_data):
     with logged_in_admin.application.app_context():
         data = organization_data
@@ -86,19 +97,30 @@ def test_delete_organization_with_database_error(logged_in_admin, db_session, mo
         new_org = Organization(name="Org ID 1", description="Testing", homepage_url="http://example.org")
         db_session.add(new_org)
         db_session.commit()
+
         def mock_delete(*args, **kwargs):
             raise SQLAlchemyError("Database error")
+
         monkeypatch.setattr(db_session, 'delete', mock_delete)
+
         response = logged_in_admin.post(url_for('admin.organization.delete', id=new_org.id), follow_redirects=True)
+
         assert response.status_code == 200
+
         # Print the response data to debug
         response_data = response.get_data(as_text=True)
         print("Response Data:")
         print(response_data)
+
         expected_flash_message = FLASH_MESSAGES['DELETE_ORGANIZATION_DATABASE_ERROR']
         print(f"Expected Flash Message: {expected_flash_message}")
-        # Check if the flash message is in the response data
-        assert expected_flash_message.encode() in response.data, f"Flash message not found in response. Expected: {expected_flash_message}"
+
+        # Extract flash messages from the response data
+        flash_messages = extract_flash_messages(response_data)
+        print(f"Extracted Flash Messages: {flash_messages}")
+
+        # Check if the expected flash message is in the extracted flash messages
+        assert any(expected_flash_message == msg for msg in flash_messages), f"Flash message not found in response. Expected: {expected_flash_message}"
 
 def test_update_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
