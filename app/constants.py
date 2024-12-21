@@ -36,10 +36,10 @@ FLASH_MESSAGES = {
     "CREATE_ORGANIZATION_SUCCESS": "Organization created successfully.",
     "CREATE_ORGANIZATION_ERROR": "Failed to create organization: ",
     "CREATE_ORGANIZATION_INVALID_DATA": "Invalid data provided for organization creation.",
-    "CREATE_ORGANIZATION_DATABASE_ERROR": "Failed to create organization. Error: {}",  # Updated specific message for database error during creation
+    "CREATE_ORGANIZATION_DATABASE_ERROR": "Failed to create organization. Error: {}",  
     "UPDATE_ORGANIZATION_SUCCESS": "Organization updated successfully.",
     "UPDATE_ORGANIZATION_ERROR": "Failed to update organization.",
-    "UPDATE_ORGANIZATION_DATABASE_ERROR": "Database error while updating organization: {}",  # New specific message for database error during update
+    "UPDATE_ORGANIZATION_DATABASE_ERROR": "Database error while updating organization: {}",  
     "DELETE_ORGANIZATION_SUCCESS": "Organization deleted successfully.",
     "DELETE_ORGANIZATION_DATABASE_ERROR": "Database error while deleting organization: {}",
     "ORGANIZATION_NOT_FOUND": "Organization not found.",
@@ -47,7 +47,7 @@ FLASH_MESSAGES = {
     # Stipend Management
     "UPDATE_STIPEND_SUCCESS": "Stipend updated successfully.",
     "UPDATE_STIPEND_ERROR": "Failed to update stipend.",
-    "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS.",  # Specific message for invalid date format
+    "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS.",  
 
     # Tag Management
     "CREATE_TAG_SUCCESS": "Tag created successfully.",
