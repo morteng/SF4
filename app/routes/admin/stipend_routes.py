@@ -88,7 +88,10 @@ def edit(id):
             db.session.rollback()
             current_app.logger.error(f"Failed to update stipend: {e}")
             flash(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)  # Ensure this is the correct message
-            return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
+            if request.headers.get('HX-Request'):
+                return render_template('_flash_messages.html'), 200
+            else:
+                return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
     
     if form.errors:
         for field, errors in form.errors.items():
