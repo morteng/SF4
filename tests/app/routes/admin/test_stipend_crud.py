@@ -1,6 +1,8 @@
 import pytest
 from flask import url_for
 from app.constants import FLASH_CATEGORY_SUCCESS, FLASH_MESSAGES
+from app.models.stipend import Stipend  # Import the Stipend model
+import re  # Import the re module
 
 def extract_csrf_token(response_data):
     match = re.search(r'name="csrf_token".*?value="(.+?)"', response_data.decode('utf-8'))
