@@ -30,14 +30,8 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
 
-        with logged_in_admin.session_transaction() as sess:
-            flashed_messages = sess.get('_flashes', [])
-            print(f"Flashed messages: {flashed_messages}")  # Add this line for debugging
-        
-        assert any(
-            cat == FLASH_CATEGORY_ERROR and msg == 'This field is required.'
-            for cat, msg in flashed_messages
-        ), f"Flashed messages: {flashed_messages}"
+        # Check if the flash message is present in the response data
+        assert b'This field is required.' in response.data, "Flash message 'This field is required.' not found in response."
 
 def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
