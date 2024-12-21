@@ -35,7 +35,14 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
 def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         stipend_data['application_deadline'] = '2023-13-32 99:99:99'
-        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
+        response = logged_in_admin.post(
+            url_for('admin.stipend.create'),
+            data=stipend_data,
+            headers={
+                'HX-Request': 'true',
+                'HX-Target': '#stipend-form-container'
+            }
+        )
 
         assert response.status_code == 200
 
@@ -66,7 +73,11 @@ def test_update_stipend_with_database_error_htmx(logged_in_admin, test_stipend, 
         monkeypatch.setattr(db_session, 'commit', mock_commit)
         
         headers = {'HX-Request': 'true'}
-        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data, headers=headers)
+        response = logged_in_admin.post(
+            url_for('admin.stipend.edit', id=test_stipend.id),
+            data=updated_data,
+            headers=headers
+        )
         
         assert response.status_code == 200
         assert FLASH_MESSAGES["UPDATE_STIPEND_ERROR"].encode() in response.data
@@ -84,7 +95,11 @@ def test_update_stipend_with_invalid_form_data_htmx(logged_in_admin, test_stipen
             'open_for_applications': True
         }
         headers = {'HX-Request': 'true'}
-        response = logged_in_admin.post(url_for('admin.stipend.update', id=test_stipend.id), data=updated_data, headers=headers)
+        response = logged_in_admin.post(
+            url_for('admin.stipend.edit', id=test_stipend.id),
+            data=updated_data,
+            headers=headers
+        )
         
         assert response.status_code == 200
         # Use the constant from constants.py
