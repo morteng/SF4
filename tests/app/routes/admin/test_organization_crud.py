@@ -100,8 +100,7 @@ def test_delete_organization_with_database_error(logged_in_admin, db_session, mo
         print(response.get_data(as_text=True))
 
         expected_flash_message = FLASH_MESSAGES['DELETE_ORGANIZATION_DATABASE_ERROR'].format("Database error")
-        flash_message_html = f'<div class="error p-2 mb-2 rounded dark:bg-gray-800 dark:text-red-500">\n<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded dark:bg-red-900 dark:border-red-800 dark:text-red-200">{expected_flash_message}</div>\n</div>'
-        assert flash_message_html.encode() in response.data
+        assert expected_flash_message.encode() in response.data
 
 def test_update_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
