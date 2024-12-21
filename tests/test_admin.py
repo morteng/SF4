@@ -9,23 +9,59 @@ def extract_csrf_token(response_data):
         return match.group(1)
     return None
 
-def test_create_organization_with_special_characters(logged_in_admin, db_session):
+def test_create_stipend_with_valid_data(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
-        response = logged_in_admin.get(url_for('admin.organization.create'))
+        response = logged_in_admin.get(url_for('admin.stipend.create'))
         csrf_token = extract_csrf_token(response.data)
 
         data = {
-            'name': '<script>alert("XSS")</script>',  # Special characters
+            'name': 'Test Stipend',
+            'amount': 1000,
             'description': 'Test Description',
-            'homepage_url': 'http://example.com',
+            'start_date': '2023-10-01 00:00:00',
+            'end_date': '2023-10-31 23:59:59',
             'csrf_token': csrf_token
         }
 
-        response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=data)
 
-        if response.status_code != 200:
-            print(f"Response status code: {response.status_code}")
-            form_errors = response.get_data(as_text=True)
-            print(f"Form errors: {form_errors}")
+        assert response.status_code == 302  # Redirect to index page on success
 
-        assert response.status_code == 200
+        # Check flash messages
+        with logged_in_admin.session_transaction() as sess:
+            flashes = sess['_flashes']
+            assert len(flashes) == 1
+            (category, message) = flashes[0]
+            assert category == FLASH_CATEGORY_SUCCESS
+            assert message == FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"]
+
+def test_create_stipend_with_invalid_form_data(logged_in_admin, db_session):
+    with logged_in_admin.application.app_context():
+        response = logged_in_admin.get(url_for('admin.stipend.create'))
+        csrf_token = extract_csrf_token(response.data)
+
+        data = {
+            'name': '',  # Invalid: name is required
+            'amount': 1000,
+            'description': 'Test Description',
+            'start_date': '2023-10-01 00:00:00',
+            'end_date': '2023-10-31 23:59:59',
+            'csrf_token': csrf_token
+        }
+
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=data)
+
+        assert response.status_code == 200  # Render form again on error
+
+        # Check flash messages
+        with logged_in_admin.session_transaction() as sess:
+            flashes = sess['_flashes']
+            assert len(flashes) >= 1  # At least one flash message for the invalid field
+            (category, message) = flashes[0]
+            assert category == FLASH_CATEGORY_ERROR
+            assert "name: This field is required." in message  # Specific validation error message
+
+        # Check general form error message
+        with logged_in_admin.session_transaction() as sess:
+            flashes = sess['_flashes']
+            assert any("CREATE_STIPEND_INVALID_FORM" in msg for _, msg in flashes)

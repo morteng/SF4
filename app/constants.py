@@ -46,6 +46,8 @@ FLASH_MESSAGES = {
     "ORGANIZATION_NOT_FOUND": "Organization not found.",
 
     # Stipend Management
+    "CREATE_STIPEND_SUCCESS": "Stipend created successfully.",
+    "CREATE_STIPEND_ERROR": "Failed to create stipend.",
     "UPDATE_STIPEND_SUCCESS": "Stipend updated successfully.",
     "UPDATE_STIPEND_ERROR": "Failed to update stipend.",
     "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS.",  
