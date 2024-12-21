@@ -32,11 +32,12 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
 
         with logged_in_admin.session_transaction() as sess:
             flashed_messages = sess.get('_flashes', [])
+            print(f"Flashed messages: {flashed_messages}")  # Add this line for debugging
         
         assert any(
             cat == FLASH_CATEGORY_ERROR and msg == 'This field is required.'
             for cat, msg in flashed_messages
-        )
+        ), f"Flashed messages: {flashed_messages}"
 
 def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
