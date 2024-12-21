@@ -69,9 +69,11 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
             'csrf_token': csrf_token
         }
 
-        response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data, follow_redirects=True)
-        
-        assert response.status_code == 200
+        # 1) Remove follow_redirects=True so the flash stays in the session.
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data)
+
+        # 2) Expect a redirect (302), not a 200.
+        assert response.status_code == 302
 
         # Inspect session for flash messages
         with logged_in_admin.session_transaction() as sess:
@@ -83,6 +85,11 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
             for cat, msg in flashed_messages
         ), f"Flash message not found in session. Expected: {expected_flash_message}"
 
+        # 5) If you want to confirm the final page after redirect:
+        follow_response = logged_in_admin.get(response.location)
+        assert follow_response.status_code == 200
+        # (Optional) check final page content if desired.
+
 def test_create_organization_with_database_error(logged_in_admin, organization_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
         data = organization_data
@@ -92,9 +99,11 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
 
         monkeypatch.setattr(db_session, 'commit', mock_commit)
 
-        response = logged_in_admin.post(url_for('admin.organization.create'), data=data, follow_redirects=True)
-        
-        assert response.status_code == 200
+        # 1) Remove follow_redirects=True so the flash stays in the session.
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
+
+        # 2) Expect a redirect (302), not a 200.
+        assert response.status_code == 302
 
         # Inspect session for flash messages
         with logged_in_admin.session_transaction() as sess:
@@ -105,6 +114,11 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
             cat == 'error' and msg == expected_flash_message
             for cat, msg in flashed_messages
         ), f"Flash message not found in session. Expected: {expected_flash_message}"
+
+        # 5) If you want to confirm the final page after redirect:
+        follow_response = logged_in_admin.get(response.location)
+        assert follow_response.status_code == 200
+        # (Optional) check final page content if desired.
 
 def test_delete_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
@@ -119,12 +133,11 @@ def test_delete_organization_with_database_error(logged_in_admin, db_session, mo
         monkeypatch.setattr("app.services.organization_service.delete_organization", mock_delete)
 
         # Attempt delete
-        response = logged_in_admin.post(
-            url_for('admin.organization.delete', id=new_org.id), 
-            follow_redirects=True
-        )
+        # 1) Remove follow_redirects=True so the flash stays in the session.
+        response = logged_in_admin.post(url_for('admin.organization.delete', id=new_org.id))
 
-        assert response.status_code == 200
+        # 2) Expect a redirect (302), not a 200.
+        assert response.status_code == 302
 
         # Inspect session for flash messages
         with logged_in_admin.session_transaction() as sess:
@@ -136,6 +149,11 @@ def test_delete_organization_with_database_error(logged_in_admin, db_session, mo
             cat == 'error' and msg == expected_flash_message
             for cat, msg in flashed_messages
         ), f"Flash message not found in session. Expected: {expected_flash_message}"
+
+        # 5) If you want to confirm the final page after redirect:
+        follow_response = logged_in_admin.get(response.location)
+        assert follow_response.status_code == 200
+        # (Optional) check final page content if desired.
 
 def test_update_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
@@ -151,9 +169,11 @@ def test_update_organization_with_database_error(logged_in_admin, db_session, mo
 
         monkeypatch.setattr(db_session, 'commit', mock_commit)
 
-        response = logged_in_admin.post(url_for('admin.organization.edit', id=organization_id), data=update_data, follow_redirects=True)
-        
-        assert response.status_code == 200
+        # 1) Remove follow_redirects=True so the flash stays in the session.
+        response = logged_in_admin.post(url_for('admin.organization.edit', id=organization_id), data=update_data)
+
+        # 2) Expect a redirect (302), not a 200.
+        assert response.status_code == 302
 
         # Inspect session for flash messages
         with logged_in_admin.session_transaction() as sess:
@@ -164,3 +184,8 @@ def test_update_organization_with_database_error(logged_in_admin, db_session, mo
             cat == 'error' and msg == expected_flash_message
             for cat, msg in flashed_messages
         ), f"Flash message not found in session. Expected: {expected_flash_message}"
+
+        # 5) If you want to confirm the final page after redirect:
+        follow_response = logged_in_admin.get(response.location)
+        assert follow_response.status_code == 200
+        # (Optional) check final page content if desired.
