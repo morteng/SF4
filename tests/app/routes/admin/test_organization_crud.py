@@ -82,14 +82,17 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
 
 def test_delete_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
-        organization_id = 1
+        # Create and commit an organization with ID=1
+        new_org = Organization(name="Org ID 1", description="Testing", homepage_url="http://example.org")
+        db_session.add(new_org)
+        db_session.commit()
 
         def mock_delete(*args, **kwargs):
             raise SQLAlchemyError("Database error")
 
         monkeypatch.setattr(db_session, 'delete', mock_delete)
 
-        response = logged_in_admin.post(url_for('admin.organization.delete', id=organization_id), follow_redirects=True)
+        response = logged_in_admin.post(url_for('admin.organization.delete', id=new_org.id), follow_redirects=True)
         
         assert response.status_code == 200
 
