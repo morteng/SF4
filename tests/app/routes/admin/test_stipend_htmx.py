@@ -29,11 +29,11 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
 
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
-        # Use the constant from constants.py
+        # Use the constant from constants.py for the specific validation error message
         flash_message = render_template_string(
             '<div class="alert alert-{{ category }}">{{ message }}</div>',
             category=FLASH_CATEGORY_ERROR,
-            message=FLASH_MESSAGES["GENERIC_ERROR"]
+            message='This field is required.'
         ).strip().encode()
         assert flash_message in response.data
 
@@ -121,6 +121,6 @@ def test_update_stipend_with_invalid_form_data_htmx(logged_in_admin, test_stipen
         flash_message = render_template_string(
             '<div class="alert alert-{{ category }}">{{ message }}</div>',
             category=FLASH_CATEGORY_ERROR,
-            message=FLASH_MESSAGES["GENERIC_ERROR"]
+            message='This field is required.'
         ).strip().encode()
         assert flash_message in response.data

@@ -55,6 +55,7 @@ def create():
     for field, errors in form.errors.items():
         for error in errors:
             logging.error(f"Flashing error: {error}")
+            flash(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
     
     if request.headers.get('HX-Request'):
         return render_template('_flash_messages.html'), 200
