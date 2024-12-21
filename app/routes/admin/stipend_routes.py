@@ -90,7 +90,7 @@ def edit(id):
     if form.errors:
         for field, errors in form.errors.items():
             for error in errors:
-                flash(FLASH_MESSAGES["UPDATE_STIPEND_FORM_ERROR"], FLASH_CATEGORY_ERROR)
+                flash(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
     
     return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
 
