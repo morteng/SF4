@@ -1,3 +1,4 @@
+#remove unnecessary comments AI!
 import pytest
 from flask import url_for
 from app.models.organization import Organization
@@ -13,17 +14,6 @@ def extract_csrf_token(response_data):
     if match:
         return match.group(1)
     return None
-
-def extract_flash_messages(response_data):
-    # Regex to find all flash messages within <div class="flashes">...</div>
-    flash_regex = r'<div class="flashes.*?">(.*?)</div>'
-    flash_content = re.search(flash_regex, response_data, re.DOTALL)
-    if flash_content:
-        # Extract individual flash messages
-        message_regex = r'<div class=".*?">(.*?)</div>'
-        messages = re.findall(message_regex, flash_content.group(1), re.DOTALL)
-        return [re.sub(r'\s+', ' ', msg.strip()).strip() for msg in messages]
-    return []
 
 def test_create_organization(logged_in_admin, db_session, organization_data):
     with logged_in_admin.application.app_context():
