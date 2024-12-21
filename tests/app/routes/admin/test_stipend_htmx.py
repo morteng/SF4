@@ -2,7 +2,7 @@ from flask import url_for, render_template_string
 import logging  # Import the logging module
 from app.models.stipend import Stipend
 from tests.conftest import logged_in_admin, db_session, stipend_data
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR  # Import the constants
+from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR, FLASH_CATEGORY_SUCCESS  # Import the constants
 
 def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
@@ -29,13 +29,14 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
 
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
-        # Use the constant from constants.py for the specific validation error message
-        flash_message = render_template_string(
-            '<div class="alert alert-{{ category }}">{{ message }}</div>',
-            category=FLASH_CATEGORY_ERROR,
-            message='This field is required.'
-        ).strip().encode()
-        assert flash_message in response.data
+
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])
+        
+        assert any(
+            cat == FLASH_CATEGORY_ERROR and msg == 'This field is required.'
+            for cat, msg in flashed_messages
+        )
 
 def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
@@ -54,15 +55,13 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
 
-        # Check for the specific validation error message
-        logging.info(f"Response data: {response.data}")  # Add this line for debugging
-        # Use the constant from constants.py
-        flash_message = render_template_string(
-            '<div class="alert alert-{{ category }}">{{ message }}</div>',
-            category=FLASH_CATEGORY_ERROR,
-            message=FLASH_MESSAGES["INVALID_DATE_FORMAT"]
-        ).strip().encode()
-        assert flash_message in response.data
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])
+        
+        assert any(
+            cat == FLASH_CATEGORY_ERROR and msg == FLASH_MESSAGES["INVALID_DATE_FORMAT"]
+            for cat, msg in flashed_messages
+        )
 
 def test_update_stipend_with_database_error_htmx(logged_in_admin, test_stipend, stipend_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
@@ -90,12 +89,14 @@ def test_update_stipend_with_database_error_htmx(logged_in_admin, test_stipend, 
         )
         
         assert response.status_code == 200
-        flash_message = render_template_string(
-            '<div class="alert alert-{{ category }}">{{ message }}</div>',
-            category=FLASH_CATEGORY_ERROR,
-            message=FLASH_MESSAGES["UPDATE_STIPEND_ERROR"]
-        ).strip().encode()
-        assert flash_message in response.data
+
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])
+        
+        assert any(
+            cat == FLASH_CATEGORY_ERROR and msg == FLASH_MESSAGES["UPDATE_STIPEND_ERROR"]
+            for cat, msg in flashed_messages
+        )
 
 def test_update_stipend_with_invalid_form_data_htmx(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
@@ -117,10 +118,11 @@ def test_update_stipend_with_invalid_form_data_htmx(logged_in_admin, test_stipen
         )
         
         assert response.status_code == 200
-        # Use the constant from constants.py
-        flash_message = render_template_string(
-            '<div class="alert alert-{{ category }}">{{ message }}</div>',
-            category=FLASH_CATEGORY_ERROR,
-            message='This field is required.'
-        ).strip().encode()
-        assert flash_message in response.data
+
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])
+        
+        assert any(
+            cat == FLASH_CATEGORY_ERROR and msg == 'This field is required.'
+            for cat, msg in flashed_messages
+        )
