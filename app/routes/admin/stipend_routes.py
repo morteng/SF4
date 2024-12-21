@@ -55,7 +55,10 @@ def create():
     for field, errors in form.errors.items():
         for error in errors:
             logging.error(f"Flashing error: {error}")
-            flash(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
+            if "date format" in error.lower():
+                flash(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
+            else:
+                flash(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
     
     if request.headers.get('HX-Request'):
         return render_template('_flash_messages.html'), 200
@@ -90,7 +93,11 @@ def edit(id):
     if form.errors:
         for field, errors in form.errors.items():
             for error in errors:
-                flash(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
+                logging.error(f"Flashing error: {error}")
+                if "date format" in error.lower():
+                    flash(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
+                else:
+                    flash(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
     
     return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
 
