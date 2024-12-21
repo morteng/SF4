@@ -86,21 +86,19 @@ def test_delete_organization_with_database_error(logged_in_admin, db_session, mo
         new_org = Organization(name="Org ID 1", description="Testing", homepage_url="http://example.org")
         db_session.add(new_org)
         db_session.commit()
-
         def mock_delete(*args, **kwargs):
             raise SQLAlchemyError("Database error")
-
         monkeypatch.setattr(db_session, 'delete', mock_delete)
-
         response = logged_in_admin.post(url_for('admin.organization.delete', id=new_org.id), follow_redirects=True)
-
         assert response.status_code == 200
-
         # Print the response data to debug
-        print(response.get_data(as_text=True))
-
+        response_data = response.get_data(as_text=True)
+        print("Response Data:")
+        print(response_data)
         expected_flash_message = FLASH_MESSAGES['DELETE_ORGANIZATION_DATABASE_ERROR']
-        assert expected_flash_message.encode() in response.data
+        print(f"Expected Flash Message: {expected_flash_message}")
+        # Check if the flash message is in the response data
+        assert expected_flash_message.encode() in response.data, f"Flash message not found in response. Expected: {expected_flash_message}"
 
 def test_update_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
