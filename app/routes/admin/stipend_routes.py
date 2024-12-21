@@ -32,7 +32,7 @@ def create():
             if not result:
                 flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
                 if request.headers.get('HX-Request'):
-                    return render_template('admin/stipends/_stipend_form.html', form=form), 200
+                    return render_template('_flash_messages.html'), 200
                 else:
                     return render_template('admin/stipends/form.html', form=form), 200
             
@@ -48,7 +48,7 @@ def create():
             logging.error(f"Failed to create stipend: {e}")
             flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
             if request.headers.get('HX-Request'):
-                return render_template('admin/stipends/_stipend_form.html', form=form), 200
+                return render_template('_flash_messages.html'), 200
             else:
                 return render_template('admin/stipends/form.html', form=form), 200
     
@@ -57,7 +57,7 @@ def create():
             logging.error(f"Flashing error: {error}")
     
     if request.headers.get('HX-Request'):
-        return render_template('admin/stipends/_stipend_form.html', form=form), 200
+        return render_template('_flash_messages.html'), 200
     else:
         return render_template('admin/stipends/form.html', form=form), 200
 
