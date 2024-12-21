@@ -7,8 +7,6 @@ from app.models.tag import Tag
 from app.models.user import User
 from app.models.bot import Bot
 
-from app.constants import FLASH_MESSAGES
-
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
     summary = TextAreaField('Summary', validators=[Optional()])
@@ -26,7 +24,11 @@ class StipendForm(FlaskForm):
 
     def validate_application_deadline(self, field):
         if field.raw_data and field.raw_data[0] and field.data is None:
-            raise ValidationError(FLASH_MESSAGES["INVALID_DATE_FORMAT"])
+            raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
+
+    def validate_name(self, name):
+        if not name.data:
+            raise ValidationError('This field is required.')  # Ensure this matches the expected message in the test
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
