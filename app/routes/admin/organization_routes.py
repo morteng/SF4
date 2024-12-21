@@ -28,7 +28,7 @@ def create():
                     flash(error_message, FLASH_CATEGORY_ERROR)
             except SQLAlchemyError as e:
                 db.session.rollback()
-                flash(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'].format(str(e)), FLASH_CATEGORY_ERROR)  # Use specific database error message
+                flash(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)  # Directly use the constant
         else:
             for field, errors in form.errors.items():
                 for error in errors:
@@ -45,7 +45,7 @@ def delete(id):
             flash(FLASH_MESSAGES["DELETE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         except SQLAlchemyError as e:
             db.session.rollback()
-            flash(FLASH_MESSAGES['DELETE_ORGANIZATION_DATABASE_ERROR'].format(str(e)), FLASH_CATEGORY_ERROR)  # Use specific database error message
+            flash(FLASH_MESSAGES['DELETE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)  # Directly use the constant
             return redirect(url_for('admin.organization.index'))
     else:
         flash(FLASH_MESSAGES["ORGANIZATION_NOT_FOUND"], FLASH_CATEGORY_ERROR)
@@ -81,6 +81,6 @@ def edit(id):
                 flash(error_message, FLASH_CATEGORY_ERROR)
         except SQLAlchemyError as e:
             db.session.rollback()
-            flash(FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'].format(str(e)), FLASH_CATEGORY_ERROR)  # Use specific database error message
+            flash(FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)  # Directly use the constant
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)
