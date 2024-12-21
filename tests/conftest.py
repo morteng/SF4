@@ -143,12 +143,11 @@ def stipend_data():
 def test_stipend(db_session, stipend_data, app):
     """Provide a test stipend."""
     with app.app_context():
-        stipend_data['application_deadline'] = datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')  # Convert to datetime here
         stipend = Stipend(**stipend_data)
         db_session.add(stipend)
         db_session.commit()
-    yield stipend
-    with app.app_context():
+        yield stipend
+        # Ensure the session is still active when cleaning up
         if db_session.query(Stipend).filter_by(id=stipend.id).first():
             db_session.delete(stipend)
             db_session.commit()
