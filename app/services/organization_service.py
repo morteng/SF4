@@ -27,11 +27,9 @@ def create_organization(data):
     try:
         db.session.commit()
         return True, None
-    except SQLAlchemyError as e:
-        # Log the error and possibly handle it
-        print(str(e))
+    except SQLAlchemyError:
         db.session.rollback()
-        return False, f"Failed to create organization. Error: {str(e)}"
+        raise
 
 def get_organization_by_id(organization_id):
     return db.session.get(Organization, organization_id)
