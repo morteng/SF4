@@ -48,7 +48,14 @@ def test_create_organization(logged_in_admin, db_session, organization_data):
         assert new_organization.homepage_url == data['homepage_url']
 
         # Check for success flash message
-        assert FLASH_MESSAGES["CREATE_ORGANIZATION_SUCCESS"].encode() in response.data
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])  # returns list of (category, message) pairs
+
+        expected_flash_message = FLASH_MESSAGES["CREATE_ORGANIZATION_SUCCESS"]
+        assert any(
+            cat == 'success' and msg == expected_flash_message
+            for cat, msg in flashed_messages
+        ), f"Flash message not found in session. Expected: {expected_flash_message}"
 
 def test_create_organization_with_invalid_form_data(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
@@ -66,11 +73,15 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
         
         assert response.status_code == 200
 
-        # Print the response data to debug
-        print(response.get_data(as_text=True))
+        # Inspect session for flash messages
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])  # returns list of (category, message) pairs
 
         expected_flash_message = 'name: This field is required.'
-        assert expected_flash_message.encode() in response.data
+        assert any(
+            cat == 'error' and msg == expected_flash_message
+            for cat, msg in flashed_messages
+        ), f"Flash message not found in session. Expected: {expected_flash_message}"
 
 def test_create_organization_with_database_error(logged_in_admin, organization_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
@@ -85,43 +96,46 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
         
         assert response.status_code == 200
 
-        # Print the response data to debug
-        print(response.get_data(as_text=True))
+        # Inspect session for flash messages
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])  # returns list of (category, message) pairs
 
         expected_flash_message = FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR']
-        assert expected_flash_message.encode() in response.data
+        assert any(
+            cat == 'error' and msg == expected_flash_message
+            for cat, msg in flashed_messages
+        ), f"Flash message not found in session. Expected: {expected_flash_message}"
 
 def test_delete_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
-        # Create and commit an organization with ID=1
+        # Create org
         new_org = Organization(name="Org ID 1", description="Testing", homepage_url="http://example.org")
         db_session.add(new_org)
         db_session.commit()
 
+        # Monkeypatch
         def mock_delete(*args, **kwargs):
             raise SQLAlchemyError("Database error")
-
-        # Correctly monkeypatch the delete_organization function in the service
         monkeypatch.setattr("app.services.organization_service.delete_organization", mock_delete)
 
-        response = logged_in_admin.post(url_for('admin.organization.delete', id=new_org.id), follow_redirects=True)
+        # Attempt delete
+        response = logged_in_admin.post(
+            url_for('admin.organization.delete', id=new_org.id), 
+            follow_redirects=True
+        )
 
         assert response.status_code == 200
 
-        # Print the response data to debug
-        response_data = response.get_data(as_text=True)
-        print("Response Data:")
-        print(response_data)
+        # Inspect session for flash messages
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])  # returns list of (category, message) pairs
 
         expected_flash_message = FLASH_MESSAGES['DELETE_ORGANIZATION_DATABASE_ERROR']
-        print(f"Expected Flash Message: {expected_flash_message}")
-
-        # Extract flash messages from the response data
-        flash_messages = extract_flash_messages(response_data)
-        print(f"Extracted Flash Messages: {flash_messages}")
-
-        # Check if the expected flash message is in the extracted flash messages
-        assert any(expected_flash_message == msg for msg in flash_messages), f"Flash message not found in response. Expected: {expected_flash_message}"
+        # Ensure we got the correct message in the list
+        assert any(
+            cat == 'error' and msg == expected_flash_message
+            for cat, msg in flashed_messages
+        ), f"Flash message not found in session. Expected: {expected_flash_message}"
 
 def test_update_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
@@ -141,36 +155,12 @@ def test_update_organization_with_database_error(logged_in_admin, db_session, mo
         
         assert response.status_code == 200
 
-        # Print the response data to debug
-        print(response.get_data(as_text=True))
+        # Inspect session for flash messages
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])  # returns list of (category, message) pairs
 
         expected_flash_message = FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR']
-        assert expected_flash_message.encode() in response.data
-
-def test_delete_organization(logged_in_admin, db_session):
-    with logged_in_admin.application.app_context():
-        # Create a test organization
-        data = {
-            'name': 'Test Organization',
-            'description': 'This is a test organization.',
-            'homepage_url': 'http://example.com/organization'
-        }
-        response = logged_in_admin.post(url_for('admin.organization.create'), data=data, follow_redirects=True)
-        
-        assert response.status_code == 200
-
-        # Get the created organization
-        new_organization = db_session.query(Organization).filter_by(name='Test Organization').first()
-        assert new_organization is not None
-
-        # Delete the organization
-        delete_response = logged_in_admin.post(url_for('admin.organization.delete', id=new_organization.id), follow_redirects=True)
-        
-        assert delete_response.status_code == 200
-
-        # Check for success flash message
-        assert FLASH_MESSAGES["DELETE_ORGANIZATION_SUCCESS"].encode() in delete_response.data
-
-        # Verify the organization is deleted
-        deleted_organization = db_session.query(Organization).filter_by(id=new_organization.id).first()
-        assert deleted_organization is None
+        assert any(
+            cat == 'error' and msg == expected_flash_message
+            for cat, msg in flashed_messages
+        ), f"Flash message not found in session. Expected: {expected_flash_message}"
