@@ -125,10 +125,10 @@ def test_delete_organization_with_database_error(logged_in_admin, db_session, mo
         db_session.add(new_org)
         db_session.commit()
 
-        # Monkeypatch
+        # Monkeypatch the delete_organization in the organization_routes module
         def mock_delete(*args, **kwargs):
             raise SQLAlchemyError("Database error")
-        monkeypatch.setattr("app.services.organization_service.delete_organization", mock_delete)
+        monkeypatch.setattr("app.routes.admin.organization_routes.delete_organization", mock_delete)
 
         # Attempt delete
         # Remove follow_redirects=True so the flash stays in the session.
@@ -160,10 +160,10 @@ def test_update_organization_with_database_error(logged_in_admin, db_session, mo
             'homepage_url': 'http://example.com/updated-organization'
         }
 
-        def mock_commit(*args, **kwargs):
+        # Monkeypatch the update_organization in the organization_routes module
+        def mock_delete(*args, **kwargs):
             raise SQLAlchemyError("Database error")
-
-        monkeypatch.setattr(db_session, 'commit', mock_commit)
+        monkeypatch.setattr("app.routes.admin.organization_routes.update_organization", mock_delete)
 
         # Remove follow_redirects=True so the flash stays in the session.
         response = logged_in_admin.post(url_for('admin.organization.edit', id=organization_id), data=update_data)
