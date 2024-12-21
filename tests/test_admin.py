@@ -1,5 +1,6 @@
 import pytest
 from flask import url_for
+from app.constants import FLASH_CATEGORY_SUCCESS, FLASH_MESSAGES
 
 def extract_csrf_token(response_data):
     import re
