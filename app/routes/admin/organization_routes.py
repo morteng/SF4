@@ -33,6 +33,7 @@ def create():
             for field, errors in form.errors.items():
                 for error in errors:
                     flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
+            flash(FLASH_MESSAGES["CREATE_ORGANIZATION_INVALID_FORM"], FLASH_CATEGORY_ERROR)
             return redirect(url_for('admin.organization.create'))  # Redirect back to the create page with errors
 
     return render_template('admin/organizations/form.html', form=form)
