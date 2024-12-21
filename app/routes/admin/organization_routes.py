@@ -28,7 +28,8 @@ def create():
                     flash(error_message, FLASH_CATEGORY_ERROR)
             except SQLAlchemyError as e:
                 db.session.rollback()
-                flash(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)  # Directly use the constant
+                flash(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
+                return redirect(url_for('admin.organization.create'))  # Redirect back to the create page with errors
         else:
             for field, errors in form.errors.items():
                 for error in errors:
