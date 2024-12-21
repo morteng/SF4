@@ -71,23 +71,31 @@ def edit(id):
         return redirect(url_for('admin.organization.index'))
 
     form = OrganizationForm(original_name=organization.name, obj=organization)
-    if request.method == 'POST' and form.validate_on_submit():
-        update_data = {
-            'name': form.name.data,
-            'description': form.description.data,
-            'homepage_url': form.homepage_url.data
-        }
-        try:
-            success, error_message = update_organization(organization, update_data)
-            if success:
-                flash(FLASH_MESSAGES["UPDATE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-                return redirect(url_for('admin.organization.index'))
-            else:
-                flash(error_message, FLASH_CATEGORY_ERROR)
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            update_data = {
+                'name': form.name.data,
+                'description': form.description.data,
+                'homepage_url': form.homepage_url.data
+            }
+            try:
+                success, error_message = update_organization(organization, update_data)
+                if success:
+                    flash(FLASH_MESSAGES["UPDATE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                    return redirect(url_for('admin.organization.index'))
+                else:
+                    flash(error_message, FLASH_CATEGORY_ERROR)
+                    return redirect(url_for('admin.organization.edit', id=id))  # Redirect back to the edit page with errors
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                flash(FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)  # Directly use the constant
                 return redirect(url_for('admin.organization.edit', id=id))  # Redirect back to the edit page with errors
-        except SQLAlchemyError as e:
-            db.session.rollback()
-            flash(FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)  # Directly use the constant
+        else:
+            # Flash form validation errors
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash(f"{field}: {error}", FLASH_CATEGORY_ERROR)
+            flash(FLASH_MESSAGES["UPDATE_ORGANIZATION_INVALID_FORM"], FLASH_CATEGORY_ERROR)
             return redirect(url_for('admin.organization.edit', id=id))  # Redirect back to the edit page with errors
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)
