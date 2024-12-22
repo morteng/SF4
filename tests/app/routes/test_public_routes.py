@@ -34,6 +34,51 @@ def test_login_route(client, test_user):
     with client.session_transaction() as session:
         assert '_user_id' in session
 
+def test_login_route_invalid_credentials(client, test_user):
+    login_response = client.get(url_for('public.login'))
+    assert login_response.status_code == 200
+
+    csrf_token = extract_csrf_token(login_response.data)
+    response = client.post(url_for('public.login'), data={
+        'username': test_user.username,
+        'password': 'wrongpassword',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+
+    assert response.status_code == 200
+    with client.session_transaction() as session:
+        assert '_user_id' not in session
+
+def test_register_route_duplicate_username(client, test_user):
+    register_response = client.get(url_for('public.register'))
+    assert register_response.status_code == 200
+
+    csrf_token = extract_csrf_token(register_response.data)
+    response = client.post(url_for('public.register'), data={
+        'username': test_user.username,
+        'email': 'newuser@example.com',
+        'password': 'password123',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+
+    assert response.status_code == 200
+    assert b'Username already exists.' in response.data
+
+def test_register_route_duplicate_email(client, test_user):
+    register_response = client.get(url_for('public.register'))
+    assert register_response.status_code == 200
+
+    csrf_token = extract_csrf_token(register_response.data)
+    response = client.post(url_for('public.register'), data={
+        'username': 'newuser',
+        'email': test_user.email,
+        'password': 'password123',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+
+    assert response.status_code == 200
+    assert b'Email already exists.' in response.data
+
 def test_logout_route(logged_in_client):
     logout_response = logged_in_client.get(url_for('public.logout'))
     assert logout_response.status_code == 302
