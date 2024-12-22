@@ -3,6 +3,7 @@ from flask import url_for
 from app.models.user import User
 from tests.conftest import extract_csrf_token, logged_in_admin
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from werkzeug.security import generate_password_hash
 
 @pytest.fixture(scope='function')
 def user_data():
