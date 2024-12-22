@@ -66,7 +66,7 @@ def test_create_user_route_with_invalid_data(logged_in_admin, user_data):
     assert FLASH_MESSAGES["CREATE_USER_INVALID_DATA"].encode() in response.data
 
 def test_update_user_route(logged_in_admin, test_user, db_session):
-    update_response = logged_in_admin.get(url_for('admin.user.edit', id=test_user.id))
+    update_response = logged_in_admin.get(url_for('admin.user.edit', id=test_user.id))  # Change here
     assert update_response.status_code == 200
 
     csrf_token = extract_csrf_token(update_response.data)
@@ -76,7 +76,7 @@ def test_update_user_route(logged_in_admin, test_user, db_session):
         'password': test_user.password_hash,  # Assuming password hash is not changed in this test
         'csrf_token': csrf_token
     }
-    response = logged_in_admin.post(url_for('admin.user.edit', id=test_user.id), data=updated_data, follow_redirects=True)
+    response = logged_in_admin.post(url_for('admin.user.edit', id=test_user.id), data=updated_data, follow_redirects=True)  # Change here
 
     assert response.status_code == 200
     updated_user = db_session.get(User, test_user.id)
@@ -85,7 +85,7 @@ def test_update_user_route(logged_in_admin, test_user, db_session):
     assert FLASH_MESSAGES["UPDATE_USER_SUCCESS"].encode() in response.data
 
 def test_update_user_route_with_invalid_id(logged_in_admin):
-    update_response = logged_in_admin.get(url_for('admin.user.edit', id=9999))
+    update_response = logged_in_admin.get(url_for('admin.user.edit', id=9999))  # Change here
     assert update_response.status_code == 302
     assert url_for('admin.user.index', _external=False) == update_response.headers['Location']
 

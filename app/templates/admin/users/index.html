@@ -24,7 +24,7 @@
                 <td class="p-3">{{ user.email }}</td>
                 <td class="p-3 flex space-x-2">
                     <button 
-                        hx-get="{{ url_for('admin.user.update', id=user.id) }}"
+                        hx-get="{{ url_for('admin.user.edit', id=user.id) }}"  <!-- Change here -->
                         hx-target="body"
                         hx-swap="afterbegin"
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
