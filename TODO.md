@@ -16,3 +16,8 @@ Refactor the code to use a centralized flash messaging system and ensure all tes
 - [ ] Update all routes in `app/routes/admin/user_routes.py` to use the new utility function for flash messaging.
 - [ ] Ensure that flash messages are only included in `base.html`.
 - [ ] Update all tests that use flash messages to ensure they work with the new centralized flash messaging system.
+  - [ ] Update tests in `tests/test_bot_routes.py`
+  - [ ] Update tests in `tests/test_organization_routes.py`
+  - [ ] Update tests in `tests/test_stipend_routes.py`
+  - [ ] Update tests in `tests/test_tag_routes.py`
+  - [ ] Update tests in `tests/test_user_routes.py`
