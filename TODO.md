@@ -1,3 +1,9 @@
-- Change the greeting to be more casual
-- Update the tests in `tests/app/routes/admin/test_user_routes.py` to ensure they work with the new centralized flash messaging system. [DONE]
-- Review and finalize changes.
+# TODO List
+
+## General
+- [ ] Change the greeting to be more casual.
+- [ ] Resolve import file mismatch error for tests/app/routes/test_user_routes.py.
+
+## Specific Tasks
+- [ ] Rename or move `tests/app/routes/admin/test_user_routes.py` to avoid naming conflicts with `tests/app/routes/test_user_routes.py`.
+- [ ] Ensure all test files have unique basenames to prevent import mismatches.
