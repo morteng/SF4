@@ -40,7 +40,7 @@ def edit_profile():
         existing_user = User.query.filter_by(username=new_username).first()
         if existing_user and existing_user.id != current_user.id:
             flash(FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"], FLASH_CATEGORY_ERROR)
-            return render_template('user/edit_profile.html', form=form)
+            return redirect(url_for('user.edit_profile'))
         
         current_user.username = new_username
         current_user.email = form.email.data
