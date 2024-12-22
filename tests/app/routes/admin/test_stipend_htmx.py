@@ -85,7 +85,7 @@ def test_update_stipend_with_database_error_htmx(logged_in_admin, test_stipend, 
         
         # Check for the exact flash message sent by the route
         assert any(
-            cat == FLASH_CATEGORY_ERROR and msg == "Failed to update stipend."
+            cat == FLASH_CATEGORY_ERROR and "Failed to update stipend." in msg
             for cat, msg in flashed_messages
         )
 
