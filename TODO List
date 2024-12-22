@@ -1,7 +1,0 @@
-Change the greeting to be more casual
-
-Ensure flash messages are only included in base.html
-
-Update tests to reflect changes
-
-Deploy changes to production
