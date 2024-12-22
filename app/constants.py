@@ -51,6 +51,7 @@ FLASH_MESSAGES = {
     "UPDATE_STIPEND_SUCCESS": "Stipend updated successfully.",
     "UPDATE_STIPEND_ERROR": "Failed to update stipend.",  # Ensure this matches the test
     "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS.",  
+    "STIPEND_NOT_FOUND": "Stipend not found.",
 
     # Tag Management
     "CREATE_TAG_SUCCESS": "Tag created successfully.",
