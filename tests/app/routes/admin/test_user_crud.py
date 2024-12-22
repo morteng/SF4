@@ -40,6 +40,10 @@ def test_create_user_route_with_invalid_data(logged_in_admin, user_data):
     assert FLASH_MESSAGES["CREATE_USER_INVALID_DATA"].encode() in response.data
 
 def test_update_user_route(logged_in_admin, test_user, db_session):
+    # Merge the user back into the session to ensure it's not detached
+    with logged_in_admin.application.app_context():
+        test_user = db_session.merge(test_user)
+
     update_response = logged_in_admin.get(url_for('admin.user.update', id=test_user.id))
     assert update_response.status_code == 200
 

@@ -122,6 +122,8 @@ def test_user(db_session, user_data, app):
         db_session.commit()
     yield user
     with app.app_context():
+        # Merge the user back into the session to ensure it's not detached
+        user = db_session.merge(user)
         if db_session.query(User).filter_by(id=user.id).first():
             db_session.delete(user)
             db_session.commit()
