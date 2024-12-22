@@ -57,7 +57,7 @@ def delete(id):
             flash_message(FLASH_MESSAGES["DELETE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
     else:
         flash_message(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
-    return redirect(url_for('tag.index'))
+    return redirect(url_for('admin.tag.index'))  # Change 'tag.index' to 'admin.tag.index'
 
 @admin_tag_bp.route('/', methods=['GET'])
 @login_required
