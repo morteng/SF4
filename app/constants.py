@@ -69,6 +69,7 @@ FLASH_MESSAGES = {
     "LOGOUT_SUCCESS": "Logged out successfully.",
     "REGISTER_SUCCESS": "Registered successfully.",
     "REGISTER_ERROR": "Registration failed. Please try again.",
+    "LOGIN_INVALID_CREDENTIALS": "Invalid username or password.",
 
     # Profile Management
     "UPDATE_PROFILE_SUCCESS": "Profile updated successfully.",

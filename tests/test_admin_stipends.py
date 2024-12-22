@@ -83,11 +83,11 @@ class AdminStipendTestCase(unittest.TestCase):
         db.session.commit()
 
         # Navigate to the stipend update page
-        response = self.client.get(url_for('admin.stipend.update', id=stipend.id))
+        response = self.client.get(url_for('admin.stipend.edit', id=stipend.id))
         self.assertEqual(response.status_code, 200)
 
         # Update the stipend without including 'open_for_applications' to simulate unchecking
-        response = self.client.post(url_for('admin.stipend.update', id=stipend.id), data={
+        response = self.client.post(url_for('admin.stipend.edit', id=stipend.id), data={
             'name': 'Updated Test Stipend',
             'summary': 'Updated summary.',
             'description': 'Updated description.',
