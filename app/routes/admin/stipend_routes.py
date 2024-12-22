@@ -112,7 +112,7 @@ def edit(id):
 def delete(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
-        flash_message(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+        flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
     
     try:
