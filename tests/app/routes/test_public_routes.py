@@ -61,8 +61,7 @@ def test_register_route_duplicate_username(client, test_user):
         'csrf_token': csrf_token
     }, follow_redirects=True)
 
-    assert response.status_code == 200
-    assert b'Username already exists.' in response.data
+    assert response.status_code == 200 and b'Username already exists.' in response.data
 
 def test_register_route_duplicate_email(client, test_user):
     register_response = client.get(url_for('public.register'))
