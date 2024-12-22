@@ -73,8 +73,8 @@ FLASH_MESSAGES = {
 
     # Profile Management
     "UPDATE_PROFILE_SUCCESS": "Profile updated successfully.",
-    "UPDATE_PROFILE_ERROR": "Failed to update profile.",
     "PROFILE_UPDATE_SUCCESS": "Profile updated successfully.",
+    "UPDATE_PROFILE_ERROR": "Failed to update profile.",
 
     # Others
     "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
