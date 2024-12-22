@@ -3,6 +3,7 @@ from wtforms import StringField, SubmitField, PasswordField
 from flask import session
 from wtforms.validators import DataRequired, Email, ValidationError, EqualTo
 from app.models.user import User
+from app.constants import FLASH_MESSAGES  # Import FLASH_MESSAGES from constants
 
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
