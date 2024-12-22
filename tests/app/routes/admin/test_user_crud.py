@@ -36,7 +36,8 @@ def test_create_user_route_with_invalid_data(logged_in_admin, user_data):
     assert response.status_code == 200
     users = User.query.all()
     assert not any(user.username == '' for user in users)
-    assert FLASH_MESSAGES["CREATE_USER_ERROR"].encode() in response.data
+    # Check for the specific flash message related to invalid data
+    assert FLASH_MESSAGES["CREATE_USER_INVALID_DATA"].encode() in response.data
 
 def test_update_user_route(logged_in_admin, test_user, db_session):
     update_response = logged_in_admin.get(url_for('admin.user.update', id=test_user.id))
