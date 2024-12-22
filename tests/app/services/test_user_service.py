@@ -19,35 +19,36 @@ def test_create_user(db_session, user_data):
 
 def test_create_user_duplicate_email(db_session, admin_user, user_data, app):
     with app.app_context():
-        # Re-query the admin_user to ensure it is attached to the session
-        admin_user = db_session.query(User).filter_by(id=admin_user.id).first()
-
         # Create a user first to cause a duplicate email error
-        existing_user = User(
-            username='existing_user',
-            email=user_data['email'],
-            password_hash=generate_password_hash(user_data['password']),
-            is_admin=False
-        )
-        db_session.add(existing_user)
-        db_session.commit()
-
-        # Attempt to create another user with the same email
-        duplicate_user_data = {
-            'username': 'duplicate_user',
-            'email': user_data['email'],
-            'password': 'password123'
-        }
-
-        with pytest.raises(IntegrityError):
-            new_user = User(
-                username=duplicate_user_data['username'],
-                email=duplicate_user_data['email'],
-                password_hash=generate_password_hash(duplicate_user_data['password']),
+        db_session.begin_nested()
+        try:
+            existing_user = User(
+                username='existing_user',
+                email=user_data['email'],
+                password_hash=generate_password_hash(user_data['password']),
                 is_admin=False
             )
-            db_session.add(new_user)
-            db_session.commit()
+            db_session.add(existing_user)
+            db_session.flush()  # Use flush to ensure the user is added without committing the transaction
+
+            # Attempt to create another user with the same email
+            duplicate_user_data = {
+                'username': 'duplicate_user',
+                'email': user_data['email'],
+                'password': 'password123'
+            }
+
+            with pytest.raises(IntegrityError):
+                new_user = User(
+                    username=duplicate_user_data['username'],
+                    email=duplicate_user_data['email'],
+                    password_hash=generate_password_hash(duplicate_user_data['password']),
+                    is_admin=False
+                )
+                db_session.add(new_user)
+                db_session.flush()  # Use flush to ensure the user is added without committing the transaction
+        finally:
+            db_session.rollback()  # Rollback the nested session to clean up
 
 
 def test_get_user_by_id(db_session, admin_user):
