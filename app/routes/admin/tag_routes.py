@@ -36,6 +36,11 @@ def create():
             db.session.rollback()
             flash_message(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
             return render_template('admin/tags/create.html', form=form)
+    else:
+        # Add a specific flash message for invalid form data
+        if request.method == 'POST':
+            flash_message(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+
     return render_template('admin/tags/create.html', form=form)
 
 @admin_tag_bp.route('/<int:id>/delete', methods=['POST'])
