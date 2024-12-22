@@ -58,8 +58,12 @@ def test_update_tag_with_invalid_form_data(logged_in_admin, test_tag, tag_data, 
         updated_data = {
             'name': '',
             'category': test_tag.category,
+            'csrf_token': extract_csrf_token(logged_in_admin.get(url_for('admin.tag.edit', id=test_tag.id)).data)
         }
-        response = logged_in_admin.post(url_for('admin.tag.edit', id=test_tag.id), data=updated_data)
+        response = logged_in_admin.post(
+            url_for('admin.tag.edit', id=test_tag.id),
+            data=updated_data
+        )
         
         assert response.status_code == 200
         assert FLASH_MESSAGES["GENERIC_ERROR"].encode() in response.data

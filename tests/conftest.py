@@ -216,6 +216,8 @@ def test_tag(db_session, app):
         db_session.commit()
     yield tag
     with app.app_context():
+        # Merge the tag back into the session to ensure it's not detached
+        tag = db_session.merge(tag)
         if db_session.query(Tag).filter_by(id=tag.id).first():
             db_session.delete(tag)
             db_session.commit()
