@@ -10,6 +10,7 @@ from app.services.tag_service import (
     update_tag
 )
 from app.extensions import db  # Ensure this matches how db is defined or imported
+from sqlalchemy.exc import IntegrityError  # Import IntegrityError
 from app.utils import admin_required, flash_message
 
 admin_tag_bp = Blueprint('tag', __name__, url_prefix='/tags')
