@@ -5,6 +5,7 @@ from datetime import datetime
 from flask_login import login_user
 from app.extensions import db  # Ensure consistent session usage
 from app.forms.admin_forms import StipendForm
+from app.models.user import User
 
 @pytest.fixture
 def test_data():
@@ -18,6 +19,13 @@ def test_data():
         'application_deadline': datetime.strptime('2023-12-31 23:59:59', '%Y-%m-%d %H:%M:%S'),
         'open_for_applications': True
     }
+
+@pytest.fixture
+def admin_user(db_session):
+    user = User(username='adminuser', email='admin@example.com', password_hash='hashedpassword')
+    db_session.add(user)
+    db_session.commit()
+    return user
 
 def test_create_stipend(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
