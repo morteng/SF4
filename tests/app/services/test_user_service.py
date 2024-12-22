@@ -64,6 +64,8 @@ def test_get_user_by_id(db_session, admin_user):
 def test_get_all_users(db_session, admin_user):
     users = get_all_users()
     assert len(users) >= 1
+    for user in users:
+        print(f"User in database: {user}")
     assert admin_user in users
 
 
