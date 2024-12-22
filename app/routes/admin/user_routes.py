@@ -21,7 +21,7 @@ def create():
             return redirect(url_for('admin.user.index'))
         except Exception as e:
             db.session.rollback()  # Ensure the session is rolled back on error
-            flash_message(f"{FLASH_MESSAGES['CREATE_USER_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
+            flash_message(f"{FLASH_MESSAGES['CREATE_USER_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
     else:
         for field, errors in form.errors.items():
             for error in errors:
@@ -52,7 +52,7 @@ def edit(id):
         except Exception as e:
             db.session.rollback()
             logging.error(f"Failed to update user {id}: {e}")
-            flash_message(f"{FLASH_MESSAGES['UPDATE_USER_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
+            flash_message(f"{FLASH_MESSAGES['UPDATE_USER_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
     
     return render_template('admin/users/_edit_row.html', form=form, user=user)
 
@@ -71,7 +71,7 @@ def delete(id):
     except Exception as e:
         db.session.rollback()
         logging.error(f"Failed to delete user {id}: {e}")
-        flash_message(f"{FLASH_MESSAGES['DELETE_USER_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
+        flash_message(f"{FLASH_MESSAGES['DELETE_USER_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
     
     return redirect(url_for('admin.user.index'))
 
