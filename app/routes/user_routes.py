@@ -34,8 +34,17 @@ def profile():
 def edit_profile():
     form = ProfileForm(original_username=current_user.username, original_email=current_user.email)
     if form.validate_on_submit():
-        current_user.username = form.username.data
+        new_username = form.username.data
+        
+        # Check for duplicate username
+        existing_user = User.query.filter_by(username=new_username).first()
+        if existing_user and existing_user.id != current_user.id:
+            flash(FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"], FLASH_CATEGORY_ERROR)
+            return render_template('user/edit_profile.html', form=form)
+        
+        current_user.username = new_username
         current_user.email = form.email.data
+        
         # Update the user directly in the database
         db.session.commit()
         flash(FLASH_MESSAGES["PROFILE_UPDATE_SUCCESS"])
