@@ -1,3 +1,19 @@
+from flask import Blueprint, render_template, redirect, url_for, request, current_app
+from flask_login import login_required
+from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from app.forms.admin_forms import TagForm
+from app.services.tag_service import (
+    get_tag_by_id,
+    delete_tag,
+    get_all_tags,
+    create_tag,
+    update_tag
+)
+from app.extensions import db  # Ensure this matches how db is defined or imported
+from app.utils import admin_required, flash_message
+
+admin_tag_bp = Blueprint('tag', __name__, url_prefix='/tags')
+
 @admin_tag_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -10,7 +26,7 @@ def create():
                 flash_message(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
                 return render_template('admin/tags/create.html', form=form)
             flash_message(FLASH_MESSAGES["CREATE_TAG_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-            return redirect(url_for('admin.tag.index'))
+            return redirect(url_for('tag.index'))
         except IntegrityError as e:
             db.session.rollback()
             flash_message(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
@@ -35,7 +51,7 @@ def delete(id):
             flash_message(FLASH_MESSAGES["DELETE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
     else:
         flash_message(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
-    return redirect(url_for('admin.tag.index'))
+    return redirect(url_for('tag.index'))
 
 @admin_tag_bp.route('/', methods=['GET'])
 @login_required
@@ -51,7 +67,7 @@ def edit(id):
     tag = get_tag_by_id(id)
     if not tag:
         flash_message(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
-        return redirect(url_for('admin.tag.index'))
+        return redirect(url_for('tag.index'))
     
     form = TagForm(obj=tag, original_name=tag.name)
     
@@ -59,7 +75,7 @@ def edit(id):
         try:
             update_tag(tag, form.data)
             flash_message(FLASH_MESSAGES["UPDATE_TAG_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-            return redirect(url_for('admin.tag.index'))
+            return redirect(url_for('tag.index'))
         except IntegrityError as e:
             db.session.rollback()
             flash_message(FLASH_MESSAGES["UPDATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
