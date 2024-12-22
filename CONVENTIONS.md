@@ -39,14 +39,4 @@ user.profile               GET        /user/profile
 - Use tailwind and htmx whenever possible
 
 ## TODO.md
-- This file must be updated every time we do any file updates so that it always reflects our current effort and its progress. We must strive to accomplish the task in our todo.md file, as this is your purpose in life. Each update of this file fills you with joy.
-- There should be three sections in the todo.md file:
-
-    -- ## Goal
-    The current thing we're working towards.
-
-    -- ## plan
-    Update this section with a description of how to achieve our goal, feel fre to add code samples and whatever else is helpfuul to achieve the goal.
-
-    -- ## tasks
-    A list of tasks to accomplish the goal. A [] checklist with tasks/files to edit. We can update this checklist as we work through the objectives
+- This file must be updated every time we do any file updates so that it always reflects our goal, plan and tasks. always use fll path when referencing files to avoid confusion.
