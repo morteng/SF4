@@ -16,12 +16,16 @@ def test_create_user(db_session, user_data):
 
 
 def test_create_user_duplicate_email(db_session, admin_user, user_data, app):
-    duplicate_user_data = {
-        'username': 'duplicate_user',
-        'email': admin_user.email,
-        'password': 'password123'
-    }
-    with app.test_request_context():
+    with app.app_context():
+        # Re-query the admin_user to ensure it is attached to the session
+        admin_user = db_session.query(User).filter_by(id=admin_user.id).one()
+
+        duplicate_user_data = {
+            'username': 'duplicate_user',
+            'email': admin_user.email,
+            'password': 'password123'
+        }
+
         with pytest.raises(ValueError):
             create_user(duplicate_user_data)
 
