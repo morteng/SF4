@@ -20,7 +20,7 @@ def test_create_user(db_session, user_data):
 def test_create_user_duplicate_email(db_session, admin_user, user_data, app):
     with app.app_context():
         # Re-query the admin_user to ensure it is attached to the session
-        admin_user = db_session.query(User).filter_by(id=admin_user.id).one()
+        admin_user = db_session.get(User, admin_user.id)
 
         # Create a user first to cause a duplicate email error
         existing_user = User(
