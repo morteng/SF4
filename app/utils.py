@@ -1,6 +1,6 @@
 # app/utils.py
 import os
-from flask import abort, redirect, url_for
+from flask import abort, redirect, url_for, flash
 from flask_login import current_user, login_required as _login_required  # Import the original login_required
 from .models.user import User
 from werkzeug.security import generate_password_hash
@@ -33,3 +33,6 @@ def init_admin_user():
         )
         db.session.add(admin_user)
         db.session.commit()
+
+def flash_message(message, category):
+    flash(message, category)

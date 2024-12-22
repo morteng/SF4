@@ -1,8 +1,14 @@
 ## Goal
-The current thing we're working towards.
+Refactor the code to use a centralized flash messaging system.
 
 ## plan
-Update this section with a description of how to achieve our goal, feel fre to add code samples and whatever else is helpfuul to achieve the goal.
+1. Create a new utility function in `app/utils.py` to handle flash messages.
+2. Update all routes in `app/routes/admin/bot_routes.py`, `app/routes/admin/organization_routes.py`, `app/routes/admin/stipend_routes.py`, `app/routes/admin/tag_routes.py`, and `app/routes/admin/user_routes.py` to use the new utility function for flash messaging.
 
 ## tasks
-A list of tasks to accomplish the goal. A [] checklist with tasks/files to edit. We can update this checklist as we work through the objectives.
+- [x] Create a new utility function in `app/utils.py` to handle flash messages.
+- [x] Update all routes in `app/routes/admin/bot_routes.py` to use the new utility function for flash messaging.
+- [x] Update all routes in `app/routes/admin/organization_routes.py` to use the new utility function for flash messaging.
+- [x] Update all routes in `app/routes/admin/stipend_routes.py` to use the new utility function for flash messaging.
+- [x] Update all routes in `app/routes/admin/tag_routes.py` to use the new utility function for flash messaging.
+- [x] Update all routes in `app/routes/admin/user_routes.py` to use the new utility function for flash messaging.

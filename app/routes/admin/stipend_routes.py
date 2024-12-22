@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
+from flask import Blueprint, render_template, redirect, url_for, request, current_app
 from flask_login import login_required
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import StipendForm
@@ -12,7 +12,7 @@ from app.services.stipend_service import (
 from app.models.stipend import Stipend
 from app.extensions import db, db_session  # Ensure this matches how db_session is defined or imported
 import logging
-from app.utils import admin_required  # Import the admin_required decorator
+from app.utils import admin_required, flash_message
 
 admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 
@@ -30,13 +30,13 @@ def create():
             result = create_stipend(stipend)
             
             if not result:
-                flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+                flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
                 if request.headers.get('HX-Request'):
                     return render_template('_flash_messages.html'), 200
                 else:
                     return render_template('admin/stipends/form.html', form=form), 200
             
-            flash(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             
             if request.headers.get('HX-Request'):
                 stipends = get_all_stipends()
@@ -46,7 +46,7 @@ def create():
         except Exception as e:
             db.session.rollback()
             logging.error(f"Failed to create stipend: {e}")
-            flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+            flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
             if request.headers.get('HX-Request'):
                 return render_template('_flash_messages.html'), 200
             else:
@@ -56,9 +56,9 @@ def create():
         for error in errors:
             logging.error(f"Flashing error: {error}")
             if "date format" in error.lower():
-                flash(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
+                flash_message(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
             else:
-                flash(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
+                flash_message(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
     
     if request.headers.get('HX-Request'):
         return render_template('_flash_messages.html'), 200
@@ -72,7 +72,7 @@ def create():
 def edit(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
-        flash(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
+        flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
     
     form = StipendForm(obj=stipend, original_name=stipend.name)
@@ -82,13 +82,13 @@ def edit(id):
             form.populate_obj(stipend)
             
             db.session.commit()
-            flash(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.stipend.index'))
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Failed to update stipend: {e}")
             # Change the flash message to only include the generic error message
-            flash(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)  # Ensure this matches the expected message in the test
+            flash_message(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)  # Ensure this matches the expected message in the test
             if request.headers.get('HX-Request'):
                 return render_template('_flash_messages.html'), 200
             else:
@@ -99,9 +99,9 @@ def edit(id):
             for error in errors:
                 logging.error(f"Flashing error: {error}")
                 if "date format" in error.lower():
-                    flash(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
+                    flash_message(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
                 else:
-                    flash(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
+                    flash_message(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
     
     return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
 
@@ -112,19 +112,19 @@ def edit(id):
 def delete(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
-        flash(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+        flash_message(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
     
     try:
         delete_stipend(stipend.id)
         db.session.commit()
         
-        flash(FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+        flash_message(FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         return redirect(url_for('admin.stipend.index'))
     except Exception as e:
         db.session.rollback()
         logging.error(f"Failed to delete stipend: {e}")
-        flash(FLASH_MESSAGES["DELETE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+        flash_message(FLASH_MESSAGES["DELETE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
 
 
