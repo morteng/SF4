@@ -43,4 +43,6 @@ def edit_profile():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
+    else:
+        flash(FLASH_MESSAGES["PROFILE_UPDATE_INVALID_DATA"], FLASH_CATEGORY_ERROR)
     return render_template('user/edit_profile.html', form=form)
