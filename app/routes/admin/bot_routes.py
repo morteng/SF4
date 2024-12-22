@@ -73,7 +73,7 @@ def run(id):
 def edit(id):
     bot = get_bot_by_id(id)
     if not bot:
-        flash_message(FLASH_MESSAGES["BOT_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific bot not found message
+        flash_message("Bot not found", "error")  # Use specific bot not found message
         return redirect(url_for('admin.bot.index'))
     
     form = BotForm(obj=bot)
