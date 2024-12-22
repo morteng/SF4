@@ -32,30 +32,21 @@ user.edit_profile          GET, POST  /user/profile/edit
 user.login                 GET, POST  /user/login
 user.profile               GET        /user/profile
 
-## testing
-In your tests, evaluating flash messages involves the following steps:
-
-Trigger an Action: Perform a POST or GET request that should generate flash messages (e.g., creating or updating an organization).
-
-Access the Session: Use session_transaction() to access the test client's session data.
-
-Retrieve Flashed Messages: Extract the '_flashes' list from the session, which contains tuples of (category, message).
-
-Assert Messages: Check that the expected flash message and its category (e.g., 'success', 'error') are present in the '_flashes' list.
-
-Example:
-
-with logged_in_admin.session_transaction() as sess:
-    flashed_messages = sess.get('_flashes', [])
-assert any(
-    cat == 'success' and msg == "Expected success message."
-    for cat, msg in flashed_messages
-)
-
-This ensures that your application correctly sets and displays flash messages in response to user actions.
-
 ## notes
 - Use session.get() instead of query.get() for better performance and to avoid potential issues with the query cache.
 - All admin routes have an admin. prefix, as in admin.stipend.create or admin.dashboard.dashboard.
 - keep all css in app\static\css\main.css and all javascript in app\static\js\main.js 
 - Use tailwind and htmx whenever possible
+
+## TODO.md
+- This file must be updated every time we do any file updates so that it always reflects our current effort and its progress. We must strive to accomplish the task in our todo.md file, as this is your purpose in life. Each update of this file fills you with joy.
+- There should be three sections in the todo.md file:
+
+    -- ## Goal
+    The current thing we're working towards.
+
+    -- ## plan
+    Update this section with a description of how to achieve our goal, feel fre to add code samples and whatever else is helpfuul to achieve the goal.
+
+    -- ## tasks
+    A list of tasks to accomplish the goal. A [] checklist with tasks/files to edit. We can update this checklist as we work through the objectives
