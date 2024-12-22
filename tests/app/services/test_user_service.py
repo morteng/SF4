@@ -62,6 +62,10 @@ def test_get_user_by_id(db_session, admin_user):
 
 
 def test_get_all_users(db_session, admin_user):
+    # Ensure the user is added to the session and committed
+    db_session.add(admin_user)
+    db_session.commit()
+
     users = get_all_users()
     assert len(users) >= 1
     for user in users:
