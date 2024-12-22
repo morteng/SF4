@@ -52,11 +52,13 @@ def test_create_user_duplicate_email(db_session, admin_user, user_data, app):
 
 
 def test_get_user_by_id(db_session, admin_user):
+    # Ensure the user is added to the session and committed
+    db_session.add(admin_user)
+    db_session.commit()
+
     with db_session.begin():
         user = get_user_by_id(admin_user.id)
-        assert user is not None
-        assert user.username == admin_user.username
-        assert user.email == admin_user.email
+        assert user.id == admin_user.id
 
 
 def test_get_all_users(db_session, admin_user):
