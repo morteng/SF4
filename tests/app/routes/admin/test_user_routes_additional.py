@@ -56,8 +56,9 @@ def test_login_route_with_invalid_credentials(logged_in_client, user_data):
 
     assert response.status_code == 200
     # Assert the flash message using constants and category
-    flashed_messages = logged_in_client.get_flashed_messages(with_categories=True)
-    assert (FLASH_CATEGORY_ERROR, FLASH_MESSAGES["LOGIN_INVALID_CREDENTIALS"]) in flashed_messages
+    with logged_in_client.session_transaction() as session:
+        flashed_messages = session['_flashes']
+        assert (FLASH_CATEGORY_ERROR, FLASH_MESSAGES["LOGIN_INVALID_CREDENTIALS"]) in flashed_messages
 
     # Ensure that the user is not redirected to a protected page
     assert b'Login' in response.data  # Check if login form is still present
