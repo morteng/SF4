@@ -55,6 +55,9 @@ def test_create_tag_route_with_database_error(logged_in_admin, tag_data, db_sess
 
 def test_update_tag_with_invalid_form_data(logged_in_admin, test_tag, tag_data, db_session):
     with logged_in_admin.application.app_context():
+        # Merge the test_tag back into the session to ensure it's not detached
+        test_tag = db_session.merge(test_tag)
+        
         updated_data = {
             'name': '',
             'category': test_tag.category,
