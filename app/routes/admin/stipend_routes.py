@@ -87,8 +87,8 @@ def edit(id):
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Failed to update stipend: {e}")
-            # Change the flash message to only include the generic error message
-            flash_message(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)  # Ensure this matches the expected message in the test
+            # Set the flash message with the correct category and message
+            flash_message(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
             if request.headers.get('HX-Request'):
                 return render_template('_flash_messages.html'), 200
             else:
