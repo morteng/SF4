@@ -3,7 +3,7 @@ from flask_login import login_user, current_user, login_required
 from app.forms.user_forms import ProfileForm, LoginForm
 from app.models.user import User  # Import the User model
 from app.extensions import db  # Import the db from extensions
-from app.constants import FLASH_MESSAGES
+from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
