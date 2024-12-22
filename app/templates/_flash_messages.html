@@ -3,6 +3,8 @@
     <div id="flash-messages">
       {% for category, message in messages %}
         <div class="flash {{ category }}">{{ message }}</div>
+        <!-- Add logging to verify rendering -->
+        <script>console.log("Rendering flash message: " + "{{ message }}");</script>
       {% endfor %}
     </div>
   {% endif %}
