@@ -74,7 +74,7 @@ def admin_user(db_session, app):
             db_session.add(user)
             db_session.commit()
         else:
-            # Ensure the user is merged into the current session
+            # Ensure the user is merged into the current session to ensure it's not detached
             user = db_session.merge(user)
     yield user
 
@@ -185,8 +185,8 @@ def extract_csrf_token(response_data):
     match = re.search(r'name="csrf_token".*?value="(.+?)"', response_data.decode('utf-8'))
     return match.group(1) if match else "dummy_csrf_token"
 
-def get_all_tags(app):
-    with app.app_context():  # Ensure application context is set
+def get_all_tags():
+    with current_app.app_context():  # Ensure application context is set
         return Tag.query.all()
 
 @pytest.fixture(scope='function')

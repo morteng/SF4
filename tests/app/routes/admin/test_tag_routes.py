@@ -15,7 +15,7 @@ def test_create_tag_route(logged_in_admin, tag_data):
     }, follow_redirects=True)
 
     assert response.status_code == 200
-    tags = get_all_tags()
+    tags = get_all_tags()  # Removed the app argument
     assert any(tag.name == tag_data['name'] and tag.category == tag_data['category'] for tag in tags)
     assert FLASH_MESSAGES["CREATE_TAG_SUCCESS"].encode() in response.data
 
