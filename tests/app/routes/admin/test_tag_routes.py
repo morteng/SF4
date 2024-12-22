@@ -69,6 +69,7 @@ def test_update_tag_with_invalid_form_data(logged_in_admin, test_tag, tag_data, 
         )
         
         assert response.status_code == 200
+        # Ensure the correct flash message is set
         assert FLASH_MESSAGES["GENERIC_ERROR"].encode() in response.data
 
 def test_update_tag_with_database_error(logged_in_admin, test_tag, db_session, monkeypatch):
