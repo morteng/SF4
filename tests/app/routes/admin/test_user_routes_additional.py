@@ -120,7 +120,7 @@ def test_edit_profile_route_with_duplicate_username(logged_in_client, test_user,
     assert response.status_code == 200
     # Assert the flash message using constants
     with logged_in_client.session_transaction() as session:
-        flashed_messages = session['_flashes']
+        flashed_messages = session.get('_flashes', [])
         assert (FLASH_CATEGORY_ERROR, FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"]) in flashed_messages
 
     db_session.delete(existing_user)
