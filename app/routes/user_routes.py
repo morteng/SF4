@@ -21,7 +21,7 @@ def login():
             else:
                 return redirect(url_for('user.profile'))
         else:
-            flash(FLASH_MESSAGES["LOGIN_INVALID_CREDENTIALS"])
+            flash(FLASH_MESSAGES["LOGIN_INVALID_CREDENTIALS"], FLASH_CATEGORY_ERROR)
     return render_template('login.html', form=form)
 
 @user_bp.route('/profile', methods=['GET'])
