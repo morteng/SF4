@@ -8,24 +8,15 @@
     {{ form.hidden_tag() }}
     <div class="flex flex-col space-y-2">
         {{ form.name.label(class_="text-gray-700") }}
-        {{ form.name(size=32, class_="border p-2 rounded w-full") }}
-        {% for error in form.name.errors %}
-            <span class="text-red-500">{{ error }}</span>
-        {% endfor %}
+        {{ form.name(size=32, class="border p-2 rounded w-full") }}
     </div>
     <div class="flex flex-col space-y-2">
         {{ form.description.label(class_="text-gray-700") }}
-        {{ form.description(cols=40, rows=10, class_="border p-2 rounded w-full") }}
-        {% for error in form.description.errors %}
-            <span class="text-red-500">{{ error }}</span>
-        {% endfor %}
+        {{ form.description(cols=40, rows=10, class="border p-2 rounded w-full") }}
     </div>
     <div class="flex flex-col space-y-2">
         {{ form.homepage_url.label(class_="text-gray-700") }}
-        {{ form.homepage_url(size=32, class_="border p-2 rounded w-full") }}
-        {% for error in form.homepage_url.errors %}
-            <span class="text-red-500">{{ error }}</span>
-        {% endfor %}
+        {{ form.homepage_url(size=32, class="border p-2 rounded w-full") }}
     </div>
     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">{% if organization %}Update{% else %}Create{% endif %}</button>
 </form>

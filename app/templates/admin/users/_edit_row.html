@@ -7,15 +7,15 @@
         {{ form.hidden_tag() | safe }}  <!-- Ensure CSRF token renders correctly -->
         <div class="flex flex-col space-y-1">
             {{ form.username.label(class_="text-gray-700") }}
-            {{ form.username(size=32, class_="w-full p-2 border rounded-lg focus:ring focus:ring-blue-500") }}
+            {{ form.username(size=32, class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-500") }}
         </div>
         <div class="flex flex-col space-y-1">
             {{ form.email.label(class_="text-gray-700") }}
-            {{ form.email(size=64, class_="w-full p-2 border rounded-lg focus:ring focus:ring-blue-500") }}
+            {{ form.email(size=64, class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-500") }}
         </div>
         <div class="flex flex-col space-y-1">
             {{ form.password.label(class_="text-gray-700") }}
-            {{ form.password(size=32, class_="w-full p-2 border rounded-lg focus:ring focus:ring-blue-500") }}
+            {{ form.password(size=32, class="w-full p-2 border rounded-lg focus:ring focus:ring-blue-500") }}
         </div>
         <div class="flex flex-col space-y-1">
             {{ form.is_admin.label(class_="text-gray-700") }}

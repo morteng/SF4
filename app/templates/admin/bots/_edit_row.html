@@ -13,23 +13,14 @@ Edit Bot - Admin Panel
         <div>
             {{ form.name.label(class_="block text-sm font-medium text-gray-700") }}<br>
             {{ form.name(size=32, class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}<br>
-            {% for error in form.name.errors %}
-                <span class="text-red-600">{{ error }}</span>
-            {% endfor %}
         </div>
         <div>
             {{ form.description.label(class_="block text-sm font-medium text-gray-700") }}<br>
             {{ form.description(cols=40, rows=10, class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}<br>
-            {% for error in form.description.errors %}
-                <span class="text-red-600">{{ error }}</span>
-            {% endfor %}
         </div>
         <div>
             {{ form.status.label(class_="block text-sm font-medium text-gray-700") }}<br>
             {{ form.status(size=32, class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}<br>
-            {% for error in form.status.errors %}
-                <span class="text-red-600">{{ error }}</span>
-            {% endfor %}
         </div>
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Update Bot</button>
     </form>

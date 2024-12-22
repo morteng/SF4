@@ -3,75 +3,42 @@
 {% block content %}
 <h2 class="text-2xl font-bold mb-4">{% if form.name.data %}Edit{% else %}Create{% endif %} Stipend</h2>
 
-{% if form.errors %}
-    <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
-        <ul>
-            {% for field, errors in form.errors.items() %}
-                {% for error in errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            {% endfor %}
-        </ul>
-    </div>
-{% endif %}
-
 <form method="post" action="" class="space-y-4">
     {{ form.hidden_tag() }}
     
     <div>
         {{ form.name.label(class_="block text-sm font-medium text-gray-700") }} 
         {{ form.name(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", size=50) }}
-        {% for error in form.name.errors %}
-            <span class="text-red-600">{{ error }}</span>
-        {% endfor %}
     </div>
 
     <div>
         {{ form.summary.label(class_="block text-sm font-medium text-gray-700") }} 
         {{ form.summary(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", rows=3) }}
-        {% for error in form.summary.errors %}
-            <span class="text-red-600">{{ error }}</span>
-        {% endfor %}
     </div>
 
     <div>
         {{ form.description.label(class_="block text-sm font-medium text-gray-700") }} 
         {{ form.description(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", rows=5) }}
-        {% for error in form.description.errors %}
-            <span class="text-red-600">{{ error }}</span>
-        {% endfor %}
     </div>
 
     <div>
         {{ form.homepage_url.label(class_="block text-sm font-medium text-gray-700") }} 
         {{ form.homepage_url(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
-        {% for error in form.homepage_url.errors %}
-            <span class="text-red-600">{{ error }}</span>
-        {% endfor %}
     </div>
 
     <div>
         {{ form.application_procedure.label(class_="block text-sm font-medium text-gray-700") }} 
         {{ form.application_procedure(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", rows=3) }}
-        {% for error in form.application_procedure.errors %}
-            <span class="text-red-600">{{ error }}</span>
-        {% endfor %}
     </div>
 
     <div>
         {{ form.eligibility_criteria.label(class_="block text-sm font-medium text-gray-700") }} 
         {{ form.eligibility_criteria(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", rows=3) }}
-        {% for error in form.eligibility_criteria.errors %}
-            <span class="text-red-600">{{ error }}</span>
-        {% endfor %}
     </div>
 
     <div>
         {{ form.application_deadline.label(class_="block text-sm font-medium text-gray-700") }} 
         {{ form.application_deadline(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", size=20) }}
-        {% for error in form.application_deadline.errors %}
-            <span class="text-red-600">{{ error }}</span>
-        {% endfor %}
     </div>
 
     <div class="flex items-center">
