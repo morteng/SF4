@@ -74,6 +74,9 @@ def test_update_tag_with_invalid_form_data(logged_in_admin, test_tag, tag_data, 
 
 def test_update_tag_with_database_error(logged_in_admin, test_tag, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
+        # Merge the test_tag back into the session to ensure it's not detached
+        test_tag = db_session.merge(test_tag)
+        
         def mock_commit(*args, **kwargs):
             raise Exception("Database error")
             
