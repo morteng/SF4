@@ -56,7 +56,7 @@ def test_login_route_with_invalid_credentials(logged_in_client, user_data):
 
     assert response.status_code == 200
     # Assert the flash message using constants
-    assert FLASH_MESSAGES["LOGIN_INVALID_CREDENTIALS"].encode() in response.data
+    assert any(FLASH_MESSAGES["LOGIN_INVALID_CREDENTIALS"].encode() in msg for msg in response.data.split(b'\n') if b'flash' in msg)
 
     # Ensure that the user is not redirected to a protected page
     assert b'Login' in response.data  # Check if login form is still present

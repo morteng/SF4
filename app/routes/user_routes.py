@@ -3,6 +3,7 @@ from flask_login import login_user, current_user, login_required
 from app.forms.user_forms import ProfileForm, LoginForm
 from app.models.user import User  # Import the User model
 from app.extensions import db  # Import the db from extensions
+from app.constants import FLASH_MESSAGES
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
@@ -13,14 +14,14 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
-            flash('Logged in successfully.')
+            flash(FLASH_MESSAGES["LOGIN_SUCCESS"])
             # Redirect based on user role
             if current_user.is_admin:
                 return redirect(url_for('admin.dashboard.dashboard'))
             else:
                 return redirect(url_for('user.profile'))
         else:
-            flash('Invalid username or password.')
+            flash(FLASH_MESSAGES["LOGIN_INVALID_CREDENTIALS"])
     return render_template('login.html', form=form)
 
 @user_bp.route('/profile', methods=['GET'])
