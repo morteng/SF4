@@ -1,7 +1,6 @@
 # TODO List
 
 ## General
-- [ ] Change the greeting to be more casual.
 - [ ] Resolve import file mismatch error for tests/app/routes/test_user_routes.py.
 
 ## Specific Tasks
