@@ -38,7 +38,7 @@ def edit_profile():
         current_user.email = form.email.data
         # Update the user directly in the database
         db.session.commit()
-        flash('Your changes have been saved.')
+        flash(FLASH_MESSAGES["PROFILE_UPDATE_SUCCESS"])
         return redirect(url_for('user.profile'))
     elif request.method == 'GET':
         form.username.data = current_user.username
