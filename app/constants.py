@@ -73,6 +73,7 @@ FLASH_MESSAGES = {
 
     # Profile Management
     "UPDATE_PROFILE_SUCCESS": "Profile updated successfully.",
+    "PROFILE_UPDATE_SUCCESS": "Profile updated successfully.",
     "PROFILE_UPDATE_ERROR": "Failed to update profile.",
     "PROFILE_UPDATE_INVALID_DATA": "Invalid data provided for profile update.",
 
