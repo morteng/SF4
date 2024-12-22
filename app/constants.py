@@ -79,5 +79,6 @@ FLASH_MESSAGES = {
 
     # Others
     "PROFILE_UPDATE_SUCCESS": "Profile updated successfully.",  # Added this line
-    "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+    "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS.",
+    "USERNAME_ALREADY_EXISTS": "Username already exists. Please choose a different username."
 }
