@@ -1,23 +1,3 @@
-## Goal
-Refactor the code to use a centralized flash messaging system and ensure all tests are updated accordingly.
-
-## plan
-1. Create a new utility function in `app/utils.py` to handle flash messages.
-2. Update all routes in `app/routes/admin/bot_routes.py`, `app/routes/admin/organization_routes.py`, `app/routes/admin/stipend_routes.py`, `app/routes/admin/tag_routes.py`, and `app/routes/admin/user_routes.py` to use the new utility function for flash messaging.
-3. Ensure that flash messages are only included in `app/templates/base.html`.
-4. Update all tests that use flash messages to ensure they work with the new centralized flash messaging system.
-
-## tasks
-- [x] Create a new utility function in `app/utils.py` to handle flash messages.
-- [x] Update all routes in `app/routes/admin/bot_routes.py` to use the new utility function for flash messaging.
-- [x] Update all routes in `app/routes/admin/organization_routes.py` to use the new utility function for flash messaging.
-- [x] Update all routes in `app/routes/admin/stipend_routes.py` to use the new utility function for flash messaging.
-- [x] Update all routes in `app/routes/admin/tag_routes.py` to use the new utility function for flash messaging.
-- [x] Update all routes in `app/routes/admin/user_routes.py` to use the new utility function for flash messaging.
-- [x] Ensure that flash messages are only included in `app/templates/base.html`.
-- [ ] Update all tests that use flash messages to ensure they work with the new centralized flash messaging system.
-  - [x] Update tests in `tests/app/routes/admin/test_bot_routes.py`
-  - [x] Update tests in `tests/app/routes/admin/test_organization_routes.py`
-  - [x] Update tests in `tests/app/routes/admin/test_stipend_routes.py`
-  - [x] Update tests in `tests/app/routes/admin/test_tag_routes.py`
-  - [ ] Update tests in `tests/app/routes/admin/test_user_routes.py`
+- Change the greeting to be more casual
+- Update the tests in `tests/app/routes/admin/test_user_routes.py` to ensure they work with the new centralized flash messaging system. [DONE]
+- Review and finalize changes.
