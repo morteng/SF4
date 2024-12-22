@@ -83,8 +83,9 @@ def test_update_stipend_with_database_error_htmx(logged_in_admin, test_stipend, 
         with logged_in_admin.session_transaction() as sess:
             flashed_messages = sess.get('_flashes', [])
         
+        # Check for the exact flash message sent by the route
         assert any(
-            cat == FLASH_CATEGORY_ERROR and msg == FLASH_MESSAGES["UPDATE_STIPEND_ERROR"]
+            cat == FLASH_CATEGORY_ERROR and msg == "Failed to update stipend."
             for cat, msg in flashed_messages
         )
 
