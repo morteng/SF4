@@ -35,4 +35,5 @@ def init_admin_user():
         db.session.commit()
 
 def flash_message(message, category):
+    from flask import flash
     flash(message, category)
