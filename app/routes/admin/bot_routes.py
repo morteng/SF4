@@ -1,13 +1,3 @@
-from flask import Blueprint, render_template, redirect, url_for, request
-from flask_login import login_required
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
-from app.forms.admin_forms import BotForm
-from app.services.bot_service import get_bot_by_id, run_bot, get_all_bots, create_bot, update_bot, delete_bot
-from app.extensions import db 
-from app.utils import admin_required, flash_message
-
-admin_bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
-
 @admin_bot_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 @admin_required

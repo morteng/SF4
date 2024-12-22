@@ -1,14 +1,3 @@
-from flask import Blueprint, render_template, redirect, url_for, request, current_app
-from flask_login import login_required
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
-from app.forms.admin_forms import UserForm
-from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user
-from app.utils import admin_required, flash_message
-import logging
-from app.extensions import db  # Import the db object
-
-admin_user_bp = Blueprint('user', __name__, url_prefix='/users')
-
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 @admin_required
