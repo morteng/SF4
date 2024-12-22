@@ -86,4 +86,8 @@ def edit(id):
             flash_message(FLASH_MESSAGES["UPDATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
             return render_template('admin/tags/update.html', form=form, tag=tag)
 
+    # Add a specific flash message for invalid form data
+    if request.method == 'POST':
+        flash_message(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+
     return render_template('admin/tags/update.html', form=form, tag=tag)
