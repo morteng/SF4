@@ -196,11 +196,10 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         # Use StipendForm to handle form submission
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
-        
-        # Call update_stipend and simulate form submission within the same request context
-        with app.test_request_context():
-            update_stipend(stipend, update_data)
-
+        # Simulate form submission to the edit route
+        response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
+        assert response.status_code == 200
+    
     # Query the stipend from the session to ensure it's bound
     updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
 
@@ -210,7 +209,7 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     assert updated_stipend.summary == 'Updated summary'
     assert updated_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
     with app.test_request_context():
-        assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in get_flashed_messages(category_filter=[FLASH_CATEGORY_SUCCESS])
+        assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
 
 def test_update_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
