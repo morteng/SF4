@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, PasswordField
 from flask import session
 from wtforms.validators import DataRequired, Email, ValidationError, EqualTo
 from app.models.user import User
-from app.constants import FLASH_MESSAGES  # Import FLASH_MESSAGES from constants
+from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR  # Import FLASH_MESSAGES and FLASH_CATEGORY_ERROR from constants
 
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -21,10 +21,12 @@ class ProfileForm(FlaskForm):
         user_by_username = User.query.filter_by(username=self.username.data).first()
         if user_by_username is not None and user_by_username.username != self.original_username:
             self.username.errors.append(FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"])
+            session['_flashes'] = [(FLASH_CATEGORY_ERROR, FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"])]  # Add flash
             return False
         user_by_email = User.query.filter_by(email=self.email.data).first()
         if user_by_email is not None and user_by_email.email != self.original_email:
             self.email.errors.append('Please use a different email address.')
+            session['_flashes'] = [(FLASH_CATEGORY_ERROR, 'Please use a different email address.')]  # Add flash
             return False
         return True
 
