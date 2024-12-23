@@ -189,16 +189,17 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         'open_for_applications': True
     }
     
-    with app.app_context(), app.test_client() as client:
+    with app.test_client() as client:
         with app.test_request_context():
             login_user(admin_user)
-        
+    
         # Use StipendForm to handle form submission
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
         # Simulate form submission to the edit route
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
         assert response.status_code == 200
+        stipend = db.session.merge(stipend)
         db.session.commit()
         db.session.refresh(stipend)
     
