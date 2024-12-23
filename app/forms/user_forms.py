@@ -4,6 +4,7 @@ from flask import session
 from wtforms.validators import DataRequired, Email, ValidationError, EqualTo
 from app.models.user import User
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR  # Import FLASH_MESSAGES and FLASH_CATEGORY_ERROR from constants
+from app.utils import flash_message  # Import the flash_message function
 
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -20,10 +21,12 @@ class ProfileForm(FlaskForm):
             return False
         user_by_username = User.query.filter_by(username=self.username.data).first()
         if user_by_username is not None and user_by_username.username != self.original_username:
+            flash_message(FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"], FLASH_CATEGORY_ERROR)
             self.username.errors.append(FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"])
             return False
         user_by_email = User.query.filter_by(email=self.email.data).first()
         if user_by_email is not None and user_by_email.email != self.original_email:
+            flash_message('Please use a different email address.', FLASH_CATEGORY_ERROR)
             self.email.errors.append('Please use a different email address.')
             return False
         return True
