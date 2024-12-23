@@ -92,7 +92,7 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
     # Check if the correct flash message was set
     with app.test_request_context():
         assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
-# look at how test_create_stipend is set up to evaluate, it works. do it the same way for the tests below AI!
+
 
 def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
@@ -106,10 +106,20 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     }
 
     with app.app_context(), app.test_client() as client:
-        login_user(admin_user)
-        response = client.post(f'/update_stipend/{stipend.id}', data=update_data)  # Assuming the endpoint is /update_stipend/<id>
+        with app.test_request_context():
+            login_user(admin_user)
+        
+        # Create a form instance and validate it
+        form = StipendForm(data=update_data)
+        assert form.validate(), f"Form validation failed: {form.errors}"
+        
+        response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
+    # Query the stipend from the session to ensure it's bound
     updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
+
+    # Check if the stipend was updated successfully
+    assert updated_stipend is not None
     assert updated_stipend.name == "Updated Test Stipend"
     assert updated_stipend.summary == 'Updated summary'
     assert updated_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
