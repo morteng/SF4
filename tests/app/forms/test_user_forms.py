@@ -4,6 +4,7 @@ from app import create_app
 from app.models.user import User
 from app.extensions import db
 from werkzeug.security import generate_password_hash
+from app.constants import FLASH_MESSAGES  # Import FLASH_MESSAGES from constants
 
 @pytest.fixture(scope='function', autouse=True)
 def setup_database(_db):
