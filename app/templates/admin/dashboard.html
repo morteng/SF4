@@ -11,7 +11,7 @@
 </div>
 
 <div id="bots" class="mt-8">
-    <hx-get href="{{ url_for('admin.bot.index') }}" hx-target="#bots" hx-swap="innerHTML"></hx-get>
+    <hx-get href="{{ url_for('admin.bot.index') }}" hx-target="body > main" hx-swap="innerHTML"></hx-get>
 </div>
 
 {% endblock %}
