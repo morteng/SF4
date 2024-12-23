@@ -30,7 +30,7 @@
                 </tr>
             </thead>
         </table>
-        <div id="stipends-pagination" hx-get="{{ url_for('admin.stipend.paginate', page=1) }}" hx-trigger="load" hx-target="#stipends-pagination" hx-swap="innerHTML"></div>
+        <div id="stipends-pagination" hx-get="{{ url_for('admin.stipend.paginate', page=1) }}" hx-trigger="load" hx-target="#stipends tbody" hx-swap="innerHTML"></div>
     </div>
 </div>
 {% endblock %}

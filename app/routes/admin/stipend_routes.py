@@ -138,5 +138,5 @@ def index():
 @login_required
 @admin_required
 def paginate(page):
-    stipends = Stipend.query.paginate(page, per_page=10)
-    return render_template('admin/stipends/_stipends_table.html', stipends=stipends.items)
+    stipends = Stipend.query.paginate(page=page, per_page=10, error_out=False)
+    return render_template('admin/stipends/_stipends_table.html', stipends=stipends)

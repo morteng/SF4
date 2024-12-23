@@ -29,4 +29,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Reinitialize any scripts after HTMX swap
+    document.body.addEventListener('htmx:afterSwap', (event) => {
+        if (event.detail.target.id === 'stipends tbody') {
+            console.log("Pagination content swapped!");
+            // Reinitialize any scripts if needed
+        }
+    });
 });
