@@ -9,17 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('htmx-indicator').style.display = 'none';
     });
 
-    // Menu toggle
-    const menuToggle = document.getElementById('menu-toggle');
-    if (menuToggle) {
-        menuToggle.addEventListener('click', function () {
-            const menu = document.getElementById('nav-menu');
-            if (menu) {
-                menu.classList.toggle('hidden');
-            }
-        });
-    }
-
+   
     // Theme toggle functionality
     const toggleButton = document.getElementById('theme-toggle');
     let currentTheme = localStorage.getItem('theme') || 'dark';
