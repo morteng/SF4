@@ -25,7 +25,7 @@ def create():
     else:
         for field, errors in form.errors.items():
             for error in errors:
-                flash_message(f"{field}: {error}", FLASH_CATEGORY_ERROR)
+                flash_message(error, FLASH_CATEGORY_ERROR)  # Flash each error message
         if not form.validate_on_submit():
             flash_message(FLASH_MESSAGES["CREATE_USER_INVALID_DATA"], FLASH_CATEGORY_ERROR)  # Use specific invalid data message
     return render_template('admin/users/create.html', form=form)
