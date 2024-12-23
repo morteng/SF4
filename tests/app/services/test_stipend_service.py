@@ -123,24 +123,16 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         with app.test_request_context():
             login_user(admin_user)
         
-        # 1. GET the form to retrieve a fresh CSRF token
-        response = client.get(f'/admin/stipends/{stipend.id}/edit')
-        csrf_token = extract_csrf_token(response.data)
-        logging.info(f"CSRF Token: {csrf_token}")
+        # Use StipendForm to handle form submission
+        form = StipendForm(data=update_data)
+        assert form.validate(), f"Form validation failed: {form.errors}"
 
-        # 2. Now post your data, ensuring you include the csrf_token
-        update_data_with_csrf = {
-            **update_data,
-            'csrf_token': csrf_token
-        }
-        logging.info(f"Data to be sent for update: {update_data_with_csrf}")
-        
-        response = client.post(f'/admin/stipends/{stipend.id}/edit', data=update_data_with_csrf, follow_redirects=True)
+        response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
         logging.info(f"Response status code: {response.status_code}")
         logging.info(f"Response data: {response.data.decode('utf-8')}")
 
     # Query the stipend from the session to ensure it's bound
-    updated_stipend = db.session.query(Stipend).filter_by(id=stipend.id).first()
+    updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
 
     # Check if the stipend was updated successfully
     assert updated_stipend is not None
@@ -172,7 +164,7 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Assert that the stipend was not updated due to validation errors
-    updated_stipend = db.session.query(Stipend).filter_by(id=stipend.id).first()
+    updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
     assert updated_stipend.name == test_data['name']
     assert updated_stipend.summary == test_data['summary']
 
@@ -200,7 +192,7 @@ def test_update_stipend_open_for_applications(test_data, db_session, app, admin_
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Query the stipend from the session to ensure it's bound
-    updated_stipend = db.session.query(Stipend).filter_by(id=stipend.id).first()
+    updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
 
     # Check if the stipend was updated successfully
     assert updated_stipend is not None
