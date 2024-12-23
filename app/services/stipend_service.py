@@ -29,6 +29,8 @@ def update_stipend(stipend, data):
             print(f"Updating {key} to {value}")
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
+        print(f"stipend.{key} set to: {getattr(stipend, key)}")
+        db.session.commit()
         flash(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
     except Exception as e:
         db.session.rollback()

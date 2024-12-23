@@ -121,7 +121,7 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Query the stipend from the session to ensure it's bound
-    updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
+    updated_stipend = db.session.query(Stipend).filter_by(id=stipend.id).first()
 
     # Check if the stipend was updated successfully
     assert updated_stipend is not None
@@ -153,7 +153,7 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Assert that the stipend was not updated due to validation errors
-    updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
+    updated_stipend = db.session.query(Stipend).filter_by(id=stipend.id).first()
     assert updated_stipend.name == test_data['name']
     assert updated_stipend.summary == test_data['summary']
 
@@ -181,7 +181,7 @@ def test_update_stipend_open_for_applications(test_data, db_session, app, admin_
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Query the stipend from the session to ensure it's bound
-    updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
+    updated_stipend = db.session.query(Stipend).filter_by(id=stipend.id).first()
 
     # Check if the stipend was updated successfully
     assert updated_stipend is not None

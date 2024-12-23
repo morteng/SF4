@@ -75,15 +75,15 @@ def edit(id):
         form = StipendForm(request.form, obj=stipend)
         if form.validate_on_submit():
             try:
-                update_stipend(stipend, form.data)
+                # Exclude 'submit' and 'csrf_token' from form data
+                stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
+                update_stipend(stipend, stipend_data)
                 
-                db.session.commit()
                 flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
                 return redirect(url_for('admin.stipend.index'))
             except Exception as e:
                 db.session.rollback()
                 current_app.logger.error(f"Failed to update stipend: {e}")
-                # Set the flash message with the correct category and message
                 flash_message(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
                 if request.headers.get('HX-Request'):
                     return render_template('_flash_messages.html'), 200
@@ -102,6 +102,7 @@ def edit(id):
                     flash_message(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
     
     return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
+
 
 
 @admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])
