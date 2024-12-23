@@ -75,6 +75,30 @@ def delete(id):
     
     return redirect(url_for('admin.user.index'))
 
+@admin_user_bp.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_profile():
+    form = ProfileForm(
+        original_username=current_user.username,
+        original_email=current_user.email,
+        obj=current_user
+    )
+    if request.method == 'POST' and form.validate_on_submit():
+        try:
+            update_user(current_user, form.data)
+            flash_message(FLASH_MESSAGES["PROFILE_UPDATE_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            return redirect(url_for('admin.user.index'))
+        except Exception as e:
+            db.session.rollback()
+            logging.error(f"Failed to update user {current_user.id}: {e}")
+            flash_message(f"{FLASH_MESSAGES['PROFILE_UPDATE_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash_message(error, FLASH_CATEGORY_ERROR)  # Flash each error message using flash_message
+    return render_template('admin/users/edit_profile.html', form=form)
+
 @admin_user_bp.route('/', methods=['GET'])
 @login_required
 @admin_required
