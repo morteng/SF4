@@ -27,27 +27,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Mobile theme toggle functionality
-    const toggleButtonMobile = document.getElementById('theme-toggle-mobile');
-    if (toggleButtonMobile) {
-        toggleButtonMobile.addEventListener('click', function () {
-            if (document.body.classList.contains('dark')) {
-                document.body.classList.remove('dark');
-                localStorage.setItem('theme', '');
-            } else {
-                document.body.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        });
-    }
+   
 
     // Mobile menu toggle functionality
     const navToggle = document.getElementById('nav-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
+    const navMenu = document.getElementById('nav-menu');
 
-    if (navToggle) {
-        navToggle.addEventListener('click', function () {
-            mobileMenu.classList.toggle('hidden');
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('hidden');
         });
     }
 });
