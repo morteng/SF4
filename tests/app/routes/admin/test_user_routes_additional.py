@@ -21,6 +21,7 @@ def test_user(db_session, user_data):
         email=user_data['email']
     )
     user.set_password(user_data['password'])
+    user.is_admin = True  # Grant admin privileges
     db_session.add(user)
     db_session.commit()
     yield user
