@@ -1,6 +1,6 @@
 import pytest
 from app.models.stipend import Stipend
-from app.services.stipend_service import create_stipend, update_stipend, delete_stipend
+from app.services.stipend_service import create_stipend, update_stipend, delete_stipend, get_stipend_by_id, get_all_stipends
 from datetime import datetime
 from flask_login import login_user
 from app.extensions import db  # Ensure consistent session usage
