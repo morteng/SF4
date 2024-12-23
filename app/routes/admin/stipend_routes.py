@@ -77,7 +77,7 @@ def edit(id):
             try:
                 # Exclude 'submit' and 'csrf_token' from form data
                 stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
-                update_stipend(stipend, stipend_data)
+                update_stipend(stipend, stipend_data, session=db.session)
                 
                 flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
                 return redirect(url_for('admin.stipend.index'))

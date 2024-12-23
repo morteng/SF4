@@ -7,7 +7,7 @@ from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR, FLASH_CATEGORY_S
 
 logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
-def update_stipend(stipend, data):
+def update_stipend(stipend, data, session=db.session):
     try:
         for key, value in data.items():
             if key.startswith('_'):
@@ -30,12 +30,12 @@ def update_stipend(stipend, data):
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
         print(f"stipend.{key} set to: {getattr(stipend, key)}")
-        db.session.commit()
+        session.commit()
         flash(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
     except Exception as e:
-        db.session.rollback()
-        if db.session.is_active and db.inspect(stipend).detached:
-            db.session.add(stipend)
+        session.rollback()
+        if session.is_active and db.inspect(stipend).detached:
+            session.add(stipend)
         logging.error(f"Failed to update stipend: {e}")
         flash(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
 
