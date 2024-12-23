@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     // HTMX indicator
-    document.body.addEventListener('htmx:configRequest', () => {
+    document.body.addEventListener('htmx:beforeRequest', () => {
         document.getElementById('htmx-indicator').style.display = 'block';
     });
     document.body.addEventListener('htmx:afterRequest', () => {
@@ -10,32 +10,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
    
-    // Theme toggle functionality
-    const toggleButton = document.getElementById('theme-toggle');
     let currentTheme = localStorage.getItem('theme') || 'dark';
     document.body.classList.add(currentTheme);
 
-    if (toggleButton) {
-        toggleButton.addEventListener('click', function () {
-            if (document.body.classList.contains('dark')) {
-                document.body.classList.remove('dark');
-                localStorage.setItem('theme', '');
-            } else {
+    const themeToggleCheckbox = document.getElementById('theme-toggle');
+    if (themeToggleCheckbox) {
+        // If the theme is dark, keep the checkbox checked
+        themeToggleCheckbox.checked = (currentTheme === 'dark');
+
+        themeToggleCheckbox.addEventListener('change', function () {
+            if (themeToggleCheckbox.checked) {
                 document.body.classList.add('dark');
                 localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark');
+                localStorage.setItem('theme', '');
             }
         });
     }
 
-   
-
-    // Mobile menu toggle functionality
-    const navToggle = document.getElementById('nav-toggle');
-    const navMenu = document.getElementById('nav-menu');
-
-    if (navToggle && navMenu) {
-        navToggle.addEventListener('click', function() {
-            navMenu.classList.toggle('hidden');
-        });
-    }
 });
