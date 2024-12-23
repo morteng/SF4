@@ -38,11 +38,12 @@ def test_profile_form_invalid_same_username(client, setup_database):
     db.session.add(user)
     db.session.commit()
 
-    form = ProfileForm(original_username="testuser", original_email="test@example.com")
-    form.username.data = "existinguser"
-    form.email.data = "newemail@example.com"
-    assert form.validate() == False
-    assert FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"] in form.username.errors
+    with client.application.app_context():
+        form = ProfileForm(original_username="testuser", original_email="test@example.com")
+        form.username.data = "existinguser"
+        form.email.data = "newemail@example.com"
+        assert form.validate() == False
+        assert FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"] in form.username.errors
 
 def test_profile_form_invalid_same_email(client, setup_database):
     password_hash = generate_password_hash("password123")
