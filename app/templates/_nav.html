@@ -69,7 +69,6 @@
                         Toggle Theme (Mobile)
                     </button>
                     <a href="{{ url_for('public.logout') }}" class="text-red-400 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Logout</a>
-                {% endif %}
             {% else %}
                 <a href="{{ url_for('user.login') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Login</a>
                 <a href="{{ url_for('public.register') }}" class="text-green-400 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Register</a>
@@ -78,17 +77,3 @@
     </div>
 </nav>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-
-    if (mobileMenuButton) {
-        mobileMenuButton.addEventListener('click', function () {
-            mobileMenu.classList.toggle('hidden');
-            // Toggle the open/close icons
-            mobileMenuButton.querySelectorAll('svg').forEach(svg => svg.classList.toggle('hidden'));
-        });
-    }
-});
-</script>
