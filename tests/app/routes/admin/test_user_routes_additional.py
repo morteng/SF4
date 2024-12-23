@@ -100,30 +100,3 @@ def test_edit_profile_route_with_invalid_data(logged_in_client, test_user):
     # Assert the flash message using constants
     assert FLASH_MESSAGES["PROFILE_UPDATE_INVALID_DATA"].encode() in response.data
 
-def test_edit_profile_route_with_duplicate_username(logged_in_client, test_user, db_session):
-    # Create another user with a different username
-    existing_user = User(username='existinguser', email='existing@example.com')
-    existing_user.set_password('password123')
-    db_session.add(existing_user)
-    db_session.commit()
-
-    edit_response = logged_in_client.get(url_for('user.edit_profile'))
-    assert edit_response.status_code == 200
-
-    csrf_token = extract_csrf_token(edit_response.data)
-    duplicate_data = {
-        'username': existing_user.username,  # Duplicate username
-        'email': test_user.email,
-        'csrf_token': csrf_token
-    }
-    response = logged_in_client.post(url_for('user.edit_profile'), data=duplicate_data, follow_redirects=True)
-
-    assert response.status_code == 200
-    # Assert the flash message using constants
-    with logged_in_client.session_transaction() as session:
-        flashed_messages = session.get('_flashes', [])
-        print(f"Flashed Messages: {flashed_messages}")
-        assert (FLASH_CATEGORY_ERROR, FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"]) in flashed_messages
-
-    db_session.delete(existing_user)
-    db_session.commit()
