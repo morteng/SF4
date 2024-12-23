@@ -190,7 +190,6 @@ def test_create_stipend_with_invalid_date_format(test_data, db_session, app, adm
     with app.test_request_context():
         assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
-
 def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
     db_session.add(stipend)
@@ -242,6 +241,7 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
     db_session.commit()
     
     update_data = {
+        'name': test_data['name'],
         'application_deadline': '2024-13-32 99:99:99',
     }
 
@@ -401,6 +401,7 @@ def test_update_stipend_with_empty_application_deadline(test_data, db_session, a
     db_session.commit()
 
     update_data = {
+        'name': test_data['name'],
         'application_deadline': '',  # Empty string
     }
 
