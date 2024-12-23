@@ -66,14 +66,14 @@ def test_create_stipend(test_data, db_session, app, admin_user):
     assert new_stipend.eligibility_criteria == test_data['eligibility_criteria']
     assert new_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
     assert new_stipend.open_for_applications is True
-
+    
     # Check if the correct flash message was set
     with app.test_request_context():
         assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
 
 def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     # Modify test data with an invalid application_deadline format
-    test_data['application_deadline'] = '2023-13-32 99:99:99'
++    test_data['application_deadline'] = '12/31/2023 23:59:59'  # Different format
     
     form = StipendForm(data=test_data)
     
