@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from flask import session
+from flask import session, test_request_context
 from werkzeug.security import generate_password_hash
 
 from app.forms.user_forms import ProfileForm, LoginForm
