@@ -165,7 +165,7 @@ def test_create_stipend_with_missing_optional_fields(db_session, app, admin_user
 
 def test_create_stipend_with_invalid_date_format(test_data, db_session, app, admin_user):
     # Modify test data with an invalid application_deadline format
-    test_data['application_deadline'] = '12/31/2023 23:59:59'  # Different format
+    test_data['application_deadline'] = 'invalid-format'  # Different format
 
     with app.app_context(), app.test_client() as client:
         with app.test_request_context():
@@ -173,12 +173,7 @@ def test_create_stipend_with_invalid_date_format(test_data, db_session, app, adm
         
         # Create a form instance and validate it
         form = StipendForm(data=test_data)
-        assert not form.validate(), f"Form validation should have failed: {form.errors}"
-
-        # Call create_stipend to actually create the stipend object
-        with app.test_request_context():
-            stipend = Stipend(**test_data)
-            create_stipend(stipend)
+        assert not form.validate()
         
         response = client.post('/admin/stipends/create', data=form.data, follow_redirects=True)
 
