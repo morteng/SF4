@@ -228,14 +228,12 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
         with app.test_request_context():
             login_user(admin_user)
         
+        # Call update_stipend to actually update the stipend object
+        update_stipend(stipend, update_data)
+        
         # Create a form instance and validate it
         form = StipendForm(data=update_data)
-        
-        # Simulate form submission after calling update_stipend
-        with app.test_request_context():
-            # Call update_stipend to actually update the stipend object
-            update_stipend(stipend, update_data)
-            response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
+        response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Assert that the stipend was not updated due to validation errors
     updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
