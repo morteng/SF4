@@ -50,7 +50,7 @@ FLASH_MESSAGES = {
     "CREATE_STIPEND_SUCCESS": "Stipend created successfully.",
     "CREATE_STIPEND_ERROR": "Failed to create stipend.",
     "UPDATE_STIPEND_SUCCESS": "Stipend updated successfully.",
-    "UPDATE_STIPEND_ERROR": "Failed to update stipend.",  # Ensure this matches the test
+    "UPDATE_STIPEND_ERROR": "Failed to update stipend.", 
     "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS.",  
     "STIPEND_NOT_FOUND": "Stipend not found.",
     "DELETE_STIPEND_SUCCESS": "Stipend deleted successfully.",
@@ -76,9 +76,5 @@ FLASH_MESSAGES = {
     "UPDATE_PROFILE_SUCCESS": "Profile updated successfully.",
     "PROFILE_UPDATE_SUCCESS": "Profile updated successfully.",
     "PROFILE_UPDATE_ERROR": "Failed to update profile.",
-    "PROFILE_UPDATE_INVALID_DATA": "Invalid data provided for profile update.",
-
-    # Others
-    "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS.",
-    "USERNAME_ALREADY_EXISTS": "Username already exists. Please choose a different username."
+    "PROFILE_UPDATE_INVALID_DATA": "Invalid data provided for profile update."
 }
