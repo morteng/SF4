@@ -15,13 +15,29 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentTheme = localStorage.getItem('theme') || 'dark';
     document.body.classList.add(currentTheme);
 
-    toggleButton.addEventListener('click', function () {
-        if (document.body.classList.contains('dark')) {
-            document.body.classList.remove('dark');
-            localStorage.setItem('theme', '');
-        } else {
-            document.body.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        }
-    });
+    if (toggleButton) {
+        toggleButton.addEventListener('click', function () {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                localStorage.setItem('theme', '');
+            } else {
+                document.body.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    }
+
+    // Mobile theme toggle functionality
+    const toggleButtonMobile = document.getElementById('theme-toggle-mobile');
+    if (toggleButtonMobile) {
+        toggleButtonMobile.addEventListener('click', function () {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                localStorage.setItem('theme', '');
+            } else {
+                document.body.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    }
 });
