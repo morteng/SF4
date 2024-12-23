@@ -9,6 +9,7 @@ from app.forms.admin_forms import StipendForm
 from app.models.user import User
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from flask import get_flashed_messages
+from logging import logging
 
 @pytest.fixture
 def test_data():
