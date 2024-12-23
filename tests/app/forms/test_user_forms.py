@@ -1,9 +1,12 @@
 import pytest
+from unittest.mock import patch
+from flask import session
+from werkzeug.security import generate_password_hash
+
 from app.forms.user_forms import ProfileForm, LoginForm
 from app import create_app
 from app.models.user import User
 from app.extensions import db
-from werkzeug.security import generate_password_hash
 from app.constants import FLASH_MESSAGES  # Import FLASH_MESSAGES from constants
 
 @pytest.fixture(scope='function', autouse=True)
@@ -39,11 +42,13 @@ def test_profile_form_invalid_same_username(client, setup_database):
     db.session.commit()
 
     with client.application.app_context():
-        form = ProfileForm(original_username="testuser", original_email="test@example.com")
-        form.username.data = "existinguser"
-        form.email.data = "newemail@example.com"
-        assert form.validate() == False
-        assert FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"] in form.username.errors
+        with patch('app.forms.user_forms.flash_message') as mock_flash:
+            form = ProfileForm(original_username="testuser", original_email="test@example.com")
+            form.username.data = "existinguser"
+            form.email.data = "newemail@example.com"
+            is_valid = form.validate()
+            mock_flash.assert_called_once_with(FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"], FLASH_CATEGORY_ERROR)
+            assert not is_valid
 
 def test_profile_form_invalid_same_email(client, setup_database):
     password_hash = generate_password_hash("password123")
