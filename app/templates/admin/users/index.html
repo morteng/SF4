@@ -23,13 +23,13 @@
                 <td class="p-3">{{ user.username }}</td>
                 <td class="p-3">{{ user.email }}</td>
                 <td class="p-3 flex space-x-2">
-                    <button 
-                        hx-get="{{ url_for('admin.user.edit', id=user.id) }}"  <!-- Change here -->
-                        hx-target="body"
-                        hx-swap="afterbegin"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
-                         Edit
-                    </button>
+                    <button
+                    hx-get="{{ url_for('admin_user.edit', id=user.id) }}"
+                    hx-target="#main-content"
+                    hx-swap="innerHTML"
+                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Edit
+                </button>
                     <button 
                         hx-confirm="Are you sure you want to delete this user?"
                         hx-delete="{{ url_for('admin.user.delete', id=user.id) }}"
