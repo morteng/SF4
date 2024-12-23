@@ -32,5 +32,16 @@
     </main>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('nav-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('change', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+    </script>
 </body>
 </html>
