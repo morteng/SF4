@@ -9,12 +9,12 @@
                 <div class="ml-10 flex items-baseline space-x-4">
                     {% if current_user.is_authenticated %}
                         {% if current_user.is_admin %}
-                            <a href="{{ url_for('admin.dashboard.dashboard') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin Dashboard</a>
-                            <a href="{{ url_for('admin.bot.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Bots</a>
-                            <a href="{{ url_for('admin.organization.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Organizations</a>
-                            <a href="{{ url_for('admin.stipend.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Stipends</a>
-                            <a href="{{ url_for('admin.tag.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Tags</a>
-                            <a href="{{ url_for('admin.user.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Users</a>
+                            <a href="#" hx-get="{{ url_for('admin.dashboard.dashboard') }}" hx-target="#main-content" hx-swap="innerHTML" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin Dashboard</a>
+                            <a href="#" hx-get="{{ url_for('admin.bot.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Bots</a>
+                            <a href="#" hx-get="{{ url_for('admin.organization.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Organizations</a>
+                            <a href="#" hx-get="{{ url_for('admin.stipend.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Stipends</a>
+                            <a href="#" hx-get="{{ url_for('admin.tag.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Tags</a>
+                            <a href="#" hx-get="{{ url_for('admin.user.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Users</a>
                         {% else %}
                             <a href="{{ url_for('public.about') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">About</a>
                             <a href="{{ url_for('user.profile') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Profile</a>
