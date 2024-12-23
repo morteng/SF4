@@ -118,7 +118,7 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         'application_deadline': datetime.strptime('2024-12-31 23:59:59', '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S'),  # Ensure it's a string
         'open_for_applications': True
     }
-
+    
     with app.app_context(), app.test_client() as client:
         with app.test_request_context():
             login_user(admin_user)
@@ -199,7 +199,8 @@ def test_update_stipend_open_for_applications(test_data, db_session, app, admin_
         assert form.validate(), f"Form validation failed: {form.errors}"
 
         # Call update_stipend to actually update the stipend object
-        update_stipend(stipend, update_data)
+        with app.test_request_context():
+            update_stipend(stipend, update_data)
         
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
