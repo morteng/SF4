@@ -6,5 +6,31 @@
 <h1 class="text-2xl font-bold mb-4">Manage Stipends</h1>
 <a href="#" hx-get="{{ url_for('admin.stipend.create') }}" hx-target="body > main" hx-swap="innerHTML" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Create New Stipend</a>
 
-<div id="stipends-pagination" hx-get="{{ url_for('admin.stipend.paginate', page=1) }}" hx-trigger="load" hx-target="#stipends-pagination" hx-swap="innerHTML"></div>
+<div class="overflow-x-auto mt-4">
+    <table id="stipends" class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th scope="col" class="relative px-6 py-3">
+                    <span class="sr-only">Action</span>
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <div class="overflow-x-auto mt-4">
+        <table id="stipends" class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th scope="col" class="relative px-6 py-3">
+                        <span class="sr-only">Action</span>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <div id="stipends-pagination" hx-get="{{ url_for('admin.stipend.paginate', page=1) }}" hx-trigger="load" hx-target="#stipends-pagination" hx-swap="innerHTML"></div>
+    </div>
+</div>
 {% endblock %}
