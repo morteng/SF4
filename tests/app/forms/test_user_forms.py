@@ -7,7 +7,7 @@ from app.forms.user_forms import ProfileForm, LoginForm
 from app import create_app
 from app.models.user import User
 from app.extensions import db
-from app.constants import FLASH_MESSAGES  # Import FLASH_MESSAGES from constants
+from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR  
 
 @pytest.fixture(scope='function', autouse=True)
 def setup_database(_db):
