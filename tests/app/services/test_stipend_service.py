@@ -127,7 +127,7 @@ def test_create_stipend_with_missing_optional_fields(db_session, app, admin_user
         'application_deadline': datetime.strptime('2023-12-31 23:59:59', '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S'),
         'open_for_applications': True
     }
-
+    
     with app.app_context(), app.test_client() as client:
         with app.test_request_context():
             login_user(admin_user)
@@ -342,9 +342,6 @@ def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user
         # Use StipendForm to handle form submission
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
-        
-        # Call update_stipend to actually update the stipend object
-        update_stipend(stipend, update_data)
         
         # Simulate form submission after calling update_stipend
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
