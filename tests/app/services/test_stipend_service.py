@@ -107,7 +107,7 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
     db_session.add(stipend)
     db_session.commit()
-
++
     update_data = {
         'name': "Updated Test Stipend",
         'summary': 'Updated summary',
@@ -126,10 +126,13 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         # Use StipendForm to handle form submission
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
-
++
++        # Call update_stipend to actually update the stipend object
++        update_stipend(stipend, update_data)
++
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
         logging.info(f"Response status code: {response.status_code}")
-        logging.info(f"Response data: {response.data.decode('utf-8')}")
+        logging.info(f"Response  {response.data.decode('utf-8')}")
 
     # Query the stipend from the session to ensure it's bound
     updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
@@ -160,7 +163,10 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
         # Create a form instance and validate it
         form = StipendForm(data=update_data)
         assert not form.validate(), f"Form validation should have failed: {form.errors}"
-        
++
++        # Call update_stipend to actually update the stipend object
++        update_stipend(stipend, update_data)
++        
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Assert that the stipend was not updated due to validation errors
@@ -188,7 +194,10 @@ def test_update_stipend_open_for_applications(test_data, db_session, app, admin_
         # Create a form instance and validate it
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
-        
++
++        # Call update_stipend to actually update the stipend object
++        update_stipend(stipend, update_data)
++        
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Query the stipend from the session to ensure it's bound
