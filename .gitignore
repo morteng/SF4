@@ -13,3 +13,5 @@ __pycache__/
 
 # Databases
 instance/site.db
+
+node_modules/
