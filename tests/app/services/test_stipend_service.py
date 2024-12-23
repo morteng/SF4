@@ -209,9 +209,7 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     assert updated_stipend.name == "Updated Test Stipend"
     assert updated_stipend.summary == 'Updated summary'
     assert updated_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
-
-    # Check if the correct flash message was set
-    with app.test_request_context():
+    with app.app_context():
         assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
 
 def test_update_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
