@@ -107,7 +107,7 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
     db_session.add(stipend)
     db_session.commit()
-
+    
     update_data = {
         'name': "Updated Test Stipend",
         'summary': 'Updated summary',
@@ -166,7 +166,8 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
         assert not form.validate(), f"Form validation should have failed: {form.errors}"
 
         # Call update_stipend to actually update the stipend object
-        update_stipend(stipend, update_data)
+        with app.test_request_context():
+            update_stipend(stipend, update_data)
         
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
