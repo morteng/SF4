@@ -30,12 +30,18 @@ def admin_user(db_session):
     return user
 
 def test_create_stipend(test_data, db_session, app, admin_user):
-    stipend = Stipend(**test_data)
+    # Convert datetime object to string for form submission
+    test_data['application_deadline'] = test_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
 
     with app.app_context(), app.test_client() as client:
         with app.test_request_context():
             login_user(admin_user)
-        response = client.post('/admin/stipends/create', data=test_data, follow_redirects=True)
+        
+        # Create a form instance and validate it
+        form = StipendForm(data=test_data)
+        assert form.validate(), f"Form validation failed: {form.errors}"
+        
+        response = client.post('/admin/stipends/create', data=form.data, follow_redirects=True)
 
     # Query the stipend from the session to ensure it's bound
     new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()

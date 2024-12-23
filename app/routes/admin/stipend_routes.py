@@ -27,14 +27,10 @@ def create():
             stipend_data = {k: v for k, v in form.data.items() if k != 'submit' and k != 'csrf_token'}
             logging.info(f"Stipend data to be created: {stipend_data}")
             stipend = Stipend(**stipend_data)
-            result = create_stipend(stipend)
             
-            if not result:
-                flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-                if request.headers.get('HX-Request'):
-                    return render_template('_flash_messages.html'), 200
-                else:
-                    return render_template('admin/stipends/form.html', form=form), 200
+            # Add the stipend to the session and commit
+            db.session.add(stipend)
+            db.session.commit()
             
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             
