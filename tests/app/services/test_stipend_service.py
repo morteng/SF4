@@ -33,9 +33,9 @@ def admin_user(db_session):
 def test_create_stipend(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
 
-    with app.app_context(), app.test_request_context():
+    with app.app_context(), app.test_client() as client:
         login_user(admin_user)
-        create_stipend(stipend, session=db_session)  # Add and commit the stipend
+        response = client.post('/create_stipend', data=test_data)  # Assuming the endpoint is /create_stipend
 
     # Query the stipend from the session to ensure it's bound
     new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
@@ -53,8 +53,7 @@ def test_create_stipend(test_data, db_session, app, admin_user):
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        with app.test_request_context():
-            assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
+        assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
 
 def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     # Modify test data with an invalid application_deadline format
@@ -62,7 +61,7 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
     
     form = StipendForm(data=test_data)
     
-    with app.app_context(), app.test_request_context():
+    with app.app_context(), app.test_client() as client:
         login_user(admin_user)
         
         # Validate the form
@@ -77,7 +76,7 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
         
         stipend_data = {k: v for k, v in form.data.items() if k != 'submit'}
         stipend = Stipend(**stipend_data)
-        new_stipend = create_stipend(stipend, session=db_session)
+        response = client.post('/create_stipend', data=stipend_data)  # Assuming the endpoint is /create_stipend
 
     # Assert that the stipend was not created due to validation errors
     new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
@@ -85,8 +84,7 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        with app.test_request_context():
-            assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
+        assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
 def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
@@ -99,9 +97,9 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         'application_deadline': datetime.strptime('2024-12-31 23:59:59', '%Y-%m-%d %H:%M:%S'),
     }
 
-    with app.app_context(), app.test_request_context():
+    with app.app_context(), app.test_client() as client:
         login_user(admin_user)
-        update_stipend(stipend, update_data)
+        response = client.post(f'/update_stipend/{stipend.id}', data=update_data)  # Assuming the endpoint is /update_stipend/<id>
 
     updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
     assert updated_stipend.name == "Updated Test Stipend"
@@ -110,8 +108,7 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        with app.test_request_context():
-            assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
+        assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
 
 def test_update_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
@@ -160,27 +157,24 @@ def test_delete_existing_stipend(test_data, db_session, app, admin_user):
     db_session.add(stipend)
     db_session.commit()
 
-    with app.app_context(), app.test_request_context():
+    with app.app_context(), app.test_client() as client:
         login_user(admin_user)
-        delete_stipend(stipend.id)
+        response = client.post(f'/delete_stipend/{stipend.id}')  # Assuming the endpoint is /delete_stipend/<id>
 
     deleted_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
     assert deleted_stipend is None
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        with app.test_request_context():
-            assert FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"].encode() in response.data
+        assert FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"].encode() in response.data
 
 def test_delete_nonexistent_stipend(app, admin_user):
-    with app.app_context(), app.test_request_context():
+    with app.app_context(), app.test_client() as client:
         login_user(admin_user)
-        delete_stipend(9999)  # Assuming there's no stipend with ID 9999
+        response = client.post('/delete_stipend/9999')  # Assuming there's no stipend with ID 9999
 
         # Check if the correct flash message was set
-        with app.test_request_context():
-            with app.test_request_context():
-                assert FLASH_MESSAGES["STIPEND_NOT_FOUND"].encode() in response.data
+        assert FLASH_MESSAGES["STIPEND_NOT_FOUND"].encode() in response.data
 
 def test_get_stipend_by_valid_id(test_data, db_session, app):
     stipend = Stipend(**test_data)
