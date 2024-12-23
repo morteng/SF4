@@ -306,8 +306,6 @@ def test_update_stipend_open_for_applications_as_string(test_data, db_session, a
         assert form.validate(), f"Form validation failed: {form.errors}"
         
         # Simulate form submission after calling update_stipend
-        # Call update_stipend to actually update the stipend object
-        update_stipend(stipend, update_data)
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Query the stipend from the session to ensure it's bound
