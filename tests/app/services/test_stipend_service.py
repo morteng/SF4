@@ -228,9 +228,6 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
         with app.test_request_context():
             login_user(admin_user)
             
-            # Call update_stipend to actually update the stipend object
-            update_stipend(stipend, update_data)
-        
         # Create a form instance and validate it
         form = StipendForm(data=update_data)
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
@@ -380,8 +377,6 @@ def test_update_stipend_with_empty_application_deadline(test_data, db_session, a
         assert not form.validate(), f"Form validation should have failed: {form.errors}"
         
         # Simulate form submission after calling update_stipend
-        # Call update_stipend to actually update the stipend object
-        update_stipend(stipend, update_data)
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Assert that the stipend was not updated due to validation errors
