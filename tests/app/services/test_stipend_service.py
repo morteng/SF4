@@ -205,7 +205,7 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     
     # Query the stipend from the session to ensure it's bound
     updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
-
+    
     # Check if the stipend was updated successfully
     assert updated_stipend is not None
     assert updated_stipend.name == "Updated Test Stipend"
