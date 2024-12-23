@@ -25,6 +25,7 @@ def test_data():
 @pytest.fixture
 def admin_user(db_session):
     user = User(username='adminuser', email='admin@example.com', password_hash='hashedpassword')
+    user.is_admin = True
     db_session.add(user)
     db_session.commit()
     return user
@@ -61,6 +62,7 @@ def test_create_stipend(test_data, db_session, app, admin_user):
     with app.test_request_context():
         assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
 
+# lookat how test_create_stipend is set up to evaluate, it works. do it the same way for the tests below AI!
 def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     # Modify test data with an invalid application_deadline format
     test_data['application_deadline'] = '2023-13-32 99:99:99'
