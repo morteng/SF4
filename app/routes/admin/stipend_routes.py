@@ -71,8 +71,8 @@ def edit(id):
         flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
     
-    form = StipendForm(obj=stipend, original_name=stipend.name)
-    
+    form = StipendForm(request.form, obj=stipend, original_name=stipend.name)
+   
     if form.validate_on_submit():
         try:
             form.populate_obj(stipend)
