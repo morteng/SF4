@@ -81,7 +81,7 @@ class AdminStipendTestCase(unittest.TestCase):
         )
         db.session.add(stipend)
         db.session.commit()
-
+        
         # Navigate to the stipend update page
         response = self.client.get(url_for('admin.stipend.edit', id=stipend.id))
         self.assertEqual(response.status_code, 200)
@@ -165,9 +165,9 @@ class AdminStipendTestCase(unittest.TestCase):
         db.session.add(stipend1)
         db.session.add(stipend2)
         db.session.commit()
-
+        
         # Navigate to the stipend index page
-        response = self.client.get(url_for('admin.stipend.index'))
+        response = self.client.get(url_for('admin.stipend.paginate', page=1))
         self.assertEqual(response.status_code, 200)
 
         # Check if both stipends are displayed on the index page
