@@ -72,7 +72,7 @@ def edit(id):
         return redirect(url_for('admin.stipend.index'))
     
     if request.method == 'POST':
-        form = StipendForm(request.form, obj=stipend)
+        form = StipendForm(request.form)
         if form.validate_on_submit():
             try:
                 # Exclude 'submit' and 'csrf_token' from form data
