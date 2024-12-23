@@ -152,7 +152,7 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
     stipend = Stipend(**test_data)
     db_session.add(stipend)
     db_session.commit()
-
+    
     update_data = {
         'application_deadline': '2024-13-32 99:99:99',
     }
