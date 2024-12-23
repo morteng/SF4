@@ -126,10 +126,11 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         # Use StipendForm to handle form submission
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
-
-        # Call update_stipend to actually update the stipend object
-        update_stipend(stipend, update_data)
-
+        
+        with app.test_request_context():
+            # Call update_stipend to actually update the stipend object
+            update_stipend(stipend, update_data)
+        
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
         logging.info(f"Response status code: {response.status_code}")
         logging.info(f"Response  {response.data.decode('utf-8')}")
