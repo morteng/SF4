@@ -76,5 +76,6 @@ FLASH_MESSAGES = {
     "UPDATE_PROFILE_SUCCESS": "Profile updated successfully.",
     "PROFILE_UPDATE_SUCCESS": "Profile updated successfully.",
     "PROFILE_UPDATE_ERROR": "Failed to update profile.",
+    "EMAIL_ALREADY_EXISTS": "Email already exists. Please choose a different email address.",
     "PROFILE_UPDATE_INVALID_DATA": "Invalid data provided for profile update."
 }
