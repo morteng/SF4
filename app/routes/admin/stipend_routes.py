@@ -10,7 +10,7 @@ from app.services.stipend_service import (
     update_stipend
 )
 from app.models.stipend import Stipend
-from app.extensions import db, db_session  # Ensure this matches how db_session is defined or imported
+from app.extensions import db
 import logging
 from app.utils import admin_required, flash_message
 

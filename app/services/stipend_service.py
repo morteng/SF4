@@ -26,6 +26,8 @@ def update_stipend(stipend, data, session=db.session):
                 else:
                     value = bool(value)
             logging.info(f"Setting {key} to {value}")
+            logging.info(f"Setting {key} to {value}")
+            logging.info(f"Setting {key} to {value}")
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
 
