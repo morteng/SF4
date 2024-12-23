@@ -62,7 +62,6 @@ def test_create_stipend(test_data, db_session, app, admin_user):
     with app.test_request_context():
         assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
 
-# lookat how test_create_stipend is set up to evaluate, it works. do it the same way for the tests below AI!
 def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     # Modify test data with an invalid application_deadline format
     test_data['application_deadline'] = '2023-13-32 99:99:99'
@@ -93,6 +92,7 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
     # Check if the correct flash message was set
     with app.test_request_context():
         assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
+# look at how test_create_stipend is set up to evaluate, it works. do it the same way for the tests below AI!
 
 def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
