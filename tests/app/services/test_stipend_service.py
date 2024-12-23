@@ -187,7 +187,54 @@ def test_update_stipend_open_for_applications(test_data, db_session, app, admin_
 
     update_data = {
         'name': test_data['name'],  # Add the name field
+        'summary': test_data['summary'],
+        'description': test_data['description'],
+        'homepage_url': test_data['homepage_url'],
+        'application_procedure': test_data['application_procedure'],
+        'eligibility_criteria': test_data['eligibility_criteria'],
+        'application_deadline': test_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S'),
         'open_for_applications': True,
+    }
+
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+        
+        # Create a form instance and validate it
+        form = StipendForm(data=update_data)
+        assert form.validate(), f"Form validation failed: {form.errors}"
+
+        # Call update_stipend to actually update the stipend object
+        with app.test_request_context():
+            update_stipend(stipend, update_data)
+        
+        response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
+
+    # Query the stipend from the session to ensure it's bound
+    updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
+
+    # Check if the stipend was updated successfully
+    assert updated_stipend is not None
+    assert updated_stipend.open_for_applications is True
+
+    # Check if the correct flash message was set
+    with app.test_request_context():
+        assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
+
+def test_update_stipend_open_for_applications_as_string(test_data, db_session, app, admin_user):
+    stipend = Stipend(**test_data)
+    db_session.add(stipend)
+    db_session.commit()
+
+    update_data = {
+        'name': test_data['name'],
+        'summary': test_data['summary'],
+        'description': test_data['description'],
+        'homepage_url': test_data['homepage_url'],
+        'application_procedure': test_data['application_procedure'],
+        'eligibility_criteria': test_data['eligibility_criteria'],
+        'application_deadline': test_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S'),
+        'open_for_applications': 'yes',  # Pass as string
     }
 
     with app.app_context(), app.test_client() as client:

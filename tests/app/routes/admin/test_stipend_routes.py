@@ -189,3 +189,24 @@ def test_update_stipend_route_with_database_error(logged_in_admin, test_stipend,
 
         updated_stipend = db_session.get(Stipend, test_stipend.id)
         assert updated_stipend.name != 'Updated Stipend'
+
+def test_delete_stipend_route_with_database_error(logged_in_admin, test_stipend, db_session, monkeypatch):
+    with logged_in_admin.application.app_context():
+        def mock_delete(*args, **kwargs):
+            raise Exception("Database error")
+
+        monkeypatch.setattr(db_session, 'delete', mock_delete)
+
+        response = logged_in_admin.post(
+            url_for('admin.stipend.delete', id=test_stipend.id),
+            follow_redirects=True
+        )
+
+        assert response.status_code == 200
+        assert FLASH_MESSAGES["DELETE_STIPEND_ERROR"].encode() in response.data
+
+        # Ensure the stipend is still in the session after the failed delete
+        db_session.expire_all()
+        stipend_after_failed_delete = db_session.get(Stipend, test_stipend.id)
+        assert stipend_after_failed_delete is not None
+        assert stipend_after_failed_delete.name == test_stipend.name
