@@ -72,7 +72,7 @@ def edit(id):
         return redirect(url_for('admin.stipend.index'))
     
     if request.method == 'POST':
-        form = StipendForm(request.form, original_name=stipend.name)
+        form = StipendForm(request.form, obj=stipend, original_name=stipend.name)
         if form.validate_on_submit():
             try:
                 form.populate_obj(stipend)
