@@ -30,6 +30,13 @@ def admin_user(db_session):
     db_session.commit()
     return user
 
+def extract_csrf_token(response_data):
+    csrf_regex = r'<input[^>]+name="csrf_token"[^>]+value="([^"]+)"'
+    match = re.search(csrf_regex, response_data.decode('utf-8'))
+    if match:
+        return match.group(1)
+    return None
+
 def test_create_stipend(test_data, db_session, app, admin_user):
     # Convert datetime object to string for form submission
     test_data['application_deadline'] = test_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
@@ -119,6 +126,8 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         assert form.validate(), f"Form validation failed: {form.errors}"
         
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
+        csrf_token = extract_csrf_token(response.data)
+
 
     # Query the stipend from the session to ensure it's bound
     updated_stipend = db.session.query(Stipend).filter_by(id=stipend.id).first()
