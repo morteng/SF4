@@ -40,4 +40,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Mobile menu toggle functionality
+    const navToggle = document.getElementById('nav-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (navToggle) {
+        navToggle.addEventListener('click', function () {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
 });
