@@ -41,7 +41,7 @@ def test_profile_form_invalid_same_username(client, setup_database):
     form.username.data = "existinguser"
     form.email.data = "newemail@example.com"
     assert form.validate() == False
-    assert 'Please use a different username.' in form.username.errors
+    assert FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"] in form.username.errors
 
 def test_profile_form_invalid_same_email(client, setup_database):
     password_hash = generate_password_hash("password123")
