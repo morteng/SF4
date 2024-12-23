@@ -64,6 +64,10 @@
                     <button id="theme-toggle" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                         Toggle Theme
                     </button>
+                    <!-- Mobile theme toggle button -->
+                    <button id="theme-toggle-mobile" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium hidden md:block">
+                        Toggle Theme (Mobile)
+                    </button>
                     <a href="{{ url_for('public.logout') }}" class="text-red-400 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Logout</a>
                 {% endif %}
             {% else %}
