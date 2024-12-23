@@ -73,7 +73,7 @@ def test_create_stipend(test_data, db_session, app, admin_user):
 
 def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     # Modify test data with an invalid application_deadline format
-    test_data['application_deadline'] = '12/31/2023 23:59:59'  # Different format
+     test_data['application_deadline'] = '12/31/2023 23:59:59'  # Different format
     
     form = StipendForm(data=test_data)
     
@@ -199,8 +199,7 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         # Simulate form submission to the edit route
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
         assert response.status_code == 200
-        stipend = db.session.merge(stipend)
-        db.session.commit()
+        
         db.session.refresh(stipend)
     
     # Query the stipend from the session to ensure it's bound
@@ -223,7 +222,7 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
         'name': test_data['name'],
         'application_deadline': '2024-13-32 99:99:99',
     }
-
+    
     with app.app_context(), app.test_client() as client:
         with app.test_request_context():
             login_user(admin_user)
