@@ -102,6 +102,94 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
     with app.test_request_context():
         assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
+def test_create_stipend_with_all_fields(test_data, db_session, app, admin_user):
+    # Convert datetime object to string for form submission
+    test_data['application_deadline'] = test_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
+
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+        
+        # Create a form instance and validate it
+        form = StipendForm(data=test_data)
+        assert form.validate(), f"Form validation failed: {form.errors}"
+        
+        response = client.post('/admin/stipends/create', data=form.data, follow_redirects=True)
+
+    # Query the stipend from the session to ensure it's bound
+    new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
+
+    # Check if the stipend was created successfully with all fields
+    assert new_stipend is not None
+    for key, value in test_data.items():
+        if key == 'application_deadline':
+            assert new_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == value
+        else:
+            assert getattr(new_stipend, key) == value
+
+    # Check if the correct flash message was set
+    with app.test_request_context():
+        assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
+
+def test_create_stipend_with_missing_optional_fields(db_session, app, admin_user):
+    test_data = {
+        'name': "Test Stipend",
+        'application_deadline': datetime.strptime('2023-12-31 23:59:59', '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S'),
+        'open_for_applications': True
+    }
+
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+        
+        # Create a form instance and validate it
+        form = StipendForm(data=test_data)
+        assert form.validate(), f"Form validation failed: {form.errors}"
+        
+        response = client.post('/admin/stipends/create', data=form.data, follow_redirects=True)
+
+    # Query the stipend from the session to ensure it's bound
+    new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
+
+    # Check if the stipend was created successfully with missing optional fields
+    assert new_stipend is not None
+    assert new_stipend.name == test_data['name']
+    assert new_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == test_data['application_deadline']
+    assert new_stipend.open_for_applications is True
+    assert new_stipend.summary is None  # Assuming summary is optional
+    assert new_stipend.description is None  # Assuming description is optional
+
+    # Check if the correct flash message was set
+    with app.test_request_context():
+        assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
+
+def test_create_stipend_with_invalid_date_format(test_data, db_session, app, admin_user):
+    # Modify test data with an invalid application_deadline format
+    test_data['application_deadline'] = '12/31/2023 23:59:59'  # Different format
+
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+        
+        # Create a form instance and validate it
+        form = StipendForm(data=test_data)
+        assert not form.validate(), f"Form validation should have failed: {form.errors}"
+
+        # Call create_stipend to actually create the stipend object
+        with app.test_request_context():
+            stipend = Stipend(**test_data)
+            create_stipend(stipend)
+        
+        response = client.post('/admin/stipends/create', data=form.data, follow_redirects=True)
+
+    # Assert that the stipend was not created due to validation errors
+    new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
+    assert new_stipend is None
+
+    # Check if the correct flash message was set
+    with app.test_request_context():
+        assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
+
 
 def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
@@ -261,6 +349,82 @@ def test_update_stipend_open_for_applications_as_string(test_data, db_session, a
     # Check if the correct flash message was set
     with app.test_request_context():
         assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
+
+def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user):
+    stipend = Stipend(**test_data)
+    db_session.add(stipend)
+    db_session.commit()
+
+    update_data = {
+        'name': "Updated All Fields",
+        'summary': 'Updated summary for all fields',
+        'description': 'Updated description for all fields.',
+        'homepage_url': 'http://updated.com',
+        'application_procedure': 'Updated procedure',
+        'eligibility_criteria': 'Updated criteria',
+        'application_deadline': datetime.strptime('2025-12-31 23:59:59', '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S'),
+        'open_for_applications': False
+    }
+
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+        
+        # Use StipendForm to handle form submission
+        form = StipendForm(data=update_data)
+        assert form.validate(), f"Form validation failed: {form.errors}"
+        
+        with app.test_request_context():
+            # Call update_stipend to actually update the stipend object
+            update_stipend(stipend, update_data)
+        
+        response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
+
+    # Query the stipend from the session to ensure it's bound
+    updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
+
+    # Check if the stipend was updated successfully with all fields changed
+    assert updated_stipend is not None
+    for key, value in update_data.items():
+        if key == 'application_deadline':
+            assert updated_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == value
+        else:
+            assert getattr(updated_stipend, key) == value
+
+    # Check if the correct flash message was set
+    with app.test_request_context():
+        assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
+
+def test_update_stipend_with_empty_application_deadline(test_data, db_session, app, admin_user):
+    stipend = Stipend(**test_data)
+    db_session.add(stipend)
+    db_session.commit()
+
+    update_data = {
+        'application_deadline': '',  # Empty string
+    }
+
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+        
+        # Create a form instance and validate it
+        form = StipendForm(data=update_data)
+        assert not form.validate(), f"Form validation should have failed: {form.errors}"
+
+        # Call update_stipend to actually update the stipend object
+        with app.test_request_context():
+            update_stipend(stipend, update_data)
+        
+        response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
+
+    # Assert that the stipend was not updated due to validation errors
+    updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
+    assert updated_stipend.application_deadline == test_data['application_deadline']  # Should remain unchanged
+
+    # Check if the correct flash message was set
+    with app.test_request_context():
+        assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
 def test_delete_existing_stipend(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
