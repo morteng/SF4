@@ -186,6 +186,7 @@ def test_update_stipend_open_for_applications(test_data, db_session, app, admin_
     db_session.commit()
 
     update_data = {
+        'name': test_data['name'],  # Add the name field
         'open_for_applications': True,
     }
 
