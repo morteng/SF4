@@ -2,6 +2,8 @@ import logging
 from app.extensions import db
 from app.models import Stipend
 from datetime import datetime
+from flask import flash
+from app.constants import FLASH_MESSAGES
 
 logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
@@ -28,11 +30,13 @@ def update_stipend(stipend, data):
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
         db.session.commit()
+        flash(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
     except Exception as e:
         db.session.rollback()
         if db.session.is_active and db.inspect(stipend).detached:
             db.session.add(stipend)
         logging.error(f"Failed to update stipend: {e}")
+        flash(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
 
 def create_stipend(stipend, session=db.session):
     try:
@@ -42,19 +46,23 @@ def create_stipend(stipend, session=db.session):
                 stipend.application_deadline = datetime.strptime(stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
             except ValueError as ve:
                 logging.error(f"Invalid date format: {ve}")
+                flash(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
                 raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
 
         session.add(stipend)
         session.commit()
         logging.info('Stipend created successfully.')
+        flash(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         return stipend
     except ValueError as ve:
         session.rollback()
         logging.error(f"Failed to create stipend due to invalid input: {ve}")
+        flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
         return None
     except Exception as e:
         session.rollback()
         logging.error(f"Failed to create stipend: {e}")
+        flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
         return None
 
 def delete_stipend(stipend_id):
@@ -64,11 +72,14 @@ def delete_stipend(stipend_id):
             db.session.delete(stipend)
             db.session.commit()
             logging.info('Stipend deleted successfully.')
+            flash(FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         else:
             logging.error('Stipend not found!')
+            flash(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
     except Exception as e:
         db.session.rollback()
         logging.error(f"Failed to delete stipend: {e}")
+        flash(FLASH_MESSAGES["DELETE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
 
 def get_stipend_by_id(id):
     return db.session.get(Stipend, id)
