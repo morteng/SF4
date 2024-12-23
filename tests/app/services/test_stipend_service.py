@@ -199,6 +199,7 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         # Simulate form submission to the edit route
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
         assert response.status_code == 200
+        db.session.commit()
     
     # Query the stipend from the session to ensure it's bound
     updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
