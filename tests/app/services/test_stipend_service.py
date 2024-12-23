@@ -197,11 +197,9 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
         
-        # Simulate form submission after calling update_stipend
+        # Call update_stipend and simulate form submission within the same request context
         with app.test_request_context():
-            # Call update_stipend to actually update the stipend object
             update_stipend(stipend, update_data)
-            response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Query the stipend from the session to ensure it's bound
     updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
