@@ -52,3 +52,4 @@ Please provide a single fenced code block with the **unified diff** (`diff --git
 **Do not** include any explanation after the code block.
 
 I will pass the patch to the “editor” LLM to apply it.
+
