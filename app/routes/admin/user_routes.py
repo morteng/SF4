@@ -3,6 +3,7 @@ from flask_login import login_required, current_user  # Add this line
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import UserForm
 from app.forms.user_forms import ProfileForm  # Add this line
+from app.forms.user_forms import ProfileForm  # Add this line
 from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user
 from app.utils import admin_required, flash_message
 import logging
