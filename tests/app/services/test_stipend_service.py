@@ -106,7 +106,7 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         'homepage_url': test_data['homepage_url'],
         'application_procedure': test_data['application_procedure'],
         'eligibility_criteria': test_data['eligibility_criteria'],
-        'application_deadline': datetime.strptime('2024-12-31 23:59:59', '%Y-%m-%d %H:%M:%S'),
+        'application_deadline': datetime.strptime('2024-12-31 23:59:59', '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S'),  # Ensure it's a string
         'open_for_applications': True
     }
 

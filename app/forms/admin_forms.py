@@ -28,7 +28,7 @@ class StipendForm(FlaskForm):
 
     def validate_name(self, name):
         if not name.data:
-            raise ValidationError('This field is required.')  # Ensure this matches the expected message in the test
+            raise ValidationError('This field is required.')
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
