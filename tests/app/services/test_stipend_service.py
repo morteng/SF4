@@ -343,9 +343,6 @@ def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
         
-        # Call update_stipend to actually update the stipend object
-        update_stipend(stipend, update_data)
-        
         # Simulate form submission after calling update_stipend
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
