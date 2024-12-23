@@ -6,7 +6,8 @@ from flask_login import login_user
 from app.extensions import db  # Ensure consistent session usage
 from app.forms.admin_forms import StipendForm
 from app.models.user import User
-from app.constants import FLASH_MESSAGES
+from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from flask import get_flashed_messages
 
 @pytest.fixture
 def test_data():

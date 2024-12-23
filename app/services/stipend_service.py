@@ -3,7 +3,7 @@ from app.extensions import db
 from app.models import Stipend
 from datetime import datetime
 from flask import flash
-from app.constants import FLASH_MESSAGES
+from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR, FLASH_CATEGORY_SUCCESS
 
 logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
