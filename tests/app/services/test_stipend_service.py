@@ -70,7 +70,8 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
     form = StipendForm(data=test_data)
     
     with app.app_context(), app.test_client() as client:
-        login_user(admin_user)
+        with app.test_request_context():
+            login_user(admin_user)
         
         # Validate the form
         if not form.validate():
@@ -83,8 +84,7 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
             return
         
         stipend_data = {k: v for k, v in form.data.items() if k != 'submit'}
-        stipend = Stipend(**stipend_data)
-        response = client.post('/create_stipend', data=stipend_data)  # Assuming the endpoint is /create_stipend
+        response = client.post('/admin/stipends/create', data=stipend_data, follow_redirects=True)
 
     # Assert that the stipend was not created due to validation errors
     new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
