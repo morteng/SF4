@@ -74,3 +74,100 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
     # Assert that the stipend was not created due to validation errors
     new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
     assert new_stipend is None
+
+def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
+    stipend = Stipend(**test_data)
+    db_session.add(stipend)
+    db_session.commit()
+
+    update_data = {
+        'name': "Updated Test Stipend",
+        'summary': 'Updated summary',
+        'application_deadline': datetime.strptime('2024-12-31 23:59:59', '%Y-%m-%d %H:%M:%S'),
+    }
+
+    with app.app_context(), app.test_request_context():
+        login_user(admin_user)
+        update_stipend(stipend, update_data)
+
+    updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
+    assert updated_stipend.name == "Updated Test Stipend"
+    assert updated_stipend.summary == 'Updated summary'
+    assert updated_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
+
+def test_update_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
+    stipend = Stipend(**test_data)
+    db_session.add(stipend)
+    db_session.commit()
+
+    update_data = {
+        'application_deadline': '2024-13-32 99:99:99',
+    }
+
+    with app.app_context(), app.test_request_context():
+        login_user(admin_user)
+        with pytest.raises(ValueError) as excinfo:
+            update_stipend(stipend, update_data)
+
+    assert "Invalid date format. Please use YYYY-MM-DD HH:MM:SS." in str(excinfo.value)
+
+def test_update_stipend_open_for_applications(test_data, db_session, app, admin_user):
+    stipend = Stipend(**test_data)
+    db_session.add(stipend)
+    db_session.commit()
+
+    update_data = {
+        'open_for_applications': 'y',
+    }
+
+    with app.app_context(), app.test_request_context():
+        login_user(admin_user)
+        update_stipend(stipend, update_data)
+
+    updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
+    assert updated_stipend.open_for_applications is True
+
+def test_delete_existing_stipend(test_data, db_session, app, admin_user):
+    stipend = Stipend(**test_data)
+    db_session.add(stipend)
+    db_session.commit()
+
+    with app.app_context(), app.test_request_context():
+        login_user(admin_user)
+        delete_stipend(stipend.id)
+
+    deleted_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
+    assert deleted_stipend is None
+
+def test_delete_nonexistent_stipend(app, admin_user):
+    with app.app_context(), app.test_request_context():
+        login_user(admin_user)
+        delete_stipend(9999)  # Assuming there's no stipend with ID 9999
+
+def test_get_stipend_by_valid_id(test_data, db_session, app):
+    stipend = Stipend(**test_data)
+    db_session.add(stipend)
+    db_session.commit()
+
+    retrieved_stipend = get_stipend_by_id(stipend.id)
+    assert retrieved_stipend is not None
+    assert retrieved_stipend.name == test_data['name']
+
+def test_get_stipend_by_invalid_id(app):
+    retrieved_stipend = get_stipend_by_id(9999)  # Assuming there's no stipend with ID 9999
+    assert retrieved_stipend is None
+
+def test_get_all_stipends_with_multiple_entries(test_data, db_session, app):
+    stipend1 = Stipend(**test_data)
+    stipend2 = Stipend(name="Another Test Stipend", summary="Summary of another stipend")
+    db_session.add(stipend1)
+    db_session.add(stipend2)
+    db_session.commit()
+
+    all_stipends = get_all_stipends()
+    assert len(all_stipends) == 2
+    assert any(s.name == test_data['name'] for s in all_stipends)
+
+def test_get_all_stipends_with_no_entries(app):
+    all_stipends = get_all_stipends()
+    assert len(all_stipends) == 0
