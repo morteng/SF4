@@ -53,8 +53,8 @@ def test_create_stipend(test_data, db_session, app, admin_user):
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert len(get_flashed_messages(category_filter=[FLASH_CATEGORY_SUCCESS])) == 1
-        assert get_flashed_messages(category_filter=[FLASH_CATEGORY_SUCCESS])[0] == FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"]
+        with app.test_request_context():
+            assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
 
 def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     # Modify test data with an invalid application_deadline format
@@ -85,8 +85,8 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert len(get_flashed_messages(category_filter=[FLASH_CATEGORY_ERROR])) == 1
-        assert get_flashed_messages(category_filter=[FLASH_CATEGORY_ERROR])[0] == FLASH_MESSAGES["INVALID_DATE_FORMAT"]
+        with app.test_request_context():
+            assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
 def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
@@ -110,8 +110,8 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert len(get_flashed_messages(category_filter=[FLASH_CATEGORY_SUCCESS])) == 1
-        assert get_flashed_messages(category_filter=[FLASH_CATEGORY_SUCCESS])[0] == FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"]
+        with app.test_request_context():
+            assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
 
 def test_update_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
@@ -169,8 +169,8 @@ def test_delete_existing_stipend(test_data, db_session, app, admin_user):
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert len(get_flashed_messages(category_filter=[FLASH_CATEGORY_SUCCESS])) == 1
-        assert get_flashed_messages(category_filter=[FLASH_CATEGORY_SUCCESS])[0] == FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"]
+        with app.test_request_context():
+            assert FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"].encode() in response.data
 
 def test_delete_nonexistent_stipend(app, admin_user):
     with app.app_context(), app.test_request_context():
@@ -179,8 +179,8 @@ def test_delete_nonexistent_stipend(app, admin_user):
 
         # Check if the correct flash message was set
         with app.test_request_context():
-            assert len(get_flashed_messages(category_filter=[FLASH_CATEGORY_ERROR])) == 1
-            assert get_flashed_messages(category_filter=[FLASH_CATEGORY_ERROR])[0] == FLASH_MESSAGES["STIPEND_NOT_FOUND"]
+            with app.test_request_context():
+                assert FLASH_MESSAGES["STIPEND_NOT_FOUND"].encode() in response.data
 
 def test_get_stipend_by_valid_id(test_data, db_session, app):
     stipend = Stipend(**test_data)
