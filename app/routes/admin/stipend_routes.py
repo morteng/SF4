@@ -71,26 +71,26 @@ def edit(id):
         flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
     
-if request.method == 'POST':
-    form = StipendForm(request.form, obj=stipend)
-    if form.validate_on_submit():
-        try:
-            update_stipend(stipend, form.data)
+    if request.method == 'POST':
+        form = StipendForm(request.form, obj=stipend)
+        if form.validate_on_submit():
+            try:
+                update_stipend(stipend, form.data)
                 
-            db.session.commit()
-            flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-            return redirect(url_for('admin.stipend.index'))
-        except Exception as e:
-            db.session.rollback()
-            current_app.logger.error(f"Failed to update stipend: {e}")
-            # Set the flash message with the correct category and message
-            flash_message(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-            if request.headers.get('HX-Request'):
-                return render_template('_flash_messages.html'), 200
-            else:
-                return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
-else:
-    form = StipendForm(obj=stipend)
+                db.session.commit()
+                flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                return redirect(url_for('admin.stipend.index'))
+            except Exception as e:
+                db.session.rollback()
+                current_app.logger.error(f"Failed to update stipend: {e}")
+                # Set the flash message with the correct category and message
+                flash_message(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+                if request.headers.get('HX-Request'):
+                    return render_template('_flash_messages.html'), 200
+                else:
+                    return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
+    else:
+        form = StipendForm(obj=stipend)
     
     if form.errors:
         for field, errors in form.errors.items():
