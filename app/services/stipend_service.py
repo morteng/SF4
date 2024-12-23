@@ -9,6 +9,8 @@ logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
 def update_stipend(stipend, data, session=db.session):
     try:
+        logging.info(f"Original stipend state: {stipend.__dict__}")
+        
         for key, value in data.items():
             if key.startswith('_'):
                 continue  # Skip internal attributes
@@ -25,12 +27,13 @@ def update_stipend(stipend, data, session=db.session):
                     value = value.lower() in ['y', 'yes', 'true', '1']
                 else:
                     value = bool(value)
-            logging.info(f"Setting {key} to {value}")
-            logging.info(f"Setting {key} to {value}")
+            
             logging.info(f"Setting {key} to {value}")
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
 
+        logging.info(f"Updated stipend state: {stipend.__dict__}")
+        
         session.commit()
         flash(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
     except Exception as e:
