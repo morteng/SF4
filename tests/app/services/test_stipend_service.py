@@ -233,12 +233,11 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
         # Create a form instance and validate it
         form = StipendForm(data=update_data)
         assert not form.validate(), f"Form validation should have failed: {form.errors}"
-
-        # Call update_stipend to actually update the stipend object
-        with app.test_request_context():
-            update_stipend(stipend, update_data)
         
-            # Simulate form submission after calling update_stipend
+        # Simulate form submission after calling update_stipend
+        with app.test_request_context():
+            # Call update_stipend to actually update the stipend object
+            update_stipend(stipend, update_data)
             response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Assert that the stipend was not updated due to validation errors
@@ -273,12 +272,11 @@ def test_update_stipend_open_for_applications(test_data, db_session, app, admin_
         # Create a form instance and validate it
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
-
-        # Call update_stipend to actually update the stipend object
-        with app.test_request_context():
-            update_stipend(stipend, update_data)
         
-            # Simulate form submission after calling update_stipend
+        # Simulate form submission after calling update_stipend
+        with app.test_request_context():
+            # Call update_stipend to actually update the stipend object
+            update_stipend(stipend, update_data)
             response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Query the stipend from the session to ensure it's bound
@@ -315,12 +313,11 @@ def test_update_stipend_open_for_applications_as_string(test_data, db_session, a
         # Create a form instance and validate it
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
-
-        # Call update_stipend to actually update the stipend object
-        with app.test_request_context():
-            update_stipend(stipend, update_data)
         
-            # Simulate form submission after calling update_stipend
+        # Simulate form submission after calling update_stipend
+        with app.test_request_context():
+            # Call update_stipend to actually update the stipend object
+            update_stipend(stipend, update_data)
             response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Query the stipend from the session to ensure it's bound
@@ -397,12 +394,11 @@ def test_update_stipend_with_empty_application_deadline(test_data, db_session, a
         # Create a form instance and validate it
         form = StipendForm(data=update_data)
         assert not form.validate(), f"Form validation should have failed: {form.errors}"
-
-        # Call update_stipend to actually update the stipend object
-        with app.test_request_context():
-            update_stipend(stipend, update_data)
         
-            # Simulate form submission after calling update_stipend
+        # Simulate form submission after calling update_stipend
+        with app.test_request_context():
+            # Call update_stipend to actually update the stipend object
+            update_stipend(stipend, update_data)
             response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
 
     # Assert that the stipend was not updated due to validation errors
