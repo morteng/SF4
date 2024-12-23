@@ -57,9 +57,10 @@ def test_profile_form_invalid_same_email(client, setup_database):
     db.session.commit()
 
     form = ProfileForm(original_username="testuser", original_email="test@example.com")
-    form.username.data = "newusername"
-    form.email.data = "existing@example.com"
-    assert form.validate() == False
+    with client.application.app_context():
+        form.username.data = "newusername"
+        form.email.data = "existing@example.com"
+        assert form.validate() == False
     assert 'Please use a different email address.' in form.email.errors
 
 def test_login_form_valid(client):
