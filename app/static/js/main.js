@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Theme toggle functionality
     const toggleButton = document.getElementById('theme-toggle');
-    const currentTheme = localStorage.getItem('theme') || 'dark';
+    let currentTheme = localStorage.getItem('theme') || 'dark';
     document.body.classList.add(currentTheme);
 
     toggleButton.addEventListener('click', function () {
