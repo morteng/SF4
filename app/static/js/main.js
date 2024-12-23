@@ -10,10 +10,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Menu toggle
-    document.getElementById('menu-toggle').addEventListener('click', function () {
-        const menu = document.getElementById('nav-menu');
-        menu.classList.toggle('hidden');
-    });
+    const menuToggle = document.getElementById('menu-toggle');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', function () {
+            const menu = document.getElementById('nav-menu');
+            if (menu) {
+                menu.classList.toggle('hidden');
+            }
+        });
+    }
 
     // Theme toggle functionality
     const toggleButton = document.getElementById('theme-toggle');
