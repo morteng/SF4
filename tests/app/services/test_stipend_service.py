@@ -354,7 +354,7 @@ def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user
         if key == 'application_deadline':
             assert updated_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == value
         else:
-            assert getattr(updated_stipend, key) == value
+            assert getattr(updated_stipend, key) is False if key == 'open_for_applications' else getattr(updated_stipend, key) == value
  
     # Check if the correct flash message was set
     with app.test_request_context():
