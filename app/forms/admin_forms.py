@@ -27,12 +27,12 @@ class StipendForm(FlaskForm):
             raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
 
     def validate_name(self, name):
-        if not name.
+        if not name.data:
             raise ValidationError('This field is required.')
 
     def process_data(self, data):
         super().process_data(data)
-        if 'open_for_applications' in 
+        if 'open_for_applications' in data:
             if data['open_for_applications'] == '0':
                 self.open_for_applications.data = False
             elif data['open_for_applications'] == '1':
@@ -50,7 +50,7 @@ class TagForm(FlaskForm):
         self.original_name = original_name
 
     def validate_name(self, name):
-        if not name.
+        if not name.data:
             raise ValidationError('Name cannot be empty.')
         if self.original_name and name.data == self.original_name:
             return  # Skip validation if the name hasn't changed
@@ -59,7 +59,7 @@ class TagForm(FlaskForm):
             raise ValidationError('Tag with this name already exists.')
 
     def validate_category(self, category):
-        if not category.
+        if not category.data:
             raise ValidationError('Category cannot be empty.')
 
 class UserForm(FlaskForm):
@@ -106,7 +106,7 @@ class BotForm(FlaskForm):
                 raise ValidationError('Bot with this name already exists.')
     
     def validate_status(self, field):
-        if field.raw_
+        if field.raw_data:
             value = field.raw_data[0].lower()
             if value in ['true', '1', 'y', 'yes', 'on']:
                 field.data = True
