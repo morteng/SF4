@@ -13,9 +13,9 @@ from app.models.stipend import Stipend
 from app.extensions import db
 import logging
 from app.utils import admin_required, flash_message
-
+ 
 admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
-
+ 
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -60,8 +60,8 @@ def create():
         return render_template('_flash_messages.html'), 200
     else:
         return render_template('admin/stipends/form.html', form=form), 200
-
-
+ 
+ 
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -75,7 +75,7 @@ def edit(id):
         form = StipendForm(request.form)
         if form.validate_on_submit():
             try:
-                # Exclude 'submit' and 'csrf_token' from form data
+                # Exclude 'submit' and 'csrf_token'
                 stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
                 update_stipend(stipend, stipend_data, session=db.session)
                 
@@ -102,9 +102,9 @@ def edit(id):
                     flash_message(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
     
     return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
-
-
-
+ 
+ 
+ 
 @admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
 @admin_required
@@ -125,15 +125,15 @@ def delete(id):
         logging.error(f"Failed to delete stipend: {e}")
         flash_message(FLASH_MESSAGES["DELETE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
         return redirect(url_for('admin.stipend.index'))
-
-
+ 
+ 
 @admin_stipend_bp.route('/', methods=['GET'])
 @login_required
 @admin_required
 def index():
     stipends = Stipend.query.paginate(page=1, per_page=10)
     return render_template('admin/stipends/index.html', stipends=stipends)
-
+ 
 @admin_stipend_bp.route('/paginate/<int:page>', methods=['GET'])
 @login_required
 @admin_required

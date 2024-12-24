@@ -73,7 +73,7 @@ def test_create_stipend(test_data, db_session, app, admin_user):
 
 def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     # Modify test data with an invalid application_deadline format
-    test_data['application_deadline'] = '12/31/2023 23:59:59'  # Different format
+     test_data['application_deadline'] = '12/31/2023 23:59:59'  # Different format
     
     form = StipendForm(data=test_data)
     
@@ -339,7 +339,7 @@ def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
         
-        # Simulate form submission after calling update_stipend
+        # Simulate form submission
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
  
     # Refresh the stipend object to get the updated data from the database
