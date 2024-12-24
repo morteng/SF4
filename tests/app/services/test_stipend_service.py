@@ -328,7 +328,7 @@ def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user
         'application_procedure': 'Updated procedure',
         'eligibility_criteria': 'Updated criteria',
         'application_deadline': datetime.strptime('2025-12-31 23:59:59', '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S'),
-        'open_for_applications': False
+        'open_for_applications': 'false'
     }
  
     with app.app_context(), app.test_client() as client:
