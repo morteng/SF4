@@ -337,6 +337,9 @@ def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user
         
         # Use StipendForm to handle form submission
         form = StipendForm(data=update_data)
+        # Manually process the form to trigger the process_data method
+        form.process()
+
         assert form.validate(), f"Form validation failed: {form.errors}"
         
         # Simulate form submission
