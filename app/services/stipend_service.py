@@ -21,7 +21,7 @@ def update_stipend(stipend, data, session=db.session):
                         value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
                     except ValueError:
                         raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
-            elif key == 'open_for_applications':
+            elif key == 'open_for_applications' and value is not None:
                 # Convert various representations of False to actual False
                 if isinstance(value, str):
                     value = value.lower() in ['y', 'yes', 'true', '1']
