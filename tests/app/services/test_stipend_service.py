@@ -319,7 +319,7 @@ def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user
     stipend = Stipend(**test_data)
     db_session.add(stipend)
     db_session.commit()
-
+ 
     update_data = {
         'name': "Updated All Fields",
         'summary': 'Updated summary for all fields',
@@ -330,7 +330,7 @@ def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user
         'application_deadline': datetime.strptime('2025-12-31 23:59:59', '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S'),
         'open_for_applications': False
     }
-
+ 
     with app.app_context(), app.test_client() as client:
         with app.test_request_context():
             login_user(admin_user)
@@ -341,10 +341,13 @@ def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user
         
         # Simulate form submission after calling update_stipend
         response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
-
+ 
+    # Refresh the stipend object to get the updated data from the database
+    db_session.refresh(stipend)
+ 
     # Query the stipend from the session to ensure it's bound
     updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
-
+ 
     # Check if the stipend was updated successfully with all fields changed
     assert updated_stipend is not None
     for key, value in update_data.items():
@@ -352,7 +355,7 @@ def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user
             assert updated_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == value
         else:
             assert getattr(updated_stipend, key) == value
-
+ 
     # Check if the correct flash message was set
     with app.test_request_context():
         assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
