@@ -1,76 +1,60 @@
 # TODO List
 
 ## Current Goals
-1. Implement comprehensive test coverage for all form validation
-   - Add test cases for all validation scenarios in StipendForm, TagForm, UserForm, BotForm, and OrganizationForm
-   - Verify error messages match expected values across all forms
-   - Test both HTMX and regular form submissions for all forms
-   - Test edge cases for all field types (dates, URLs, text lengths, etc.)
+1. Expand validation test coverage for edge cases
+   - Add tests for timezone handling in date fields
+   - Test form submission with mixed valid/invalid fields
+   - Verify error message persistence across HTMX partial updates
 
-2. Document validation rules and error handling patterns
-   - Add documentation for all form validation rules
-   - Include examples of valid/invalid inputs for each field type
-   - Document error message formats and handling patterns
-   - Add to project documentation in PROJECT.md
+2. Improve validation documentation
+   - Add validation flow diagrams to VALIDATION.md
+   - Document error message localization requirements
+   - Add API documentation for validation endpoints
 
 ## Knowledge & Memories
 - Windows 11 environment
 - Error Handling Implementation:
-  * utils.py provides format_error_message() with error mapping for consistent error formatting
-  * HTMX responses must include both error messages and field-specific errors
-  * Form errors must be propagated to templates with proper status codes
-  * Error messages must be rendered in specific HTML structure for testability
-  * Key fixes implemented:
-    - Error messages appear in HTMX responses
-    - Template structure matches test expectations
-    - Comprehensive date validation with edge case handling
-    - Consistent error container structure (#<field_name>-error)
-
-- Form Validation Patterns:
-  * All forms use consistent validation patterns
-  * CustomDateTimeField handles all date/time validation cases
-  * URL fields validate proper URL format and protocols
-  * Text fields have consistent length validation
-  * Unique field validation (username, email, etc.) implemented consistently
+  * utils.py format_error_message() handles date/time validation edge cases
+  * HTMX responses require specific error message structure for client-side handling
+  * Form templates use consistent error container IDs (#<field_name>-error)
+  * Key validation patterns implemented:
+    - Date/time validation with CustomDateTimeField
+    - URL validation with protocol enforcement
+    - Length validation with character counting
+    - Unique field validation with database checks
 
 - Template Structure:
-  * Error messages displayed in div with id="<field_name>-error"
-  * Each error wrapped in div with class="error-message"
-  * Flash messages displayed in #flash-messages container
-  * Consistent styling using Tailwind CSS classes
+  * Error messages use Tailwind CSS classes for consistent styling
+  * Field-specific errors appear below each input
+  * Flash messages appear in #flash-messages container
+  * HTMX responses maintain form state during validation
 
 ## Implementation Details
-1. For form error handling:
-   - All forms properly validate their fields
-   - Routes propagate errors correctly in HTMX responses
-   - Template structure in _form.html is consistent across all forms
-   - field_errors are properly passed to templates
-   - Error message rendering in templates is consistent
+1. Validation Patterns:
+   - All forms use CustomDateTimeField for date/time fields
+   - URL fields validate protocol and format
+   - Text fields enforce length limits
+   - Unique fields perform database checks
 
-2. For date validation:
-   - StipendForm.validate_application_deadline() includes comprehensive validation
-   - CustomDateTimeField handles all date/time validation cases
-   - Error messages are properly formatted and displayed in template
-   - HTMX responses handle validation errors correctly
+2. Error Handling:
+   - format_error_message() in utils.py standardizes error messages
+   - Templates render errors in consistent structure
+   - HTMX responses include both field errors and flash messages
+   - Date validation handles edge cases (leap years, timezones, etc.)
 
 ## Specific Tasks
-1. Add test coverage for all forms:
-   - Create test files for each form type
-   - Add test cases for all validation scenarios
-   - Verify error messages match expected values
-   - Test both HTMX and regular form submissions
-   - Test edge cases for each field type
+1. Enhance date/time validation:
+   - Add timezone support to CustomDateTimeField
+   - Implement daylight saving time handling
+   - Add tests for international date formats
 
-2. Document validation rules:
-   - Create VALIDATION.md documentation file
-   - Document validation rules for each field type
-   - Include examples of valid/invalid inputs
-   - Document error message formats
-   - Add to project documentation in PROJECT.md
+2. Improve validation documentation:
+   - Add validation flow diagrams to VALIDATION.md
+   - Document error message localization requirements
+   - Add API documentation for validation endpoints
 
-3. Review error handling consistency:
-   - Verify consistent error handling across all forms
-   - Ensure all forms use proper field types (CustomDateTimeField for dates, etc.)
-   - Check error message formatting in all templates
-   - Verify HTMX error handling in all routes
+3. Optimize validation performance:
+   - Implement caching for repeated validation checks
+   - Add rate limiting for form submissions
+   - Optimize database queries during validation
 
