@@ -61,6 +61,7 @@ class StipendForm(FlaskForm):
             field.data = field.data.lower() in ['true', 'yes', '1', 'y', 'on']
         elif field.data is None:
             field.data = False
+        return True  # Explicitly return True to indicate validation passed
 
     def validate_organization_id(self, field):
         if not field.data:

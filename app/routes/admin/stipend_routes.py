@@ -91,18 +91,20 @@ def edit(id):
     if request.method == 'POST' and form.validate_on_submit():
         try:
             # Prepare update data
-            stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
-
-
-            # Handle organization_id
-            if 'organization_id' in stipend_data:
-                organization = get_organization_by_id(stipend_data['organization_id'])
-                if not organization:
-                    flash_message(FLASH_MESSAGES["INVALID_ORGANIZATION"], FLASH_CATEGORY_ERROR)
-                    return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
+            stipend_data = {
+                'name': form.name.data,
+                'summary': form.summary.data,
+                'description': form.description.data,
+                'homepage_url': form.homepage_url.data,
+                'application_procedure': form.application_procedure.data,
+                'eligibility_criteria': form.eligibility_criteria.data,
+                'application_deadline': form.application_deadline.data,
+                'organization_id': form.organization_id.data,
+                'open_for_applications': form.open_for_applications.data
+            }
 
             # Handle empty application_deadline
-            if stipend_data.get('application_deadline') == '':
+            if stipend_data['application_deadline'] == '':
                 stipend_data['application_deadline'] = None
 
             # Update the stipend
