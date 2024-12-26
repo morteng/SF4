@@ -82,10 +82,11 @@ def create():
             field_errors = {}
             for field_name, errors in form.errors.items():
                 field = getattr(form, field_name)
-                field_errors[field_name] = [format_error_message(field, error) for error in errors]
-                error_messages.extend(field_errors[field_name])
-                for error in errors:
-                    flash_message(format_error_message(field, error), FLASH_CATEGORY_ERROR)
+                formatted_errors = [format_error_message(field, error) for error in errors]
+                field_errors[field_name] = formatted_errors
+                error_messages.extend(formatted_errors)
+                for error in formatted_errors:
+                    flash_message(error, FLASH_CATEGORY_ERROR)
                     
             if is_htmx:
                 return render_template(
