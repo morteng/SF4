@@ -2,6 +2,7 @@ import pytest
 from flask import url_for
 from app.models.stipend import Stipend
 from tests.conftest import extract_csrf_token
+from app.models.organization import Organization
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from datetime import datetime
 
@@ -14,7 +15,6 @@ def stipend_data():
         'homepage_url': 'http://example.com/stipend',
         'application_procedure': 'Apply online at example.com',
         'eligibility_criteria': 'Open to all students',
-        'organization_id': 1,
         'application_deadline': '2023-12-31 23:59:59',  # Keep as string
         'open_for_applications': True
     }
@@ -23,7 +23,10 @@ def stipend_data():
 def test_stipend(db_session, stipend_data):
     """Provide a test stipend."""
     stipend_data['application_deadline'] = datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')  # Convert to datetime here
-    stipend = Stipend(**stipend_data)
+    organization = Organization(name='Test Org')
+    db_session.add(organization)
+    db_session.commit()
+    stipend = Stipend(**stipend_data, organization_id=organization.id)
     db_session.add(stipend)
     db_session.commit()
     yield stipend
@@ -43,7 +46,7 @@ def test_create_stipend_route(logged_in_admin, stipend_data):
         'application_procedure': stipend_data['application_procedure'],
         'eligibility_criteria': stipend_data['eligibility_criteria'],
         'application_deadline': stipend_data['application_deadline'],  # Changed this line
-        'organization_id': stipend_data['organization_id'],
+        'organization_id': 1,
         'open_for_applications': stipend_data['open_for_applications'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
@@ -123,7 +126,13 @@ def test_paginate_stipend_route(logged_in_admin, test_stipend):
     assert response.status_code == 200
     assert test_stipend.name.encode() in response.data
 
-def test_create_stipend_route_htmx(logged_in_admin, stipend_data):
+def test_create_stipend_route_htmx(logged_in_admin, stipend_data, db_session):
+    # Ensure an organization exists for the test
+    organization = Organization(name='Test Org HTMX')
+    db_session.add(organization)
+    db_session.commit()
+    stipend_data['organization_id'] = organization.id
+
     create_response = logged_in_admin.get(url_for('admin.stipend.create'))
     assert create_response.status_code == 200
 

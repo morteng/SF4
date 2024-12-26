@@ -4,6 +4,7 @@ from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY
 from app.forms.admin_forms import StipendForm
 from app.services.stipend_service import (
     get_stipend_by_id,
+    get_organization_by_id,
     delete_stipend,
     get_all_stipends,
     create_stipend,
@@ -25,8 +26,10 @@ def create():
     if form.validate_on_submit():
         try:
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
-            logging.info(f"Stipend data to be created: {stipend_data}")
-            stipend = Stipend(**stipend_data)
+            organization = get_organization_by_id(stipend_data['organization_id'])
+            stipend_data['organization'] = organization
+            del stipend_data['organization_id']
+            stipend = create_stipend(stipend_data)
             
             # Add the stipend to the session and commit
             db.session.add(stipend)
@@ -77,6 +80,9 @@ def edit(id):
             try:
                 # Exclude 'submit' and 'csrf_token'
                 stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
+                organization = get_organization_by_id(stipend_data['organization_id'])
+                stipend_data['organization'] = organization
+                del stipend_data['organization_id']
                 update_stipend(stipend, stipend_data, session=db.session)
                 
                 flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
