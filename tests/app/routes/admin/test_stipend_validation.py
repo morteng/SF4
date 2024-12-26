@@ -6,6 +6,12 @@ from app.forms.admin_forms import StipendForm  # Added import statement
 
 def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
+        # Create a test organization first
+        from app.models.organization import Organization
+        test_org = Organization(name="Test Org", description="Test Org Description")
+        db_session.add(test_org)
+        db_session.commit()
+        
         # Ensure all required fields are present
         test_data = {
             'name': 'Test Stipend',
@@ -15,7 +21,7 @@ def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_
             'application_procedure': 'Test procedure',
             'eligibility_criteria': 'Test criteria',
             'application_deadline': '',
-            'organization_id': 1,
+            'organization_id': test_org.id,  # Use the actual organization ID
             'open_for_applications': True
         }
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=test_data)
