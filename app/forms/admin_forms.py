@@ -63,7 +63,7 @@ class StipendForm(FlaskForm):
     def validate_organization_id(self, field):
         if not field.data:
             raise ValidationError('Organization is required.')
-        organization = Organization.query.get(field.data)
+        organization = db.session.get(Organization, field.data)  # Updated to use db.session.get
         if not organization:
             raise ValidationError('Invalid organization selected.')
 
@@ -108,13 +108,13 @@ class UserForm(FlaskForm):
 
     def validate_username(self, username):
         if username.data != self.original_username:
-            user = User.query.filter_by(username=username.data).first()
+            user = db.session.get(User, username.data)  # Updated to use db.session.get
             if user is not None:
                 raise ValidationError('Please use a different username.')
 
     def validate_email(self, email):
         if email.data != self.original_email:
-            user = User.query.filter_by(email=email.data).first()
+            user = db.session.get(User, email.data)  # Updated to use db.session.get
             if user is not None:
                 raise ValidationError('Please use a different email address.')
 
@@ -156,7 +156,7 @@ class OrganizationForm(FlaskForm):
 
     def validate_name(self, name):
         if name.data != self.original_name:
-            organization = Organization.query.filter_by(name=name.data).first()
+            organization = db.session.get(Organization, name.data)  # Updated to use db.session.get
             if organization:
                 raise ValidationError('Organization with this name already exists.')
 

@@ -55,7 +55,7 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
         'eligibility_criteria': stipend_data['eligibility_criteria'],
         'application_deadline': '2024-12-31 23:59:59',  # Changed to future date
         'organization_id': str(organization.id),  # Converted to string
-        'open_for_applications': 'y',  # Changed to string 'y'
+        'open_for_applications': True,  # Changed to boolean
         'csrf_token': csrf_token
     }
     
@@ -96,7 +96,7 @@ def test_create_stipend_route_with_invalid_application_deadline_format(logged_in
         'eligibility_criteria': stipend_data['eligibility_criteria'],
         'application_deadline': '2023-13-32 99:99:99',  # Invalid date format
         'organization_id': str(organization.id),  # Converted to string
-        'open_for_applications': 'y',  # Changed to string 'y'
+        'open_for_applications': True,  # Changed to boolean
         'csrf_token': csrf_token
     }
     
@@ -122,26 +122,20 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'homepage_url': test_stipend.homepage_url,
         'application_procedure': test_stipend.application_procedure,
         'eligibility_criteria': test_stipend.eligibility_criteria,
-        'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if isinstance(test_stipend.application_deadline, datetime) else test_stipend.application_deadline,
+        'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if test_stipend.application_deadline else '',
         'organization_id': test_stipend.organization_id,
-        'open_for_applications': test_stipend.open_for_applications,
+        'open_for_applications': True,  # Changed to boolean
         'csrf_token': csrf_token
     }
     
-    # Remove follow_redirects=True to test the redirect response
     response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data)
-    
-    # Now we expect a 302 redirect
     assert response.status_code == 302
     
-    # Follow the redirect to verify the final result
     redirect_response = logged_in_admin.get(response.location)
     assert redirect_response.status_code == 200
     
     updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
     assert updated_stipend.name == 'Updated Stipend'
-    
-    # Assert the flash message in the redirected response
     assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in redirect_response.data
 
 def test_delete_stipend_route(logged_in_admin, test_stipend, db_session):
@@ -182,7 +176,7 @@ def test_create_stipend_route_htmx(logged_in_admin, stipend_data, db_session):
         'eligibility_criteria': stipend_data['eligibility_criteria'],
         'application_deadline': stipend_data['application_deadline'],  # Edited Line
         'organization_id': stipend_data['organization_id'],
-        'open_for_applications': stipend_data['open_for_applications'],
+        'open_for_applications': True,  # Changed to boolean
        'csrf_token': csrf_token
    }, follow_redirects=True)
  
