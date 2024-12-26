@@ -13,9 +13,8 @@
      e. Ensure proper status codes for different error types
 
 ## Completed Tasks
-- Fixed date validation error message propagation in stipend routes
+- Fixed datetime validation to handle both string and datetime inputs
 - Added comprehensive error handling for stipend routes
-- Added date validation with edge case handling
 - Established consistent error message formatting
 - Implemented HTMX response handling for form errors
 - Added test coverage for error scenarios in stipend routes
