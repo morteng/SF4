@@ -1,24 +1,25 @@
 # TODO List
 
 ## Current Goals
-1. [ ] Fix date validation error handling in stipend routes
-   - Update error message handling in stipend_routes.py
-   - Ensure proper error message passing to templates
-   - Verify error message rendering in HTML response
+1. [ ] Verify template rendering of error messages
+   - Check admin/stipends/_form.html template
+   - Ensure error messages appear in correct locations
+   - Verify proper styling of error messages
    - Steps:
-     a. Modify date error handling in create route
-     b. Update form template to display errors correctly
-     c. Add test cases for all date validation scenarios
+     a. Add template to chat for review
+     b. Verify error message container structure
+     c. Check CSS classes for error styling
 
-2. [ ] Improve error handling test coverage
-   - Add test cases in test_stipend_htmx.py for:
-     * All date validation edge cases
-     * Error message rendering location
-     * Field-specific error styling
+2. [ ] Add comprehensive test coverage for all form fields
+   - Create test cases in test_stipend_htmx.py for:
+     * Required field validation
+     * Field length validation
+     * URL format validation
+     * HTML escaping of user input
    - Steps:
-     a. Add test cases for invalid dates/times
-     b. Verify error message presence in response
-     c. Check for proper error styling in HTML
+     a. Add test cases for each form field
+     b. Verify error message consistency
+     c. Check field-specific error styling
 
 ## Knowledge & Memories
 - Windows 11 environment
@@ -53,8 +54,9 @@
     - Form field focus after error display
     - Error message persistence across form submissions
     - Verify error messages appear in correct HTML structure
-- Current Issues:
-  * Date validation errors not appearing in response
-  * Error messages not being passed to template correctly
-  * Test assertions failing due to missing error messages
+- Completed Work:
+  * Fixed date validation error handling in stipend_routes.py
+  * Enhanced format_error_message utility in utils.py
+  * Updated test_stipend_htmx.py with specific error location checks
+  * Standardized error message handling across all form fields
 

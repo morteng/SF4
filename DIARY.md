@@ -22,3 +22,14 @@ A log of interesting things tought, learned, discovered, and done.
   * Field labels should be used in error messages for better UX
   * HTMX responses need proper status codes and error handling
 
+### Day 4
+- Fixed date validation error handling issues:
+  * Standardized error handling using format_error_message utility
+  * Improved date validation error messages in utils.py
+  * Updated test_stipend_htmx.py with specific error location checks
+  * Ensured error messages appear in correct HTML structure
+- Key learnings:
+  * Specific error containers are crucial for reliable testing
+  * Consistent error message formatting improves maintainability
+  * Detailed test assertions help catch rendering issues
+
