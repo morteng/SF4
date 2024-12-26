@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
+from app.forms.fields import CustomDateTimeField
 from wtforms.validators import ValidationError
 from wtforms import (
     StringField, TextAreaField, URLField, BooleanField, 
@@ -42,10 +43,9 @@ class StipendForm(FlaskForm):
         Optional(),
         Length(max=1000, message="Eligibility criteria cannot exceed 1000 characters.")
     ])
-    application_deadline = DateTimeField(
+    application_deadline = CustomDateTimeField(
         'Application Deadline',
         validators=[DataRequired(message="Date is required")],
-        format='%Y-%m-%d %H:%M:%S',
         render_kw={
             "placeholder": "YYYY-MM-DD HH:MM:SS",
             "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
