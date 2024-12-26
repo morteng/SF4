@@ -20,27 +20,37 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @login_required
 @admin_required
 def create():
+    print("\n[DEBUG] Starting stipend create route")
     form = StipendForm()
     
     if form.validate_on_submit():
         try:
+            print("[DEBUG] Form validated successfully")
             # Create a copy of form data and remove unnecessary fields
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
+            print(f"[DEBUG] Prepared stipend_data: {stipend_data}")
             
             # Handle empty application deadline
-            if 'application_deadline' in stipend_data and stipend_data['application_deadline'] == '':
-                stipend_data['application_deadline'] = None
+            if 'application_deadline' in stipend_data:
+                print(f"[DEBUG] Processing application_deadline: {stipend_data['application_deadline']}")
+                if stipend_data['application_deadline'] == '':
+                    print("[DEBUG] Empty application_deadline, setting to None")
+                    stipend_data['application_deadline'] = None
                 
             # Create the stipend
+            print("[DEBUG] Creating stipend")
             stipend = create_stipend(stipend_data)
             if not stipend:
+                print("[DEBUG] Stipend creation failed")
                 flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
                 return render_template('admin/stipends/form.html', form=form), 200
             
+            print(f"[DEBUG] Stipend created successfully: {stipend}")
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.stipend.index'))
             
         except Exception as e:
+            print(f"[DEBUG] Exception occurred: {str(e)}")
             db.session.rollback()
             logging.error(f"Failed to create stipend: {e}")
             if "date format" in str(e).lower() or "deadline cannot be" in str(e).lower():
@@ -49,15 +59,7 @@ def create():
                 flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
             return render_template('admin/stipends/form.html', form=form), 200
     
-    # Handle form validation errors
-    for field, errors in form.errors.items():
-        for error in errors:
-            logging.error(f"Flashing error: {error}")
-            if "date format" in error.lower():
-                flash_message(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
-            else:
-                flash_message(error, FLASH_CATEGORY_ERROR)
-    
+    print("[DEBUG] Rendering form")
     return render_template('admin/stipends/form.html', form=form), 200
  
  
