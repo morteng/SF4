@@ -130,7 +130,7 @@ def edit(id):
                 
                 if is_htmx:
                     # Return the updated row with HTMX headers
-                    return render_template('admin/stipends/_stipend_row.html', stipend=updated_stipend)
+                    return render_template('admin/stipends/_stipend_row.html', stipend=updated_stipend), 200
                 # For non-HTMX requests, redirect to index
                 return redirect(url_for('admin.stipend.index'))
 
