@@ -256,7 +256,7 @@ def test_create_stipend_route_with_invalid_application_deadline_format_htmx(logg
     stipends = Stipend.query.all()
     assert not any(stipend.name == invalid_data['name'] for stipend in stipends)
     # Assert the flash message
-    assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
+    assert b'Invalid date format. Please use YYYY-MM-DD HH:MM:SS' in response.data
 
 def test_create_stipend_with_invalid_form_data_htmx(logged_in_admin, stipend_data, db_session):
     # Create organization first
