@@ -36,7 +36,7 @@ def create():
 
     if form.validate_on_submit():
         try:
-            # Prepare form data
+            # Prepare form data with explicit date handling
             stipend_data = {
                 'name': form.name.data,
                 'summary': form.summary.data,
@@ -48,6 +48,10 @@ def create():
                 'organization_id': form.organization_id.data,
                 'open_for_applications': form.open_for_applications.data
             }
+                
+            # Additional date validation
+            if stipend_data['application_deadline'] and stipend_data['application_deadline'] < datetime.now():
+                raise ValueError('Application deadline cannot be in the past.')
 
             # Create the stipend
             new_stipend = create_stipend(stipend_data)
@@ -103,6 +107,10 @@ def edit(id):
                     'organization_id': form.organization_id.data,
                     'open_for_applications': form.open_for_applications.data
                 }
+                
+                # Additional date validation
+                if stipend_data['application_deadline'] and stipend_data['application_deadline'] < datetime.now():
+                    raise ValueError('Application deadline cannot be in the past.')
 
                 # Update the stipend
                 update_stipend(stipend, stipend_data, session=db.session)
