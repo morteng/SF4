@@ -125,7 +125,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'application_procedure': test_stipend.application_procedure,
         'eligibility_criteria': test_stipend.eligibility_criteria,
         'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if test_stipend.application_deadline else '',
-        'organization_id': str(test_stipend.organization_id),  # Pass as string
+        'organization_id': test_stipend.organization_id,  # Pass as integer
         'open_for_applications': 'y',  # Changed from True to 'y'
         'csrf_token': csrf_token
     }
