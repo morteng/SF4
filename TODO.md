@@ -1,5 +1,8 @@
 # TODO List
 
+## Nice to know
+you're running on a windows 11 machine.
+
 ## Current Issues
 - [x] Fix test file path conflict in test_stipend_routes.py
   - [x] Remove duplicate test file at tests/routes/admin/test_stipend_routes.py

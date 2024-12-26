@@ -1,0 +1,17 @@
+/read CONVENTIONS.md
+/read PROJECT.md
+/add TODO.md
+/test
+/architect update TODO.md
+/architect fix that
+/architect clean up TODO.md
+/reset
+
+/read CONVENTIONS.md
+/read PROJECT.md
+/add TODO.md
+/test
+/architect update TODO.md
+/architect fix that
+/architect clean up TODO.md
+/reset
