@@ -29,7 +29,7 @@
      - In both HTML and JSON responses
 
 ## Knowledge & Memories
-- Windows 11 environment - use cmd.exe for commands
+- Windows 11 environment
 - Error Handling Implementation:
   - utils.py provides format_error_message() for consistent error formatting
   - HTMX responses include both error messages and field-specific errors
