@@ -3,20 +3,16 @@ from wtforms.validators import ValidationError
 from datetime import datetime
 
 class CustomDateTimeField(DateTimeField):
-    def __init__(self, label=None, validators=None, format='%Y-%m-%d', **kwargs):
+    def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
         super().__init__(label, validators, **kwargs)
         self.format = format
+        self.process_formdata = self._process_formdata
 
-    def process_formdata(self, valuelist):
+    def _process_formdata(self, valuelist):
         if valuelist:
-            date_str = ' '.join(valuelist)
+            date_str = valuelist[0]
             try:
-                self.data = datetime.strptime(date_str, self.format).date()
+                self.data = datetime.strptime(date_str, self.format)
             except ValueError:
                 self.data = None
-                raise ValidationError(f'Invalid date format. Please use {self.format}.')
-
-    def _value(self):
-        if self.raw_data:
-            return " ".join(self.raw_data)
-        return self.data.strftime(self.format) if self.data else ""
+                raise ValueError(self.gettext('Invalid date format'))
