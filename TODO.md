@@ -23,9 +23,9 @@
 - [ ] Review other admin routes for similar HTMX issues
 - [x] Fix redirect URL assertion in test_update_stipend_route
 - [x] Investigate template rendering error in stipend update route
-- [ ] Fix HTMX handling in stipend create route
-- [ ] Update test for HTMX stipend create route
-- [ ] Verify HTMX stipend create route works with proper template rendering
+- [x] Fix HTMX handling in stipend create route
+- [x] Update test for HTMX stipend create route
+- [x] Verify HTMX stipend create route works with proper template rendering
 
 ## Completed Tasks
 - Fixed HTMX stipend update route to return 200 status code without explicit status
