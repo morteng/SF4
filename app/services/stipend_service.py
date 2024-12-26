@@ -83,4 +83,4 @@ def get_stipend_by_id(id):
     return db.session.get(Stipend, id)
 
 def get_all_stipends():
-    return Stipend.query.all()
+    return Stipend.query
