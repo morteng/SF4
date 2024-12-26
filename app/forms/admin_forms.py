@@ -63,7 +63,6 @@ class StipendForm(FlaskForm):
             field.data = False
         # Ensure the field data is properly set in the form
         self.open_for_applications.data = field.data
-        return True
 
     def validate_organization_id(self, field):
         if not field.data:
