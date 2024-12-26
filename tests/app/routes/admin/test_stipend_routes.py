@@ -98,7 +98,11 @@ def test_create_stipend_route_with_invalid_application_deadline_format(logged_in
         'organization_id': str(organization.id),  # Converted to string
         'open_for_applications': 'y',  # Changed to string 'y'
         'csrf_token': csrf_token
-   }, follow_redirects=True)
+    }
+    
+    response = logged_in_admin.post(url_for('admin.stipend.create'), 
+                                  data=invalid_data,
+                                  follow_redirects=True)
  
     assert response.status_code == 400
     stipends = Stipend.query.all()
