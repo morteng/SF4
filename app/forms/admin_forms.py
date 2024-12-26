@@ -38,6 +38,7 @@ class StipendForm(FlaskForm):
     def validate_application_deadline(self, field):
         if field.data:
             try:
+                # Handle string input
                 if isinstance(field.data, str):
                     if not field.data.strip():
                         field.data = None
@@ -46,9 +47,13 @@ class StipendForm(FlaskForm):
                         deadline = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
                     except ValueError:
                         raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-                else:
+                # Handle datetime object
+                elif isinstance(field.data, datetime):
                     deadline = field.data
+                else:
+                    raise ValidationError('Invalid date format')
                 
+                # Validate future date
                 if deadline < datetime.now():
                     raise ValidationError('Application deadline cannot be in the past.')
             except Exception as e:

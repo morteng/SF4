@@ -53,21 +53,28 @@ def update_stipend(stipend, data, session=db.session):
 def create_stipend(stipend_data, session=db.session):
     try:
         # Validate required fields
-        if 'organization_id' not in stipend_data or not stipend_data['organization_id']:
-            raise ValueError("Organization ID is required")
-            
+        required_fields = ['name', 'organization_id']
+        for field in required_fields:
+            if field not in stipend_data or not stipend_data[field]:
+                raise ValueError(f"{field.replace('_', ' ').title()} is required")
+        
+        # Validate organization exists
+        organization = session.get(Organization, stipend_data['organization_id'])
+        if not organization:
+            raise ValueError("Invalid organization ID")
+        
         # Handle application_deadline
         if 'application_deadline' in stipend_data:
             if isinstance(stipend_data['application_deadline'], str):
-                try:
-                    if stipend_data['application_deadline'].strip():
+                if stipend_data['application_deadline'].strip():
+                    try:
                         stipend_data['application_deadline'] = datetime.strptime(
                             stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
                         )
-                    else:
-                        stipend_data['application_deadline'] = None
-                except ValueError:
-                    raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
+                    except ValueError:
+                        raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
+                else:
+                    stipend_data['application_deadline'] = None
             elif not stipend_data['application_deadline']:
                 stipend_data['application_deadline'] = None
         

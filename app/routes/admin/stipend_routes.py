@@ -25,19 +25,23 @@ def create():
 
     if form.validate_on_submit():
         try:
-            stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
+            # Prepare form data
+            stipend_data = {
+                'name': form.name.data,
+                'summary': form.summary.data,
+                'description': form.description.data,
+                'homepage_url': form.homepage_url.data,
+                'application_procedure': form.application_procedure.data,
+                'eligibility_criteria': form.eligibility_criteria.data,
+                'application_deadline': form.application_deadline.data,
+                'organization_id': form.organization_id.data,
+                'open_for_applications': form.open_for_applications.data
+            }
             
-            # Handle empty application_deadline
-            if not stipend_data.get('application_deadline'):
-                stipend_data['application_deadline'] = None
-                
             # Create the stipend
             new_stipend = create_stipend(stipend_data)
-            if not new_stipend:
-                flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-                return render_template('admin/stipends/create.html', form=form), 400
-            
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            
             if is_htmx:
                 return render_template('admin/stipends/_stipend_row.html', stipend=new_stipend)
             return redirect(url_for('admin.stipend.index'))
