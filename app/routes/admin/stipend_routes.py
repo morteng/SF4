@@ -79,15 +79,33 @@ def create():
         else:
             error_messages = []
             for field, errors in form.errors.items():
-                field_label = getattr(form, field).label.text
-                for error in errors:
-                    # For date fields, use the error directly
-                    if field == 'application_deadline':
-                        error_messages.append(error)
-                        flash_message(error, FLASH_CATEGORY_ERROR)
-                    else:
-                        error_messages.append(f"{field_label}: {error}")
-                        flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
+                if field == 'application_deadline':
+                    # Handle date-specific errors
+                    for error in errors:
+                        if 'invalid_format' in error:
+                            msg = 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
+                        elif 'invalid_date' in error:
+                            msg = 'Invalid date values (e.g., Feb 30)'
+                        elif 'invalid_time' in error:
+                            msg = 'Invalid time values (e.g., 25:61:61)'
+                        elif 'missing_time' in error:
+                            msg = 'Time is required. Please use YYYY-MM-DD HH:MM:SS'
+                        elif 'required' in error:
+                            msg = 'Date is required'
+                        elif 'cannot be in the past' in error:
+                            msg = 'Application deadline must be a future date'
+                        elif 'cannot be more than 5 years' in error:
+                            msg = 'Application deadline cannot be more than 5 years in the future'
+                        else:
+                            msg = error
+                        error_messages.append(msg)
+                        flash_message(msg, FLASH_CATEGORY_ERROR)
+                else:
+                    field_label = getattr(form, field).label.text
+                    for error in errors:
+                        msg = f"{field_label}: {error}"
+                        error_messages.append(msg)
+                        flash_message(msg, FLASH_CATEGORY_ERROR)
                 
             if is_htmx:
                 return render_template(

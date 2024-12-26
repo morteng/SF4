@@ -32,10 +32,20 @@ def update_stipend(stipend, data, session=db.session):
                 elif isinstance(value, str):
                     try:
                         value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
-                        if value < datetime.now():
+                        now = datetime.now()
+                        if value < now:
                             raise ValueError("Application deadline cannot be in the past.")
-                    except ValueError:
-                        raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
+                        if (value - now).days > 365 * 5:
+                            raise ValueError("Application deadline cannot be more than 5 years in the future.")
+                    except ValueError as e:
+                        if 'does not match format' in str(e):
+                            raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
+                        elif 'day is out of range' in str(e):
+                            raise ValueError("Invalid date values (e.g., Feb 30)")
+                        elif 'hour must be in' in str(e):
+                            raise ValueError("Invalid time values (e.g., 25:61:61)")
+                        else:
+                            raise ValueError("Invalid date/time values")
                 elif isinstance(value, datetime):
                     if value < datetime.now():
                         raise ValueError("Application deadline cannot be in the past.")
