@@ -21,7 +21,6 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @admin_required
 def create():
     form = StipendForm()
-    form.organization_id.choices = [(org.id, org.name) for org in Organization.query.all()]
     is_htmx = request.headers.get('HX-Request')
     
     if form.validate_on_submit():

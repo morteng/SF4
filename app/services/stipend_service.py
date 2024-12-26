@@ -48,41 +48,21 @@ def update_stipend(stipend, data, session=db.session):
 
 def create_stipend(stipend_data, session=db.session):
     try:
-        print("\n[DEBUG] Starting stipend creation")
-        print(f"[DEBUG] Received stipend_data: {stipend_data}")
-        
-        # Convert blank application_deadline to None
-        if 'application_deadline' in stipend_data:
-            print(f"[DEBUG] Processing application_deadline: {stipend_data['application_deadline']}")
-            if stipend_data['application_deadline'] == '':
-                print("[DEBUG] Empty application_deadline, setting to None")
-                stipend_data['application_deadline'] = None
-            elif isinstance(stipend_data['application_deadline'], str) and stipend_data['application_deadline'].strip():
-                print("[DEBUG] Converting string to datetime")
-                # Try multiple date formats
-                for fmt in ('%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M'):
-                    try:
-                        stipend_data['application_deadline'] = datetime.strptime(
-                            stipend_data['application_deadline'], fmt
-                        )
-                        print(f"[DEBUG] Successfully converted to datetime: {stipend_data['application_deadline']}")
-                        break
-                    except ValueError as e:
-                        print(f"[DEBUG] Failed to convert with format {fmt}: {str(e)}")
-                        continue
-                else:
-                    print("[DEBUG] All date format conversions failed")
-                    raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS or YYYY-MM-DD HH:MM.")
-            elif stipend_data['application_deadline'] is None:
-                print("[DEBUG] application_deadline is already None")
-                stipend_data['application_deadline'] = None
+        # Ensure organization_id is present
+        if 'organization_id' not in stipend_data or not stipend_data['organization_id']:
+            raise ValueError("Organization ID is required")
             
-        # Ensure organization_id is valid
-        organization_id = stipend_data.get('organization_id')
-        print(f"[DEBUG] Processing organization_id: {organization_id}")
-        if not organization_id:
-            print("[DEBUG] Organization ID is missing")
-            raise ValueError("Organization ID is required.")
+        # Handle application_deadline
+        if 'application_deadline' in stipend_data:
+            if stipend_data['application_deadline'] == '':
+                stipend_data['application_deadline'] = None
+            elif isinstance(stipend_data['application_deadline'], str):
+                try:
+                    stipend_data['application_deadline'] = datetime.strptime(
+                        stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
+                    )
+                except ValueError:
+                    raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
         
         # Fetch the organization
         organization = session.get(Organization, organization_id)

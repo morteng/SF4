@@ -21,7 +21,12 @@ class StipendForm(FlaskForm):
         validators=[Optional()],  # Allow blank values
         format='%Y-%m-%d %H:%M:%S'
     )
-    organization_id = SelectField('Organization', validators=[DataRequired()], coerce=int)
+    organization_id = SelectField('Organization', validators=[DataRequired()], coerce=int, choices=[])
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Populate organization choices
+        self.organization_id.choices = [(org.id, org.name) for org in Organization.query.all()]
     open_for_applications = BooleanField('Open for Applications', default=False)
     submit = SubmitField('Create')
 
