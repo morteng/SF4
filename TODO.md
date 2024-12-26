@@ -13,6 +13,10 @@ You're running on a windows 11 machine, should format all commands for that envi
 - Check for proper error handling and validation messages
 - Test edge cases for form validation (empty fields, invalid formats)
 - Verify CSRF token handling in form submissions
+- Test datetime field validation thoroughly (past dates, invalid formats, far future dates)
+- Verify error messages are properly displayed in templates
+- Test form re-rendering with validation errors
+- Ensure consistent error handling between HTMX and non-HTMX requests
 
 ## Things to remember about coding
 - Keep HTMX and non-HTMX logic separate and explicit
@@ -25,6 +29,10 @@ You're running on a windows 11 machine, should format all commands for that envi
 - Maintain consistent flash message handling
 - Ensure proper CSRF token validation in all forms
 - Handle datetime fields carefully with proper validation and formatting
+- Use proper error handling in form validation methods
+- Ensure validation errors are properly propagated to templates
+- Keep form validation logic consistent across routes
+- Use proper error messages that are user-friendly and specific
 
 ## Current Issues
 - [x] Fix test file path conflict in test_stipend_routes.py
@@ -41,14 +49,19 @@ You're running on a windows 11 machine, should format all commands for that envi
   - [x] Verify template path handling in stipend_routes.py
   - [x] Check form validation and error handling
   - [x] Ensure proper database commit/rollback behavior
-  - [ ] Verify CSRF token handling in HTMX requests
-  - [ ] Test datetime field validation and formatting
+  - [x] Verify CSRF token handling in HTMX requests
+  - [x] Test datetime field validation and formatting
   - [x] Added debug logging to verify template path and existence
   - [x] Confirmed template path is correct
-  - [ ] Investigating template loading issue
+  - [x] Fixed datetime validation in StipendForm
+  - [ ] Verify error messages are properly displayed in templates
+  - [ ] Test form re-rendering with validation errors
 
 ## Specific Tasks
 - [x] Remove duplicate test file tests/routes/admin/test_stipend_routes.py
 - [x] Verify all tests pass after cleanup
 - [ ] Fix HTMX stipend creation functionality
+  - [x] Update datetime validation in StipendForm
+  - [ ] Verify template error message rendering
+  - [ ] Add additional test cases for datetime validation
 
