@@ -112,4 +112,5 @@ def get_stipend_by_id(id):
     return db.session.get(Stipend, id)
 
 def get_all_stipends():
-    return Stipend.query.all()  # Execute the query and return a list
+    # Change from returning a list to returning a query object
+    return Stipend.query
