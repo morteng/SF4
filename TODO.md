@@ -1,7 +1,7 @@
 # TODO List
 
 ## Nice to know
-You're running on a windows 11 machine, should format all commands for that environment.
+- You're running on a windows 11 machine, should format all commands for that environment.
 
 ## Completed Tasks
 - Resolved test file conflicts and syntax errors in stipend routes
