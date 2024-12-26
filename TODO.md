@@ -1,8 +1,5 @@
 # TODO List
 
-## Nice to know
-- You're running on a windows 11 machine, should format all commands for that environment
-
 ## Completed Tasks
 - Fixed HTMX stipend creation and datetime validation issues
 
@@ -21,6 +18,7 @@
    - Implement real-time validation feedback
 
 ## Knowledge & Memories
+- You're running on a windows 11 machine, should format all commands for that environment
 - Date validation now handles both string and datetime inputs
 - Error messages are properly propagated to HTMX responses
 - Template rendering includes specific field error display
