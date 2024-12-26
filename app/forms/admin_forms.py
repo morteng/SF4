@@ -11,14 +11,29 @@ from app.models.bot import Bot
 
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[
-        DataRequired(message="This field is required."), 
-        Length(max=100)
+        DataRequired(message="This field is required."),
+        Length(max=100, message="Name must be less than 100 characters.")
     ])
-    summary = TextAreaField('Summary', validators=[Optional()])
-    description = TextAreaField('Description', validators=[Optional()])
-    homepage_url = URLField('Homepage URL', validators=[Optional(), URL()])
-    application_procedure = TextAreaField('Application Procedure', validators=[Optional()])
-    eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[Optional()])
+    summary = TextAreaField('Summary', validators=[
+        Optional(),
+        Length(max=500, message="Summary must be less than 500 characters.")
+    ])
+    description = TextAreaField('Description', validators=[
+        Optional(),
+        Length(max=2000, message="Description must be less than 2000 characters.")
+    ])
+    homepage_url = URLField('Homepage URL', validators=[
+        Optional(),
+        URL(message="Please enter a valid URL.")
+    ])
+    application_procedure = TextAreaField('Application Procedure', validators=[
+        Optional(),
+        Length(max=1000, message="Application procedure must be less than 1000 characters.")
+    ])
+    eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[
+        Optional(),
+        Length(max=1000, message="Eligibility criteria must be less than 1000 characters.")
+    ])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
         validators=[Optional()],
