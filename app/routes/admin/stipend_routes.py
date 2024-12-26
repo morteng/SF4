@@ -57,9 +57,9 @@ def create():
                 flash_message(str(e), FLASH_CATEGORY_ERROR)
             else:
                 flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-            template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/form.html'
+            template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/create.html'
             return render_template(template, form=form), 200
-    
+     
     template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/form.html'
     return render_template(template, form=form), 200
  

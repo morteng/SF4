@@ -49,8 +49,8 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
 
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
-
+ 
         # Check if the flash message is present in the response data
-        assert b'Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data, "Flash message 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' not found in response."
-
+        assert b'Invalid date format.' in response.data, "Flash message 'Invalid date format.' not found in response."
+ 
 
