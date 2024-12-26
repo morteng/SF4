@@ -110,6 +110,7 @@ def edit(id):
             
             if is_htmx:
                 return render_template('admin/stipends/_stipend_row.html', stipend=stipend)
+            # Add this line to ensure redirect for non-HTMX requests
             return redirect(url_for('admin.stipend.index'))
 
         except Exception as e:
