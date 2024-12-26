@@ -63,10 +63,10 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
                                   data=form_data, 
                                   follow_redirects=True)
     
-   # Verify response
-   assert response.status_code == 302
+    # Verify response
+    assert response.status_code == 200
     
-   # Check database for created stipend
+    # Check database for created stipend
     created_stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
     assert created_stipend is not None
     assert created_stipend.summary == stipend_data['summary']
@@ -175,8 +175,8 @@ def test_create_stipend_route_htmx(logged_in_admin, stipend_data, db_session):
        'csrf_token': csrf_token
    }, follow_redirects=True)
  
-   assert response.status_code == 400
-   assert b'<tr hx-target="this" hx-swap="outerHTML">' in response.data
+    assert response.status_code == 200
+    assert b'<tr hx-target="this" hx-swap="outerHTML">' in response.data
     stipends = Stipend.query.all()
     assert any(stipend.name == stipend_data['name'] and stipend.summary == stipend_data['summary'] for stipend in stipends)
     # Assert the flash message

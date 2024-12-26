@@ -8,7 +8,7 @@ class CustomDateTimeField(DateTimeField):
         self.format = format
 
     def _value(self):
-        if self.raw_
+        if self.raw_:
             return ' '.join(self.raw_data)
         else:
             return self.data and self.data.strftime(self.format) or ''
