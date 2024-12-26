@@ -64,7 +64,7 @@ class StipendForm(FlaskForm):
             field.data = False
         # Ensure the field data is properly set in the form
         self.open_for_applications.data = field.data
-        return None  # WTForms validators should return None
+        return None  # Explicitly return None as required by WTForms
 
     def validate_organization_id(self, field):
         if not field.data:
