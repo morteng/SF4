@@ -27,7 +27,7 @@ def create():
         try:
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
             
-            # Convert and validate application_deadline
+            # Convert application_deadline to datetime
             if stipend_data['application_deadline']:
                 stipend_data['application_deadline'] = datetime.strptime(
                     stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
