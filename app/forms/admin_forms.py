@@ -1,13 +1,10 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
-from app.extensions import db
-from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, PasswordField, HiddenField, SelectField
-from wtforms.validators import DataRequired, Length, Optional, ValidationError, Email, URL, Regexp  # Add URL and Regexp here
+from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, SelectField
+from wtforms.validators import DataRequired, Length, Optional, ValidationError, URL
+from wtforms.fields import DateTimeField
 from app.models.organization import Organization
-from app.forms.fields import CustomDateTimeField
-from app.models.tag import Tag
-from app.models.user import User
-from app.models.bot import Bot
+from app.extensions import db
 
 
 class StipendForm(FlaskForm):
@@ -35,15 +32,11 @@ class StipendForm(FlaskForm):
         Optional(),
         Length(max=1000, message="Eligibility criteria cannot exceed 1000 characters.")
     ])
-    application_deadline = CustomDateTimeField(
+    application_deadline = DateTimeField(
         'Application Deadline',
         validators=[Optional()],
         format='%Y-%m-%d %H:%M:%S',
-        render_kw={
-            'placeholder': 'YYYY-MM-DD HH:MM:SS',
-            'data-date-format': 'yyyy-mm-dd hh:ii:ss',
-            'autocomplete': 'off'
-        }
+        render_kw={"placeholder": "YYYY-MM-DD HH:MM:SS"}
     )
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)
@@ -57,8 +50,13 @@ class StipendForm(FlaskForm):
             self.organization_id.data = self.organization_id.choices[0][0]
 
     def validate_application_deadline(self, field):
-        if field.data and field.data < datetime.now():
-            raise ValidationError('Application deadline cannot be in the past.')
+        if field.data:
+            try:
+                # Ensure the date is in the future
+                if field.data < datetime.now():
+                    raise ValidationError('Application deadline cannot be in the past.')
+            except ValueError as e:
+                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
 
     def validate_open_for_applications(self, field):
         # Handle string values from form submission
