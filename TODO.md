@@ -39,6 +39,7 @@
 - [x] Fix HTMX handling in stipend create route
 - [x] Update test for HTMX stipend create route
 - [x] Verify HTMX stipend create route works with proper template rendering
+- [ ] Investigate why flash message 'Stipend created successfully.' is not appearing
 
 ## Completed Tasks
 - Fixed HTMX stipend update route to return 200 status code without explicit status
