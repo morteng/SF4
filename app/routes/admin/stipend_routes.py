@@ -26,7 +26,12 @@ def create():
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
             
             # Validate organization exists
-            organization = get_organization_by_id(stipend_data['organization_id'])
+            organization_id = stipend_data.get('organization_id')
+            if not organization_id:
+                flash_message(FLASH_MESSAGES["INVALID_ORGANIZATION"], FLASH_CATEGORY_ERROR)
+                return render_template('admin/stipends/form.html', form=form), 200
+                
+            organization = get_organization_by_id(organization_id)
             if not organization:
                 flash_message(FLASH_MESSAGES["INVALID_ORGANIZATION"], FLASH_CATEGORY_ERROR)
                 return render_template('admin/stipends/form.html', form=form), 200
@@ -38,7 +43,8 @@ def create():
             # Create the stipend
             stipend = create_stipend(stipend_data)
             if not stipend:
-                raise Exception("Failed to create stipend")
+                flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+                return render_template('admin/stipends/form.html', form=form), 200
             
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             
