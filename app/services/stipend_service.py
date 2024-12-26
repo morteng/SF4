@@ -53,18 +53,17 @@ def create_stipend(stipend_data, session=db.session):
             if stipend_data['application_deadline'] == '':
                 stipend_data['application_deadline'] = None
             elif isinstance(stipend_data['application_deadline'], str) and stipend_data['application_deadline'].strip():
-                try:
-                    stipend_data['application_deadline'] = datetime.strptime(
-                        stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
-                    )
-                except ValueError:
-                    # Try alternative format if first attempt fails
+                # Try multiple date formats
+                for fmt in ('%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M'):
                     try:
                         stipend_data['application_deadline'] = datetime.strptime(
-                            stipend_data['application_deadline'], '%Y-%m-%d %H:%M'
+                            stipend_data['application_deadline'], fmt
                         )
+                        break
                     except ValueError:
-                        raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS or YYYY-MM-DD HH:MM.")
+                        continue
+                else:
+                    raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS or YYYY-MM-DD HH:MM.")
             elif stipend_data['application_deadline'] is None:
                 # Explicitly set to None if it's already None
                 stipend_data['application_deadline'] = None
