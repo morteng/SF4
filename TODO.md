@@ -14,6 +14,7 @@
 
 ## Specific Tasks
 - [x] Fix HTMX handling in stipend update route (fixed status code and redirect behavior)
+- [ ] Fix invalid date format handling in HTMX stipend create route
 - [x] Update test for HTMX stipend update route
 - [x] Verify HTMX stipend update route works with proper template rendering
 - [x] Add explicit status code for HTMX responses
