@@ -26,29 +26,17 @@ class StipendForm(FlaskForm):
     submit = SubmitField('Create')
 
     def validate_application_deadline(self, field):
-        print(f"\n[DEBUG] Validating application_deadline: {field.data}")
-        # Handle empty string or None values
         if not field.data or field.data == '':
-            print("[DEBUG] Empty application_deadline, setting to None")
             field.data = None
             return
         
-        # If there's data, ensure it's a valid datetime
         try:
-            print(f"[DEBUG] Processing application_deadline: {field.data}")
-            # Convert string to datetime if needed
             if isinstance(field.data, str):
-                print(f"[DEBUG] Converting string to datetime: {field.data}")
                 field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-                print(f"[DEBUG] Converted datetime: {field.data}")
             
-            # Ensure date is not in the past
             if field.data and field.data < datetime.now():
-                print(f"[DEBUG] Date is in the past: {field.data}")
                 raise ValidationError('Application deadline cannot be in the past.')
-            print("[DEBUG] Date validation successful")
         except ValueError as e:
-            print(f"[DEBUG] Date validation failed: {str(e)}")
             raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
 
 

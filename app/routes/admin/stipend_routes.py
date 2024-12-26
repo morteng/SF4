@@ -32,16 +32,13 @@ def create():
             
             # Handle empty application deadline
             if 'application_deadline' in stipend_data:
-                print(f"[DEBUG] Processing application_deadline: {stipend_data['application_deadline']}")
                 if stipend_data['application_deadline'] == '':
-                    print("[DEBUG] Empty application_deadline, setting to None")
                     stipend_data['application_deadline'] = None
                 elif isinstance(stipend_data['application_deadline'], str):
                     try:
                         # Try to parse the date string
                         datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')
                     except ValueError:
-                        print("[DEBUG] Invalid date format")
                         flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.", FLASH_CATEGORY_ERROR)
                         template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/form.html'
                         return render_template(template, form=form), 200
