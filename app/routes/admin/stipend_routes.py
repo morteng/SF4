@@ -54,28 +54,27 @@ def create():
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
 
             if is_htmx:
+                # Ensure template path is correct
+                template_path = 'templates/admin/stipends/_stipend_row.html'
+                current_app.logger.debug(f"Attempting to render template at: {template_path}")
+                # Try rendering with full path first
                 try:
-                    # Ensure template path is correct
-                    template_path = 'templates/admin/stipends/_stipend_row.html'
-                    current_app.logger.debug(f"Attempting to render template at: {template_path}")
-                    # Try rendering with full path first
-                    try:
-                        rendered = render_template(template_path, stipend=new_stipend)
-                        # Add flash message to HTMX response
-                        flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-                        return rendered, 200
-                    except TemplateNotFound:
-                        # Try with relative path if full path fails
-                        rendered = render_template('admin/stipends/_stipend_row.html', stipend=new_stipend)
-                        flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-                        return rendered, 200
-                    except Exception as e:
-                        current_app.logger.error(f"Failed to render stipend row template: {e}")
-                        # Return error message with flash
-                        flash_message(f"Error rendering new row: {str(e)}", FLASH_CATEGORY_ERROR)
-                        return render_template_string(
-                            f"<tr><td colspan='6'>Error rendering new row: {str(e)}</td></tr>"
-                        ), 200
+                    rendered = render_template(template_path, stipend=new_stipend)
+                    # Add flash message to HTMX response
+                    flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                    return rendered, 200
+                except TemplateNotFound:
+                    # Try with relative path if full path fails
+                    rendered = render_template('admin/stipends/_stipend_row.html', stipend=new_stipend)
+                    flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                    return rendered, 200
+                except Exception as e:
+                    current_app.logger.error(f"Failed to render stipend row template: {e}")
+                    # Return error message with flash
+                    flash_message(f"Error rendering new row: {str(e)}", FLASH_CATEGORY_ERROR)
+                    return render_template_string(
+                        f"<tr><td colspan='6'>Error rendering new row: {str(e)}</td></tr>"
+                    ), 200
                 except Exception as e:
                     db.session.rollback()
                     current_app.logger.error(f"Failed to create stipend: {e}")
