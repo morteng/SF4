@@ -42,14 +42,14 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
     # Update stipend data with organization ID
     stipend_data['organization_id'] = organization.id
     
+    # Ensure application_deadline is in correct string format
+    if isinstance(stipend_data['application_deadline'], datetime):
+        stipend_data['application_deadline'] = stipend_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
+    
     # Get create page and extract CSRF token
     create_response = logged_in_admin.get(url_for('admin.stipend.create'))
     assert create_response.status_code == 200
     csrf_token = extract_csrf_token(create_response.data)
-    
-    # Ensure application_deadline is in correct string format
-    if isinstance(stipend_data['application_deadline'], datetime):
-        stipend_data['application_deadline'] = stipend_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
     
     # Prepare form data
     form_data = {
@@ -60,7 +60,7 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
         'application_procedure': stipend_data['application_procedure'],
         'eligibility_criteria': stipend_data['eligibility_criteria'],
         'application_deadline': stipend_data['application_deadline'],
-        'organization_id': organization.id,  # Use the committed organization's ID
+        'organization_id': organization.id,
         'open_for_applications': stipend_data['open_for_applications'],
         'csrf_token': csrf_token
     }
