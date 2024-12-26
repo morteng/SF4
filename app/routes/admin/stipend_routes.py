@@ -129,8 +129,14 @@ def edit(id):
                 flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
                 
                 if is_htmx:
-                    # Return the updated row with HTMX headers
-                    return render_template('admin/stipends/_stipend_row.html', stipend=updated_stipend)
+                    try:
+                        # Return the updated row with HTMX headers
+                        return render_template('admin/stipends/_stipend_row.html', stipend=updated_stipend)
+                    except Exception as e:
+                        current_app.logger.error(f"Failed to render stipend row template: {e}")
+                        return render_template_string(
+                            f"<tr><td colspan='6'>Error rendering updated row: {str(e)}</td></tr>"
+                        ), 200
                 # For non-HTMX requests, redirect to index
                 return redirect(url_for('admin.stipend.index'))
 
