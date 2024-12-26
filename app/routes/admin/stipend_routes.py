@@ -21,6 +21,7 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @admin_required
 def create():
     form = StipendForm()
+    is_htmx = request.headers.get('HX-Request')
     
     if form.validate_on_submit():
         try:
@@ -37,15 +38,15 @@ def create():
                         datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')
                     except ValueError:
                         flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.", FLASH_CATEGORY_ERROR)
-                        template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/create.html'
-                        return render_template(template, form=form), 200
+                        template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/create.html'
+                        return render_template(template, form=form), 200 if is_htmx else 400
                 
             # Create the stipend
             stipend = create_stipend(stipend_data)
             if not stipend:
                 flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-                template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/form.html'
-                return render_template(template, form=form), 200
+                template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/form.html'
+                return render_template(template, form=form), 200 if is_htmx else 400
             
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.stipend.index'))
@@ -57,18 +58,18 @@ def create():
                 flash_message(str(e), FLASH_CATEGORY_ERROR)
             else:
                 flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-            template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/create.html'
-            return render_template(template, form=form), 200
+            template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/create.html'
+            return render_template(template, form=form), 200 if is_htmx else 400
      
     # Handle form validation errors
     if request.method == 'POST':
         for field, errors in form.errors.items():
             for error in errors:
                 flash_message(f"Error in {getattr(form, field).label.text}: {error}", FLASH_CATEGORY_ERROR)
-        template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/create.html'
-        return render_template(template, form=form), 200
+        template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/create.html'
+        return render_template(template, form=form), 200 if is_htmx else 400
     
-    template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/form.html'
+    template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/form.html'
     return render_template(template, form=form), 200
  
  
