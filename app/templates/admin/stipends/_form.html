@@ -40,15 +40,15 @@
         <div id="application_deadline-error" class="text-red-600 text-sm mt-1">
             {% if application_deadline_error %}
                 {% for error in application_deadline_error %}
-                    {{ error }}<br>
+                    <div class="error-message">{{ error }}</div>
                 {% endfor %}
             {% elif field_errors and field_errors.application_deadline %}
                 {% for error in field_errors.application_deadline %}
-                    {{ error }}<br>
+                    <div class="error-message">{{ error }}</div>
                 {% endfor %}
             {% elif form.application_deadline.errors %}
                 {% for error in form.application_deadline.errors %}
-                    {{ error }}<br>
+                    <div class="error-message">{{ error }}</div>
                 {% endfor %}
             {% endif %}
         </div>
