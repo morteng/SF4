@@ -2,8 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, curren
 from flask_login import login_required
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import StipendForm
-from app.services.stipend_service import (
-    get_stipend_by_id,
+from app.services.organization_service import (
     get_organization_by_id,
     delete_stipend,
     get_all_stipends,
@@ -11,6 +10,7 @@ from app.services.stipend_service import (
     update_stipend
 )
 from app.models.stipend import Stipend
+from app.services.stipend_service import get_stipend_by_id
 from app.extensions import db
 import logging
 from app.utils import admin_required, flash_message
