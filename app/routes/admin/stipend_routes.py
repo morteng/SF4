@@ -113,29 +113,26 @@ def delete(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
         flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
-        return '', 500  # Return error response for HTMX
+        return '', 404  # Return 404 for HTMX
     
     try:
         delete_stipend(stipend.id)
-        db.session.commit()
-        
         flash_message(FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-        return redirect(url_for('admin.stipend.index'))
+        return '', 200  # Return empty response for HTMX
     except Exception as e:
         db.session.rollback()
         logging.error(f"Failed to delete stipend: {e}")
         flash_message(FLASH_MESSAGES["DELETE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-        return redirect(url_for('admin.stipend.index'))
+        return '', 500  # Return error response for HTMX
  
  
 @admin_stipend_bp.route('/', methods=['GET'])
 @login_required
 @admin_required
 def index():
-    # Get paginated stipends directly
     page = request.args.get('page', 1, type=int)
     stipends = get_all_stipends().paginate(page=page, per_page=10, error_out=False)
-    return render_template('admin/stipends/index.html', stipends=stipends)  # Pass the full Pagination object
+    return render_template('admin/stipends/index.html', stipends=stipends)
  
 @admin_stipend_bp.route('/paginate/<int:page>', methods=['GET'])
 @login_required
