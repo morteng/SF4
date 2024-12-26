@@ -70,6 +70,13 @@ def create_stipend(stipend_data, session=db.session):
         if not stipend_data.get('organization_id'):
             raise ValueError("Organization is required")
         
+        # Convert organization_id to int if it's a string
+        if isinstance(stipend_data['organization_id'], str):
+            try:
+                stipend_data['organization_id'] = int(stipend_data['organization_id'])
+            except ValueError:
+                raise ValueError("Invalid organization ID format")
+        
         # Validate organization exists
         organization = session.get(Organization, stipend_data['organization_id'])
         if not organization:
