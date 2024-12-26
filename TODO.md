@@ -1,25 +1,29 @@
 # TODO List
 
 ## Current Goals
-1. [ ] Verify template rendering of error messages
-   - Check admin/stipends/_form.html template
-   - Ensure error messages appear in correct locations
-   - Verify proper styling of error messages
-   - Steps:
-     a. Add template to chat for review
-     b. Verify error message container structure
-     c. Check CSS classes for error styling
-
-2. [ ] Add comprehensive test coverage for all form fields
+1. [ ] Add comprehensive test coverage for all form fields
    - Create test cases in test_stipend_htmx.py for:
-     * Required field validation
-     * Field length validation
-     * URL format validation
+     * Required field validation (name, summary, description)
+     * Field length validation (max 100 chars for name, max 500 for summary)
+     * URL format validation (homepage_url, application_procedure)
      * HTML escaping of user input
    - Steps:
-     a. Add test cases for each form field
-     b. Verify error message consistency
-     c. Check field-specific error styling
+     a. Add test cases for each form field with invalid data
+     b. Verify error message consistency across all fields
+     c. Check field-specific error styling matches application_deadline pattern
+     d. Ensure all error containers have unique IDs following pattern: <field_name>-error
+
+2. [ ] Verify error handling consistency across all admin routes
+   - Check error handling in:
+     * Organization routes
+     * Tag routes
+     * User routes
+     * Bot routes
+   - Steps:
+     a. Review each route's error handling pattern
+     b. Ensure consistent use of format_error_message()
+     c. Verify proper error container IDs in templates
+     d. Check for consistent status code usage (400 for validation errors)
 
 ## Knowledge & Memories
 - Windows 11 environment
@@ -29,11 +33,6 @@
   * Date field errors are handled with specific message mapping
   * Form errors are propagated to templates with proper status codes
   * Error messages now rendered in specific HTML structure for better testability
-- Key Fixes Made:
-  * Removed duplicate validate_application_deadline method in StipendForm
-  * Updated error handling in stipend_routes.py to properly pass field errors
-  * Enhanced test assertions to verify error message rendering
-  * Added specific error container for application deadline field
 - Validation System Details:
   * Client-side (main.js):
     - Real-time validation using regex: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/
@@ -62,7 +61,7 @@
     - Client/server message consistency
     - Error styling in UI (is-invalid class)
     - Proper status codes (400 for failures)
-    - Error message element presence (#application_deadline-error)
+    - Error message element presence (#<field_name>-error)
     - Form field focus after error display
     - Error message persistence across form submissions
     - Verify error messages appear in correct HTML structure
@@ -71,18 +70,4 @@
       * Error container presence
       * Field error classes
       * Response status codes
-- Completed Work:
-  * Fixed date validation error handling in stipend_routes.py
-  * Enhanced format_error_message utility in utils.py
-  * Updated test_stipend_htmx.py with specific error location checks
-  * Standardized error message handling across all form fields
-  * Improved error propagation in create route to properly pass field errors
-  * Added field-specific error containers in template rendering
-  * Ensured consistent error message formatting across all validation scenarios
-
-## Next Steps
-1. Verify template structure for error rendering
-2. Add test cases for remaining form fields
-3. Ensure all error messages are properly styled
-4. Verify error handling consistency across all admin routes
 
