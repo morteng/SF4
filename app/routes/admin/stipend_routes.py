@@ -90,9 +90,14 @@ def create():
                     current_app.logger.error(f"Failed to create stipend: {e}")
                     flash_message(str(e), FLASH_CATEGORY_ERROR)
                     return render_template('admin/stipends/create.html', form=form), 400
+            except Exception as e:
+                db.session.rollback()
+                current_app.logger.error(f"Failed to create stipend: {e}")
+                flash_message(str(e), FLASH_CATEGORY_ERROR)
+                return render_template('admin/stipends/create.html', form=form), 400
 
     # Handle form validation errors
-    if request.method == 'POST':
+    if request.method == 'POST' and not form.validate_on_submit():
         for field, errors in form.errors.items():
             for error in errors:
                 # Special handling for date field errors
