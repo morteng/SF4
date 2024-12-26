@@ -69,12 +69,14 @@ def create():
             for error in errors:
                 # Special handling for date field errors
                 if field == 'application_deadline':
-                    if 'cannot be in the past' in error:
+                    if 'Not a valid datetime value' in error:
+                        flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS", FLASH_CATEGORY_ERROR)
+                    elif 'cannot be in the past' in error:
                         flash_message("Application deadline must be a future date", FLASH_CATEGORY_ERROR)
                     elif 'cannot be more than 5 years' in error:
                         flash_message("Application deadline cannot be more than 5 years in the future", FLASH_CATEGORY_ERROR)
                     else:
-                        flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS", FLASH_CATEGORY_ERROR)
+                        flash_message(f"Invalid date: {error}", FLASH_CATEGORY_ERROR)
                 else:
                     # Include the field label in the error message
                     field_label = getattr(form, field).label.text
@@ -132,12 +134,14 @@ def edit(id):
                 for error in errors:
                     # Special handling for date field errors
                     if field == 'application_deadline':
-                        if 'cannot be in the past' in error:
+                        if 'Not a valid datetime value' in error:
+                            flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS", FLASH_CATEGORY_ERROR)
+                        elif 'cannot be in the past' in error:
                             flash_message("Application deadline must be a future date", FLASH_CATEGORY_ERROR)
                         elif 'cannot be more than 5 years' in error:
                             flash_message("Application deadline cannot be more than 5 years in the future", FLASH_CATEGORY_ERROR)
                         else:
-                            flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS", FLASH_CATEGORY_ERROR)
+                            flash_message(f"Invalid date: {error}", FLASH_CATEGORY_ERROR)
                     else:
                         # Include the field label in the error message
                         field_label = getattr(form, field).label.text
