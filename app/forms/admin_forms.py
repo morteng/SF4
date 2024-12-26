@@ -32,11 +32,7 @@ class StipendForm(FlaskForm):
             return
         
         # If there's data but it's not a valid datetime
-        if field.raw_data and field.raw_data[0] and field.data is None:
-            raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
-        
-        # If we have valid data, ensure it's a datetime object
-        if field.data and not isinstance(field.data, datetime):
+        if field.raw_data and field.raw_data[0]:
             try:
                 field.data = datetime.strptime(field.raw_data[0], '%Y-%m-%d %H:%M:%S')
             except ValueError:
