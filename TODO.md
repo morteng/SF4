@@ -1,36 +1,24 @@
 # TODO List
 
 ## Current Goals
-1. [ ] Standardize error handling across all admin forms
-   - Create error_handler utility in utils.py to:
-     * Format field-specific errors consistently
-     * Handle HTMX responses with proper status codes
-     * Map common validation errors to user-friendly messages
-   - Implement in all admin routes:
-     * Use error_handler in create/update endpoints
-     * Ensure consistent error message formatting
-     * Add proper error response templates
-   - Add tests in test_utils.py:
-     * Verify error message formatting (test_format_error_message)
-     * Test HTMX response handling (test_error_handler_htmx)
-     * Check status code consistency (test_error_handler_status_codes)
+1. [ ] Fix date validation error handling in stipend routes
+   - Update error message handling in stipend_routes.py
+   - Ensure proper error message passing to templates
+   - Verify error message rendering in HTML response
    - Steps:
-     a. Create error_handler function in utils.py
-     b. Update all admin routes to use error_handler
-     c. Add test cases in test_utils.py
-     d. Verify error handling in all admin forms
+     a. Modify date error handling in create route
+     b. Update form template to display errors correctly
+     c. Add test cases for all date validation scenarios
 
-2. [ ] Implement comprehensive error handling tests
+2. [ ] Improve error handling test coverage
    - Add test cases in test_stipend_htmx.py for:
-     * Field-specific error rendering
-     * Error message persistence across form submissions
-     * HTMX response validation
-     * Error styling in templates
-   - Create test templates for error rendering verification
+     * All date validation edge cases
+     * Error message rendering location
+     * Field-specific error styling
    - Steps:
-     a. Add new test cases in test_stipend_htmx.py
-     b. Create test templates in tests/templates/
-     c. Verify error handling in all scenarios
+     a. Add test cases for invalid dates/times
+     b. Verify error message presence in response
+     c. Check for proper error styling in HTML
 
 ## Knowledge & Memories
 - Windows 11 environment
@@ -65,4 +53,8 @@
     - Form field focus after error display
     - Error message persistence across form submissions
     - Verify error messages appear in correct HTML structure
+- Current Issues:
+  * Date validation errors not appearing in response
+  * Error messages not being passed to template correctly
+  * Test assertions failing due to missing error messages
 
