@@ -34,20 +34,24 @@ def test_stipend(db_session, stipend_data):
     db_session.commit()
 
 def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
+    print("\n[DEBUG] Starting test_create_stipend_route")
+    print(f"[DEBUG] Initial stipend_data: {stipend_data}")
+    
     # Create and commit organization first
     organization = Organization(name='Test Org')
     db_session.add(organization)
     db_session.commit()
+    print(f"[DEBUG] Created organization with ID: {organization.id}")
     
     # Update stipend data with organization ID
     stipend_data['organization_id'] = organization.id
-    
-    # Use the string directly
+    print(f"[DEBUG] Updated stipend_data with organization_id: {stipend_data}")
     
     # Get create page and extract CSRF token
     create_response = logged_in_admin.get(url_for('admin.stipend.create'))
     assert create_response.status_code == 200
     csrf_token = extract_csrf_token(create_response.data)
+    print(f"[DEBUG] Extracted CSRF token: {csrf_token}")
     
     # Prepare form data
     form_data = {
@@ -62,23 +66,28 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
         'open_for_applications': stipend_data['open_for_applications'],
         'csrf_token': csrf_token
     }
+    print(f"[DEBUG] Prepared form_data: {form_data}")
     
     # Submit form
     response = logged_in_admin.post(url_for('admin.stipend.create'), 
                                   data=form_data, 
                                   follow_redirects=True)
+    print(f"[DEBUG] Response status code: {response.status_code}")
+    print(f"[DEBUG] Response data: {response.data.decode('utf-8')}")
     
     # Verify response
     assert response.status_code == 200
     
     # Check database for created stipend
     created_stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
+    print(f"[DEBUG] Created stipend: {created_stipend}")
     assert created_stipend is not None, "Stipend was not created"
     assert created_stipend.summary == stipend_data['summary'], "Stipend summary does not match"
     assert created_stipend.organization_id == organization.id, "Stipend not associated with correct organization"
     
     # Verify flash message
     assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data, "Success flash message not found"
+    print("[DEBUG] Test completed successfully")
 
 def test_create_stipend_route_with_invalid_application_deadline_format(logged_in_admin, stipend_data, db_session):
     create_response = logged_in_admin.get(url_for('admin.stipend.create'))
