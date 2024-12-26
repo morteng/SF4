@@ -45,8 +45,9 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
 
 def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
-        # Get the organization ID from the test stipend
-        org_id = test_stipend.organization_id
+        # Ensure the test stipend is in the session
+        db_session.add(test_stipend)
+        db_session.commit()
         
         updated_data = {
             'name': test_stipend.name,
@@ -56,7 +57,7 @@ def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_st
             'application_procedure': "Apply online at example.com/updated",
             'eligibility_criteria': "Open to all updated students",
             'application_deadline': '',
-            'organization_id': org_id,
+            'organization_id': test_stipend.organization.id,  # Access through relationship
             'open_for_applications': True
         }
 
@@ -64,10 +65,9 @@ def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_st
         
         assert response.status_code == 302  # Expect redirect on success
 
-        # Instead of refresh, query the database again
-        updated_stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
-        assert updated_stipend is not None
-        assert updated_stipend.application_deadline is None
+        # Refresh the instance from the database
+        db_session.refresh(test_stipend)
+        assert test_stipend.application_deadline is None
 
 def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
