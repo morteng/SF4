@@ -55,7 +55,7 @@ class StipendForm(FlaskForm):
 
     def validate_application_deadline(self, field):
         if not field.data:
-            return
+            raise ValidationError('Date is required')
             
         # Handle both string and datetime inputs
         if isinstance(field.data, str):
@@ -109,6 +109,9 @@ class StipendForm(FlaskForm):
         max_future = now.replace(year=now.year + 5)
         if dt > max_future:
             raise ValidationError('Application deadline cannot be more than 5 years in the future')
+        
+        # If all validations pass, format the datetime as a string
+        field.data = dt.strftime('%Y-%m-%d %H:%M:%S')
 
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)
