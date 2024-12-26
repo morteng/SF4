@@ -24,8 +24,14 @@ def create():
     if form.validate_on_submit():
         try:
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
+            
+            # Validate organization exists
             organization = get_organization_by_id(stipend_data['organization_id'])
-            stipend_data['organization_id'] = organization.id  # Pass the ID instead of the object
+            if not organization:
+                flash_message(FLASH_MESSAGES["INVALID_ORGANIZATION"], FLASH_CATEGORY_ERROR)
+                return render_template('admin/stipends/form.html', form=form), 200
+                
+            stipend_data['organization_id'] = organization.id
             
             # Handle empty application deadline
             if 'application_deadline' in stipend_data and stipend_data['application_deadline'] == '':

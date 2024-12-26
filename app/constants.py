@@ -55,6 +55,7 @@ FLASH_MESSAGES = {
     "STIPEND_NOT_FOUND": "Stipend not found.",
     "DELETE_STIPEND_SUCCESS": "Stipend deleted successfully.",
     "DELETE_STIPEND_ERROR": "Failed to delete stipend.",
+    "INVALID_ORGANIZATION": "Invalid organization selected. Please choose a valid organization.",
 
     # Tag Management
     "CREATE_TAG_SUCCESS": "Tag created successfully.",
