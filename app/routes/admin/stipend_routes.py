@@ -36,9 +36,13 @@ def create():
                 stipend_data['application_deadline'] = None
                 
             # Create the stipend
-            stipend = create_stipend(stipend_data)
-            if not stipend:
-                raise Exception("Failed to create stipend")
+            try:
+                stipend = create_stipend(stipend_data)
+                if not stipend:
+                    raise Exception("Failed to create stipend")
+            except ValueError as e:
+                flash_message(str(e), FLASH_CATEGORY_ERROR)
+                return render_template('admin/stipends/form.html', form=form), 200
             
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             

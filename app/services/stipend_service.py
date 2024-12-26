@@ -49,6 +49,16 @@ def create_stipend(stipend_data, session=db.session):
         if 'application_deadline' in stipend_data and (stipend_data['application_deadline'] == '' or stipend_data['application_deadline'] is None):
             stipend_data['application_deadline'] = None
             
+        # Ensure organization_id is valid
+        organization_id = stipend_data.get('organization_id')
+        if not organization_id:
+            raise ValueError("Organization ID is required.")
+        
+        # Fetch the organization
+        organization = session.get(Organization, organization_id)
+        if not organization:
+            raise ValueError("Invalid organization ID.")
+        
         # Create a new Stipend object from the provided data
         new_stipend = Stipend(**stipend_data)
         
