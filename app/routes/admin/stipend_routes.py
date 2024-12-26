@@ -55,9 +55,13 @@ def create():
 
                 if is_htmx:
                     try:
-                        return render_template('admin/stipends/_stipend_row.html', stipend=new_stipend), 200
+                        current_app.logger.debug(f"Attempting to render template at: admin/stipends/_stipend_row.html")
+                        template_path = 'admin/stipends/_stipend_row.html'
+                        current_app.logger.debug(f"Template exists: {current_app.jinja_env.loader.get_source(current_app.jinja_env, template_path) is not None}")
+                        return render_template(template_path, stipend=new_stipend), 200
                     except Exception as e:
                         current_app.logger.error(f"Failed to render stipend row template: {e}")
+                        current_app.logger.error(f"Template path: {template_path}")
                         return render_template_string(
                             f"<tr><td colspan='6'>Error rendering new row: {str(e)}</td></tr>"
                         ), 200
