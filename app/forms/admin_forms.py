@@ -27,14 +27,16 @@ class StipendForm(FlaskForm):
 
     def validate_application_deadline(self, field):
         # Handle empty string or None values
-        if not field.data or field.data == '':
+        if not field.data or (isinstance(field.data, str) and field.data.strip() == ''):
             field.data = None
             return
         
         # If there's data but it's not a valid datetime
         if field.data:
             try:
-                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+                # Convert string to datetime if needed
+                if isinstance(field.data, str):
+                    field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
             except ValueError:
                 raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
 
