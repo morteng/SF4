@@ -1,17 +1,24 @@
 from wtforms.fields import DateTimeField
 from wtforms.validators import ValidationError
 from datetime import datetime
+import pytz
+from pytz import timezone, utc
 
 class CustomDateTimeField(DateTimeField):
-    def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
+    def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', timezone='UTC', **kwargs):
         super().__init__(label, validators, format=format, **kwargs)
         self.format = format
+        self.timezone = timezone
         self.error_messages = {
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
             'invalid_date': 'Invalid date values (e.g., Feb 30)',
             'invalid_time': 'Invalid time values (e.g., 25:61:61)',
             'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
-            'required': 'Date is required'
+            'required': 'Date is required',
+            'invalid_timezone': 'Invalid timezone',
+            'daylight_saving': 'Ambiguous time due to daylight saving transition',
+            'future_date': 'Date must be in the future',
+            'past_date': 'Date must be in the past'
         }
         # Initialize errors as a list
         self.errors = []
@@ -22,16 +29,30 @@ class CustomDateTimeField(DateTimeField):
             if not date_str:
                 self.errors.append(self.error_messages['required'])
                 return
+            
             try:
-                self.data = datetime.strptime(date_str, self.format)
-                # Add validation for individual components
+                # Parse in local timezone
+                local_tz = timezone(self.timezone)
+                naive_dt = datetime.strptime(date_str, self.format)
+                local_dt = local_tz.localize(naive_dt, is_dst=None)
+                
+                # Convert to UTC for storage
+                self.data = local_dt.astimezone(utc)
+                
+                # Validate components
                 if not self._validate_date_components(self.data):
                     self.errors.append(self.error_messages['invalid_date'])
-            except ValueError as e:
-                if 'unconverted data remains' in str(e):
-                    self.errors.append(self.error_messages['missing_time'])
-                elif 'does not match format' in str(e):
-                    self.errors.append(self.error_messages['invalid_format'])
+                    
+            except Exception as e:
+                if isinstance(e, ValueError):
+                    if 'does not match format' in str(e):
+                        self.errors.append(self.error_messages['invalid_format'])
+                    elif 'day is out of range' in str(e):
+                        self.errors.append(self.error_messages['invalid_date'])
+                    elif 'is ambiguous' in str(e):
+                        self.errors.append(self.error_messages['daylight_saving'])
+                elif isinstance(e, pytz.UnknownTimeZoneError):
+                    self.errors.append(self.error_messages['invalid_timezone'])
                 else:
                     self.errors.append(self.error_messages['invalid_date'])
 

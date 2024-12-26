@@ -40,6 +40,13 @@ def format_error_message(field, error):
     logging.debug(f"Formatting error for field '{getattr(field, 'name', str(field))}': {error}")
     field_name = getattr(field, 'name', str(field))
     
+    # Add timezone-specific error handling
+    if 'timezone' in str(field):
+        if 'Invalid timezone' in str(error):
+            return 'Please select a valid timezone'
+        if 'Ambiguous time' in str(error):
+            return 'The selected time is ambiguous due to daylight saving time. Please choose a different time.'
+    
     # Handle date-specific errors
     if field_name == 'application_deadline':
         error_str = str(error)
@@ -68,6 +75,12 @@ def format_error_message(field, error):
         # Remove field label prefix for HTMX responses
         return str(error).replace('Application Deadline: ', '')
     
+    # Add date range validation
+    if 'future_date' in str(error):
+        return 'The date must be in the future'
+    if 'past_date' in str(error):
+        return 'The date must be in the past'
+        
     # Handle other field errors consistently
     field_label = getattr(field, 'label', None)
     if field_label:

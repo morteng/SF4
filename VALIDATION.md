@@ -28,6 +28,23 @@
 - **Error Messages**:
   - "Invalid URL format."
 
+### Date/Time Field
+- **Required**: Yes
+- **Type**: DateTime
+- **Format**: YYYY-MM-DD HH:MM:SS
+- **Timezone**: UTC (converted from user's local timezone)
+- **Validation**:
+  - Must be a valid date/time
+  - Must be in the future (for future events)
+  - Must handle daylight saving time transitions
+  - Must be within valid ranges (1900-2100 for years)
+- **Error Messages**:
+  - "Invalid date format. Please use YYYY-MM-DD HH:MM:SS"
+  - "Invalid timezone"
+  - "Ambiguous time due to daylight saving transition"
+  - "Date must be in the future"
+  - "Date must be in the past"
+
 ### Examples
 
 **Valid Inputs**:
