@@ -67,7 +67,12 @@ def edit(id):
             logging.error(f"Failed to update user {id}: {e}")
             flash_message(f"{FLASH_MESSAGES['UPDATE_USER_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
     
-    return render_template('admin/users/user_form.html', form=form, user=user)
+    return render_template('admin/_form_template.html', 
+                         form=form, 
+                         form_title='User',
+                         form_action=url_for('admin.user.edit', id=user.id),
+                         back_url=url_for('admin.user.index'),
+                         back_text='Users')
 
 @admin_user_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
