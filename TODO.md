@@ -1,13 +1,7 @@
 # TODO List
 
 ## Current Goals
-1. [x] Improve error handling in stipend routes
-   - Updated error handling in stipend_routes.py
-   - Added field-specific error rendering
-   - Improved date validation error messages
-   - Ensured consistent HTMX response format
-
-2. [ ] Standardize error handling across all admin forms
+1. [ ] Standardize error handling across all admin forms
    - Create error_handler utility in utils.py to:
      * Format field-specific errors consistently
      * Handle HTMX responses with proper status codes
@@ -26,11 +20,17 @@
      c. Add test cases in test_utils.py
      d. Verify error handling in all admin forms
 
-3. [ ] Update test cases for error handling
-   - Modify test_stipend_htmx.py to match new error format
-   - Add more edge case tests for date validation
-   - Verify error message rendering in templates
-   - Test error persistence across form submissions
+2. [ ] Implement comprehensive error handling tests
+   - Add test cases in test_stipend_htmx.py for:
+     * Field-specific error rendering
+     * Error message persistence across form submissions
+     * HTMX response validation
+     * Error styling in templates
+   - Create test templates for error rendering verification
+   - Steps:
+     a. Add new test cases in test_stipend_htmx.py
+     b. Create test templates in tests/templates/
+     c. Verify error handling in all scenarios
 
 ## Knowledge & Memories
 - Windows 11 environment
