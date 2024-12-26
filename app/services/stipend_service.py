@@ -43,13 +43,17 @@ def update_stipend(stipend, data, session=db.session):
         logging.error(f"Failed to update stipend: {e}")
         flash(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
 
-def create_stipend(stipend, session=db.session):
+def create_stipend(stipend_data, session=db.session):
     try:
+        # Handle empty application deadline
+        if 'application_deadline' in stipend_data and stipend_data['application_deadline'] == '':
+            stipend_data['application_deadline'] = None
+            
         # Create a new Stipend object from the provided data
-        new_stipend = Stipend(**stipend)
+        new_stipend = Stipend(**stipend_data)
         
-        # Convert application_deadline to datetime if it's a string
-        if isinstance(new_stipend.application_deadline, str):
+        # Convert application_deadline to datetime if it's a non-empty string
+        if isinstance(new_stipend.application_deadline, str) and new_stipend.application_deadline:
             new_stipend.application_deadline = datetime.strptime(new_stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
         
         # Add the new stipend to the session and commit
