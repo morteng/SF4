@@ -70,18 +70,27 @@ def create():
                 # Special handling for date field errors
                 if field == 'application_deadline':
                     if 'Not a valid datetime value' in error:
-                        flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS", FLASH_CATEGORY_ERROR)
+                        error_msg = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS"
                     elif 'cannot be in the past' in error:
-                        flash_message("Application deadline must be a future date", FLASH_CATEGORY_ERROR)
+                        error_msg = "Application deadline must be a future date"
                     elif 'cannot be more than 5 years' in error:
-                        flash_message("Application deadline cannot be more than 5 years in the future", FLASH_CATEGORY_ERROR)
+                        error_msg = "Application deadline cannot be more than 5 years in the future"
                     else:
-                        flash_message(f"Invalid date: {error}", FLASH_CATEGORY_ERROR)
+                        error_msg = f"Invalid date: {error}"
+                    
+                    if is_htmx:
+                        return error_msg, 400
+                    flash_message(error_msg, FLASH_CATEGORY_ERROR)
                 else:
                     # Include the field label in the error message
                     field_label = getattr(form, field).label.text
-                    flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
-    
+                    error_msg = f"{field_label}: {error}"
+                    if is_htmx:
+                        return error_msg, 400
+                    flash_message(error_msg, FLASH_CATEGORY_ERROR)
+        
+        if is_htmx:
+            return "Invalid form data", 400
         return render_template('admin/stipends/create.html', form=form), 400
 
     return render_template('admin/stipends/create.html', form=form)
