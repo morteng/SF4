@@ -37,7 +37,7 @@ def create():
                         datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')
                     except ValueError:
                         flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.", FLASH_CATEGORY_ERROR)
-                        template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/form.html'
+                        template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/create.html'
                         return render_template(template, form=form), 200
                 
             # Create the stipend
