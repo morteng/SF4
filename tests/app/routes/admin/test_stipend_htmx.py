@@ -52,6 +52,5 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         assert stipend is None
 
         # Check for the specific error message in the response
-        assert b'Application Deadline: Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data, \
-            "Expected error message not found in response"
+        assert b'Application Deadline: Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data
 
