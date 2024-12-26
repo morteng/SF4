@@ -64,12 +64,19 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
     # Assert the flash message
     assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
 
-def test_create_stipend_route_with_invalid_application_deadline_format(logged_in_admin, stipend_data):
+def test_create_stipend_route_with_invalid_application_deadline_format(logged_in_admin, stipend_data, db_session):
     create_response = logged_in_admin.get(url_for('admin.stipend.create'))
     assert create_response.status_code == 200
 
     csrf_token = extract_csrf_token(create_response.data)
+    
+    # Create an organization for the test
+    organization = Organization(name='Test Org Invalid Deadline')
+    db_session.add(organization)
+    db_session.commit()
+    
     invalid_data = stipend_data.copy()
+    invalid_data['organization_id'] = organization.id
     invalid_data['application_deadline'] = '2023-13-32 99:99:99'
     response = logged_in_admin.post(url_for('admin.stipend.create'), data={
         'name': invalid_data['name'],
@@ -79,7 +86,7 @@ def test_create_stipend_route_with_invalid_application_deadline_format(logged_in
         'application_procedure': invalid_data['application_procedure'],
         'eligibility_criteria': invalid_data['eligibility_criteria'],
         'application_deadline': invalid_data['application_deadline'],
-        'organization_id': 1,  # Mock the organization ID for this test
+        'organization_id': organization.id,  # Use the ID of the created organization
         'open_for_applications': invalid_data['open_for_applications'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
