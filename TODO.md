@@ -17,7 +17,8 @@
 - [x] Update test for HTMX stipend update route
 - [x] Verify HTMX stipend update route works with proper template rendering
 - [x] Add explicit status code for HTMX responses
-- [ ] Verify _stipend_row.html template exists and is properly formatted
+- [x] Add error handling for missing _stipend_row.html template
+- [ ] Create _stipend_row.html template with proper formatting
 - [ ] Add more test coverage for HTMX routes
 - [ ] Review other admin routes for similar HTMX issues
 
@@ -25,4 +26,5 @@
 - Fixed HTMX stipend update route to return 200 status code without explicit status
 - Updated HTMX test to remove follow_redirects since HTMX responses shouldn't follow redirects
 - Verified template rendering works correctly for HTMX responses
+- Added error handling for missing _stipend_row.html template with fallback HTML
 
