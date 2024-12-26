@@ -15,8 +15,7 @@ def stipend_data():
         'homepage_url': 'http://example.com/stipend',
         'application_procedure': 'Apply online at example.com',
         'eligibility_criteria': 'Open to all students',
-        'application_deadline': '2023-12-31 23:59:59',  # Use consistent format
-        'application_deadline': '2023-12-31 23:59:59',
+        'application_deadline': (datetime.now() + timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'),  # Future date
         'open_for_applications': True
     }
 
@@ -53,7 +52,7 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
         'homepage_url': stipend_data['homepage_url'],
         'application_procedure': stipend_data['application_procedure'],
         'eligibility_criteria': stipend_data['eligibility_criteria'],
-        'application_deadline': '2024-12-31 23:59:59',  # Changed to future date
+        'application_deadline': stipend_data['application_deadline'],  # Use future date from fixture
         'organization_id': str(organization.id),  # Converted to string
         'open_for_applications': True,  # Changed to boolean
         'csrf_token': csrf_token
