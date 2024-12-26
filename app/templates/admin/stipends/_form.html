@@ -37,6 +37,9 @@
     <div>
         {{ form.application_deadline.label(class_="block text-sm font-medium text-gray-700") }} 
         {{ form.application_deadline(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", size=20) }}
+        <!-- Error messages are displayed in a div with id="<field_name>-error"
+             and class="text-red-500 text-sm mt-1". Each error is wrapped in a
+             div with class="error-message" for consistent styling. -->
         <div id="application_deadline-error" class="text-red-500 text-sm mt-1">
             {% if form.application_deadline.errors %}
                 {% for error in form.application_deadline.errors %}
