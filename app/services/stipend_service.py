@@ -57,14 +57,14 @@ def create_stipend(stipend_data, session=db.session):
             raise ValueError("Organization ID is required")
             
         # Handle application_deadline
-        if 'application_deadline' in stipend_data and stipend_data['application_deadline']:
+        if 'application_deadline' in stipend_data:
             if isinstance(stipend_data['application_deadline'], str):
                 try:
                     stipend_data['application_deadline'] = datetime.strptime(
                         stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
                     )
                 except ValueError:
-                    raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:%M:%S")
+                    raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
             elif isinstance(stipend_data['application_deadline'], datetime):
                 pass  # Already a datetime object
             else:

@@ -27,6 +27,10 @@ def create():
         try:
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
             
+            # Handle empty application_deadline
+            if not stipend_data.get('application_deadline'):
+                stipend_data['application_deadline'] = None
+                
             # Create the stipend
             stipend = create_stipend(stipend_data)
             if not stipend:
@@ -77,6 +81,10 @@ def edit(id):
                     flash_message(FLASH_MESSAGES["INVALID_ORGANIZATION"], FLASH_CATEGORY_ERROR)
                     return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
             
+            # Handle empty application_deadline
+            if not stipend_data.get('application_deadline'):
+                stipend_data['application_deadline'] = None
+                
             # Update the stipend
             if update_stipend(stipend, stipend_data, session=db.session):
                 flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
