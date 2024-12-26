@@ -9,7 +9,7 @@ def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_
         stipend_data['application_deadline'] = ''
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
         
-        assert response.status_code in (200, 302)
+        assert response.status_code == 302  # Should redirect on success
 
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is not None
