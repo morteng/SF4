@@ -45,32 +45,30 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
 
     csrf_token = extract_csrf_token(create_response.data)
     
-    # Create a copy of the stipend data to modify
-    post_data = stipend_data.copy()
-    # Convert datetime to string in the expected format
-    if isinstance(post_data['application_deadline'], datetime):
-        post_data['application_deadline'] = post_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
+    # Ensure application_deadline is in the correct string format
+    if isinstance(stipend_data['application_deadline'], datetime):
+        stipend_data['application_deadline'] = stipend_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
     
     response = logged_in_admin.post(url_for('admin.stipend.create'), data={
-        'name': post_data['name'],
-        'summary': post_data['summary'],
-        'description': post_data['description'],
-        'homepage_url': post_data['homepage_url'],
-        'application_procedure': post_data['application_procedure'],
-        'eligibility_criteria': post_data['eligibility_criteria'],
-        'application_deadline': post_data['application_deadline'],
+        'name': stipend_data['name'],
+        'summary': stipend_data['summary'],
+        'description': stipend_data['description'],
+        'homepage_url': stipend_data['homepage_url'],
+        'application_procedure': stipend_data['application_procedure'],
+        'eligibility_criteria': stipend_data['eligibility_criteria'],
+        'application_deadline': stipend_data['application_deadline'],
         'organization_id': organization.id,
-        'open_for_applications': post_data['open_for_applications'],
+        'open_for_applications': stipend_data['open_for_applications'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
 
     assert response.status_code == 200
     # Check if the stipend was created
     created_stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
-    assert created_stipend is not None
-    assert created_stipend.summary == stipend_data['summary']
+    assert created_stipend is not None, "Stipend was not created"
+    assert created_stipend.summary == stipend_data['summary'], "Stipend summary does not match"
     # Assert the flash message
-    assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
+    assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data, "Success flash message not found"
 
 def test_create_stipend_route_with_invalid_application_deadline_format(logged_in_admin, stipend_data, db_session):
     create_response = logged_in_admin.get(url_for('admin.stipend.create'))
