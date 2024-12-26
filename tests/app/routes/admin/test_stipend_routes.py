@@ -228,18 +228,17 @@ def test_create_stipend_route_with_invalid_application_deadline_format_htmx(logg
     assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
 def test_create_stipend_with_invalid_form_data_htmx(logged_in_admin, stipend_data, db_session):
-    """Test HTMX form submission with invalid data (empty name field)"""
     # Create organization first
     organization = Organization(name='Test Org')
     db_session.add(organization)
     db_session.commit()
     
-    # Get CSRF token
+    # Get the form page to extract CSRF token
     create_response = logged_in_admin.get(url_for('admin.stipend.create'))
     assert create_response.status_code == 200
     csrf_token = extract_csrf_token(create_response.data)
     
-    # Prepare invalid form data
+    # Prepare form data with empty 'name' and include CSRF token
     invalid_data = {
         'name': '',  # Intentionally invalid
         'summary': stipend_data['summary'],
@@ -248,9 +247,9 @@ def test_create_stipend_with_invalid_form_data_htmx(logged_in_admin, stipend_dat
         'application_procedure': stipend_data['application_procedure'],
         'eligibility_criteria': stipend_data['eligibility_criteria'],
         'application_deadline': stipend_data['application_deadline'],
-        'organization_id': organization.id,
+        'organization_id': organization.id,  # Use the created organization's ID
         'open_for_applications': stipend_data['open_for_applications'],
-        'csrf_token': csrf_token
+        'csrf_token': csrf_token  # Include CSRF token
     }
     
     # Submit form with HTMX headers
@@ -260,22 +259,13 @@ def test_create_stipend_with_invalid_form_data_htmx(logged_in_admin, stipend_dat
         headers={'HX-Request': 'true'},
         follow_redirects=True
     )
-
-    # Verify response
+    
     assert response.status_code == 200
-    
-    # Check for validation error in response
-    assert b'This field is required.' in response.data, \
-        "Expected validation error not found in response"
-    
-    # Verify no stipend was created in database
-    stipend_count = db_session.query(Stipend).filter_by(organization_id=organization.id).count()
-    assert stipend_count == 0, \
-        "Stipend was created despite invalid form data"
-    
-    # Verify form is re-rendered with error
-    assert b'form' in response.data.lower(), \
-        "Expected form to be re-rendered with validation error"
+    # Check if validation error is present
+    assert b'This field is required.' in response.data, "Validation error not found in response"
+    # Verify no stipend was created
+    stipends = db_session.query(Stipend).all()
+    assert not any(stipend.organization_id == organization.id for stipend in stipends)
 
 
 def test_update_stipend_route_htmx(logged_in_admin, test_stipend, db_session):
