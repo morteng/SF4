@@ -29,6 +29,9 @@ def create():
             # Handle empty application deadline
             if 'application_deadline' in stipend_data and stipend_data['application_deadline'] == '':
                 stipend_data['application_deadline'] = None
+            elif stipend_data['application_deadline']:
+                # Convert to string in standard format
+                stipend_data['application_deadline'] = stipend_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
                 
             # Create the stipend
             stipend = create_stipend(stipend_data)
