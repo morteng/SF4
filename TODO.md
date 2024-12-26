@@ -17,7 +17,12 @@
   * Supports both full page and HTMX responses
   * Uses format_error_message() for consistent error display
   * Follows Flask-Login and admin_required decorator patterns
-  * Templates must be placed in templates/admin/bots/ directory
+  * Template structure:
+    * Main templates in admin/bots/ directory must extend admin/layout.html
+    * admin/layout.html extends base.html
+    * HTMX partial templates should use _ prefix
+    * Follows consistent naming conventions (index.html, create.html, edit.html)
+    * Template paths must match route references exactly
 
 - Error handling patterns:
   * Errors are displayed below each field with consistent styling
@@ -43,7 +48,8 @@
    - Add integration tests for bot service interactions
 
 ## Recent Fixes
-- Added admin/layout.html template
+- Created admin/layout.html template
+- Updated edit.html to use correct template inheritance
 - Created HTMX partial templates (_bot_row.html, _create_form.html)
 - Updated edit.html with HTMX support
 - Added proper error handling in bot templates
