@@ -1,17 +1,17 @@
 # TODO List
 
 ## Current Goals
-1. [ ] Add comprehensive test coverage for all form fields
-   - Create test cases in test_stipend_htmx.py for:
+1. [x] Add comprehensive test coverage for all form fields
+   - Created test cases in test_stipend_htmx.py for:
      * Required field validation (name, summary, description)
      * Field length validation (max 100 chars for name, max 500 for summary)
      * URL format validation (homepage_url, application_procedure)
      * HTML escaping of user input
-   - Steps:
-     a. Add test cases for each form field with invalid data
-     b. Verify error message consistency across all fields
-     c. Check field-specific error styling matches application_deadline pattern
-     d. Ensure all error containers have unique IDs following pattern: <field_name>-error
+   - Implemented:
+     a. Test cases for each form field with invalid data
+     b. Error message consistency across all fields
+     c. Field-specific error styling matching application_deadline pattern
+     d. Error containers with unique IDs following pattern: <field_name>-error
 
 2. [ ] Verify error handling consistency across all admin routes
    - Check error handling in:
@@ -24,6 +24,21 @@
      b. Ensure consistent use of format_error_message()
      c. Verify proper error container IDs in templates
      d. Check for consistent status code usage (400 for validation errors)
+
+## New Knowledge
+- Date validation error handling improvements:
+  * Added specific error messages for invalid dates, times, and formats
+  * Implemented future date validation with 5-year maximum
+  * Added time component validation
+  * Improved error message consistency between client and server
+- Error propagation:
+  * Ensured errors are properly flashed and rendered in templates
+  * Added specific error containers for each field
+  * Implemented consistent error styling with is-invalid class
+- Test improvements:
+  * Added assertions for error container presence
+  * Verified error message content matches expected format
+  * Ensured tests match the updated error handling implementation
 
 ## Knowledge & Memories
 - Windows 11 environment
