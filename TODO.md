@@ -17,6 +17,7 @@
 - [x] Update test for HTMX stipend update route
 - [x] Verify HTMX stipend update route works with proper template rendering
 - [x] Add explicit status code for HTMX responses
+- [ ] Verify _stipend_row.html template exists and is properly formatted
 - [ ] Add more test coverage for HTMX routes
 - [ ] Review other admin routes for similar HTMX issues
 
