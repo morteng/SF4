@@ -6,12 +6,23 @@ from app.forms.admin_forms import StipendForm  # Added import statement
 
 def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
-        stipend_data['application_deadline'] = ''
-        response = logged_in_admin.post(url_for('admin.stipend.create'), data=stipend_data)
+        # Ensure all required fields are present
+        test_data = {
+            'name': 'Test Stipend',
+            'summary': 'Test summary',
+            'description': 'Test description',
+            'homepage_url': 'http://example.com',
+            'application_procedure': 'Test procedure',
+            'eligibility_criteria': 'Test criteria',
+            'application_deadline': '',
+            'organization_id': 1,
+            'open_for_applications': True
+        }
+        response = logged_in_admin.post(url_for('admin.stipend.create'), data=test_data)
         
         assert response.status_code == 302  # Should redirect on success
 
-        stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
+        stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None  # Verify the deadline is None
 
