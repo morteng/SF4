@@ -1,4 +1,4 @@
-from wtforms.fields import DateTimeField
+from wtforms.fields import DateTimeField, SelectField
 from wtforms.validators import ValidationError
 from datetime import datetime
 import pytz
@@ -8,15 +8,20 @@ class CustomDateTimeField(DateTimeField):
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', timezone='UTC', **kwargs):
         super().__init__(label, validators, format=format, **kwargs)
         self.format = format
-        self.timezone = timezone
+        self.timezone = SelectField(
+            'Timezone',
+            choices=[(tz, tz) for tz in pytz.all_timezones],
+            default='UTC'
+        )
         self.error_messages = {
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
             'invalid_date': 'Invalid date values (e.g., Feb 30)',
             'invalid_time': 'Invalid time values (e.g., 25:61:61)',
             'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
             'required': 'Date is required',
-            'invalid_timezone': 'Invalid timezone',
+            'invalid_timezone': 'Invalid timezone selected',
             'daylight_saving': 'Ambiguous time due to daylight saving transition',
+            'timezone_conversion': 'Error converting to UTC',
             'future_date': 'Date must be in the future',
             'past_date': 'Date must be in the past'
         }

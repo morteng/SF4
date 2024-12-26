@@ -36,56 +36,29 @@ def init_admin_user():
 
 def format_error_message(field, error):
     """Format error messages consistently for both HTMX and regular requests"""
-    import logging
-    logging.debug(f"Formatting error for field '{getattr(field, 'name', str(field))}': {error}")
-    field_name = getattr(field, 'name', str(field))
+    error_map = {
+        'invalid_format': 'Invalid format. Please use YYYY-MM-DD HH:MM:SS',
+        'invalid_date': 'Invalid date values',
+        'invalid_time': 'Invalid time values',
+        'invalid_timezone': 'Invalid timezone selected',
+        'daylight_saving': 'Ambiguous time due to daylight saving',
+        'future_date': 'Date must be in the future',
+        'past_date': 'Date must be in the past',
+        'timezone_conversion': 'Error converting timezone',
+        'missing_time': 'Time is required',
+        'required': 'This field is required'
+    }
     
-    # Add timezone-specific error handling
-    if 'timezone' in str(field):
-        if 'Invalid timezone' in str(error):
-            return 'Please select a valid timezone'
-        if 'Ambiguous time' in str(error):
-            return 'The selected time is ambiguous due to daylight saving time. Please choose a different time.'
-    
-    # Handle date-specific errors
-    if field_name == 'application_deadline':
-        error_str = str(error)
-        # Format validation errors
-        if 'does not match format' in error_str:
-            return 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
-        # Date component errors
-        elif 'day is out of range' in error_str:
-            return 'Invalid day for month'
-        elif 'month is out of range' in error_str:
-            return 'Invalid month value (1-12)'
-        elif 'hour must be in' in error_str:
-            return 'Invalid hour value (0-23)'
-        elif 'minute must be in' in error_str:
-            return 'Invalid minute value (0-59)'
-        elif 'second must be in' in error_str:
-            return 'Invalid second value (0-59)'
-        # Date range errors
-        elif 'must be a future date' in error_str:
-            return 'Application deadline must be a future date'
-        elif 'cannot be more than 5 years' in error_str:
-            return 'Application deadline cannot be more than 5 years in the future'
-        # General date/time errors
-        elif 'Invalid date values' in error_str:
-            return 'Invalid date values (e.g., Feb 30)'
-        # Remove field label prefix for HTMX responses
-        return str(error).replace('Application Deadline: ', '')
-    
-    # Add date range validation
-    if 'future_date' in str(error):
-        return 'The date must be in the future'
-    if 'past_date' in str(error):
-        return 'The date must be in the past'
-        
-    # Handle other field errors consistently
+    # Return mapped error if available
+    for key, msg in error_map.items():
+        if key in str(error):
+            return msg
+            
+    # Default formatting
     field_label = getattr(field, 'label', None)
     if field_label:
         return f"{field_label.text}: {error}"
-    return f"{field_name}: {error}"
+    return f"{field.name if hasattr(field, 'name') else str(field)}: {error}"
 
 def flash_message(message, category):
     from flask import flash

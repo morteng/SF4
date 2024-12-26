@@ -5,6 +5,7 @@ from app.models.organization import Organization
 from app.forms.admin_forms import OrganizationForm
 from tests.conftest import logged_in_admin, db_session, test_organization, organization_data
 import re
+import pytz
 from sqlalchemy.exc import SQLAlchemyError
 from app.constants import FLASH_MESSAGES
 
@@ -241,6 +242,42 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, db_session)
         # Ensure organization was not updated
         org = db_session.query(Organization).filter_by(id=org.id).first()
         assert org.name != invalid_data['name']
+
+def test_timezone_handling(logged_in_admin, db_session):
+    # Test timezone conversion
+    with logged_in_admin.application.app_context():
+        data = {
+            'name': 'Timezone Org',
+            'description': 'Testing timezones',
+            'homepage_url': 'http://example.com',
+            'timezone': 'America/New_York',
+            'application_deadline': '2023-12-31 23:59:59'
+        }
+        
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
+        assert response.status_code == 302
+        
+        org = db_session.query(Organization).filter_by(name=data['name']).first()
+        assert org.application_deadline.tzinfo == pytz.UTC
+        assert org.application_deadline.hour == 4  # 23:59 EST -> 04:59 UTC
+
+def test_invalid_timezone(logged_in_admin):
+    # Test invalid timezone
+    with logged_in_admin.application.app_context():
+        data = {
+            'name': 'Invalid TZ Org',
+            'description': 'Testing invalid timezone',
+            'homepage_url': 'http://example.com',
+            'timezone': 'Invalid/Timezone',
+            'application_deadline': '2023-12-31 23:59:59'
+        }
+        
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
+        assert response.status_code == 302
+        
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])
+            assert any('Invalid timezone selected' in msg for cat, msg in flashed_messages)
 
 def test_delete_organization(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
