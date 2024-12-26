@@ -132,15 +132,15 @@ def delete(id):
 @login_required
 @admin_required
 def index():
-    # Get all stipends from the database
+    # Get all stipends from the database using the service layer
     stipends = get_all_stipends()
-    # Pass them to the template
-    return render_template('admin/stipends/index.html', stipends=stipends)
+    # Pass them to the template with the correct context
+    return render_template('admin/stipends/index.html', stipends=stipends.items if hasattr(stipends, 'items') else stipends)
  
 @admin_stipend_bp.route('/paginate/<int:page>', methods=['GET'])
 @login_required
 @admin_required
 def paginate(page):
-    # Use get_all_stipends() instead of direct query
+    # Use get_all_stipends() with pagination
     stipends = get_all_stipends().paginate(page=page, per_page=10, error_out=False)
     return render_template('admin/stipends/_stipends_table.html', stipends=stipends)
