@@ -42,8 +42,12 @@ def create():
                         return render_template('admin/stipends/create.html', form=form), 200 if is_htmx else 400
                 
             # Create the stipend
-            stipend = create_stipend(stipend_data)
-            if not stipend:
+            try:
+                stipend = create_stipend(stipend_data)
+                if not stipend:
+                    flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+                    return render_template('admin/stipends/create.html', form=form), 200 if is_htmx else 400
+            except Exception as e:
                 flash_message(str(e) if str(e) else FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
                 return render_template('admin/stipends/create.html', form=form), 200 if is_htmx else 400
             
