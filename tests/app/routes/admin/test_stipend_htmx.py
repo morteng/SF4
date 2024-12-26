@@ -17,7 +17,7 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
         )
 
         assert response.status_code == 400  # Ensure status code is 400 for invalid data
-        assert b'Name is required.' in response.data  # Check for the specific error message
+        assert b'Name: This field is required.' in response.data  # Updated to match the actual error message format
 
 def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
