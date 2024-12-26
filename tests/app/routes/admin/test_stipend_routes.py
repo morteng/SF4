@@ -33,7 +33,13 @@ def test_stipend(db_session, stipend_data):
     db_session.delete(stipend)
     db_session.commit()
 
-def test_create_stipend_route(logged_in_admin, stipend_data):
+def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
+    # Create an organization for the test
+    organization = Organization(name='Test Org')
+    db_session.add(organization)
+    db_session.commit()
+    stipend_data['organization_id'] = organization.id
+
     create_response = logged_in_admin.get(url_for('admin.stipend.create'))
     assert create_response.status_code == 200
 
@@ -45,8 +51,8 @@ def test_create_stipend_route(logged_in_admin, stipend_data):
         'homepage_url': stipend_data['homepage_url'],
         'application_procedure': stipend_data['application_procedure'],
         'eligibility_criteria': stipend_data['eligibility_criteria'],
-        'application_deadline': stipend_data['application_deadline'],  # Changed this line
-        'organization_id': 1,
+        'application_deadline': stipend_data['application_deadline'],
+        'organization_id': organization.id,  # Use the ID of the created organization
         'open_for_applications': stipend_data['open_for_applications'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
