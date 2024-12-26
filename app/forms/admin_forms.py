@@ -57,61 +57,59 @@ class StipendForm(FlaskForm):
         if not field.data:
             raise ValidationError('Date is required')
             
-        # Handle both string and datetime inputs
-        if isinstance(field.data, str):
-            try:
+        try:
+            # Handle both string and datetime inputs
+            if isinstance(field.data, str):
                 dt = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-            except ValueError as e:
-                if 'does not match format' in str(e):
-                    raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-                elif 'unconverted data remains' in str(e):
-                    raise ValidationError('Time is required. Please use YYYY-MM-DD HH:MM:SS')
-                elif 'day is out of range' in str(e) or 'month is out of range' in str(e):
-                    raise ValidationError('Invalid date values (e.g., Feb 30)')
-                elif 'time data' in str(e):  # Handle invalid time components
-                    raise ValidationError('Invalid time values (e.g., 25:61:61)')
-                else:
-                    raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-        else:
-            dt = field.data  # Already a datetime object
-            
-        # Validate date components
-        if dt.year < 1900 or dt.year > 2100:
-            raise ValidationError('Invalid year value')
-        if dt.month < 1 or dt.month > 12:
-            raise ValidationError('Invalid month value')
-        if dt.day < 1 or dt.day > 31:
-            raise ValidationError('Invalid date values (e.g., Feb 30)')
-        if dt.month in [4,6,9,11] and dt.day > 30:
-            raise ValidationError('Invalid date values (e.g., Feb 30)')
-        if dt.month == 2:
-            # Handle leap years
-            if dt.year % 4 == 0 and (dt.year % 100 != 0 or dt.year % 400 == 0):
-                if dt.day > 29:
-                    raise ValidationError('Invalid date values (e.g., Feb 30)')
-            elif dt.day > 28:
+            else:
+                dt = field.data
+                
+            # Validate date components
+            if dt.year < 1900 or dt.year > 2100:
+                raise ValidationError('Invalid year value')
+            if dt.month < 1 or dt.month > 12:
+                raise ValidationError('Invalid month value')
+            if dt.day < 1 or dt.day > 31:
                 raise ValidationError('Invalid date values (e.g., Feb 30)')
+            if dt.month in [4,6,9,11] and dt.day > 30:
+                raise ValidationError('Invalid date values (e.g., Feb 30)')
+            if dt.month == 2:
+                # Handle leap years
+                if dt.year % 4 == 0 and (dt.year % 100 != 0 or dt.year % 400 == 0):
+                    if dt.day > 29:
+                        raise ValidationError('Invalid date values (e.g., Feb 30)')
+                elif dt.day > 28:
+                    raise ValidationError('Invalid date values (e.g., Feb 30)')
+                
+            # Validate time components
+            if dt.hour < 0 or dt.hour > 23:
+                raise ValidationError('Invalid time values (e.g., 25:61:61)')
+            if dt.minute < 0 or dt.minute > 59:
+                raise ValidationError('Invalid time values (e.g., 25:61:61)')
+            if dt.second < 0 or dt.second > 59:
+                raise ValidationError('Invalid time values (e.g., 25:61:61)')
             
-        # Validate time components
-        if dt.hour < 0 or dt.hour > 23:
-            raise ValidationError('Invalid time values (e.g., 25:61:61)')
-        if dt.minute < 0 or dt.minute > 59:
-            raise ValidationError('Invalid time values (e.g., 25:61:61)')
-        if dt.second < 0 or dt.second > 59:
-            raise ValidationError('Invalid time values (e.g., 25:61:61)')
-        
-        # Validate future date
-        now = datetime.now()
-        if dt < now:
-            raise ValidationError('Application deadline must be a future date')
-        
-        # Validate not too far in future
-        max_future = now.replace(year=now.year + 5)
-        if dt > max_future:
-            raise ValidationError('Application deadline cannot be more than 5 years in the future')
-        
-        # If all validations pass, format the datetime as a string
-        field.data = dt.strftime('%Y-%m-%d %H:%M:%S')
+            # Validate future date
+            now = datetime.now()
+            if dt < now:
+                raise ValidationError('Application deadline must be a future date')
+            
+            # Validate not too far in future
+            max_future = now.replace(year=now.year + 5)
+            if dt > max_future:
+                raise ValidationError('Application deadline cannot be more than 5 years in the future')
+            
+        except ValueError as e:
+            if 'does not match format' in str(e):
+                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+            elif 'unconverted data remains' in str(e):
+                raise ValidationError('Time is required. Please use YYYY-MM-DD HH:MM:SS')
+            elif 'day is out of range' in str(e) or 'month is out of range' in str(e):
+                raise ValidationError('Invalid date values (e.g., Feb 30)')
+            elif 'time data' in str(e):
+                raise ValidationError('Invalid time values (e.g., 25:61:61)')
+            else:
+                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
 
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)
