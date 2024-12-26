@@ -58,8 +58,6 @@ class StipendForm(FlaskForm):
                     raise ValidationError('Application deadline cannot be in the past.')
             except Exception as e:
                 raise ValidationError(str(e))
-        else:
-            field.data = None  # Ensure empty deadlines are stored as None
 
     def validate_organization_id(self, field):
         if not field.data:
