@@ -10,7 +10,7 @@
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
         {% for stipend in stipends.items %}
-        <tr>
+        <tr hx-target="this" hx-swap="outerHTML">
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ stipend.id }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ stipend.name }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
