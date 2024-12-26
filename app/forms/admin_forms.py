@@ -21,7 +21,7 @@ class StipendForm(FlaskForm):
     eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[Optional()])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
-        validators=[Optional()],  # Change from DataRequired to Optional
+        validators=[Optional()],
         format='%Y-%m-%d %H:%M:%S'
     )
     organization_id = SelectField('Organization', validators=[DataRequired()], coerce=int, choices=[])
@@ -37,9 +37,8 @@ class StipendForm(FlaskForm):
     def validate_application_deadline(self, field):
         if field.data:
             try:
-                # Handle both string and datetime inputs
                 if isinstance(field.data, str):
-                    if not field.data.strip():  # Handle empty string
+                    if not field.data.strip():
                         field.data = None
                         return
                     deadline = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
