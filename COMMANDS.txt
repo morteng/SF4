@@ -1,17 +1,9 @@
-/read CONVENTIONS.md
-/read PROJECT.md
+/add CONVENTIONS.md
 /add TODO.md
-/test
-/architect update TODO.md
-/architect fix that
-/architect clean up TODO.md
-/reset
 
-/read CONVENTIONS.md
+/code "fix issues revealed by testing, asking questions or noted in todo.md."
+
 /read PROJECT.md
-/add TODO.md
-/test
-/architect update TODO.md
-/architect fix that
-/architect clean up TODO.md
-/reset
+
+/architect "Clean up todo list, remove completed tasks. Keep important memories, knowledge and any goals you have been given. Update with new memories, knowledge and goals. Be specific and describe exactly how to accomplish things."
+

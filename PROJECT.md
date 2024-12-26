@@ -278,6 +278,43 @@ Project Root/
 
 ---
 
+## routes
+Endpoint                   Methods    Rule
+-------------------------  ---------  ------------------------------------       
+admin.bot.create           GET, POST  /admin/bots/create
+admin.bot.delete           POST       /admin/bots/<int:id>/delete
+admin.bot.edit             GET, POST  /admin/bots/<int:id>/edit
+admin.bot.index            GET        /admin/bots/
+admin.bot.run              POST       /admin/bots/<int:id>/run
+admin.dashboard.dashboard  GET        /admin/dashboard/
+admin.organization.create  GET, POST  /admin/organizations/create
+admin.organization.delete  POST       /admin/organizations/<int:id>/delete
+admin.organization.edit    GET, POST  /admin/organizations/<int:id>/edit
+admin.organization.index   GET        /admin/organizations/
+admin.stipend.create       GET, POST  /admin/stipends/create
+admin.stipend.delete       POST       /admin/stipends/<int:id>/delete
+admin.stipend.edit         GET, POST  /admin/stipends/<int:id>/edit
+admin.stipend.index        GET        /admin/stipends/
+admin.stipend.paginate     GET        /admin/stipends/paginate/<int:page>
+admin.tag.create           GET, POST  /admin/tags/create
+admin.tag.delete           POST       /admin/tags/<int:id>/delete
+admin.tag.edit             GET, POST  /admin/tags/<int:id>/edit
+admin.tag.index            GET        /admin/tags/
+admin.user.create          GET, POST  /admin/users/create
+admin.user.delete          POST       /admin/users/<int:id>/delete
+admin.user.edit            GET, POST  /admin/users/<int:id>/edit
+admin.user.edit_profile    GET, POST  /admin/users/edit_profile
+admin.user.index           GET        /admin/users/
+public.index               GET        /
+public.login               GET, POST  /login
+public.logout              GET        /logout
+public.register            GET, POST  /register
+static                     GET        /static/<path:filename>
+user.edit_profile          GET, POST  /user/profile/edit
+user.profile               GET        /user/profile
+
+---
+
 ## Additional Components
 
 - **Logging & Monitoring**: Use Python’s `logging`. Consider log rotation.  

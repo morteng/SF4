@@ -1,38 +1,3 @@
-## routes
-Endpoint                   Methods    Rule
--------------------------  ---------  ------------------------------------       
-admin.bot.create           GET, POST  /admin/bots/create
-admin.bot.delete           POST       /admin/bots/<int:id>/delete
-admin.bot.edit             GET, POST  /admin/bots/<int:id>/edit
-admin.bot.index            GET        /admin/bots/
-admin.bot.run              POST       /admin/bots/<int:id>/run
-admin.dashboard.dashboard  GET        /admin/dashboard/
-admin.organization.create  GET, POST  /admin/organizations/create
-admin.organization.delete  POST       /admin/organizations/<int:id>/delete
-admin.organization.edit    GET, POST  /admin/organizations/<int:id>/edit
-admin.organization.index   GET        /admin/organizations/
-admin.stipend.create       GET, POST  /admin/stipends/create
-admin.stipend.delete       POST       /admin/stipends/<int:id>/delete
-admin.stipend.edit         GET, POST  /admin/stipends/<int:id>/edit
-admin.stipend.index        GET        /admin/stipends/
-admin.stipend.paginate     GET        /admin/stipends/paginate/<int:page>
-admin.tag.create           GET, POST  /admin/tags/create
-admin.tag.delete           POST       /admin/tags/<int:id>/delete
-admin.tag.edit             GET, POST  /admin/tags/<int:id>/edit
-admin.tag.index            GET        /admin/tags/
-admin.user.create          GET, POST  /admin/users/create
-admin.user.delete          POST       /admin/users/<int:id>/delete
-admin.user.edit            GET, POST  /admin/users/<int:id>/edit
-admin.user.edit_profile    GET, POST  /admin/users/edit_profile
-admin.user.index           GET        /admin/users/
-public.index               GET        /
-public.login               GET, POST  /login
-public.logout              GET        /logout
-public.register            GET, POST  /register
-static                     GET        /static/<path:filename>
-user.edit_profile          GET, POST  /user/profile/edit
-user.profile               GET        /user/profile
-
 ## notes
 - Use session.get() instead of query.get() for better performance and to avoid potential issues with the query cache.
 - All admin routes have an admin. prefix, as in admin.stipend.create or admin.dashboard.dashboard.
@@ -40,7 +5,8 @@ user.profile               GET        /user/profile
 - Use tailwind and htmx whenever possible
 
 ## TODO.md
-- This file must be updated every time we do any file updates so that it always reflects our goal, plan and tasks. Always use full paths when referencing files to avoid confusion. This is a memory store for you, so jot down any salient thoughts about tests or code you would like to keep in mind for later. If you learn something about the codebase that would be good to knwo later, include the knowledge here. Do this after editing any other files. Always update TODO.md.
+- This file must be updated every time we do any file updates so that it always reflects our goal, plan and tasks. Always use full paths when referencing files to avoid confusion. This is a memory store for you, so jot down any salient thoughts about tests or code you would like to keep in mind for later. If you learn something about the codebase that would be good to know later, include the knowledge here. Do this after editing any other files. Always update TODO.md.
 
-
+# DIARY.md
+- This file is a summary of our notable achievements. If it gets too long, collaps and summarise it. Any key learnings that are new should be added to the TODO.md files knowledge. 
 
