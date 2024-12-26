@@ -14,6 +14,16 @@
      d. Check for consistent status code usage (400 for validation errors)
      e. Add corresponding test cases in test_*_routes.py files
 
+2. [ ] Implement comprehensive date validation across all forms
+   - Add validation for:
+     * Past dates
+     * Dates >5 years in future
+     * Invalid date formats
+     * Missing time components
+     * Edge cases (leap years, invalid month days, etc.)
+   - Ensure consistent error messages between client and server
+   - Add corresponding test cases
+
 ## Knowledge & Memories
 - Windows 11 environment
 - Error Handling Implementation:
@@ -22,6 +32,11 @@
   * Date field errors are handled with specific message mapping
   * Form errors are propagated to templates with proper status codes
   * Error messages now rendered in specific HTML structure for better testability
+  * Key fixes implemented:
+    - Combined duplicate validate_application_deadline methods
+    - Added comprehensive date validation logic
+    - Improved error message propagation in stipend routes
+    - Ensured proper error container structure in templates
 - Validation System Details:
   * Client-side (main.js):
     - Real-time validation using regex: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/
