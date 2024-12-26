@@ -2,18 +2,46 @@
 
 {% block content %}
 <div class="container">
-    <h2 class="text-2xl font-bold mb-4">Create Tag</h2>
-    <form method="POST" action="{{ url_for('admin.tag.create') }}" class="space-y-4">
+    <h2 class="text-2xl font-bold mb-4">Create Stipend</h2>
+    <form method="POST" action="{{ url_for('admin.stipend.create') }}" class="space-y-4">
         {{ form.hidden_tag() }}
         <div class="flex flex-col space-y-1">
             {{ form.name.label(class_="text-gray-700") }}
             {{ form.name(class_="border border-gray-300 p-2 rounded w-full") }}
         </div>
         <div class="flex flex-col space-y-1">
-            {{ form.category.label(class_="text-gray-700") }}
-            {{ form.category(class_="border border-gray-300 p-2 rounded w-full") }}
+            {{ form.summary.label(class_="text-gray-700") }}
+            {{ form.summary(class_="border border-gray-300 p-2 rounded w-full") }}
         </div>
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Create Tag</button>
+        <div class="flex flex-col space-y-1">
+            {{ form.description.label(class_="text-gray-700") }}
+            {{ form.description(class_="border border-gray-300 p-2 rounded w-full") }}
+        </div>
+        <div class="flex flex-col space-y-1">
+            {{ form.homepage_url.label(class_="text-gray-700") }}
+            {{ form.homepage_url(class_="border border-gray-300 p-2 rounded w-full") }}
+        </div>
+        <div class="flex flex-col space-y-1">
+            {{ form.application_procedure.label(class_="text-gray-700") }}
+            {{ form.application_procedure(class_="border border-gray-300 p-2 rounded w-full") }}
+        </div>
+        <div class="flex flex-col space-y-1">
+            {{ form.eligibility_criteria.label(class_="text-gray-700") }}
+            {{ form.eligibility_criteria(class_="border border-gray-300 p-2 rounded w-full") }}
+        </div>
+        <div class="flex flex-col space-y-1">
+            {{ form.application_deadline.label(class_="text-gray-700") }}
+            {{ form.application_deadline(class_="border border-gray-300 p-2 rounded w-full") }}
+        </div>
+        <div class="flex flex-col space-y-1">
+            {{ form.organization_id.label(class_="text-gray-700") }}
+            {{ form.organization_id(class_="border border-gray-300 p-2 rounded w-full") }}
+        </div>
+        <div class="flex flex-col space-y-1">
+            {{ form.open_for_applications.label(class_="text-gray-700") }}
+            {{ form.open_for_applications(class_="border border-gray-300 p-2 rounded") }}
+        </div>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Create Stipend</button>
     </form>
 </div>
 {% endblock %}
