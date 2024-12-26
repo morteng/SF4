@@ -1,4 +1,4 @@
-## Project Diary
+# Project Diary
 A log of interesting things tought, learned, discovered, and done.
 
 ### Day 1
