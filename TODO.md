@@ -1,18 +1,18 @@
 # TODO List
 
 ## Current Goals
-1. [ ] Verify error handling consistency across all admin routes
-   - Check error handling in:
-     * Organization routes (app/routes/admin/organization_routes.py)
-     * Tag routes (app/routes/admin/tag_routes.py)
-     * User routes (app/routes/admin/user_routes.py)
-     * Bot routes (app/routes/admin/bot_routes.py)
+1. [ ] Add comprehensive test coverage for error handling
+   - Add tests for:
+     * Organization routes error handling
+     * Tag routes error handling
+     * User routes error handling
+     * Bot routes error handling
    - Steps:
-     a. Review each route's error handling pattern
-     b. Ensure consistent use of format_error_message() from utils.py
-     c. Verify proper error container IDs in templates
-     d. Check for consistent status code usage (400 for validation errors)
-     e. Add corresponding test cases in test_*_routes.py files
+     a. Create test files for each route type (test_organization_routes.py, etc.)
+     b. Add test cases for all form field validations
+     c. Verify error message consistency across client and server
+     d. Check error container structure in responses
+     e. Ensure proper status codes for different error types
 
 ## Knowledge & Memories
 - Windows 11 environment
