@@ -16,24 +16,35 @@ def create():
     if form.validate_on_submit():
         try:
             new_bot = create_bot(form.data)
-            flash_message(FLASH_MESSAGES["CREATE_BOT_SUCCESS"], FLASH_CATEGORY_SUCCESS)  # Use constants for flash message
+            flash_message(FLASH_MESSAGES["CREATE_BOT_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             current_app.logger.info(f"Flash message set: {FLASH_MESSAGES['CREATE_BOT_SUCCESS']}")
             return redirect(url_for('admin.bot.index'))
         except Exception as e:
-            db.session.rollback()  # Ensure the session is rolled back on error
+            db.session.rollback()
             flash_message(f"{FLASH_MESSAGES['CREATE_BOT_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
             current_app.logger.error(f"Failed to create bot: {e}")
     else:
         # Improved error handling
-        if form.errors:
-            for field_name, errors in form.errors.items():
-                field = getattr(form, field_name)
-                for error in errors:
-                    msg = format_error_message(field, error)
-                    flash_message(msg, FLASH_CATEGORY_ERROR)
-                    current_app.logger.error(f"Form validation error: {msg}")
+        error_messages = []
+        field_errors = {}
+        for field_name, errors in form.errors.items():
+            field = getattr(form, field_name)
+            field_errors[field_name] = []
+            for error in errors:
+                msg = format_error_message(field, error)
+                error_messages.append(msg)
+                field_errors[field_name].append(msg)
+                flash_message(msg, FLASH_CATEGORY_ERROR)
+                current_app.logger.error(f"Form validation error: {msg}")
+        
+        if request.headers.get('HX-Request') == 'true':
+            return render_template('admin/bots/_create_form.html', 
+                                form=form,
+                                error_messages=error_messages,
+                                field_errors=field_errors), 400
+        else:
             flash_message(FLASH_MESSAGES["CREATE_BOT_INVALID_DATA"], FLASH_CATEGORY_ERROR)
-            current_app.logger.error(f"Flashing error: {FLASH_MESSAGES['CREATE_BOT_INVALID_DATA']}")
+    
     return render_template('admin/bots/create.html', form=form)
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])

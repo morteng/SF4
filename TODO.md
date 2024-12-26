@@ -2,11 +2,13 @@
 
 ## Current Goals
 1. [ ] Implement comprehensive error handling for all admin routes
-   - Add error handling tests for:
+   - Completed:
+     * Bot routes error handling
+     * Stipend routes error handling
+   - Remaining:
      * Organization routes
      * Tag routes
      * User routes
-     * Bot routes
    - Steps:
      a. Create test files for each route type (test_organization_routes.py, etc.)
      b. Add test cases for all form field validations
