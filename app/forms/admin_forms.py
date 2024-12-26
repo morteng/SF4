@@ -63,19 +63,18 @@ class StipendForm(FlaskForm):
                 field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
             except ValueError as e:
                 error_str = str(e)
-                # Handle specific date component errors
                 if 'does not match format' in error_str:
                     raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
                 elif 'day is out of range' in error_str:
-                    raise ValidationError('Invalid day for month')
+                    raise ValidationError('Invalid date values (e.g., Feb 30)')
                 elif 'month is out of range' in error_str:
-                    raise ValidationError('Invalid month value (1-12)')
+                    raise ValidationError('Invalid date values (e.g., Feb 30)')
                 elif 'hour must be in' in error_str:
-                    raise ValidationError('Invalid hour value (0-23)')
+                    raise ValidationError('Invalid time values (e.g., 25:61:61)')
                 elif 'minute must be in' in error_str:
-                    raise ValidationError('Invalid minute value (0-59)')
+                    raise ValidationError('Invalid time values (e.g., 25:61:61)')
                 elif 'second must be in' in error_str:
-                    raise ValidationError('Invalid second value (0-59)')
+                    raise ValidationError('Invalid time values (e.g., 25:61:61)')
                 else:
                     raise ValidationError('Invalid date values (e.g., Feb 30)')
 
@@ -88,27 +87,6 @@ class StipendForm(FlaskForm):
         max_future = now.replace(year=now.year + 5)
         if field.data > max_future:
             raise ValidationError('Application deadline cannot be more than 5 years in the future')
-
-        # Validate individual components
-        try:
-            # Check valid date
-            field.data.replace(hour=0, minute=0, second=0)
-            # Check valid time
-            field.data.time()
-        except ValueError as e:
-            error_str = str(e)
-            if 'day is out of range' in error_str:
-                raise ValidationError('Invalid day for month')
-            elif 'month is out of range' in error_str:
-                raise ValidationError('Invalid month value (1-12)')
-            elif 'hour must be in' in error_str:
-                raise ValidationError('Invalid hour value (0-23)')
-            elif 'minute must be in' in error_str:
-                raise ValidationError('Invalid minute value (0-59)')
-            elif 'second must be in' in error_str:
-                raise ValidationError('Invalid second value (0-59)')
-            else:
-                raise ValidationError('Invalid date values (e.g., Feb 30)')
 
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)

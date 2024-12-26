@@ -24,6 +24,9 @@ class CustomDateTimeField(DateTimeField):
                 return
             try:
                 self.data = datetime.strptime(date_str, self.format)
+                # Add validation for individual components
+                if not self._validate_date_components(self.data):
+                    self.errors.append(self.error_messages['invalid_date'])
             except ValueError as e:
                 if 'unconverted data remains' in str(e):
                     self.errors.append(self.error_messages['missing_time'])
@@ -31,6 +34,15 @@ class CustomDateTimeField(DateTimeField):
                     self.errors.append(self.error_messages['invalid_format'])
                 else:
                     self.errors.append(self.error_messages['invalid_date'])
+
+    def _validate_date_components(self, dt):
+        try:
+            # Check if the date components are valid
+            dt.replace(hour=0, minute=0, second=0)
+            dt.time()
+            return True
+        except ValueError:
+            return False
 
     def _value(self):
         if self.raw_data:
