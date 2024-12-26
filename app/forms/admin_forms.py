@@ -57,7 +57,8 @@ class StipendForm(FlaskForm):
 
     def validate_open_for_applications(self, field):
         if isinstance(field.data, str):
-            field.data = field.data.lower() in ['true', 'yes', '1']
+            # Convert string values to boolean
+            field.data = field.data.lower() in ['true', 'yes', '1', 'y']
         elif not isinstance(field.data, bool):
             field.data = False
 

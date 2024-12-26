@@ -93,6 +93,11 @@ def edit(id):
             # Prepare update data
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
 
+            # Handle boolean conversion for open_for_applications
+            if 'open_for_applications' in stipend_data:
+                if isinstance(stipend_data['open_for_applications'], str):
+                    stipend_data['open_for_applications'] = stipend_data['open_for_applications'].lower() in ['true', 'yes', '1', 'y']
+
             # Handle organization_id
             if 'organization_id' in stipend_data:
                 organization = get_organization_by_id(stipend_data['organization_id'])
