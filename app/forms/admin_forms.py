@@ -87,6 +87,20 @@ class StipendForm(FlaskForm):
         max_future = now.replace(year=now.year + 5)
         if field.data > max_future:
             raise ValidationError('Application deadline cannot be more than 5 years in the future')
+            
+        # Validate time components
+        if field.data.hour < 0 or field.data.hour > 23:
+            raise ValidationError('Invalid hour value (0-23)')
+        if field.data.minute < 0 or field.data.minute > 59:
+            raise ValidationError('Invalid minute value (0-59)')
+        if field.data.second < 0 or field.data.second > 59:
+            raise ValidationError('Invalid second value (0-59)')
+            
+        # Validate date components
+        try:
+            field.data.replace(day=field.data.day)  # Check if day is valid for month
+        except ValueError:
+            raise ValidationError('Invalid date for month (e.g., Feb 30)')
 
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)
