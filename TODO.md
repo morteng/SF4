@@ -2,8 +2,15 @@
 
 ## Things to remember about testing
 - Ensure all tests pass
+- When fixing HTMX routes, test both HTMX and non-HTMX cases
+- Verify proper status codes (200 for success, 400 for errors)
 
-## Things to remember abot coding
+## Things to remember about coding
+- Keep HTMX and non-HTMX logic separate and explicit
+- Add clear comments for HTMX-specific handling
+- Use consistent status codes for API responses
 
 ## Specific Tasks
-- [ ] create this list, and keep updating it
+- [x] Fix HTMX handling in stipend update route
+- [ ] Add more test coverage for HTMX routes
+- [ ] Review other admin routes for similar HTMX issues
