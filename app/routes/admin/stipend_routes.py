@@ -60,7 +60,8 @@ def create():
             return render_template('admin/stipends/form.html', form=form), 200
     
     print("[DEBUG] Rendering form")
-    return render_template('admin/stipends/form.html', form=form), 200
+    template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/form.html'
+    return render_template(template, form=form), 200
  
  
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
@@ -96,7 +97,8 @@ def edit(id):
             current_app.logger.error(f"Failed to update stipend: {e}")
             flash_message(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
     
-    return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
+    template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/form.html'
+    return render_template(template, form=form, stipend=stipend), 200
  
  
  

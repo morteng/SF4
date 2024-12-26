@@ -3,51 +3,7 @@
 {% block content %}
 <h2 class="text-2xl font-bold mb-4">{% if form.name.data %}Edit{% else %}Create{% endif %} Stipend</h2>
 
-<form method="post" action="" class="space-y-4">
-    {{ form.hidden_tag() }}
-    
-    <div>
-        {{ form.name.label(class_="block text-sm font-medium text-gray-700") }} 
-        {{ form.name(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", size=50) }}
-    </div>
-
-    <div>
-        {{ form.summary.label(class_="block text-sm font-medium text-gray-700") }} 
-        {{ form.summary(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", rows=3) }}
-    </div>
-
-    <div>
-        {{ form.description.label(class_="block text-sm font-medium text-gray-700") }} 
-        {{ form.description(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", rows=5) }}
-    </div>
-
-    <div>
-        {{ form.homepage_url.label(class_="block text-sm font-medium text-gray-700") }} 
-        {{ form.homepage_url(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
-    </div>
-
-    <div>
-        {{ form.application_procedure.label(class_="block text-sm font-medium text-gray-700") }} 
-        {{ form.application_procedure(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", rows=3) }}
-    </div>
-
-    <div>
-        {{ form.eligibility_criteria.label(class_="block text-sm font-medium text-gray-700") }} 
-        {{ form.eligibility_criteria(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", rows=3) }}
-    </div>
-
-    <div>
-        {{ form.application_deadline.label(class_="block text-sm font-medium text-gray-700") }} 
-        {{ form.application_deadline(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", size=20) }}
-    </div>
-
-    <div class="flex items-center">
-        {{ form.open_for_applications(class_="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded") }} 
-        {{ form.open_for_applications.label(class_="ml-2 block text-sm text-gray-900") }}
-    </div>
-
-    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">{{ form.submit.label.text }}</button>
-</form>
+{% include 'admin/stipends/_form.html' %}
 
 <a href="#" hx-get="{{ url_for('admin.stipend.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">Back to Stipends</a>
 {% endblock %}
