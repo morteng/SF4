@@ -54,48 +54,51 @@ class StipendForm(FlaskForm):
     )
 
     def validate_application_deadline(self, field):
-        if not field.data:
+        if not field.data or (isinstance(field.data, str) and not field.data.strip()):
             raise ValidationError('Date is required')
             
         try:
             # Handle both string and datetime inputs
             if isinstance(field.data, str):
-                if len(field.data.strip()) == 0:
-                    raise ValidationError('Date is required')
                 try:
                     dt = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
                 except ValueError as e:
-                    if 'does not match format' in str(e):
+                    error_str = str(e)
+                    if 'does not match format' in error_str:
                         raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-                    elif 'unconverted data remains' in str(e):
+                    elif 'unconverted data remains' in error_str:
                         raise ValidationError('Time is required. Please use YYYY-MM-DD HH:MM:SS')
+                    elif 'day is out of range' in error_str or 'month is out of range' in error_str:
+                        raise ValidationError('Invalid date values (e.g., Feb 30)')
+                    elif 'time data' in error_str:
+                        raise ValidationError('Invalid time values (e.g., 25:61:61)')
                     raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
             else:
                 dt = field.data
                 
             # Validate date components
             if dt.month < 1 or dt.month > 12:
-                raise ValidationError('Invalid month value')
+                raise ValidationError('Invalid date values (e.g., Feb 30)')
             if dt.day < 1 or dt.day > 31:
-                raise ValidationError('Invalid day value')
+                raise ValidationError('Invalid date values (e.g., Feb 30)')
             # Add specific validation for months with 30 days
             if dt.month in [4, 6, 9, 11] and dt.day > 30:
-                raise ValidationError('Invalid day value for month')
+                raise ValidationError('Invalid date values (e.g., Feb 30)')
             if dt.month == 2:
                 # Handle leap years
                 if dt.year % 4 == 0 and (dt.year % 100 != 0 or dt.year % 400 == 0):
                     if dt.day > 29:
-                        raise ValidationError('Invalid day value for February')
+                        raise ValidationError('Invalid date values (e.g., Feb 30)')
                 elif dt.day > 28:
-                    raise ValidationError('Invalid day value for February')
+                    raise ValidationError('Invalid date values (e.g., Feb 30)')
             
             # Validate time components
             if dt.hour < 0 or dt.hour > 23:
-                raise ValidationError('Invalid hour value')
+                raise ValidationError('Invalid time values (e.g., 25:61:61)')
             if dt.minute < 0 or dt.minute > 59:
-                raise ValidationError('Invalid minute value')
+                raise ValidationError('Invalid time values (e.g., 25:61:61)')
             if dt.second < 0 or dt.second > 59:
-                raise ValidationError('Invalid second value')
+                raise ValidationError('Invalid time values (e.g., 25:61:61)')
             
             # Validate future date
             now = datetime.now()
