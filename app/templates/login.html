@@ -6,9 +6,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-<div id="htmx-indicator" class="hidden text-center bg-blue-100 text-blue-900 py-2">
-    Loading...
-</div>
+{% from "_macros.html" import htmx_loading_indicator %}
+{{ htmx_loading_indicator() }}
 <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Login</h1>
     <form method="POST" action="{{ url_for('public.login') }}" class="max-w-md mx-auto bg-white p-8 rounded shadow-md">

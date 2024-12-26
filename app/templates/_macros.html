@@ -1,0 +1,64 @@
+{% macro delete_button(url, target) %}
+<button 
+    hx-confirm="Are you sure you want to delete this?"
+    hx-delete="{{ url }}"
+    hx-target="{{ target }}"
+    hx-swap="outerHTML swap:0.5s"
+    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+    Delete
+</button>
+{% endmacro %}
+
+{% macro edit_button(url, target) %}
+<button
+    hx-get="{{ url }}"
+    hx-target="{{ target }}"
+    hx-swap="innerHTML"
+    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+    Edit
+</button>
+{% endmacro %}
+
+{% macro flash_messages() %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div id="flash-messages">
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+{% endmacro %}
+
+{% macro pagination(paginated_data, paginate_url) %}
+<nav class="mt-4">
+    <ul class="pagination flex justify-center items-center space-x-2">
+        {% if paginated_data.has_prev %}
+            <li>
+                <a href="#" hx-get="{{ paginate_url }}?page={{ paginated_data.prev_num }}" hx-target="#{{ paginated_data.__class__.__name__.lower() }}-table" hx-swap="innerHTML" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
+                    Previous
+                </a>
+            </li>
+        {% endif %}
+        <li>
+            <span class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-500 bg-white cursor-not-allowed">
+                Page {{ paginated_data.page }} of {{ paginated_data.pages }}
+            </span>
+        </li>
+        {% if paginated_data.has_next %}
+            <li>
+                <a href="#" hx-get="{{ paginate_url }}?page={{ paginated_data.next_num }}" hx-target="#{{ paginated_data.__class__.__name__.lower() }}-table" hx-swap="innerHTML" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
+                    Next
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endmacro %}
+
+{% macro htmx_loading_indicator() %}
+<div id="htmx-indicator" class="hidden text-center bg-blue-100 text-blue-900 py-2">
+    Loading...
+</div>
+{% endmacro %}

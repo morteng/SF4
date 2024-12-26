@@ -12,20 +12,10 @@
         {% include '_nav.html' %}
     </header>
 
-    <!-- Add HTMX loading indicator here -->
-    <div id="htmx-indicator" class="hidden text-center bg-blue-100 text-blue-900 py-2">
-        Loading...
-    </div>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flash-messages">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
+    {% from "_macros.html" import htmx_loading_indicator, flash_messages %}
+    
+    {{ htmx_loading_indicator() }}
+    {{ flash_messages() }}
 
     <main id="main-content" class="p-4">
         {% block content %}{% endblock %}

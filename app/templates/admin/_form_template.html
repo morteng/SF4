@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-4">{{ 'Edit' if form.id.data else 'Create' }} {{ form_title }}</h2>
+    <form method="POST" action="{{ form_action }}" class="space-y-4">
+        {{ form.hidden_tag() }}
+        {% for field in form %}
+            {% if field.type != 'HiddenField' and field.type != 'CSRFTokenField' %}
+                <div class="flex flex-col space-y-1">
+                    {{ field.label(class_="text-gray-700") }}
+                    {{ field(class_="border border-gray-300 p-2 rounded w-full") }}
+                    {% for error in field.errors %}
+                        <span class="text-red-500 text-sm">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+            {% if form.id.data %}Update{% else %}Create{% endif %}
+        </button>
+    </form>
+    <a href="{{ back_url }}" class="text-blue-500 hover:underline">Back to {{ back_text }}</a>
+</div>
+{% endblock %}
