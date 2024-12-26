@@ -150,23 +150,38 @@ def edit(id):
                 flash_message(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
                 return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
         else:
-            # Handle form validation errors
+            error_messages = []
             for field, errors in form.errors.items():
                 for error in errors:
-                    # Special handling for date field errors
                     if field == 'application_deadline':
-                        if 'Not a valid datetime value' in error:
-                            flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS", FLASH_CATEGORY_ERROR)
+                        # Map specific date validation errors
+                        if 'invalid_format' in error:
+                            error_messages.append('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+                        elif 'invalid_date' in error:
+                            error_messages.append('Invalid date values (e.g., Feb 30)')
+                        elif 'invalid_time' in error:
+                            error_messages.append('Invalid time values (e.g., 25:61:61)')
+                        elif 'missing_time' in error:
+                            error_messages.append('Time is required. Please use YYYY-MM-DD HH:MM:SS')
+                        elif 'required' in error:
+                            error_messages.append('Date is required')
                         elif 'cannot be in the past' in error:
-                            flash_message("Application deadline must be a future date", FLASH_CATEGORY_ERROR)
+                            error_messages.append('Application deadline must be a future date')
                         elif 'cannot be more than 5 years' in error:
-                            flash_message("Application deadline cannot be more than 5 years in the future", FLASH_CATEGORY_ERROR)
+                            error_messages.append('Application deadline cannot be more than 5 years in the future')
                         else:
-                            flash_message(f"Invalid date: {error}", FLASH_CATEGORY_ERROR)
+                            error_messages.append(error)
                     else:
-                        # Include the field label in the error message
                         field_label = getattr(form, field).label.text
-                        flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
+                        error_messages.append(f"{field_label}: {error}")
+                
+            if is_htmx:
+                return render_template(
+                    'admin/stipends/_form.html',
+                    form=form,
+                    error_messages=error_messages,
+                    field_errors=form.errors
+                ), 400
             return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
     
     if is_htmx:

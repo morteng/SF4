@@ -26,8 +26,11 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         ('2023-01-01 25:61:61', 'Invalid time values (e.g., 25:61:61)'),
         ('2023-01-01', 'Time is required. Please use YYYY-MM-DD HH:MM:SS'),
         ('', 'Date is required'),
-        ('2020-01-01 00:00:00', 'Application deadline cannot be in the past'),
-        ('2030-01-01 00:00:00', 'Application deadline cannot be more than 5 years in the future')
+        ('2020-01-01 00:00:00', 'Application deadline must be a future date'),
+        ('2030-01-01 00:00:00', 'Application deadline cannot be more than 5 years in the future'),
+        ('2023-02-29 12:00:00', 'Invalid date values (e.g., Feb 30)'),  # Test leap year
+        ('2023-04-31 12:00:00', 'Invalid date values (e.g., Feb 30)'),  # Test invalid month day
+        ('2023-01-01 24:00:00', 'Invalid time values (e.g., 25:61:61)')  # Test invalid hour
     ]
 
     with logged_in_admin.application.app_context():
