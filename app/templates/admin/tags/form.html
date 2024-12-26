@@ -1,24 +1,6 @@
-{% extends "base.html" %}
+{% extends "admin/_form_template.html" %}
 
-{% block content %}
-<h2 class="text-2xl font-bold mb-4">{% if form.id.data %}Edit{% else %}Create{% endif %} Tag</h2>
-<form hx-post="{{ url_for('admin_tag_routes.create_or_edit', id=form.id.data) }}" hx-target="#tags" hx-swap="outerHTML" class="space-y-4">
-    {{ form.hidden_tag() }}
-    <div class="flex flex-col space-y-1">
-        {{ form.name.label(class_="text-gray-700") }}
-        {{ form.name(class_="border border-gray-300 p-2 rounded w-full", size=32) }}
-        {% for error in form.name.errors %}
-            <span class="text-red-500">{{ error }}</span>
-        {% endfor %}
-    </div>
-    <div class="flex flex-col space-y-1">
-        {{ form.category.label(class_="text-gray-700") }}
-        {{ form.category(class_="border border-gray-300 p-2 rounded w-full", size=32) }}
-        {% for error in form.category.errors %}
-            <span class="text-red-500">{{ error }}</span>
-        {% endfor %}
-    </div>
-    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">{% if form.id.data %}Update{% else %}Create{% endif %}</button>
-</form>
-<a href="{{ url_for('admin_tag_routes.tags_list') }}" class="text-blue-500 hover:underline">Back to Tags</a>
-{% endblock %}
+{% set form_title = "Tag" %}
+{% set form_action = url_for('admin.tag.create_or_edit', id=form.id.data) %}
+{% set back_url = url_for('admin.tag.index') %}
+{% set back_text = "Tags" %}

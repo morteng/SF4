@@ -1,9 +1,6 @@
-{% extends "base.html" %}
+{% extends "admin/_form_template.html" %}
 
-{% block content %}
-<h2 class="text-2xl font-bold mb-4">{% if form.name.data %}Edit{% else %}Create{% endif %} Stipend</h2>
-
-{% include 'admin/stipends/_form.html' %}
-
-<a href="#" hx-get="{{ url_for('admin.stipend.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">Back to Stipends</a>
-{% endblock %}
+{% set form_title = "Stipend" %}
+{% set form_action = url_for('admin.stipend.create_or_edit', id=form.id.data) %}
+{% set back_url = url_for('admin.stipend.index') %}
+{% set back_text = "Stipends" %}
