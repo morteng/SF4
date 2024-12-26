@@ -21,9 +21,9 @@
 - [x] Create _stipend_row.html template with proper formatting
 - [ ] Add more test coverage for HTMX routes
 - [ ] Review other admin routes for similar HTMX issues
-- [ ] Fix template rendering error in stipend create route
-- [ ] Verify _stipend_row.html template is properly loaded
-- [ ] Update test_create_stipend_route_htmx to handle template rendering cases
+- [x] Fix template rendering error in stipend create route
+- [x] Verify _stipend_row.html template is properly loaded
+- [x] Update test_create_stipend_route_htmx to handle template rendering cases
 - [x] Fix redirect URL assertion in test_update_stipend_route
 - [x] Investigate template rendering error in stipend update route
 - [x] Fix HTMX handling in stipend create route
