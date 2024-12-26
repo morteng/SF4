@@ -11,35 +11,35 @@ from app.models.bot import Bot
 
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[
-        DataRequired(message="This field is required."),
-        Length(max=100, message="Name must be less than 100 characters.")
+        DataRequired(message="Name is required."),
+        Length(max=100, message="Name cannot exceed 100 characters.")
     ])
     summary = TextAreaField('Summary', validators=[
         Optional(),
-        Length(max=500, message="Summary must be less than 500 characters.")
+        Length(max=500, message="Summary cannot exceed 500 characters.")
     ])
     description = TextAreaField('Description', validators=[
         Optional(),
-        Length(max=2000, message="Description must be less than 2000 characters.")
+        Length(max=2000, message="Description cannot exceed 2000 characters.")
     ])
     homepage_url = URLField('Homepage URL', validators=[
         Optional(),
-        URL(message="Please enter a valid URL.")
+        URL(message="Please enter a valid URL starting with http:// or https://.")
     ])
     application_procedure = TextAreaField('Application Procedure', validators=[
         Optional(),
-        Length(max=1000, message="Application procedure must be less than 1000 characters.")
+        Length(max=1000, message="Application procedure cannot exceed 1000 characters.")
     ])
     eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[
         Optional(),
-        Length(max=1000, message="Eligibility criteria must be less than 1000 characters.")
+        Length(max=1000, message="Eligibility criteria cannot exceed 1000 characters.")
     ])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
         validators=[Optional()],
         format='%Y-%m-%d %H:%M:%S'
     )
-    organization_id = SelectField('Organization', validators=[DataRequired()], coerce=int, choices=[])
+    organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)
     submit = SubmitField('Create')
 
@@ -51,9 +51,8 @@ class StipendForm(FlaskForm):
             self.organization_id.data = self.organization_id.choices[0][0]
 
     def validate_application_deadline(self, field):
-        if field.data:
-            if field.data < datetime.now():
-                raise ValidationError('Application deadline cannot be in the past.')
+        if field.data and field.data < datetime.now():
+            raise ValidationError('Application deadline cannot be in the past.')
 
     def validate_open_for_applications(self, field):
         if field.data is None:
@@ -62,6 +61,14 @@ class StipendForm(FlaskForm):
             field.data = field.data.lower() in ['y', 'yes', 'true', '1']
         elif not isinstance(field.data, bool):
             field.data = False
+
+    def validate_summary(self, field):
+        if field.data and field.data.strip() == '':
+            raise ValidationError('Summary cannot be just whitespace.')
+
+    def validate_description(self, field):
+        if field.data and field.data.strip() == '':
+            raise ValidationError('Description cannot be just whitespace.')
 
     def validate_organization_id(self, field):
         if not field.data:
