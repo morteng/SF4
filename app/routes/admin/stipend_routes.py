@@ -68,7 +68,7 @@ def edit(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
         flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
-        return redirect(url_for('admin.stipend.index'))
+        return '', 200  # Return empty response for HTMX
     
     if request.method == 'POST':
         form = StipendForm(request.form)
@@ -113,7 +113,7 @@ def delete(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
         flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
-        return redirect(url_for('admin.stipend.index'))
+        return '', 500  # Return error response for HTMX
     
     try:
         delete_stipend(stipend.id)
@@ -135,7 +135,7 @@ def index():
     # Get paginated stipends directly
     page = request.args.get('page', 1, type=int)
     stipends = get_all_stipends().paginate(page=page, per_page=10, error_out=False)
-    return render_template('admin/stipends/index.html', stipends=stipends.items)  # Add .items here
+    return render_template('admin/stipends/index.html', stipends=stipends)  # Pass the full Pagination object
  
 @admin_stipend_bp.route('/paginate/<int:page>', methods=['GET'])
 @login_required
