@@ -27,13 +27,14 @@ def update_stipend(stipend, data, session=db.session):
                     value = None
                 elif isinstance(value, str):
                     try:
-                        value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
-                        if value < datetime.now():
+                        value = datetime.strptime(value, '%Y-%m-%d').date()
+                        if value < datetime.now().date():
                             raise ValueError("Application deadline cannot be in the past.")
                     except ValueError:
-                        raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
+                        raise ValueError("Invalid date format. Please use YYYY-MM-DD")
                 elif isinstance(value, datetime):
-                    if value < datetime.now():
+                    value = value.date()
+                    if value < datetime.now().date():
                         raise ValueError("Application deadline cannot be in the past.")
                 elif value is not None:
                     raise ValueError("Invalid date format")
@@ -71,27 +72,11 @@ def create_stipend(stipend_data, session=db.session):
             raise ValueError("Invalid organization ID")
         
         # Handle application_deadline
-        if 'application_deadline' in stipend_data:
-            if isinstance(stipend_data['application_deadline'], str):
-                if stipend_data['application_deadline'].strip():
-                    try:
-                        deadline = datetime.strptime(
-                            stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
-                        )
-                        if deadline < datetime.now():
-                            raise ValueError("Application deadline cannot be in the past.")
-                        stipend_data['application_deadline'] = deadline
-                    except ValueError:
-                        raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
-                else:
-                    stipend_data['application_deadline'] = None
-            elif isinstance(stipend_data['application_deadline'], datetime):
-                if stipend_data['application_deadline'] < datetime.now():
-                    raise ValueError("Application deadline cannot be in the past.")
-            elif stipend_data['application_deadline'] is None:
-                pass
-            else:
-                raise ValueError("Invalid date format")
+        if 'application_deadline' in stipend_data and stipend_data['application_deadline']:
+            deadline = datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d').date()
+            if deadline < datetime.now().date():
+                raise ValueError("Application deadline cannot be in the past.")
+            stipend_data['application_deadline'] = deadline
         
         # Handle open_for_applications
         if 'open_for_applications' in stipend_data:
