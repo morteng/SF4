@@ -126,29 +126,27 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'eligibility_criteria': test_stipend.eligibility_criteria,
         'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if test_stipend.application_deadline else '',
         'organization_id': test_stipend.organization_id,
-        'open_for_applications': True,  # Ensure boolean value
+        'open_for_applications': True,
         'csrf_token': csrf_token
     }
 
-    # Submit the update request (without follow_redirects)
+    # Submit the update request with HTMX header
     response = logged_in_admin.post(
         url_for('admin.stipend.edit', id=test_stipend.id),
-        data=updated_data
+        data=updated_data,
+        headers={'HX-Request': 'true'}
     )
     
-    # Verify the response redirects
-    assert response.status_code == 302
-
-    # Follow the redirect to verify the final result
-    redirect_response = logged_in_admin.get(response.location)
-    assert redirect_response.status_code == 200
+    # Verify the HTMX response
+    assert response.status_code == 200
+    assert b'<tr hx-target="this" hx-swap="outerHTML">' in response.data
 
     # Verify the stipend was updated
     updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
     assert updated_stipend.name == 'Updated Stipend'
 
     # Verify the success flash message
-    assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in redirect_response.data
+    assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
 
 def test_delete_stipend_route(logged_in_admin, test_stipend, db_session):
     response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id), follow_redirects=True)
