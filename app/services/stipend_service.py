@@ -46,8 +46,16 @@ def update_stipend(stipend, data, session=db.session):
 def create_stipend(stipend_data, session=db.session):
     try:
         # Convert blank application_deadline to None
-        if 'application_deadline' in stipend_data and stipend_data['application_deadline'] == '':
-            stipend_data['application_deadline'] = None
+        if 'application_deadline' in stipend_data:
+            if stipend_data['application_deadline'] == '':
+                stipend_data['application_deadline'] = None
+            elif isinstance(stipend_data['application_deadline'], str) and stipend_data['application_deadline'].strip():
+                try:
+                    stipend_data['application_deadline'] = datetime.strptime(
+                        stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
+                    )
+                except ValueError:
+                    raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
             
         # Ensure organization_id is valid
         organization_id = stipend_data.get('organization_id')
@@ -67,13 +75,6 @@ def create_stipend(stipend_data, session=db.session):
         
         # Explicitly set the organization relationship
         new_stipend.organization = organization
-        
-        # Convert application_deadline to datetime if it's a non-empty string
-        if isinstance(new_stipend.application_deadline, str) and new_stipend.application_deadline.strip():
-            try:
-                new_stipend.application_deadline = datetime.strptime(new_stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
-            except ValueError:
-                raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
         
         # Add the new stipend to the session and commit
         session.add(new_stipend)
