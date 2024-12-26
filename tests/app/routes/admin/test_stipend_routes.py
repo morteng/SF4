@@ -271,10 +271,10 @@ def test_update_stipend_route_htmx(logged_in_admin, test_stipend, db_session):
         'open_for_applications': test_stipend.open_for_applications,
         'csrf_token': csrf_token
    }
-   response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), headers={'HX-Request': 'true'}, data=updated_data, follow_redirects=True)
- 
-   assert response.status_code == 302
-   updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
+    response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), headers={'HX-Request': 'true'}, data=updated_data, follow_redirects=True)
+    
+    assert response.status_code == 302
+    updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
     assert updated_stipend.name == 'Updated Stipend'
     # Assert the flash message
     assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
