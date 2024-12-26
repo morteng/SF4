@@ -123,7 +123,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'homepage_url': test_stipend.homepage_url,
         'application_procedure': test_stipend.application_procedure,
         'eligibility_criteria': test_stipend.eligibility_criteria,
-        'application_deadline': (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S'),
+        'application_deadline': (datetime.now() + timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'),  # Changed to 365 days in the future
         'organization_id': test_stipend.organization_id,  # Pass as integer
         'open_for_applications': 'y',  # Changed from True to 'y'
         'csrf_token': csrf_token
