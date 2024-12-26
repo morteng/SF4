@@ -1,14 +1,14 @@
 # TODO List
 
 ## Current Goals
-1. [x] Fix date validation error handling
-   - Removed duplicate validate_application_deadline method
-   - Added proper error message propagation to template
-   - Updated test assertions to verify error rendering
-   - Next steps:
-     a. Verify template structure in admin/stipends/_form.html
-     b. Ensure error messages appear in correct containers
-     c. Check CSS styling for error messages
+1. [ ] Verify template rendering of error messages
+   - Check admin/stipends/_form.html template
+   - Ensure error messages appear in correct locations
+   - Verify proper styling of error messages
+   - Steps:
+     a. Add template to chat for review
+     b. Verify error message container structure
+     c. Check CSS classes for error styling
 
 2. [ ] Add comprehensive test coverage for all form fields
    - Create test cases in test_stipend_htmx.py for:

@@ -33,3 +33,14 @@ A log of interesting things tought, learned, discovered, and done.
   * Consistent error message formatting improves maintainability
   * Detailed test assertions help catch rendering issues
 
+### Day 5
+- Completed date validation error handling fixes:
+  * Removed duplicate validate_application_deadline method
+  * Enhanced error propagation in stipend_routes.py
+  * Updated test assertions to be more specific about error locations
+  * Improved error message formatting in utils.py
+- Key learnings:
+  * Error messages must match exactly between client and server
+  * Template structure must align with test expectations
+  * Field-specific error containers improve test reliability
+
