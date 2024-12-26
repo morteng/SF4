@@ -14,27 +14,16 @@
      d. Check for consistent status code usage (400 for validation errors)
      e. Add corresponding test cases in test_*_routes.py files
 
-2. [ ] Implement comprehensive date validation across all forms
-   - Add validation for:
-     * Past dates
-     * Dates >5 years in future
-     * Invalid date formats
-     * Missing time components
-     * Edge cases (leap years, invalid month days, etc.)
-   - Ensure consistent error messages between client and server
-   - Add corresponding test cases
-
 ## Knowledge & Memories
 - Windows 11 environment
 - Error Handling Implementation:
-  * utils.py provides format_error_message() for consistent error formatting
+  * utils.py provides format_error_message() with error mapping for consistent error formatting
   * HTMX responses include both error messages and field-specific errors
   * Date field errors are handled with specific message mapping
   * Form errors are propagated to templates with proper status codes
   * Error messages now rendered in specific HTML structure for better testability
   * Key fixes implemented:
-    - Combined duplicate validate_application_deadline methods
-    - Added comprehensive date validation logic
+    - Added comprehensive date validation logic in StipendForm
     - Improved error message propagation in stipend routes
     - Ensured proper error container structure in templates
 - Validation System Details:
@@ -44,8 +33,10 @@
     - Error display in #date-error div with is-invalid class
   * Server-side (StipendForm):
     - Uses datetime.strptime with format '%Y-%m-%d %H:%M:%S'
-    - Future date validation: datetime.now() comparison
-    - Date range validation: 5 year maximum future date
+    - Comprehensive validation including:
+      * Date component validation (year, month, day, hour, minute, second)
+      * Future date validation: datetime.now() comparison
+      * Date range validation: 5 year maximum future date
     - Specific error messages for:
       * Invalid date format
       * Invalid date values
