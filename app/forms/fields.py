@@ -18,24 +18,29 @@ class CustomDateTimeField(DateTimeField):
         if valuelist:
             date_str = valuelist[0].strip()
             if not date_str:
-                raise ValidationError(self.error_messages['required'])
+                self.errors.append(self.error_messages['required'])
+                return
             
             try:
-                # First try parsing the full datetime
                 self.data = datetime.strptime(date_str, self.format)
-            except ValueError:
+            except ValueError as e:
                 self.data = None
-                # Check if it's just a date without time
-                try:
-                    datetime.strptime(date_str, '%Y-%m-%d')
-                    raise ValidationError(self.error_messages['missing_time'])
-                except ValueError:
-                    # Check if it's invalid date components
+                if 'unconverted data remains' in str(e):
+                    self.errors.append(self.error_messages['missing_time'])
+                elif 'does not match format' in str(e):
+                    self.errors.append(self.error_messages['invalid_format'])
+                else:
+                    # Check if it's just a date without time
                     try:
-                        datetime.strptime(date_str[:10], '%Y-%m-%d')
-                        raise ValidationError(self.error_messages['invalid_time'])
+                        datetime.strptime(date_str, '%Y-%m-%d')
+                        self.errors.append(self.error_messages['missing_time'])
                     except ValueError:
-                        raise ValidationError(self.error_messages['invalid_date'])
+                        # Check if it's invalid date components
+                        try:
+                            datetime.strptime(date_str[:10], '%Y-%m-%d')
+                            self.errors.append(self.error_messages['invalid_time'])
+                        except ValueError:
+                            self.errors.append(self.error_messages['invalid_date'])
 
     def _value(self):
         if self.raw_data:
