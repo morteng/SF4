@@ -7,12 +7,6 @@
    - Add comprehensive date validation with edge case handling
    - Update test coverage for date validation edge cases
 
-2. Improve error handling consistency across all admin routes
-   - Verify error message formatting in bot, organization, and tag routes
-   - Ensure all routes use format_error_message() consistently
-   - Add HTMX response handling for form errors in all routes
-   - Update test coverage for error handling in all routes
-
 ## Knowledge & Memories
 - Windows 11 environment
 - Error Handling Implementation:
@@ -39,16 +33,35 @@
    - Ensure field_errors are properly passed to template
    - Verify error message rendering in template
 
-2. For general error handling:
-   - Review all admin routes for consistent error handling
-   - Ensure format_error_message() is used consistently
-   - Add HTMX response handling for form errors
-   - Update test coverage for error handling
-
 ## New Memories
 - Discovered failing test for invalid application deadlines
 - Need to ensure error messages appear in HTMX responses
 - Current implementation in stipend_routes.py needs to properly propagate errors
 - Test expects specific error messages for invalid dates/times
 - Form validation needs to handle both string and datetime inputs
+
+## Specific Tasks
+1. Fix application deadline validation in StipendForm:
+   - Add comprehensive validation for date components (month, day, year)
+   - Add validation for time components (hour, minute, second)
+   - Add validation for future date requirement
+   - Add validation for maximum future date (5 years)
+   - Ensure consistent error messages across all validation cases
+
+2. Update stipend_routes.py error handling:
+   - Ensure field_errors are properly passed to the template
+   - Verify error messages are included in HTMX responses
+   - Maintain consistent error container structure (#<field_name>-error)
+   - Ensure proper status codes (400) for validation errors
+
+3. Update template error rendering:
+   - Verify error container structure matches test expectations
+   - Ensure error messages are properly displayed for each field
+   - Maintain consistent styling for error messages
+
+4. Add comprehensive test coverage:
+   - Add test cases for all date validation scenarios
+   - Verify error messages match expected values
+   - Test both HTMX and regular form submissions
+   - Test edge cases (leap years, month/day combinations)
 
