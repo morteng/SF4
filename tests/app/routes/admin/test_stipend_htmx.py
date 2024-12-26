@@ -34,3 +34,31 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         assert response.status_code == 400  # Ensure status code is 400 for invalid data
         assert b'Invalid date format. Please use YYYY-MM-DD HH:MM:SS' in response.data  # Check for the specific error message
 
+def test_create_stipend_with_past_date(stipend_data, logged_in_admin, db_session):
+    with logged_in_admin.application.app_context():
+        stipend_data['application_deadline'] = '2020-01-01 00:00:00'  # Past date
+        response = logged_in_admin.post(
+            url_for('admin.stipend.create'),
+            data=stipend_data,
+            headers={
+                'HX-Request': 'true',
+                'HX-Target': '#stipend-form-container'
+            }
+        )
+        assert response.status_code == 400
+        assert b'Application deadline cannot be in the past' in response.data
+
+def test_create_stipend_with_far_future_date(stipend_data, logged_in_admin, db_session):
+    with logged_in_admin.application.app_context():
+        stipend_data['application_deadline'] = '2030-01-01 00:00:00'  # More than 5 years
+        response = logged_in_admin.post(
+            url_for('admin.stipend.create'),
+            data=stipend_data,
+            headers={
+                'HX-Request': 'true',
+                'HX-Target': '#stipend-form-container'
+            }
+        )
+        assert response.status_code == 400
+        assert b'Application deadline cannot be more than 5 years in the future' in response.data
+

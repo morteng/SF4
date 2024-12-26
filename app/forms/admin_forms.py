@@ -57,7 +57,10 @@ class StipendForm(FlaskForm):
             try:
                 # Handle both string and datetime inputs
                 if isinstance(field.data, str):
-                    parsed_date = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+                    try:
+                        parsed_date = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+                    except ValueError:
+                        raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
                 else:
                     parsed_date = field.data
                 
@@ -74,7 +77,7 @@ class StipendForm(FlaskForm):
                 if parsed_date > max_future_date:
                     raise ValidationError('Application deadline cannot be more than 5 years in the future.')
                     
-            except ValueError:
+            except ValueError as e:
                 raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
 
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
