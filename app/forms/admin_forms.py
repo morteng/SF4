@@ -65,8 +65,7 @@ class StipendForm(FlaskForm):
                 dt = field.data
                 
             # Validate date components
-            if dt.year < 1900 or dt.year > 2100:
-                raise ValidationError('Invalid year value')
+            # Validate date components
             if dt.month < 1 or dt.month > 12:
                 raise ValidationError('Invalid month value')
             if dt.day < 1 or dt.day > 31:
