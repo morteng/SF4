@@ -156,7 +156,10 @@ class TagForm(FlaskForm):
             raise ValidationError('Tag with this name already exists.')
 
 
+from wtforms import HiddenField
+
 class UserForm(FlaskForm):
+    id = HiddenField('ID')
     username = StringField('Username', validators=[DataRequired(), Length(max=100)])
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=255)])
     password = PasswordField('Password', validators=[

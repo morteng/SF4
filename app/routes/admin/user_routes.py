@@ -57,6 +57,7 @@ def edit(id):
         original_email=user.email,
         obj=user
     )
+    form.id.data = user.id
     if request.method == 'POST' and form.validate_on_submit():
         try:
             update_user(user, form.data)
