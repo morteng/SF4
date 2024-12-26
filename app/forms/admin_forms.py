@@ -66,7 +66,7 @@ class StipendForm(FlaskForm):
                 
             # Validate date components
             if dt.month < 1 or dt.month > 12:
-                raise ValidationError('Invalid month value')
+                raise ValidationError('Invalid date values (e.g., Feb 30)')
             if dt.day < 1 or dt.day > 31:
                 raise ValidationError('Invalid date values (e.g., Feb 30)')
             # Add specific validation for months with 30 days
@@ -79,7 +79,7 @@ class StipendForm(FlaskForm):
                         raise ValidationError('Invalid date values (e.g., Feb 30)')
                 elif dt.day > 28:
                     raise ValidationError('Invalid date values (e.g., Feb 30)')
-                
+            
             # Validate time components
             if dt.hour < 0 or dt.hour > 23:
                 raise ValidationError('Invalid time values (e.g., 25:61:61)')

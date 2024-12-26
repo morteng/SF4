@@ -41,8 +41,8 @@
             {% for error in form.application_deadline.errors %}
                 <div class="error-message">{{ error }}</div>
             {% endfor %}
-            {% if application_deadline_error %}
-                {% for error in application_deadline_error %}
+            {% if field_errors and field_errors.application_deadline %}
+                {% for error in field_errors.application_deadline %}
                     <div class="error-message">{{ error }}</div>
                 {% endfor %}
             {% endif %}
