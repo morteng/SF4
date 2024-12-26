@@ -12,5 +12,9 @@
         </script>
       {% endfor %}
     </div>
+  {% else %}
+    <script>
+      console.log("No flash messages to render");
+    </script>
   {% endif %}
 {% endwith %}

@@ -139,6 +139,8 @@ def index():
     page = request.args.get('page', 1, type=int)
     stipends = get_all_stipends().paginate(page=page, per_page=10, error_out=False)
     logging.info(f"Stipends fetched: {stipends.items}")
+    if not stipends.items:
+        flash_message("No stipends found", FLASH_CATEGORY_INFO)
     return render_template('admin/stipends/index.html', stipends=stipends)
  
 @admin_stipend_bp.route('/paginate/<int:page>', methods=['GET'])
