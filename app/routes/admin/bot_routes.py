@@ -56,7 +56,10 @@ def create():
                     field_errors=field_errors,
                     is_htmx=True
                 ), 400
-            return render_template('admin/bots/create.html', form=form), 400
+            return render_template('admin/bots/create.html', 
+                                form=form,
+                                error_messages=error_messages,
+                                field_errors=field_errors), 400
 
     return render_template('admin/bots/create.html', form=form)
 
