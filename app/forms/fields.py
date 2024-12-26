@@ -14,7 +14,9 @@ class CustomDateTimeField(DateTimeField):
                 self.data = datetime.strptime(date_str, self.format)
             except ValueError:
                 self.data = None
-                raise ValidationError(f'Invalid date format. Please use {self.format}.')
+                # Remove the ValidationError raise here
+                # This allows the form to continue validation
+                pass
 
     def _value(self):
         if self.raw_data:

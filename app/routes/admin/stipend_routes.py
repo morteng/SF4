@@ -78,7 +78,9 @@ def create():
         for field, errors in form.errors.items():
             for error in errors:
                 flash_message(f"{getattr(form, field).label.text}: {error}", FLASH_CATEGORY_ERROR)
-        return render_template('admin/stipends/create.html', form=form), 400
+        # Return 200 status code for HTMX requests even with validation errors
+        status_code = 200 if is_htmx else 400
+        return render_template('admin/stipends/create.html', form=form), status_code
 
     return render_template('admin/stipends/create.html', form=form)
 
