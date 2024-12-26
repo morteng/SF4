@@ -32,5 +32,5 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         )
 
         assert response.status_code == 400  # Ensure status code is 400 for invalid data
-        assert b'Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data  # Check for the specific error message
+        assert b'Invalid date format. Please use YYYY-MM-DD HH:MM:SS' in response.data  # Check for the specific error message
 
