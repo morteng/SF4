@@ -22,24 +22,47 @@ class CustomDateTimeField(DateTimeField):
             
         date_str = valuelist[0].strip()
         try:
-            self.data = datetime.strptime(date_str, self.format)
+            dt = datetime.strptime(date_str, self.format)
+            
+            # Validate date components
+            if dt.month < 1 or dt.month > 12:
+                raise ValueError('invalid_date')
+            if dt.day < 1 or dt.day > 31:
+                raise ValueError('invalid_date')
+            if dt.month in [4, 6, 9, 11] and dt.day > 30:
+                raise ValueError('invalid_date')
+            if dt.month == 2:
+                # Handle leap years
+                if dt.year % 4 == 0 and (dt.year % 100 != 0 or dt.year % 400 == 0):
+                    if dt.day > 29:
+                        raise ValueError('invalid_date')
+                elif dt.day > 28:
+                    raise ValueError('invalid_date')
+            
+            # Validate time components
+            if dt.hour < 0 or dt.hour > 23:
+                raise ValueError('invalid_time')
+            if dt.minute < 0 or dt.minute > 59:
+                raise ValueError('invalid_time')
+            if dt.second < 0 or dt.second > 59:
+                raise ValueError('invalid_time')
+            
+            self.data = dt
+            
         except ValueError as e:
             self.data = None
             error_str = str(e)
             
-            if 'unconverted data remains' in error_str:
+            if error_str == 'invalid_date':
+                self.errors.append(self.error_messages['invalid_date'])
+            elif error_str == 'invalid_time':
+                self.errors.append(self.error_messages['invalid_time'])
+            elif 'unconverted data remains' in error_str:
                 self.errors.append(self.error_messages['missing_time'])
             elif 'does not match format' in error_str:
                 self.errors.append(self.error_messages['invalid_format'])
             else:
-                # Handle invalid date/time values
-                try:
-                    # Try parsing just the date portion
-                    datetime.strptime(date_str.split()[0], '%Y-%m-%d')
-                    # If date is valid, it must be an invalid time
-                    self.errors.append(self.error_messages['invalid_time'])
-                except ValueError:
-                    self.errors.append(self.error_messages['invalid_date'])
+                self.errors.append(self.error_messages['invalid_date'])
 
     def _value(self):
         if self.raw_data:

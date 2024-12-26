@@ -54,69 +54,18 @@ class StipendForm(FlaskForm):
     )
 
     def validate_application_deadline(self, field):
-        if not field.data or (isinstance(field.data, str) and not field.data.strip()):
+        if not field.data:
             raise ValidationError('Date is required')
             
-        try:
-            # Handle both string and datetime inputs
-            if isinstance(field.data, str):
-                try:
-                    dt = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-                except ValueError as e:
-                    error_str = str(e)
-                    if 'does not match format' in error_str:
-                        raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-                    elif 'unconverted data remains' in error_str:
-                        raise ValidationError('Time is required. Please use YYYY-MM-DD HH:MM:SS')
-                    elif 'day is out of range' in error_str or 'month is out of range' in error_str:
-                        raise ValidationError('Invalid date values (e.g., Feb 30)')
-                    elif 'time data' in error_str:
-                        raise ValidationError('Invalid time values (e.g., 25:61:61)')
-                    raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-            else:
-                dt = field.data
-                
-            # Validate date components
-            if dt.month < 1 or dt.month > 12:
-                raise ValidationError('Invalid date values (e.g., Feb 30)')
-            if dt.day < 1 or dt.day > 31:
-                raise ValidationError('Invalid date values (e.g., Feb 30)')
-            # Add specific validation for months with 30 days
-            if dt.month in [4, 6, 9, 11] and dt.day > 30:
-                raise ValidationError('Invalid date values (e.g., Feb 30)')
-            if dt.month == 2:
-                # Handle leap years
-                if dt.year % 4 == 0 and (dt.year % 100 != 0 or dt.year % 400 == 0):
-                    if dt.day > 29:
-                        raise ValidationError('Invalid date values (e.g., Feb 30)')
-                elif dt.day > 28:
-                    raise ValidationError('Invalid date values (e.g., Feb 30)')
-            
-            # Validate time components
-            if dt.hour < 0 or dt.hour > 23:
-                raise ValidationError('Invalid time values (e.g., 25:61:61)')
-            if dt.minute < 0 or dt.minute > 59:
-                raise ValidationError('Invalid time values (e.g., 25:61:61)')
-            if dt.second < 0 or dt.second > 59:
-                raise ValidationError('Invalid time values (e.g., 25:61:61)')
-            
-            # Validate future date
-            now = datetime.now()
-            if dt < now:
-                raise ValidationError('Application deadline must be a future date')
-            
-            # Validate not too far in future
-            max_future = now.replace(year=now.year + 5)
-            if dt > max_future:
-                raise ValidationError('Application deadline cannot be more than 5 years in the future')
-            
-        except ValueError as e:
-            error_str = str(e)
-            if 'day is out of range' in error_str or 'month is out of range' in error_str:
-                raise ValidationError('Invalid date values (e.g., Feb 30)')
-            elif 'time data' in error_str:
-                raise ValidationError('Invalid time values (e.g., 25:61:61)')
-            raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+        # Validate future date
+        now = datetime.now()
+        if field.data < now:
+            raise ValidationError('Application deadline must be a future date')
+        
+        # Validate not too far in future
+        max_future = now.replace(year=now.year + 5)
+        if field.data > max_future:
+            raise ValidationError('Application deadline cannot be more than 5 years in the future')
 
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)
