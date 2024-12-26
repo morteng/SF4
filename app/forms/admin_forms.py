@@ -1,9 +1,18 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, SelectField
-from wtforms.validators import DataRequired, Length, Optional, ValidationError, URL
+from wtforms import (
+    StringField, TextAreaField, URLField, BooleanField, 
+    SubmitField, SelectField, PasswordField
+)
+from wtforms.validators import (
+    DataRequired, Length, Optional, ValidationError, 
+    URL, Email, Regexp
+)
 from wtforms.fields import DateTimeField
 from app.models.organization import Organization
+from app.models.tag import Tag
+from app.models.user import User
+from app.models.bot import Bot
 from app.extensions import db
 
 
