@@ -56,6 +56,12 @@ def format_error_message(field, error):
             return 'Application deadline cannot be more than 5 years in the future'
         return str(error)
     
+    # Handle other field errors consistently
+    field_label = getattr(field, 'label', None)
+    if field_label:
+        return f"{field_label.text}: {error}"
+    return f"{field_name}: {error}"
+    
     # Get the field label if available
     field_label = getattr(field, 'label', None)
     if field_label:

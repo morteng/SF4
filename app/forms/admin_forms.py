@@ -54,19 +54,38 @@ class StipendForm(FlaskForm):
 
     def validate_application_deadline(self, field):
         if not field.data:
-            return
+            raise ValidationError('Date is required')
+            
+        # Check if time component is missing
+        if isinstance(field.data, str) and len(field.data.split()) == 1:
+            raise ValidationError('Time is required. Please use YYYY-MM-DD HH:MM:SS')
             
         try:
+            # Parse the date string if it's not already a datetime object
+            if isinstance(field.data, str):
+                parsed_date = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+            else:
+                parsed_date = field.data
+                
             # Ensure the date is in the future
-            if field.data < datetime.now():
+            if parsed_date < datetime.now():
                 raise ValidationError('Application deadline must be a future date')
             
             # Ensure the date is within a reasonable range
             max_future_date = datetime.now().replace(year=datetime.now().year + 5)
-            if field.data > max_future_date:
+            if parsed_date > max_future_date:
                 raise ValidationError('Application deadline cannot be more than 5 years in the future')
+                
         except ValueError as e:
-            raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+            # Handle specific date parsing errors
+            if 'day is out of range' in str(e) or 'month must be in 1..12' in str(e):
+                raise ValidationError('Invalid date values (e.g., Feb 30)')
+            elif 'time data' in str(e) and 'does not match format' in str(e):
+                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+            elif 'hour must be in 0..23' in str(e) or 'minute must be in 0..59' in str(e):
+                raise ValidationError('Invalid time values (e.g., 25:61:61)')
+            else:
+                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
 
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)
