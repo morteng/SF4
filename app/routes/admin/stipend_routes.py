@@ -97,7 +97,7 @@ def create():
                     field_errors=field_errors,
                     application_deadline_error=field_errors.get('application_deadline', []),
                     is_htmx=True
-                ), 400
+                ), 200 if not error_messages else 400
             return render_template('admin/stipends/create.html', 
                 form=form,
                 error_messages=error_messages,
