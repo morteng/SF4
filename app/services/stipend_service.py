@@ -9,6 +9,10 @@ logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
 def update_stipend(stipend, data, session=db.session):
     try:
+        # Ensure open_for_applications is present with default False
+        if 'open_for_applications' not in data:
+            data['open_for_applications'] = False
+
         # Handle organization_id separately
         organization_id = data.pop('organization_id', None)
         if organization_id:
