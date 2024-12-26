@@ -77,14 +77,20 @@ def create():
                     ), 400
                 return render_template('admin/stipends/create.html', form=form), 400
         else:
+            error_messages = []
             for field, errors in form.errors.items():
                 for error in errors:
                     field_label = getattr(form, field).label.text
                     error_msg = f"{field_label}: {error}"
+                    error_messages.append(error_msg)
                     flash_message(error_msg, FLASH_CATEGORY_ERROR)
             
             if is_htmx:
-                return render_template('admin/stipends/_form.html', form=form), 400
+                return render_template(
+                    'admin/stipends/_form.html', 
+                    form=form,
+                    error_messages=error_messages
+                ), 400
             return render_template('admin/stipends/create.html', form=form), 400
 
     return render_template('admin/stipends/create.html', form=form)
