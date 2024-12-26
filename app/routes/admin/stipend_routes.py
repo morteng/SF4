@@ -73,8 +73,12 @@ def create():
                 current_app.logger.error(f"Failed to create stipend: {e}")
                 flash_message(str(e), FLASH_CATEGORY_ERROR)
                 if is_htmx:
-                    return render_template_string(
-                        f"<tr><td colspan='6'>Error creating stipend: {str(e)}</td></tr>"
+                    return render_template(
+                        'admin/stipends/_form.html',
+                        form=form,
+                        error_messages=[str(e)],
+                        field_errors={'application_deadline': [str(e)]},
+                        is_htmx=True
                     ), 400
                 return render_template('admin/stipends/create.html', form=form), 400
         else:
@@ -153,6 +157,15 @@ def edit(id):
                 db.session.rollback()
                 current_app.logger.error(f"Failed to update stipend: {e}")
                 flash_message(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+                if is_htmx:
+                    return render_template(
+                        'admin/stipends/_form.html',
+                        form=form,
+                        stipend=stipend,
+                        error_messages=[str(e)],
+                        field_errors={'application_deadline': [str(e)]},
+                        is_htmx=True
+                    ), 400
                 return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
         else:
             error_messages = []
