@@ -206,15 +206,9 @@ def test_create_stipend_route_htmx(logged_in_admin, stipend_data, db_session):
    }, follow_redirects=True)
  
     assert response.status_code == 200
-    # Check for either the successful row or error fallback
-    # Check for successful row rendering or error fallback
-    if b'Error rendering new row' in response.data:
-        # If error, verify the error message contains the template path
-        assert b'admin/stipends/_stipend_row.html' in response.data
-    else:
-        # If success, verify the row contains the stipend data
-        assert b'<tr hx-target="this" hx-swap="outerHTML">' in response.data
-        assert stipend_data['name'].encode() in response.data
+    # Verify the row was rendered correctly
+    assert b'<tr id="stipend-row-' in response.data
+    assert stipend_data['name'].encode() in response.data
     # Verify the stipend was created
     created_stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
     assert created_stipend is not None

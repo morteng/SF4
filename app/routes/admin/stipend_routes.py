@@ -55,7 +55,7 @@ def create():
 
             if is_htmx:
                 try:
-                    return render_template('admin/stipends/_stipend_row.html', stipend=new_stipend), 200
+                    return render_template('admin/stipends/_stipend_row.html', stipend=new_stipend)
                 except Exception as e:
                     current_app.logger.error(f"Failed to render stipend row template: {e}")
                     return render_template_string(
