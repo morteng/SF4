@@ -23,19 +23,9 @@ def create():
     
     if form.validate_on_submit():
         try:
+            # Create a copy of form data and remove unnecessary fields
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
             
-            # Validate organization exists
-            organization_id = stipend_data.get('organization_id')
-            if not organization_id:
-                flash_message(FLASH_MESSAGES["INVALID_ORGANIZATION"], FLASH_CATEGORY_ERROR)
-                return render_template('admin/stipends/form.html', form=form), 200
-                
-            organization = get_organization_by_id(organization_id)
-            if not organization:
-                flash_message(FLASH_MESSAGES["INVALID_ORGANIZATION"], FLASH_CATEGORY_ERROR)
-                return render_template('admin/stipends/form.html', form=form), 200
-                
             # Handle empty application deadline
             if 'application_deadline' in stipend_data and stipend_data['application_deadline'] == '':
                 stipend_data['application_deadline'] = None
@@ -47,33 +37,24 @@ def create():
                 return render_template('admin/stipends/form.html', form=form), 200
             
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-            
-            if request.headers.get('HX-Request'):
-                stipends = get_all_stipends()
-                return render_template('admin/stipends/_stipend_list_with_flash.html', stipends=stipends.paginate(page=1, per_page=10)), 200
-            
             return redirect(url_for('admin.stipend.index'))
+            
         except Exception as e:
             db.session.rollback()
             logging.error(f"Failed to create stipend: {e}")
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-            if request.headers.get('HX-Request'):
-                return render_template('_flash_messages.html'), 200
-            else:
-                return render_template('admin/stipends/form.html', form=form), 200
+            return render_template('admin/stipends/form.html', form=form), 200
     
+    # Handle form validation errors
     for field, errors in form.errors.items():
         for error in errors:
             logging.error(f"Flashing error: {error}")
             if "date format" in error.lower():
                 flash_message(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
             else:
-                flash_message(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
+                flash_message(error, FLASH_CATEGORY_ERROR)
     
-    if request.headers.get('HX-Request'):
-        return render_template('_flash_messages.html'), 200
-    else:
-        return render_template('admin/stipends/form.html', form=form), 200
+    return render_template('admin/stipends/form.html', form=form), 200
  
  
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
