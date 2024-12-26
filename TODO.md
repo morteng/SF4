@@ -8,9 +8,9 @@
 
 ## Current Issue
 - [x] Fix template rendering error in HTMX stipend create route
-  - Added debug logging for template path
-  - Ensured flash messages appear in HTMX responses
-  - Verified template path resolution
+  - [x] Added debug logging for template path
+  - [x] Ensured flash messages appear in HTMX responses
+  - [x] Verified template path resolution
 
 ## Things to remember about coding
 - Keep HTMX and non-HTMX logic separate and explicit
