@@ -96,9 +96,15 @@ def create():
                     error_messages=error_messages,
                     field_errors=field_errors,
                     application_deadline_error=field_errors.get('application_deadline', []),
-                    is_htmx=True
+                    is_htmx=True,
+                    status=400
                 ), 400
-            return render_template('admin/stipends/create.html', form=form), 400
+            return render_template('admin/stipends/create.html', 
+                form=form,
+                error_messages=error_messages,
+                field_errors=field_errors,
+                application_deadline_error=field_errors.get('application_deadline', [])
+            ), 400
 
     return render_template('admin/stipends/create.html', form=form)
 

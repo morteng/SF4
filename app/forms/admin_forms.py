@@ -100,13 +100,14 @@ class StipendForm(FlaskForm):
                 raise ValidationError('Application deadline cannot be more than 5 years in the future')
             
         except ValueError as e:
-            if 'does not match format' in str(e):
+            error_str = str(e)
+            if 'does not match format' in error_str:
                 raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-            elif 'unconverted data remains' in str(e):
+            elif 'unconverted data remains' in error_str:
                 raise ValidationError('Time is required. Please use YYYY-MM-DD HH:MM:SS')
-            elif 'day is out of range' in str(e) or 'month is out of range' in str(e):
+            elif 'day is out of range' in error_str or 'month is out of range' in error_str:
                 raise ValidationError('Invalid date values (e.g., Feb 30)')
-            elif 'time data' in str(e):
+            elif 'time data' in error_str:
                 raise ValidationError('Invalid time values (e.g., 25:61:61)')
             else:
                 raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
