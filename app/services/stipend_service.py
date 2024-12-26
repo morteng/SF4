@@ -60,10 +60,10 @@ def update_stipend(stipend, data, session=db.session):
 def create_stipend(stipend_data, session=db.session):
     try:
         # Validate required fields
-        required_fields = ['name', 'organization_id']
-        for field in required_fields:
-            if field not in stipend_data or not stipend_data[field]:
-                raise ValueError(f"{field.replace('_', ' ').title()} is required")
+        if not stipend_data.get('name'):
+            raise ValueError("Name is required")
+        if not stipend_data.get('organization_id'):
+            raise ValueError("Organization is required")
         
         # Validate organization exists
         organization = session.get(Organization, stipend_data['organization_id'])
@@ -88,8 +88,8 @@ def create_stipend(stipend_data, session=db.session):
             elif isinstance(stipend_data['application_deadline'], datetime):
                 if stipend_data['application_deadline'] < datetime.now():
                     raise ValueError("Application deadline cannot be in the past.")
-            elif not stipend_data['application_deadline']:
-                stipend_data['application_deadline'] = None
+            elif stipend_data['application_deadline'] is None:
+                pass
             else:
                 raise ValueError("Invalid date format")
         
