@@ -49,16 +49,12 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
 
             assert response.status_code == 400
             # Check for error message in the specific error container
+            assert b'id="application_deadline-error"' in response.data
             assert expected_error.encode() in response.data
             # Check for error class on the field
             assert b'is-invalid' in response.data
-            # Check for error message container
-            assert b'id="application_deadline-error"' in response.data
             # Verify the error message appears in the correct location
-            assert f'<div id="application_deadline-error" class="error-message">{expected_error}</div>'.encode() in response.data
-            # Verify the form includes the error messages
-            assert b'error-message' in response.data
-            assert b'is-invalid' in response.data
+            assert f'<div id="application_deadline-error" class="text-red-500 text-sm mt-1">{expected_error}</div>'.encode() in response.data
 
 def test_create_stipend_with_past_date(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():

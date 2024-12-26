@@ -50,7 +50,7 @@ def format_error_message(field, error):
             return 'Time is required. Please use YYYY-MM-DD HH:MM:SS'
         elif 'Date is required' in error:
             return 'Date is required'
-        elif 'cannot be in the past' in error or 'future date' in error:
+        elif 'must be a future date' in error:
             return 'Application deadline must be a future date'
         elif 'cannot be more than 5 years' in error:
             return 'Application deadline cannot be more than 5 years in the future'
