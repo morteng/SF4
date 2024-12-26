@@ -27,11 +27,11 @@ def update_stipend(stipend, data, session=db.session):
                     value = None
                 elif isinstance(value, str):
                     try:
-                        value = datetime.strptime(value, '%Y-%m-%d').date()
-                        if value < datetime.now().date():
+                        value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+                        if value < datetime.now():
                             raise ValueError("Application deadline cannot be in the past.")
                     except ValueError:
-                        raise ValueError("Invalid date format. Please use YYYY-MM-DD")
+                        raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
                 elif isinstance(value, datetime):
                     value = value.date()
                     if value < datetime.now().date():
@@ -73,13 +73,14 @@ def create_stipend(stipend_data, session=db.session):
         
         # Handle application_deadline
         if 'application_deadline' in stipend_data and stipend_data['application_deadline']:
-            try:
-                deadline = datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d').date()
-                if deadline < datetime.now().date():
-                    raise ValueError("Application deadline cannot be in the past.")
-                stipend_data['application_deadline'] = deadline
-            except ValueError:
-                raise ValueError("Invalid date format for application_deadline. Please use YYYY-MM-DD.")
+            if isinstance(stipend_data['application_deadline'], str):
+                try:
+                    deadline = datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+                    if deadline < datetime.now():
+                        raise ValueError("Application deadline cannot be in the past.")
+                    stipend_data['application_deadline'] = deadline
+                except ValueError:
+                    raise ValueError("Invalid date format for application_deadline. Please use YYYY-MM-DD HH:MM:SS.")
         
         # Handle open_for_applications
         if 'open_for_applications' in stipend_data:
