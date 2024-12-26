@@ -32,15 +32,26 @@ def create():
                 if stipend_data['application_deadline'] == '':
                     stipend_data['application_deadline'] = None
                 elif isinstance(stipend_data['application_deadline'], str):
-                    # Convert string to datetime object
+                    # Convert string to datetime object using the form's validation
                     try:
                         stipend_data['application_deadline'] = datetime.strptime(
                             stipend_data['application_deadline'], 
                             '%Y-%m-%d %H:%M:%S'
                         )
                     except ValueError:
-                        flash_message('Invalid date format. Please use YYYY-MM-DD HH:MM:SS', FLASH_CATEGORY_ERROR)
-                        return render_template('admin/stipends/form.html', form=form), 200
+                        # If the main format fails, try other formats
+                        for fmt in ('%Y-%m-%d %H:%M', '%Y-%m-%d'):
+                            try:
+                                stipend_data['application_deadline'] = datetime.strptime(
+                                    stipend_data['application_deadline'], 
+                                    fmt
+                                )
+                                break
+                            except ValueError:
+                                continue
+                        else:
+                            flash_message('Invalid date format. Please use YYYY-MM-DD, YYYY-MM-DD HH:MM, or YYYY-MM-DD HH:MM:SS', FLASH_CATEGORY_ERROR)
+                            return render_template('admin/stipends/form.html', form=form), 200
                 
             # Create the stipend
             stipend = create_stipend(stipend_data)

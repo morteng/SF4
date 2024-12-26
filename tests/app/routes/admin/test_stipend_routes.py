@@ -51,7 +51,7 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
         'homepage_url': stipend_data['homepage_url'],
         'application_procedure': stipend_data['application_procedure'],
         'eligibility_criteria': stipend_data['eligibility_criteria'],
-        'application_deadline': stipend_data['application_deadline'],
+        'application_deadline': '2023-12-31 23:59:59',  # Ensure this matches the expected format
         'organization_id': organization.id,  # Use the ID of the created organization
         'open_for_applications': stipend_data['open_for_applications'],
         'csrf_token': csrf_token
