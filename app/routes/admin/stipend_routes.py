@@ -2,6 +2,7 @@ from datetime import datetime
 import logging
 
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string
+from jinja2 import TemplateNotFound
 from flask_login import login_required
 
 from app.constants import (
