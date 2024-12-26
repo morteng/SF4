@@ -34,56 +34,61 @@ def create():
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')
 
-    if form.validate_on_submit():
-        try:
-            # Prepare form data with explicit date handling
-            stipend_data = {
-                'name': form.name.data,
-                'summary': form.summary.data,
-                'description': form.description.data,
-                'homepage_url': form.homepage_url.data,
-                'application_procedure': form.application_procedure.data,
-                'eligibility_criteria': form.eligibility_criteria.data,
-                'application_deadline': form.application_deadline.data,
-                'organization_id': form.organization_id.data,
-                'open_for_applications': form.open_for_applications.data
-            }
-                        
+    if request.method == 'POST':
+        if form.validate_on_submit():
             try:
-                # Create the stipend
-                new_stipend = create_stipend(stipend_data)
-                flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                # Prepare form data with explicit date handling
+                stipend_data = {
+                    'name': form.name.data,
+                    'summary': form.summary.data,
+                    'description': form.description.data,
+                    'homepage_url': form.homepage_url.data,
+                    'application_procedure': form.application_procedure.data,
+                    'eligibility_criteria': form.eligibility_criteria.data,
+                    'application_deadline': form.application_deadline.data,
+                    'organization_id': form.organization_id.data,
+                    'open_for_applications': form.open_for_applications.data
+                }
+                            
+                try:
+                    # Create the stipend
+                    new_stipend = create_stipend(stipend_data)
+                    flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
 
-                if is_htmx:
-                    # Ensure template path is correct
-                    template_path = 'templates/admin/stipends/_stipend_row.html'
-                    current_app.logger.debug(f"Attempting to render template at: {template_path}")
-                    # Try rendering with full path first
-                    try:
-                        rendered = render_template(template_path, stipend=new_stipend)
-                        # Add flash message to HTMX response
-                        flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-                        return rendered, 200
-                    except TemplateNotFound:
-                        # Try with relative path if full path fails
-                        rendered = render_template('admin/stipends/_stipend_row.html', stipend=new_stipend)
-                        flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-                        return rendered, 200
-                    except Exception as e:
-                        current_app.logger.error(f"Failed to render stipend row template: {e}")
-                        # Return error message with flash
-                        flash_message(f"Error rendering new row: {str(e)}", FLASH_CATEGORY_ERROR)
-                        return render_template_string(
-                            f"<tr><td colspan='6'>Error rendering new row: {str(e)}</td></tr>"
-                        ), 200
+                    if is_htmx:
+                        # Ensure template path is correct
+                        template_path = 'templates/admin/stipends/_stipend_row.html'
+                        current_app.logger.debug(f"Attempting to render template at: {template_path}")
+                        # Try rendering with full path first
+                        try:
+                            rendered = render_template(template_path, stipend=new_stipend)
+                            # Add flash message to HTMX response
+                            flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                            return rendered, 200
+                        except TemplateNotFound:
+                            # Try with relative path if full path fails
+                            rendered = render_template('admin/stipends/_stipend_row.html', stipend=new_stipend)
+                            flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                            return rendered, 200
+                        except Exception as e:
+                            current_app.logger.error(f"Failed to render stipend row template: {e}")
+                            # Return error message with flash
+                            flash_message(f"Error rendering new row: {str(e)}", FLASH_CATEGORY_ERROR)
+                            return render_template_string(
+                                f"<tr><td colspan='6'>Error rendering new row: {str(e)}</td></tr>"
+                            ), 200
+                except Exception as e:
+                    db.session.rollback()
+                    current_app.logger.error(f"Failed to create stipend: {e}")
+                    flash_message(str(e), FLASH_CATEGORY_ERROR)
+                    return render_template('admin/stipends/create.html', form=form), 400
             except Exception as e:
                 db.session.rollback()
-                current_app.logger.error(f"Failed to create stipend: {e}")
+                current_app.logger.error(f"Failed to process stipend creation: {e}")
                 flash_message(str(e), FLASH_CATEGORY_ERROR)
                 return render_template('admin/stipends/create.html', form=form), 400
-
-    # Handle form validation errors
-    if request.method == 'POST' and not form.validate_on_submit():
+        else:
+            # Handle form validation errors
         for field, errors in form.errors.items():
             for error in errors:
                 # Special handling for date field errors
