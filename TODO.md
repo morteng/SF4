@@ -6,11 +6,16 @@
 - Verify proper status codes (200 for success, 400 for errors)
 - HTMX responses should not follow redirects
 
-## Current Issue
+## Current Issues
 - [x] Fix template rendering error in HTMX stipend create route
   - [x] Added debug logging for template path
   - [x] Ensured flash messages appear in HTMX responses
   - [x] Verified template path resolution
+
+- [ ] Fix test file path conflict in test_stipend_routes.py
+  - [ ] Remove __pycache__/.pyc files
+  - [ ] Ensure consistent test file paths between tests/app/routes/admin/ and tests/routes/admin/
+  - [ ] Verify pytest can collect tests correctly after cleanup
 
 ## Things to remember about coding
 - Keep HTMX and non-HTMX logic separate and explicit
