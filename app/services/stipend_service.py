@@ -60,11 +60,14 @@ def create_stipend(stipend_data, session=db.session):
         if 'application_deadline' in stipend_data:
             if isinstance(stipend_data['application_deadline'], str):
                 try:
-                    stipend_data['application_deadline'] = datetime.strptime(
-                        stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
-                    )
+                    if stipend_data['application_deadline'].strip():  # Only parse if not empty
+                        stipend_data['application_deadline'] = datetime.strptime(
+                            stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
+                        )
+                    else:
+                        stipend_data['application_deadline'] = None
                 except ValueError:
-                    stipend_data['application_deadline'] = None  # Set to None if invalid
+                    raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
             elif isinstance(stipend_data['application_deadline'], datetime):
                 pass  # Already a datetime object
             else:

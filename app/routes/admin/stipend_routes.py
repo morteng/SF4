@@ -39,7 +39,7 @@ def create():
             
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             if is_htmx:
-                return '', 200
+                return render_template('admin/stipends/_stipend_row.html', stipend=new_stipend)
             return redirect(url_for('admin.stipend.index'))
             
         except Exception as e:
@@ -55,6 +55,8 @@ def create():
                 flash_message(f"Error in {getattr(form, field).label.text}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/stipends/create.html', form=form), 400
     
+    if is_htmx:
+        return render_template('admin/stipends/_form.html', form=form), 200
     return render_template('admin/stipends/create.html', form=form), 200
  
  

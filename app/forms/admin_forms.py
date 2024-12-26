@@ -39,6 +39,9 @@ class StipendForm(FlaskForm):
             try:
                 # Handle both string and datetime inputs
                 if isinstance(field.data, str):
+                    if not field.data.strip():  # Handle empty string
+                        field.data = None
+                        return
                     deadline = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
                 else:
                     deadline = field.data
