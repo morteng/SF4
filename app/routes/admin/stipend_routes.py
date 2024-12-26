@@ -67,39 +67,31 @@ def edit(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
         flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
-        return '', 200  # Return empty response for HTMX
+        return '', 200
+
+    form = StipendForm(obj=stipend)
     
-    if request.method == 'POST':
-        form = StipendForm(request.form)
-        if form.validate_on_submit():
-            try:
-                # Exclude 'submit' and 'csrf_token'
-                stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
+    if request.method == 'POST' and form.validate_on_submit():
+        try:
+            # Prepare update data
+            stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
+            
+            # Handle organization_id
+            if 'organization_id' in stipend_data:
                 organization = get_organization_by_id(stipend_data['organization_id'])
-                stipend_data['organization'] = organization
-                
-                update_stipend(stipend, stipend_data, session=db.session)
+                if not organization:
+                    flash_message(FLASH_MESSAGES["INVALID_ORGANIZATION"], FLASH_CATEGORY_ERROR)
+                    return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
+            
+            # Update the stipend
+            if update_stipend(stipend, stipend_data, session=db.session):
                 flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
                 return redirect(url_for('admin.stipend.index'))
-            except Exception as e:
-                db.session.rollback()
-                current_app.logger.error(f"Failed to update stipend: {e}")
-                flash_message(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-                if request.headers.get('HX-Request'):
-                    return render_template('_flash_messages.html'), 200
-                else:
-                    return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
-    else:
-        form = StipendForm(obj=stipend)
-    
-    if form.errors:
-        for field, errors in form.errors.items():
-            for error in errors:
-                logging.error(f"Flashing error: {error}")
-                if "date format" in error.lower():
-                    flash_message(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
-                else:
-                    flash_message(error, FLASH_CATEGORY_ERROR)  # Flash each specific validation error
+            
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Failed to update stipend: {e}")
+            flash_message(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
     
     return render_template('admin/stipends/form.html', form=form, stipend=stipend), 200
  

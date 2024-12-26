@@ -9,43 +9,42 @@ logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
 def update_stipend(stipend, data, session=db.session):
     try:
-        logging.info(f"Original stipend state: {stipend.__dict__}")
-        
+        # Handle organization_id separately
+        organization_id = data.pop('organization_id', None)
+        if organization_id:
+            organization = session.get(Organization, organization_id)
+            if not organization:
+                raise ValueError(f"Invalid organization ID: {organization_id}")
+            stipend.organization = organization
+
+        # Process other fields
         for key, value in data.items():
             if key.startswith('_'):
-                continue  # Skip internal attributes
+                continue
 
             if key == 'application_deadline':
                 if value:
                     if isinstance(value, str):
-                        try:
-                            value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
-                        except ValueError:
-                            raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
-                    # Ensure date is not in the past
+                        value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
                     if value < datetime.now():
                         raise ValueError("Application deadline cannot be in the past.")
             elif key == 'open_for_applications' and value is not None:
-                # Convert various representations of False to actual False
                 if isinstance(value, str):
                     value = value.lower() in ['y', 'yes', 'true', '1']
                 else:
                     value = bool(value)
-            
-            logging.info(f"Setting {key} to {value}")
+
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
 
-        logging.info(f"Updated stipend state: {stipend.__dict__}")
-        
         session.commit()
         flash(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+        return True
     except Exception as e:
         session.rollback()
-        if session.is_active and db.inspect(stipend).detached:
-            session.add(stipend)
         logging.error(f"Failed to update stipend: {e}")
-        flash(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+        flash(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+        return False
 
 def create_stipend(stipend_data, session=db.session):
     try:
