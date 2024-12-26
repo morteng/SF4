@@ -1,28 +1,12 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
-from flask_login import login_user, current_user, login_required
-from app.forms.user_forms import ProfileForm, LoginForm
+from flask_login import current_user, login_required
+from app.forms.user_forms import ProfileForm
 from app.models.user import User  # Import the User model
 from app.extensions import db  # Import the db from extensions
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
-@user_bp.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)
-            flash(FLASH_MESSAGES["LOGIN_SUCCESS"])
-            # Redirect based on user role
-            if current_user.is_admin:
-                return redirect(url_for('admin.dashboard.dashboard'))
-            else:
-                return redirect(url_for('user.profile'))
-        else:
-            flash(FLASH_MESSAGES["LOGIN_INVALID_CREDENTIALS"], FLASH_CATEGORY_ERROR)
-    return render_template('login.html', form=form)
 
 @user_bp.route('/profile', methods=['GET'])
 @login_required
