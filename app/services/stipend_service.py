@@ -56,6 +56,9 @@ def create_stipend(stipend_data, session=db.session):
                     )
                 except ValueError:
                     raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
+            elif stipend_data['application_deadline'] is None:
+                # Explicitly set to None if it's already None
+                stipend_data['application_deadline'] = None
             
         # Ensure organization_id is valid
         organization_id = stipend_data.get('organization_id')
