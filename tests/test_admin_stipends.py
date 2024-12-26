@@ -48,8 +48,9 @@ class AdminStipendTestCase(unittest.TestCase):
             'homepage_url': 'http://example.com/stipend',
             'application_procedure': 'Send an email to admin@example.com',
             'eligibility_criteria': 'Must be a student.',
-            'application_deadline': datetime(2023, 12, 31, 23, 59, 59).strftime('%Y-%m-%d %H:%M:%S'),  # Convert to string
-            'open_for_applications': 'y'  # Use 'y' or 'n' for boolean fields in form data
+            'application_deadline': '2023-12-31 23:59:59',  # Use string format
+            'organization_id': 1,  # Ensure this matches a valid organization
+            'open_for_applications': 'y'
         }, follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)

@@ -55,21 +55,23 @@ def create_stipend(stipend_data, session=db.session):
         # Validate required fields
         if 'organization_id' not in stipend_data or not stipend_data['organization_id']:
             raise ValueError("Organization ID is required")
-        if 'application_deadline' not in stipend_data:
-            raise ValueError("Application deadline is required")
             
-        # Convert and validate application_deadline
-        if isinstance(stipend_data['application_deadline'], str):
-            try:
-                stipend_data['application_deadline'] = datetime.strptime(
-                    stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
-                )
-            except ValueError:
-                raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
+        # Handle application_deadline
+        if 'application_deadline' in stipend_data:
+            if isinstance(stipend_data['application_deadline'], str):
+                try:
+                    stipend_data['application_deadline'] = datetime.strptime(
+                        stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
+                    )
+                except ValueError:
+                    raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:%M:%S")
+            elif isinstance(stipend_data['application_deadline'], datetime):
+                pass  # Already a datetime object
+            else:
+                raise ValueError("Invalid application_deadline format")
         
         # Create the stipend
         new_stipend = Stipend(**stipend_data)
-        
         session.add(new_stipend)
         session.commit()
         return new_stipend

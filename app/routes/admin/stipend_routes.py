@@ -27,12 +27,6 @@ def create():
         try:
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
             
-            # Convert application_deadline to datetime
-            if stipend_data['application_deadline']:
-                stipend_data['application_deadline'] = datetime.strptime(
-                    stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
-                )
-            
             # Create the stipend
             stipend = create_stipend(stipend_data)
             if not stipend:
@@ -47,7 +41,7 @@ def create():
         except Exception as e:
             db.session.rollback()
             logging.error(f"Failed to create stipend: {e}")
-            flash_message(str(e) if str(e) else FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+            flash_message(str(e), FLASH_CATEGORY_ERROR)
             return render_template('admin/stipends/create.html', form=form), 400
      
     # Handle form validation errors
