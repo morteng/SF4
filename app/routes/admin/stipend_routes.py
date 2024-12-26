@@ -48,7 +48,7 @@ def create():
                 'organization_id': form.organization_id.data,
                 'open_for_applications': form.open_for_applications.data
             }
-                
+                        
             # Create the stipend
             new_stipend = create_stipend(stipend_data)
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
@@ -81,11 +81,6 @@ def create():
                     current_app.logger.error(f"Failed to create stipend: {e}")
                     flash_message(str(e), FLASH_CATEGORY_ERROR)
                     return render_template('admin/stipends/create.html', form=form), 400
-            except Exception as e:
-                db.session.rollback()
-                current_app.logger.error(f"Failed to create stipend: {e}")
-                flash_message(str(e), FLASH_CATEGORY_ERROR)
-                return render_template('admin/stipends/create.html', form=form), 400
 
     # Handle form validation errors
     if request.method == 'POST' and not form.validate_on_submit():
