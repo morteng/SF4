@@ -39,9 +39,11 @@ def update_stipend(stipend, data, session=db.session):
                     raise ValueError("Invalid date format")
             elif key == 'open_for_applications' and value is not None:
                 if isinstance(value, str):
+                    if value.lower() not in ['y', 'yes', 'true', '1', 'n', 'no', 'false', '0']:
+                        raise ValueError("Open for Applications must be a boolean value.")
                     value = value.lower() in ['y', 'yes', 'true', '1']
-                else:
-                    value = bool(value)
+                elif not isinstance(value, bool):
+                    raise ValueError("Open for Applications must be a boolean value.")
 
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
