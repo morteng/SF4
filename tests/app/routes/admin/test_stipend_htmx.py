@@ -51,6 +51,6 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
 
-        # Check the response data directly instead of using get_flashed_messages
-        assert b'Invalid date format' in response.data
+        # Check for the specific error message in the response
+        assert b'Application Deadline: Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data
 
