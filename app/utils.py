@@ -36,6 +36,8 @@ def init_admin_user():
 
 def format_error_message(field, error):
     """Format error messages consistently for both HTMX and regular requests"""
+    import logging
+    logging.debug(f"Formatting error for field '{getattr(field, 'name', str(field))}': {error}")
     field_name = getattr(field, 'name', str(field))
     
     # Handle date-specific errors

@@ -82,6 +82,7 @@ def create():
                     ), 400
                 return render_template('admin/stipends/create.html', form=form), 400
         else:
+            current_app.logger.debug(f"Form validation failed: {form.errors}")
             error_messages = []
             field_errors = {}
             for field_name, errors in form.errors.items():
