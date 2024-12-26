@@ -77,10 +77,24 @@ class StipendForm(FlaskForm):
         if not organization:
             raise ValidationError('Invalid organization selected.')
 
+    def validate_summary(self, field):
+        if field.data and field.data.strip() == '':
+            raise ValidationError('Summary cannot be just whitespace.')
+
+    def validate_description(self, field):
+        if field.data and field.data.strip() == '':
+            raise ValidationError('Description cannot be just whitespace.')
+
 
 class TagForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired(), Length(max=100)])
-    category = StringField('Category', validators=[DataRequired(), Length(max=100)])  # Keep only one
+    name = StringField('Name', validators=[
+        DataRequired(message="Name is required."),
+        Length(max=100, message="Name cannot exceed 100 characters.")
+    ])
+    category = StringField('Category', validators=[
+        DataRequired(message="Category is required."),
+        Length(max=100, message="Category cannot exceed 100 characters.")
+    ])
     submit = SubmitField('Create')
 
     def __init__(self, original_name=None, *args, **kwargs):
@@ -98,7 +112,10 @@ class TagForm(FlaskForm):
 class UserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(max=100)])
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=255)])
-    password = PasswordField('Password', validators=[Optional()])
+    password = PasswordField('Password', validators=[
+        Optional(),
+        Length(min=8, message="Password must be at least 8 characters long.")
+    ])
     is_admin = BooleanField('Is Admin')
     submit = SubmitField('Create')
 
@@ -123,7 +140,10 @@ class UserForm(FlaskForm):
 class BotForm(FlaskForm):
 
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
-    description = TextAreaField('Description', validators=[DataRequired(), Length(max=500)])
+    description = TextAreaField('Description', validators=[
+        DataRequired(message="Description is required."),
+        Length(max=500, message="Description cannot exceed 500 characters.")
+    ])
     status = BooleanField('Status', default=False)
     submit = SubmitField('Create')
 
@@ -157,3 +177,7 @@ class OrganizationForm(FlaskForm):
             organization = Organization.query.filter_by(name=name.data).first()
             if organization:
                 raise ValidationError('Organization with this name already exists.')
+
+    def validate_homepage_url(self, field):
+        if field.data and not (field.data.startswith('http://') or field.data.startswith('https://')):
+            raise ValidationError('URL must start with http:// or https://.')
