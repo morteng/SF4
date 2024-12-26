@@ -30,8 +30,9 @@ class StipendForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Ensure organization choices are always populated
         self.organization_id.choices = [(org.id, org.name) for org in Organization.query.order_by(Organization.name).all()]
-        if len(self.organization_id.choices) == 1:
+        if not self.organization_id.data and self.organization_id.choices:
             self.organization_id.data = self.organization_id.choices[0][0]
 
     def validate_application_deadline(self, field):
@@ -52,6 +53,8 @@ class StipendForm(FlaskForm):
                     raise ValidationError('Application deadline cannot be in the past.')
             except Exception as e:
                 raise ValidationError(str(e))
+        else:
+            field.data = None  # Ensure empty deadlines are stored as None
 
     def validate_organization_id(self, field):
         if not field.data:
