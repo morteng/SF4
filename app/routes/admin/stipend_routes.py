@@ -2,14 +2,13 @@ from flask import Blueprint, render_template, redirect, url_for, request, curren
 from flask_login import login_required
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import StipendForm, OrganizationForm
-from app.services.organization_service import (
-    get_organization_by_id,
-    create_stipend,
-    update_stipend
-)
+from app.services.organization_service import get_organization_by_id
 from app.models.stipend import Stipend
-from app.services.stipend_service import get_stipend_by_id, delete_stipend, get_all_stipends
+from app.services.stipend_service import get_stipend_by_id, delete_stipend, get_all_stipends, create_stipend, update_stipend
 from app.extensions import db
+from app.models.organization import Organization
+from app.models.stipend import Stipend
+from app.services.stipend_service import get_stipend_by_id, delete_stipend, get_all_stipends, create_stipend, update_stipend
 import logging
 from app.utils import admin_required, flash_message
  
@@ -25,9 +24,8 @@ def create():
         try:
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
             organization = get_organization_by_id(stipend_data['organization_id'])
-            stipend_data['organization'] = organization
-            del stipend_data['organization_id']
-            stipend = create_stipend(stipend_data)
+            stipend_data['organization'] = organization  # Ensure the object is passed
+            stipend = create_stipend(Stipend(**stipend_data))
             
             # Add the stipend to the session and commit
             db.session.add(stipend)
@@ -80,9 +78,8 @@ def edit(id):
                 stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
                 organization = get_organization_by_id(stipend_data['organization_id'])
                 stipend_data['organization'] = organization
-                del stipend_data['organization_id']
-                update_stipend(stipend, stipend_data, session=db.session)
                 
+                update_stipend(stipend, stipend_data, session=db.session)
                 flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
                 return redirect(url_for('admin.stipend.index'))
             except Exception as e:

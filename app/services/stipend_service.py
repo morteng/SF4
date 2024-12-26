@@ -1,5 +1,5 @@
 import logging
-from app.extensions import db
+from app.extensions import db, get_or_create
 from app.models import Stipend
 from datetime import datetime
 from flask import flash
@@ -44,28 +44,21 @@ def update_stipend(stipend, data, session=db.session):
         flash(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
 
 def create_stipend(stipend, session=db.session):
-    try:
-        if isinstance(stipend.application_deadline, str):
-            try:
-                logging.info(f"Attempting to parse application deadline: {stipend.application_deadline}")
-                stipend.application_deadline = datetime.strptime(stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
-            except ValueError as ve:
-                logging.error(f"Invalid date format: {ve}")
-                flash(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
-                raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
-
-        session.add(stipend)
-        session.commit()
-        logging.info('Stipend created successfully.')
-        flash(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-        return stipend
-    except ValueError as ve:
-        session.rollback()
-        logging.error(f"Failed to create stipend due to invalid input: {ve}")
-        flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-        return None
-    except Exception as e:
-        session.rollback()
+   try:
+       if isinstance(stipend.application_deadline, str):
+           try:
+               logging.info(f"Attempting to parse application deadline: {stipend.application_deadline}")
+               stipend.application_deadline = datetime.strptime(stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
+           except ValueError as ve:
+               logging.error(f"Invalid date format: {ve}")
+               flash(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
+               raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
+       session.add(stipend)
+       session.commit()
+       logging.info('Stipend created successfully.')
+       flash(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+       return stipend
+   except Exception as e:
         logging.error(f"Failed to create stipend: {e}")
         flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
         return None
