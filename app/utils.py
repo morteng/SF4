@@ -36,8 +36,10 @@ def init_admin_user():
 
 def format_error_message(field, error):
     """Format error messages consistently for both HTMX and regular requests"""
-    if field == 'application_deadline':
-        # Handle date-specific errors
+    field_name = getattr(field, 'name', str(field))
+    
+    # Handle date-specific errors
+    if field_name == 'application_deadline':
         if 'invalid_format' in error:
             return 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
         elif 'invalid_date' in error:
@@ -53,11 +55,12 @@ def format_error_message(field, error):
         elif 'cannot be more than 5 years' in error:
             return 'Application deadline cannot be more than 5 years in the future'
         return error
+    
     # Get the field label if available
     field_label = getattr(field, 'label', None)
     if field_label:
         return f"{field_label.text}: {error}"
-    return f"{field}: {error}"
+    return f"{field_name}: {error}"
 
 def flash_message(message, category):
     from flask import flash
