@@ -40,22 +40,23 @@ def format_error_message(field, error):
     
     # Handle date-specific errors
     if field_name == 'application_deadline':
-        if 'does not match format' in str(error):
+        error_str = str(error)
+        if 'does not match format' in error_str or 'invalid-date' in error_str:
             return 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
-        elif 'Invalid month value' in str(error) or 'month is out of range' in str(error):
-            return 'Invalid month value (e.g., month 13)'
-        elif 'Invalid day value' in str(error) or 'day is out of range' in str(error):
-            return 'Invalid day value (e.g., Feb 30)'
-        elif 'Invalid hour value' in str(error):
+        elif 'Invalid month value' in error_str or 'month is out of range' in error_str:
+            return 'Invalid date values (e.g., Feb 30)'
+        elif 'Invalid day value' in error_str or 'day is out of range' in error_str:
+            return 'Invalid date values (e.g., Feb 30)'
+        elif 'Invalid hour value' in error_str or 'Invalid minute value' in error_str or 'Invalid second value' in error_str:
             return 'Invalid time values (e.g., 25:61:61)'
-        elif 'Invalid minute value' in str(error):
-            return 'Invalid time values (e.g., 25:61:61)'
-        elif 'Invalid second value' in str(error):
-            return 'Invalid time values (e.g., 25:61:61)'
-        elif 'must be a future date' in str(error):
+        elif 'must be a future date' in error_str:
             return 'Application deadline must be a future date'
-        elif 'cannot be more than 5 years' in str(error):
+        elif 'cannot be more than 5 years' in error_str:
             return 'Application deadline cannot be more than 5 years in the future'
+        elif 'Time is required' in error_str:
+            return 'Time is required. Please use YYYY-MM-DD HH:MM:SS'
+        elif 'Date is required' in error_str:
+            return 'Date is required'
         return str(error)
     
     # Handle other field errors consistently

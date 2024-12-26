@@ -21,18 +21,31 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
 
 def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     test_cases = [
+        # Invalid date values
         ('2023-13-32 99:99:99', 'Invalid date values (e.g., Feb 30)'),
         ('2023-02-30 12:00:00', 'Invalid date values (e.g., Feb 30)'),
+        ('2023-04-31 12:00:00', 'Invalid date values (e.g., Feb 30)'),
+        
+        # Invalid time values
         ('2023-01-01 25:61:61', 'Invalid time values (e.g., 25:61:61)'),
+        ('2023-01-01 24:00:00', 'Invalid time values (e.g., 25:61:61)'),
+        
+        # Missing components
         ('2023-01-01', 'Time is required. Please use YYYY-MM-DD HH:MM:SS'),
+        ('2023-01-01 12:00', 'Time is required. Please use YYYY-MM-DD HH:MM:SS'),
         ('', 'Date is required'),
+        
+        # Invalid formats
+        ('invalid-date', 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'),
+        ('01/01/2023', 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'),
+        
+        # Date range issues
         ('2020-01-01 00:00:00', 'Application deadline must be a future date'),
         ('2030-01-01 00:00:00', 'Application deadline cannot be more than 5 years in the future'),
-        ('2023-02-29 12:00:00', 'Invalid date values (e.g., Feb 30)'),  # Test leap year
-        ('2023-04-31 12:00:00', 'Invalid date values (e.g., Feb 30)'),  # Test invalid month day
-        ('2023-01-01 24:00:00', 'Invalid time values (e.g., 25:61:61)'),  # Test invalid hour
-        ('invalid-date', 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'),  # Test invalid format
-        ('2023-01-01 12:00', 'Time is required. Please use YYYY-MM-DD HH:MM:SS')  # Test missing seconds
+        
+        # Edge cases
+        ('2023-02-29 12:00:00', 'Invalid date values (e.g., Feb 30)'),  # Non-leap year
+        ('2024-02-29 12:00:00', None)  # Valid leap year
     ]
 
     with logged_in_admin.application.app_context():
