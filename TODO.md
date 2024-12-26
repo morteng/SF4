@@ -19,6 +19,7 @@
 - Established consistent error message formatting
 - Implemented HTMX response handling for form errors
 - Added test coverage for error scenarios in stipend routes
+- Resolved failing test for invalid application deadlines
 
 ## Knowledge & Memories
 - Windows 11 environment

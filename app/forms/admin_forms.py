@@ -57,20 +57,15 @@ class StipendForm(FlaskForm):
         if not field.data:
             return
             
-        # Handle both string and datetime inputs
-        if isinstance(field.data, str):
-            try:
-                dt = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-            except ValueError as e:
-                if 'does not match format' in str(e):
-                    raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-                elif 'unconverted data remains' in str(e):
-                    raise ValidationError('Time is required. Please use YYYY-MM-DD HH:MM:SS')
-                else:
-                    # Add specific error message for invalid date values
-                    raise ValidationError('Invalid date values (e.g., Feb 30)')
-        else:
-            dt = field.data  # Already a datetime object
+        try:
+            dt = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+        except ValueError as e:
+            if 'does not match format' in str(e):
+                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+            elif 'unconverted data remains' in str(e):
+                raise ValidationError('Time is required. Please use YYYY-MM-DD HH:MM:SS')
+            else:
+                raise ValidationError('Invalid date values (e.g., Feb 30)')
 
         # Rest of the validation logic remains the same
         if dt.year < 1900 or dt.year > 2100:
