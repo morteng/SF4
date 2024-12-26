@@ -75,12 +75,14 @@ Key Accomplishments:
 - Added support for both string and datetime inputs
 - Maintained consistent error message formatting
 - Improved test coverage for date validation
+- Fixed error message propagation in HTMX responses
 
 Key Learnings:
 - Form validation needs to handle multiple input types
 - Error messages must be consistent across different input formats
 - Comprehensive date validation requires checking all components
 - Test cases should cover both string and datetime inputs
+- HTMX responses need proper error container structure
 
 ## Week 5 Summary
 - Fixed error handling in stipend routes to properly propagate error messages
@@ -124,6 +126,7 @@ Key Learnings:
 - Resolved failing test for invalid application deadlines
 - Updated documentation to reflect completed tasks
 - Added comprehensive error handling for date validation edge cases
+- Fixed error message propagation for application_deadline field in HTMX responses
 
 Key Accomplishments:
 - Resolved TypeError in date validation
