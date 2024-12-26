@@ -83,6 +83,7 @@ def create():
             for field_name, errors in form.errors.items():
                 field = getattr(form, field_name)
                 field_errors[field_name] = [format_error_message(field, error) for error in errors]
+                error_messages.extend(field_errors[field_name])
                 for error in errors:
                     flash_message(format_error_message(field, error), FLASH_CATEGORY_ERROR)
                     
@@ -92,7 +93,6 @@ def create():
                     form=form,
                     error_messages=error_messages,
                     field_errors=field_errors,
-                    application_deadline_error=field_errors.get('application_deadline', []),
                     is_htmx=True
                 ), 400
             return render_template('admin/stipends/create.html', 
