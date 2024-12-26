@@ -17,6 +17,31 @@
    - Add client-side validation for date fields
    - Implement real-time validation feedback
 
+## Things to Remember About Testing
+- Always test edge cases for date fields (leap years, month boundaries)
+- Verify error messages are specific and helpful
+- Check both server-side and client-side validation
+- Test with different date formats and timezones
+- Ensure error states are properly styled in the UI
+- Verify that HTMX responses include proper error information
+
+## Things to Remember About Coding
+- Use specific error messages for validation failures
+- Ensure consistent error handling across all forms
+- Properly propagate errors to HTMX responses
+- Use proper status codes for error responses (400 for validation errors)
+- Maintain consistent field naming and error message formats
+- Keep validation logic in forms, not in routes
+- Use proper error styling in templates (is-invalid class)
+
+## Current Issues
+- Date validation error messages need to be more specific
+- Error handling in HTMX responses needs improvement
+- Test coverage for edge cases needs to be expanded
+- Form error styling needs to be consistent across all forms
+- Need better handling of timezone differences
+- Need to implement client-side date validation
+
 ## Knowledge & Memories
 - You're running on a windows 11 machine, should format all commands for that environment
 - Date validation now handles both string and datetime inputs
