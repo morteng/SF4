@@ -99,8 +99,7 @@ def create():
             return render_template('admin/stipends/create.html', 
                 form=form,
                 error_messages=error_messages,
-                field_errors=field_errors,
-                application_deadline_error=field_errors.get('application_deadline', [])
+                field_errors=field_errors
             ), 400
 
     return render_template('admin/stipends/create.html', form=form)

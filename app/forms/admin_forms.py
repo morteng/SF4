@@ -107,9 +107,9 @@ class StipendForm(FlaskForm):
             elif 'unconverted data remains' in error_str:
                 raise ValidationError('Time is required. Please use YYYY-MM-DD HH:MM:SS')
             elif 'day is out of range' in error_str or 'month is out of range' in error_str:
-                raise ValidationError('Invalid date values')
+                raise ValidationError('Invalid date values (e.g., Feb 30)')
             elif 'time data' in error_str:
-                raise ValidationError('Invalid time values')
+                raise ValidationError('Invalid time values (e.g., 25:61:61)')
             else:
                 raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
 
