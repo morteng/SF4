@@ -57,7 +57,10 @@ def create_stipend(stipend_data, session=db.session):
         # Fetch the organization
         organization = session.get(Organization, organization_id)
         if not organization:
-            raise ValueError("Invalid organization ID.")
+            raise ValueError(f"Invalid organization ID: {organization_id}")
+        
+        # Remove organization_id from stipend_data to avoid conflicts
+        stipend_data.pop('organization_id', None)
         
         # Create a new Stipend object from the provided data
         new_stipend = Stipend(**stipend_data)
