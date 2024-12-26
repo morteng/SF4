@@ -40,21 +40,21 @@ def format_error_message(field, error):
     
     # Handle date-specific errors
     if field_name == 'application_deadline':
-        if 'invalid_format' in error:
+        if 'Invalid date format' in error:
             return 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
-        elif 'invalid_date' in error:
+        elif 'Invalid date values' in error or 'Feb 30' in error:
             return 'Invalid date values (e.g., Feb 30)'
-        elif 'invalid_time' in error:
+        elif 'Invalid time values' in error or '25:61:61' in error:
             return 'Invalid time values (e.g., 25:61:61)'
-        elif 'missing_time' in error:
+        elif 'Time is required' in error:
             return 'Time is required. Please use YYYY-MM-DD HH:MM:SS'
-        elif 'required' in error:
+        elif 'Date is required' in error:
             return 'Date is required'
-        elif 'cannot be in the past' in error:
+        elif 'cannot be in the past' in error or 'future date' in error:
             return 'Application deadline must be a future date'
         elif 'cannot be more than 5 years' in error:
             return 'Application deadline cannot be more than 5 years in the future'
-        return error
+        return str(error)
     
     # Get the field label if available
     field_label = getattr(field, 'label', None)
