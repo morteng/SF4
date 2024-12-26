@@ -113,17 +113,23 @@ def delete(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
         flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
-        return render_template('_flash_messages.html'), 404  # Return flash messages for HTMX
+        if request.headers.get('HX-Request'):
+            return render_template('_flash_messages.html'), 404
+        return redirect(url_for('admin.stipend.index'))
     
     try:
         delete_stipend(stipend.id)
         flash_message(FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-        return render_template('_flash_messages.html'), 200  # Return flash messages for HTMX
+        if request.headers.get('HX-Request'):
+            return render_template('_flash_messages.html'), 200
+        return redirect(url_for('admin.stipend.index'))
     except Exception as e:
         db.session.rollback()
         logging.error(f"Failed to delete stipend: {e}")
         flash_message(FLASH_MESSAGES["DELETE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-        return render_template('_flash_messages.html'), 500  # Return flash messages for HTMX
+        if request.headers.get('HX-Request'):
+            return render_template('_flash_messages.html'), 500
+        return redirect(url_for('admin.stipend.index'))
  
  
 @admin_stipend_bp.route('/', methods=['GET'])
