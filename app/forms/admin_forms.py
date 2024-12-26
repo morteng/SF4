@@ -54,13 +54,18 @@ class StipendForm(FlaskForm):
 
     def validate_application_deadline(self, field):
         if field.data:
-            # Ensure the date is in the future
-            if field.data < datetime.now():
-                raise ValidationError('Application deadline cannot be in the past.')
-            # Ensure the date is within a reasonable range
-            max_future_date = datetime.now().replace(year=datetime.now().year + 5)
-            if field.data > max_future_date:
-                raise ValidationError('Application deadline cannot be more than 5 years in the future.')
+            try:
+                # Ensure the date is in the correct format
+                datetime.strptime(str(field.data), '%Y-%m-%d %H:%M:%S')
+                # Ensure the date is in the future
+                if field.data < datetime.now():
+                    raise ValidationError('Application deadline cannot be in the past.')
+                # Ensure the date is within a reasonable range
+                max_future_date = datetime.now().replace(year=datetime.now().year + 5)
+                if field.data > max_future_date:
+                    raise ValidationError('Application deadline cannot be more than 5 years in the future.')
+            except ValueError:
+                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
 
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)

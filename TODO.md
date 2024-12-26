@@ -11,6 +11,8 @@ You're running on a windows 11 machine, should format all commands for that envi
 - Test template rendering for HTMX responses
 - Verify database state changes after successful operations
 - Check for proper error handling and validation messages
+- Test edge cases for form validation (empty fields, invalid formats)
+- Verify CSRF token handling in form submissions
 
 ## Things to remember about coding
 - Keep HTMX and non-HTMX logic separate and explicit
@@ -21,6 +23,8 @@ You're running on a windows 11 machine, should format all commands for that envi
 - Validate all form inputs before processing
 - Use proper template paths for HTMX responses
 - Maintain consistent flash message handling
+- Ensure proper CSRF token validation in all forms
+- Handle datetime fields carefully with proper validation and formatting
 
 ## Current Issues
 - [x] Fix test file path conflict in test_stipend_routes.py
@@ -31,12 +35,14 @@ You're running on a windows 11 machine, should format all commands for that envi
 - [x] Fix SyntaxError in stipend_routes.py
   - [x] Identify invalid syntax around line 93
   - [x] Fix try/except block structure
-  - [ ] Verify tests pass after fix
+  - [x] Verify tests pass after fix
 - [ ] Fix HTMX stipend creation test failure
-  - [ ] Investigate 400 status code in test_create_stipend_route_htmx
-  - [ ] Verify template path handling in stipend_routes.py
-  - [ ] Check form validation and error handling
-  - [ ] Ensure proper database commit/rollback behavior
+  - [x] Investigate 400 status code in test_create_stipend_route_htmx
+  - [x] Verify template path handling in stipend_routes.py
+  - [x] Check form validation and error handling
+  - [x] Ensure proper database commit/rollback behavior
+  - [ ] Verify CSRF token handling in HTMX requests
+  - [ ] Test datetime field validation and formatting
 
 ## Specific Tasks
 - [x] Remove duplicate test file tests/routes/admin/test_stipend_routes.py
