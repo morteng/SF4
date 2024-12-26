@@ -2,8 +2,9 @@
 
 ## Current Goals
 1. Complete bot routes implementation
-   - Add missing HTMX partial templates for bot CRUD operations
    - Implement proper error handling for bot operations
+   - Add validation tests for bot forms
+   - Ensure consistent error display across all bot views
 
 2. Enhance test coverage for bot routes
    - Add tests for HTMX responses in bot routes
@@ -32,9 +33,9 @@
 
 ## Implementation Tasks
 1. Bot routes improvements:
-   - Add missing HTMX partial templates (_bot_row.html, _create_form.html)
    - Implement proper error handling for bot operations
-   - Ensure all templates are in correct locations
+   - Add validation tests for bot forms
+   - Ensure consistent error display across all bot views
 
 2. Test coverage expansion:
    - Add tests for HTMX responses in bot routes
@@ -42,5 +43,8 @@
    - Add integration tests for bot service interactions
 
 ## Recent Fixes
-- Added edit.html template for bot editing functionality
+- Added admin/layout.html template
+- Created HTMX partial templates (_bot_row.html, _create_form.html)
+- Updated edit.html with HTMX support
+- Added proper error handling in bot templates
 
