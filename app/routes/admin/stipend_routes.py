@@ -142,6 +142,10 @@ def index():
     logging.info(f"Stipends fetched: {stipends.items}")
     if not stipends.items:
         flash_message("No stipends found", FLASH_CATEGORY_INFO)
+    # Debug: Log the first stipend's details if available
+    if stipends.items:
+        first_stipend = stipends.items[0]
+        logging.info(f"First stipend details - Name: {first_stipend.name}, Amount: {first_stipend.amount}, Organization: {first_stipend.organization.name if first_stipend.organization else 'None'}")
     return render_template('admin/stipends/index.html', stipends=stipends)
  
 @admin_stipend_bp.route('/paginate/<int:page>', methods=['GET'])
