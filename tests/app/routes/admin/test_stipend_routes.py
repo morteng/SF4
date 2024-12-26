@@ -4,7 +4,7 @@ from app.models.stipend import Stipend
 from tests.conftest import extract_csrf_token
 from app.models.organization import Organization
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
-from datetime import datetime
+from datetime import datetime, timedelta
 
 @pytest.fixture(scope='function')
 def stipend_data():
@@ -124,7 +124,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'homepage_url': test_stipend.homepage_url,
         'application_procedure': test_stipend.application_procedure,
         'eligibility_criteria': test_stipend.eligibility_criteria,
-        'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if test_stipend.application_deadline else '',
+        'application_deadline': (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S'),
         'organization_id': test_stipend.organization_id,  # Pass as integer
         'open_for_applications': 'y',  # Changed from True to 'y'
         'csrf_token': csrf_token
@@ -291,7 +291,7 @@ def test_update_stipend_route_htmx(logged_in_admin, test_stipend, db_session):
         'homepage_url': test_stipend.homepage_url,
         'application_procedure': test_stipend.application_procedure,
         'eligibility_criteria': test_stipend.eligibility_criteria,
-        'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if isinstance(test_stipend.application_deadline, datetime) else test_stipend.application_deadline,  # Changed this line
+        'application_deadline': (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S'),
         'organization_id': test_stipend.organization_id,
         'open_for_applications': test_stipend.open_for_applications,
         'csrf_token': csrf_token
