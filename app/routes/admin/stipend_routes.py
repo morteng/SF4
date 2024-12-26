@@ -132,12 +132,15 @@ def delete(id):
 @login_required
 @admin_required
 def index():
-    stipends = Stipend.query.paginate(page=1, per_page=10)
+    # Get all stipends from the database
+    stipends = get_all_stipends()
+    # Pass them to the template
     return render_template('admin/stipends/index.html', stipends=stipends)
  
 @admin_stipend_bp.route('/paginate/<int:page>', methods=['GET'])
 @login_required
 @admin_required
 def paginate(page):
-    stipends = Stipend.query.paginate(page=page, per_page=10, error_out=False)
+    # Use get_all_stipends() instead of direct query
+    stipends = get_all_stipends().paginate(page=page, per_page=10, error_out=False)
     return render_template('admin/stipends/_stipends_table.html', stipends=stipends)
