@@ -1,6 +1,6 @@
 import logging
 from app.extensions import db, get_or_create
-from app.models import Stipend
+from app.models import Stipend, Organization
 from datetime import datetime
 from flask import flash
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR, FLASH_CATEGORY_SUCCESS
@@ -44,24 +44,24 @@ def update_stipend(stipend, data, session=db.session):
         flash(FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
 
 def create_stipend(stipend, session=db.session):
-   try:
-       if isinstance(stipend.application_deadline, str):
-           try:
-               logging.info(f"Attempting to parse application deadline: {stipend.application_deadline}")
-               stipend.application_deadline = datetime.strptime(stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
-           except ValueError as ve:
-               logging.error(f"Invalid date format: {ve}")
-               flash(FLASH_MESSAGES["INVALID_DATE_FORMAT"], FLASH_CATEGORY_ERROR)
-               raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
-       session.add(stipend)
-       session.commit()
-       logging.info('Stipend created successfully.')
-       flash(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-       return stipend
-   except Exception as e:
+    try:
+        # Create a new Stipend object from the provided data
+        new_stipend = Stipend(**stipend)
+        
+        # Convert application_deadline to datetime if it's a string
+        if isinstance(new_stipend.application_deadline, str):
+            new_stipend.application_deadline = datetime.strptime(new_stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
+        
+        # Add the new stipend to the session and commit
+        session.add(new_stipend)
+        session.commit()
+        logging.info('Stipend created successfully.')
+        flash(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+        return new_stipend
+    except Exception as e:
+        session.rollback()
         logging.error(f"Failed to create stipend: {e}")
         flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-        return None
 
 def delete_stipend(stipend_id):
     try:
