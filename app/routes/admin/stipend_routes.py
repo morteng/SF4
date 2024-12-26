@@ -125,12 +125,12 @@ def edit(id):
                 }
                 
                 # Update the stipend
-                update_stipend(stipend, stipend_data, session=db.session)
+                updated_stipend = update_stipend(stipend, stipend_data, session=db.session)
                 flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
                 
                 if is_htmx:
                     # Return the updated row with HTMX headers
-                    return render_template('admin/stipends/_stipend_row.html', stipend=stipend), 200
+                    return render_template('admin/stipends/_stipend_row.html', stipend=updated_stipend), 200
                 # For non-HTMX requests, redirect to index
                 return redirect(url_for('admin.stipend.index'))
 
