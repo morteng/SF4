@@ -90,6 +90,9 @@ def edit(id):
 
     if request.method == 'POST' and form.validate_on_submit():
         try:
+            # Convert 'y'/'n' to boolean for open_for_applications
+            open_for_applications = form.open_for_applications.data.lower() == 'y' if isinstance(form.open_for_applications.data, str) else bool(form.open_for_applications.data)
+
             # Prepare update data with explicit type conversion
             stipend_data = {
                 'name': str(form.name.data),
@@ -100,7 +103,7 @@ def edit(id):
                 'eligibility_criteria': str(form.eligibility_criteria.data) if form.eligibility_criteria.data else None,
                 'application_deadline': form.application_deadline.data if form.application_deadline.data else None,
                 'organization_id': int(form.organization_id.data),
-                'open_for_applications': bool(form.open_for_applications.data)
+                'open_for_applications': open_for_applications
             }
 
             # Handle empty application_deadline
