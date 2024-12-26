@@ -24,7 +24,7 @@ def create():
         try:
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
             organization = get_organization_by_id(stipend_data['organization_id'])
-            stipend_data['organization'] = organization  # Ensure the object is passed
+            stipend_data['organization_id'] = organization.id  # Pass the ID instead of the object
             stipend = create_stipend(stipend_data)
             
             # Add the stipend to the session and commit
