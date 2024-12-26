@@ -38,7 +38,12 @@ class StipendForm(FlaskForm):
     application_deadline = CustomDateTimeField(
         'Application Deadline',
         validators=[Optional()],
-        format='%Y-%m-%d %H:%M:%S'
+        format='%Y-%m-%d %H:%M:%S',
+        render_kw={
+            'placeholder': 'YYYY-MM-DD HH:MM:SS',
+            'data-date-format': 'yyyy-mm-dd hh:ii:ss',
+            'autocomplete': 'off'
+        }
     )
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)
