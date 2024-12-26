@@ -91,24 +91,20 @@ def edit(id):
     if request.method == 'POST' and form.validate_on_submit():
         try:
             # Convert 'y'/'n' to boolean for open_for_applications
-            open_for_applications = form.open_for_applications.data.lower() == 'y' if isinstance(form.open_for_applications.data, str) else bool(form.open_for_applications.data)
+            open_for_applications = True if form.open_for_applications.data == 'y' else False
 
-            # Prepare update data with explicit type conversion
+            # Prepare update data
             stipend_data = {
-                'name': str(form.name.data),
-                'summary': str(form.summary.data) if form.summary.data else None,
-                'description': str(form.description.data) if form.description.data else None,
-                'homepage_url': str(form.homepage_url.data) if form.homepage_url.data else None,
-                'application_procedure': str(form.application_procedure.data) if form.application_procedure.data else None,
-                'eligibility_criteria': str(form.eligibility_criteria.data) if form.eligibility_criteria.data else None,
-                'application_deadline': form.application_deadline.data if form.application_deadline.data else None,
-                'organization_id': int(form.organization_id.data),
+                'name': form.name.data,
+                'summary': form.summary.data,
+                'description': form.description.data,
+                'homepage_url': form.homepage_url.data,
+                'application_procedure': form.application_procedure.data,
+                'eligibility_criteria': form.eligibility_criteria.data,
+                'application_deadline': form.application_deadline.data,
+                'organization_id': form.organization_id.data,
                 'open_for_applications': open_for_applications
             }
-
-            # Handle empty application_deadline
-            if stipend_data['application_deadline'] == '' or stipend_data['application_deadline'] is None:
-                stipend_data['application_deadline'] = None
 
             # Update the stipend
             update_stipend(stipend, stipend_data, session=db.session)
