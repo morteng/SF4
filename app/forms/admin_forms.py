@@ -49,10 +49,6 @@ class StipendForm(FlaskForm):
         self.organization_id.choices = [(org.id, org.name) for org in Organization.query.order_by(Organization.name).all()]
         if not self.organization_id.data and self.organization_id.choices:
             self.organization_id.data = self.organization_id.choices[0][0]
-        # Ensure organization choices are always populated
-        self.organization_id.choices = [(org.id, org.name) for org in Organization.query.order_by(Organization.name).all()]
-        if not self.organization_id.data and self.organization_id.choices:
-            self.organization_id.data = self.organization_id.choices[0][0]
 
     def validate_application_deadline(self, field):
         if field.data:
