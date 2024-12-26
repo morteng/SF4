@@ -1,6 +1,7 @@
 import pytest
 import re  # Import the re module to use regex for extracting CSRF token
 from app.models.stipend import Stipend
+from app.models.organization import Organization
 from app.services.stipend_service import create_stipend, update_stipend, delete_stipend, get_stipend_by_id, get_all_stipends
 from datetime import datetime
 from flask_login import login_user
@@ -21,7 +22,8 @@ def test_data():
         'application_procedure': 'Apply online at example.com',
         'eligibility_criteria': 'Open to all students',
         'application_deadline': datetime.strptime('2023-12-31 23:59:59', '%Y-%m-%d %H:%M:%S'),
-        'open_for_applications': True
+        'open_for_applications': True,
+        'organization_id': 1  # Add this required field
     }
 
 @pytest.fixture
@@ -40,6 +42,12 @@ def extract_csrf_token(response_data):
     return None
 
 def test_create_stipend(test_data, db_session, app, admin_user):
+    # Create an organization first
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+    test_data['organization_id'] = org.id
+
     # Convert datetime object to string for form submission
     test_data['application_deadline'] = test_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
 
@@ -66,6 +74,7 @@ def test_create_stipend(test_data, db_session, app, admin_user):
     assert new_stipend.eligibility_criteria == test_data['eligibility_criteria']
     assert new_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
     assert new_stipend.open_for_applications is True
+    assert new_stipend.organization_id == org.id  # Verify organization association
     
     # Check if the correct flash message was set
     with app.test_request_context():
