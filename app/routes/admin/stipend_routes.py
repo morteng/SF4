@@ -129,7 +129,7 @@ def edit(id):
                 flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
                 
                 if is_htmx:
-                    return render_template('admin/stipends/_stipend_row.html', stipend=stipend)
+                    return render_template('admin/stipends/_stipend_row.html', stipend=stipend), 200
                 return redirect(url_for('admin.stipend.index'))
 
             except Exception as e:
