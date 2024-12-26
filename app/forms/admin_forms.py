@@ -65,15 +65,12 @@ class StipendForm(FlaskForm):
                 dt = field.data
                 
             # Validate date components
-            # Validate date components
             if dt.month < 1 or dt.month > 12:
                 raise ValidationError('Invalid month value')
             if dt.day < 1 or dt.day > 31:
                 raise ValidationError('Invalid date values (e.g., Feb 30)')
             # Add specific validation for months with 30 days
             if dt.month in [4, 6, 9, 11] and dt.day > 30:
-                raise ValidationError('Invalid date values (e.g., Feb 30)')
-            if dt.month in [4,6,9,11] and dt.day > 30:
                 raise ValidationError('Invalid date values (e.g., Feb 30)')
             if dt.month == 2:
                 # Handle leap years
