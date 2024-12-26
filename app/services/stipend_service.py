@@ -53,6 +53,7 @@ def update_stipend(stipend, data, session=db.session):
         return True
     except Exception as e:
         session.rollback()
+        logging.error(f"Failed to create stipend: {e}")  # Add this line
         logging.error(f"Failed to update stipend: {e}")
         flash(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
         return False
@@ -72,6 +73,8 @@ def create_stipend(stipend_data, session=db.session):
         
         # Handle application_deadline
         if 'application_deadline' in stipend_data:
+            if stipend_data['application_deadline'] == '':
+                stipend_data['application_deadline'] = None
             if stipend_data['application_deadline'] == '':
                 stipend_data['application_deadline'] = None
             if isinstance(stipend_data['application_deadline'], str):

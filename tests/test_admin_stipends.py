@@ -19,6 +19,7 @@ class AdminStipendTestCase(unittest.TestCase):
         admin_user.is_admin = True
         db.session.add(admin_user)
         db.session.commit()  # Add this line
+        db.session.commit()  # Add this line
 
     def tearDown(self):
         db.session.remove()

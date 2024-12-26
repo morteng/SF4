@@ -41,6 +41,11 @@ def create():
             if not organization:
                 flash_message(FLASH_MESSAGES["INVALID_ORGANIZATION"], FLASH_CATEGORY_ERROR)
                 return render_template('admin/stipends/create.html', form=form), 200
+            # Add organization validation
+            organization = get_organization_by_id(form.organization_id.data)
+            if not organization:
+                flash_message(FLASH_MESSAGES["INVALID_ORGANIZATION"], FLASH_CATEGORY_ERROR)
+                return render_template('admin/stipends/create.html', form=form), 200
             # Prepare form data
             stipend_data = {
                 'name': form.name.data,
