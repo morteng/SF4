@@ -57,7 +57,8 @@ def create():
                 try:
                     return render_template('admin/stipends/_stipend_row.html', stipend=new_stipend)
                 except Exception as e:
-                    current_app.logger.error(f"Failed to render stipend row template: {e}")
+                    template_path = 'templates/admin/stipends/_stipend_row.html'
+                    current_app.logger.error(f"Failed to render stipend row template at {template_path}: {e}")
                     return render_template_string(
                         f"<tr><td colspan='6'>Error rendering new row: {str(e)}</td></tr>"
                     ), 200
