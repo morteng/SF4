@@ -10,7 +10,10 @@ from app.models.bot import Bot
 
 
 class StipendForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired(message="This field is required."), Length(max=100)])
+    name = StringField('Name', validators=[
+        DataRequired(message="This field is required."), 
+        Length(max=100)
+    ])
     summary = TextAreaField('Summary', validators=[Optional()])
     description = TextAreaField('Description', validators=[Optional()])
     homepage_url = URLField('Homepage URL', validators=[Optional(), URL()])
@@ -18,7 +21,11 @@ class StipendForm(FlaskForm):
     eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[Optional()])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
-        validators=[Optional()],
+        validators=[
+            DataRequired(),
+            Regexp(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', 
+                  message='Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
+        ],
         format='%Y-%m-%d %H:%M:%S'
     )
     organization_id = SelectField('Organization', validators=[DataRequired()], coerce=int, choices=[])
