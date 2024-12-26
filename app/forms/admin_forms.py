@@ -27,6 +27,7 @@ class StipendForm(FlaskForm):
     def validate_application_deadline(self, field):
         # Allow empty values
         if field.raw_data and field.raw_data[0] == '':
+            field.data = None  # Explicitly set to None
             return
         if field.raw_data and field.raw_data[0] and field.data is None:
             raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')

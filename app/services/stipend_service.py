@@ -46,15 +46,18 @@ def update_stipend(stipend, data, session=db.session):
 def create_stipend(stipend_data, session=db.session):
     try:
         # Handle empty application deadline
-        if 'application_deadline' in stipend_data and stipend_data['application_deadline'] == '':
+        if 'application_deadline' in stipend_data and (stipend_data['application_deadline'] == '' or stipend_data['application_deadline'] is None):
             stipend_data['application_deadline'] = None
             
         # Create a new Stipend object from the provided data
         new_stipend = Stipend(**stipend_data)
         
         # Convert application_deadline to datetime if it's a non-empty string
-        if isinstance(new_stipend.application_deadline, str) and new_stipend.application_deadline:
-            new_stipend.application_deadline = datetime.strptime(new_stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
+        if isinstance(new_stipend.application_deadline, str) and new_stipend.application_deadline.strip():
+            try:
+                new_stipend.application_deadline = datetime.strptime(new_stipend.application_deadline, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
         
         # Add the new stipend to the session and commit
         session.add(new_stipend)

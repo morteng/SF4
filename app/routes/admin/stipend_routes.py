@@ -26,6 +26,11 @@ def create():
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
             organization = get_organization_by_id(stipend_data['organization_id'])
             stipend_data['organization_id'] = organization.id  # Pass the ID instead of the object
+            
+            # Handle empty application deadline
+            if 'application_deadline' in stipend_data and stipend_data['application_deadline'] == '':
+                stipend_data['application_deadline'] = None
+                
             stipend = create_stipend(stipend_data)
             
             # Add the stipend to the session and commit
