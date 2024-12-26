@@ -1,6 +1,8 @@
+{# Template: admin/stipends/_stipend_row.html #}
+{# Context: stipend - Stipend model instance #}
 <tr id="stipend-row-{{ stipend.id }}" hx-target="this" hx-swap="outerHTML">
-    <td class="px-4 py-2">{{ stipend.name }}</td>
-    <td class="px-4 py-2">{{ stipend.summary }}</td>
+    <td class="px-4 py-2">{{ stipend.name|default('N/A', true) }}</td>
+    <td class="px-4 py-2">{{ stipend.summary|default('N/A', true) }}</td>
     <td class="px-4 py-2">
         {% if stipend.open_for_applications %}
             <span class="text-green-600">Open</span>
