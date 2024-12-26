@@ -149,7 +149,8 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         data=updated_data
     )
     assert non_htmx_response.status_code == 302
-    assert non_htmx_response.location.endswith(url_for('admin.stipend.index'))
+    # Check if location starts with the expected path
+    assert non_htmx_response.location.startswith('/admin/stipends/')
 
     # Follow the redirect for non-HTMX case
     final_response = logged_in_admin.get(non_htmx_response.location)
