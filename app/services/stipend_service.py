@@ -68,27 +68,11 @@ def create_stipend(stipend_data, session=db.session):
                 except ValueError:
                     raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
         
-        # Fetch the organization
-        organization_id = stipend_data['organization_id']
-        organization = session.get(Organization, organization_id)
-        if not organization:
-            print(f"[DEBUG] Invalid organization ID: {organization_id}")
-            raise ValueError(f"Invalid organization ID: {organization_id}")
-        
-        # Remove organization_id from stipend_data to avoid conflicts
-        stipend_data.pop('organization_id', None)
-        
-        # Create a new Stipend object from the provided data
-        print("[DEBUG] Creating Stipend object")
+        # Create the stipend with organization_id
         new_stipend = Stipend(**stipend_data)
         
-        # Explicitly set the organization relationship
-        new_stipend.organization = organization
-        
-        # Add the new stipend to the session and commit
         session.add(new_stipend)
         session.commit()
-        print("[DEBUG] Stipend created and committed successfully")
         return new_stipend
     except Exception as e:
         print(f"[DEBUG] Exception occurred: {str(e)}")
