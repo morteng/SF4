@@ -50,19 +50,13 @@ def format_error_message(field, error):
             return 'Time is required. Please use YYYY-MM-DD HH:MM:SS'
         elif 'Date is required' in error:
             return 'Date is required'
-        elif 'must be a future date' in error:
+        elif 'must be a future date' in error or 'cannot be in the past' in error:
             return 'Application deadline must be a future date'
         elif 'cannot be more than 5 years' in error:
             return 'Application deadline cannot be more than 5 years in the future'
         return str(error)
     
     # Handle other field errors consistently
-    field_label = getattr(field, 'label', None)
-    if field_label:
-        return f"{field_label.text}: {error}"
-    return f"{field_name}: {error}"
-    
-    # Get the field label if available
     field_label = getattr(field, 'label', None)
     if field_label:
         return f"{field_label.text}: {error}"

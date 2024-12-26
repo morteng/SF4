@@ -87,7 +87,8 @@ def create():
                     msg = format_error_message(field, error)
                     error_messages.append(msg)
                     field_errors[field_name].append(msg)
-                
+                    flash_message(msg, FLASH_CATEGORY_ERROR)
+                    
             if is_htmx:
                 return render_template(
                     'admin/stipends/_form.html', 
