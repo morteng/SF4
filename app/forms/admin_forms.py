@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, PasswordField, HiddenField
+from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, PasswordField, HiddenField, SelectField
 from wtforms.validators import DataRequired, Length, Optional, ValidationError, Email, URL, Regexp  # Add URL and Regexp here
 from app.models.organization import Organization
 from app.forms.fields import CustomDateTimeField
@@ -21,22 +21,20 @@ class StipendForm(FlaskForm):
         validators=[Optional()],  # Allow blank values
         format='%Y-%m-%d %H:%M:%S'
     )
-    organization_id = HiddenField('Organization ID')
+    organization_id = SelectField('Organization', validators=[DataRequired()], coerce=int)
     open_for_applications = BooleanField('Open for Applications', default=False)
     submit = SubmitField('Create')
 
     def validate_application_deadline(self, field):
-        if not field.data or field.data == '':
+        if field.data == '':
             field.data = None
             return
-        
         try:
             if isinstance(field.data, str):
                 field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-            
             if field.data and field.data < datetime.now():
                 raise ValidationError('Application deadline cannot be in the past.')
-        except ValueError as e:
+        except ValueError:
             raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
 
 
