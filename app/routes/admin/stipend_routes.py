@@ -139,7 +139,7 @@ def delete(id):
 def index():
     page = request.args.get('page', 1, type=int)
     stipends = get_all_stipends().paginate(page=page, per_page=10, error_out=False)
-    logging.info(f"Stipends fetched: {stipends.items}")
+    logging.info(f"Stipends fetched: {stipends.items}")  # Debug: Log the fetched stipends
     if not stipends.items:
         flash_message("No stipends found", FLASH_CATEGORY_INFO)
     # Debug: Log the first stipend's details if available
