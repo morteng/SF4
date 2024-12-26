@@ -110,14 +110,17 @@ def create():
                     ]
                 
                 # Return HTMX response with proper error structure
-                
+                current_app.logger.debug(f"Returning HTMX response with field_errors: {field_errors}")
                 return render_template(
                     'admin/stipends/_form.html',
                     form=form,
                     error_messages=error_messages,
                     field_errors=field_errors,
                     is_htmx=True
-                ), 400
+                ), 400, {
+                    'HX-Retarget': '#stipend-form',
+                    'HX-Reswap': 'innerHTML'
+                }
             return render_template('admin/stipends/create.html', 
                 form=form,
                 error_messages=error_messages,
