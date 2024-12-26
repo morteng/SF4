@@ -1,44 +1,18 @@
 # TODO List
 
 ## Current Goals
-1. [x] Add comprehensive test coverage for all form fields
-   - Created test cases in test_stipend_htmx.py for:
-     * Required field validation (name, summary, description)
-     * Field length validation (max 100 chars for name, max 500 for summary)
-     * URL format validation (homepage_url, application_procedure)
-     * HTML escaping of user input
-   - Implemented:
-     a. Test cases for each form field with invalid data
-     b. Error message consistency across all fields
-     c. Field-specific error styling matching application_deadline pattern
-     d. Error containers with unique IDs following pattern: <field_name>-error
-
-2. [ ] Verify error handling consistency across all admin routes
+1. [ ] Verify error handling consistency across all admin routes
    - Check error handling in:
-     * Organization routes
-     * Tag routes
-     * User routes
-     * Bot routes
+     * Organization routes (app/routes/admin/organization_routes.py)
+     * Tag routes (app/routes/admin/tag_routes.py)
+     * User routes (app/routes/admin/user_routes.py)
+     * Bot routes (app/routes/admin/bot_routes.py)
    - Steps:
      a. Review each route's error handling pattern
-     b. Ensure consistent use of format_error_message()
+     b. Ensure consistent use of format_error_message() from utils.py
      c. Verify proper error container IDs in templates
      d. Check for consistent status code usage (400 for validation errors)
-
-## New Knowledge
-- Date validation error handling improvements:
-  * Added specific error messages for invalid dates, times, and formats
-  * Implemented future date validation with 5-year maximum
-  * Added time component validation
-  * Improved error message consistency between client and server
-- Error propagation:
-  * Ensured errors are properly flashed and rendered in templates
-  * Added specific error containers for each field
-  * Implemented consistent error styling with is-invalid class
-- Test improvements:
-  * Added assertions for error container presence
-  * Verified error message content matches expected format
-  * Ensured tests match the updated error handling implementation
+     e. Add corresponding test cases in test_*_routes.py files
 
 ## Knowledge & Memories
 - Windows 11 environment
