@@ -106,6 +106,8 @@ def edit(id):
             # Update the stipend
             if update_stipend(stipend, stipend_data, session=db.session):
                 flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                if request.headers.get('HX-Request'):
+                    return render_template('admin/stipends/_stipend_row.html', stipend=stipend)
                 return redirect(url_for('admin.stipend.index'))
 
         except Exception as e:
