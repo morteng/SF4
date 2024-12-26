@@ -79,18 +79,18 @@ def create():
                         error_msg = f"Invalid date: {error}"
                     
                     if is_htmx:
-                        return error_msg, 400
+                        return render_template_string(error_msg), 400
                     flash_message(error_msg, FLASH_CATEGORY_ERROR)
                 else:
                     # Include the field label in the error message
                     field_label = getattr(form, field).label.text
                     error_msg = f"{field_label}: {error}"
                     if is_htmx:
-                        return error_msg, 400
+                        return render_template_string(error_msg), 400
                     flash_message(error_msg, FLASH_CATEGORY_ERROR)
         
         if is_htmx:
-            return "Invalid form data", 400
+            return render_template_string("Invalid form data"), 400
         return render_template('admin/stipends/create.html', form=form), 400
 
     return render_template('admin/stipends/create.html', form=form)
