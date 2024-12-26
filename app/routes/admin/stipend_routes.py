@@ -94,6 +94,13 @@ def create():
                     flash_message(error, FLASH_CATEGORY_ERROR)
                     
             if is_htmx:
+                # Ensure application_deadline errors are properly formatted
+                if 'application_deadline' in field_errors:
+                    field_errors['application_deadline'] = [
+                        error.replace('Application Deadline: ', '') 
+                        for error in field_errors['application_deadline']
+                    ]
+                
                 return render_template(
                     'admin/stipends/_form.html',
                     form=form,

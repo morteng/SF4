@@ -59,7 +59,8 @@ def format_error_message(field, error):
             return 'Time is required. Please use YYYY-MM-DD HH:MM:SS'
         elif 'Date is required' in error_str:
             return 'Date is required'
-        return str(error)
+        # Remove field label prefix for HTMX responses
+        return str(error).replace('Application Deadline: ', '')
     
     # Handle other field errors consistently
     field_label = getattr(field, 'label', None)
