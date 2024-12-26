@@ -216,6 +216,20 @@ class OrganizationForm(FlaskForm):
     ])
     description = TextAreaField('About')
     homepage_url = URLField('Website', validators=[Optional(), URL()])  # URL validator remains
+    application_deadline = CustomDateTimeField(
+        'Application Deadline',
+        validators=[Optional()],
+        render_kw={
+            "placeholder": "YYYY-MM-DD HH:MM:SS",
+            "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
+            "title": "Please enter date in YYYY-MM-DD HH:MM:SS format."
+        }
+    )
+    timezone = SelectField(
+        'Timezone',
+        choices=[(tz, tz) for tz in pytz.all_timezones],
+        default='UTC'
+    )
     submit = SubmitField('Create')
 
     def __init__(self, original_name=None, *args, **kwargs):
