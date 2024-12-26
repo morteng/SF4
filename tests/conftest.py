@@ -153,9 +153,12 @@ def test_stipend(db_session, stipend_data, test_organization, app):
         db_session.commit()
         yield stipend
         # Cleanup after test
-        if db_session.query(Stipend).filter_by(id=stipend.id).first():
-            db_session.delete(stipend)
-            db_session.commit()
+        with app.app_context():
+            # Merge the stipend back into the session to ensure it's not detached
+            stipend = db_session.merge(stipend)
+            if db_session.query(Stipend).filter_by(id=stipend.id).first():
+                db_session.delete(stipend)
+                db_session.commit()
 
 @pytest.fixture(scope='function')
 def organization_data():
