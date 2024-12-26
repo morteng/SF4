@@ -2,4 +2,5 @@
 - Fixed test_create_stipend_with_invalid_application_deadline in tests/app/routes/admin/test_stipend_htmx.py
   - Removed trailing period from error message assertion to match actual response format
 - Modified test_create_stipend_route_with_invalid_application_deadline_format in tests/app/routes/admin/test_stipend_routes.py
-  - Made error message check more flexible to handle both flash messages and form validation errors
+  - Made error message check more flexible to handle different date validation error messages
+  - Now checks for any of "Invalid date", "Invalid datetime", or "date format" in response
