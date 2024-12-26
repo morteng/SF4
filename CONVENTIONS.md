@@ -39,17 +39,7 @@ user.profile               GET        /user/profile
 - Use tailwind and htmx whenever possible
 
 ## TODO.md
-- This file must be updated every time we do any file updates so that it always reflects our goal, plan and tasks. always use fll path when referencing files to avoid confusion.
+- This file must be updated every time we do any file updates so that it always reflects our goal, plan and tasks. Always use full paths when referencing files to avoid confusion. This is a memory store for you, so jot down any salient thoughts about tests or code you would like to keep in mind for later.
 
-## Coding
-Please provide a single fenced code block with the **unified diff** (`diff --git`) patch, showing only the necessary edits and a few lines of context.
-**Do not** show the entire file—only the `diff`.
 
-**Before the code block**, include a concise explanation of:
-1. The original problem (how it manifested in the code),
-2. How your changes solve it.
-
-**Do not** include any explanation after the code block.
-
-I will pass the patch to the “editor” LLM to apply it.
 

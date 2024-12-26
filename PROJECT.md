@@ -171,7 +171,6 @@ Variables like `SECRET_KEY`, `DATABASE_URL`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`,
 
 ## Folder Structure
 
-```plaintext
 Project Root/
   .env.example
   .flaskenv
@@ -276,7 +275,6 @@ Project Root/
       __init__.py
       test_*.py
   README.md
-```
 
 ---
 

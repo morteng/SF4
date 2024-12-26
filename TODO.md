@@ -1,11 +1,9 @@
 # TODO List
 
-## Testing Improvements
-
-
-
-## General
+## Things to remember about testing
 - Ensure all tests pass
 
+## Things to remember abot coding
+
 ## Specific Tasks
-- [ ] create this list
+- [ ] create this list, and keep updating it

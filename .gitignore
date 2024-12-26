@@ -10,8 +10,10 @@ __pycache__/
 .aider*
 .coverage*
 .pytest_cache/
+.env.aider
 
 # Databases
 instance/site.db
 
 node_modules/
+
