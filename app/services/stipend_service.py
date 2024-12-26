@@ -33,8 +33,7 @@ def update_stipend(stipend, data, session=db.session):
                     except ValueError:
                         raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
                 elif isinstance(value, datetime):
-                    value = value.date()
-                    if value < datetime.now().date():
+                    if value < datetime.now():
                         raise ValueError("Application deadline cannot be in the past.")
                 elif value is not None:
                     raise ValueError("Invalid date format")
