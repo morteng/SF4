@@ -35,6 +35,7 @@
   * HTMX responses maintain form state during validation
   * Database errors are caught and handled gracefully
   * Invalid form submissions should return 302 redirects
+  * Database errors during updates should redirect back to edit page with flash message
 
 ## Implementation Tasks
 1. Organization routes improvements:
