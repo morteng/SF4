@@ -1,12 +1,12 @@
 # TODO List
 
 ## Current Goals
-1. Fix date validation error message propagation in stipend routes
+1. Fix HTMX error message rendering in stipend routes
    - Issue: Error messages not appearing in HTMX responses for invalid dates
    - Steps:
      a. Update stipend_routes.py to properly pass field_errors to _form.html template
-     b. Ensure application_deadline_error is included in template context
-     c. Verify error container structure matches test expectations in _form.html
+     b. Ensure error messages are rendered in the correct HTML structure
+     c. Verify error container structure matches test expectations
      d. Add proper error message formatting using format_error_message() in utils.py
      e. Update test_stipend_htmx.py to verify error message presence and formatting
 
@@ -68,4 +68,5 @@
     - Need to verify template structure in _form.html
     - Ensure field_errors are properly passed to template
     - Check format_error_message() implementation in utils.py
+    - Verify error message rendering in template
 
