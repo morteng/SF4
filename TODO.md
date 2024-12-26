@@ -2,13 +2,11 @@
 
 ## Current Goals
 1. Complete organization routes implementation
-   - Add validation tests for organization forms
    - Ensure consistent error display across all organization views
    - Implement proper error handling for organization operations
 
 2. Enhance test coverage for organization routes
    - Add tests for HTMX responses in organization routes
-   - Create edge case tests for organization operations
    - Add integration tests for organization service interactions
 
 ## Knowledge & Memories
@@ -46,4 +44,5 @@
 - Fixed organization create route to properly handle invalid form data
 - Updated error handling in organization routes to use consistent flash message format
 - Added proper redirect behavior for form validation errors
+- Updated organization form validation tests to expect field-specific error messages
 

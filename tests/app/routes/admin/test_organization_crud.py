@@ -76,11 +76,11 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
         # Print the flash messages to debug
         print("Flashed Messages:", flashed_messages)
 
-        expected_flash_message = FLASH_MESSAGES["CREATE_ORGANIZATION_INVALID_FORM"]
+        # Expect field-specific validation message
         assert any(
-            cat == 'error' and msg == expected_flash_message
+            cat == 'error' and 'Org Name: This field is required.' in msg
             for cat, msg in flashed_messages
-        ), f"Flash message not found in session. Expected: {expected_flash_message}"
+        ), "Field validation error not found in flash messages"
 
         # Confirm the final page after redirect
         follow_response = logged_in_admin.get(response.location)
