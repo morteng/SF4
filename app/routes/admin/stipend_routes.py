@@ -36,8 +36,8 @@ def create():
             
             if request.headers.get('HX-Request'):
                 stipends = get_all_stipends()
-                # Return both the flash messages and the updated stipend list
-                return render_template('admin/stipends/_stipend_list.html', stipends=stipends), 200
+                # Return combined response with flash messages and stipend list
+                return render_template('admin/stipends/index.html', stipends=stipends.paginate(page=1, per_page=10)), 200
             
             return redirect(url_for('admin.stipend.index'))
         except Exception as e:
