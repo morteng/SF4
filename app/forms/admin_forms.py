@@ -21,11 +21,7 @@ class StipendForm(FlaskForm):
     eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[Optional()])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
-        validators=[
-            DataRequired(),
-            Regexp(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', 
-                  message='Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
-        ],
+        validators=[DataRequired()],
         format='%Y-%m-%d %H:%M:%S'
     )
     organization_id = SelectField('Organization', validators=[DataRequired()], coerce=int, choices=[])
@@ -39,16 +35,8 @@ class StipendForm(FlaskForm):
             self.organization_id.data = self.organization_id.choices[0][0]
 
     def validate_application_deadline(self, field):
-        if field.data == '':
-            field.data = None
-            return
-        try:
-            if isinstance(field.data, str):
-                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-            if field.data and field.data < datetime.now():
-                raise ValidationError('Application deadline cannot be in the past.')
-        except ValueError:
-            raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
+        if field.data and field.data < datetime.now():
+            raise ValidationError('Application deadline cannot be in the past.')
 
     def validate_organization_id(self, field):
         if not field.data:
@@ -56,11 +44,6 @@ class StipendForm(FlaskForm):
         organization = Organization.query.get(field.data)
         if not organization:
             raise ValidationError('Invalid organization selected.')
-
-    def validate(self, extra_validators=None):
-        if not super().validate(extra_validators):
-            return False
-        return True
 
 
 class TagForm(FlaskForm):
