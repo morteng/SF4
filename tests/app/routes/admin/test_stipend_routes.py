@@ -15,7 +15,7 @@ def stipend_data():
         'homepage_url': 'http://example.com/stipend',
         'application_procedure': 'Apply online at example.com',
         'eligibility_criteria': 'Open to all students',
-        'application_deadline': '2023-12-31 23:59:59',  # Keep as string
+        'application_deadline': '2023-12-31 23:59:59',  # Use consistent format
         'open_for_applications': True
     }
 
@@ -42,23 +42,7 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
     # Update stipend data with organization ID
     stipend_data['organization_id'] = organization.id
     
-    # Ensure application_deadline is in correct string format
-    if isinstance(stipend_data['application_deadline'], datetime):
-        stipend_data['application_deadline'] = stipend_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
-    elif isinstance(stipend_data['application_deadline'], str):
-        # Validate the string format
-        try:
-            datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')
-        except ValueError:
-            # Try alternative formats if the primary format fails
-            for fmt in ('%Y-%m-%d %H:%M', '%Y-%m-%d'):
-                try:
-                    datetime.strptime(stipend_data['application_deadline'], fmt)
-                    break
-                except ValueError:
-                    continue
-            else:
-                raise ValueError("Invalid date format. Please use YYYY-MM-DD, YYYY-MM-DD HH:MM, or YYYY-MM-DD HH:MM:SS.")
+    # Use the string directly
     
     # Get create page and extract CSRF token
     create_response = logged_in_admin.get(url_for('admin.stipend.create'))

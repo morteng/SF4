@@ -28,30 +28,8 @@ def create():
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
             
             # Handle empty application deadline
-            if 'application_deadline' in stipend_data:
-                if stipend_data['application_deadline'] == '':
-                    stipend_data['application_deadline'] = None
-                elif isinstance(stipend_data['application_deadline'], str):
-                    # Convert string to datetime object using the form's validation
-                    try:
-                        stipend_data['application_deadline'] = datetime.strptime(
-                            stipend_data['application_deadline'], 
-                            '%Y-%m-%d %H:%M:%S'
-                        )
-                    except ValueError:
-                        # If the main format fails, try other formats
-                        for fmt in ('%Y-%m-%d %H:%M', '%Y-%m-%d'):
-                            try:
-                                stipend_data['application_deadline'] = datetime.strptime(
-                                    stipend_data['application_deadline'], 
-                                    fmt
-                                )
-                                break
-                            except ValueError:
-                                continue
-                        else:
-                            flash_message('Invalid date format. Please use YYYY-MM-DD, YYYY-MM-DD HH:MM, or YYYY-MM-DD HH:MM:SS', FLASH_CATEGORY_ERROR)
-                            return render_template('admin/stipends/form.html', form=form), 200
+            if 'application_deadline' in stipend_data and stipend_data['application_deadline'] == '':
+                stipend_data['application_deadline'] = None
                 
             # Create the stipend
             stipend = create_stipend(stipend_data)
