@@ -55,4 +55,5 @@
 - Updated error handling in organization routes to use consistent flash message format
 - Added proper redirect behavior for form validation errors
 - Updated organization form validation tests to expect field-specific error messages
+- Fixed test_timezone_handling by adding missing application_deadline field
 

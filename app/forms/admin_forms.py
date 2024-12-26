@@ -226,6 +226,15 @@ class OrganizationForm(FlaskForm):
             "title": "Please enter date in YYYY-MM-DD HH:MM:SS format."
         }
     )
+    application_deadline = CustomDateTimeField(
+        'Application Deadline',
+        validators=[Optional()],
+        render_kw={
+            "placeholder": "YYYY-MM-DD HH:MM:SS",
+            "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
+            "title": "Please enter date in YYYY-MM-DD HH:MM:SS format."
+        }
+    )
     timezone = SelectField(
         'Timezone',
         choices=[(tz, tz) for tz in pytz.all_timezones],
