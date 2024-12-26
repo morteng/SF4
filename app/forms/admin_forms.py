@@ -56,9 +56,10 @@ class StipendForm(FlaskForm):
             raise ValidationError('Application deadline cannot be in the past.')
 
     def validate_open_for_applications(self, field):
-        # Convert string values to boolean
+        # Handle string values from form submission
         if isinstance(field.data, str):
             field.data = field.data.lower() in ['true', 'yes', '1', 'y', 'on']
+        # Convert None to False
         elif field.data is None:
             field.data = False
         # Ensure the field data is properly set in the form
