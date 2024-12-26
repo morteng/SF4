@@ -95,6 +95,8 @@ def create_stipend(stipend_data, session=db.session):
         if 'open_for_applications' in stipend_data:
             if isinstance(stipend_data['open_for_applications'], str):
                 stipend_data['open_for_applications'] = stipend_data['open_for_applications'].lower() in ['y', 'yes', 'true', '1']
+            elif stipend_data['open_for_applications'] is None:
+                stipend_data['open_for_applications'] = False
             elif not isinstance(stipend_data['open_for_applications'], bool):
                 raise ValueError("Open for Applications must be a boolean value.")
         
