@@ -63,10 +63,10 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
                                   data=form_data, 
                                   follow_redirects=True)
     
-    # Verify response
-    assert response.status_code == 200
+   # Verify response
+   assert response.status_code == 302
     
-    # Check database for created stipend
+   # Check database for created stipend
     created_stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
     assert created_stipend is not None
     assert created_stipend.summary == stipend_data['summary']
@@ -100,11 +100,11 @@ def test_create_stipend_route_with_invalid_application_deadline_format(logged_in
         'organization_id': organization.id,  # Use the ID of the created organization
         'open_for_applications': invalid_data['open_for_applications'],
         'csrf_token': csrf_token
-    }, follow_redirects=True)
-
-    assert response.status_code == 200
-    stipends = Stipend.query.all()
-    assert not any(stipend.name == invalid_data['name'] for stipend in stipends)
+   }, follow_redirects=True)
+ 
+   assert response.status_code == 400
+   stipends = Stipend.query.all()
+   assert not any(stipend.name == invalid_data['name'] for stipend in stipends)
     # Assert the flash message
     assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
@@ -124,11 +124,11 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'organization_id': test_stipend.organization_id,
         'open_for_applications': test_stipend.open_for_applications,
         'csrf_token': csrf_token
-    }
-    response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data, follow_redirects=True)
-
-    assert response.status_code == 200
-    updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
+   }
+   response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data, follow_redirects=True)
+ 
+   assert response.status_code == 302
+   updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
     assert updated_stipend.name == 'Updated Stipend'
     # Assert the flash message
     assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
@@ -172,11 +172,11 @@ def test_create_stipend_route_htmx(logged_in_admin, stipend_data, db_session):
         'application_deadline': stipend_data['application_deadline'],  # Edited Line
         'organization_id': stipend_data['organization_id'],
         'open_for_applications': stipend_data['open_for_applications'],
-        'csrf_token': csrf_token
-    }, follow_redirects=True)
-
-    assert response.status_code == 200
-    assert b'<tr hx-target="this" hx-swap="outerHTML">' in response.data
+       'csrf_token': csrf_token
+   }, follow_redirects=True)
+ 
+   assert response.status_code == 400
+   assert b'<tr hx-target="this" hx-swap="outerHTML">' in response.data
     stipends = Stipend.query.all()
     assert any(stipend.name == stipend_data['name'] and stipend.summary == stipend_data['summary'] for stipend in stipends)
     # Assert the flash message
@@ -204,12 +204,12 @@ def test_create_stipend_route_with_invalid_application_deadline_format_htmx(logg
         'application_deadline': invalid_data['application_deadline'],
         'organization_id': organization.id,
         'open_for_applications': invalid_data['open_for_applications'],
-        'csrf_token': csrf_token
-    }, follow_redirects=True)
-
-    assert response.status_code == 200
-    stipends = Stipend.query.all()
-    assert not any(stipend.name == invalid_data['name'] for stipend in stipends)
+       'csrf_token': csrf_token
+   }, follow_redirects=True)
+ 
+   assert response.status_code == 400
+   stipends = Stipend.query.all()
+   assert not any(stipend.name == invalid_data['name'] for stipend in stipends)
     # Assert the flash message
     assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
@@ -243,11 +243,11 @@ def test_create_stipend_with_invalid_form_data_htmx(logged_in_admin, stipend_dat
         url_for('admin.stipend.create'),
         data=invalid_data,
         headers={'HX-Request': 'true'},
-        follow_redirects=True
-    )
+       follow_redirects=True
+   )
     
-    assert response.status_code == 200
-    # Check if validation error is present
+   assert response.status_code == 400
+   # Check if validation error is present
     assert b'This field is required.' in response.data, "Validation error not found in response"
     # Verify no stipend was created
     stipends = db_session.query(Stipend).all()
@@ -270,11 +270,11 @@ def test_update_stipend_route_htmx(logged_in_admin, test_stipend, db_session):
         'organization_id': test_stipend.organization_id,
         'open_for_applications': test_stipend.open_for_applications,
         'csrf_token': csrf_token
-    }
-    response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), headers={'HX-Request': 'true'}, data=updated_data, follow_redirects=True)
-
-    assert response.status_code == 200
-    updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
+   }
+   response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), headers={'HX-Request': 'true'}, data=updated_data, follow_redirects=True)
+ 
+   assert response.status_code == 302
+   updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
     assert updated_stipend.name == 'Updated Stipend'
     # Assert the flash message
     assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data

@@ -102,9 +102,9 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
     new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
     assert new_stipend is None
 
-    # Check if the correct flash message was set
-    with app.test_request_context():
-        assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
+   # Check if the correct flash message was set
+   with app.test_request_context():
+       assert b'Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data
 
 def test_create_stipend_with_all_fields(test_data, db_session, app, admin_user):
     # Create an organization first

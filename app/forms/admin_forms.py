@@ -37,7 +37,7 @@ class StipendForm(FlaskForm):
     application_deadline = CustomDateTimeField(
         'Application Deadline',
         validators=[Optional()],
-        format='%Y-%m-%d'
+        format='%Y-%m-%d %H:%M:%S'
     )
     organization_id = SelectField('Organization', validators=[DataRequired()], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)
@@ -51,7 +51,7 @@ class StipendForm(FlaskForm):
             self.organization_id.data = self.organization_id.choices[0][0]
 
     def validate_application_deadline(self, field):
-        if field.data and field.data < datetime.now():
+        if field.data and field.data < datetime.now().date():
             raise ValidationError('Application deadline cannot be in the past.')
 
     def validate_open_for_applications(self, field):

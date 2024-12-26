@@ -51,10 +51,10 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
  
-        # Check if the flash message is present in the response data
-        with logged_in_admin.session_transaction() as sess:
-            messages = sess['_flashes']
-            assert len(messages) == 1
-            assert messages[0] == ('error', 'application_deadline: Invalid date format. Please use one of the following: %Y-%m-%d %H:%M:%S.')
+       # Check if the flash message is present in the response data
+       with logged_in_admin.session_transaction() as sess:
+           messages = get_flashed_messages(with_categories=True)
+           assert len(messages) == 1
+           assert messages[0] == ('error', 'application_deadline: Invalid date format. Please use one of the following: %Y-%m-%d %H:%M:%S.')
  
 
