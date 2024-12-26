@@ -36,6 +36,14 @@ def create():
                 if stipend_data['application_deadline'] == '':
                     print("[DEBUG] Empty application_deadline, setting to None")
                     stipend_data['application_deadline'] = None
+                elif isinstance(stipend_data['application_deadline'], str):
+                    try:
+                        # Try to parse the date string
+                        datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+                    except ValueError:
+                        print("[DEBUG] Invalid date format")
+                        flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.", FLASH_CATEGORY_ERROR)
+                        return render_template('admin/stipends/form.html', form=form), 200
                 
             # Create the stipend
             print("[DEBUG] Creating stipend")
