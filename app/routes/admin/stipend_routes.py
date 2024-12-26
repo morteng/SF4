@@ -56,7 +56,7 @@ def create():
     if request.method == 'POST':
         for field, errors in form.errors.items():
             for error in errors:
-                flash_message(f"Error in {getattr(form, field).label.text}: {error}", FLASH_CATEGORY_ERROR)
+                flash_message(f"{getattr(form, field).label.text}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/stipends/create.html', form=form), 400
     
     return render_template('admin/stipends/create.html', form=form)
