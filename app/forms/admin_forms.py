@@ -46,6 +46,18 @@ class StipendForm(FlaskForm):
         except ValueError:
             raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
 
+    def validate(self, extra_validators=None):
+        # Call parent validation first
+        if not super().validate(extra_validators):
+            return False
+            
+        # Additional validation for organization_id
+        if not self.organization_id.data:
+            self.organization_id.errors.append('This field is required.')
+            return False
+            
+        return True
+
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])

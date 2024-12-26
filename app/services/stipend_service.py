@@ -75,7 +75,6 @@ def create_stipend(stipend_data, session=db.session):
         session.commit()
         return new_stipend
     except Exception as e:
-        print(f"[DEBUG] Exception occurred: {str(e)}")
         session.rollback()
         logging.error(f"Failed to create stipend: {e}")
         raise
