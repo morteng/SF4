@@ -27,7 +27,7 @@ class StipendForm(FlaskForm):
 
     def validate_application_deadline(self, field):
         # Handle empty string or None values
-        if not field.data or (isinstance(field.data, str) and field.data.strip() == ''):
+        if field.raw_data and field.raw_data[0] == '':
             field.data = None
             return
         
