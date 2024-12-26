@@ -62,8 +62,8 @@ class StipendForm(FlaskForm):
             try:
                 field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
             except ValueError as e:
-                # Handle specific date component errors
                 error_str = str(e)
+                # Handle specific date component errors
                 if 'does not match format' in error_str:
                     raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
                 elif 'day is out of range' in error_str:
