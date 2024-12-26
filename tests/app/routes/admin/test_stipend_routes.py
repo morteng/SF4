@@ -255,7 +255,8 @@ def test_create_stipend_with_invalid_form_data_htmx(logged_in_admin, stipend_dat
     response = logged_in_admin.post(
         url_for('admin.stipend.create'),
         data=invalid_data,
-        headers={'HX-Request': 'true'}
+        headers={'HX-Request': 'true'},
+        follow_redirects=True
     )
 
     assert response.status_code == 200

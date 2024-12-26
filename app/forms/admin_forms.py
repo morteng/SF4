@@ -10,7 +10,7 @@ from app.models.bot import Bot
 
 
 class StipendForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired(), Length(max=100)])
+    name = StringField('Name', validators=[DataRequired(message="This field is required."), Length(max=100)])
     summary = TextAreaField('Summary', validators=[Optional()])
     description = TextAreaField('Description', validators=[Optional()])
     homepage_url = URLField('Homepage URL', validators=[Optional(), URL()])  # Add URL validator here
