@@ -12,10 +12,11 @@
   - [x] Ensured flash messages appear in HTMX responses
   - [x] Verified template path resolution
 
-- [ ] Fix test file path conflict in test_stipend_routes.py
-  - [ ] Remove __pycache__/.pyc files
-  - [ ] Ensure consistent test file paths between tests/app/routes/admin/ and tests/routes/admin/
-  - [ ] Verify pytest can collect tests correctly after cleanup
+- [x] Fix test file path conflict in test_stipend_routes.py
+  - [x] Remove __pycache__/.pyc files
+  - [x] Ensure consistent test file paths between tests/app/routes/admin/ and tests/routes/admin/
+  - [x] Verify pytest can collect tests correctly after cleanup
+  - [x] Remove duplicate test_create_stipend_route_htmx from tests/routes/admin/test_stipend_routes.py
 
 ## Things to remember about coding
 - Keep HTMX and non-HTMX logic separate and explicit
