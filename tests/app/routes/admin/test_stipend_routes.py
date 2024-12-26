@@ -235,13 +235,22 @@ def test_create_stipend_with_invalid_form_data_htmx(logged_in_admin, stipend_dat
     
     # Get CSRF token
     create_response = logged_in_admin.get(url_for('admin.stipend.create'))
+    assert create_response.status_code == 200
     csrf_token = extract_csrf_token(create_response.data)
     
     # Set invalid data
-    invalid_data = stipend_data.copy()
-    invalid_data['name'] = ''  # Intentionally invalid
-    invalid_data['organization_id'] = organization.id
-    invalid_data['csrf_token'] = csrf_token
+    invalid_data = {
+        'name': '',  # Intentionally invalid
+        'summary': stipend_data['summary'],
+        'description': stipend_data['description'],
+        'homepage_url': stipend_data['homepage_url'],
+        'application_procedure': stipend_data['application_procedure'],
+        'eligibility_criteria': stipend_data['eligibility_criteria'],
+        'application_deadline': stipend_data['application_deadline'],
+        'organization_id': organization.id,  # Use the created organization's ID
+        'open_for_applications': stipend_data['open_for_applications'],
+        'csrf_token': csrf_token
+    }
     
     response = logged_in_admin.post(
         url_for('admin.stipend.create'),
