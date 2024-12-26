@@ -81,7 +81,7 @@ def create():
                     # Include the field label in the error message
                     field_label = getattr(form, field).label.text
                     flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
-        
+    
         return render_template('admin/stipends/create.html', form=form), 400
 
     return render_template('admin/stipends/create.html', form=form)
