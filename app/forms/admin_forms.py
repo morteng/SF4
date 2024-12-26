@@ -21,7 +21,7 @@ class StipendForm(FlaskForm):
     eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[Optional()])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
-        validators=[DataRequired()],
+        validators=[Optional()],  # Change from DataRequired to Optional
         format='%Y-%m-%d %H:%M:%S'
     )
     organization_id = SelectField('Organization', validators=[DataRequired()], coerce=int, choices=[])
