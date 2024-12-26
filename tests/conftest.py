@@ -144,8 +144,10 @@ def stipend_data():
 @pytest.fixture(scope='function')
 def test_stipend(db_session, stipend_data, test_organization, app):
     """Provide a test stipend."""
-    stipend_data['organization_id'] = test_organization.id  # Add this line
     with app.app_context():
+        # Merge the organization into the current session
+        test_organization = db_session.merge(test_organization)
+        stipend_data['organization_id'] = test_organization.id
         stipend = Stipend(**stipend_data)
         db_session.add(stipend)
         db_session.commit()
