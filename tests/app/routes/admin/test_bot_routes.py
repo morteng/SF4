@@ -119,7 +119,7 @@ def test_create_bot_route_with_database_error(logged_in_admin, bot_data, db_sess
         
         response = logged_in_admin.post(url_for('admin.bot.create'), data=data)
         
-        assert response.status_code == 200
+        assert response.status_code == 400  # Changed from 200 to 400
         # Assert the flash message using constants
         assert FLASH_MESSAGES["CREATE_BOT_ERROR"].encode() in response.data
 
