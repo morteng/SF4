@@ -73,7 +73,7 @@ def test_create_stipend_route_with_invalid_application_deadline_format(logged_in
     # Create an organization for the test
     organization = Organization(name='Test Org Invalid Deadline')
     db_session.add(organization)
-    db_session.commit()
+    db_session.commit()  # Commit the organization to the database
     
     invalid_data = stipend_data.copy()
     invalid_data['organization_id'] = organization.id
