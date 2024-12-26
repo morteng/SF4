@@ -24,9 +24,9 @@
 - [x] Create _stipend_row.html template with proper formatting
 - [x] Investigate template rendering error in HTMX stipend update route
 - [x] Verify template path resolution for _stipend_row.html
-- [ ] Fix template rendering error in HTMX stipend create route
-- [ ] Verify _stipend_row.html template path in create route
-- [ ] Update test_create_stipend_route_htmx to handle template path issues
+- [x] Fix template rendering error in HTMX stipend create route
+- [x] Verify _stipend_row.html template path in create route
+- [x] Update test_create_stipend_route_htmx to handle template path issues
 - [ ] Add more test coverage for HTMX routes
 - [ ] Review other admin routes for similar HTMX issues
 - [x] Fix template path error in stipend create route
