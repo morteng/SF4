@@ -22,63 +22,48 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 def create():
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')
-    
-    # Ensure at least one organization exists
-    if not Organization.query.first():
-        flash_message("You must create an organization before creating a stipend.", FLASH_CATEGORY_ERROR)
-        return redirect(url_for('admin.organization.create'))
 
     if form.validate_on_submit():
         try:
-            # Create a copy of form data and remove unnecessary fields
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
             
-            # Handle empty application deadline
-            if 'application_deadline' in stipend_data:
-                if stipend_data['application_deadline'] == '':
-                    stipend_data['application_deadline'] = None
-                elif isinstance(stipend_data['application_deadline'], str):
-                    try:
-                        stipend_data['application_deadline'] = datetime.strptime(
-                            stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
-                        )
-                    except ValueError:
-                        flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.", FLASH_CATEGORY_ERROR)
-                        return render_template('admin/stipends/create.html', form=form), 400
-                
-            # Create the stipend
-            try:
-                stipend = create_stipend(stipend_data)
-                if not stipend:
-                    flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+            # Handle application_deadline
+            if stipend_data['application_deadline'] == '':
+                stipend_data['application_deadline'] = None
+            elif isinstance(stipend_data['application_deadline'], str):
+                try:
+                    stipend_data['application_deadline'] = datetime.strptime(
+                        stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
+                    )
+                except ValueError:
+                    flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.", FLASH_CATEGORY_ERROR)
                     return render_template('admin/stipends/create.html', form=form), 400
-            except Exception as e:
-                flash_message(str(e) if str(e) else FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+            
+            # Create the stipend
+            stipend = create_stipend(stipend_data)
+            if not stipend:
+                flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
                 return render_template('admin/stipends/create.html', form=form), 400
             
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            if is_htmx:
+                return '', 200
             return redirect(url_for('admin.stipend.index'))
             
         except Exception as e:
             db.session.rollback()
             logging.error(f"Failed to create stipend: {e}")
-            if "date format" in str(e).lower() or "deadline cannot be" in str(e).lower():
-                flash_message(str(e), FLASH_CATEGORY_ERROR)
-            else:
-                flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-            template = 'admin/stipends/create.html'
-            return render_template(template, form=form), 400
+            flash_message(str(e) if str(e) else FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+            return render_template('admin/stipends/create.html', form=form), 400
      
     # Handle form validation errors
     if request.method == 'POST':
         for field, errors in form.errors.items():
             for error in errors:
                 flash_message(f"Error in {getattr(form, field).label.text}: {error}", FLASH_CATEGORY_ERROR)
-        template = 'admin/stipends/create.html'
-        return render_template(template, form=form), 400
+        return render_template('admin/stipends/create.html', form=form), 400
     
-    template = 'admin/stipends/create.html'  # Always use the full template
-    return render_template(template, form=form), 200
+    return render_template('admin/stipends/create.html', form=form), 200
  
  
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])

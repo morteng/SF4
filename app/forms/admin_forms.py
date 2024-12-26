@@ -13,24 +13,21 @@ class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(message="This field is required."), Length(max=100)])
     summary = TextAreaField('Summary', validators=[Optional()])
     description = TextAreaField('Description', validators=[Optional()])
-    homepage_url = URLField('Homepage URL', validators=[Optional(), URL()])  # Add URL validator here
+    homepage_url = URLField('Homepage URL', validators=[Optional(), URL()])
     application_procedure = TextAreaField('Application Procedure', validators=[Optional()])
     eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[Optional()])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
-        validators=[Optional()],  # Allow blank values
+        validators=[Optional()],
         format='%Y-%m-%d %H:%M:%S'
     )
     organization_id = SelectField('Organization', validators=[DataRequired()], coerce=int, choices=[])
-
     open_for_applications = BooleanField('Open for Applications', default=False)
     submit = SubmitField('Create')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Populate organization choices
         self.organization_id.choices = [(org.id, org.name) for org in Organization.query.order_by(Organization.name).all()]
-        # Set default organization if only one exists
         if len(self.organization_id.choices) == 1:
             self.organization_id.data = self.organization_id.choices[0][0]
 
@@ -47,11 +44,9 @@ class StipendForm(FlaskForm):
             raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
 
     def validate(self, extra_validators=None):
-        # Call parent validation first
         if not super().validate(extra_validators):
             return False
             
-        # Additional validation for organization_id
         if not self.organization_id.data:
             self.organization_id.errors.append('This field is required.')
             return False
