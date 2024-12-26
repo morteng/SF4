@@ -42,9 +42,9 @@ def format_error_message(field, error):
     if field_name == 'application_deadline':
         if 'does not match format' in str(error):
             return 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
-        elif 'Invalid month value' in str(error):
+        elif 'Invalid month value' in str(error) or 'month is out of range' in str(error):
             return 'Invalid date values (e.g., Feb 30)'
-        elif 'Invalid day value' in str(error):
+        elif 'Invalid day value' in str(error) or 'day is out of range' in str(error):
             return 'Invalid date values (e.g., Feb 30)'
         elif 'Invalid hour value' in str(error):
             return 'Invalid time values (e.g., 25:61:61)'

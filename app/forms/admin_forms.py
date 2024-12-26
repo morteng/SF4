@@ -66,8 +66,12 @@ class StipendForm(FlaskForm):
                     raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
                 elif 'unconverted data remains' in str(e):
                     raise ValidationError('Time is required. Please use YYYY-MM-DD HH:MM:SS')
-                else:
+                elif 'day is out of range' in str(e):
                     raise ValidationError('Invalid date values (e.g., Feb 30)')
+                elif 'month is out of range' in str(e):
+                    raise ValidationError('Invalid date values (e.g., Feb 30)')
+                else:
+                    raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
         else:
             dt = field.data  # Already a datetime object
             
