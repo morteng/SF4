@@ -55,20 +55,10 @@ class StipendForm(FlaskForm):
             raise ValidationError('Application deadline cannot be in the past.')
 
     def validate_open_for_applications(self, field):
-        if field.data is None:
-            field.data = False
-        elif isinstance(field.data, str):
-            field.data = field.data.lower() in ['y', 'yes', 'true', '1']
+        if isinstance(field.data, str):
+            field.data = field.data.lower() in ['true', 'yes', '1']
         elif not isinstance(field.data, bool):
             field.data = False
-
-    def validate_summary(self, field):
-        if field.data and field.data.strip() == '':
-            raise ValidationError('Summary cannot be just whitespace.')
-
-    def validate_description(self, field):
-        if field.data and field.data.strip() == '':
-            raise ValidationError('Description cannot be just whitespace.')
 
     def validate_organization_id(self, field):
         if not field.data:
@@ -76,14 +66,6 @@ class StipendForm(FlaskForm):
         organization = Organization.query.get(field.data)
         if not organization:
             raise ValidationError('Invalid organization selected.')
-
-    def validate_summary(self, field):
-        if field.data and field.data.strip() == '':
-            raise ValidationError('Summary cannot be just whitespace.')
-
-    def validate_description(self, field):
-        if field.data and field.data.strip() == '':
-            raise ValidationError('Description cannot be just whitespace.')
 
 
 class TagForm(FlaskForm):
