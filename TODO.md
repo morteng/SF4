@@ -1,14 +1,24 @@
 # TODO List
 
 ## Current Goals
-1. Fix HTMX error message rendering in stipend routes
-   - Issue: Error messages not appearing in HTMX responses for invalid dates
-   - Steps:
-     a. Update stipend_routes.py to properly pass field_errors to _form.html template
-     b. Ensure error messages are rendered in the correct HTML structure
-     c. Verify error container structure matches test expectations
-     d. Add proper error message formatting using format_error_message() in utils.py
-     e. Update test_stipend_htmx.py to verify error message presence and formatting
+1. Improve error handling consistency across all admin routes
+   - Verify error message formatting in bot, organization, and tag routes
+   - Ensure all routes use format_error_message() consistently
+   - Add HTMX response handling for form errors in all routes
+   - Update test coverage for error handling in all routes
+
+## Knowledge & Memories
+- Windows 11 environment
+- Error Handling Implementation:
+  * utils.py provides format_error_message() with error mapping for consistent error formatting
+  * HTMX responses must include both error messages and field-specific errors
+  * Date field errors require specific message mapping
+  * Form errors must be propagated to templates with proper status codes
+  * Error messages must be rendered in specific HTML structure for testability
+  * Key fixes needed:
+    - Ensure error messages appear in HTMX responses
+    - Verify template structure matches test expectations
+    - Maintain consistent error container structure (#<field_name>-error)
 
 ## Knowledge & Memories
 - Windows 11 environment
