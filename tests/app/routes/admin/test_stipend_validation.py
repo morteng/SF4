@@ -27,8 +27,8 @@ def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_
         response = logged_in_admin.post(url_for('admin.stipend.create'), data=test_data)
         
         assert response.status_code == 302
- 
-       stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
+
+        stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
         assert stipend is not None
         assert stipend.application_deadline is None  # Verify the deadline is None
 
