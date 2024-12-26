@@ -80,7 +80,7 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
             'open_for_applications': True
         }
  
-       response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data)
+        response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data)
         
         assert response.status_code == 400
         db_session.expire_all()
