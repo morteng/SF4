@@ -59,11 +59,11 @@ def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_st
             'open_for_applications': True
         }
  
-       response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data)
+        response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data)
         
-       assert response.status_code == 302
- 
-       # Refresh the instance from the database
+        assert response.status_code == 302
+
+        # Refresh the instance from the database
         db_session.refresh(test_stipend)
         assert test_stipend.application_deadline is None
 
