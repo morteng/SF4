@@ -142,14 +142,15 @@ def stipend_data():
     }
 
 @pytest.fixture(scope='function')
-def test_stipend(db_session, stipend_data, app):
+def test_stipend(db_session, stipend_data, test_organization, app):
     """Provide a test stipend."""
+    stipend_data['organization_id'] = test_organization.id  # Add this line
     with app.app_context():
         stipend = Stipend(**stipend_data)
         db_session.add(stipend)
         db_session.commit()
         yield stipend
-        # Ensure the session is still active when cleaning up
+        # Cleanup after test
         if db_session.query(Stipend).filter_by(id=stipend.id).first():
             db_session.delete(stipend)
             db_session.commit()
