@@ -207,9 +207,9 @@ def test_create_stipend_route_with_invalid_application_deadline_format_htmx(logg
        'csrf_token': csrf_token
    }, follow_redirects=True)
  
-   assert response.status_code == 400
-   stipends = Stipend.query.all()
-   assert not any(stipend.name == invalid_data['name'] for stipend in stipends)
+    assert response.status_code == 400
+    stipends = Stipend.query.all()
+    assert not any(stipend.name == invalid_data['name'] for stipend in stipends)
     # Assert the flash message
     assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
@@ -246,8 +246,8 @@ def test_create_stipend_with_invalid_form_data_htmx(logged_in_admin, stipend_dat
        follow_redirects=True
    )
     
-   assert response.status_code == 400
-   # Check if validation error is present
+    assert response.status_code == 400
+    # Check if validation error is present
     assert b'This field is required.' in response.data, "Validation error not found in response"
     # Verify no stipend was created
     stipends = db_session.query(Stipend).all()
