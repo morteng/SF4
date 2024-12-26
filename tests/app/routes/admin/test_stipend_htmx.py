@@ -49,6 +49,8 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
             assert expected_error.encode() in response.data
             assert b'application_deadline' in response.data
             assert b'is-invalid' in response.data
+            # Verify error message appears in the form
+            assert b'id="application_deadline-error"' in response.data
 
 def test_create_stipend_with_past_date(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():

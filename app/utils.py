@@ -34,6 +34,12 @@ def init_admin_user():
         db.session.add(admin_user)
         db.session.commit()
 
+def format_error_message(field, error):
+    """Format error messages consistently for both HTMX and regular requests"""
+    if field == 'application_deadline':
+        return error
+    return f"{field}: {error}"
+
 def flash_message(message, category):
     from flask import flash
     flash(message, category)

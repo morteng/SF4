@@ -79,14 +79,15 @@ def create():
         else:
             error_messages = []
             for field, errors in form.errors.items():
+                field_label = getattr(form, field).label.text
                 for error in errors:
                     # For date fields, use the error directly
                     if field == 'application_deadline':
                         error_messages.append(error)
+                        flash_message(error, FLASH_CATEGORY_ERROR)
                     else:
-                        field_label = getattr(form, field).label.text
                         error_messages.append(f"{field_label}: {error}")
-                    flash_message(error, FLASH_CATEGORY_ERROR)
+                        flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
                 
             if is_htmx:
                 return render_template(
