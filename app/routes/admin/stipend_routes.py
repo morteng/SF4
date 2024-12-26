@@ -135,7 +135,7 @@ def index():
     # Get paginated stipends directly
     page = request.args.get('page', 1, type=int)
     stipends = get_all_stipends().paginate(page=page, per_page=10, error_out=False)
-    return render_template('admin/stipends/index.html', stipends=stipends)
+    return render_template('admin/stipends/index.html', stipends=stipends.items)
  
 @admin_stipend_bp.route('/paginate/<int:page>', methods=['GET'])
 @login_required
