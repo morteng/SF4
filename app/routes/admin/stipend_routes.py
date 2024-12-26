@@ -4,13 +4,12 @@ from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY
 from app.forms.admin_forms import StipendForm
 from app.services.organization_service import (
     get_organization_by_id,
-    delete_stipend,
     get_all_stipends,
     create_stipend,
     update_stipend
 )
 from app.models.stipend import Stipend
-from app.services.stipend_service import get_stipend_by_id
+from app.services.stipend_service import get_stipend_by_id, delete_stipend
 from app.extensions import db
 import logging
 from app.utils import admin_required, flash_message
