@@ -43,6 +43,9 @@ You're running on a windows 11 machine, should format all commands for that envi
   - [x] Ensure proper database commit/rollback behavior
   - [ ] Verify CSRF token handling in HTMX requests
   - [ ] Test datetime field validation and formatting
+  - [x] Added debug logging to verify template path and existence
+  - [x] Confirmed template path is correct
+  - [ ] Investigating template loading issue
 
 ## Specific Tasks
 - [x] Remove duplicate test file tests/routes/admin/test_stipend_routes.py
