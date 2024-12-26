@@ -1,4 +1,4 @@
-from flask import url_for, render_template_string
+from flask import url_for, render_template_string, get_flashed_messages
 import logging  # Import the logging module
 from app.models.stipend import Stipend
 from tests.conftest import logged_in_admin, db_session, stipend_data
