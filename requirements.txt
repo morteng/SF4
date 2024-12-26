@@ -8,3 +8,4 @@ Flask-Login
 Flask-WTF
 WTForms
 flask-migrate
+pytz
