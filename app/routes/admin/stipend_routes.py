@@ -34,19 +34,18 @@ def create():
                     stipend_data['application_deadline'] = None
                 elif isinstance(stipend_data['application_deadline'], str):
                     try:
-                        # Try to parse the date string
-                        datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+                        stipend_data['application_deadline'] = datetime.strptime(
+                            stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
+                        )
                     except ValueError:
                         flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.", FLASH_CATEGORY_ERROR)
-                        template = 'admin/stipends/create.html'  # Always use the full template
-                        return render_template(template, form=form), 200 if is_htmx else 400
+                        return render_template('admin/stipends/create.html', form=form), 200 if is_htmx else 400
                 
             # Create the stipend
             stipend = create_stipend(stipend_data)
             if not stipend:
-                flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-                template = 'admin/stipends/create.html'  # Always use the full template
-                return render_template(template, form=form), 200 if is_htmx else 400
+                flash_message(str(e) if str(e) else FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+                return render_template('admin/stipends/create.html', form=form), 200 if is_htmx else 400
             
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.stipend.index'))

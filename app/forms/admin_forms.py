@@ -21,7 +21,7 @@ class StipendForm(FlaskForm):
         validators=[Optional()],  # Allow blank values
         format='%Y-%m-%d %H:%M:%S'
     )
-    organization_id = SelectField('Organization', validators=[Optional()], coerce=int, choices=[])  # Changed from DataRequired to Optional
+    organization_id = SelectField('Organization', validators=[DataRequired()], coerce=int, choices=[])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

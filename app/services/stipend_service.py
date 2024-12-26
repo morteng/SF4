@@ -23,11 +23,15 @@ def update_stipend(stipend, data, session=db.session):
                 continue
 
             if key == 'application_deadline':
-                if value:
-                    if isinstance(value, str):
+                if value == '':
+                    value = None
+                elif isinstance(value, str):
+                    try:
                         value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
-                    if value < datetime.now():
-                        raise ValueError("Application deadline cannot be in the past.")
+                    except ValueError:
+                        raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
+                if value and value < datetime.now():
+                    raise ValueError("Application deadline cannot be in the past.")
             elif key == 'open_for_applications' and value is not None:
                 if isinstance(value, str):
                     value = value.lower() in ['y', 'yes', 'true', '1']
@@ -112,5 +116,4 @@ def get_stipend_by_id(id):
     return db.session.get(Stipend, id)
 
 def get_all_stipends():
-    # Change from returning a list to returning a query object
-    return Stipend.query
+    return Stipend.query.all()  # Return a list instead of Query object
