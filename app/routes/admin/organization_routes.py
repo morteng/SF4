@@ -27,20 +27,20 @@ def create():
                     return redirect(url_for('admin.organization.index'))
                 else:
                     flash_message(error_message, FLASH_CATEGORY_ERROR)
-                    return redirect(url_for('admin.organization.create'))  # Redirect back to the create page with errors
+                    return redirect(url_for('admin.organization.create'))
             except SQLAlchemyError as e:
                 db.session.rollback()
                 flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
-                return redirect(url_for('admin.organization.create'))  # Redirect back to the create page with errors
+                return redirect(url_for('admin.organization.create'))
         else:
-            # Improved error handling with field labels and HTML formatting
+            # Changed from render_template to redirect with flash messages
             error_messages = []
             for field, errors in form.errors.items():
                 field_label = getattr(form, field).label.text
                 for error in errors:
                     error_messages.append(f"<strong>{field_label}</strong>: {error}")
             flash_message("<br>".join(error_messages), FLASH_CATEGORY_ERROR)
-            return render_template('admin/organizations/form.html', form=form)
+            return redirect(url_for('admin.organization.create'))
 
     return render_template('admin/organizations/form.html', form=form)
 
