@@ -1,11 +1,11 @@
 # TODO List
 
 ## Current Goals
-1. Fix bot route error handling [COMPLETED]
-   - Updated test to expect 200 status code for successful creation
-   - Verified error handling consistency in bot_routes.py
-   - Confirmed proper error message propagation
-   - Checked HTMX response handling
+1. Fix application deadline validation error handling in stipend routes
+   - Ensure error messages are properly propagated to HTMX responses
+   - Verify template structure matches test expectations
+   - Add comprehensive date validation with edge case handling
+   - Update test coverage for date validation edge cases
 
 2. Improve error handling consistency across all admin routes
    - Verify error message formatting in bot, organization, and tag routes
@@ -25,18 +25,17 @@
     - Verify template structure matches test expectations
     - Maintain consistent error container structure (#<field_name>-error)
 
-- Bot Route Specifics:
+- Stipend Route Specifics:
   * Error handling needs to return 400 status code for invalid data
   * Form validation errors should be properly propagated
   * HTMX responses need proper error container structure
   * Error messages should match between client and server
 
 ## Implementation Details
-1. For bot route error handling:
-   - Update bot_routes.py to return 400 status code for successful bot creation
-   - Ensure test_create_bot_route expects 200 status code for successful creation
-   - Verify error messages appear in HTMX responses
-   - Check template structure in admin/bots/_create_form.html
+1. For stipend route error handling:
+   - Update StipendForm in admin_forms.py to properly validate application_deadline
+   - Ensure stipend_routes.py propagates errors correctly in HTMX responses
+   - Verify template structure in admin/stipends/_form.html
    - Ensure field_errors are properly passed to template
    - Verify error message rendering in template
 
@@ -47,8 +46,9 @@
    - Update test coverage for error handling
 
 ## New Memories
-- Discovered test_create_bot_route expects 400 status code but receives 200
-- Need to update either the test expectation or the route implementation
-- Current implementation in bot_routes.py returns 200 for successful bot creation
-- Test may need to be updated to expect 200 status code for successful creation
+- Discovered failing test for invalid application deadlines
+- Need to ensure error messages appear in HTMX responses
+- Current implementation in stipend_routes.py needs to properly propagate errors
+- Test expects specific error messages for invalid dates/times
+- Form validation needs to handle both string and datetime inputs
 
