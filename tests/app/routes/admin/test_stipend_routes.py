@@ -14,6 +14,7 @@ def stipend_data():
         'homepage_url': 'http://example.com/stipend',
         'application_procedure': 'Apply online at example.com',
         'eligibility_criteria': 'Open to all students',
+        'organization_id': 1,
         'application_deadline': '2023-12-31 23:59:59',  # Keep as string
         'open_for_applications': True
     }
@@ -42,6 +43,7 @@ def test_create_stipend_route(logged_in_admin, stipend_data):
         'application_procedure': stipend_data['application_procedure'],
         'eligibility_criteria': stipend_data['eligibility_criteria'],
         'application_deadline': stipend_data['application_deadline'],  # Changed this line
+        'organization_id': stipend_data['organization_id'],
         'open_for_applications': stipend_data['open_for_applications'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
@@ -67,6 +69,7 @@ def test_create_stipend_route_with_invalid_application_deadline_format(logged_in
         'application_procedure': invalid_data['application_procedure'],
         'eligibility_criteria': invalid_data['eligibility_criteria'],
         'application_deadline': invalid_data['application_deadline'],
++        'organization_id': invalid_data['organization_id'],
         'open_for_applications': invalid_data['open_for_applications'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
@@ -90,123 +93,23 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'application_procedure': test_stipend.application_procedure,
         'eligibility_criteria': test_stipend.eligibility_criteria,
         'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if isinstance(test_stipend.application_deadline, datetime) else test_stipend.application_deadline,  # Changed this line
-        'open_for_applications': test_stipend.open_for_applications,
-        'csrf_token': csrf_token
-    }
-    response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data, follow_redirects=True)
-
-    assert response.status_code == 200
-    updated_stipend = db_session.get(Stipend, test_stipend.id)
-    assert updated_stipend.name == 'Updated Stipend'
-    # Assert the flash message
-    assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
-
-def test_update_stipend_route_with_invalid_id(logged_in_admin):
-    update_response = logged_in_admin.get(url_for('admin.stipend.edit', id=9999))
-    assert update_response.status_code == 302
-    assert url_for('admin.stipend.index', _external=False) == update_response.headers['Location']
-
-def test_delete_stipend_route(logged_in_admin, test_stipend, db_session):
-    # Perform the DELETE operation and follow the redirect
-    delete_response = logged_in_admin.post(
-        url_for('admin.stipend.delete', id=test_stipend.id),
-        follow_redirects=True
-    )
-    assert delete_response.status_code == 200
-    
-    # Ensure the stipend is no longer in the session after deleting
-    db_session.expire_all()
-    updated_stipend = db_session.get(Stipend, test_stipend.id)
-    assert updated_stipend is None
-    # Assert the flash message
-    assert FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"].encode() in delete_response.data
-
-def test_delete_stipend_route_with_invalid_id(logged_in_admin):
-    delete_response = logged_in_admin.post(url_for('admin.stipend.delete', id=9999))
-    assert delete_response.status_code == 302
-    assert url_for('admin.stipend.index', _external=False) == delete_response.headers['Location']
-
-def test_create_stipend_route_with_database_error(logged_in_admin, stipend_data, db_session, monkeypatch):
-    with logged_in_admin.application.app_context():
-        data = stipend_data
-
-        def mock_commit(*args, **kwargs):
-            raise Exception("Database error")
-
-        monkeypatch.setattr(db_session, 'commit', mock_commit)
-
-        response = logged_in_admin.post(url_for('admin.stipend.create'), data={
-            'name': data['name'],
-            'summary': data['summary'],
-            'description': data['description'],
-            'homepage_url': data['homepage_url'],
-            'application_procedure': data['application_procedure'],
-            'eligibility_criteria': data['eligibility_criteria'],
-            'application_deadline': data['application_deadline'],  # Edited Line
-            'open_for_applications': data['open_for_applications'],
-            'csrf_token': extract_csrf_token(logged_in_admin.get(url_for('admin.stipend.create')).data)
-        }, follow_redirects=True)
-
-        assert response.status_code == 200
-        assert FLASH_MESSAGES["CREATE_STIPEND_ERROR"].encode() in response.data  # Confirm error message is present
-
-        stipends = Stipend.query.all()
-        assert not any(stipend.name == data['name'] for stipend in stipends)  # Ensure no stipend was created
-
-
-def test_update_stipend_route_with_database_error(logged_in_admin, test_stipend, db_session, monkeypatch):
-    with logged_in_admin.application.app_context():
-        updated_data = {
-            'name': 'Updated Stipend',
-            'summary': test_stipend.summary,
-            'description': test_stipend.description,
-            'homepage_url': test_stipend.homepage_url,
-            'application_procedure': test_stipend.application_procedure,
-            'eligibility_criteria': test_stipend.eligibility_criteria,
-            'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if isinstance(test_stipend.application_deadline, datetime) else test_stipend.application_deadline,
-            'open_for_applications': test_stipend.open_for_applications
-        }
-
-        def mock_commit(*args, **kwargs):
-            raise Exception("Database error")
-            
-        monkeypatch.setattr(db_session, 'commit', mock_commit)
-        
-        response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data={
-            'name': updated_data['name'],
-            'summary': updated_data['summary'],
-            'description': updated_data['description'],
-            'homepage_url': updated_data['homepage_url'],
-            'application_procedure': updated_data['application_procedure'],
-            'eligibility_criteria': updated_data['eligibility_criteria'],
-            'application_deadline': updated_data['application_deadline'],
-            'open_for_applications': updated_data['open_for_applications'],
-            'csrf_token': extract_csrf_token(logged_in_admin.get(url_for('admin.stipend.edit', id=test_stipend.id)).data)
-        }, follow_redirects=True)
-        
-        assert response.status_code == 200
-        assert FLASH_MESSAGES["UPDATE_STIPEND_ERROR"].encode() in response.data  # Confirm error message is present
-
-        updated_stipend = db_session.get(Stipend, test_stipend.id)
-        assert updated_stipend.name != 'Updated Stipend'
-
-def test_delete_stipend_route_with_database_error(logged_in_admin, test_stipend, db_session, monkeypatch):
-    with logged_in_admin.application.app_context():
-        def mock_delete(*args, **kwargs):
-            raise Exception("Database error")
-
-        monkeypatch.setattr(db_session, 'delete', mock_delete)
-
-        response = logged_in_admin.post(
-            url_for('admin.stipend.delete', id=test_stipend.id),
-            follow_redirects=True
-        )
-
-        assert response.status_code == 200
-        assert FLASH_MESSAGES["DELETE_STIPEND_ERROR"].encode() in response.data
-
-        # Ensure the stipend is still in the session after the failed delete
-        db_session.expire_all()
-        stipend_after_failed_delete = db_session.get(Stipend, test_stipend.id)
-        assert stipend_after_failed_delete is not None
-        assert stipend_after_failed_delete.name == test_stipend.name
++        'organization_id': test_stipend.organization_id,
+         'open_for_applications': test_stipend.open_for_applications,
+         'csrf_token': csrf_token
+     }
+@@ -190,6 +193,7 @@
+             'application_procedure': data['application_procedure'],
+             'eligibility_criteria': data['eligibility_criteria'],
+             'application_deadline': data['application_deadline'],  # Edited Line
++            'organization_id': data['organization_id'],
+             'open_for_applications': data['open_for_applications'],
+             'csrf_token': extract_csrf_token(logged_in_admin.get(url_for('admin.stipend.create')).data)
+         }, follow_redirects=True)
+@@ -214,6 +218,7 @@
+             'application_procedure': updated_data['application_procedure'],
+             'eligibility_criteria': updated_data['eligibility_criteria'],
+             'application_deadline': updated_data['application_deadline'],
++            'organization_id': updated_data['organization_id'],
+             'open_for_applications': updated_data['open_for_applications']
+         }
+ 
