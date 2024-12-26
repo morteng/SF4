@@ -28,6 +28,7 @@
   * URL fields enforce protocol (http/https) and format
   * Text fields have length limits enforced with specific error messages
   * Unique fields perform database checks for duplicates with custom error messages
+  * UserForm requires an id field for edit operations
 
 - Error handling details:
   * Errors are displayed below each field with consistent styling using format_error_message()
@@ -55,4 +56,7 @@
    - Add tests for historical date validation in tests/test_utils.py
    - Create integration tests for timezone conversion scenarios
    - Add edge case tests for daylight saving time transitions
+
+## Recent Fixes
+- Added id field to UserForm to fix template rendering error in admin user edit route
 
