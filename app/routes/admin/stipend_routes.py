@@ -137,7 +137,7 @@ def edit(id):
                 if is_htmx:
                     try:
                         # Return the updated row with HTMX headers
-                        return render_template('admin/stipends/_stipend_row.html', stipend=updated_stipend)
+                        return render_template('admin/stipends/_stipend_row.html', stipend=updated_stipend), 200
                     except Exception as e:
                         current_app.logger.error(f"Failed to render stipend row template: {e}")
                         return render_template_string(

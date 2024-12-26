@@ -18,12 +18,12 @@
 - [x] Fix date format validation message in HTMX stipend create route
 - [x] Fix invalid date format handling in HTMX stipend create route
 - [x] Update test for HTMX stipend update route
-- [ ] Verify HTMX stipend update route works with proper template rendering
+- [x] Verify HTMX stipend update route works with proper template rendering
 - [x] Add explicit status code for HTMX responses
 - [x] Add error handling for missing _stipend_row.html template
 - [x] Create _stipend_row.html template with proper formatting
-- [ ] Investigate template rendering error in HTMX stipend update route
-- [ ] Verify template path resolution for _stipend_row.html
+- [x] Investigate template rendering error in HTMX stipend update route
+- [x] Verify template path resolution for _stipend_row.html
 - [ ] Add more test coverage for HTMX routes
 - [ ] Review other admin routes for similar HTMX issues
 - [x] Fix template path error in stipend create route
