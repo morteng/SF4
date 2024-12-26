@@ -1,25 +1,14 @@
 # TODO List
 
 ## Current Goals
-1. Fix error message propagation in stipend routes
+1. Fix date validation error message propagation in stipend routes
    - Issue: Error messages not appearing in HTMX responses for invalid dates
    - Steps:
-     a. Update stipend_routes.py to properly pass field_errors to template
+     a. Update stipend_routes.py to properly pass field_errors to _form.html template
      b. Ensure application_deadline_error is included in template context
-     c. Verify error container structure matches test expectations
-     d. Add proper error message formatting using format_error_message()
-     e. Update test_stipend_htmx.py to verify error message presence
-
-2. Complete error handling implementation for remaining admin routes
-   - Remaining:
-     * Tag routes
-     * User routes
-   - Steps:
-     a. Create test files for each route type (test_tag_routes.py, etc.)
-     b. Add test cases for all form field validations
-     c. Verify error message consistency across client and server
-     d. Check error container structure in responses
-     e. Ensure proper status codes for different error types
+     c. Verify error container structure matches test expectations in _form.html
+     d. Add proper error message formatting using format_error_message() in utils.py
+     e. Update test_stipend_htmx.py to verify error message presence and formatting
 
 ## Knowledge & Memories
 - Windows 11 environment
@@ -73,4 +62,10 @@
       * Error container presence
       * Field error classes
       * Response status codes
+- Current Issues:
+  * test_create_stipend_with_invalid_application_deadline failing
+    - Error messages not appearing in HTMX responses
+    - Need to verify template structure in _form.html
+    - Ensure field_errors are properly passed to template
+    - Check format_error_message() implementation in utils.py
 
