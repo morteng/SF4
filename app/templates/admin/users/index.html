@@ -2,6 +2,7 @@
 
 {% block title %}Manage Users{% endblock %}
 
+{% from "_macros.html" import edit_button, delete_button %}
 {% block content %}
 <h1 class="text-3xl font-bold mb-4">Manage Users</h1>
 <a href="{{ url_for('admin.user.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create New User</a>
@@ -23,9 +24,7 @@
                 <td class="p-3">{{ user.username }}</td>
                 <td class="p-3">{{ user.email }}</td>
                 <td class="p-3 flex space-x-2">
-                    {% from "_macros.html" import edit_button %}
                     {{ edit_button(url_for('admin.user.edit', id=user.id), 'body > main') }}
-                    {% from "_macros.html" import delete_button %}
                     {{ delete_button(url_for('admin.user.delete', id=user.id), 'closest tr') }}
                 </td>
             </tr>
