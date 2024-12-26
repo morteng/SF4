@@ -42,7 +42,10 @@ def create():
         except Exception as e:
             db.session.rollback()
             logging.error(f"Failed to create stipend: {e}")
-            flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+            if "date format" in str(e).lower() or "deadline cannot be" in str(e).lower():
+                flash_message(str(e), FLASH_CATEGORY_ERROR)
+            else:
+                flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
             return render_template('admin/stipends/form.html', form=form), 200
     
     # Handle form validation errors

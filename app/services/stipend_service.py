@@ -16,11 +16,15 @@ def update_stipend(stipend, data, session=db.session):
                 continue  # Skip internal attributes
 
             if key == 'application_deadline':
-                if isinstance(value, str):
-                    try:
-                        value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
-                    except ValueError:
-                        raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
+                if value:
+                    if isinstance(value, str):
+                        try:
+                            value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+                        except ValueError:
+                            raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
+                    # Ensure date is not in the past
+                    if value < datetime.now():
+                        raise ValueError("Application deadline cannot be in the past.")
             elif key == 'open_for_applications' and value is not None:
                 # Convert various representations of False to actual False
                 if isinstance(value, str):
