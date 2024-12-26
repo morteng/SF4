@@ -18,7 +18,7 @@ class AdminStipendTestCase(unittest.TestCase):
         admin_user.set_password('password')
         admin_user.is_admin = True
         db.session.add(admin_user)
-        db.session.commit()
+        db.session.commit()  # Add this line
 
     def tearDown(self):
         db.session.remove()
@@ -48,7 +48,7 @@ class AdminStipendTestCase(unittest.TestCase):
             'homepage_url': 'http://example.com/stipend',
             'application_procedure': 'Send an email to admin@example.com',
             'eligibility_criteria': 'Must be a student.',
-            'application_deadline': '2023-12-31 23:59:59',  # Use string format
+            'application_deadline': '2023-12-31 23:59:59',  # Ensure this format
             'organization_id': 1,  # Ensure this matches a valid organization
             'open_for_applications': 'y'
         }, follow_redirects=True)

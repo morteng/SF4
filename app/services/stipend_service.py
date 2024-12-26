@@ -72,6 +72,8 @@ def create_stipend(stipend_data, session=db.session):
         
         # Handle application_deadline
         if 'application_deadline' in stipend_data:
+            if stipend_data['application_deadline'] == '':
+                stipend_data['application_deadline'] = None
             if isinstance(stipend_data['application_deadline'], str):
                 try:
                     deadline = datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')
