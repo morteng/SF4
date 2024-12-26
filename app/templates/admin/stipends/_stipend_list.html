@@ -1,1 +1,25 @@
-path/to/filename.js
+<table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+        <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+            <th scope="col" class="relative px-6 py-3">
+                <span class="sr-only">Actions</span>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stipend in stipends %}
+        <tr hx-target="this" hx-swap="outerHTML">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ stipend.name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ stipend.description }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <a href="{{ url_for('admin.stipend.edit', id=stipend.id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                <form class="inline" hx-delete="{{ url_for('admin.stipend.delete', id=stipend.id) }}" hx-confirm="Are you sure you want to delete this stipend?">
+                    <button type="submit" class="text-red-600 hover:text-red-900 ml-2">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
