@@ -49,10 +49,6 @@ def create():
                 'open_for_applications': form.open_for_applications.data
             }
                 
-            # Additional date validation
-            if stipend_data['application_deadline'] and stipend_data['application_deadline'] < datetime.now():
-                raise ValueError('Application deadline cannot be in the past.')
-
             # Create the stipend
             new_stipend = create_stipend(stipend_data)
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
@@ -108,10 +104,6 @@ def edit(id):
                     'open_for_applications': form.open_for_applications.data
                 }
                 
-                # Additional date validation
-                if stipend_data['application_deadline'] and stipend_data['application_deadline'] < datetime.now():
-                    raise ValueError('Application deadline cannot be in the past.')
-
                 # Update the stipend
                 update_stipend(stipend, stipend_data, session=db.session)
                 flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)

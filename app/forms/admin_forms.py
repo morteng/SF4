@@ -45,11 +45,7 @@ class StipendForm(FlaskForm):
         'Application Deadline',
         validators=[Optional()],
         format='%Y-%m-%d %H:%M:%S',
-        render_kw={
-            "placeholder": "YYYY-MM-DD HH:MM:SS",
-            "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
-            "title": "Please use the format YYYY-MM-DD HH:MM:SS"
-        }
+        render_kw={"placeholder": "YYYY-MM-DD HH:MM:SS"}
     )
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)
@@ -64,14 +60,9 @@ class StipendForm(FlaskForm):
 
     def validate_application_deadline(self, field):
         if field.data:
-            try:
-                # Ensure the date is in the future
-                if field.data < datetime.now():
-                    raise ValidationError('Application deadline cannot be in the past.')
-            except ValueError as e:
-                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
-            except TypeError as e:
-                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
+            # Ensure the date is in the future
+            if field.data < datetime.now():
+                raise ValidationError('Application deadline cannot be in the past.')
 
     def validate_open_for_applications(self, field):
         # Handle string values from form submission
