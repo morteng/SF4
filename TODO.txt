@@ -1,0 +1,3 @@
+# 2024-12-26
+- Fixed test_create_stipend_with_invalid_application_deadline in tests/app/routes/admin/test_stipend_htmx.py
+  - Removed trailing period from error message assertion to match actual response format
