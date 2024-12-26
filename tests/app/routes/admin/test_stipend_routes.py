@@ -102,9 +102,9 @@ def test_create_stipend_route_with_invalid_application_deadline_format(logged_in
         'csrf_token': csrf_token
    }, follow_redirects=True)
  
-   assert response.status_code == 400
-   stipends = Stipend.query.all()
-   assert not any(stipend.name == invalid_data['name'] for stipend in stipends)
+    assert response.status_code == 400
+    stipends = Stipend.query.all()
+    assert not any(stipend.name == invalid_data['name'] for stipend in stipends)
     # Assert the flash message
     assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
