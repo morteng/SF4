@@ -44,6 +44,12 @@ def update_stipend(stipend, data, session=db.session):
                             raise ValueError("Invalid date values (e.g., Feb 30)")
                         elif 'hour must be in' in str(e):
                             raise ValueError("Invalid time values (e.g., 25:61:61)")
+                        elif 'month must be in' in str(e):
+                            raise ValueError("Invalid date values (e.g., Feb 30)")
+                        elif 'minute must be in' in str(e):
+                            raise ValueError("Invalid time values (e.g., 25:61:61)")
+                        elif 'second must be in' in str(e):
+                            raise ValueError("Invalid time values (e.g., 25:61:61)")
                         else:
                             raise ValueError("Invalid date/time values")
                 elif isinstance(value, datetime):

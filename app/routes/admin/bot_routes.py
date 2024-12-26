@@ -24,10 +24,16 @@ def create():
             flash_message(f"{FLASH_MESSAGES['CREATE_BOT_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
             current_app.logger.error(f"Failed to create bot: {e}")
     else:
-        for field, errors in form.errors.items():
+        error_messages = []
+        field_errors = {}
+        for field_name, errors in form.errors.items():
+            field = getattr(form, field_name)
+            field_errors[field_name] = []
             for error in errors:
-                flash_message(f"{field}: {error}", FLASH_CATEGORY_ERROR)
-                current_app.logger.error(f"Flashing error: {field}: {error}")
+                msg = format_error_message(field, error)
+                error_messages.append(msg)
+                field_errors[field_name].append(msg)
+                flash_message(msg, FLASH_CATEGORY_ERROR)
         if not form.validate_on_submit():
             flash_message(FLASH_MESSAGES["CREATE_BOT_INVALID_DATA"], FLASH_CATEGORY_ERROR)  # Use specific invalid data message
             current_app.logger.error(f"Flashing error: {FLASH_MESSAGES['CREATE_BOT_INVALID_DATA']}")

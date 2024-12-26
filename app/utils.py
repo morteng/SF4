@@ -40,19 +40,21 @@ def format_error_message(field, error):
     
     # Handle date-specific errors
     if field_name == 'application_deadline':
-        if 'Invalid date format' in error:
+        if 'does not match format' in str(error):
             return 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
-        elif 'Invalid date values' in error or 'Feb 30' in error:
+        elif 'Invalid month value' in str(error):
             return 'Invalid date values (e.g., Feb 30)'
-        elif 'Invalid time values' in error or '25:61:61' in error:
+        elif 'Invalid day value' in str(error):
+            return 'Invalid date values (e.g., Feb 30)'
+        elif 'Invalid hour value' in str(error):
             return 'Invalid time values (e.g., 25:61:61)'
-        elif 'Time is required' in error:
-            return 'Time is required. Please use YYYY-MM-DD HH:MM:SS'
-        elif 'Date is required' in error:
-            return 'Date is required'
-        elif 'must be a future date' in error or 'cannot be in the past' in error:
+        elif 'Invalid minute value' in str(error):
+            return 'Invalid time values (e.g., 25:61:61)'
+        elif 'Invalid second value' in str(error):
+            return 'Invalid time values (e.g., 25:61:61)'
+        elif 'must be a future date' in str(error):
             return 'Application deadline must be a future date'
-        elif 'cannot be more than 5 years' in error:
+        elif 'cannot be more than 5 years' in str(error):
             return 'Application deadline cannot be more than 5 years in the future'
         return str(error)
     

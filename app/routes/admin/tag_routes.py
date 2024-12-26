@@ -37,9 +37,16 @@ def create():
             flash_message(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
             return render_template('admin/tags/create.html', form=form)
     else:
-        # Add a specific flash message for invalid form data
-        if request.method == 'POST':
-            flash_message(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+        error_messages = []
+        field_errors = {}
+        for field_name, errors in form.errors.items():
+            field = getattr(form, field_name)
+            field_errors[field_name] = []
+            for error in errors:
+                msg = format_error_message(field, error)
+                error_messages.append(msg)
+                field_errors[field_name].append(msg)
+                flash_message(msg, FLASH_CATEGORY_ERROR)
 
     return render_template('admin/tags/create.html', form=form)
 
