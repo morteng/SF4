@@ -110,7 +110,6 @@ def edit(id):
             
             if is_htmx:
                 return render_template('admin/stipends/_stipend_row.html', stipend=stipend)
-            # Add this line to ensure redirect for non-HTMX requests
             return redirect(url_for('admin.stipend.index'))
 
         except Exception as e:
@@ -119,6 +118,8 @@ def edit(id):
             flash_message(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
             return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
 
+    if request.method == 'POST' and not form.validate_on_submit():
+        return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
     template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/form.html'
     return render_template(template, form=form, stipend=stipend)
 
