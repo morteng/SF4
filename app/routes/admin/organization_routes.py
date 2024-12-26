@@ -33,7 +33,9 @@ def create():
                 flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
                 return redirect(url_for('admin.organization.create'))
         else:
-            # Return 302 redirect for invalid form data
+            # Flash the generic invalid form message first
+            flash_message(FLASH_MESSAGES["CREATE_ORGANIZATION_INVALID_FORM"], FLASH_CATEGORY_ERROR)
+            # Then add individual field errors
             for field, errors in form.errors.items():
                 for error in errors:
                     flash_message(f"{getattr(form, field).label.text}: {error}", FLASH_CATEGORY_ERROR)
