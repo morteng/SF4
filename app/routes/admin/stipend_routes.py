@@ -140,12 +140,6 @@ def index():
     page = request.args.get('page', 1, type=int)
     stipends = get_all_stipends().paginate(page=page, per_page=10, error_out=False)
     logging.info(f"Stipends fetched: {stipends.items}")  # Debug: Log the fetched stipends
-    if not stipends.items:
-        flash_message("No stipends found", FLASH_CATEGORY_INFO)
-    # Debug: Log the first stipend's details if available
-    if stipends.items:
-        first_stipend = stipends.items[0]
-        logging.info(f"First stipend details - Name: {first_stipend.name}, Amount: {first_stipend.amount}, Organization: {first_stipend.organization.name if first_stipend.organization else 'None'}")
     return render_template('admin/stipends/index.html', stipends=stipends)
  
 @admin_stipend_bp.route('/paginate/<int:page>', methods=['GET'])
