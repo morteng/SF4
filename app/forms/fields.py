@@ -1,5 +1,6 @@
 from wtforms.fields import DateTimeField
 from wtforms.validators import ValidationError
+import logging
 from datetime import datetime
 
 class CustomDateTimeField(DateTimeField):
@@ -18,6 +19,7 @@ class CustomDateTimeField(DateTimeField):
                     self.data = datetime.strptime(date_str, fmt)
                     return
                 except ValueError:
+                    logging.info(f"Invalid date format: {date_str} with format {fmt}")
                     continue
             self.data = None
             raise ValidationError(f"Invalid date format. Please use one of the following: {', '.join(self.format)}.")
