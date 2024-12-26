@@ -20,6 +20,8 @@
 - Added test coverage for error scenarios in stipend routes
 - Resolved failing test for invalid application deadlines
 - Fixed error message propagation for application_deadline field
+- Resolved failing test for invalid application deadlines
+- Fixed error message propagation for application_deadline field
 
 ## Knowledge & Memories
 - Windows 11 environment
