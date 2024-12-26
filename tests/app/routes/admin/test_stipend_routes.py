@@ -50,6 +50,20 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
     # Ensure application_deadline is in correct string format
     if isinstance(stipend_data['application_deadline'], datetime):
         stipend_data['application_deadline'] = stipend_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
+    elif isinstance(stipend_data['application_deadline'], str):
+        # Ensure the string is in the correct format
+        try:
+            datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            # If the main format fails, try other formats
+            for fmt in ('%Y-%m-%d %H:%M', '%Y-%m-%d'):
+                try:
+                    datetime.strptime(stipend_data['application_deadline'], fmt)
+                    break
+                except ValueError:
+                    continue
+            else:
+                stipend_data['application_deadline'] = datetime.fromisoformat(stipend_data['application_deadline']).strftime('%Y-%m-%d %H:%M:%S')
     
     # Prepare form data
     form_data = {

@@ -43,7 +43,11 @@ class StipendForm(FlaskForm):
                     except ValueError:
                         continue
                 else:
-                    raise ValidationError('Invalid date format. Please use YYYY-MM-DD, YYYY-MM-DD HH:MM, or YYYY-MM-DD HH:MM:SS.')
+                    # If none of the formats worked, try parsing as is
+                    try:
+                        field.data = datetime.fromisoformat(field.data)
+                    except ValueError:
+                        raise ValidationError('Invalid date format. Please use YYYY-MM-DD, YYYY-MM-DD HH:MM, or YYYY-MM-DD HH:MM:SS.')
     
             # Ensure date is not in the past
             if field.data and field.data < datetime.now():
