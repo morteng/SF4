@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask_wtf import FlaskForm
+from app.extensions import db
 from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, PasswordField, HiddenField, SelectField
 from wtforms.validators import DataRequired, Length, Optional, ValidationError, Email, URL, Regexp  # Add URL and Regexp here
 from app.models.organization import Organization
