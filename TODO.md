@@ -1,18 +1,24 @@
 # TODO List
 
 ## Current Goals
-1. [ ] Add comprehensive test coverage for error handling
-   - Add tests for:
-     * Organization routes error handling
-     * Tag routes error handling
-     * User routes error handling
-     * Bot routes error handling
+1. [ ] Implement comprehensive error handling for all admin routes
+   - Add error handling tests for:
+     * Organization routes
+     * Tag routes
+     * User routes
+     * Bot routes
    - Steps:
      a. Create test files for each route type (test_organization_routes.py, etc.)
      b. Add test cases for all form field validations
      c. Verify error message consistency across client and server
      d. Check error container structure in responses
      e. Ensure proper status codes for different error types
+   - Implementation Requirements:
+     * Use format_error_message() from utils.py consistently
+     * Ensure all routes handle HTMX responses properly
+     * Maintain consistent error container structure (#<field_name>-error)
+     * Verify proper error styling (is-invalid class)
+     * Test edge cases for each field type
 
 ## Knowledge & Memories
 - Windows 11 environment
