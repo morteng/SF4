@@ -45,8 +45,8 @@ def update_stipend(stipend, data, session=db.session):
 
 def create_stipend(stipend_data, session=db.session):
     try:
-        # Handle empty application deadline
-        if 'application_deadline' in stipend_data and (stipend_data['application_deadline'] == '' or stipend_data['application_deadline'] is None):
+        # Convert blank application_deadline to None
+        if 'application_deadline' in stipend_data and stipend_data['application_deadline'] == '':
             stipend_data['application_deadline'] = None
             
         # Ensure organization_id is valid
