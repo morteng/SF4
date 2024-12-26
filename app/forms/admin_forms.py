@@ -48,7 +48,7 @@ class StipendForm(FlaskForm):
         render_kw={
             "placeholder": "YYYY-MM-DD HH:MM:SS",
             "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
-            "title": "Please enter date in YYYY-MM-DD HH:MM:SS format"
+            "title": "Please enter date in YYYY-MM-DD HH:MM:SS format."
         }
     )
 
