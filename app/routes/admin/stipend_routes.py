@@ -43,7 +43,8 @@ def create():
                     except ValueError:
                         print("[DEBUG] Invalid date format")
                         flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.", FLASH_CATEGORY_ERROR)
-                        return render_template('admin/stipends/form.html', form=form), 200
+                        template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/form.html'
+                        return render_template(template, form=form), 200
                 
             # Create the stipend
             print("[DEBUG] Creating stipend")
@@ -51,7 +52,8 @@ def create():
             if not stipend:
                 print("[DEBUG] Stipend creation failed")
                 flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
-                return render_template('admin/stipends/form.html', form=form), 200
+                template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/form.html'
+                return render_template(template, form=form), 200
             
             print(f"[DEBUG] Stipend created successfully: {stipend}")
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
