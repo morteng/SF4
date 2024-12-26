@@ -14,9 +14,9 @@ def delete_organization(organization):
     try:
         db.session.delete(organization)
         db.session.commit()
-    except SQLAlchemyError:
+    except SQLAlchemyError as e:
         db.session.rollback()
-        raise
+        raise  # Re-raise the exception to be handled by the route
 
 def create_organization(data):
     valid_keys = {'name', 'description', 'homepage_url'}  # Adjust based on Organization fields
