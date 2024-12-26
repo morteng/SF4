@@ -90,10 +90,7 @@ def edit(id):
 
     if request.method == 'POST' and form.validate_on_submit():
         try:
-            # Convert 'y'/'n' to boolean for open_for_applications
-            open_for_applications = True if form.open_for_applications.data == 'y' else False
-
-            # Prepare update data
+            # Prepare update data directly from form
             stipend_data = {
                 'name': form.name.data,
                 'summary': form.summary.data,
@@ -103,7 +100,7 @@ def edit(id):
                 'eligibility_criteria': form.eligibility_criteria.data,
                 'application_deadline': form.application_deadline.data,
                 'organization_id': form.organization_id.data,
-                'open_for_applications': open_for_applications
+                'open_for_applications': form.open_for_applications.data
             }
 
             # Update the stipend
