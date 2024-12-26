@@ -1,44 +1,38 @@
 # TODO List
 
 ## Current Goals
-1. [ ] Fix HTMX error handling in stipend routes
-   - Update stipend_routes.py to properly propagate errors in HTMX responses
-   - Ensure error messages are included in the response data
-   - Add proper error container structure in templates
+1. [ ] Add comprehensive test coverage for all form fields
+   - Create test cases in test_stipend_htmx.py for:
+     * Required field validation (name, summary, description)
+     * Field length validation (max 100 chars for name, max 500 for summary)
+     * URL format validation (homepage_url, application_procedure)
+     * HTML escaping of user input
    - Steps:
-     a. Modify create route to include field-specific errors
-     b. Update _form.html template with error containers
-     c. Ensure consistent error message formatting
-     d. Verify error messages appear in correct HTML structure
+     a. Add test cases for each form field with invalid data
+     b. Verify error message consistency across all fields
+     c. Check field-specific error styling matches application_deadline pattern
+     d. Ensure all error containers have unique IDs following pattern: <field_name>-error
 
-2. [ ] Improve date validation consistency
-   - Update validate_application_deadline in admin_forms.py
-   - Add proper error handling for invalid date formats
-   - Ensure consistent error messages across client and server
+2. [ ] Verify error handling consistency across all admin routes
+   - Check error handling in:
+     * Organization routes
+     * Tag routes
+     * User routes
+     * Bot routes
    - Steps:
-     a. Add try-catch block for date parsing
-     b. Standardize error messages
-     c. Verify error handling for all edge cases
-     d. Update tests to match new error messages
-
-3. [ ] Update test_stipend_htmx.py
-   - Modify tests to look for errors in correct locations
-   - Add assertions for error container presence
-   - Verify error message content matches expected format
-   - Steps:
-     a. Update test assertions to check specific error containers
-     b. Add checks for error message formatting
-     c. Verify status codes for different error cases
-     d. Ensure tests match the updated error handling implementation
+     a. Review each route's error handling pattern
+     b. Ensure consistent use of format_error_message()
+     c. Verify proper error container IDs in templates
+     d. Check for consistent status code usage (400 for validation errors)
 
 ## Knowledge & Memories
 - Windows 11 environment
 - Error Handling Implementation:
   * utils.py provides format_error_message() for consistent error formatting
-  * HTMX responses must include both error messages and field-specific errors
-  * Date field errors require specific message mapping
-  * Form errors must be propagated to templates with proper status codes
-  * Error messages must be rendered in specific HTML structure for testability
+  * HTMX responses include both error messages and field-specific errors
+  * Date field errors are handled with specific message mapping
+  * Form errors are propagated to templates with proper status codes
+  * Error messages now rendered in specific HTML structure for better testability
 - Validation System Details:
   * Client-side (main.js):
     - Real-time validation using regex: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/
@@ -76,10 +70,4 @@
       * Error container presence
       * Field error classes
       * Response status codes
-- New Learnings:
-  * HTMX responses must include error messages in the response data
-  * Error containers must have consistent IDs for testability
-  * Form validation errors must be properly propagated to templates
-  * Date validation requires specific error handling for different cases
-  * Tests must check for errors in specific HTML containers
 

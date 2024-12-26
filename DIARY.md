@@ -50,9 +50,27 @@ A log of interesting things tought, learned, discovered, and done.
   * Implemented support for both field_errors and form.errors
   * Improved flash messages container spacing
   * Ensured consistent error message structure
+
+### Day 7
+- Fixed HTMX error handling in stipend routes:
+  * Updated stipend_routes.py to properly propagate errors in HTMX responses
+  * Ensured error messages are included in the response data
+  * Added proper error container structure in templates
+  * Verified error messages appear in correct HTML structure
+- Improved date validation consistency:
+  * Updated validate_application_deadline in admin_forms.py
+  * Added try-catch block for date parsing
+  * Standardized error messages across client and server
+  * Verified error handling for all edge cases
+- Updated test_stipend_htmx.py:
+  * Modified tests to look for errors in correct locations
+  * Added assertions for error container presence
+  * Verified error message content matches expected format
+  * Ensured tests match the updated error handling implementation
 - Key learnings:
+  * HTMX responses must include error messages in the response data
   * Error containers must have consistent IDs for testability
-  * Both field_errors and form.errors need to be handled
-  * Proper spacing improves error message readability
-  * Consistent structure makes testing more reliable
+  * Form validation errors must be properly propagated to templates
+  * Date validation requires specific error handling for different cases
+  * Tests must check for errors in specific HTML containers
 
