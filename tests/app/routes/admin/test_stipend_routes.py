@@ -63,12 +63,7 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
     # Assert the flash message
     assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
 
-def test_create_stipend_route_with_invalid_application_deadline_format(logged_in_admin, stipend_data, db_session):
-    # Create an organization for the test
-    organization = Organization(name='Test Org Invalid Deadline')
-    db_session.add(organization)
-    db_session.commit()
-
+def test_create_stipend_route_with_invalid_application_deadline_format(logged_in_admin, stipend_data):
     create_response = logged_in_admin.get(url_for('admin.stipend.create'))
     assert create_response.status_code == 200
 
@@ -83,7 +78,7 @@ def test_create_stipend_route_with_invalid_application_deadline_format(logged_in
         'application_procedure': invalid_data['application_procedure'],
         'eligibility_criteria': invalid_data['eligibility_criteria'],
         'application_deadline': invalid_data['application_deadline'],
-        'organization_id': organization.id,  # Use the ID of the created organization
+        'organization_id': 1,  # Mock the organization ID for this test
         'open_for_applications': invalid_data['open_for_applications'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
