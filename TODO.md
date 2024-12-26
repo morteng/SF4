@@ -1,11 +1,7 @@
 # TODO List
 
 ## Current Goals
-1. [x] Implement comprehensive error handling for all admin routes
-   * Completed comprehensive date validation in StipendForm
-   - Completed:
-     * Bot routes error handling
-     * Stipend routes error handling
+1. Complete error handling implementation for remaining admin routes
    - Remaining:
      * Organization routes
      * Tag routes
@@ -16,12 +12,6 @@
      c. Verify error message consistency across client and server
      d. Check error container structure in responses
      e. Ensure proper status codes for different error types
-   - Implementation Requirements:
-     * Use format_error_message() from utils.py consistently
-     * Ensure all routes handle HTMX responses properly
-     * Maintain consistent error container structure (#<field_name>-error)
-     * Verify proper error styling (is-invalid class)
-     * Test edge cases for each field type
 
 ## Knowledge & Memories
 - Windows 11 environment
