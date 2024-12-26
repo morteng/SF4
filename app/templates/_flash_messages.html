@@ -3,19 +3,7 @@
     <div id="flash-messages">
       {% for category, message in messages %}
         <div class="flash {{ category }}">{{ message }}</div>
-        <!-- Add detailed logging for debugging -->
-        <script>
-          console.log("Rendering flash message:");
-          console.log("Category: {{ category }}");
-          console.log("Message: {{ message }}");
-          console.log("Raw message: {{ message | tojson }}");
-          console.trace("Flash message stack trace");
-        </script>
       {% endfor %}
     </div>
-  {% else %}
-    <script>
-      console.log("No flash messages to render");
-    </script>
   {% endif %}
 {% endwith %}
