@@ -44,7 +44,7 @@ def create():
                 'homepage_url': form.homepage_url.data,
                 'application_procedure': form.application_procedure.data,
                 'eligibility_criteria': form.eligibility_criteria.data,
-                'application_deadline': form.application_deadline.data or None,
+                'application_deadline': form.application_deadline.data,
                 'organization_id': form.organization_id.data,
                 'open_for_applications': form.open_for_applications.data
             }

@@ -67,7 +67,7 @@ class StipendForm(FlaskForm):
         elif isinstance(field.data, str):
             field.data = field.data.lower() in ['y', 'yes', 'true', '1']
         elif not isinstance(field.data, bool):
-            raise ValidationError('Open for Applications must be a boolean value.')
+            field.data = False
 
     def validate_organization_id(self, field):
         if not field.data:

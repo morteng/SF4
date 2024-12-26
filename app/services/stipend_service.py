@@ -71,7 +71,7 @@ def create_stipend(stipend_data, session=db.session):
             raise ValueError("Invalid organization ID")
         
         # Handle application_deadline
-        if 'application_deadline' in stipend_data and stipend_data['application_deadline']:
+        if 'application_deadline' in stipend_data:
             if isinstance(stipend_data['application_deadline'], str):
                 try:
                     deadline = datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')
@@ -79,7 +79,9 @@ def create_stipend(stipend_data, session=db.session):
                         raise ValueError("Application deadline cannot be in the past.")
                     stipend_data['application_deadline'] = deadline
                 except ValueError:
-                    raise ValueError("Invalid date format for application_deadline. Please use YYYY-MM-DD HH:MM:SS.")
+                    stipend_data['application_deadline'] = None
+            elif stipend_data['application_deadline'] == '':
+                stipend_data['application_deadline'] = None
         
         # Handle open_for_applications
         if 'open_for_applications' in stipend_data:

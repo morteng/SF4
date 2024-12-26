@@ -9,7 +9,7 @@ class CustomDateTimeField(DateTimeField):
 
     def process_formdata(self, valuelist):
         if valuelist:
-            date_str = ' '.join(valuelist)
+            date_str = valuelist[0]  # Use first value only
             try:
                 self.data = datetime.strptime(date_str, self.format)
             except ValueError:
