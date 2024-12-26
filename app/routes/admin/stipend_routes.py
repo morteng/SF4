@@ -31,17 +31,14 @@ def create():
                 flash_message(FLASH_MESSAGES["INVALID_ORGANIZATION"], FLASH_CATEGORY_ERROR)
                 return render_template('admin/stipends/form.html', form=form), 200
                 
-            stipend_data['organization_id'] = organization.id
-            
             # Handle empty application deadline
             if 'application_deadline' in stipend_data and stipend_data['application_deadline'] == '':
                 stipend_data['application_deadline'] = None
                 
+            # Create the stipend
             stipend = create_stipend(stipend_data)
-            
-            # Add the stipend to the session and commit
-            db.session.add(stipend)
-            db.session.commit()
+            if not stipend:
+                raise Exception("Failed to create stipend")
             
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             

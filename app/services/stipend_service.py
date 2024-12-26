@@ -63,12 +63,10 @@ def create_stipend(stipend_data, session=db.session):
         session.add(new_stipend)
         session.commit()
         logging.info('Stipend created successfully.')
-        flash(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         return new_stipend
     except Exception as e:
         session.rollback()
         logging.error(f"Failed to create stipend: {e}")
-        flash(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
         raise  # Re-raise the exception to be handled by the route
 
 def delete_stipend(stipend_id):
