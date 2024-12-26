@@ -53,16 +53,17 @@ def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_st
             'application_procedure': "Apply online at example.com/updated",
             'eligibility_criteria': "Open to all updated students",
             'application_deadline': '',
+            'organization_id': test_stipend.organization_id,  # Add this line
             'open_for_applications': True
         }
 
         response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data)
         
-        assert response.status_code in (200, 302)
+        assert response.status_code == 302  # Expect redirect on success
 
-        db_session.expire_all()
-        stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
-        assert stipend.application_deadline is None
+        # Refresh the stipend instance
+        db_session.refresh(test_stipend)
+        assert test_stipend.application_deadline is None
 
 def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():

@@ -145,20 +145,18 @@ def stipend_data():
 def test_stipend(db_session, stipend_data, test_organization, app):
     """Provide a test stipend."""
     with app.app_context():
-        # Merge the organization into the current session
+        # Ensure organization is attached to session
         test_organization = db_session.merge(test_organization)
         stipend_data['organization_id'] = test_organization.id
         stipend = Stipend(**stipend_data)
         db_session.add(stipend)
         db_session.commit()
+        db_session.refresh(stipend)  # Refresh to ensure we have latest state
         yield stipend
         # Cleanup after test
-        with app.app_context():
-            # Merge the stipend back into the session to ensure it's not detached
-            stipend = db_session.merge(stipend)
-            if db_session.query(Stipend).filter_by(id=stipend.id).first():
-                db_session.delete(stipend)
-                db_session.commit()
+        if db_session.query(Stipend).filter_by(id=stipend.id).first():
+            db_session.delete(stipend)
+            db_session.commit()
 
 @pytest.fixture(scope='function')
 def organization_data():
