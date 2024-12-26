@@ -4,7 +4,7 @@
 
 {% block content %}
 <h1 class="text-2xl font-bold mb-4">Manage Stipends</h1>
-<a href="#" hx-get="{{ url_for('admin.stipend.create') }}" hx-target="body > main" hx-swap="innerHTML" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Create New Stipend</a>
+<a href="#" hx-get="{{ url_for('admin.stipend.create') }}" hx-target="#main-content" hx-swap="innerHTML" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Create New Stipend</a>
 
 <div id="flash-messages-container">
     {% include '_flash_messages.html' %}
