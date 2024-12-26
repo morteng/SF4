@@ -137,4 +137,4 @@ def edit(id):
                 flash_message(f"{field}: {error}", FLASH_CATEGORY_ERROR)
                 current_app.logger.error(f"Flashing error: {field}: {error}")
 
-    return render_template('admin/bots/_edit_row.html', form=form, bot=bot)
+    return render_template('admin/bots/edit.html', form=form, bot=bot)
