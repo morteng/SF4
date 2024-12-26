@@ -137,12 +137,18 @@ def test_create_stipend_with_all_fields(test_data, db_session, app, admin_user):
         assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
 
 def test_create_stipend_with_missing_optional_fields(db_session, app, admin_user):
+    # Create an organization first
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+
     test_data = {
         'name': "Test Stipend",
         'application_deadline': datetime.strptime('2023-12-31 23:59:59', '%Y-%m-%d %H:%M:%S').strftime('%Y-%m-%d %H:%M:%S'),
-        'open_for_applications': True
+        'open_for_applications': True,
+        'organization_id': org.id  # Add the required organization_id
     }
-    
+
     with app.app_context(), app.test_client() as client:
         with app.test_request_context():
             login_user(admin_user)
@@ -163,6 +169,7 @@ def test_create_stipend_with_missing_optional_fields(db_session, app, admin_user
     assert new_stipend.open_for_applications is True
     assert new_stipend.summary is None  # Assuming summary is optional
     assert new_stipend.description is None  # Assuming description is optional
+    assert new_stipend.organization_id == org.id  # Verify organization association
 
     # Check if the correct flash message was set
     with app.test_request_context():
