@@ -1,13 +1,10 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, flash
-from flask_login import login_required, current_user  # Add this line
+from flask_login import login_required, current_user
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import UserForm
-from app.forms.user_forms import ProfileForm  # Add this line
-from app.forms.user_forms import ProfileForm  # Add this line
-from app.forms.user_forms import ProfileForm  # Add this line
-from app.forms.user_forms import ProfileForm  # Add this line
+from app.forms.user_forms import ProfileForm
 from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user
-from app.utils import admin_required, flash_message
+from app.utils import admin_required, flash_message, format_error_message
 import logging
 from app.extensions import db  # Import the db object
 
@@ -27,18 +24,23 @@ def create():
             db.session.rollback()  # Ensure the session is rolled back on error
             flash_message(f"{FLASH_MESSAGES['CREATE_USER_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
     else:
-        error_messages = []
-        field_errors = {}
-        for field_name, errors in form.errors.items():
-            field = getattr(form, field_name)
-            field_errors[field_name] = []
-            for error in errors:
-                msg = format_error_message(field, error)
-                error_messages.append(msg)
-                field_errors[field_name].append(msg)
-                flash_message(msg, FLASH_CATEGORY_ERROR)
-        if not form.validate_on_submit():
-            flash_message(FLASH_MESSAGES["CREATE_USER_INVALID_DATA"], FLASH_CATEGORY_ERROR)  # Use specific invalid data message
+        if request.headers.get('HX-Request') == 'true':
+            # HTMX response - return form with errors
+            return render_template('admin/users/_create_form.html', form=form), 400
+        else:
+            # Regular form submission
+            error_messages = []
+            field_errors = {}
+            for field_name, errors in form.errors.items():
+                field = getattr(form, field_name)
+                field_errors[field_name] = []
+                for error in errors:
+                    msg = format_error_message(field, error)
+                    error_messages.append(msg)
+                    field_errors[field_name].append(msg)
+                    flash_message(msg, FLASH_CATEGORY_ERROR)
+            if not form.validate_on_submit():
+                flash_message(FLASH_MESSAGES["CREATE_USER_INVALID_DATA"], FLASH_CATEGORY_ERROR)
     return render_template('admin/users/create.html', form=form)
 
 @admin_user_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
