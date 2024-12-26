@@ -1,5 +1,5 @@
 import logging
-from app.extensions import db, get_or_create
+from app.extensions import db
 from app.models import Stipend, Organization
 from datetime import datetime
 from flask import flash
