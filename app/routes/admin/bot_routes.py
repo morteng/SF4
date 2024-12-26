@@ -116,25 +116,26 @@ def run(id):
 def edit(id):
     bot = get_bot_by_id(id)
     if not bot:
-        flash_message(FLASH_MESSAGES["BOT_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific bot not found message
+        flash_message(FLASH_MESSAGES["BOT_NOT_FOUND"], FLASH_CATEGORY_ERROR)
         current_app.logger.error(f"Bot not found with id: {id}")
         return redirect(url_for('admin.bot.index'))
     
     form = BotForm(obj=bot)
-    if request.method == 'POST' and form.validate_on_submit():
-        try:
-            update_bot(bot, form.data)
-            flash_message(FLASH_MESSAGES["UPDATE_BOT_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-            current_app.logger.info(f"Flash message set: {FLASH_MESSAGES['UPDATE_BOT_SUCCESS']}")
-        except Exception as e:
-            db.session.rollback()
-            flash_message(f"{FLASH_MESSAGES['UPDATE_BOT_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
-            current_app.logger.error(f"Failed to update bot: {e}")
-        return redirect(url_for('admin.bot.index'))
-    else:
-        for field, errors in form.errors.items():
-            for error in errors:
-                flash_message(f"{field}: {error}", FLASH_CATEGORY_ERROR)
-                current_app.logger.error(f"Flashing error: {field}: {error}")
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            try:
+                update_bot(bot, form.data)
+                flash_message(FLASH_MESSAGES["UPDATE_BOT_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                current_app.logger.info(f"Flash message set: {FLASH_MESSAGES['UPDATE_BOT_SUCCESS']}")
+                return redirect(url_for('admin.bot.index'))
+            except Exception as e:
+                db.session.rollback()
+                flash_message(f"{FLASH_MESSAGES['UPDATE_BOT_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
+                current_app.logger.error(f"Failed to update bot: {e}")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash_message(f"{field}: {error}", FLASH_CATEGORY_ERROR)
+                    current_app.logger.error(f"Flashing error: {field}: {error}")
 
     return render_template('admin/bots/edit.html', form=form, bot=bot)
