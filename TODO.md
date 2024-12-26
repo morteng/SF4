@@ -1,11 +1,11 @@
 # TODO List
 
 ## Current Goals
-1. Fix bot route error handling
-   - Update test_create_bot_route_with_invalid_data to expect 400 status code
-   - Ensure error messages appear in HTMX responses
-   - Verify template structure matches test expectations
-   - Maintain consistent error container structure (#<field_name>-error)
+1. Fix bot route error handling [COMPLETED]
+   - Updated test_create_bot_route_with_invalid_data to expect 400 status code
+   - Ensured error messages appear in HTMX responses
+   - Verified template structure matches test expectations
+   - Maintained consistent error container structure (#<field_name>-error)
 
 2. Improve error handling consistency across all admin routes
    - Verify error message formatting in bot, organization, and tag routes

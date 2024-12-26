@@ -53,7 +53,7 @@ def test_create_bot_route_with_invalid_data(logged_in_admin, bot_data):
     }
     response = logged_in_admin.post(url_for('admin.bot.create'), data=invalid_data, follow_redirects=True)
 
-    assert response.status_code == 200
+    assert response.status_code == 400
     bots = Bot.query.all()
     assert not any(bot.name == '' for bot in bots)  # Ensure no bot with an empty name was created
     # Assert the flash message using constants
