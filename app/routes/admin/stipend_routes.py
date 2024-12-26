@@ -55,7 +55,7 @@ def create():
 
             if is_htmx:
                 return render_template('admin/stipends/_stipend_row.html', stipend=new_stipend)
-            return redirect(url_for('stipend.index'))
+            return redirect(url_for('admin.stipend.index'))
 
         except Exception as e:
             db.session.rollback()
@@ -80,7 +80,7 @@ def edit(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
         flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
-        return redirect(url_for('stipend.index'))
+        return redirect(url_for('admin.stipend.index'))
 
     form = StipendForm(obj=stipend)
 
@@ -123,14 +123,14 @@ def delete(id):
         flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
         if request.headers.get('HX-Request'):
             return render_template('_flash_messages.html'), 404
-        return redirect(url_for('stipend.index'))
+        return redirect(url_for('admin.stipend.index'))
 
     try:
         delete_stipend(stipend.id)
         flash_message(FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         if request.headers.get('HX-Request'):
             return render_template('_flash_messages.html'), 200
-        return redirect(url_for('stipend.index'))
+        return redirect(url_for('admin.stipend.index'))
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(f"Failed to delete stipend: {e}")
