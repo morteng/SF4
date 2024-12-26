@@ -4,12 +4,19 @@
 1. Complete organization routes implementation
    - Ensure consistent error display across all organization views
    - Implement proper error handling for organization operations
+   - Add timezone handling for application deadlines
 
 2. Enhance test coverage for organization routes
    - Add tests for HTMX responses in organization routes
    - Add integration tests for organization service interactions
+   - Add tests for timezone conversion functionality
 
 ## Knowledge & Memories
+- Organization model now includes application_deadline field with timezone support
+- Timezone handling must be implemented in both forms and routes
+- Application deadlines should be stored in UTC but displayed in user's local timezone
+- Use pytz for timezone conversions
+- Add validation to ensure application deadlines are in the future
 - Organization routes implementation details:
   * Uses consistent CRUD pattern with admin. prefix
   * Supports both full page and HTMX responses
@@ -41,7 +48,6 @@
    - Add integration tests for organization service interactions
 
 ## Recent Fixes
-- Added timezone support to Organization model
 - Added application_deadline field to Organization model
 - Updated OrganizationForm to include timezone and deadline fields
 - Fixed timezone handling in organization routes
