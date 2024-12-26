@@ -2,9 +2,23 @@
 
 ## Completed Tasks
 - Implemented comprehensive validation and error handling system with HTMX support
+- Added test cases for invalid date formats in test_stipend_htmx.py
 
 ## Current Goals
-1. [ ] Standardize error handling across all admin forms
+1. [ ] Fix error message rendering in stipend routes
+   - Ensure error messages are properly passed to templates
+   - Verify error messages appear in correct HTML structure
+   - Update tests to check for error messages in rendered HTML
+
+2. [ ] Improve test coverage for stipend routes (currently 36%)
+   - Add test cases for:
+     - Successful stipend creation
+     - Missing required fields
+     - Boundary value testing
+     - HTMX response handling
+   - Verify error message consistency across all scenarios
+
+3. [ ] Standardize error handling across all admin forms
    - Create error_handler utility in utils.py to:
      - Format field-specific errors consistently
      - Handle HTMX responses with proper status codes
@@ -18,16 +32,6 @@
      - Test HTMX response handling
      - Check status code consistency
 
-2. [ ] Enhance test coverage for edge cases
-   - Add test cases for:
-     - Invalid date formats (test_stipend_htmx.py)
-     - Missing required fields (test_utils.py)
-     - Boundary value testing (test_stipend_htmx.py)
-   - Verify error message consistency:
-     - Between client and server
-     - Across different HTTP methods
-     - In both HTML and JSON responses
-
 ## Knowledge & Memories
 - Windows 11 environment
 - Error Handling Implementation:
@@ -35,6 +39,10 @@
   - HTMX responses include both error messages and field-specific errors
   - Date field errors are handled with specific message mapping
   - Form errors are propagated to templates with proper status codes
+- Current Issues:
+  - Error messages not appearing in response data as expected
+  - Tests need to check for error messages in HTML structure
+  - Stipend route coverage needs improvement (36%)
 - Validation System Details:
   - Client-side (main.js):
     - Real-time validation using regex: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/
