@@ -16,7 +16,6 @@ def stipend_data():
         'application_procedure': 'Apply online at example.com',
         'eligibility_criteria': 'Open to all students',
         'application_deadline': '2023-12-31 23:59:59',  # Keep as string
-        'organization_id': 1,  # Add a mock organization ID
         'open_for_applications': True
     }
 
