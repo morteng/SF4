@@ -16,6 +16,7 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
+                {% from "_macros.html" import edit_button, delete_button %}
                 {% for bot in bots %}
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap">{{ bot.id }}</td>
@@ -23,9 +24,7 @@
                     <td class="px-6 py-4 whitespace-nowrap">{{ bot.description }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ bot.status }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        {% from "_macros.html" import edit_button %}
                         {{ edit_button(url_for('admin.bot.edit', id=bot.id), 'body > main') }}
-                        {% from "_macros.html" import delete_button %}
                         {{ delete_button(url_for('admin.bot.delete', id=bot.id), 'closest tr') }}
                     </td>
                 </tr>
