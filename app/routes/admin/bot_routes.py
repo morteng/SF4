@@ -36,6 +36,9 @@ def create():
                     ), 400
                 return render_template('admin/bots/create.html', form=form), 400
         else:
+            flash_message(FLASH_MESSAGES["CREATE_BOT_INVALID_DATA"], FLASH_CATEGORY_ERROR)
+            current_app.logger.error("Invalid data provided for bot creation")
+            
             error_messages = []
             field_errors = {}
             for field_name, errors in form.errors.items():
@@ -45,7 +48,6 @@ def create():
                     msg = format_error_message(field, error)
                     error_messages.append(msg)
                     field_errors[field_name].append(msg)
-                    flash_message(msg, FLASH_CATEGORY_ERROR)
                     current_app.logger.error(f"Form validation error: {msg}")
                     
             if is_htmx:
