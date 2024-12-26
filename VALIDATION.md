@@ -31,29 +31,28 @@
 ### Examples
 
 **Valid Inputs**:
-```json
+
 {
     "name": "My Organization",
     "description": "A great organization",
     "homepage_url": "https://example.org"
 }
-```
+
 
 **Invalid Inputs**:
-```json
+
 {
     "name": "Org@123!",  // Contains special characters
     "description": "a" * 501,  // Too long
     "homepage_url": "not-a-url"  // Invalid URL format
 }
-```
+
 
 ### Error Handling
 - Errors are displayed with the field label and error message
 - Multiple errors are separated by line breaks
 - Error messages are displayed in a consistent format:
-```html
 <div class="error-message">
     <strong>Field Label</strong>: Error message
 </div>
-```
+
