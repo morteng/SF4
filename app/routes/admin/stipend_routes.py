@@ -80,16 +80,20 @@ def create():
             error_messages = []
             for field, errors in form.errors.items():
                 for error in errors:
-                    field_label = getattr(form, field).label.text
-                    error_msg = f"{field_label}: {error}"
-                    error_messages.append(error_msg)
-                    flash_message(error_msg, FLASH_CATEGORY_ERROR)
-            
+                    # For date fields, use the error directly
+                    if field == 'application_deadline':
+                        error_messages.append(error)
+                    else:
+                        field_label = getattr(form, field).label.text
+                        error_messages.append(f"{field_label}: {error}")
+                    flash_message(error, FLASH_CATEGORY_ERROR)
+                
             if is_htmx:
                 return render_template(
                     'admin/stipends/_form.html', 
                     form=form,
-                    error_messages=error_messages
+                    error_messages=error_messages,
+                    field_errors=form.errors
                 ), 400
             return render_template('admin/stipends/create.html', form=form), 400
 

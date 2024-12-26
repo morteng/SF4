@@ -53,32 +53,33 @@ class StipendForm(FlaskForm):
     )
 
     def validate_application_deadline(self, field):
-        if field.data:
+        if not field.data:
+            return
+            
+        # Handle string input
+        if isinstance(field.data, str):
             try:
-                # Handle both string and datetime inputs
-                if isinstance(field.data, str):
-                    try:
-                        parsed_date = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-                    except ValueError:
-                        raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-                else:
-                    parsed_date = field.data
-                
-                # Validate date components
-                if parsed_date.month > 12 or parsed_date.day > 31:
-                    raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-                
-                # Ensure the date is in the future
-                if parsed_date < datetime.now():
-                    raise ValidationError('Application deadline cannot be in the past.')
-                
-                # Ensure the date is within a reasonable range
-                max_future_date = datetime.now().replace(year=datetime.now().year + 5)
-                if parsed_date > max_future_date:
-                    raise ValidationError('Application deadline cannot be more than 5 years in the future.')
-                    
-            except ValueError as e:
+                parsed_date = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
                 raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+        else:
+            parsed_date = field.data
+        
+        # Validate date components
+        try:
+            datetime(parsed_date.year, parsed_date.month, parsed_date.day, 
+                    parsed_date.hour, parsed_date.minute, parsed_date.second)
+        except ValueError:
+            raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+        
+        # Ensure the date is in the future
+        if parsed_date < datetime.now():
+            raise ValidationError('Application deadline cannot be in the past.')
+        
+        # Ensure the date is within a reasonable range
+        max_future_date = datetime.now().replace(year=datetime.now().year + 5)
+        if parsed_date > max_future_date:
+            raise ValidationError('Application deadline cannot be more than 5 years in the future.')
 
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)
