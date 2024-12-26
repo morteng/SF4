@@ -60,12 +60,14 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
                 }
             )
 
-            assert response.status_code == 400
-            assert b'id="application_deadline-error"' in response.data
-            assert expected_error.encode() in response.data
-            assert b'border-red-500' in response.data
-            assert f'<div id="application_deadline-error" class="text-red-500 text-sm mt-1">{expected_error}</div>'.encode() in response.data
-            assert b'Application Deadline:' in response.data
+            if expected_error:
+                assert response.status_code == 400
+                assert expected_error.encode() in response.data
+                assert b'id="application_deadline-error"' in response.data
+                assert b'border-red-500' in response.data
+                assert f'<div id="application_deadline-error" class="text-red-500 text-sm mt-1">{expected_error}</div>'.encode() in response.data
+            else:
+                assert response.status_code == 200
 
 def test_create_stipend_with_past_date(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():

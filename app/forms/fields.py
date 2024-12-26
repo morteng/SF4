@@ -13,6 +13,8 @@ class CustomDateTimeField(DateTimeField):
             'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
             'required': 'Date is required'
         }
+        # Initialize errors as a list
+        self.errors = []
 
     def process_formdata(self, valuelist):
         if valuelist:
