@@ -227,6 +227,36 @@ def test_create_stipend_route_with_invalid_application_deadline_format_htmx(logg
     # Assert the flash message
     assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
+def test_create_stipend_with_invalid_form_data_htmx(logged_in_admin, stipend_data, db_session):
+    # Create organization first
+    organization = Organization(name='Test Org')
+    db_session.add(organization)
+    db_session.commit()
+    
+    # Get CSRF token
+    create_response = logged_in_admin.get(url_for('admin.stipend.create'))
+    csrf_token = extract_csrf_token(create_response.data)
+    
+    # Set invalid data
+    invalid_data = stipend_data.copy()
+    invalid_data['name'] = ''  # Intentionally invalid
+    invalid_data['organization_id'] = organization.id
+    invalid_data['csrf_token'] = csrf_token
+    
+    response = logged_in_admin.post(
+        url_for('admin.stipend.create'),
+        data=invalid_data,
+        headers={'HX-Request': 'true'}
+    )
+
+    assert response.status_code == 200
+    # Check if validation error is present
+    assert b'This field is required.' in response.data, "Validation error not found in response"
+    # Verify no stipend was created
+    stipend = Stipend.query.filter_by(organization_id=organization.id).first()
+    assert stipend is None
+
+
 def test_update_stipend_route_htmx(logged_in_admin, test_stipend, db_session):
     update_response = logged_in_admin.get(url_for('admin.stipend.edit', id=test_stipend.id))
     assert update_response.status_code == 200

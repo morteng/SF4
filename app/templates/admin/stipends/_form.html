@@ -5,23 +5,32 @@
         {{ form.name.label(class_="block text-sm font-medium text-gray-700") }} 
         {{ form.name(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", size=50) }}
         {% for error in form.name.errors %}
-            <span class="text-red-600">{{ error }}</span>
+            <span class="text-red-600 text-sm">{{ error }}</span>
         {% endfor %}
     </div>
 
     <div>
         {{ form.summary.label(class_="block text-sm font-medium text-gray-700") }} 
         {{ form.summary(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", size=50) }}
+        {% for error in form.summary.errors %}
+            <span class="text-red-600 text-sm">{{ error }}</span>
+        {% endfor %}
     </div>
 
     <div>
         {{ form.description.label(class_="block text-sm font-medium text-gray-700") }} 
         {{ form.description(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", rows=3) }}
+        {% for error in form.description.errors %}
+            <span class="text-red-600 text-sm">{{ error }}</span>
+        {% endfor %}
     </div>
 
     <div>
         {{ form.application_deadline.label(class_="block text-sm font-medium text-gray-700") }} 
         {{ form.application_deadline(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", size=20) }}
+        {% for error in form.application_deadline.errors %}
+            <span class="text-red-600 text-sm">{{ error }}</span>
+        {% endfor %}
     </div>
 
     <div class="flex items-center">
