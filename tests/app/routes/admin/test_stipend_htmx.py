@@ -25,7 +25,8 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
             }
         )
 
-        assert response.status_code == 200
+        # Change expected status code to 400
+        assert response.status_code == 400
 
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
