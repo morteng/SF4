@@ -60,7 +60,7 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
         'application_procedure': stipend_data['application_procedure'],
         'eligibility_criteria': stipend_data['eligibility_criteria'],
         'application_deadline': stipend_data['application_deadline'],
-        'organization_id': stipend_data['organization_id'],
+        'organization_id': organization.id,  # Use the committed organization's ID
         'open_for_applications': stipend_data['open_for_applications'],
         'csrf_token': csrf_token
     }
