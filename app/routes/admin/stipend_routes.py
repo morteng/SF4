@@ -86,6 +86,7 @@ def edit(id):
         return redirect(url_for('admin.stipend.index'))
 
     form = StipendForm(obj=stipend)
+    is_htmx = request.headers.get('HX-Request')
 
     if request.method == 'POST' and form.validate_on_submit():
         try:
@@ -107,7 +108,7 @@ def edit(id):
             update_stipend(stipend, stipend_data, session=db.session)
             flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             
-            if request.headers.get('HX-Request'):
+            if is_htmx:
                 return render_template('admin/stipends/_stipend_row.html', stipend=stipend)
             return redirect(url_for('admin.stipend.index'))
 
@@ -117,7 +118,7 @@ def edit(id):
             flash_message(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
             return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
 
-    template = 'admin/stipends/_form.html' if request.headers.get('HX-Request') else 'admin/stipends/form.html'
+    template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/form.html'
     return render_template(template, form=form, stipend=stipend)
 
 
