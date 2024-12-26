@@ -13,7 +13,12 @@ from flask import get_flashed_messages
 import logging
 
 @pytest.fixture
-def test_data():
+def test_data(db_session):
+    # Create an organization first
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+    
     return {
         'name': "Test Stipend",
         'summary': 'This is a test stipend.',
@@ -23,7 +28,7 @@ def test_data():
         'eligibility_criteria': 'Open to all students',
         'application_deadline': datetime.strptime('2023-12-31 23:59:59', '%Y-%m-%d %H:%M:%S'),
         'open_for_applications': True,
-        'organization_id': 1  # Add this required field
+        'organization_id': org.id  # Add this required field
     }
 
 @pytest.fixture

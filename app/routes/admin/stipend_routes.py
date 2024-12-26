@@ -23,6 +23,11 @@ def create():
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')
     
+    # Ensure at least one organization exists
+    if not Organization.query.first():
+        flash_message("You must create an organization before creating a stipend.", FLASH_CATEGORY_ERROR)
+        return redirect(url_for('admin.organization.create'))
+
     if form.validate_on_submit():
         try:
             # Create a copy of form data and remove unnecessary fields

@@ -23,12 +23,16 @@ class StipendForm(FlaskForm):
     )
     organization_id = SelectField('Organization', validators=[DataRequired()], coerce=int, choices=[])
 
+    open_for_applications = BooleanField('Open for Applications', default=False)
+    submit = SubmitField('Create')
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Populate organization choices
-        self.organization_id.choices = [(org.id, org.name) for org in Organization.query.all()]
-    open_for_applications = BooleanField('Open for Applications', default=False)
-    submit = SubmitField('Create')
+        self.organization_id.choices = [(org.id, org.name) for org in Organization.query.order_by(Organization.name).all()]
+        # Set default organization if only one exists
+        if len(self.organization_id.choices) == 1:
+            self.organization_id.data = self.organization_id.choices[0][0]
 
     def validate_application_deadline(self, field):
         if field.data == '':
