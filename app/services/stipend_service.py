@@ -58,7 +58,13 @@ def create_stipend(stipend_data, session=db.session):
                         stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
                     )
                 except ValueError:
-                    raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.")
+                    # Try alternative format if first attempt fails
+                    try:
+                        stipend_data['application_deadline'] = datetime.strptime(
+                            stipend_data['application_deadline'], '%Y-%m-%d %H:%M'
+                        )
+                    except ValueError:
+                        raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS or YYYY-MM-DD HH:MM.")
             elif stipend_data['application_deadline'] is None:
                 # Explicitly set to None if it's already None
                 stipend_data['application_deadline'] = None

@@ -35,13 +35,17 @@ class StipendForm(FlaskForm):
         try:
             # Convert string to datetime if needed
             if isinstance(field.data, str):
-                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-            
+                try:
+                    field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+                except ValueError:
+                    # Try alternative format if first attempt fails
+                    field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M')
+        
             # Ensure date is not in the past
             if field.data and field.data < datetime.now():
                 raise ValidationError('Application deadline cannot be in the past.')
-        except ValueError:
-            raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
+        except ValueError as e:
+            raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS or YYYY-MM-DD HH:MM.')
 
 
 class TagForm(FlaskForm):
