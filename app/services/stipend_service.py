@@ -65,6 +65,7 @@ def create_stipend(stipend_data, session=db.session):
                     raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
         
         # Fetch the organization
+        organization_id = stipend_data['organization_id']
         organization = session.get(Organization, organization_id)
         if not organization:
             print(f"[DEBUG] Invalid organization ID: {organization_id}")
