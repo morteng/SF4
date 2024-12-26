@@ -116,7 +116,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
     assert update_response.status_code == 200
     csrf_token = extract_csrf_token(update_response.data)
 
-    # Prepare updated data
+    # Prepare updated data with correct format for boolean field
     updated_data = {
         'name': 'Updated Stipend',
         'summary': test_stipend.summary,
@@ -125,8 +125,8 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'application_procedure': test_stipend.application_procedure,
         'eligibility_criteria': test_stipend.eligibility_criteria,
         'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if test_stipend.application_deadline else '',
-        'organization_id': test_stipend.organization_id,
-        'open_for_applications': True,
+        'organization_id': str(test_stipend.organization_id),  # Convert to string
+        'open_for_applications': 'y',  # Changed from True to 'y'
         'csrf_token': csrf_token
     }
 
