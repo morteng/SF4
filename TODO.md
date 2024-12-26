@@ -1,18 +1,11 @@
 # TODO List
 
 ## Current Goals
-1. [ ] Improve test coverage for stipend routes (currently 36%)
-   - Add test cases in test_stipend_htmx.py for:
-     * Successful stipend creation (test_create_stipend_success)
-     * Missing required fields (test_create_stipend_missing_fields)
-     * Boundary value testing (test_create_stipend_boundary_values)
-     * HTMX response handling (test_create_stipend_htmx_response)
-   - Verify error message consistency across all scenarios
-   - Steps:
-     a. Create new test functions in test_stipend_htmx.py
-     b. Test both HTML and JSON responses
-     c. Verify proper status codes (200, 400)
-     d. Check error message formatting in responses
+1. [x] Improve error handling in stipend routes
+   - Updated error handling in stipend_routes.py
+   - Added field-specific error rendering
+   - Improved date validation error messages
+   - Ensured consistent HTMX response format
 
 2. [ ] Standardize error handling across all admin forms
    - Create error_handler utility in utils.py to:
@@ -33,6 +26,12 @@
      c. Add test cases in test_utils.py
      d. Verify error handling in all admin forms
 
+3. [ ] Update test cases for error handling
+   - Modify test_stipend_htmx.py to match new error format
+   - Add more edge case tests for date validation
+   - Verify error message rendering in templates
+   - Test error persistence across form submissions
+
 ## Knowledge & Memories
 - Windows 11 environment
 - Error Handling Implementation:
@@ -40,6 +39,7 @@
   * HTMX responses include both error messages and field-specific errors
   * Date field errors are handled with specific message mapping
   * Form errors are propagated to templates with proper status codes
+  * Error messages now rendered in specific HTML structure for better testability
 - Validation System Details:
   * Client-side (main.js):
     - Real-time validation using regex: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/
@@ -64,4 +64,5 @@
     - Error message element presence (#application_deadline-error)
     - Form field focus after error display
     - Error message persistence across form submissions
+    - Verify error messages appear in correct HTML structure
 
