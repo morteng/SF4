@@ -111,10 +111,12 @@ def test_create_stipend_route_with_invalid_application_deadline_format(logged_in
     assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
 def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
+    # Get the edit page to extract CSRF token
     update_response = logged_in_admin.get(url_for('admin.stipend.edit', id=test_stipend.id))
     assert update_response.status_code == 200
-
     csrf_token = extract_csrf_token(update_response.data)
+
+    # Prepare updated data
     updated_data = {
         'name': 'Updated Stipend',
         'summary': test_stipend.summary,
@@ -124,18 +126,28 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'eligibility_criteria': test_stipend.eligibility_criteria,
         'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if test_stipend.application_deadline else '',
         'organization_id': test_stipend.organization_id,
-        'open_for_applications': True,  # Changed to boolean
+        'open_for_applications': True,  # Ensure boolean value
         'csrf_token': csrf_token
     }
+
+    # Submit the update request (without follow_redirects)
+    response = logged_in_admin.post(
+        url_for('admin.stipend.edit', id=test_stipend.id),
+        data=updated_data
+    )
     
-    response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data)
+    # Verify the response redirects
     assert response.status_code == 302
-    
+
+    # Follow the redirect to verify the final result
     redirect_response = logged_in_admin.get(response.location)
     assert redirect_response.status_code == 200
-    
+
+    # Verify the stipend was updated
     updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
     assert updated_stipend.name == 'Updated Stipend'
+
+    # Verify the success flash message
     assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in redirect_response.data
 
 def test_delete_stipend_route(logged_in_admin, test_stipend, db_session):
