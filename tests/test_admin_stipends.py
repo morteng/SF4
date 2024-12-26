@@ -200,6 +200,27 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertIn(b'This field is required.', response.data)
         self.assertIn(b'Invalid URL.', response.data)  # Ensure this matches the expected error message
 
+    def test_create_stipend_with_invalid_organization(self):
+        # Log in as admin
+        response = self.login('admin', 'password')
+        self.assertEqual(response.status_code, 200)
+
+        # Attempt to create a stipend with an invalid organization ID
+        response = self.client.post(url_for('admin.stipend.create'), data={
+            'name': 'Test Stipend',
+            'summary': 'This is a test stipend.',
+            'description': 'Detailed description of the test stipend.',
+            'homepage_url': 'http://example.com/stipend',
+            'application_procedure': 'Send an email to admin@example.com',
+            'eligibility_criteria': 'Must be a student.',
+            'application_deadline': datetime(2023, 12, 31, 23, 59, 59).strftime('%Y-%m-%d %H:%M:%S'),
+            'organization_id': 9999,  # Invalid organization ID
+            'open_for_applications': 'y'
+        }, follow_redirects=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Invalid organization selected.', response.data)
+
     def test_unauthorized_access(self):
         # Create a non-admin user
         user = User(username='user', email='user@example.com')

@@ -50,14 +50,16 @@ class StipendForm(FlaskForm):
         except ValueError:
             raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
 
+    def validate_organization_id(self, field):
+        if not field.data:
+            raise ValidationError('Organization is required.')
+        organization = Organization.query.get(field.data)
+        if not organization:
+            raise ValidationError('Invalid organization selected.')
+
     def validate(self, extra_validators=None):
         if not super().validate(extra_validators):
             return False
-            
-        if not self.organization_id.data:
-            self.organization_id.errors.append('This field is required.')
-            return False
-            
         return True
 
 
