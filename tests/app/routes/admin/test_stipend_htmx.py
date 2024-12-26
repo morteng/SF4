@@ -48,7 +48,7 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
             )
 
             assert response.status_code == 400
-            assert expected_error.encode() in response.data
+            assert f'<div id="application_deadline-error">{expected_error}</div>'.encode() in response.data
             assert b'application_deadline' in response.data
             assert b'is-invalid' in response.data
             # Verify error message appears in the form

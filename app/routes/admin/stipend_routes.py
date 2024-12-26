@@ -78,10 +78,12 @@ def create():
                 return render_template('admin/stipends/create.html', form=form), 400
         else:
             error_messages = []
+            field_errors = {}
             for field, errors in form.errors.items():
-                if field == 'application_deadline':
-                    # Handle date-specific errors
-                    for error in errors:
+                field_errors[field] = []
+                for error in errors:
+                    if field == 'application_deadline':
+                        # Handle date-specific errors
                         if 'invalid_format' in error:
                             msg = 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
                         elif 'invalid_date' in error:
@@ -98,8 +100,13 @@ def create():
                             msg = 'Application deadline cannot be more than 5 years in the future'
                         else:
                             msg = error
-                        error_messages.append(msg)
-                        flash_message(msg, FLASH_CATEGORY_ERROR)
+                    else:
+                        field_label = getattr(form, field).label.text
+                        msg = f"{field_label}: {error}"
+                    
+                    error_messages.append(msg)
+                    field_errors[field].append(msg)
+                    flash_message(msg, FLASH_CATEGORY_ERROR)
                 else:
                     field_label = getattr(form, field).label.text
                     for error in errors:

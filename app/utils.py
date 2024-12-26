@@ -37,6 +37,21 @@ def init_admin_user():
 def format_error_message(field, error):
     """Format error messages consistently for both HTMX and regular requests"""
     if field == 'application_deadline':
+        # Handle date-specific errors
+        if 'invalid_format' in error:
+            return 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
+        elif 'invalid_date' in error:
+            return 'Invalid date values (e.g., Feb 30)'
+        elif 'invalid_time' in error:
+            return 'Invalid time values (e.g., 25:61:61)'
+        elif 'missing_time' in error:
+            return 'Time is required. Please use YYYY-MM-DD HH:MM:SS'
+        elif 'required' in error:
+            return 'Date is required'
+        elif 'cannot be in the past' in error:
+            return 'Application deadline must be a future date'
+        elif 'cannot be more than 5 years' in error:
+            return 'Application deadline cannot be more than 5 years in the future'
         return error
     return f"{field}: {error}"
 
