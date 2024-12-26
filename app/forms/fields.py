@@ -32,24 +32,14 @@ class CustomDateTimeField(DateTimeField):
             elif 'does not match format' in error_str:
                 self.errors.append(self.error_messages['invalid_format'])
             else:
-                # Check if it's an invalid date or time
-                parts = date_str.split()
-                if len(parts) >= 1:
-                    try:
-                        # Try parsing just the date portion
-                        datetime.strptime(parts[0], '%Y-%m-%d')
-                        # If date is valid, check time portion
-                        if len(parts) > 1:
-                            try:
-                                datetime.strptime(parts[1], '%H:%M:%S')
-                                # If both date and time parse but still error, it's an invalid date/time combination
-                                self.errors.append(self.error_messages['invalid_date'])
-                            except ValueError:
-                                self.errors.append(self.error_messages['invalid_time'])
-                        else:
-                            self.errors.append(self.error_messages['missing_time'])
-                    except ValueError:
-                        self.errors.append(self.error_messages['invalid_date'])
+                # Handle invalid date/time values
+                try:
+                    # Try parsing just the date portion
+                    datetime.strptime(date_str.split()[0], '%Y-%m-%d')
+                    # If date is valid, it must be an invalid time
+                    self.errors.append(self.error_messages['invalid_time'])
+                except ValueError:
+                    self.errors.append(self.error_messages['invalid_date'])
 
     def _value(self):
         if self.raw_data:
