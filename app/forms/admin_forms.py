@@ -57,6 +57,13 @@ class StipendForm(FlaskForm):
         if not field.data:
             raise ValidationError('Date is required')
             
+        # Handle string input
+        if isinstance(field.data, str):
+            try:
+                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+
         # Validate future date
         now = datetime.now()
         if field.data < now:
@@ -66,6 +73,15 @@ class StipendForm(FlaskForm):
         max_future = now.replace(year=now.year + 5)
         if field.data > max_future:
             raise ValidationError('Application deadline cannot be more than 5 years in the future')
+
+        # Validate individual components
+        try:
+            # Check valid date
+            field.data.replace(hour=0, minute=0, second=0)
+            # Check valid time
+            field.data.time()
+        except ValueError as e:
+            raise ValidationError(f'Invalid date/time values: {str(e)}')
 
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)

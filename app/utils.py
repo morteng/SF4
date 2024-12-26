@@ -43,22 +43,36 @@ def format_error_message(field, error):
     # Handle date-specific errors
     if field_name == 'application_deadline':
         error_str = str(error)
+        # Format validation errors
         if 'does not match format' in error_str or 'invalid-date' in error_str:
             return 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
+        # Date component errors
         elif 'Invalid month value' in error_str or 'month is out of range' in error_str:
-            return 'Invalid date values (e.g., Feb 30)'
+            return 'Invalid month value (1-12)'
         elif 'Invalid day value' in error_str or 'day is out of range' in error_str:
-            return 'Invalid date values (e.g., Feb 30)'
-        elif 'Invalid hour value' in error_str or 'Invalid minute value' in error_str or 'Invalid second value' in error_str:
-            return 'Invalid time values (e.g., 25:61:61)'
+            return 'Invalid day for month'
+        elif 'Invalid year value' in error_str:
+            return 'Invalid year value'
+        # Time component errors
+        elif 'Invalid hour value' in error_str:
+            return 'Invalid hour value (0-23)'
+        elif 'Invalid minute value' in error_str:
+            return 'Invalid minute value (0-59)'
+        elif 'Invalid second value' in error_str:
+            return 'Invalid second value (0-59)'
+        # Date range errors
         elif 'must be a future date' in error_str:
             return 'Application deadline must be a future date'
         elif 'cannot be more than 5 years' in error_str:
             return 'Application deadline cannot be more than 5 years in the future'
+        # Required field errors
         elif 'Time is required' in error_str:
             return 'Time is required. Please use YYYY-MM-DD HH:MM:SS'
         elif 'Date is required' in error_str:
             return 'Date is required'
+        # General date/time errors
+        elif 'Invalid date/time values' in error_str:
+            return 'Invalid date/time values'
         # Remove field label prefix for HTMX responses
         return str(error).replace('Application Deadline: ', '')
     

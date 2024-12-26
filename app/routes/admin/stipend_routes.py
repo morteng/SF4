@@ -85,21 +85,31 @@ def create():
             current_app.logger.debug(f"Form validation failed: {form.errors}")
             error_messages = []
             field_errors = {}
+            
+            # Process all field errors
             for field_name, errors in form.errors.items():
                 field = getattr(form, field_name)
-                formatted_errors = [format_error_message(field, error) for error in errors]
+                formatted_errors = []
+                
+                for error in errors:
+                    # Format error message consistently
+                    msg = format_error_message(field, error)
+                    formatted_errors.append(msg)
+                    error_messages.append(msg)
+                    flash_message(msg, FLASH_CATEGORY_ERROR)
+                
+                # Store field-specific errors
                 field_errors[field_name] = formatted_errors
-                error_messages.extend(formatted_errors)
-                for error in formatted_errors:
-                    flash_message(error, FLASH_CATEGORY_ERROR)
-                    
+                
             if is_htmx:
-                # Ensure application_deadline errors are properly formatted
+                # Special handling for application_deadline errors
                 if 'application_deadline' in field_errors:
                     field_errors['application_deadline'] = [
-                        error.replace('Application Deadline: ', '') 
+                        error.replace('Application Deadline: ', '')
                         for error in field_errors['application_deadline']
                     ]
+                
+                # Return HTMX response with proper error structure
                 
                 return render_template(
                     'admin/stipends/_form.html',
