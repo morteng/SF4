@@ -31,7 +31,7 @@
     <ul class="pagination flex justify-center items-center space-x-2">
         {% if stipends.has_prev %}
             <li>
-                <a href="#" hx-get="{{ url_for('admin.stipend.paginate', page=stipends.prev_num) }}" hx-target="#stipends-pagination" hx-swap="innerHTML" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
+                <a href="#" hx-get="{{ url_for('admin.stipend.paginate', page=stipends.prev_num) }}" hx-target="#stipends-table" hx-swap="innerHTML" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
                     Previous
                 </a>
             </li>
@@ -45,7 +45,7 @@
         
         {% if stipends.has_next %}
             <li>
-                <a href="#" hx-get="{{ url_for('admin.stipend.paginate', page=stipends.next_num) }}" hx-target="#stipends-pagination" hx-swap="innerHTML" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
+                <a href="#" hx-get="{{ url_for('admin.stipend.paginate', page=stipends.next_num) }}" hx-target="#stipends-table" hx-swap="innerHTML" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
                     Next
                 </a>
             </li>
