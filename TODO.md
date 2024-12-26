@@ -23,6 +23,11 @@
 13. Verify validation error messages are specific and helpful
 14. Test for proper handling of invalid date formats
 15. Ensure error messages are visible in both full page and HTMX responses
+16. Test error message formatting and visibility in templates
+17. Verify error messages are properly propagated from form validation to templates
+18. Test both client-side and server-side validation
+19. Verify error messages are user-friendly and specific
+20. Test validation for all form fields, not just required fields
 
 ## Things to remember about coding
 1. Keep HTMX and non-HTMX logic separate and explicit
@@ -43,12 +48,16 @@
 16. Ensure error messages are properly formatted for display in templates
 17. Use consistent error message formatting across all forms
 18. Add proper error handling for invalid date formats in forms
+19. Implement both client-side and server-side validation
+20. Use descriptive error messages that guide users to correct input
 
 ## Current Issues
 1. [ ] Fix HTMX error message rendering for invalid date formats
    - Ensure error messages appear in HTMX responses
    - Verify proper error message formatting in templates
    - Test with various invalid date formats
+   - Ensure error messages are specific and helpful
+   - Verify error message visibility in both full page and HTMX responses
 
 2. [ ] Add comprehensive date validation tests
    - Test past dates
@@ -57,28 +66,38 @@
    - Test edge cases (leap years, month/day boundaries)
    - Test empty date fields
    - Test valid date formats
+   - Test both client-side and server-side validation
+   - Verify error messages for each test case
 
 3. [ ] Improve error message handling in forms
    - Ensure consistent error message display across all forms
    - Verify error messages are properly formatted for display
    - Test error message propagation in both HTMX and non-HTMX responses
+   - Implement user-friendly error messages
+   - Ensure error messages guide users to correct input
 
 4. [ ] Update form validation to handle edge cases
    - Add specific validation for date fields
    - Ensure proper error messages for invalid inputs
    - Test validation with various edge cases
+   - Implement both client-side and server-side validation
+   - Add validation for all form fields, not just required fields
 
 ## Specific Tasks
 1. Verify template error rendering:
    - Check admin/stipends/_form.html template
    - Add error message display section if missing
    - Test with invalid inputs to verify error visibility
+   - Ensure error messages are properly formatted
+   - Verify error message visibility in both full page and HTMX responses
 
 2. Add datetime validation test cases:
    - Add test cases for past dates
    - Add test cases for far future dates
    - Add test cases for invalid formats
    - Add test cases for edge cases
+   - Add test cases for both client-side and server-side validation
+   - Verify error messages for each test case
 
 ## Knowledge & Memories
 - Fixed datetime validation in StipendForm to handle string inputs
@@ -86,4 +105,6 @@
 - Confirmed proper CSRF token handling in HTMX requests
 - Added debug logging for template verification
 - Improved error handling for invalid date formats
+- Implemented both client-side and server-side validation
+- Added user-friendly error messages for date validation
 
