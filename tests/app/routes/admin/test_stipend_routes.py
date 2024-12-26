@@ -130,23 +130,33 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'csrf_token': csrf_token
     }
 
-    # Submit the update request with HTMX header
-    response = logged_in_admin.post(
+    # Test HTMX case
+    htmx_response = logged_in_admin.post(
         url_for('admin.stipend.edit', id=test_stipend.id),
         data=updated_data,
         headers={'HX-Request': 'true'}
     )
-    
-    # Verify the HTMX response
-    assert response.status_code == 200
-    assert b'<tr hx-target="this" hx-swap="outerHTML">' in response.data
+    assert htmx_response.status_code == 200
+    assert b'<tr hx-target="this" hx-swap="outerHTML">' in htmx_response.data
+
+    # Test non-HTMX case
+    non_htmx_response = logged_in_admin.post(
+        url_for('admin.stipend.edit', id=test_stipend.id),
+        data=updated_data
+    )
+    assert non_htmx_response.status_code == 302
+    assert non_htmx_response.location.endswith(url_for('admin.stipend.index'))
+
+    # Follow the redirect for non-HTMX case
+    final_response = logged_in_admin.get(non_htmx_response.location)
+    assert final_response.status_code == 200
 
     # Verify the stipend was updated
     updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
     assert updated_stipend.name == 'Updated Stipend'
 
     # Verify the success flash message
-    assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
+    assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in final_response.data
 
 def test_delete_stipend_route(logged_in_admin, test_stipend, db_session):
     response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id), follow_redirects=True)
