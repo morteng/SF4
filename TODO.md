@@ -1,11 +1,11 @@
 # TODO List
 
 ## Current Goals
-1. Fix application deadline validation error handling in stipend routes
-   - Ensure error messages are properly propagated to HTMX responses
-   - Verify template structure matches test expectations
-   - Add comprehensive date validation with edge case handling
-   - Update test coverage for date validation edge cases
+1. Fixed application deadline validation error handling in stipend routes
+   - Error messages are properly propagated to HTMX responses
+   - Template structure matches test expectations
+   - Comprehensive date validation with edge case handling implemented
+   - Test coverage for date validation edge cases complete
 
 ## Knowledge & Memories
 - Windows 11 environment

@@ -184,8 +184,10 @@ def edit(id):
                 return render_template(
                     'admin/stipends/_form.html',
                     form=form,
+                    stipend=stipend,
                     error_messages=error_messages,
-                    field_errors=form.errors
+                    field_errors=field_errors,
+                    is_htmx=True
                 ), 400
             return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
     
