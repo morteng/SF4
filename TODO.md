@@ -25,13 +25,15 @@
     - Added comprehensive date validation logic in StipendForm
     - Improved error message propagation in stipend routes
     - Ensured proper error container structure in templates
+    - Fixed datetime validation to handle both string and datetime inputs
 - Validation System Details:
   * Client-side (main.js):
     - Real-time validation using regex: /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/
     - Component validation for date/time ranges
     - Error display in #date-error div with is-invalid class
   * Server-side (StipendForm):
-    - Uses datetime.strptime with format '%Y-%m-%d %H:%M:%S'
+    - Handles both string and datetime inputs
+    - Uses datetime.strptime with format '%Y-%m-%d %H:%M:%S' for string inputs
     - Comprehensive validation including:
       * Date component validation (year, month, day, hour, minute, second)
       * Future date validation: datetime.now() comparison
