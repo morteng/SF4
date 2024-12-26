@@ -62,7 +62,7 @@ class StipendForm(FlaskForm):
         elif field.data is None:
             field.data = False
         # Ensure the field data is properly set in the form
-        self.open_for_applications.data = field.data
+        self.open_for_applications.data = bool(field.data)
 
     def validate_organization_id(self, field):
         if not field.data:
