@@ -36,10 +36,7 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
 
 def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
-        # Set invalid date format
         stipend_data['application_deadline'] = '2023-13-32 99:99:99'
-        
-        # Make the request
         response = logged_in_admin.post(
             url_for('admin.stipend.create'),
             data=stipend_data,
@@ -49,14 +46,11 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
             }
         )
 
-        # Verify response
         assert response.status_code == 200
-        
-        # Check that no stipend was created
+
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is None
 
-        # Verify the error message is in the response
-        assert b'Application Deadline: Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data, \
-            "Expected error message not found in response"
+        # Check for the specific error message in the response
+        assert b'Application Deadline: Invalid date format. Please use YYYY-MM-DD HH:MM:SS.' in response.data
 
