@@ -1,11 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, PasswordField
+from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, PasswordField, HiddenField
 from wtforms.validators import DataRequired, Length, Optional, ValidationError, Email, URL, Regexp  # Add URL and Regexp here
 from app.models.organization import Organization
 from app.forms.fields import CustomDateTimeField
 from app.models.tag import Tag
 from app.models.user import User
 from app.models.bot import Bot
+
 
 class StipendForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
@@ -19,6 +20,7 @@ class StipendForm(FlaskForm):
         format='%Y-%m-%d %H:%M:%S',
         validators=[Optional()]
     )
+    organization_id = HiddenField('Organization ID')
     open_for_applications = BooleanField('Open for Applications', default=False)
     submit = SubmitField('Create')
 
@@ -26,19 +28,6 @@ class StipendForm(FlaskForm):
         if field.raw_data and field.raw_data[0] and field.data is None:
             raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
 
-    def validate_name(self, name):
-        if not name.
-            raise ValidationError('This field is required.')
-
-    def process_data(self, data):
-        super().process_data(data)
-        if 'open_for_applications' in 
-            if data['open_for_applications'] == '0':
-                self.open_for_applications.data = False
-            elif data['open_for_applications'] == '1':
-                self.open_for_applications.data = True
-            else:
-                self.open_for_applications.data = bool(data['open_for_applications'])
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=100)])
@@ -50,17 +39,12 @@ class TagForm(FlaskForm):
         self.original_name = original_name
 
     def validate_name(self, name):
-        if not name.
-            raise ValidationError('Name cannot be empty.')
         if self.original_name and name.data == self.original_name:
             return  # Skip validation if the name hasn't changed
         tag = Tag.query.filter_by(name=name.data).first()
         if tag:
             raise ValidationError('Tag with this name already exists.')
 
-    def validate_category(self, category):
-        if not category.
-            raise ValidationError('Category cannot be empty.')
 
 class UserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(max=100)])
@@ -86,12 +70,11 @@ class UserForm(FlaskForm):
             if user is not None:
                 raise ValidationError('Please use a different email address.')
 
-from wtforms.validators import InputRequired
 
 class BotForm(FlaskForm):
 
-    name = StringField('Name', validators=[InputRequired(), Length(max=100)])
-    description = TextAreaField('Description', validators=[InputRequired(), Length(max=500)])
+    name = StringField('Name', validators=[DataRequired(), Length(max=100)])
+    description = TextAreaField('Description', validators=[DataRequired(), Length(max=500)])
     status = BooleanField('Status', default=False)
     submit = SubmitField('Create')
 
@@ -104,11 +87,6 @@ class BotForm(FlaskForm):
             bot = Bot.query.filter_by(name=name.data).first()
             if bot:
                 raise ValidationError('Bot with this name already exists.')
-    
-    def validate_status(self, field):
-        # Directly use field.data for BooleanField, it will be a Python boolean
-        if not isinstance(field.data, bool):
-            raise ValidationError("Invalid value for status. It must be a boolean.")
 
 
 class OrganizationForm(FlaskForm):
