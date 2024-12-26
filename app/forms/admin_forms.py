@@ -62,7 +62,14 @@ class StipendForm(FlaskForm):
             if isinstance(field.data, str):
                 if len(field.data.strip()) == 0:
                     raise ValidationError('Date is required')
-                dt = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+                try:
+                    dt = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+                except ValueError as e:
+                    if 'does not match format' in str(e):
+                        raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+                    elif 'unconverted data remains' in str(e):
+                        raise ValidationError('Time is required. Please use YYYY-MM-DD HH:MM:SS')
+                    raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
             else:
                 dt = field.data
                 
@@ -102,16 +109,11 @@ class StipendForm(FlaskForm):
             
         except ValueError as e:
             error_str = str(e)
-            if 'does not match format' in error_str:
-                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-            elif 'unconverted data remains' in error_str:
-                raise ValidationError('Time is required. Please use YYYY-MM-DD HH:MM:SS')
-            elif 'day is out of range' in error_str or 'month is out of range' in error_str:
+            if 'day is out of range' in error_str or 'month is out of range' in error_str:
                 raise ValidationError('Invalid date values (e.g., Feb 30)')
             elif 'time data' in error_str:
                 raise ValidationError('Invalid time values (e.g., 25:61:61)')
-            else:
-                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+            raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
 
     organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
     open_for_applications = BooleanField('Open for Applications', default=False)
