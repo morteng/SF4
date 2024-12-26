@@ -1,11 +1,17 @@
 # TODO List
 
 ## Current Goals
-1. Ensure comprehensive test coverage for stipend form validation
-   - Add test cases for all date validation scenarios in StipendForm
-   - Verify error messages match expected values
-   - Test both HTMX and regular form submissions
-   - Test edge cases (leap years, month/day combinations)
+1. Implement comprehensive test coverage for all form validation
+   - Add test cases for all validation scenarios in StipendForm, TagForm, UserForm, BotForm, and OrganizationForm
+   - Verify error messages match expected values across all forms
+   - Test both HTMX and regular form submissions for all forms
+   - Test edge cases for all field types (dates, URLs, text lengths, etc.)
+
+2. Document validation rules and error handling patterns
+   - Add documentation for all form validation rules
+   - Include examples of valid/invalid inputs for each field type
+   - Document error message formats and handling patterns
+   - Add to project documentation in PROJECT.md
 
 ## Knowledge & Memories
 - Windows 11 environment
@@ -20,46 +26,51 @@
     - Comprehensive date validation with edge case handling
     - Consistent error container structure (#<field_name>-error)
 
-- Stipend Route Specifics:
-  * Error handling returns 400 status code for invalid data
-  * Form validation errors are properly propagated
-  * HTMX responses have proper error container structure
-  * Error messages match between client and server
+- Form Validation Patterns:
+  * All forms use consistent validation patterns
+  * CustomDateTimeField handles all date/time validation cases
+  * URL fields validate proper URL format and protocols
+  * Text fields have consistent length validation
+  * Unique field validation (username, email, etc.) implemented consistently
+
+- Template Structure:
+  * Error messages displayed in div with id="<field_name>-error"
+  * Each error wrapped in div with class="error-message"
+  * Flash messages displayed in #flash-messages container
+  * Consistent styling using Tailwind CSS classes
 
 ## Implementation Details
-1. For stipend route error handling:
-   - StipendForm in admin_forms.py properly validates application_deadline
-   - stipend_routes.py propagates errors correctly in HTMX responses
-   - Template structure in admin/stipends/_form.html is correct
-   - field_errors are properly passed to template
-   - Error message rendering in template is consistent
+1. For form error handling:
+   - All forms properly validate their fields
+   - Routes propagate errors correctly in HTMX responses
+   - Template structure in _form.html is consistent across all forms
+   - field_errors are properly passed to templates
+   - Error message rendering in templates is consistent
 
-## New Memories
-- Completed implementation of application deadline validation
-- CustomDateTimeField handles all date/time validation cases
-- StipendForm.validate_application_deadline() includes comprehensive validation
-- Error messages are properly formatted and displayed in template
-- HTMX responses handle validation errors correctly
+2. For date validation:
+   - StipendForm.validate_application_deadline() includes comprehensive validation
+   - CustomDateTimeField handles all date/time validation cases
+   - Error messages are properly formatted and displayed in template
+   - HTMX responses handle validation errors correctly
 
 ## Specific Tasks
-1. Add comprehensive test coverage:
-   - Add test cases for all date validation scenarios
+1. Add test coverage for all forms:
+   - Create test files for each form type
+   - Add test cases for all validation scenarios
    - Verify error messages match expected values
    - Test both HTMX and regular form submissions
-   - Test edge cases (leap years, month/day combinations)
-   - Test future date validation (must be future but not more than 5 years)
-   - Test time component validation (hours, minutes, seconds)
-   - Test invalid date combinations (e.g., Feb 30)
+   - Test edge cases for each field type
 
 2. Document validation rules:
-   - Add documentation for date/time validation rules
-   - Include examples of valid/invalid dates
+   - Create VALIDATION.md documentation file
+   - Document validation rules for each field type
+   - Include examples of valid/invalid inputs
    - Document error message formats
    - Add to project documentation in PROJECT.md
 
 3. Review error handling consistency:
    - Verify consistent error handling across all forms
-   - Ensure all forms use CustomDateTimeField for date fields
+   - Ensure all forms use proper field types (CustomDateTimeField for dates, etc.)
    - Check error message formatting in all templates
    - Verify HTMX error handling in all routes
 
