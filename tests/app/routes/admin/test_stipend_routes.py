@@ -122,18 +122,27 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
         'homepage_url': test_stipend.homepage_url,
         'application_procedure': test_stipend.application_procedure,
         'eligibility_criteria': test_stipend.eligibility_criteria,
-        'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if isinstance(test_stipend.application_deadline, datetime) else test_stipend.application_deadline,  # Changed this line
+        'application_deadline': test_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') if isinstance(test_stipend.application_deadline, datetime) else test_stipend.application_deadline,
         'organization_id': test_stipend.organization_id,
         'open_for_applications': test_stipend.open_for_applications,
         'csrf_token': csrf_token
-   }
-    response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data, follow_redirects=True)
-
+    }
+    
+    # Remove follow_redirects=True to test the redirect response
+    response = logged_in_admin.post(url_for('admin.stipend.edit', id=test_stipend.id), data=updated_data)
+    
+    # Now we expect a 302 redirect
     assert response.status_code == 302
+    
+    # Follow the redirect to verify the final result
+    redirect_response = logged_in_admin.get(response.location)
+    assert redirect_response.status_code == 200
+    
     updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
     assert updated_stipend.name == 'Updated Stipend'
-    # Assert the flash message
-    assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
+    
+    # Assert the flash message in the redirected response
+    assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in redirect_response.data
 
 def test_delete_stipend_route(logged_in_admin, test_stipend, db_session):
     response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id), follow_redirects=True)
