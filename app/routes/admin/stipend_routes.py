@@ -89,33 +89,33 @@ def create():
                 return render_template('admin/stipends/create.html', form=form), 400
         else:
             # Handle form validation errors
-        for field, errors in form.errors.items():
-            for error in errors:
-                # Special handling for date field errors
-                if field == 'application_deadline':
-                    if 'Not a valid datetime value' in error:
-                        error_msg = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS"
-                    elif 'cannot be in the past' in error:
-                        error_msg = "Application deadline must be a future date"
-                    elif 'cannot be more than 5 years' in error:
-                        error_msg = "Application deadline cannot be more than 5 years in the future"
+            for field, errors in form.errors.items():
+                for error in errors:
+                    # Special handling for date field errors
+                    if field == 'application_deadline':
+                        if 'Not a valid datetime value' in error:
+                            error_msg = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS"
+                        elif 'cannot be in the past' in error:
+                            error_msg = "Application deadline must be a future date"
+                        elif 'cannot be more than 5 years' in error:
+                            error_msg = "Application deadline cannot be more than 5 years in the future"
+                        else:
+                            error_msg = f"Invalid date: {error}"
+                        
+                        if is_htmx:
+                            return render_template_string(error_msg), 400
+                        flash_message(error_msg, FLASH_CATEGORY_ERROR)
                     else:
-                        error_msg = f"Invalid date: {error}"
-                    
-                    if is_htmx:
-                        return render_template_string(error_msg), 400
-                    flash_message(error_msg, FLASH_CATEGORY_ERROR)
-                else:
-                    # Include the field label in the error message
-                    field_label = getattr(form, field).label.text
-                    error_msg = f"{field_label}: {error}"
-                    if is_htmx:
-                        return render_template_string(error_msg), 400
-                    flash_message(error_msg, FLASH_CATEGORY_ERROR)
-        
-        if is_htmx:
-            return render_template_string("Invalid form data"), 400
-        return render_template('admin/stipends/create.html', form=form), 400
+                        # Include the field label in the error message
+                        field_label = getattr(form, field).label.text
+                        error_msg = f"{field_label}: {error}"
+                        if is_htmx:
+                            return render_template_string(error_msg), 400
+                        flash_message(error_msg, FLASH_CATEGORY_ERROR)
+            
+            if is_htmx:
+                return render_template_string("Invalid form data"), 400
+            return render_template('admin/stipends/create.html', form=form), 400
 
     return render_template('admin/stipends/create.html', form=form)
 
