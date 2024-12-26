@@ -35,18 +35,18 @@ class StipendForm(FlaskForm):
         try:
             # Convert string to datetime if needed
             if isinstance(field.data, str):
-                # Try multiple formats
-                for fmt in ('%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M', '%Y-%m-%d'):
-                    try:
-                        field.data = datetime.strptime(field.data, fmt)
-                        break
-                    except ValueError:
-                        continue
-                else:
-                    # If none of the formats worked, try parsing as is
-                    try:
-                        field.data = datetime.fromisoformat(field.data)
-                    except ValueError:
+                # Try the primary format first
+                try:
+                    field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+                except ValueError:
+                    # If primary format fails, try secondary formats
+                    for fmt in ('%Y-%m-%d %H:%M', '%Y-%m-%d'):
+                        try:
+                            field.data = datetime.strptime(field.data, fmt)
+                            break
+                        except ValueError:
+                            continue
+                    else:
                         raise ValidationError('Invalid date format. Please use YYYY-MM-DD, YYYY-MM-DD HH:MM, or YYYY-MM-DD HH:MM:SS.')
     
             # Ensure date is not in the past
