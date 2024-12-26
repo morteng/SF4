@@ -1,60 +1,53 @@
 # TODO List
 
 ## Current Goals
-1. Expand validation test coverage for edge cases
-   - Add tests for timezone handling in date fields
-   - Test form submission with mixed valid/invalid fields
-   - Verify error message persistence across HTMX partial updates
+1. Implement comprehensive timezone handling
+   - Add timezone selection to CustomDateTimeField in app/forms/fields.py
+   - Store all dates in UTC but display in user's timezone
+   - Handle daylight saving time transitions in date validation
 
-2. Improve validation documentation
-   - Add validation flow diagrams to VALIDATION.md
-   - Document error message localization requirements
-   - Add API documentation for validation endpoints
+2. Enhance validation error handling
+   - Add specific error messages for each validation failure case
+   - Standardize error message format across all forms
+   - Ensure consistent error display in both full page and HTMX responses
+
+3. Improve test coverage
+   - Add tests for timezone handling in tests/test_utils.py
+   - Create integration tests for form validation scenarios
+   - Add edge case tests for date/time validation
 
 ## Knowledge & Memories
-- Windows 11 environment
-- Error Handling Implementation:
-  * utils.py format_error_message() handles date/time validation edge cases
-  * HTMX responses require specific error message structure for client-side handling
-  * Form templates use consistent error container IDs (#<field_name>-error)
-  * Key validation patterns implemented:
-    - Date/time validation with CustomDateTimeField
-    - URL validation with protocol enforcement
-    - Length validation with character counting
-    - Unique field validation with database checks
+- Current validation implementation:
+  * CustomDateTimeField handles date/time parsing and validation
+  * format_error_message() in app/utils.py standardizes error display
+  * All forms use consistent validation patterns
+  * Error messages are displayed using Tailwind CSS classes
 
-- Template Structure:
-  * Error messages use Tailwind CSS classes for consistent styling
-  * Field-specific errors appear below each input
+- Key validation patterns:
+  * Date/time fields use CustomDateTimeField with strict format validation
+  * URL fields enforce protocol (http/https) and format
+  * Text fields have length limits enforced
+  * Unique fields perform database checks for duplicates
+
+- Error handling details:
+  * Errors are displayed below each field with consistent styling
   * Flash messages appear in #flash-messages container
   * HTMX responses maintain form state during validation
+  * Date validation handles edge cases (leap years, timezones, etc.)
 
-## Implementation Details
-1. Validation Patterns:
-   - All forms use CustomDateTimeField for date/time fields
-   - URL fields validate protocol and format
-   - Text fields enforce length limits
-   - Unique fields perform database checks
+## Implementation Tasks
+1. Timezone handling:
+   - Add timezone selection dropdown to forms
+   - Modify CustomDateTimeField to handle timezone conversion
+   - Update date validation to account for timezone differences
 
-2. Error Handling:
-   - format_error_message() in utils.py standardizes error messages
-   - Templates render errors in consistent structure
-   - HTMX responses include both field errors and flash messages
-   - Date validation handles edge cases (leap years, timezones, etc.)
+2. Error message standardization:
+   - Create error message templates in app/utils.py
+   - Ensure consistent error message format across all forms
+   - Add support for localized error messages
 
-## Specific Tasks
-1. Enhance date/time validation:
-   - Add timezone support to CustomDateTimeField
-   - Implement daylight saving time handling
-   - Add tests for international date formats
-
-2. Improve validation documentation:
-   - Add validation flow diagrams to VALIDATION.md
-   - Document error message localization requirements
-   - Add API documentation for validation endpoints
-
-3. Optimize validation performance:
-   - Implement caching for repeated validation checks
-   - Add rate limiting for form submissions
-   - Optimize database queries during validation
+3. Test coverage expansion:
+   - Add timezone handling tests to tests/test_utils.py
+   - Create form validation integration tests
+   - Add edge case tests for date/time validation
 
