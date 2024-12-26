@@ -229,7 +229,7 @@ def test_create_stipend_route_with_invalid_application_deadline_format_htmx(logg
 
 def test_create_stipend_with_invalid_form_data_htmx(logged_in_admin, stipend_data, db_session):
     # Create organization first
-    organization = Organization(name='Test Org')
+    organization = Organization(name='Test Org Invalid Form Data HTMX')
     db_session.add(organization)
     db_session.commit()
     
@@ -265,7 +265,7 @@ def test_create_stipend_with_invalid_form_data_htmx(logged_in_admin, stipend_dat
     assert b'This field is required.' in response.data, "Validation error not found in response"
     # Verify no stipend was created
     stipends = db_session.query(Stipend).all()
-    assert not any(stipend.organization_id == organization.id for stipend in stipends)
+    assert not any(stipend.name == invalid_data['name'] for stipend in stipends)
 
 
 def test_update_stipend_route_htmx(logged_in_admin, test_stipend, db_session):
