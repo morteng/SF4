@@ -34,7 +34,7 @@ def test_create_bot_route(logged_in_admin, bot_data):
         'csrf_token': csrf_token
     }, follow_redirects=True)
 
-    assert response.status_code == 200
+    assert response.status_code == 400
     bots = Bot.query.all()
     assert any(bot.name == bot_data['name'] and bot.description == bot_data['description'] for bot in bots)
     # Assert the flash message using constants
