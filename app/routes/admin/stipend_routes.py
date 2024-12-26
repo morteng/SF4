@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint, render_template, redirect, url_for, request, current_app
 from app.constants import FLASH_CATEGORY_INFO
 from flask_login import login_required
@@ -27,11 +28,19 @@ def create():
             stipend_data = {k: v for k, v in form.data.items() if k not in ('submit', 'csrf_token')}
             
             # Handle empty application deadline
-            if 'application_deadline' in stipend_data and stipend_data['application_deadline'] == '':
-                stipend_data['application_deadline'] = None
-            elif stipend_data['application_deadline']:
-                # Convert to string in standard format
-                stipend_data['application_deadline'] = stipend_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
+            if 'application_deadline' in stipend_data:
+                if stipend_data['application_deadline'] == '':
+                    stipend_data['application_deadline'] = None
+                elif isinstance(stipend_data['application_deadline'], str):
+                    # Convert string to datetime object
+                    try:
+                        stipend_data['application_deadline'] = datetime.strptime(
+                            stipend_data['application_deadline'], 
+                            '%Y-%m-%d %H:%M:%S'
+                        )
+                    except ValueError:
+                        flash_message('Invalid date format. Please use YYYY-MM-DD HH:MM:SS', FLASH_CATEGORY_ERROR)
+                        return render_template('admin/stipends/form.html', form=form), 200
                 
             # Create the stipend
             stipend = create_stipend(stipend_data)
