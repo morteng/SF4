@@ -29,11 +29,12 @@ def test_user(db_session, user_data):
     db_session.commit()
 
 def test_login_route(logged_in_client, user_data):
-    login_response = logged_in_client.get(url_for('user.login'))
+    # Update the route from 'user.login' to 'public.login'
+    login_response = logged_in_client.get(url_for('public.login'))
     assert login_response.status_code == 200
 
     csrf_token = extract_csrf_token(login_response.data)
-    response = logged_in_client.post(url_for('user.login'), data={
+    response = logged_in_client.post(url_for('public.login'), data={
         'username': user_data['username'],
         'password': user_data['password'],
         'csrf_token': csrf_token
@@ -44,7 +45,8 @@ def test_login_route(logged_in_client, user_data):
     assert FLASH_MESSAGES["LOGIN_SUCCESS"].encode() in response.data
 
 def test_login_route_with_invalid_credentials(logged_in_client, user_data):
-    login_response = logged_in_client.get(url_for('user.login'))
+    # Update the route from 'user.login' to 'public.login'
+    login_response = logged_in_client.get(url_for('public.login'))
     assert login_response.status_code == 200
 
     csrf_token = extract_csrf_token(login_response.data)
@@ -53,7 +55,7 @@ def test_login_route_with_invalid_credentials(logged_in_client, user_data):
         'password': 'wrongpassword',
         'csrf_token': csrf_token
     }
-    response = logged_in_client.post(url_for('user.login'), data=invalid_data, follow_redirects=True)
+    response = logged_in_client.post(url_for('public.login'), data=invalid_data, follow_redirects=True)
 
     assert response.status_code == 200
     # Assert the flash message using constants and category
