@@ -79,9 +79,7 @@ def create_stipend(stipend_data, session=db.session):
         if 'application_deadline' in stipend_data:
             if stipend_data['application_deadline'] == '':
                 stipend_data['application_deadline'] = None
-            if stipend_data['application_deadline'] == '':
-                stipend_data['application_deadline'] = None
-            if isinstance(stipend_data['application_deadline'], str):
+            elif isinstance(stipend_data['application_deadline'], str):
                 try:
                     deadline = datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')
                     if deadline < datetime.now():
@@ -89,8 +87,6 @@ def create_stipend(stipend_data, session=db.session):
                     stipend_data['application_deadline'] = deadline
                 except ValueError:
                     stipend_data['application_deadline'] = None
-            elif stipend_data['application_deadline'] == '':
-                stipend_data['application_deadline'] = None
         
         # Handle open_for_applications
         if 'open_for_applications' in stipend_data:
@@ -103,12 +99,10 @@ def create_stipend(stipend_data, session=db.session):
         new_stipend = Stipend(**stipend_data)
         session.add(new_stipend)
         session.commit()
-        flash(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
         return new_stipend
     except Exception as e:
         session.rollback()
         logging.error(f"Failed to create stipend: {e}")
-        flash(str(e) if str(e) else FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
         raise
 
 def delete_stipend(stipend_id, session=db.session):
