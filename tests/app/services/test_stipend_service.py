@@ -102,6 +102,12 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
         assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
 
 def test_create_stipend_with_all_fields(test_data, db_session, app, admin_user):
+    # Create an organization first
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+    test_data['organization_id'] = org.id  # Use the created organization's ID
+
     # Convert datetime object to string for form submission
     test_data['application_deadline'] = test_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
 
