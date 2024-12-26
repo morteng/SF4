@@ -27,9 +27,9 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
 
         # Change expected status code to 400
         assert response.status_code == 400
-
+ 
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
-        assert stipend is None
+        assert stipend is None, "Stipend should not be created with invalid data"
 
         # Check if the flash message is present in the response data
         assert b'This field is required.' in response.data, "Flash message 'This field is required.' not found in response."
