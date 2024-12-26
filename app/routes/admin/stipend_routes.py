@@ -118,7 +118,7 @@ def create():
                     field_errors=field_errors,
                     is_htmx=True
                 ), 400, {
-                    'HX-Retarget': '#stipend-form',
+                    'HX-Retarget': '#stipend-form-container',
                     'HX-Reswap': 'innerHTML'
                 }
             return render_template('admin/stipends/create.html', 
