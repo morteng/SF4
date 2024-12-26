@@ -172,9 +172,9 @@ def test_organization(db_session, organization_data, app):
         organization = Organization(**organization_data)
         db_session.add(organization)
         db_session.commit()
-    yield organization
-    with app.app_context():
-        # Merge the organization back into the session to ensure it's not detached
+        # Yield the organization within the app context
+        yield organization
+        # Cleanup within the same app context
         organization = db_session.merge(organization)
         if db_session.query(Organization).filter_by(id=organization.id).first():
             db_session.delete(organization)
