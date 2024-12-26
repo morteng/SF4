@@ -42,6 +42,24 @@
         themeToggle.addEventListener('change', () => {
             document.documentElement.classList.toggle('dark');
         });
+
+        // Add error handling for HTMX responses
+        document.body.addEventListener('htmx:afterRequest', function(evt) {
+            if (evt.detail.failed) {
+                const form = evt.detail.elt.closest('form');
+                if (form) {
+                    // Add error classes to invalid fields
+                    const errorFields = form.querySelectorAll('.is-invalid');
+                    errorFields.forEach(field => {
+                        field.classList.add('border-red-500');
+                        const feedback = field.nextElementSibling;
+                        if (feedback && feedback.classList.contains('invalid-feedback')) {
+                            feedback.classList.remove('hidden');
+                        }
+                    });
+                }
+            }
+        });
     </script>
 </body>
 </html>
