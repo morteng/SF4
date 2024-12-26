@@ -39,14 +39,14 @@ def create():
                     except ValueError:
                         flash_message("Invalid date format. Please use YYYY-MM-DD HH:MM:SS.", FLASH_CATEGORY_ERROR)
                         template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/create.html'
-                        return render_template(template, form=form), 400
+                        return render_template(template, form=form), 200 if is_htmx else 400
                 
             # Create the stipend
             stipend = create_stipend(stipend_data)
             if not stipend:
                 flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
                 template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/form.html'
-                return render_template(template, form=form), 400
+                return render_template(template, form=form), 200 if is_htmx else 400
             
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
             return redirect(url_for('admin.stipend.index'))
@@ -59,7 +59,7 @@ def create():
             else:
                 flash_message(FLASH_MESSAGES["CREATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
             template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/create.html'
-            return render_template(template, form=form), 400
+            return render_template(template, form=form), 200 if is_htmx else 400
      
     # Handle form validation errors
     if request.method == 'POST':
@@ -67,7 +67,7 @@ def create():
             for error in errors:
                 flash_message(f"Error in {getattr(form, field).label.text}: {error}", FLASH_CATEGORY_ERROR)
         template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/create.html'
-        return render_template(template, form=form), 400
+        return render_template(template, form=form), 200 if is_htmx else 400
     
     template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/form.html'
     return render_template(template, form=form), 200
