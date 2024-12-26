@@ -53,6 +53,10 @@ def format_error_message(field, error):
         elif 'cannot be more than 5 years' in error:
             return 'Application deadline cannot be more than 5 years in the future'
         return error
+    # Get the field label if available
+    field_label = getattr(field, 'label', None)
+    if field_label:
+        return f"{field_label.text}: {error}"
     return f"{field}: {error}"
 
 def flash_message(message, category):

@@ -177,29 +177,15 @@ def edit(id):
                 return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
         else:
             error_messages = []
-            for field, errors in form.errors.items():
+            field_errors = {}
+            for field_name, errors in form.errors.items():
+                field = getattr(form, field_name)
+                field_errors[field_name] = []
                 for error in errors:
-                    if field == 'application_deadline':
-                        # Map specific date validation errors
-                        if 'invalid_format' in error:
-                            error_messages.append('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-                        elif 'invalid_date' in error:
-                            error_messages.append('Invalid date values (e.g., Feb 30)')
-                        elif 'invalid_time' in error:
-                            error_messages.append('Invalid time values (e.g., 25:61:61)')
-                        elif 'missing_time' in error:
-                            error_messages.append('Time is required. Please use YYYY-MM-DD HH:MM:SS')
-                        elif 'required' in error:
-                            error_messages.append('Date is required')
-                        elif 'cannot be in the past' in error:
-                            error_messages.append('Application deadline must be a future date')
-                        elif 'cannot be more than 5 years' in error:
-                            error_messages.append('Application deadline cannot be more than 5 years in the future')
-                        else:
-                            error_messages.append(error)
-                    else:
-                        field_label = getattr(form, field).label.text
-                        error_messages.append(f"{field_label}: {error}")
+                    msg = format_error_message(field, error)
+                    error_messages.append(msg)
+                    field_errors[field_name].append(msg)
+                    flash_message(msg, FLASH_CATEGORY_ERROR)
                 
             if is_htmx:
                 return render_template(
