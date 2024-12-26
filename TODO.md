@@ -17,6 +17,11 @@
 - [ ] Add more test coverage for HTMX routes
 - [ ] Review other admin routes for similar HTMX issues
 
+## Completed Tasks
+- Fixed HTMX stipend update route to return 200 status code without explicit status
+- Updated HTMX test to remove follow_redirects since HTMX responses shouldn't follow redirects
+- Verified template rendering works correctly for HTMX responses
+
 ## Things to remember about testing
 - Ensure all tests pass
 - When fixing HTMX routes, test both HTMX and non-HTMX cases
