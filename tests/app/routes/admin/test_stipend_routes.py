@@ -136,8 +136,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
     htmx_response = logged_in_admin.post(
         url_for('admin.stipend.edit', id=test_stipend.id),
         data=updated_data,
-        headers={'HX-Request': 'true'},
-        follow_redirects=True
+        headers={'HX-Request': 'true'}
     )
     assert htmx_response.status_code == 200
     assert b'<tr hx-target="this" hx-swap="outerHTML">' in htmx_response.data
