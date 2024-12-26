@@ -88,42 +88,42 @@ def edit(id):
     form = StipendForm(obj=stipend)
     is_htmx = request.headers.get('HX-Request')
 
-    if request.method == 'POST' and form.validate_on_submit():
-        try:
-            # Prepare update data directly from form
-            stipend_data = {
-                'name': form.name.data,
-                'summary': form.summary.data,
-                'description': form.description.data,
-                'homepage_url': form.homepage_url.data,
-                'application_procedure': form.application_procedure.data,
-                'eligibility_criteria': form.eligibility_criteria.data,
-                'application_deadline': form.application_deadline.data,
-                'organization_id': form.organization_id.data,
-                'open_for_applications': form.open_for_applications.data
-            }
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            try:
+                # Prepare update data directly from form
+                stipend_data = {
+                    'name': form.name.data,
+                    'summary': form.summary.data,
+                    'description': form.description.data,
+                    'homepage_url': form.homepage_url.data,
+                    'application_procedure': form.application_procedure.data,
+                    'eligibility_criteria': form.eligibility_criteria.data,
+                    'application_deadline': form.application_deadline.data,
+                    'organization_id': form.organization_id.data,
+                    'open_for_applications': form.open_for_applications.data
+                }
 
-            # Update the stipend
-            update_stipend(stipend, stipend_data, session=db.session)
-            flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-            
-            if is_htmx:
-                return render_template('admin/stipends/_stipend_row.html', stipend=stipend)
-            return redirect(url_for('admin.stipend.index'))
+                # Update the stipend
+                update_stipend(stipend, stipend_data, session=db.session)
+                flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                
+                if is_htmx:
+                    return render_template('admin/stipends/_stipend_row.html', stipend=stipend)
+                return redirect(url_for('admin.stipend.index'))
 
-        except Exception as e:
-            db.session.rollback()
-            current_app.logger.error(f"Failed to update stipend: {e}")
-            flash_message(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+            except Exception as e:
+                db.session.rollback()
+                current_app.logger.error(f"Failed to update stipend: {e}")
+                flash_message(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+                return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
+        else:
+            # Handle form validation errors
+            for field, errors in form.errors.items():
+                for error in errors:
+                    field_label = getattr(form, field).label.text
+                    flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
             return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
-
-    if request.method == 'POST' and not form.validate_on_submit():
-        # Handle form validation errors
-        for field, errors in form.errors.items():
-            for error in errors:
-                field_label = getattr(form, field).label.text
-                flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
-        return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
     
     template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/form.html'
     return render_template(template, form=form, stipend=stipend)
