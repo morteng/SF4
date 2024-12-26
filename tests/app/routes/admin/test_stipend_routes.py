@@ -53,9 +53,9 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
         'homepage_url': stipend_data['homepage_url'],
         'application_procedure': stipend_data['application_procedure'],
         'eligibility_criteria': stipend_data['eligibility_criteria'],
-        'application_deadline': stipend_data['application_deadline'],
-        'organization_id': organization.id,
-        'open_for_applications': stipend_data['open_for_applications'],
+        'application_deadline': '2024-12-31 23:59:59',  # Changed to future date
+        'organization_id': str(organization.id),  # Converted to string
+        'open_for_applications': 'y',  # Changed to string 'y'
         'csrf_token': csrf_token
     }
     
@@ -87,19 +87,16 @@ def test_create_stipend_route_with_invalid_application_deadline_format(logged_in
     db_session.add(organization)
     db_session.commit()  # Commit the organization to the database
     
-    invalid_data = stipend_data.copy()
-    invalid_data['organization_id'] = organization.id
-    invalid_data['application_deadline'] = '2023-13-32 99:99:99'
-    response = logged_in_admin.post(url_for('admin.stipend.create'), data={
-        'name': invalid_data['name'],
-        'summary': invalid_data['summary'],
-        'description': invalid_data['description'],
-        'homepage_url': invalid_data['homepage_url'],
-        'application_procedure': invalid_data['application_procedure'],
-        'eligibility_criteria': invalid_data['eligibility_criteria'],
-        'application_deadline': invalid_data['application_deadline'],
-        'organization_id': organization.id,  # Use the ID of the created organization
-        'open_for_applications': invalid_data['open_for_applications'],
+    invalid_data = {
+        'name': stipend_data['name'],
+        'summary': stipend_data['summary'],
+        'description': stipend_data['description'],
+        'homepage_url': stipend_data['homepage_url'],
+        'application_procedure': stipend_data['application_procedure'],
+        'eligibility_criteria': stipend_data['eligibility_criteria'],
+        'application_deadline': '2023-13-32 99:99:99',  # Invalid date format
+        'organization_id': str(organization.id),  # Converted to string
+        'open_for_applications': 'y',  # Changed to string 'y'
         'csrf_token': csrf_token
    }, follow_redirects=True)
  
