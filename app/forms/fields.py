@@ -14,4 +14,11 @@ class CustomDateTimeField(DateTimeField):
                 self.data = datetime.strptime(date_str, self.format)
             except ValueError:
                 self.data = None
-                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
+                raise ValidationError(f'Invalid date format. Please use {self.format}.')
+
+    def _value(self):
+        if self.raw_data:
+            return " ".join(self.raw_data)
+        if self.data:
+            return self.data.strftime(self.format)
+        return ""
