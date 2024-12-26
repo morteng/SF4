@@ -118,7 +118,13 @@ def edit(id):
             return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
 
     if request.method == 'POST' and not form.validate_on_submit():
+        # Handle form validation errors
+        for field, errors in form.errors.items():
+            for error in errors:
+                field_label = getattr(form, field).label.text
+                flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/stipends/form.html', form=form, stipend=stipend), 400
+    
     template = 'admin/stipends/_form.html' if is_htmx else 'admin/stipends/form.html'
     return render_template(template, form=form, stipend=stipend)
 
