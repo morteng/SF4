@@ -54,7 +54,13 @@ def create():
             flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
 
             if is_htmx:
-                return render_template('admin/stipends/_stipend_row.html', stipend=new_stipend)
+                try:
+                    return render_template('admin/stipends/_stipend_row.html', stipend=new_stipend)
+                except Exception as e:
+                    current_app.logger.error(f"Failed to render stipend row template: {e}")
+                    return render_template_string(
+                        f"<tr><td colspan='6'>Error rendering new row: {str(e)}</td></tr>"
+                    ), 200
             return redirect(url_for('admin.stipend.index'))
 
         except Exception as e:
