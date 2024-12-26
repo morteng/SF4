@@ -13,7 +13,7 @@ def test_create_stipend_with_blank_application_deadline(stipend_data, logged_in_
 
         stipend = db_session.query(Stipend).filter_by(name=stipend_data['name']).first()
         assert stipend is not None
-        assert stipend.application_deadline is None
+        assert stipend.application_deadline is None  # Verify the deadline is None
 
 def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
