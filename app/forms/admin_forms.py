@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, URLField, BooleanField, SubmitField, PasswordField, HiddenField
 from wtforms.validators import DataRequired, Length, Optional, ValidationError, Email, URL, Regexp  # Add URL and Regexp here
@@ -25,16 +26,21 @@ class StipendForm(FlaskForm):
     submit = SubmitField('Create')
 
     def validate_application_deadline(self, field):
-        # Allow empty values
-        if field.raw_data and field.raw_data[0] == '':
-            field.data = None  # Explicitly set to None
+        # Handle empty string or None values
+        if not field.raw_data or field.raw_data[0] == '':
+            field.data = None
             return
-        # Only validate format if there's actual data
+        
+        # If there's data but it's not a valid datetime
         if field.raw_data and field.raw_data[0] and field.data is None:
             raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
-        # Allow None values
-        if field.data is None:
-            return
+        
+        # If we have valid data, ensure it's a datetime object
+        if field.data and not isinstance(field.data, datetime):
+            try:
+                field.data = datetime.strptime(field.raw_data[0], '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
 
 
 class TagForm(FlaskForm):
