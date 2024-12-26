@@ -61,7 +61,6 @@ def create_stipend(stipend_data, session=db.session):
         
         # Create a new Stipend object from the provided data
         new_stipend = Stipend(**stipend_data)
-        new_stipend.organization = organization  # Explicitly set the organization relationship
         
         # Convert application_deadline to datetime if it's a non-empty string
         if isinstance(new_stipend.application_deadline, str) and new_stipend.application_deadline.strip():
