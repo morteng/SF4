@@ -45,7 +45,7 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
 
 def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
-        # Instead of adding, merge the existing stipend into the current session
+        # Ensure the stipend is attached to the current session
         test_stipend = db_session.merge(test_stipend)
         
         updated_data = {
