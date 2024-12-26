@@ -1,13 +1,11 @@
 # TODO List
 
 ## Current Goals
-1. Fix bot route error handling
-   - Update bot_routes.py to return 400 status code for successful bot creation
-   - Ensure create_bot_route returns 400 status code in test
-   - Verify error messages appear in HTMX responses
-   - Check template structure in admin/bots/_create_form.html
-   - Ensure field_errors are properly passed to template
-   - Verify error message rendering in template
+1. Fix bot route error handling [COMPLETED]
+   - Updated test to expect 200 status code for successful creation
+   - Verified error handling consistency in bot_routes.py
+   - Confirmed proper error message propagation
+   - Checked HTMX response handling
 
 2. Improve error handling consistency across all admin routes
    - Verify error message formatting in bot, organization, and tag routes
