@@ -145,13 +145,12 @@ def stipend_data():
 def test_stipend(db_session, stipend_data, test_organization, app):
     """Provide a test stipend."""
     with app.app_context():
-        # Ensure organization is attached to session
+        # Merge the organization into the current session
         test_organization = db_session.merge(test_organization)
         stipend_data['organization_id'] = test_organization.id
         stipend = Stipend(**stipend_data)
         db_session.add(stipend)
         db_session.commit()
-        db_session.refresh(stipend)  # Refresh to ensure we have latest state
         yield stipend
         # Cleanup after test
         if db_session.query(Stipend).filter_by(id=stipend.id).first():
