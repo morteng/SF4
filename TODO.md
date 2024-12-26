@@ -2,7 +2,6 @@
 
 ## Current Goals
 1. Complete bot routes implementation
-   - Ensure all bot routes use correct templates
    - Add missing HTMX partial templates for bot CRUD operations
    - Implement proper error handling for bot operations
 
@@ -17,6 +16,7 @@
   * Supports both full page and HTMX responses
   * Uses format_error_message() for consistent error display
   * Follows Flask-Login and admin_required decorator patterns
+  * Templates must be placed in templates/admin/bots/ directory
 
 - Error handling patterns:
   * Errors are displayed below each field with consistent styling
@@ -28,12 +28,13 @@
   * Main templates in admin/bots/ directory
   * HTMX partial templates should use _ prefix
   * Follows consistent naming conventions (index.html, create.html, edit.html)
+  * Template paths must match route references exactly
 
 ## Implementation Tasks
 1. Bot routes improvements:
    - Add missing HTMX partial templates (_bot_row.html, _create_form.html)
    - Implement proper error handling for bot operations
-   - Ensure consistent template usage across all routes
+   - Ensure all templates are in correct locations
 
 2. Test coverage expansion:
    - Add tests for HTMX responses in bot routes
@@ -41,5 +42,5 @@
    - Add integration tests for bot service interactions
 
 ## Recent Fixes
-- Fixed template reference in bot edit route (changed _edit_row.html to edit.html)
+- Added edit.html template for bot editing functionality
 
