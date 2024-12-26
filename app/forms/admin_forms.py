@@ -29,8 +29,12 @@ class StipendForm(FlaskForm):
         if field.raw_data and field.raw_data[0] == '':
             field.data = None  # Explicitly set to None
             return
+        # Only validate format if there's actual data
         if field.raw_data and field.raw_data[0] and field.data is None:
             raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS.')
+        # Allow None values
+        if field.data is None:
+            return
 
 
 class TagForm(FlaskForm):
