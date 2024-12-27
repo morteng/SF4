@@ -1,5 +1,6 @@
 import pytest
 import logging
+import re
 from datetime import datetime
 from flask import url_for
 from app.services.user_service import get_all_users
@@ -384,24 +385,22 @@ def test_update_user_route_with_invalid_id(logged_in_admin):
 
 def extract_csrf_token(response_data):
     """Extract CSRF token from HTML response."""
-    from bs4 import BeautifulSoup
+    decoded_data = response_data.decode('utf-8')
     
-    soup = BeautifulSoup(response_data, 'html.parser')
-    
-    # Look for CSRF token in hidden input with name="csrf_token"
-    csrf_input = soup.find('input', {'name': 'csrf_token'})
+    # Look for CSRF token in hidden input with id="csrf_token"
+    csrf_input = re.search(r'<input[^>]*id="csrf_token"[^>]*value="(.+?)"', decoded_data)
     if csrf_input:
-        return csrf_input.get('value')
+        return csrf_input.group(1)
     
     # Look for CSRF token in meta tag as fallback
-    meta_token = soup.find('meta', {'name': 'csrf-token'})
+    meta_token = re.search(r'<meta[^>]*name="csrf-token"[^>]*content="(.+?)"', decoded_data)
     if meta_token:
-        return meta_token.get('content')
+        return meta_token.group(1)
     
     # Look for CSRF token in any hidden input as last resort
-    hidden_input = soup.find('input', {'type': 'hidden'})
-    if hidden_input and hidden_input.get('name') == 'csrf_token':
-        return hidden_input.get('value')
+    hidden_input = re.search(r'<input[^>]*type="hidden"[^>]*name="csrf_token"[^>]*value="(.+?)"', decoded_data)
+    if hidden_input:
+        return hidden_input.group(1)
     
     logging.warning("CSRF token not found in response")
     return None
