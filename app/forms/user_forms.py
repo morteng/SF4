@@ -1,5 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
+import logging
+
+logger = logging.getLogger(__name__)
 from flask import session
 from wtforms.validators import DataRequired, Email, ValidationError, EqualTo
 from app.models.user import User
@@ -11,14 +14,14 @@ class ProfileForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Save Changes')
 
-    def validate_username(self, username):
+    def validate_username(self, username: StringField) -> None:
         if username.data != self.original_username:
             user = User.query.filter_by(username=username.data).first()
             if user:
                 flash_message(FlashMessages.USERNAME_ALREADY_EXISTS, FlashCategory.ERROR)
                 raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS)
 
-    def validate_email(self, email):
+    def validate_email(self, email: StringField) -> None:
         if email.data != self.original_email:
             user = User.query.filter_by(email=email.data).first()
             if user:

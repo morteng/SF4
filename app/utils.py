@@ -68,11 +68,22 @@ def validate_url(url: str) -> bool:
         bool: True if URL is valid, False otherwise
     """
     try:
+        if not url:
+            logger.warning("Empty URL provided for validation.")
+            return False
+        
         result = urlparse(url)
-        return all([result.scheme, result.netloc]) and re.match(
-            r'^https?://', url
-        )
-    except ValueError:
+        if not all([result.scheme, result.netloc]):
+            logger.warning(f"Invalid URL format: {url}")
+            return False
+        
+        if not re.match(r'^https?://', url):
+            logger.warning(f"URL must start with http:// or https://: {url}")
+            return False
+        
+        return True
+    except ValueError as e:
+        logger.error(f"Error validating URL {url}: {e}")
         return False
 
 def format_error_message(field: Any, error: Union[str, Exception]) -> str:

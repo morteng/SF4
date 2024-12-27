@@ -6,9 +6,19 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config(object):
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'a_very_secret_key'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    if not SECRET_KEY:
+        raise ValueError("SECRET_KEY environment variable is required.")
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = True  # Ensure CSRF protection is enabled
+
+    @classmethod
+    def validate_config(cls):
+        required_vars = ["SECRET_KEY", "SQLALCHEMY_DATABASE_URI"]
+        for var in required_vars:
+            if not getattr(cls, var):
+                raise ValueError(f"{var} environment variable is required.")
     # Add these lines
     RATELIMIT_STORAGE_URI = 'memory://'  # For development, use Redis in production
     RATELIMIT_STRATEGY = 'fixed-window'

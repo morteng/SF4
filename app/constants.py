@@ -1,12 +1,14 @@
 # app/constants.py
 
-class FlashCategory:
+from enum import Enum
+
+class FlashCategory(str, Enum):
     SUCCESS = "success"
     ERROR = "error"
     INFO = "info"
     WARNING = "warning"
 
-class FlashMessages:
+class FlashMessages(str, Enum):
     # General
     GENERIC_SUCCESS = "Operation completed successfully."
     GENERIC_ERROR = "An error occurred. Please try again."
