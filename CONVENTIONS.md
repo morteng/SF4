@@ -11,6 +11,8 @@
 ### Testing with CSRF
 - Always use `test_request_context` when testing forms with CSRF protection
 - Ensure CSRF tokens are validated in form tests
+- Use form-generated CSRF tokens in tests
+- Include CSRF token in POST requests
 
 ### Form Testing
 - Always use `test_request_context` when testing forms
