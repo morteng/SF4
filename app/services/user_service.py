@@ -66,6 +66,8 @@ def create_user(form_data):
         audit_log = AuditLog(
             user_id=current_user.id,  # Use the admin user's ID
             action='create_user',
+            object_type='User',
+            object_id=new_user.id,
             details_before=f'Creating user: {username}',
             timestamp=datetime.utcnow()
         )
