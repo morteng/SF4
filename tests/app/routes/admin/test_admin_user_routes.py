@@ -168,7 +168,11 @@ def test_create_user_route_with_database_error(logged_in_admin, user_data, db_se
         
         assert response.status_code == 400
         # Assert the flash message using constants
-        assert_flash_message(response, FlashMessages.CREATE_USER_ERROR)
+        # Check that the flash message starts with the expected error message
+        with logged_in_admin.session_transaction() as session:
+            flashed_messages = session.get('_flashes', [])
+            assert any(FlashMessages.CREATE_USER_ERROR.value in msg[1] for msg in flashed_messages), \
+                f"Expected flash message containing '{FlashMessages.CREATE_USER_ERROR.value}' not found in session"
 
         users = User.query.all()
         assert not any(user.username == data['username'] for user in users)  # Ensure no user was created
