@@ -22,12 +22,12 @@ class CustomDateTimeField(DateTimeField):
         }
 
     def process_formdata(self, valuelist):
-        if valuelist:
-            date_str = valuelist[0]
-            print(f"process_formdata called with date_str: {date_str}")  # Add this line
-            if not date_str:
-                self.errors.append(self.error_messages['required'])
-                return
+        if not valuelist or not valuelist[0]:
+            self.errors.append(self.error_messages['required'])
+            return
+            
+        date_str = valuelist[0]
+        print(f"process_formdata called with date_str: {date_str}")  # Add this line
             
             # First check for leap year dates
             print(f"Date string: {date_str}")
