@@ -63,6 +63,15 @@ def index():
 @admin_bp.notification_count
 def create():
     """Create a new organization"""
+    # Audit log creation
+    AuditLog.create(
+        user_id=current_user.id,
+        action='create_organization',
+        object_type='Organization',
+        object_id=None,  # Will be set after creation
+        details='Attempting to create new organization',
+        ip_address=request.remote_addr
+    )
     """Create new organization with audit logging and notifications"""
     form = OrganizationForm()
     
