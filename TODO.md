@@ -11,6 +11,7 @@
 - [x] Add audit logging for sensitive operations
 - [x] Fix date validation in StipendForm
 - [x] Implement rate limiting for sensitive operations
+- [ ] Add foreign key relationship between User and AuditLog
 - [ ] Ensure notification_count is available in all admin templates
 - [ ] Complete CRUD operation tests for all admin routes
 
