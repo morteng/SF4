@@ -6,6 +6,7 @@ import secrets
 from typing import Any, Union
 from flask import abort, redirect, url_for, flash
 from flask_wtf.csrf import generate_csrf
+from app.models.audit_log import AuditLog
 
 def generate_csrf_token():
     """Generate a CSRF token for form validation."""
