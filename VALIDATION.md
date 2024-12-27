@@ -3,12 +3,14 @@
 - Validate client & server side
 - Use enums for message types
 - Test success & failure cases
+- Include CSRF validation
 
 ## Form Validation
 - Required fields: Validate presence
 - Length: Enforce max lengths
 - Format: Validate URLs, dates
 - Uniqueness: Check for duplicates
+- CSRF: Validate token in all forms
 
 ## Error Handling
 - Rollback on error
@@ -18,6 +20,7 @@
 
 ## Security
 - Sanitize inputs
-- CSRF tokens required
+- CSRF tokens required in all forms
 - Rate limit sensitive endpoints
+- Use Flask-WTF for form handling
 
