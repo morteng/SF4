@@ -187,13 +187,21 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
     
     # Log in the admin user
     with logged_in_admin:
-        # Perform login
+        # First get the CSRF token from the login page
+        login_get_response = logged_in_admin.get('/login')
+        csrf_token = extract_csrf_token(login_get_response.data)
+        assert csrf_token is not None, "CSRF token not found in login page"
+            
+        # Perform login with CSRF token
         login_response = logged_in_admin.post('/login', data={
-            'username': 'admin_user',
-            'password': 'AdminPass123!'
+            'username': test_user.username,  # Use the test_user's actual username
+            'password': 'AdminPass123!',
+            'csrf_token': csrf_token
         }, follow_redirects=True)
-        assert login_response.status_code == 200
-        
+            
+        assert login_response.status_code == 200, \
+            f"Login failed with status {login_response.status_code}. Response: {login_response.data.decode('utf-8')}"
+            
         # Verify admin user is logged in
         with logged_in_admin.session_transaction() as session:
             assert '_user_id' in session, "Admin user is not logged in"
