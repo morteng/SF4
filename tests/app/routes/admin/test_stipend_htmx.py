@@ -162,3 +162,29 @@ def test_create_stipend_with_invalid_url(stipend_data: Dict[str, str], logged_in
     assert FlashMessages.INVALID_URL.value in response.data, \
         "Expected invalid URL error message"
     logger.debug(f"Invalid URL submission response: {response.data.decode()}")
+def test_create_stipend_with_invalid_url(stipend_data: Dict[str, str], logged_in_admin: FlaskClient) -> None:
+    """Test stipend creation with invalid homepage URL.
+    
+    Args:
+        stipend_data: Fixture providing test stipend data
+        logged_in_admin: Authenticated admin test client
+        
+    Verifies:
+        - Returns 400 status for invalid URL
+        - Displays correct error message
+    """
+    stipend_data['homepage_url'] = 'invalid-url'
+    
+    response = logged_in_admin.post(
+        url_for('admin.stipend.create'),
+        data=stipend_data,
+        headers={
+            'HX-Request': 'true',
+            'HX-Target': '#stipend-form-container'
+        }
+    )
+    
+    assert response.status_code == 400, "Expected 400 status for invalid URL"
+    assert FlashMessages.INVALID_URL.value in response.data, \
+        "Expected invalid URL error message"
+    logger.debug(f"Invalid URL submission response: {response.data.decode()}")
