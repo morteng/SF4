@@ -391,7 +391,27 @@
 - Logs validation errors
 - Preserves form state
 
-## Organization Form
+## Organization Form Validation
+
+### New Test Cases
+1. Verify organization form template exists and extends base.html
+2. Test form rendering and error handling
+3. Test successful organization creation
+4. Test validation errors for:
+   - Empty name field
+   - Name with special characters
+   - Description exceeding 500 characters
+   - Invalid URL format
+5. Test database error handling
+
+### Error Messages
+- "Name is required"
+- "Name must contain only letters, numbers, and spaces"
+- "Name must be between 1 and 100 characters"
+- "Description must be less than 500 characters"
+- "Invalid URL format"
+
+## Organization Form Fields
 
 ### Name Field
 - **Required**: Yes

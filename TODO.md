@@ -7,6 +7,7 @@
    - [ ] Verify proper error handling in all admin templates
 
 2. **Form Validation Improvements**
+   - [x] Add validation for organization fields
    - [ ] Add validation for bot status field
    - [ ] Improve error message consistency
    - [ ] Add validation for bot description length
