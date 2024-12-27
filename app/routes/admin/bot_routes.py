@@ -23,12 +23,13 @@ def create():
             flash_message(f"{FLASH_MESSAGES['CREATE_BOT_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
             current_app.logger.error(f"Failed to create bot: {e}")
             return render_template('admin/bots/create.html', form=form), 400
-    else:  # Add this else block to handle invalid form data
+    elif request.method == 'POST':  # Handle invalid form submission
         for field, errors in form.errors.items():
             for error in errors:
                 flash_message(f"{field}: {error}", FLASH_CATEGORY_ERROR)
                 current_app.logger.error(f"Flashing error: {field}: {error}")
         return render_template('admin/bots/create.html', form=form), 400
+    return render_template('admin/bots/create.html', form=form)
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required

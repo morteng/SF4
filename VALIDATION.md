@@ -218,15 +218,37 @@
 ## Bot Route Validation
 
 ### New Test Cases
-1. **URL Endpoint Validation**
-   - Verify all template URLs match actual route endpoints
-   - Test case: test_bot_url_endpoints
-   - Implementation: Check that all url_for() calls in bot templates match registered routes
-   - Test case: test_htmx_endpoint_validation
-   - Implementation: Verify HTMX form actions match route endpoints
-   - Specific check: Ensure bot run form uses 'admin.bot.run' endpoint
-   - Add validation for all HTMX form actions to match their corresponding route endpoints
-   - Include test cases for both GET and POST form actions
+1. **Invalid Form Submission**
+   - Test case: test_create_bot_route_with_invalid_data
+   - Implementation: Submit form with invalid data and verify:
+     * Returns 400 status code
+     * Proper error messages are displayed
+     * Form retains submitted values
+     * Error messages are logged
+   - Test invalid values for all fields
+   - Verify proper error handling for database errors
+
+### Error Handling
+- **Invalid Form Data**
+  * Returns 400 status code
+  * Displays field-specific error messages
+  * Logs validation errors
+  * Preserves form state
+  * Uses consistent error message formatting
+
+### Examples
+**Invalid Inputs**:
+{
+    "name": "",  // Empty name
+    "description": "a" * 501,  // Too long
+    "status": "invalid_status"  // Invalid value
+}
+
+**Expected Behavior**:
+- Returns 400 status code
+- Displays error messages for invalid fields
+- Logs validation errors
+- Preserves form state
 
 ### Test Cases
 1. **Create Bot**
