@@ -5,12 +5,17 @@ from app.config import TestConfig
 
 @pytest.fixture
 def app():
-    app = create_app('testing')  # Use 'testing' instead of TestConfig
-    return app
+    app = create_app('testing')
+    # Use application context to prevent blueprint re-registration issues
+    with app.app_context():
+        yield app
 
 @pytest.fixture
 def client(app):
-    return app.test_client()
+    # Return test client with application context
+    with app.test_client() as client:
+        with app.app_context():
+            yield client
 
 def test_organization_form_valid_data(app):
     """Test organization form with valid data"""
