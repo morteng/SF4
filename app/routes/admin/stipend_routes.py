@@ -83,49 +83,17 @@ def create():
                 return render_template('admin/stipends/create.html', form=form), 400
         else:
             current_app.logger.debug(f"Form validation failed: {form.errors}")
-            error_messages = []
-            field_errors = {}
-            
-            # Process all field errors
-            for field_name, errors in form.errors.items():
-                field = getattr(form, field_name)
-                formatted_errors = []
-                
-                for error in errors:
-                    # Format error message consistently
-                    msg = format_error_message(field, error)
-                    formatted_errors.append(msg)
-                    error_messages.append(msg)
-                    flash_message(msg, FLASH_CATEGORY_ERROR)
-                
-                # Store field-specific errors
-                field_errors[field_name] = formatted_errors
-                
             if is_htmx:
-                # Special handling for application_deadline errors
-                if 'application_deadline' in field_errors:
-                    field_errors['application_deadline'] = [
-                        error.replace('Application Deadline: ', '')
-                        for error in field_errors['application_deadline']
-                    ]
-                
-                # Return HTMX response with proper error structure
-                current_app.logger.debug(f"Returning HTMX response with field_errors: {field_errors}")
+                # Return HTMX response with form errors
                 return render_template(
                     'admin/stipends/_form.html',
                     form=form,
-                    error_messages=error_messages,
-                    field_errors=field_errors,
                     is_htmx=True
                 ), 400, {
                     'HX-Retarget': '#stipend-form-container',
                     'HX-Reswap': 'innerHTML'
                 }
-            return render_template('admin/stipends/create.html', 
-                form=form,
-                error_messages=error_messages,
-                field_errors=field_errors
-            ), 400
+            return render_template('admin/stipends/create.html', form=form), 400
 
     return render_template('admin/stipends/create.html', form=form)
 

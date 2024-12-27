@@ -59,12 +59,10 @@ class StipendForm(FlaskForm):
         if not field.data or field.errors:
             return
         
-        # Ensure both datetimes are timezone-aware
+        # Ensure datetime is timezone-aware
         now = datetime.now(pytz.UTC)
         if field.data.tzinfo is None:
             field.data = pytz.UTC.localize(field.data)
-        else:
-            field.data = field.data.astimezone(pytz.UTC)
         
         # Validate future date
         if field.data < now:
