@@ -35,7 +35,10 @@ def create():
             flash_message(error_message, FlashCategory.ERROR.value)
             # Ensure the flash message is available in the current request
             session.modified = True
-            # Render the create template directly with 400 status
+            # For HTMX requests, return the partial form
+            if request.headers.get('HX-Request') == 'true':
+                return render_template('admin/users/_create_form.html', form=form), 400
+            # For regular requests, return the full template directly
             return render_template('admin/users/create.html', form=form), 400
     else:
         if request.headers.get('HX-Request') == 'true':
