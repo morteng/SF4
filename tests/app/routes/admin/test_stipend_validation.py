@@ -1,7 +1,7 @@
 from flask import url_for
 from app.models.stipend import Stipend
 from tests.conftest import logged_in_admin, stipend_data, db_session
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from app.constants import FlashMessages, FlashCategory
 from app.forms.admin_forms import StipendForm
 from app.models.organization import Organization
 
@@ -42,7 +42,7 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
         assert stipend is None
         
         # Check for flash message in response
-        assert FLASH_MESSAGES["INVALID_DATE_FORMAT"] in response.get_data(as_text=True)
+        assert FlashMessages.INVALID_DATE_FORMAT in response.get_data(as_text=True)
 
 def test_update_stipend_with_blank_application_deadline(logged_in_admin, test_stipend, stipend_data, db_session):
     with logged_in_admin.application.app_context():
@@ -88,7 +88,7 @@ def test_update_stipend_with_invalid_application_deadline(logged_in_admin, test_
         db_session.expire_all()
         stipend = db_session.query(Stipend).filter_by(id=test_stipend.id).first()
         assert stipend.application_deadline == test_stipend.application_deadline  # Should remain unchanged
-        assert FLASH_MESSAGES["INVALID_DATE_FORMAT"] in response.get_data(as_text=True)
+        assert FlashMessages.INVALID_DATE_FORMAT in response.get_data(as_text=True)
 
 def test_create_stipend_with_invalid_form_data(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
