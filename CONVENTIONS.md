@@ -23,6 +23,8 @@
 - Ensure test client maintains session state
 - Use form-generated CSRF tokens in tests and ensure they are added to the session
 - Include CSRF token in POST requests
+- Initialize session with a request (e.g., `client.get('/')`) before form creation
+- Add assertions to verify CSRF token presence in session
 
 ### Form Testing
 - Always use an application context when testing forms
