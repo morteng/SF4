@@ -4,7 +4,7 @@
 - [x] Verify CSRF token handling in all form submissions
 - [x] Implement proper CSRF token decoding in tests
 - [x] Update flash message verification in tests
-- [x] Ensure flash messages are properly displayed after redirects
+- [x] Ensure consistent error handling for database errors
 
 ## Best Practices
 - Ensure CSRF protection matches production environment

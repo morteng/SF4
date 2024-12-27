@@ -9,7 +9,10 @@
 - Return appropriate status codes:
   - 400 for validation/database errors
   - 200 for success
-- Render templates directly for error responses to preserve flash messages
+- For database errors:
+  - Render templates directly
+  - Set flash message
+  - Return 400 status
 - Ensure validation errors are properly propagated to form errors
 - Log details including error messages
 - Use enums for user feedback with appended error details when needed

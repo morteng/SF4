@@ -11,7 +11,10 @@
 - Verify flash messages in response HTML (don't rely on redirects)
 - Test both valid and invalid CSRF scenarios
 - Always make a GET request before POST to establish session
-- For database error tests, verify flash messages directly in response
+- For database error tests:
+  - Verify flash messages directly in response
+  - Expect 400 status code
+  - Verify template is rendered directly
 - For error scenarios:
   - Check response status codes (400 for errors)
   - Verify flash messages
