@@ -9,7 +9,7 @@ from app import create_app
 from app.models.user import User
 from app.extensions import db
 from app.constants import FlashMessages, FlashCategory
-from app.utils import generate_csrf_token
+from app.utils import generate_csrf_token, flash_message
 
 @pytest.fixture(scope='function', autouse=True)
 def setup_database(_db):
@@ -88,7 +88,7 @@ def test_profile_form_invalid_same_username(client, setup_database):
     db.session.commit()
 
     with client.application.test_request_context():  # Added request context
-        with patch('app.forms.user_forms.flash_message') as mock_flash:
+        with patch('app.utils.flash_message') as mock_flash:
             form = ProfileForm(original_username="testuser", original_email="test@example.com")
             form.username.data = "existinguser"
             form.email.data = "newemail@example.com"
