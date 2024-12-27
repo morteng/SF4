@@ -25,6 +25,16 @@
 
 ## Error Handling
 - Rollback on error
+- Audit log all CRUD operations with:
+  - Timestamp (UTC)
+  - User ID
+  - IP address
+  - Action type (create/update/delete)
+  - Object type and ID
+  - Before/after state for updates
+  - Success/failure status
+- Store audit logs in separate database table
+- Include audit log reference in error responses
 - Return appropriate status codes:
   - 400 for validation/database errors
   - 200 for success
