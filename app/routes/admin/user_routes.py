@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, flash, session
+from flask import request  # Ensure request is imported
 from app.models.user import User
 from datetime import datetime
 from app.models.audit_log import AuditLog
@@ -56,19 +57,28 @@ def create():
     if form.validate_on_submit():
         try:
             # Validate unique fields
-            if User.query.filter_by(username=form.username.data).first():
+            existing_user = User.query.filter_by(username=form.username.data).first()
+            if existing_user:
                 flash_message(FlashMessages.USERNAME_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
                 return render_template('admin/users/create.html', 
                                     form=form,
                                     notification_count=notification_count), 400
-            if User.query.filter_by(email=form.email.data).first():
+            
+            existing_email = User.query.filter_by(email=form.email.data).first()
+            if existing_email:
                 flash_message(FlashMessages.EMAIL_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
                 return render_template('admin/users/create.html', 
                                     form=form,
                                     notification_count=notification_count), 400
                 
             # Create user
-            new_user = create_user(form.data)
+            user_data = {
+                'username': form.username.data,
+                'email': form.email.data,
+                'password': form.password.data,
+                'is_admin': form.is_admin.data if hasattr(form, 'is_admin') else False
+            }
+            new_user = create_user(user_data)
             
             # Create audit log
             AuditLog.create(
