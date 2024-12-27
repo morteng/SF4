@@ -37,13 +37,3 @@
   * Test edge cases for form validation
   * Verify proper error handling for database errors
 
-- **Testing Best Practices**
-  * Use fixtures for common test setup
-  * Verify template rendering in route tests
-  * Check for proper error handling
-  * Test both success and failure cases
-  * When testing forms, always include CSRF token
-  * Use constants for flash messages to ensure consistency
-  * Add tests for invalid form submissions
-  * Verify status codes match expected values
-
