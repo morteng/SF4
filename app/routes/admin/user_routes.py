@@ -20,6 +20,8 @@ def create():
         try:
             new_user = create_user(form.data)
             flash(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
+            # Ensure the session is saved before redirecting
+            session.modified = True
             return redirect(url_for('admin.user.index'))
         except ValueError as e:
             db.session.rollback()
