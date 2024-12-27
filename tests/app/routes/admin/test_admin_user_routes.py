@@ -62,8 +62,8 @@ def test_create_user_route(logged_in_admin, user_data):
     users = User.query.all()
     assert any(user.username == user_data['username'] and user.email == user_data['email'] for user in users)
     
-    # Verify notification count is present
-    assert b'notification_count' in response.data
+    # Verify notification badge is present (even if count is 0)
+    assert b'notification-badge' in response.data
     
     # Verify audit log was created
     audit_log = AuditLog.query.filter_by(action='create_user').first()
