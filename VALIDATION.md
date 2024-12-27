@@ -87,4 +87,6 @@
     - User should be redirected to edit page with error message
     - Form should maintain its state
     - Flash message must be set before redirect
+    - Error handling follows consistent pattern across all routes
+    - Database errors are logged for debugging
 

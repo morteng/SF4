@@ -60,4 +60,7 @@
 - Improved error message formatting in organization edit route to use field labels
 - Fixed database error handling to properly redirect back to edit page with flash message
 - Fixed test_update_organization_with_database_error by ensuring proper flash message is set
+  * Now properly sets flash message before redirect
+  * Maintains form state during database errors
+  * Follows consistent error handling pattern
 
