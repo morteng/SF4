@@ -49,7 +49,6 @@ class FlashMessages(str, Enum):
     DELETE_ORGANIZATION_DATABASE_ERROR = "Database error while deleting organization."
     ORGANIZATION_NOT_FOUND = "Organization not found."
     INVALID_URL_FORMAT = "URL must start with http:// or https://."
-    INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
     INVALID_FUTURE_DATE = "Date must be in the future."
     INVALID_PAST_DATE = "Date must be in the past."
 
