@@ -35,7 +35,7 @@ class CustomDateTimeField(DateTimeField):
             self.errors.append(self.error_messages.get('required', 'Date is required'))
             self.data = None
             self._invalid_leap_year = False
-            return
+            return False  # Explicitly return False to prevent further validation
             
         date_str = valuelist[0].strip()
         if not date_str:
@@ -133,12 +133,19 @@ class CustomDateTimeField(DateTimeField):
             return False
 
     def validate(self, form, extra_validators=()):
-        # First check if we have any errors from process_formdata
-        if self._invalid_leap_year or self.errors:
+        # If we already have errors from process_formdata, return False
+        if self.errors:
             return False
             
         # Then proceed with normal validation
-        return super().validate(form, extra_validators)
+        result = super().validate(form, extra_validators)
+        
+        # If validation failed and we have a required field error, replace it with our custom message
+        if not result and 'This field is required.' in self.errors:
+            self.errors.remove('This field is required.')
+            self.errors.append(self.error_messages.get('required', 'Date is required'))
+            
+        return result
         
     def _validate_date_components(self, dt):
         try:
