@@ -1,5 +1,12 @@
 # Validation Rules
-### CSRF Token Validation
+
+## Notification Handling
+- notification_count must be passed to all admin templates
+- notification_count should be retrieved using get_notification_count()
+- Handle notification_count errors gracefully (return 0 on error)
+- Ensure notification_count is updated in real-time
+
+## CSRF Token Validation
 - Validate CSRF tokens in all POST requests.
 - Include CSRF token in form fields:
   ```html

@@ -9,16 +9,12 @@
 - [x] Implement direct template rendering for database errors
 - [x] Add audit logging for sensitive operations
 - [x] Fix date validation in StipendForm
-- [ ] Verify error message formatting in all error responses
-- [ ] Implement email notifications for password resets
 - [ ] Ensure notification_count is available in all admin templates
+- [ ] Fix template rendering errors in admin routes
+- [ ] Complete CRUD operation tests for all admin routes
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
 - Standardize error message handling across all endpoints
 - Verify error scenarios using response status codes and flash messages
-- Return appropriate status codes:
-  - 200 for success
-  - 400 for validation/database errors
-  - Render templates directly for error responses instead of redirecting
 
