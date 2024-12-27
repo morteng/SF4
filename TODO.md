@@ -10,5 +10,8 @@
 - Ensure CSRF protection matches production environment
 - Standardize error message handling across all endpoints
 - Verify error scenarios using response status codes and flash messages
-- Return appropriate status codes (200 for success, 400 for validation errors)
+- Return appropriate status codes:
+  - 200 for success
+  - 400 for validation/database errors
+  - Maintain error status codes through redirects
 

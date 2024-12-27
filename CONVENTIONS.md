@@ -11,7 +11,10 @@
 - Verify flash messages in response HTML after redirects
 - Test both valid and invalid CSRF scenarios
 - Always make a GET request before POST to establish session
-- For error scenarios, check response status codes and flash messages
+- For error scenarios:
+  - Check response status codes (400 for errors)
+  - Verify flash messages
+  - Ensure redirects maintain error status codes
 
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
