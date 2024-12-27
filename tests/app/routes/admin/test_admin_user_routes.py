@@ -224,6 +224,9 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
         assert login_response.status_code == 200, \
             f"Login failed with status {login_response.status_code}. Response: {login_response.data.decode('utf-8')}"
         
+        # Refresh test_user within session
+        test_user = db_session.merge(test_user)
+
         # Verify admin user is logged in
         with logged_in_admin.session_transaction() as session:
             assert '_user_id' in session, "Admin user is not logged in"
