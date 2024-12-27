@@ -28,6 +28,8 @@
   * Use pytz.UTC.localize() for naive datetimes
   * Use astimezone(pytz.UTC) for timezone-aware datetimes
   * All datetime comparisons must be between timezone-aware datetimes
+  * Fixed TypeError when comparing naive and timezone-aware datetimes
+  * Added comprehensive test cases for timezone-aware datetime validation
 
 - Organization model includes basic fields: name, description, homepage_url
 - When handling database errors:

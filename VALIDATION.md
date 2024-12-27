@@ -51,11 +51,21 @@
 3. Compare datetimes in different timezones (should convert both to UTC)
 4. Validate future date with timezone conversion
 5. Validate max future date (5 years) with timezone conversion
+6. Validate leap year dates (2024-02-29)
+7. Validate invalid dates (2023-02-30)
+8. Validate invalid times (25:61:61)
+9. Validate missing time components
+10. Validate invalid formats
 
 **Error Messages**:
 - "Application deadline must be a future date"
 - "Application deadline cannot be more than 5 years in the future"
 - "Invalid timezone conversion"
+- "Invalid date format. Please use YYYY-MM-DD HH:MM:SS"
+- "Invalid date values (e.g., Feb 30)"
+- "Invalid time values (e.g., 25:61:61)"
+- "Date is required"
+- "Time is required. Please use YYYY-MM-DD HH:MM:SS"
 
 ### Examples
 
