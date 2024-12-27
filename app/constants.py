@@ -37,6 +37,7 @@ FLASH_MESSAGES = {
     "CREATE_ORGANIZATION_SUCCESS": "Organization created successfully.",
     "CREATE_ORGANIZATION_ERROR": "Failed to create organization: ",
     "CREATE_ORGANIZATION_INVALID_FORM": "Invalid data provided for organization creation.",
+    "CREATE_ORGANIZATION_DUPLICATE_ERROR": "An organization with this name already exists.",
     "CREATE_ORGANIZATION_DATABASE_ERROR": "Database error while creating organization.",  
     "UPDATE_ORGANIZATION_SUCCESS": "Organization updated successfully.",
     "UPDATE_ORGANIZATION_ERROR": "Failed to update organization.",
@@ -64,6 +65,10 @@ FLASH_MESSAGES = {
     "UPDATE_TAG_ERROR": "Failed to update tag.",
     "DELETE_TAG_SUCCESS": "Tag deleted successfully.",
     "DELETE_TAG_ERROR": "Failed to delete tag.",
+
+    # CSRF
+    "CSRF_MISSING": "CSRF token is missing. Please try again.",
+    "CSRF_INVALID": "Invalid CSRF token. Please refresh the page and try again.",
 
     # Authentication
     "LOGIN_SUCCESS": "Logged in successfully.",
