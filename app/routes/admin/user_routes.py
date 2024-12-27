@@ -30,8 +30,16 @@ limiter = Limiter(
 @login_required
 @admin_required
 def create():
+    # Debug logging
+    print(f"Current User: {current_user}")
+    print(f"Admin Status: {current_user.is_admin}")
+    
     form = UserForm()
     notification_count = get_notification_count(current_user.id)
+    
+    # Ensure CSRF token is generated
+    if request.method == 'GET':
+        print("Generating CSRF token for GET request")
     
     if form.validate_on_submit():
         try:
