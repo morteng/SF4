@@ -19,9 +19,11 @@
           hx-target="#form-container"
           hx-swap="outerHTML"
           hx-indicator="#form-loading"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'
           aria-labelledby="form-title">
         
         {{ form.hidden_tag() }}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         
         {% for field in form %}
             {% if field.type != 'HiddenField' and field.type != 'CSRFTokenField' %}
