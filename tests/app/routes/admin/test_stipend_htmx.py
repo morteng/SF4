@@ -1,9 +1,9 @@
 from flask import url_for, render_template_string, get_flashed_messages
 from bs4 import BeautifulSoup
-import logging  # Import the logging module
+import logging
 from app.models.stipend import Stipend
 from tests.conftest import logged_in_admin, db_session, stipend_data
-from app.constants import FlashMessages, FlashCategory  # Import the constants
+from app.constants import FlashMessages, FlashCategory
 
 def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
