@@ -229,7 +229,7 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, db_session)
 
         # Expect field-specific validation message
         assert any(
-            cat == 'error' and 'Name: This field is required.' in msg
+            cat == 'error' and 'Name is required.' in msg
             for cat, msg in flashed_messages
         ), "Field validation error not found in flash messages"
 
