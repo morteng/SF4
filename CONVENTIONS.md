@@ -90,6 +90,11 @@
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
 - Leap year validation must explicitly check for February 29th in non-leap years with specific error message: 'Invalid date values (e.g., Feb 29 in non-leap years)'
+- Password security:
+  - Always use generate_password_hash() from werkzeug.security for password hashing
+  - Verify passwords using check_password_hash()
+  - Never store plain text passwords
+  - Use strong hashing algorithm (default pbkdf2:sha256)
 - Password strength requirements:
   - Minimum 8 characters
   - At least one uppercase letter

@@ -1,6 +1,7 @@
 # TODO List
 ## High Priority
 - [x] Core CRUD & security
+- [ ] Implement password hashing using werkzeug.security
 - [x] Fix datetime.utcnow() deprecation warnings
 - [x] Add username validation constants
 - [x] Improve test isolation with unique credentials

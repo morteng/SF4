@@ -64,6 +64,11 @@
 
 ## Form Validation
 - Validate all form inputs using constants from app\constants.py
+- Password validation:
+  - Verify passwords are hashed using werkzeug.security.generate_password_hash()
+  - Test password verification using check_password_hash()
+  - Ensure no plain text passwords are stored
+  - Verify password strength requirements are enforced
 - Required validations:
     USERNAME_REQUIRED = "Username is required."
     USERNAME_LENGTH = "Username must be between 3 and 50 characters."
