@@ -61,6 +61,7 @@ class CustomDateTimeField(DateTimeField):
                     self.errors = [self.error_messages['invalid_date']]
             except pytz.UnknownTimeZoneError:
                 self.errors.append(self.error_messages['invalid_timezone'])
+                self.errors.append(self.error_messages['invalid_timezone'])
 
     def _validate_time_components(self, dt):
         try:
