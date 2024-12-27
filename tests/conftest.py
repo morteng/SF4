@@ -24,6 +24,7 @@ def app():
     app.config['WTF_CSRF_ENABLED'] = True  # Enable CSRF for testing
     app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'  # Add CSRF secret key
 
+    # Initialize database and login manager in app context
     with app.app_context():
         db.session.expire_on_commit = False
 
@@ -32,8 +33,13 @@ def app():
             user = db.session.get(User, int(user_id))
             return db.session.merge(user) if user else None
 
+        # Create all database tables
         db.create_all()
-        yield app
+    
+    yield app
+    
+    # Clean up database after test
+    with app.app_context():
         db.session.remove()
         db.drop_all()
 
@@ -41,10 +47,7 @@ def app():
 def _db(app):
     """Provide the SQLAlchemy database session for each test function."""
     with app.app_context():
-        db.create_all()
         yield db
-        db.drop_all()
-        db.session.remove()
 
 @pytest.fixture(scope='function')
 def db_session(_db, app):
@@ -83,6 +86,9 @@ def admin_user(db_session, app):
 @pytest.fixture(scope='function')
 def logged_in_admin(client, admin_user, db_session):
     """Log in as the admin user."""
+    # Ensure admin_user is bound to the current session
+    db_session.refresh(admin_user)
+    
     # Get CSRF token
     login_response = client.get(url_for('public.login'))
     csrf_token = extract_csrf_token(login_response.data)
