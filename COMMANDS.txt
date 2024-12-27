@@ -1,4 +1,8 @@
 
+/git add .
+
+/commit
+
 /read PROJECT.md
 /add CONVENTIONS.md
 /add VALIDATION.md
@@ -20,8 +24,4 @@
 /test
 
 /code update CONVENTIONS.md, TODO.md and VALIDATION.md as needed. Keep them as compact as possible without losing important information.
-
-/git add .
-
-/commit
 
