@@ -11,6 +11,10 @@
 - Always make a GET request before POST to establish session
 - Handle CSRF token extraction errors gracefully
 - For form validation errors, expect 400 status code
+- Include CSRF token in both form data and headers:
+  - Form data: `csrf_token` and `_csrf_token`
+  - Header: `X-CSRFToken`
+  - Header: `X-Requested-With: XMLHttpRequest`
 
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations

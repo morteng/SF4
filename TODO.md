@@ -3,7 +3,8 @@
 - [ ] Add remaining form validation tests
 - [ ] Add CRUD integration tests
 - [ ] Increase test coverage to 80%+
-- [ ] Verify CSRF protection in all POST requests
+- [x] Verify CSRF protection in all POST requests
+- [ ] Update CSRF token handling documentation
 
 ## Best Practices
 - Ensure date parsing and logical validation are handled separately

@@ -11,7 +11,10 @@
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
-- Include CSRF token in form submissions
+- Include CSRF token in both form data and headers:
+  - Form fields: `csrf_token` and `_csrf_token`
+  - Header: `X-CSRFToken`
+  - Header: `X-Requested-With: XMLHttpRequest`
 - Extract CSRF token from GET requests before POST
 - Extract CSRF token from login page using reliable parsing
 - Ensure CSRF protection is enabled in test config
