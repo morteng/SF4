@@ -35,12 +35,17 @@ def get_all_users(page=1, per_page=10):
     return User.query.paginate(page=page, per_page=per_page)
 
 def search_users(query, page=1, per_page=10):
-    return User.query.filter(
-        or_(
-            User.username.ilike(f'%{query}%'),
-            User.email.ilike(f'%{query}%')
-        )
-    ).paginate(page=page, per_page=per_page)
+    """Search users with error handling"""
+    try:
+        return User.query.filter(
+            or_(
+                User.username.ilike(f'%{query}%'),
+                User.email.ilike(f'%{query}%')
+            )
+        ).paginate(page=page, per_page=per_page)
+    except Exception as e:
+        logging.error(f"Error searching users: {str(e)}")
+        raise ValueError(FlashMessages.USER_SEARCH_ERROR.value)
 
 def create_user(form_data):
     """Create a new user with validation and audit logging"""

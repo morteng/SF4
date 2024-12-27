@@ -28,7 +28,10 @@ limiter = Limiter(
 def init_rate_limiter(app):
     """Initialize rate limiter with app-specific configuration"""
     limiter.init_app(app)
-    limiter.default_limits = [app.config['RATELIMIT_USER_MANAGEMENT']]
+    limiter.limit("100 per hour")(admin_user_bp)
+    limiter.limit("10 per minute")(admin_user_bp.route('/create', methods=['POST']))
+    limiter.limit("3 per minute")(admin_user_bp.route('/<int:id>/delete', methods=['POST']))
+    limiter.limit("5 per hour")(admin_user_bp.route('/<int:id>/reset_password', methods=['POST']))
 
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")
@@ -293,11 +296,22 @@ def delete(id):
 @login_required
 @admin_required
 def reset_password(id):
-    """Reset a user's password"""
+    """Reset a user's password with audit logging"""
     try:
         user = get_user_by_id(id)
         temp_password = generate_temp_password()
         user.set_password(temp_password)
+        
+        # Create audit log
+        AuditLog.create(
+            user_id=current_user.id,
+            action='reset_password',
+            object_type='User',
+            object_id=user.id,
+            details=f'Reset password for user {user.username}',
+            ip_address=request.remote_addr
+        )
+        
         db.session.commit()
         
         # TODO: Send email with temporary password
@@ -308,7 +322,7 @@ def reset_password(id):
     except Exception as e:
         db.session.rollback()
         logging.error(f"Failed to reset password for user {id}: {e}")
-        flash_message(FlashMessages.PASSWORD_RESET_ERROR.value, FlashCategory.ERROR.value)
+        flash_message(f"{FlashMessages.PASSWORD_RESET_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
         return redirect(url_for('admin.user.index')), 500
 
 @admin_user_bp.route('/<int:id>/toggle_active', methods=['POST'])
@@ -366,19 +380,25 @@ def edit_profile():
 @login_required
 @admin_required
 def index():
-    page = request.args.get('page', 1, type=int)
-    search_query = request.args.get('q', '')
-    
-    if search_query:
-        users = search_users(search_query, page=page)
-    else:
-        users = get_all_users(page=page)
-    
-    # Create a form instance to include CSRF token
-    form = UserForm()
-    return render_template('admin/users/index.html', 
-                         users=users,
-                         search_query=search_query,
-                         form=form,
-                         csrf_token=generate_csrf(),
-                         _meta={'csrf': True})  # Ensure CSRF is enabled
+    """List users with search and pagination"""
+    try:
+        page = request.args.get('page', 1, type=int)
+        search_query = request.args.get('q', '')
+        
+        if search_query:
+            users = search_users(search_query, page=page)
+        else:
+            users = get_all_users(page=page)
+        
+        # Create a form instance to include CSRF token
+        form = UserForm()
+        return render_template('admin/users/index.html', 
+                            users=users,
+                            search_query=search_query,
+                            form=form,
+                            csrf_token=generate_csrf(),
+                            _meta={'csrf': True})  # Ensure CSRF is enabled
+    except Exception as e:
+        logging.error(f"Error in user index route: {str(e)}")
+        flash_message(FlashMessages.GENERIC_ERROR.value, FlashCategory.ERROR.value)
+        return redirect(url_for('admin.dashboard.dashboard'))
