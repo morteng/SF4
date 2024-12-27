@@ -86,7 +86,7 @@ def delete(id):
     try:
         delete_user(user)
         flash_message(FlashMessages.DELETE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
-        return redirect(url_for('admin.user.index')), 302
+        return redirect(url_for('admin.user.index')), 200
     except Exception as e:
         db.session.rollback()
         logging.error(f"Failed to delete user {id}: {e}")
