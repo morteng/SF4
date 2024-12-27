@@ -19,3 +19,4 @@
 /architect update CONVENTIONS.md, TODO.md and VALIDATION.md as needed. Keep them as compact as possible without losing important information.
 
 /exit
+/exit

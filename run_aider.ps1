@@ -1,4 +1,4 @@
-# Continuously runs aider with COMMANDS.txt until Exc is pressed
+# Continuously runs aider with COMMANDS.txt until Esc is pressed
 
 Write-Host "Running aider in a loop. Press Esc to exit..."
 
