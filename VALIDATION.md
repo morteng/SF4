@@ -30,6 +30,11 @@
 - Sensitive operations: 10 requests/minute
 - Use Flask-Limiter for implementation
 
+### Notification Badge Validation
+- All admin templates must include a notification badge.
+- The badge must display the correct count of unread notifications.
+- The badge must be visible even if the count is 0.
+
 ## Error Handling
 - Rollback on error
 - Audit log all CRUD operations with:

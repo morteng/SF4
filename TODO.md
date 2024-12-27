@@ -1,5 +1,6 @@
 # TODO List
 ## High Priority
+- [ ] Ensure notification badge is present in all admin templates
 - [x] Implement consistent CSRF token handling
 - [x] Verify error handling for database errors
 - [x] Implement password strength validation

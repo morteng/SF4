@@ -21,6 +21,12 @@
 - Ensure CSRF tokens are included in all POST requests
 - Use `extract_csrf_token()` helper function in tests
 
+### Notification Badges
+- All admin templates must include a notification badge.
+- The badge should display the count of unread notifications.
+- Use `get_notification_count()` to retrieve the count.
+- The badge should be visible even if the count is 0.
+
 ### Testing with CSRF and Error Handling
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
 - Extract CSRF token from hidden input: `<input name="csrf_token" value="...">`
