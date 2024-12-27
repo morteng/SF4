@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, flash, session
-from flask import request  # Ensure request is imported
 from app.models.user import User
 from datetime import datetime
 from app.models.audit_log import AuditLog
