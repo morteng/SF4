@@ -30,9 +30,7 @@ def create():
     form = OrganizationForm()
     
     if form.validate_on_submit():
-        if not request.form.get('csrf_token'):
-            flash_message(FLASH_MESSAGES['CSRF_MISSING'], FLASH_CATEGORY_ERROR)
-            return redirect(url_for('admin.organization.index'))
+        # CSRF token is automatically validated by Flask-WTF
             
         try:
             organization_data = {

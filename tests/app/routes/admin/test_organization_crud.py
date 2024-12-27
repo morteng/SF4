@@ -23,9 +23,10 @@ def test_create_organization(logged_in_admin, db_session, organization_data):
         assert response.status_code == 200
         csrf_token = extract_csrf_token(response.data)
 
-        # Include CSRF token in the POST data
+        # Include CSRF token and form submit in the POST data
         data = organization_data.copy()
         data['csrf_token'] = csrf_token
+        data['submit'] = 'Create'  # Add the submit button value
 
         # Submit the form
         response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
