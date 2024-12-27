@@ -35,13 +35,13 @@ def test_organization_form_valid_data(app, client):
             print("Session after initial request:", session)
             assert 'csrf_token' in session, "CSRF token not found in session"
 
-        # Create form within the request context
-        form = OrganizationForm()
-        assert form.csrf_token.current_token, "CSRF token not generated in form"
-
-        # Verify CSRF token in session matches the form's token
+        # Create form within the request context using the session token
         with client.session_transaction() as session:
-            assert session['csrf_token'] == form.csrf_token.current_token, "CSRF token mismatch"
+            csrf_token = session['csrf_token']
+            
+        # Create form with the existing CSRF token
+        form = OrganizationForm(csrf_token=csrf_token)
+        assert form.csrf_token.current_token == csrf_token, "Form CSRF token mismatch"
 
         # Create form with valid data and the actual CSRF token
         form = OrganizationForm(data={
