@@ -3,7 +3,7 @@
 ## Principles
 - Validate client & server side
 - Test success & failure cases
-- Use FlashCategory and FlashMessages enums for message types
+- Use `FlashMessages` and `FlashCategory` enums for message types
 
 ## Form Validation
 - Required fields: Validate presence
@@ -14,7 +14,7 @@
 ## Error Handling
 - Rollback on error
 - Log details
-- Use FlashMessages for user feedback
+- Use `FlashMessages` for user feedback
 - Preserve form state
 
 ## Security

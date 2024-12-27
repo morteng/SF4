@@ -3,8 +3,8 @@
 - Type hints & docstrings required
 - Use fixtures & parameterized tests
 - Verify UI & DB state
-- Use enums (FlashCategory, FlashMessages) consistently
-- Use factory functions (tests/utils.py)
+- Use enums (`FlashMessages`, `FlashCategory`) consistently
+- Use factory functions (`tests/utils.py`)
 
 ### Security
 - Validate all inputs
@@ -13,7 +13,7 @@
 - Sanitize with bleach
 
 ### Code Organization
-- CSS: Tailwind in main.css
-- JS: HTMX in main.js
-- Constants: Use FlashCategory and FlashMessages enums
+- CSS: Tailwind in `main.css`
+- JS: HTMX in `main.js`
+- Constants: Use `FlashMessages` and `FlashCategory` enums
 
