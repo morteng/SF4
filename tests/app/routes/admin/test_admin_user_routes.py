@@ -166,7 +166,7 @@ def test_create_user_route_with_database_error(logged_in_admin, user_data, db_se
         
         response = logged_in_admin.post(url_for('admin.user.create'), data=data)
         
-        assert response.status_code == 200
+        assert response.status_code == 400
         # Assert the flash message using constants
         assert_flash_message(response, FlashMessages.CREATE_USER_ERROR)
 
