@@ -38,7 +38,8 @@ class AuditLog(db.Model):
             notification = Notification(
                 message=f"Audit log created for {action} on {object_type} {object_id}",
                 type="system",
-                read_status=False
+                read_status=False,
+                user_id=user_id
             )
             db.session.add(notification)
             
