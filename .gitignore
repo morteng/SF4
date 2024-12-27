@@ -11,6 +11,7 @@ __pycache__/
 .coverage*
 .pytest_cache/
 .env.aider
+.vscode/
 
 # Databases
 instance/site.db
