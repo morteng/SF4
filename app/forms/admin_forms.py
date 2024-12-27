@@ -215,7 +215,6 @@ class OrganizationForm(FlaskForm):
         Regexp('^[A-Za-z0-9 ]*$', message='Organization name must contain only letters, numbers, and spaces.')
     ])
     description = TextAreaField('About', validators=[
-        Optional(),
         Length(max=500, message="Description cannot exceed 500 characters.")
     ], render_kw={"maxlength": 500, "data-maxlength": "500"})
     homepage_url = URLField('Website', validators=[
@@ -249,9 +248,10 @@ class OrganizationForm(FlaskForm):
 
     def validate_description(self, field):
         """Custom validation for description field"""
-        if field.data is None:
+        # Skip validation if field is empty
+        if not field.data:
             return
-        
+            
         # Ensure the description is a string
         if not isinstance(field.data, str):
             raise ValidationError('Description must be a string')
