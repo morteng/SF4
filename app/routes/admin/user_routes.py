@@ -19,24 +19,14 @@ from app.extensions import db  # Import the db object
 
 admin_user_bp = Blueprint('user', __name__, url_prefix='/users')
 
-# Initialize rate limiter with default values
+# Initialize rate limiter
 limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"]  # Default fallback values
 )
 
-def init_rate_limiter(app):
-    """Initialize rate limiter with app-specific configuration"""
-    limiter.init_app(app)
-    # Global rate limit for all admin user routes
-    limiter.limit("100 per hour")(admin_user_bp)
-    # Specific rate limits for sensitive operations
-    limiter.limit("10 per minute")(admin_user_bp.route('/create', methods=['POST']))
-    limiter.limit("3 per minute")(admin_user_bp.route('/<int:id>/delete', methods=['POST']))
-    limiter.limit("5 per hour")(admin_user_bp.route('/<int:id>/reset_password', methods=['POST']))
-
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")  # More restrictive limit for user creation
+@limiter.limit("10 per minute")
 @login_required
 @admin_required
 def create():
@@ -253,7 +243,7 @@ def edit(id):
         return redirect(url_for('admin.user.index')), 500
 
 @admin_user_bp.route('/<int:id>/delete', methods=['POST'])
-@limiter.limit("3 per minute")  # More restrictive limit for user deletion
+@limiter.limit("3 per minute")
 @login_required
 @admin_required
 def delete(id):
@@ -284,7 +274,7 @@ def delete(id):
         return redirect(url_for('admin.user.index')), 500
 
 @admin_user_bp.route('/<int:id>/reset_password', methods=['POST'])
-@limiter.limit("5 per hour")  # More restrictive limit for password resets
+@limiter.limit("5 per hour")
 @login_required
 @admin_required
 def reset_password(id):

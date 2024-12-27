@@ -40,8 +40,8 @@ def create_app(config_name='development'):
         return db.session.get(User, int(user_id))  
 
     # Initialize rate limiter
-    from app.routes.admin.user_routes import init_rate_limiter
-    init_rate_limiter(app)
+    from app.routes.admin.user_routes import limiter
+    limiter.init_app(app)
 
     # Register blueprints
     from app.routes.admin import register_admin_blueprints
