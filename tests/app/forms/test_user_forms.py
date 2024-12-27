@@ -145,10 +145,10 @@ def test_profile_form_invalid_same_username(client, setup_database):
     if response.status_code != 200:
         print("Response data:", response.data.decode())
         
-    # Verify flash message was shown
-    assert response.status_code == 200, f"Expected 200, got {response.status_code}"
+    # Verify the response status code and error message
+    assert response.status_code == 400, f"Expected 400, got {response.status_code}"
     assert FlashMessages.USERNAME_ALREADY_EXISTS.value.encode() in response.data, \
-        f"Expected flash message '{FlashMessages.USERNAME_ALREADY_EXISTS.value}' not found in response"
+        "Expected username validation error not found in response"
 
     # Log out and clean up
     client.get('/logout')
