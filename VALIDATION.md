@@ -37,11 +37,15 @@
 - Handle missing/invalid CSRF tokens with 400 status
 
 ## Rate Limiting
-- Admin endpoints: 100 requests/hour
-- Sensitive operations: 10 requests/minute
-- User creation: 10 requests/minute
-- User deletion: 3 requests/minute
-- Password resets: 5 requests/hour
+- Admin: 100/hour
+- Sensitive ops: 10/minute
+- User CRUD:
+  - Create: 10/minute
+  - Delete: 3/minute
+- Password resets: 5/hour
+- Organization CRUD:
+  - Create/Update: 10/minute
+  - Delete: 3/minute
 
 ### Notification Badge Validation
 - All admin templates must include a notification badge.

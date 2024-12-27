@@ -10,11 +10,15 @@
   - Sensitive operations: 10/minute
 
 ### Rate Limiting
-- Admin endpoints: 100/hour
-- Sensitive operations: 10/minute
-- User creation: 10/minute
-- User deletion: 3/minute
+- Admin: 100/hour
+- Sensitive ops: 10/minute
+- User CRUD:
+  - Create: 10/minute
+  - Delete: 3/minute
 - Password resets: 5/hour
+- Organization CRUD:
+  - Create/Update: 10/minute
+  - Delete: 3/minute
 
 ### CSRF Token Handling
 - Use Flask-WTF for CSRF protection

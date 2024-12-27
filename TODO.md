@@ -1,13 +1,11 @@
 # TODO List
 ## High Priority
-- [x] Implement core CRUD functionality
-- [x] Add CSRF protection and validation
-- [x] Set up audit logging (all CRUD operations)
-- [x] Configure rate limiting
-- [x] Fix CSRF token template usage
-- [ ] Complete admin route tests
-- [ ] Fix request handling in user routes
-- [ ] Add HTMX integration tests
+- [x] Core CRUD & security
+- [ ] Testing:
+  - Admin routes
+  - User request handling
+  - HTMX integration
+  - Rate limiting (org CRUD)
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
