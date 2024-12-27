@@ -50,13 +50,13 @@ def test_profile_form_valid(logged_in_client, db_session):
             assert response.status_code == 200
             assert b"Profile updated successfully" in response.data
 
-def test_profile_form_invalid_csrf(client):
+def test_profile_form_invalid_csrf(logged_in_client):
     """Test profile form submission with invalid CSRF token"""
-    with client.application.test_request_context():
+    with logged_in_client.application.test_request_context():
         with patch('app.forms.user_forms.User.query.filter_by') as mock_filter_by:
             mock_filter_by.return_value.first.return_value = None
 
-            with client.session_transaction() as sess:
+            with logged_in_client.session_transaction() as sess:
                 form = ProfileForm(
                     original_username="testuser",
                     original_email="test@example.com"
@@ -65,7 +65,7 @@ def test_profile_form_invalid_csrf(client):
                 sess['csrf_token'] = csrf_token
 
             # Submit with invalid CSRF token
-            response = client.post(url_for('user.edit_profile'), data={
+            response = logged_in_client.post(url_for('user.edit_profile'), data={
                 'username': 'newusername',
                 'email': 'newemail@example.com',
                 'csrf_token': 'invalid_token'
