@@ -5,7 +5,7 @@
    - [x] Implement CSRF protection
    - [x] Add input sanitization
    - [ ] Add rate limiting to admin routes
-   - [x] Standardize flash messages using enums (FlashMessages and FlashCategory)
+   - [x] Standardize flash messages using enums
 
 2. **Error Handling**
    - [x] Add comprehensive error handling
