@@ -30,7 +30,7 @@ def init_rate_limiter(app):
     limiter.default_limits = [app.config['RATELIMIT_USER_MANAGEMENT']]
 
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")  # Matches project specification for sensitive operations
+@limiter.limit("10 per minute")
 @login_required
 @admin_required
 def create():
@@ -39,24 +39,41 @@ def create():
     
     if form.validate_on_submit():
         try:
+            # Validate unique fields
+            if User.query.filter_by(username=form.username.data).first():
+                raise ValueError("Username already exists")
+            if User.query.filter_by(email=form.email.data).first():
+                raise ValueError("Email already exists")
+                
+            # Create user
             new_user = create_user(form.data)
-            # Create audit log entry
+            
+            # Create audit log
             AuditLog.create(
                 user_id=current_user.id,
                 action='create_user',
-                details=f'Created user {new_user.username}'
+                object_type='User',
+                object_id=new_user.id,
+                details=f'Created user {new_user.username}',
+                ip_address=request.remote_addr
             )
+            
             flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
-            session.modified = True
             return redirect(url_for('admin.user.index'))
         except ValueError as e:
             db.session.rollback()
             flash_message(str(e), FlashCategory.ERROR.value)
-            if request.headers.get('HX-Request') == 'true':
-                return render_template('admin/users/_create_form.html', 
-                                    form=form,
-                                    notification_count=notification_count), 400
-            return render_template('admin/users/create.html', 
+            
+            # Log the failed attempt
+            AuditLog.create(
+                user_id=current_user.id,
+                action='create_user_failed',
+                details=f'Failed to create user: {str(e)}',
+                ip_address=request.remote_addr
+            )
+            
+            template = 'admin/users/_create_form.html' if request.headers.get('HX-Request') == 'true' else 'admin/users/create.html'
+            return render_template(template, 
                                 form=form,
                                 notification_count=notification_count,
                                 form_title='Create User'), 400
@@ -166,6 +183,10 @@ def create():
 def edit(id):
     try:
         user = get_user_by_id(id)
+        if not user:
+            flash_message(FlashMessages.USER_NOT_FOUND.value, FlashCategory.ERROR.value)
+            return redirect(url_for('admin.user.index'))
+            
         form = UserForm(
             original_username=user.username,
             original_email=user.email,
@@ -174,17 +195,39 @@ def edit(id):
         form.id.data = user.id
         
         if request.method == 'POST' and form.validate_on_submit():
+            # Validate unique fields
+            if user.username != form.username.data and User.query.filter_by(username=form.username.data).first():
+                flash_message("Username already exists", FlashCategory.ERROR.value)
+                return render_template('admin/users/edit.html', form=form), 400
+                
+            if user.email != form.email.data and User.query.filter_by(email=form.email.data).first():
+                flash_message("Email already exists", FlashCategory.ERROR.value)
+                return render_template('admin/users/edit.html', form=form), 400
+                
             # Handle role changes
             if 'is_admin' in request.form:
                 user.is_admin = request.form['is_admin'] == 'true'
             
             # Handle password reset
             if 'reset_password' in request.form and request.form['reset_password'] == 'true':
-                user.set_password('temporary_password')  # Implement proper password reset logic
+                temp_password = generate_temp_password()
+                user.set_password(temp_password)
+                # TODO: Send email with temporary password
                 flash_message("Password reset initiated", FlashCategory.SUCCESS)
                 
             try:
                 update_user(user, form.data)
+                
+                # Create audit log
+                AuditLog.create(
+                    user_id=current_user.id,
+                    action='update_user',
+                    object_type='User',
+                    object_id=user.id,
+                    details=f'Updated user {user.username}',
+                    ip_address=request.remote_addr
+                )
+                
                 flash_message(FlashMessages.UPDATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
                 return redirect(url_for('admin.user.index'))
             except ValueError as e:

@@ -50,11 +50,6 @@ def test_create_user_route(logged_in_admin, user_data):
         'csrf_token': csrf_token
     }, follow_redirects=True)
     
-    # Debug logging to help identify validation issues
-    if response.status_code != 200:
-        logging.error(f"Unexpected status code: {response.status_code}")
-        logging.error(f"Response data: {response.data.decode('utf-8')}")
-    
     # Verify response
     assert response.status_code == 200
     assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data
@@ -63,14 +58,18 @@ def test_create_user_route(logged_in_admin, user_data):
     users = User.query.all()
     assert any(user.username == user_data['username'] and user.email == user_data['email'] for user in users)
     
-    # Verify notification badge is present (even if count is 0)
+    # Verify notification badge is present
     assert b'notification-badge' in response.data
     
     # Verify audit log was created
     audit_log = AuditLog.query.filter_by(action='create_user').first()
     assert audit_log is not None
-    with logged_in_admin.application.app_context():
-        assert audit_log.user_id == current_user.id
+    
+    # Verify audit log details
+    admin_user = User.query.filter_by(is_admin=True).first()
+    assert audit_log.user_id == admin_user.id
+    assert audit_log.object_type == 'User'
+    assert audit_log.details == f'Created user {user_data["username"]}'
     assert audit_log.ip_address is not None
 
 def test_create_user_route_with_invalid_data(logged_in_admin, user_data):
