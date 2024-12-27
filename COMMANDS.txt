@@ -12,16 +12,9 @@
 
 /ask what is causing the problem?
 
-/code implement the suggested changes
-/code implement the suggested changes
-
-/ask how can we improve the code?
-/ask how can we improve the code?
-
-/code implement the suggested changes
-/code implement the suggested changes
+/architect implement the suggested changes
 
 /test
 
-/code update CONVENTIONS.md, TODO.md and VALIDATION.md as needed. Keep them as compact as possible without losing important information.
+/architect update CONVENTIONS.md, TODO.md and VALIDATION.md as needed. Keep them as compact as possible without losing important information.
 
