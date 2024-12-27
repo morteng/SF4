@@ -126,8 +126,8 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
     assert csrf_token is not None, f"CSRF token not found in the response. HTML: {index_response.data.decode()[:1000]}"
     
     # Deserialize the CSRF token from the form
-    from itsdangerous import URLSafeTimedSerializer
-    serializer = URLSafeTimedSerializer(logged_in_admin.application.config['SECRET_KEY'])
+    from itsdangerous import URLSafeSerializer
+    serializer = URLSafeSerializer(logged_in_admin.application.config['SECRET_KEY'])
     deserialized_csrf_token = serializer.loads(csrf_token)
 
     # Verify the CSRF token in the session
