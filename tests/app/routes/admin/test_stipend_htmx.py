@@ -37,8 +37,10 @@ def test_create_stipend_with_invalid_form_data_htmx(
             }
         )
 
-        assert response.status_code == 400  # Ensure status code is 400 for invalid data
-        assert FlashMessages.FORM_FIELD_REQUIRED.value.format(field="Name") in response.data
+        assert response.status_code == 400, "Expected 400 status for invalid form data"  # Ensure status code is 400 for invalid data
+        assert FlashMessages.FORM_FIELD_REQUIRED.value.format(field="Name") in response.data, \
+            "Expected required field error message"
+        logger.debug(f"Invalid form submission response: {response.data.decode()}")
 
 def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     test_cases = [
