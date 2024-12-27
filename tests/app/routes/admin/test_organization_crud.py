@@ -154,6 +154,10 @@ def test_create_organization_with_invalid_url(logged_in_admin, db_session):
             for cat, msg in flashed_messages
         ), "Field validation error not found in flash messages"
 
+        # Ensure no organization was created
+        new_organization = db_session.query(Organization).filter_by(name=invalid_data['name']).first()
+        assert new_organization is None
+
 def test_create_organization_with_empty_form(logged_in_admin, db_session):
     """Test that empty form submissions are rejected."""
     with logged_in_admin.application.app_context():

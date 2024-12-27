@@ -3,6 +3,8 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from bleach import clean
 
 logger = logging.getLogger(__name__)
+
+logger = logging.getLogger(__name__)
 from flask_login import login_required
 from flask_wtf.csrf import CSRFProtect
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
@@ -24,17 +26,21 @@ def create():
     GET: Render the organization creation form.
     POST: Validate the form and create the organization.
     """
+    logger.info("Organization creation form accessed.")
     form = OrganizationForm()
     
     if form.validate_on_submit():
-        # Clean and validate input data
-        organization_data = {
-            'name': clean(form.name.data.strip()),
-            'description': clean(form.description.data.strip()),
-            'homepage_url': clean(form.homepage_url.data.strip()) if form.homepage_url.data else None
-        }
-        
+        if not request.form.get('csrf_token'):
+            flash_message(FLASH_MESSAGES['CSRF_MISSING'], FLASH_CATEGORY_ERROR)
+            return redirect(url_for('admin.organization.index'))
+            
         try:
+            organization_data = {
+                'name': clean(form.name.data.strip()),
+                'description': clean(form.description.data.strip()),
+                'homepage_url': clean(form.homepage_url.data.strip()) if form.homepage_url.data else None
+            }
+            
             success, error_message = create_organization(organization_data)
             if success:
                 flash_message(FLASH_MESSAGES["CREATE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
@@ -46,11 +52,17 @@ def create():
         except IntegrityError as e:
             db.session.rollback()
             flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DUPLICATE_ERROR'], FLASH_CATEGORY_ERROR)
+            logger.error(f"Integrity error creating organization: {str(e)}")
         except SQLAlchemyError as e:
             db.session.rollback()
-            logger.error(f"Database error creating organization: {str(e)}")
             flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
+            logger.error(f"Database error creating organization: {str(e)}")
+        except Exception as e:
+            db.session.rollback()
+            flash_message(FLASH_MESSAGES['GENERIC_ERROR'], FLASH_CATEGORY_ERROR)
+            logger.error(f"Unexpected error creating organization: {str(e)}")
     elif form.errors:
+        logger.warning(f"Form validation errors: {form.errors}")
         return handle_form_errors(form)
         
     return render_template('admin/organizations/form.html', form=form)
@@ -132,8 +144,6 @@ def handle_form_errors(form):
                 message = FLASH_MESSAGES["FORM_FIELD_REQUIRED"].format(field=field_label)
             elif 'Invalid URL format' in error:
                 message = FLASH_MESSAGES["FORM_INVALID_URL"].format(field=field_label)
-            elif 'Invalid date format' in error:
-                message = FLASH_MESSAGES["FORM_INVALID_DATE_FORMAT"].format(field=field_label)
             elif 'Invalid characters' in error:
                 message = FLASH_MESSAGES["FORM_INVALID_CHARACTERS"].format(field=field_label)
             else:

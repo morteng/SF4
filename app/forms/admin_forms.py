@@ -213,8 +213,14 @@ class OrganizationForm(FlaskForm):
         Length(max=100, message="Organization name cannot exceed 100 characters."),
         Regexp('^[A-Za-z0-9 ]*$', message='Organization name must contain only letters, numbers, and spaces.')
     ])
-    description = TextAreaField('About')
-    homepage_url = URLField('Website', validators=[Optional(), URL()])
+    description = TextAreaField('About', validators=[
+        DataRequired(message="This field is required."),
+        Length(max=500, message="Description cannot exceed 500 characters.")
+    ])
+    homepage_url = URLField('Website', validators=[
+        Optional(),
+        URL(message="Please enter a valid URL starting with http:// or https://.")
+    ])
     submit = SubmitField('Create')
 
     def __init__(self, original_name=None, *args, **kwargs):
