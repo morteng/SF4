@@ -34,13 +34,13 @@ def client(app):
     ctx.pop()
 
 @pytest.fixture(scope='function')
-def test_user(db_session, user_data):
-    """Provide a test user."""
+def test_user(db_session):
+    """Provide a test admin user."""
     user = User(
-        username=user_data['username'],
-        email=user_data['email'],
-        password_hash=generate_password_hash(user_data['password']),
-        is_admin=False
+        username='admin_user',
+        email='admin@example.com',
+        password_hash=generate_password_hash('AdminPass123!'),
+        is_admin=True
     )
     db_session.add(user)
     db_session.commit()
@@ -179,13 +179,22 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
     unique_user_data = user_data.copy()
     unique_user_data['username'] = 'unique_testuser'
     
-    # Verify admin user is logged in
-    with logged_in_admin.session_transaction() as session:
-        assert 'user_id' in session, "Admin user is not logged in"
-        assert session['user_id'] == test_user.id, \
-            f"Expected logged in user ID {test_user.id} but got {session['user_id']}"
+    # Log in the admin user
+    with logged_in_admin:
+        # Perform login
+        login_response = logged_in_admin.post('/login', data={
+            'username': 'admin_user',
+            'password': 'AdminPass123!'
+        }, follow_redirects=True)
+        assert login_response.status_code == 200
+        
+        # Verify admin user is logged in
+        with logged_in_admin.session_transaction() as session:
+            assert '_user_id' in session, "Admin user is not logged in"
+            assert session['_user_id'] == str(test_user.id), \
+                f"Expected logged in user ID {test_user.id} but got {session['_user_id']}"
     
-    verify_user_crud_operations(logged_in_admin, test_user, unique_user_data)
+        verify_user_crud_operations(logged_in_admin, test_user, unique_user_data)
 
 def test_get_all_users_sorting(db_session):
     """Test sorting functionality in get_all_users()"""

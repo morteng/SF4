@@ -22,7 +22,11 @@ from werkzeug.security import generate_password_hash
 from dotenv import load_dotenv  # Add this import
 from app.extensions import db  # Import the db object
 
+from functools import wraps
+from datetime import datetime
+
 def admin_required(f):
+    @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
             flash_message(FlashMessages.LOGIN_REQUIRED.value, FlashCategory.ERROR.value)
@@ -32,18 +36,20 @@ def admin_required(f):
             flash_message(FlashMessages.ADMIN_REQUIRED.value, FlashCategory.ERROR.value)
             return abort(403)
             
-        # Add audit log
-        audit_log = AuditLog(
-            user_id=current_user.id,
-            action=f.__name__,
-            details_before=f"Accessed admin route: {request.path}",
-            timestamp=datetime.utcnow()
-        )
-        db.session.add(audit_log)
-        db.session.commit()
-        
+        try:
+            # Add audit log
+            audit_log = AuditLog(
+                user_id=current_user.id,
+                action=f.__name__,
+                details_before=f"Accessed admin route: {request.path}",
+                timestamp=datetime.now(datetime.UTC)
+            )
+            db.session.add(audit_log)
+            db.session.commit()
+        except Exception as e:
+            logger.error(f"Error creating audit log: {str(e)}")
+            
         return f(*args, **kwargs)
-    decorated_function.__name__ = f.__name__
     return decorated_function
 
 # Define login_required in utils.py
