@@ -32,8 +32,29 @@ def delete_user(user):
 
 from sqlalchemy import or_
 
-def get_all_users(page=1, per_page=10):
-    return User.query.paginate(page=page, per_page=per_page)
+def get_all_users(page=1, per_page=10, sort_by='created_at', sort_order='desc'):
+    """Get paginated list of users with sorting options.
+    
+    Args:
+        page: Page number (1-based)
+        per_page: Items per page
+        sort_by: Field to sort by ('username', 'email', or 'created_at')
+        sort_order: Sort direction ('asc' or 'desc')
+    
+    Returns:
+        Pagination object with users
+    """
+    query = User.query
+    
+    # Validate and apply sorting
+    if sort_by == 'username':
+        query = query.order_by(User.username.asc() if sort_order == 'asc' else User.username.desc())
+    elif sort_by == 'email':
+        query = query.order_by(User.email.asc() if sort_order == 'asc' else User.email.desc())
+    else:  # Default to created_at
+        query = query.order_by(User.created_at.desc())
+    
+    return query.paginate(page=page, per_page=per_page)
 
 def search_users(query, page=1, per_page=10):
     """Search users with error handling"""

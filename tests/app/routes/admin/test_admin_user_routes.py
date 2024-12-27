@@ -46,6 +46,31 @@ def test_user(db_session, user_data):
     db_session.delete(user)
     db_session.commit()
 
+def test_get_all_users_sorting(db_session):
+    """Test sorting functionality in get_all_users()"""
+    # Create test users
+    user1 = User(username='user1', email='user1@example.com', created_at=datetime(2024, 1, 1))
+    user2 = User(username='user2', email='user2@example.com', created_at=datetime(2024, 1, 2))
+    user3 = User(username='user3', email='user3@example.com', created_at=datetime(2024, 1, 3))
+    db_session.add_all([user1, user2, user3])
+    db_session.commit()
+
+    # Test username ascending
+    result = get_all_users(sort_by='username', sort_order='asc')
+    assert [u.username for u in result.items] == ['user1', 'user2', 'user3']
+
+    # Test username descending
+    result = get_all_users(sort_by='username', sort_order='desc')
+    assert [u.username for u in result.items] == ['user3', 'user2', 'user1']
+
+    # Test email ascending
+    result = get_all_users(sort_by='email', sort_order='asc')
+    assert [u.email for u in result.items] == ['user1@example.com', 'user2@example.com', 'user3@example.com']
+
+    # Test created_at descending (default)
+    result = get_all_users()
+    assert [u.username for u in result.items] == ['user3', 'user2', 'user1']
+
 def test_create_user_route(logged_in_admin, user_data, db_session):
     """Test user creation with proper CSRF and audit logging"""
     # Verify initial user count
