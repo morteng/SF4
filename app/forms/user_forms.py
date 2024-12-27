@@ -3,6 +3,9 @@ from wtforms import StringField, SubmitField, PasswordField
 import logging
 
 logger = logging.getLogger(__name__)
+import logging
+
+logger = logging.getLogger(__name__)
 from flask import session
 from wtforms.validators import DataRequired, Email, ValidationError, EqualTo
 from app.models.user import User
@@ -51,12 +54,12 @@ class RegisterForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
-    def validate_username(self, username):
+    def validate_username(self, username: StringField) -> None:
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
             raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS)
 
-    def validate_email(self, email):
+    def validate_email(self, email: StringField) -> None:
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError(FlashMessages.EMAIL_ALREADY_EXISTS)
