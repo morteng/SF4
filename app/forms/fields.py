@@ -38,6 +38,9 @@ class CustomDateTimeField(DateTimeField):
                     is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
                     if not is_leap:
                         self.errors.append(self.error_messages['invalid_leap_year'])
+                        # Clear any previous format errors
+                        if 'invalid_format' in self.errors:
+                            self.errors.remove('invalid_format')
                         return
                 
                 # Validate time components
@@ -72,7 +75,9 @@ class CustomDateTimeField(DateTimeField):
                 
                 # Handle other error cases
                 if 'does not match format' in error_str:
-                    self.errors.append(self.error_messages['invalid_format'])
+                    # Only add format error if it's not a leap year issue
+                    if not any('invalid_leap_year' in err for err in self.errors):
+                        self.errors.append(self.error_messages['invalid_format'])
                 elif 'day is out of range' in error_str or 'month is out of range' in error_str or 'day must be in' in error_str:
                     self.errors.append(self.error_messages['invalid_date'])
                 elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
