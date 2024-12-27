@@ -29,13 +29,17 @@ def create():
         except SQLAlchemyError as e:
             db.session.rollback()
             flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
-            return render_template('admin/organizations/form.html', form=form), 500
     else:
         # Handle form validation errors
         for field_name, errors in form.errors.items():
+            field_label = form[field_name].label.text
             for error in errors:
-                flash_message(error, FLASH_CATEGORY_ERROR)
+                if 'This field is required.' in error:
+                    flash_message(f"{field_label}: This field is required.", FLASH_CATEGORY_ERROR)
+                else:
+                    flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
+    return render_template('admin/organizations/form.html', form=form)
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
