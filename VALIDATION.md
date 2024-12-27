@@ -1,12 +1,8 @@
 # Validation Rules
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
-- Include CSRF token in:
-  - Form fields: `csrf_token` and `_csrf_token`
-  - Meta tag: `<meta name="csrf-token" content="{{ csrf_token }}">`
-  - Headers: `X-CSRFToken` and `X-Requested-With: XMLHttpRequest`
-  - HTMX requests: Add CSRF token via hx-headers
-- Verify CSRF token matches session token
+- Include CSRF token in form fields: `<input name="csrf_token" value="{{ csrf_token }}">`
+- Verify raw CSRF token matches session token directly
 
 ## Error Handling
 - Rollback on error
