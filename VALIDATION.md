@@ -6,6 +6,7 @@
 - CSRF enabled in all environments
 - Include CSRF validation in all form tests
 - Use request context for form tests
+- Use form-generated CSRF tokens in tests
 
 ## Form Validation
 - Required fields: Validate presence
@@ -13,6 +14,7 @@
 - Format: Validate URLs, dates
 - Uniqueness: Check for duplicates
 - CSRF: Validate token in all forms
+- Use form-generated CSRF tokens
 
 ## Form Testing
 - Test both valid and invalid form submissions
@@ -20,6 +22,7 @@
 - Use `test_request_context` for CSRF-protected forms
 - Validate CSRF tokens in all form tests
 - Ensure form submissions include all required fields
+- Use form-generated CSRF tokens in tests
 
 ## Form Validation Testing
 - Test all required fields and constraints

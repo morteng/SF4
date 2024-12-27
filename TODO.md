@@ -18,4 +18,5 @@
 - Verify UI & DB state in tests
 - Ensure CSRF tokens in all forms
 - Maintain CSRF protection in all environments
+- Use form-generated CSRF tokens in tests
 
