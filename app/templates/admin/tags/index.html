@@ -7,23 +7,22 @@
 <a href="{{ url_for('admin.tag.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Create New Tag</a>
 
 <div class="overflow-x-auto mt-6">
-    <table id="tags" class="w-full border-collapse bg-white text-left text-sm">
+    <table class="w-full border-collapse bg-white text-left text-sm">
         <thead>
-            <tr>
-                <th class="bg-gray-50 px-4 py-2">#</th>
-                <th class="bg-gray-50 px-4 py-2">Name</th>
-                <th class="bg-gray-50 px-4 py-2">Action</th>
+            <tr class="bg-gray-50">
+                <th class="px-4 py-2">ID</th>
+                <th class="px-4 py-2">Name</th>
+                <th class="px-4 py-2">Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for tag in tags %}
-            <tr>
-                <td class="border border-gray-300 px-4 py-2">{{ tag.id }}</td>
-                <td class="border border-gray-300 px-4 py-2">{{ tag.name }}</td>
-                <td class="border border-gray-300 px-4 py-2">
-                    {% from "_macros.html" import edit_button %}
-                    {{ edit_button(url_for('admin.tag.edit', id=tag.id), 'body > main') }}
-                    {% from "_macros.html" import delete_button %}
+            <tr class="border-b border-gray-200">
+                <td class="px-4 py-2">{{ tag.id }}</td>
+                <td class="px-4 py-2">{{ tag.name }}</td>
+                <td class="px-4 py-2">
+                    {% from "_macros.html" import edit_button, delete_button %}
+                    {{ edit_button(url_for('admin.tag.edit', id=tag.id), '#main-content') }}
                     {{ delete_button(url_for('admin.tag.delete', id=tag.id), 'closest tr') }}
                 </td>
             </tr>
@@ -31,4 +30,7 @@
         </tbody>
     </table>
 </div>
+
+{% from "_macros.html" import pagination %}
+{{ pagination(tags, url_for('admin.tag.paginate')) }}
 {% endblock %}
