@@ -15,12 +15,7 @@ class CustomDateTimeField(DateTimeField):
             'invalid_date': 'Invalid date values (e.g., Feb 30)',
             'invalid_time': 'Invalid time values (e.g., 25:61:61)',
             'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
-            'required': 'Date is required',
-            'invalid_timezone': 'Invalid timezone selected',
-            'daylight_saving': 'Ambiguous time due to daylight saving transition',
-            'timezone_conversion': 'Error converting to UTC',
-            'future_date': 'Date must be in the future',
-            'past_date': 'Date must be in the past'
+            'required': 'Date is required'
         }
         # Initialize errors as a list
         self.errors = []

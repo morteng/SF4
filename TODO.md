@@ -2,10 +2,10 @@
 
 ## Current Goals
 1. Complete date/time validation implementation
-   - Add comprehensive tests for all date/time validation scenarios
-   - Ensure consistent error messages across all date/time fields
-   - Add tests for timezone-aware datetime comparisons
-   - Add edge case tests for datetime validation
+   - [x] Add comprehensive tests for all date/time validation scenarios
+   - [x] Ensure consistent error messages across all date/time fields
+   - [ ] Add tests for timezone-aware datetime comparisons
+   - [ ] Add edge case tests for datetime validation
 
 2. Enhance test coverage for stipend routes
    - Add tests for HTMX responses in stipend routes

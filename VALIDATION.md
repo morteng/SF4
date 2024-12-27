@@ -18,7 +18,8 @@
   - Month: 1-12
   - Day: 1-31 (month-dependent)
 - **Error Messages**:
-  - "Invalid date values (e.g., Feb 30)"
+  - "Invalid date values (e.g., Feb 30)"  # Updated error message
+  - "Date is required"  # Added required field message
 
 ### Time Validation
 - **Valid Time Range**:
