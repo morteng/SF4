@@ -37,6 +37,6 @@
     </div>
 
     {% from "_macros.html" import pagination %}
-    {{ pagination(users, url_for('admin.user.paginate')) }}
+    {{ pagination(users, 'admin.user.paginate', current_page, total_pages) }}
 </div>
 {% endblock %}

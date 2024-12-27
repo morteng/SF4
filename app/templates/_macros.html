@@ -46,24 +46,26 @@
 {% endwith %}
 {% endmacro %}
 
-{% macro pagination(paginated_data, paginate_url) %}
+{% macro pagination(paginated_data, endpoint, current_page, total_pages) %}
 <nav class="mt-4">
     <ul class="pagination flex justify-center items-center space-x-2">
-        {% if paginated_data.has_prev %}
+        {% if current_page > 1 %}
             <li>
-                <a href="#" hx-get="{{ paginate_url }}?page={{ paginated_data.prev_num }}" hx-target="#{{ paginated_data.__class__.__name__.lower() }}-table" hx-swap="innerHTML" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
+                <a href="{{ url_for(endpoint, page=current_page - 1) }}" 
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
                     Previous
                 </a>
             </li>
         {% endif %}
         <li>
             <span class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-500 bg-white cursor-not-allowed">
-                Page {{ paginated_data.page }} of {{ paginated_data.pages }}
+                Page {{ current_page }} of {{ total_pages }}
             </span>
         </li>
-        {% if paginated_data.has_next %}
+        {% if current_page < total_pages %}
             <li>
-                <a href="#" hx-get="{{ paginate_url }}?page={{ paginated_data.next_num }}" hx-target="#{{ paginated_data.__class__.__name__.lower() }}-table" hx-swap="innerHTML" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
+                <a href="{{ url_for(endpoint, page=current_page + 1) }}" 
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
                     Next
                 </a>
             </li>
