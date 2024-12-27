@@ -113,6 +113,8 @@ def test_leap_year_validation(app, form_data):
         form_data['application_deadline'] = '2023-02-29 12:00:00'
         form = StipendForm(data=form_data, meta={'csrf': False})
         assert form.validate() is False
+        if not form.validate():
+            print("Validation errors:", form.errors)
         assert any('Invalid date values (e.g., Feb 29 in non-leap years)' in error for error in form.errors['application_deadline'])
 
 def test_missing_date(app, form_data):
