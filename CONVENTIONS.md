@@ -1,7 +1,7 @@
 ## Coding Conventions
 ### Testing with CSRF
-- Always make an initial request (e.g., `client.get('/')`) before testing forms
-- Verify CSRF token presence and value in session
+- Always initialize session with `client.get('/')` before form tests
+- Verify CSRF token presence in session after form creation
 - Keep form creation and validation in the same context
 - Ensure test client maintains session state between requests
 
