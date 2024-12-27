@@ -145,8 +145,11 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
     updated_user = db_session.get(User, test_user.id)
     assert updated_user is None
     
-    # Verify flash message
-    assert_flash_message(delete_response, FlashMessages.DELETE_USER_SUCCESS)
+    # Verify flash message in session
+    with logged_in_admin.session_transaction() as session:
+        flashed_messages = session.get('_flashes', [])
+        assert any(msg[1] == FlashMessages.DELETE_USER_SUCCESS.value for msg in flashed_messages), \
+            f"Expected flash message '{FlashMessages.DELETE_USER_SUCCESS.value}' not found in session"
 
 def test_delete_user_route_with_invalid_id(logged_in_admin):
     delete_response = logged_in_admin.post(url_for('admin.user.delete', id=9999))
