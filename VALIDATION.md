@@ -9,6 +9,8 @@
      - URLs: No HTML
    - Validate URLs using Flask-WTF URL validator
    - Use `Enum` for constants to ensure type safety
+   - Centralized test assertions in `tests/utils.py`
+   - Factory functions for consistent test data
 
 2. **Error Handling**
    - Provide clear, user-friendly error messages using `FlashMessages`

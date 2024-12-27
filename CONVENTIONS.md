@@ -9,6 +9,8 @@
 - Validate all form inputs both client and server side
 - Use `Enum` for constants to ensure type safety
 - Add docstrings to all classes and functions
+- Centralize test utilities in `tests/utils.py`
+- Use factory functions for test data creation
 
 ## TODO.md
 - This file must be updated every time we do any file updates so that it always reflects our goal, plan and tasks. Always use full paths when referencing files to avoid confusion. This is a memory store for you, so jot down any salient thoughts about tests or code you would like to keep in mind for later. If you learn something about the codebase that would be good to know later, include the knowledge here. Do this after editing any other files. Always update TODO.md.
