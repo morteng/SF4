@@ -42,12 +42,13 @@ def create_app(config_name='development'):
     from app.routes.admin.user_routes import limiter
     limiter.init_app(app)
 
-    # Register blueprints
-    from app.routes.admin import register_admin_blueprints
-    register_admin_blueprints(app)  # For admin routes
+    # Register blueprints only if not in testing mode
+    if config_name != 'testing':
+        from app.routes.admin import register_admin_blueprints
+        register_admin_blueprints(app)  # For admin routes
 
-    from app.routes import register_blueprints
-    register_blueprints(app)        # Register other blueprints
+        from app.routes import register_blueprints
+        register_blueprints(app)        # Register other blueprints
 
     # Add CSRF error handler
     from flask_wtf.csrf import CSRFError

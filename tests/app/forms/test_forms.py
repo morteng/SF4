@@ -6,8 +6,12 @@ from app.config import TestConfig
 @pytest.fixture
 def app():
     app = create_app('testing')
-    # Use application context to prevent blueprint re-registration issues
     with app.app_context():
+        # Manually register blueprints for testing
+        from app.routes.admin import register_admin_blueprints
+        from app.routes import register_blueprints
+        register_admin_blueprints(app)
+        register_blueprints(app)
         yield app
 
 @pytest.fixture
