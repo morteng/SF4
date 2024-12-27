@@ -29,18 +29,12 @@
    - [ ] Add confirmation dialogs for delete actions
    - [ ] Add loading indicators for HTMX requests
 
-5. **Add Audit Logging**
-   - [ ] Create `AuditLog` model to track admin actions
-   - [ ] Add audit logging for all CRUD operations
-   - [ ] Add audit log view in admin dashboard
-   - [ ] Add export functionality for audit logs
-
 ## New Goals from Testing
-6. **Fix Template Issues**
+5. **Fix Template Issues**
    - [x] Create missing bot templates
    - [ ] Verify all admin routes have corresponding templates
 
-7. **Improve Test Coverage**
+6. **Improve Test Coverage**
    - [ ] Add tests for bot routes
    - [ ] Increase coverage for admin routes
    - [ ] Add integration tests for bot operations
