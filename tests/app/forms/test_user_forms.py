@@ -82,18 +82,42 @@ def test_profile_form_valid(client, setup_database):
         db.session.commit()
 
 def test_profile_form_invalid_same_username(client, setup_database):
+    # Create existing user
     password_hash = generate_password_hash("password123")
     user = User(username="existinguser", email="existing@example.com", password_hash=password_hash)
     db.session.add(user)
     db.session.commit()
 
-    with client.application.test_request_context():  # Added request context
-        with patch('app.utils.flash_message') as mock_flash:
-            form = ProfileForm(original_username="testuser", original_email="test@example.com")
-            form.username.data = "existinguser"
-            form.email.data = "newemail@example.com"
-            is_valid = form.validate()
-            mock_flash.assert_called_once_with(FlashMessages.USERNAME_ALREADY_EXISTS, FlashCategory.ERROR)
+    # Create and log in as test user
+    test_user = User(username="testuser", email="test@example.com", password_hash=password_hash)
+    db.session.add(test_user)
+    db.session.commit()
+    
+    # Simulate login
+    with client.session_transaction() as session:
+        session['user_id'] = test_user.id
+
+    # Get CSRF token
+    get_response = client.get('/user/profile/edit')
+    assert get_response.status_code == 200
+    soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+    csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+
+    # Test form submission with duplicate username
+    response = client.post('/user/profile/edit', data={
+        'username': 'existinguser',
+        'email': 'newemail@example.com',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+
+    # Verify flash message was shown
+    assert response.status_code == 200
+    assert FlashMessages.USERNAME_ALREADY_EXISTS.value.encode() in response.data
+
+    # Clean up
+    db.session.delete(user)
+    db.session.delete(test_user)
+    db.session.commit()
             assert not is_valid
 
 def test_profile_form_invalid_same_email(client, setup_database):
