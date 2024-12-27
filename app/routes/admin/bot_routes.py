@@ -105,6 +105,10 @@ def run(id):
         flash_message(FlashMessages.BOT_NOT_FOUND, FlashCategory.ERROR)
         return redirect(url_for('admin.bot.index'))
 
+    if not bot:
+        flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)
+        return redirect(url_for('admin.bot.index'))
+
     try:
         # Create audit log
         AuditLog.create(
@@ -115,9 +119,6 @@ def run(id):
             details=f'Running bot {bot.name}',
             ip_address=request.remote_addr
         )
-    if not bot:
-        flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)
-        return redirect(url_for('admin.bot.index'))
 
     try:
         # Run the appropriate bot based on name
