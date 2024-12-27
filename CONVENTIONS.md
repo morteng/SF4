@@ -3,7 +3,7 @@
 - Type hints & docstrings required
 - Use fixtures & parameterized tests
 - Verify UI & DB state
-- Use enums (FlashCategory, FlashMessages) for assertions
+- Use enums (FlashCategory, FlashMessages) consistently
 - Use factory functions (tests/utils.py)
 
 ### Security
@@ -15,5 +15,5 @@
 ### Code Organization
 - CSS: Tailwind in main.css
 - JS: HTMX in main.js
-- Constants: Use FlashCategory enum for message types
+- Constants: Use FlashCategory and FlashMessages enums
 
