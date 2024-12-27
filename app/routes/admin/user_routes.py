@@ -35,35 +35,22 @@ def create():
     notification_count = get_notification_count(current_user.id)
     
     if request.method == 'GET':
-        # Generate CSRF token for the form
-        csrf_token = generate_csrf()
         return render_template('admin/users/create.html', 
                             form=form,
-                            notification_count=notification_count,
-                            csrf_token=csrf_token), 200
-    
-    if request.method == 'GET':
-        # Generate CSRF token for the form
-        csrf_token = generate_csrf()
-        return render_template('admin/users/create.html', 
-                            form=form,
-                            notification_count=notification_count,
-                            csrf_token=csrf_token)
+                            notification_count=notification_count)
     
     if form.validate_on_submit():
         try:
             # Validate unique fields
-            existing_user = User.query.filter_by(username=form.username.data).first()
-            if existing_user:
-                flash_message(FlashMessages.USERNAME_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
-                return render_template('admin/users/create.html', 
+            if User.query.filter_by(username=form.username.data).first():
+                form.username.errors.append('Username already exists')
+                return render_template('admin/users/create.html',
                                     form=form,
                                     notification_count=notification_count), 400
             
-            existing_email = User.query.filter_by(email=form.email.data).first()
-            if existing_email:
-                flash_message(FlashMessages.EMAIL_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
-                return render_template('admin/users/create.html', 
+            if User.query.filter_by(email=form.email.data).first():
+                form.email.errors.append('Email already exists')
+                return render_template('admin/users/create.html',
                                     form=form,
                                     notification_count=notification_count), 400
                 
