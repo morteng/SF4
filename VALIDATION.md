@@ -2,26 +2,24 @@
 
 ## Validation Principles
 1. **Input Validation**
-   - All user input validated client and server side
-   - Sanitize using bleach with specific allowed tags
-   - Validate URLs using Flask-WTF URL validator
-   - Use `Enum` for constants to ensure type safety
-   - Centralized test assertions in `tests/utils.py`
+   - Validate all form inputs client and server side
+   - Use `Enum` constants (FlashMessages, FlashCategory)
+   - Centralized test utilities in `tests/utils.py`
    - Factory functions for consistent test data
    - Type hints for all function signatures
    - Detailed docstrings for test functions
 
 2. **Error Handling**
-   - Provide clear, user-friendly error messages using `FlashMessages`
-   - Log detailed error information for debugging using `logger`
-   - Handle database errors gracefully with try-except blocks
+   - Use FlashMessages for consistent error messages
+   - Log detailed error information using `logger`
+   - Use context managers for database operations
    - Rollback database sessions on errors
 
 3. **Security**
    - Use CSRF tokens for all forms
    - Implement rate limiting for sensitive endpoints
    - Validate and sanitize all URLs
-   - Use type hints for better code clarity and IDE support
+   - Use type hints for better code clarity
 
 ## Form Validation
 

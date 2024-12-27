@@ -18,6 +18,8 @@
    - [x] Add factory functions for test data
    - [x] Verify error handling for all admin routes
    - [x] Test database error scenarios
+   - [x] Add type hints to test functions
+   - [x] Add docstrings to test functions
    - [ ] Add integration tests for all CRUD operations
 
 ## Knowledge & Memories
