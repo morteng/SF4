@@ -32,11 +32,7 @@ class CustomDateTimeField(DateTimeField):
                 # First try parsing the date string
                 parsed_dt = datetime.strptime(date_str, self.format)
                 
-                # Validate time components first
-                if not self._validate_time_components(parsed_dt):
-                    return
-                
-                # Validate leap year before other date components
+                # Validate leap year before other validations
                 if parsed_dt.month == 2 and parsed_dt.day == 29:
                     year = parsed_dt.year
                     is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
@@ -44,11 +40,15 @@ class CustomDateTimeField(DateTimeField):
                         self.errors.append(self.error_messages['invalid_leap_year'])
                         return
                 
-                # Then validate other date components
+                # Validate time components
+                if not self._validate_time_components(parsed_dt):
+                    return
+                
+                # Validate date components
                 if not self._validate_date_components(parsed_dt):
                     return
                 
-                # If parsing succeeds, proceed with timezone handling
+                # If all validations pass, proceed with timezone handling
                 local_tz = timezone(self.timezone_str)
                 local_dt = local_tz.localize(parsed_dt, is_dst=None)
                 self.data = local_dt.astimezone(utc)
