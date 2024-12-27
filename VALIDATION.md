@@ -19,6 +19,7 @@
 - Verify validation messages
 - Use `test_request_context` for CSRF-protected forms
 - Validate CSRF tokens in all form tests
+- Ensure form submissions include all required fields
 
 ## Form Validation Testing
 - Test all required fields and constraints

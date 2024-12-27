@@ -2,6 +2,7 @@
 ## High Priority
 - [x] Add CSRF protection to all forms
 - [x] Enable CSRF in testing environment
+- [ ] Investigate profile form submission failure (400 error)
 - [ ] Fix form tests to work with CSRF protection
 - [ ] Add form validation tests
 - [ ] Add comprehensive form validation tests
