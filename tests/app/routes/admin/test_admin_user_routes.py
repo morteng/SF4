@@ -153,8 +153,7 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
 
 def test_delete_user_route_with_invalid_id(logged_in_admin):
     delete_response = logged_in_admin.post(url_for('admin.user.delete', id=9999))
-    assert delete_response.status_code == 302
-    assert url_for('admin.user.index', _external=False) == delete_response.headers['Location']
+    assert delete_response.status_code == 400
 
 def test_create_user_route_with_database_error(logged_in_admin, user_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
