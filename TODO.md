@@ -5,7 +5,6 @@
    - [x] Implement CSRF protection
    - [x] Add input sanitization
    - [ ] Add rate limiting to admin routes
-   - [x] Standardize flash messages using enums
 
 2. **Error Handling**
    - [x] Add comprehensive error handling
@@ -16,6 +15,7 @@
    - [x] Add tests for edge cases
    - [x] Parameterize test scenarios
    - [x] Add database state verification
+   - [x] Update tests to use FlashMessages enum
    - [ ] Add integration tests for all CRUD operations
 
 ## Knowledge & Memories
