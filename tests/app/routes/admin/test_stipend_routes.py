@@ -280,56 +280,6 @@ def test_update_stipend_route(authenticated_admin: FlaskClient, test_stipend: St
     # Verify the success flash message
     assert FlashMessages.UPDATE_STIPEND_SUCCESS.value.encode() in final_response.data, "Success message not found"
     
-    logger.info("Completed test_update_stipend_route")
-    # Get the edit page to extract CSRF token
-    update_response = logged_in_admin.get(url_for('admin.stipend.edit', id=test_stipend.id))
-    assert update_response.status_code == 200
-    csrf_token = extract_csrf_token(update_response.data)
-
-    # Prepare updated data with correct format for boolean field
-    updated_data = {
-        'name': 'Updated Stipend',
-        'summary': test_stipend.summary,
-        'description': test_stipend.description,
-        'homepage_url': test_stipend.homepage_url,
-        'application_procedure': test_stipend.application_procedure,
-        'eligibility_criteria': test_stipend.eligibility_criteria,
-        'application_deadline': (datetime.now() + timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'),  # Changed to 365 days in the future
-        'organization_id': test_stipend.organization_id,  # Pass as integer
-        'open_for_applications': 'y',  # Changed from True to 'y'
-        'csrf_token': csrf_token
-    }
-
-    # Test HTMX case
-    htmx_response = logged_in_admin.post(
-        url_for('admin.stipend.edit', id=test_stipend.id),
-        data=updated_data,
-        headers={'HX-Request': 'true'}
-    )
-    assert htmx_response.status_code == 200
-    # Check for either the successful row or error fallback
-    assert (b'<tr hx-target="this" hx-swap="outerHTML">' in htmx_response.data or
-            b'Error rendering updated row' in htmx_response.data)
-
-    # Test non-HTMX case
-    non_htmx_response = logged_in_admin.post(
-        url_for('admin.stipend.edit', id=test_stipend.id),
-        data=updated_data
-    )
-    assert non_htmx_response.status_code == 302
-    # Check if location starts with the expected path
-    assert non_htmx_response.location.startswith('/admin/stipends/')
-
-    # Follow the redirect for non-HTMX case
-    final_response = logged_in_admin.get(non_htmx_response.location)
-    assert final_response.status_code == 200
-
-    # Verify the stipend was updated
-    updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
-    assert updated_stipend.name == 'Updated Stipend'
-
-    # Verify the success flash message
-    assert FlashMessages.UPDATE_STIPEND_SUCCESS.value.encode() in final_response.data
 
 def test_delete_stipend_route(authenticated_admin: FlaskClient, test_stipend: Stipend, db_session) -> None:
     """Test that a stipend can be deleted successfully through the admin interface."""
@@ -348,13 +298,6 @@ def test_delete_stipend_route(authenticated_admin: FlaskClient, test_stipend: St
     # Verify the success flash message
     assert FlashMessages.DELETE_STIPEND_SUCCESS.value.encode() in response.data, "Success message not found"
     
-    logger.info("Completed test_delete_stipend_route")
-    response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id), follow_redirects=True)
-    assert response.status_code == 200
-    deleted_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
-    assert deleted_stipend is None
-    # Assert the flash message
-    assert FlashMessages.DELETE_STIPEND_SUCCESS.value.encode() in response.data
 
 def test_index_stipend_route(authenticated_admin: FlaskClient, test_stipend: Stipend) -> None:
     """Test that the stipend index page displays stipends correctly."""
@@ -364,10 +307,6 @@ def test_index_stipend_route(authenticated_admin: FlaskClient, test_stipend: Sti
     assert response.status_code == 200, "Failed to load stipend index page"
     assert test_stipend.name.encode() in response.data, "Stipend not found in index page"
     
-    logger.info("Completed test_index_stipend_route")
-    response = logged_in_admin.get(url_for('admin.stipend.index'))
-    assert response.status_code == 200
-    assert test_stipend.name.encode() in response.data
 
 def test_paginate_stipend_route(authenticated_admin: FlaskClient, test_stipend: Stipend) -> None:
     """Test that stipend pagination works correctly."""
@@ -377,10 +316,6 @@ def test_paginate_stipend_route(authenticated_admin: FlaskClient, test_stipend: 
     assert response.status_code == 200, "Failed to load paginated stipends"
     assert test_stipend.name.encode() in response.data, "Stipend not found in paginated results"
     
-    logger.info("Completed test_paginate_stipend_route")
-    response = logged_in_admin.get(url_for('admin.stipend.paginate', page=1))
-    assert response.status_code == 200
-    assert test_stipend.name.encode() in response.data
 
 def test_create_stipend_route_htmx(logged_in_admin, stipend_data, db_session):
     # Ensure an organization exists for the test
