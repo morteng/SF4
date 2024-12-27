@@ -39,6 +39,14 @@ def test_create_user_route(logged_in_admin, user_data):
     create_response = logged_in_admin.get(url_for('admin.user.create'))
     assert create_response.status_code == 200
     
+    # Verify admin user context
+    with logged_in_admin.session_transaction() as session:
+        assert 'user_id' in session
+        admin_user_id = session['user_id']
+        admin_user = User.query.get(admin_user_id)
+        assert admin_user is not None
+        assert admin_user.is_admin
+    
     # Test POST request
     csrf_token = extract_csrf_token(create_response.data)
     response = logged_in_admin.post(url_for('admin.user.create'), data={
@@ -66,8 +74,9 @@ def test_create_user_route(logged_in_admin, user_data):
     assert audit_log is not None
     
     # Verify audit log details
-    admin_user = User.query.filter_by(is_admin=True).first()
     assert audit_log.user_id == admin_user.id
+    assert audit_log.object_type == 'User'
+    assert audit_log.details == f'Created user {user_data["username"]}'
     assert audit_log.object_type == 'User'
     assert audit_log.details == f'Created user {user_data["username"]}'
     assert audit_log.ip_address is not None

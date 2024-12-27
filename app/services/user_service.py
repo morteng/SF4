@@ -56,14 +56,15 @@ def create_user(form_data):
     new_user = User(username=username, email=email, is_admin=is_admin)
     new_user.set_password(password)
     
-    # Audit log
-    audit_log = AuditLog(
-        user_id=current_user.id,
-        action='create_user',
-        details_before=f'Creating user: {username}',
-        timestamp=datetime.utcnow()
-    )
-    db.session.add(audit_log)
+    # Audit log - ensure we use the admin user's ID
+    if current_user and current_user.is_authenticated:
+        audit_log = AuditLog(
+            user_id=current_user.id,  # Use the admin user's ID
+            action='create_user',
+            details_before=f'Creating user: {username}',
+            timestamp=datetime.utcnow()
+        )
+        db.session.add(audit_log)
     
     try:
         db.session.add(new_user)
