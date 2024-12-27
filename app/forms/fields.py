@@ -110,6 +110,14 @@ class CustomDateTimeField(DateTimeField):
             self.errors.append(self.error_messages['invalid_time'])
             return False
 
+    def validate(self, form, extra_validators=()):
+        # First check if we have any errors from process_formdata
+        if self._invalid_leap_year or self.errors:
+            return False
+            
+        # Then proceed with normal validation
+        return super().validate(form, extra_validators)
+        
     def _validate_date_components(self, dt):
         try:
             # Check if the date components are valid
