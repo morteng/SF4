@@ -37,17 +37,21 @@ def test_organization_form_valid_data(app):
 ])
 def test_organization_form_invalid_data(app, client, name, description, homepage_url, expected):
     """Test organization form with invalid data"""
-    with app.app_context():
+    with app.test_request_context():
+        # Initialize session and CSRF token
+        client.get('/')  # Access any route to initialize session
+        
         with client.session_transaction() as session:
-            form = OrganizationForm()
-            csrf_token = form.csrf_token.current_token
+            form = OrganizationForm(meta={'csrf': False})
             
-            form = OrganizationForm(data={
-                'name': name,
-                'description': description,
-                'homepage_url': homepage_url,
-                'csrf_token': csrf_token
-            })
+            form = OrganizationForm(
+                data={
+                    'name': name,
+                    'description': description,
+                    'homepage_url': homepage_url
+                },
+                meta={'csrf': False}
+            )
             
             if not form.validate():
                 print(f"Validation errors for {name}, {description}, {homepage_url}:", form.errors)
