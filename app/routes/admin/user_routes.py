@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, flash, session
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import generate_csrf
 from flask_login import login_required, current_user
 from app.constants import FlashMessages, FlashCategory
@@ -129,6 +131,8 @@ def delete(id):
     try:
         user = get_user_by_id(id)
         delete_user(user)
+        # Audit log
+        logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.utcnow()}")
         flash_message(FlashMessages.DELETE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
         return redirect(url_for('admin.user.index')), 200
     except ValueError as e:
