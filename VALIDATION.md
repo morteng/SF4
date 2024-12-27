@@ -5,7 +5,7 @@
 ### Required Fields
 - **Required**: Yes
 - **Error Messages**:
-  - "Date is required"
+  - "Date is required"  # Updated to match implementation
 
 ### Format Validation
 - **Format**: YYYY-MM-DD HH:MM:SS

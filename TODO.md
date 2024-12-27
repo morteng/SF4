@@ -25,6 +25,7 @@
   * All datetime comparisons must be between timezone-aware datetimes
   * Added separate validation for time components (hours, minutes, seconds)
   * Fixed error message for invalid dates to show "Invalid date values (e.g., Feb 30)" instead of "Date is required"
+  * Required field error message must be "Date is required" to match test expectations
 
 - When handling datetime validation:
   * Always convert input to UTC for comparison
