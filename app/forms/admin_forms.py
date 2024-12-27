@@ -57,7 +57,7 @@ class StipendForm(FlaskForm):
     def validate_application_deadline(self, field):
         if not field.data:
             raise ValidationError('Date is required')
-            
+        
         # Handle string input
         if isinstance(field.data, str):
             try:
@@ -79,8 +79,16 @@ class StipendForm(FlaskForm):
                 else:
                     raise ValidationError('Invalid date values (e.g., Feb 30)')
 
+        # Convert now to UTC for comparison
+        now = datetime.now(pytz.UTC)
+        
+        # Ensure field.data is in UTC
+        if field.data.tzinfo is None:
+            field.data = pytz.UTC.localize(field.data)
+        else:
+            field.data = field.data.astimezone(pytz.UTC)
+        
         # Validate future date
-        now = datetime.now()
         if field.data < now:
             raise ValidationError('Application deadline must be a future date')
         
