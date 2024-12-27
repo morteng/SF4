@@ -40,5 +40,5 @@ def edit_profile():
         form.email.data = current_user.email
     else:
         flash(FlashMessages.PROFILE_UPDATE_INVALID_DATA.value, FlashCategory.ERROR.value)
-        print(f"Flash message set: {FlashMessages.PROFILE_UPDATE_INVALID_DATA.value} with category {FlashCategory.ERROR.value}")
+        print(f"Form errors: {form.errors}")  # Log form errors for debugging
     return render_template('user/edit_profile.html', form=form)

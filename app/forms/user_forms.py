@@ -16,23 +16,28 @@ from app.constants import FlashMessages, FlashCategory  # Import FlashMessages a
 from app.utils import flash_message  # Import the flash_message function
 
 class ProfileForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    username = StringField('Username', validators=[
+        DataRequired(message="Username is required."),
+        Length(min=3, max=50, message="Username must be between 3 and 50 characters.")
+    ])
+    email = StringField('Email', validators=[
+        DataRequired(message="Email is required."),
+        Email(message="Invalid email address."),
+        Length(max=100, message="Email cannot exceed 100 characters.")
+    ])
     submit = SubmitField('Save Changes')
 
-    def validate_username(self, username: StringField) -> None:
+    def validate_username(self, username):
         if username.data != self.original_username:
             user = User.query.filter_by(username=username.data).first()
             if user:
-                flash_message(FlashMessages.USERNAME_ALREADY_EXISTS, FlashCategory.ERROR)
-                raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS)
+                raise ValidationError('Username already exists.')
 
-    def validate_email(self, email: StringField) -> None:
+    def validate_email(self, email):
         if email.data != self.original_email:
             user = User.query.filter_by(email=email.data).first()
             if user:
-                flash_message(FlashMessages.EMAIL_ALREADY_EXISTS, FlashCategory.ERROR)
-                raise ValidationError(FlashMessages.EMAIL_ALREADY_EXISTS)
+                raise ValidationError('Email already exists.')
 
     def __init__(self, original_username, original_email, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
