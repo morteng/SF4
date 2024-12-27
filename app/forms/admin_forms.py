@@ -216,30 +216,7 @@ class OrganizationForm(FlaskForm):
         Regexp('^[A-Za-z0-9 ]*$', message='Name must contain only letters, numbers, and spaces.')
     ])
     description = TextAreaField('About')
-    homepage_url = URLField('Website', validators=[Optional(), URL()])  # URL validator remains
-    application_deadline = CustomDateTimeField(
-        'Application Deadline',
-        validators=[Optional()],
-        render_kw={
-            "placeholder": "YYYY-MM-DD HH:MM:SS",
-            "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
-            "title": "Please enter date in YYYY-MM-DD HH:MM:SS format."
-        }
-    )
-    application_deadline = CustomDateTimeField(
-        'Application Deadline',
-        validators=[Optional()],
-        render_kw={
-            "placeholder": "YYYY-MM-DD HH:MM:SS",
-            "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
-            "title": "Please enter date in YYYY-MM-DD HH:MM:SS format."
-        }
-    )
-    timezone = SelectField(
-        'Timezone',
-        choices=[(tz, tz) for tz in pytz.all_timezones],
-        default='UTC'
-    )
+    homepage_url = URLField('Website', validators=[Optional(), URL()])
     submit = SubmitField('Create')
 
     def __init__(self, original_name=None, *args, **kwargs):
@@ -248,7 +225,7 @@ class OrganizationForm(FlaskForm):
 
     def validate_name(self, name):
         if name.data != self.original_name:
-            organization = db.session.get(Organization, name.data)  # Updated to use db.session.get
+            organization = db.session.get(Organization, name.data)
             if organization:
                 raise ValidationError('Organization with this name already exists.')
 
