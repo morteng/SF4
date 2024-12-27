@@ -52,46 +52,45 @@ class FlashMessages:
     INVALID_PAST_DATE = "Date must be in the past."
 
     # Form Validation Messages
-    "FORM_FIELD_REQUIRED": "{field} is required.",
-    "FORM_INVALID_URL": "{field} must be a valid URL starting with http:// or https://.",
-    "FORM_INVALID_DATE_FORMAT": "{field} must be in the format YYYY-MM-DD HH:MM:SS.",
-    "FORM_INVALID_CHARACTERS": "{field} contains invalid characters.",
+    FORM_FIELD_REQUIRED = "{field} is required."
+    FORM_INVALID_URL = "{field} must be a valid URL starting with http:// or https://."
+    FORM_INVALID_DATE_FORMAT = "{field} must be in the format YYYY-MM-DD HH:MM:SS."
+    FORM_INVALID_CHARACTERS = "{field} contains invalid characters."
 
     # Stipend Management
-    "CREATE_STIPEND_SUCCESS": "Stipend created successfully.",
-    "CREATE_STIPEND_ERROR": "Failed to create stipend.",
-    "UPDATE_STIPEND_SUCCESS": "Stipend updated successfully.",
-    "UPDATE_STIPEND_ERROR": "Failed to update stipend.", 
-    "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS.",  
-    "STIPEND_NOT_FOUND": "Stipend not found.",
-    "DELETE_STIPEND_SUCCESS": "Stipend deleted successfully.",
-    "DELETE_STIPEND_ERROR": "Failed to delete stipend.",
-    "INVALID_ORGANIZATION": "Invalid organization selected. Please choose a valid organization.",
+    CREATE_STIPEND_SUCCESS = "Stipend created successfully."
+    CREATE_STIPEND_ERROR = "Failed to create stipend."
+    UPDATE_STIPEND_SUCCESS = "Stipend updated successfully."
+    UPDATE_STIPEND_ERROR = "Failed to update stipend."
+    INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+    STIPEND_NOT_FOUND = "Stipend not found."
+    DELETE_STIPEND_SUCCESS = "Stipend deleted successfully."
+    DELETE_STIPEND_ERROR = "Failed to delete stipend."
+    INVALID_ORGANIZATION = "Invalid organization selected. Please choose a valid organization."
 
     # Tag Management
-    "CREATE_TAG_SUCCESS": "Tag created successfully.",
-    "CREATE_TAG_ERROR": "Failed to create tag: ",
-    "UPDATE_TAG_SUCCESS": "Tag updated successfully.",
-    "UPDATE_TAG_ERROR": "Failed to update tag.",
-    "DELETE_TAG_SUCCESS": "Tag deleted successfully.",
-    "DELETE_TAG_ERROR": "Failed to delete tag.",
+    CREATE_TAG_SUCCESS = "Tag created successfully."
+    CREATE_TAG_ERROR = "Failed to create tag: "
+    UPDATE_TAG_SUCCESS = "Tag updated successfully."
+    UPDATE_TAG_ERROR = "Failed to update tag."
+    DELETE_TAG_SUCCESS = "Tag deleted successfully."
+    DELETE_TAG_ERROR = "Failed to delete tag."
 
     # CSRF
-    "CSRF_MISSING": "CSRF token is missing. Please try again.",
-    "CSRF_INVALID": "Invalid CSRF token. Please refresh the page and try again.",
+    CSRF_MISSING = "CSRF token is missing. Please try again."
+    CSRF_INVALID = "Invalid CSRF token. Please refresh the page and try again."
 
     # Authentication
-    "LOGIN_SUCCESS": "Logged in successfully.",
-    "LOGIN_ERROR": "Invalid username or password.",
-    "LOGOUT_SUCCESS": "Logged out successfully.",
-    "REGISTER_SUCCESS": "Registered successfully.",
-    "REGISTER_ERROR": "Registration failed. Please try again.",
-    "LOGIN_INVALID_CREDENTIALS": "Invalid username or password.",
+    LOGIN_SUCCESS = "Logged in successfully."
+    LOGIN_ERROR = "Invalid username or password."
+    LOGOUT_SUCCESS = "Logged out successfully."
+    REGISTER_SUCCESS = "Registered successfully."
+    REGISTER_ERROR = "Registration failed. Please try again."
+    LOGIN_INVALID_CREDENTIALS = "Invalid username or password."
 
     # Profile Management
-    "UPDATE_PROFILE_SUCCESS": "Profile updated successfully.",
-    "PROFILE_UPDATE_SUCCESS": "Profile updated successfully.",
-    "PROFILE_UPDATE_ERROR": "Failed to update profile.",
-    "EMAIL_ALREADY_EXISTS": "Email already exists. Please choose a different email address.",
-    "PROFILE_UPDATE_INVALID_DATA": "Invalid data provided for profile update."
-}
+    UPDATE_PROFILE_SUCCESS = "Profile updated successfully."
+    PROFILE_UPDATE_SUCCESS = "Profile updated successfully."
+    PROFILE_UPDATE_ERROR = "Failed to update profile."
+    EMAIL_ALREADY_EXISTS = "Email already exists. Please choose a different email address."
+    PROFILE_UPDATE_INVALID_DATA = "Invalid data provided for profile update."
