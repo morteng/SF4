@@ -40,6 +40,9 @@ def test_profile_form_valid(client, setup_database):
 
             # Create the form and get its CSRF token within a request context
             with client.application.test_request_context():
+                # First make a GET request to establish the session
+                client.get(url_for('user.edit_profile'))
+                
                 form = ProfileForm(
                     original_username="testuser",
                     original_email="test@example.com"
