@@ -1,11 +1,31 @@
 from flask import url_for, render_template_string, get_flashed_messages
 from bs4 import BeautifulSoup
 import logging
+from typing import Dict
+from flask.testing import FlaskClient
+from sqlalchemy.orm import Session
 from app.models.stipend import Stipend
 from tests.conftest import logged_in_admin, db_session, stipend_data
 from app.constants import FlashMessages, FlashCategory
 
-def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admin, db_session):
+logger = logging.getLogger(__name__)
+
+def test_create_stipend_with_invalid_form_data_htmx(
+    stipend_data: Dict[str, str], 
+    logged_in_admin: FlaskClient, 
+    db_session: Session
+) -> None:
+    """Test HTMX form submission with invalid data.
+    
+    Args:
+        stipend_data: Fixture providing test stipend data
+        logged_in_admin: Authenticated admin test client
+        db_session: Database session fixture
+        
+    Verifies:
+        - Returns 400 status for invalid data
+        - Displays correct error message for required field
+    """
     with logged_in_admin.application.app_context():
         stipend_data['name'] = ''  # Intentionally invalid
         response = logged_in_admin.post(
@@ -71,7 +91,22 @@ def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_i
             else:
                 assert response.status_code == 200
 
-def test_create_stipend_with_past_date(stipend_data, logged_in_admin, db_session):
+def test_create_stipend_with_past_date(
+    stipend_data: Dict[str, str], 
+    logged_in_admin: FlaskClient, 
+    db_session: Session
+) -> None:
+    """Test stipend creation with past application deadline.
+    
+    Args:
+        stipend_data: Fixture providing test stipend data
+        logged_in_admin: Authenticated admin test client
+        db_session: Database session fixture
+        
+    Verifies:
+        - Returns 400 status for past date
+        - Displays correct error message
+    """
     with logged_in_admin.application.app_context():
         stipend_data['application_deadline'] = '2020-01-01 00:00:00'  # Past date
         response = logged_in_admin.post(
@@ -99,3 +134,29 @@ def test_create_stipend_with_far_future_date(stipend_data, logged_in_admin, db_s
         assert response.status_code == 400
         assert FlashMessages.INVALID_DATE_FUTURE.value in response.data
 
+def test_create_stipend_with_invalid_url(stipend_data: Dict[str, str], logged_in_admin: FlaskClient) -> None:
+    """Test stipend creation with invalid homepage URL.
+    
+    Args:
+        stipend_data: Fixture providing test stipend data
+        logged_in_admin: Authenticated admin test client
+        
+    Verifies:
+        - Returns 400 status for invalid URL
+        - Displays correct error message
+    """
+    stipend_data['homepage_url'] = 'invalid-url'
+    
+    response = logged_in_admin.post(
+        url_for('admin.stipend.create'),
+        data=stipend_data,
+        headers={
+            'HX-Request': 'true',
+            'HX-Target': '#stipend-form-container'
+        }
+    )
+    
+    assert response.status_code == 400, "Expected 400 status for invalid URL"
+    assert FlashMessages.INVALID_URL.value in response.data, \
+        "Expected invalid URL error message"
+    logger.debug(f"Invalid URL submission response: {response.data.decode()}")
