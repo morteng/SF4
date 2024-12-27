@@ -1,10 +1,10 @@
 # app/utils.py
 import os
 import logging
+import string
+import secrets
 from typing import Any, Union
-import logging
 from flask import abort, redirect, url_for, flash
-from typing import Any, Union
 from flask_wtf.csrf import generate_csrf
 
 def generate_csrf_token():

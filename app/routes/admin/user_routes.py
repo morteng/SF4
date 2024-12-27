@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, curren
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import generate_csrf
+from app.utils import generate_temp_password
 from flask_login import login_required, current_user
 from app.constants import FlashMessages, FlashCategory
 from app.forms.admin_forms import UserForm
