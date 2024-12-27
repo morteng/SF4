@@ -10,11 +10,11 @@
 - Ensure test client maintains session state for CSRF validation
 
 ### Testing with CSRF
-- Always use `test_request_context` when testing forms with CSRF protection
-- Ensure CSRF tokens are validated in form tests
+- Use `test_request_context` for CSRF-protected forms
+- Ensure test client maintains session state
+- Use `client.session_transaction()` to verify CSRF tokens
 - Use form-generated CSRF tokens in tests
 - Include CSRF token in POST requests
-- Ensure test client maintains session state for CSRF validation
 
 ### Form Testing
 - Always use `test_request_context` when testing forms
