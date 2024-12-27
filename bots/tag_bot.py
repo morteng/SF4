@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+from app.models.audit_log import AuditLog
 from app.models.notification import Notification
 from app.extensions import db
 
@@ -17,8 +18,15 @@ class TagBot:
             self.status = "active"
             self.logger.info("TagBot started.")
             
-            # Add bot logic here
+            # Get untagged stipends
+            from app.models.stipend import Stipend
+            untagged_stipends = Stipend.query.filter(~Stipend.tags.any()).all()
             
+            # Basic tagging logic
+            for stipend in untagged_stipends:
+                # Add your tagging logic here
+                pass
+                
             self.status = "completed"
             self.last_run = datetime.utcnow()
             

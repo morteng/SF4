@@ -55,7 +55,7 @@ def create():
         if form.validate_on_submit():
             try:
                 # Audit log
-                AuditLog.create(
+                audit_log = AuditLog(
                     user_id=current_user.id,
                     action='create_stipend',
                     details=f"Attempt to create new stipend: {form.name.data}"

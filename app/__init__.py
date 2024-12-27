@@ -58,6 +58,17 @@ def create_app(config_name='development'):
         init_extensions(app)  # Initialize extensions within the application context
         db.create_all()  # Creates all tables if they don't exist
         init_admin_user()  # Initialize the admin user
+        
+        # Initialize bots
+        from app.models.bot import Bot
+        if not Bot.query.first():
+            bots = [
+                Bot(name="TagBot", description="Automatically tags stipends"),
+                Bot(name="UpdateBot", description="Updates stale stipend data"),
+                Bot(name="ReviewBot", description="Flags suspicious entries")
+            ]
+            db.session.bulk_save_objects(bots)
+            db.session.commit()
 
     # Initialize rate limiter
     from app.routes.admin.user_routes import init_rate_limiter
