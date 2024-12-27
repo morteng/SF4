@@ -93,10 +93,16 @@ def create():
 
                 if is_htmx:
                     try:
+                        # Add HTMX headers for better client-side handling
+                        headers = {
+                            'HX-Trigger': 'stipendCreated',
+                            'HX-Reswap': 'outerHTML',
+                            'HX-Retarget': '#stipend-table'
+                        }
                         current_app.logger.debug(f"Attempting to render template at: admin/stipends/_stipend_row.html")
                         template_path = 'admin/stipends/_stipend_row.html'
                         current_app.logger.debug(f"Template exists: {current_app.jinja_env.loader.get_source(current_app.jinja_env, template_path) is not None}")
-                        return render_template(template_path, stipend=new_stipend), 200
+                        return render_template(template_path, stipend=new_stipend), 200, headers
                     except Exception as e:
                         current_app.logger.error(f"Failed to render stipend row template: {e}")
                         current_app.logger.error(f"Template path: {template_path}")

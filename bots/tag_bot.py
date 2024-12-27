@@ -24,6 +24,13 @@ class TagBot:
     def run(self):
         """Run the TagBot to process and tag stipends."""
         try:
+            # Add audit log
+            AuditLog.create(
+                user_id=0,  # System user
+                action='tagbot_run',
+                details='Starting TagBot execution',
+                object_type='Bot'
+            )
             self._start_bot()
             untagged_stipends = Stipend.query.filter(~Stipend.tags.any()).all()
             
