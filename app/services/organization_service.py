@@ -22,16 +22,37 @@ def get_organization_by_id(organization_id):
         logger.error(f"Error getting organization by ID {organization_id}: {str(e)}")
         return None
 
-def create_organization(data):
-    """Create a new organization."""
-    try:
-        # Validate required fields
-        if not data.get('name'):
-            return False, "Organization name is required."
+from typing import Tuple, Union
+from app.utils import validate_url
+
+def create_organization(data: dict) -> Tuple[bool, Union[Organization, str]]:
+    """Create a new organization with validated data.
+    
+    Args:
+        data: Dictionary containing organization data (name, description, homepage_url)
         
+    Returns:
+        Tuple of (success: bool, result: Organization or error_message: str)
+    """
+    # Input validation
+    if not data or not isinstance(data, dict):
+        return False, "Invalid organization data"
+        
+    name = data.get('name', '').strip()
+    if not name:
+        return False, "Organization name is required."
+    if len(name) > 100:
+        return False, "Organization name cannot exceed 100 characters."
+        
+    # URL validation
+    homepage_url = data.get('homepage_url', '').strip()
+    if homepage_url and not validate_url(homepage_url):
+        return False, "Invalid homepage URL format"
+        
+    try:
         # Check for existing organization with same name (case-insensitive)
         existing_org = Organization.query.filter(
-            func.lower(Organization.name) == func.lower(data['name'])
+            func.lower(Organization.name) == func.lower(name)
         ).first()
         if existing_org:
             return False, "Organization with this name already exists."

@@ -17,11 +17,15 @@ def extract_csrf_token(response_data):
     return None
 
 def test_create_organization(logged_in_admin, db_session, organization_data):
+    """Test successful organization creation workflow"""
     with logged_in_admin.application.app_context():
         # Get CSRF token from the form
         response = logged_in_admin.get(url_for('admin.organization.create'))
         assert response.status_code == 200
+        assert b"Create Organization" in response.data
+        
         csrf_token = extract_csrf_token(response.data)
+        assert csrf_token, "CSRF token not found in form"
 
         # Include CSRF token and form submit in the POST data
         data = organization_data.copy()

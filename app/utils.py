@@ -55,6 +55,26 @@ def init_admin_user() -> None:
         logger.error(f"Error initializing admin user: {str(e)}")
         raise RuntimeError(f"Failed to initialize admin user: {str(e)}")
 
+from urllib.parse import urlparse
+import re
+
+def validate_url(url: str) -> bool:
+    """Validate URL format.
+    
+    Args:
+        url: URL string to validate
+        
+    Returns:
+        bool: True if URL is valid, False otherwise
+    """
+    try:
+        result = urlparse(url)
+        return all([result.scheme, result.netloc]) and re.match(
+            r'^https?://', url
+        )
+    except ValueError:
+        return False
+
 def format_error_message(field: Any, error: Union[str, Exception]) -> str:
     """
     Format error messages consistently for both HTMX and regular requests.

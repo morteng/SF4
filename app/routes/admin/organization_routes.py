@@ -20,14 +20,20 @@ csrf = CSRFProtect()
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
-    """
-    Handle the creation of a new organization.
+    """Handle organization creation.
     
     GET: Render the organization creation form.
     POST: Validate the form and create the organization.
+    
+    Returns:
+        GET: Rendered form template
+        POST: Redirect to organization index or form with errors
     """
-    logger.info("Organization creation form accessed.")
+    logger.info(f"Organization creation form accessed by user {current_user.username}")
     form = OrganizationForm()
+    
+    # Add CSRF token to form context
+    form.csrf_token.data = request.cookies.get('csrf_token')
     
     if form.validate_on_submit():
         # CSRF token is automatically validated by Flask-WTF
