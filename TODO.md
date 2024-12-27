@@ -49,8 +49,9 @@
    - Add integration tests for organization service interactions
 
 ## Recent Fixes
-- Fixed database error handling in organization edit route to properly set flash messages
+- Fixed database error handling in organization edit route to properly set flash messages and redirect
 - Updated organization form validation tests to expect field-specific error messages
 - Fixed test_timezone_handling by adding missing application_deadline field
 - Improved error message formatting in organization edit route to use field labels
+- Fixed database error handling to properly redirect back to edit page with flash message
 

@@ -81,4 +81,9 @@
   * Form should retain previously entered values
   * Error message should be: "Database error while updating organization."
   * Test Case: test_update_organization_with_database_error
+  * Implementation Details:
+    - SQLAlchemyError should be caught and handled
+    - Database session should be rolled back
+    - User should be redirected to edit page with error message
+    - Form should maintain its state
 
