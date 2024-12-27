@@ -11,7 +11,7 @@
 
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
-- Leap year validation must explicitly check for February 29th in non-leap years
+- Leap year validation must explicitly check for February 29th in non-leap years with specific error message: 'Invalid date values (e.g., Feb 29 in non-leap years)'
 - Ensure date validation errors are properly propagated to form errors
 - Custom date fields must handle:
   - Timezone conversion
