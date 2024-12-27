@@ -12,4 +12,5 @@ pytz
 Flask-Limiter
 requirements-parser
 setuptools
-redis 
+redis
+bleach
