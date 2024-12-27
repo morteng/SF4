@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from flask import session
+from flask import session, url_for
 from werkzeug.security import generate_password_hash
 
 from app.forms.user_forms import ProfileForm, LoginForm
@@ -8,6 +8,7 @@ from app import create_app
 from app.models.user import User
 from app.extensions import db
 from app.constants import FlashMessages, FlashCategory
+from app.utils.security import generate_csrf_token
 
 @pytest.fixture(scope='function', autouse=True)
 def setup_database(_db):
@@ -37,15 +38,23 @@ def test_profile_form_valid(client, setup_database):
             # Mock the database queries to return None (no existing user)
             mock_filter_by.return_value.first.return_value = None
 
-            # Test the form
+            # Test the form with valid CSRF token
             form = ProfileForm(
                 original_username="testuser",
-                original_email="test@example.com"
+                original_email="test@example.com",
+                csrf_token=generate_csrf_token()
             )
             form.username.data = "newusername"
             form.email.data = "newemail@example.com"
-            print(form.errors)  # Debugging: Print validation errors
             assert form.validate() == True
+
+            # Test form submission via POST
+            response = client.post(url_for('user.edit_profile'), data={
+                'username': 'newusername',
+                'email': 'newemail@example.com',
+                'csrf_token': generate_csrf_token()
+            })
+            assert response.status_code == 302  # Redirect on success
 
 def test_profile_form_invalid_same_username(client, setup_database):
     password_hash = generate_password_hash("password123")
@@ -91,17 +100,34 @@ def test_profile_form_invalid_same_email(client, setup_database):
 
 def test_login_form_valid(client):
     with client.application.test_request_context():  # Added request context
-        form = LoginForm()
+        # Test form validation with CSRF token
+        form = LoginForm(csrf_token=generate_csrf_token())
         form.username.data = "testuser"
         form.password.data = "password123"
         assert form.validate() == True
 
+        # Test form submission via POST
+        response = client.post(url_for('public.login'), data={
+            'username': 'testuser',
+            'password': 'password123',
+            'csrf_token': generate_csrf_token()
+        })
+        assert response.status_code == 302  # Redirect on success
+
 def test_login_form_invalid_missing_username(client):
     with client.application.test_request_context():  # Added request context
-        form = LoginForm()
+        # Test form validation with CSRF token
+        form = LoginForm(csrf_token=generate_csrf_token())
         form.password.data = "password123"
         assert form.validate() == False
         assert 'This field is required.' in form.username.errors
+
+        # Test form submission via POST
+        response = client.post(url_for('public.login'), data={
+            'password': 'password123',
+            'csrf_token': generate_csrf_token()
+        })
+        assert response.status_code == 200  # Form error, no redirect
 
 def test_login_form_invalid_missing_password(client):
     with client.application.test_request_context():  # Added request context
