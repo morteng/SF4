@@ -34,21 +34,21 @@ class CustomDateTimeField(DateTimeField):
         if '02-29' in date_str:
             print("Found 02-29 in date string")
             try:
-                    # Extract just the date portion
-                    date_part = date_str.split()[0]
-                    parsed_date = datetime.strptime(date_part, '%Y-%m-%d')
-                    if parsed_date.month == 2 and parsed_date.day == 29:
-                        year = parsed_date.year
-                        is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
-                        if not is_leap:
-                            print("Not a leap year, appending error")
-                            self.errors = []
-                            self.errors.append(self.error_messages['invalid_leap_year'])
-                            print(f"Errors after appending: {self.errors}")
-                            return
-                except ValueError:
-                    print("ValueError during leap year check")
-                    pass
+                # Extract just the date portion
+                date_part = date_str.split()[0]
+                parsed_date = datetime.strptime(date_part, '%Y-%m-%d')
+                if parsed_date.month == 2 and parsed_date.day == 29:
+                    year = parsed_date.year
+                    is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
+                    if not is_leap:
+                        print("Not a leap year, appending error")
+                        self.errors = []
+                        self.errors.append(self.error_messages['invalid_leap_year'])
+                        print(f"Errors after appending: {self.errors}")
+                        return
+            except ValueError:
+                print("ValueError during leap year check")
+                pass
 
             print(f"Before strptime, date_str: {date_str}")  # Add this line
             try:
