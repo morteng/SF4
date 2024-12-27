@@ -34,9 +34,11 @@ admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 csrf = CSRFProtect()
 
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
-@limiter.limit(ORG_RATE_LIMITS['create'])
+@limiter.limit("10 per minute")
 @login_required
+@admin_required
 def create():
+    """Create new organization with audit logging"""
     """
     Create a new organization.
     

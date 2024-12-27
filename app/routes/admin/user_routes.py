@@ -127,6 +127,7 @@ def create():
 @login_required
 @admin_required
 def edit(id):
+    """Edit user with audit logging and validation"""
     """Edit user details with proper validation and audit logging"""
     try:
         user = get_user_by_id(id)

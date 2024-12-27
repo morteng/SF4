@@ -74,9 +74,11 @@ def index():
     return render_template('admin/bots/index.html', bots=bots)
 
 @admin_bot_bp.route('/<int:id>/run', methods=['POST'])
+@limiter.limit("10 per hour")
 @login_required
 @admin_required
 def run(id):
+    """Run bot with status tracking and notifications"""
     bot = get_bot_by_id(id)
     if not bot:
         flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)

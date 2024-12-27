@@ -249,10 +249,11 @@ def edit(id):
 
 
 @admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])
-@limiter.limit("3 per minute")  # Add rate limiting for delete
+@limiter.limit("3 per minute")
 @login_required
 @admin_required
 def delete(id):
+    """Delete stipend with audit logging and notification"""
     stipend = get_stipend_by_id(id)
     if not stipend:
         flash_message(FlashMessages["STIPEND_NOT_FOUND"], FlashCategory.ERROR)

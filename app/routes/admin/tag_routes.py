@@ -52,9 +52,11 @@ def create():
     return render_template('admin/tags/create.html', form=form)
 
 @admin_tag_bp.route('/<int:id>/delete', methods=['POST'])
+@limiter.limit("3 per minute")
 @login_required
 @admin_required
 def delete(id):
+    """Delete tag with audit logging"""
     tag = get_tag_by_id(id)
     if tag:
         try:
