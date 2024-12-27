@@ -72,8 +72,18 @@ def run(id):
         return redirect(url_for('admin.bot.index'))
 
     try:
-        # Run the bot and capture results
-        result = run_bot(bot)
+        # Run the appropriate bot based on name
+        if bot.name == 'TagBot':
+            from bots.tag_bot import TagBot
+            result = TagBot().run()
+        elif bot.name == 'UpdateBot':
+            from bots.update_bot import UpdateBot
+            result = UpdateBot().run()
+        elif bot.name == 'ReviewBot':
+            from bots.review_bot import ReviewBot
+            result = ReviewBot().run()
+        else:
+            raise ValueError("Unknown bot type")
         
         # Update bot status and last run time
         bot.status = result['status']

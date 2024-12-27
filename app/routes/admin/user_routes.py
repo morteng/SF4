@@ -28,7 +28,12 @@ limiter = Limiter(
 def init_rate_limiter(app):
     """Initialize rate limiter with app-specific configuration"""
     limiter.init_app(app)
+    # Global rate limit for all admin user routes
     limiter.limit("100 per hour")(admin_user_bp)
+    # Specific rate limits for sensitive operations
+    limiter.limit("10 per minute")(admin_user_bp.route('/create', methods=['POST']))
+    limiter.limit("3 per minute")(admin_user_bp.route('/<int:id>/delete', methods=['POST']))
+    limiter.limit("5 per hour")(admin_user_bp.route('/<int:id>/reset_password', methods=['POST']))
 
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")  # More restrictive limit for user creation
@@ -49,15 +54,18 @@ def create():
             # Create user
             new_user = create_user(form.data)
             
-            # Create audit log
-            AuditLog.create(
+            # Create audit log with all required fields
+            audit_log = AuditLog(
                 user_id=current_user.id,
                 action='create_user',
                 object_type='User',
                 object_id=new_user.id,
                 details=f'Created user {new_user.username}',
-                ip_address=request.remote_addr
+                ip_address=request.remote_addr,
+                timestamp=datetime.utcnow()
             )
+            db.session.add(audit_log)
+            db.session.commit()
             
             flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
