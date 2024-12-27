@@ -1,6 +1,8 @@
 import pytest
 from datetime import datetime, timedelta
 from app.forms.admin_forms import StipendForm
+from app.models.organization import Organization
+from app.extensions import db
 
 @pytest.fixture
 def form_data():
@@ -19,7 +21,19 @@ def test_valid_date_format(app, form_data):
     """Test valid date format"""
     form_data['application_deadline'] = '2025-12-31 23:59:59'
     with app.test_request_context():
-        form = StipendForm(data=form_data)
+        # Create a test organization
+        org = Organization(name="Test Org", description="Test Description", homepage_url="https://test.org")
+        db.session.add(org)
+        db.session.commit()
+        form_data['organization_id'] = org.id
+
+        # Get CSRF token
+        form = StipendForm()
+        csrf_token = form.csrf_token.current_token
+        form_data['csrf_token'] = csrf_token
+
+        # Validate the form
+        form = StipendForm(data=form_data, meta={'csrf': False})
         if not form.validate():
             print("Validation errors:", form.errors)
         assert form.validate() is True
