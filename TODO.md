@@ -4,8 +4,9 @@
 - [x] Add CSRF protection and validation
 - [x] Set up audit logging
 - [x] Configure rate limiting
-- [ ] Fix CSRF token template usage
+- [x] Fix CSRF token template usage
 - [ ] Complete admin route tests
+- [ ] Fix request handling in user routes
 - [ ] Add HTMX integration tests
 
 ## Best Practices

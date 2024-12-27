@@ -25,6 +25,7 @@
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
 - Use Flask-WTF forms for automatic CSRF validation
+- Verify request object is properly imported and accessible
 - Include CSRF token in all forms and HTMX requests
 - Ensure CSRF tokens are properly extracted in tests using `extract_csrf_token()`
 - Handle missing/invalid CSRF tokens with 400 status
