@@ -16,6 +16,8 @@
   * Handles timezone conversion
   * Provides specific error messages for different validation failures
   * Error messages must match test expectations exactly
+  * Invalid date components now return consistent error messages
+  * Removed redundant component-specific error messages
 
 - Organization model includes basic fields: name, description, homepage_url
 - When handling database errors:
