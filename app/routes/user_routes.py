@@ -17,28 +17,38 @@ def profile():
 @login_required
 def edit_profile():
     form = ProfileForm(original_username=current_user.username, original_email=current_user.email)
-    if form.validate_on_submit():
-        new_username = form.username.data
-        
-        # Check for duplicate username
-        existing_user = User.query.filter_by(username=new_username).first()
-        if existing_user and existing_user.id != current_user.id:
-            flash(FlashMessages.USERNAME_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
-            print(f"Flash message set: {FlashMessages.USERNAME_ALREADY_EXISTS.value} with category {FlashCategory.ERROR.value}")
-            return redirect(url_for('user.edit_profile'))
-        
-        current_user.username = new_username
-        current_user.email = form.email.data
-        
-        # Update the user directly in the database
-        db.session.commit()
-        flash(FlashMessages.PROFILE_UPDATE_SUCCESS.value)
-        print(f"Flash message set: {FlashMessages.PROFILE_UPDATE_SUCCESS.value}")
-        return redirect(url_for('user.profile'))
-    elif request.method == 'GET':
+    
+    if request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    else:
+        return render_template('user/edit_profile.html', form=form)
+        
+    if not form.validate_on_submit():
+        # Log detailed form errors
+        print(f"Form validation failed. Errors: {form.errors}")
+        for field, errors in form.errors.items():
+            for error in errors:
+                print(f"Field '{field}' error: {error}")
         flash(FlashMessages.PROFILE_UPDATE_INVALID_DATA.value, FlashCategory.ERROR.value)
-        print(f"Form errors: {form.errors}")  # Log form errors for debugging
-    return render_template('user/edit_profile.html', form=form)
+        return render_template('user/edit_profile.html', form=form), 400
+        
+    new_username = form.username.data
+    new_email = form.email.data
+    
+    # Check for duplicate username
+    existing_user = User.query.filter_by(username=new_username).first()
+    if existing_user and existing_user.id != current_user.id:
+        flash(FlashMessages.USERNAME_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
+        return render_template('user/edit_profile.html', form=form), 409
+        
+    try:
+        current_user.username = new_username
+        current_user.email = new_email
+        db.session.commit()
+        flash(FlashMessages.PROFILE_UPDATE_SUCCESS.value, FlashCategory.SUCCESS.value)
+        return redirect(url_for('user.profile'))
+    except Exception as e:
+        db.session.rollback()
+        print(f"Database error during profile update: {str(e)}")
+        flash(FlashMessages.PROFILE_UPDATE_ERROR.value, FlashCategory.ERROR.value)
+        return render_template('user/edit_profile.html', form=form), 500
