@@ -3,6 +3,7 @@ from wtforms import StringField, SubmitField, PasswordField, HiddenField
 from wtforms.validators import DataRequired, Email, ValidationError, EqualTo, Length
 from app.models.user import User
 from app.utils import generate_csrf_token
+from app.constants import FlashMessages
 
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[
