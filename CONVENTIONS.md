@@ -6,18 +6,17 @@
   - JavaScript: Include CSRF token in HTMX headers via htmx:configRequest event
 
 ### CSRF Token Handling
-- All forms must include a CSRF token input field:
+- Use Flask-WTF forms for automatic CSRF protection
+- Include CSRF token in forms:
   ```html
-  <input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  {{ form.csrf_token }}
   ```
-- For HTMX requests, include a meta tag in the base template:
+- For HTMX requests, include meta tag:
   ```html
   <meta name="csrf-token" content="{{ csrf_token() }}">
   ```
-- Ensure CSRF tokens are passed to templates in routes:
-  ```python
-  return render_template('template.html', csrf_token=generate_csrf())
-  ```
+- In routes, pass form instances to templates
+- Handle CSRF errors with 400 status code
 
 ### Testing with CSRF and Error Handling
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`

@@ -1,7 +1,7 @@
 # TODO List
 ## High Priority
-- [ ] Fix CSRF token handling in admin user index template
-- [x] Verify CSRF token handling in all form submissions
+- [x] Implement consistent CSRF token handling
+- [x] Verify error handling for database errors
 - [x] Implement password strength validation
 - [x] Implement proper CSRF token decoding in tests
 - [x] Update flash message verification in tests
