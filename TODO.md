@@ -7,7 +7,7 @@
   - HTMX integration
   - Rate limiting
 - [x] Fix datetime.utcnow() deprecation warnings
-- [ ] Complete CRUD test coverage
+- [x] Complete CRUD test coverage
 - [x] Add audit logging for all operations
 - [x] Fix notification.user_id constraint issues
 - [x] Implement blueprint factory pattern

@@ -12,16 +12,11 @@
 ### Rate Limiting
 - Admin: 100/hour (global)
 - Sensitive ops: 10/minute (per endpoint)
-- Stipend CRUD:
+- CRUD Operations:
   - Create/Update: 10/minute
   - Delete: 3/minute
-- User CRUD:
-  - Create: 10/minute
-  - Delete: 3/minute
+  - View: No limit
 - Password resets: 5/hour
-- Organization CRUD:
-  - Create/Update: 10/minute
-  - Delete: 3/minute
 - Bot operations: 10/hour
 
 ### CSRF Token Handling
