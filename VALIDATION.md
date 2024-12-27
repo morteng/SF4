@@ -61,6 +61,14 @@
 - The badge must display the correct count of unread notifications.
 - The badge must be visible even if the count is 0.
 
+## Form Validation
+- Validate all form inputs using constants from app\constants.py
+- Required validations:
+    USERNAME_REQUIRED = "Username is required."
+    USERNAME_LENGTH = "Username must be between 3 and 50 characters."
+    USERNAME_FORMAT = "Username can only contain letters, numbers and underscores."
+    FORM_VALIDATION_ERROR = "Form validation failed. Please check your input."
+
 ## Error Handling
 - Rollback on error
 - Audit log all CRUD operations with:

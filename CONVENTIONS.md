@@ -78,6 +78,14 @@
 - Use `datetime.utcnow()` for timestamping (legacy support)
 - For new code, prefer timezone-aware datetimes using `datetime.now(datetime.UTC)`
 
+### Form Validation Messages
+- All form validation messages must use constants from app\constants.py
+- Required validation messages:
+    USERNAME_REQUIRED = "Username is required."
+    USERNAME_LENGTH = "Username must be between 3 and 50 characters."
+    USERNAME_FORMAT = "Username can only contain letters, numbers and underscores."
+    FORM_FIELD_REQUIRED = "{field} is required."
+
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
 - Leap year validation must explicitly check for February 29th in non-leap years with specific error message: 'Invalid date values (e.g., Feb 29 in non-leap years)'
