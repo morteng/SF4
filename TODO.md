@@ -18,6 +18,13 @@
   * Provides specific error messages for different validation failures
   * Error messages must match test expectations exactly
   * Timezone parameter is now safely converted to string using str()
+  * All datetime comparisons must be between timezone-aware datetimes
+
+- When handling datetime validation:
+  * Always convert input to UTC for comparison
+  * Ensure both compared datetimes are timezone-aware
+  * Use pytz.UTC.localize() for naive datetimes
+  * Use astimezone(pytz.UTC) for timezone-aware datetimes
 
 - Organization model includes basic fields: name, description, homepage_url
 - When handling database errors:

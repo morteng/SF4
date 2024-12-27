@@ -37,6 +37,21 @@
   * Properly converts string timezone to pytz timezone object
   * Handles UnknownTimeZoneError gracefully
 
+- **Comparison Rules**:
+  * All datetime comparisons must be between timezone-aware datetimes
+  * Naive datetimes must be localized to UTC using pytz.UTC.localize()
+  * Timezone-aware datetimes must be converted to UTC using astimezone(pytz.UTC)
+  * Comparisons between naive and timezone-aware datetimes will raise TypeError
+
+### Examples
+
+**Valid Comparisons**:
+- pytz.UTC.localize(datetime.now()) < datetime.now(pytz.UTC)
+- datetime.now(pytz.timezone('America/New_York')).astimezone(pytz.UTC) < datetime.now(pytz.UTC)
+
+**Invalid Comparisons**:
+- datetime.now() < datetime.now(pytz.UTC)  # Raises TypeError
+
 ### Examples
 
 **Valid Inputs**:
