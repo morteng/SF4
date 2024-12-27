@@ -1,8 +1,8 @@
 # TODO List
 ## High Priority
-- [ ] Add CSRF token to admin user index template
+- [x] Add CSRF token to admin user index template
 - [ ] Verify CSRF token handling in all form submissions
-- [ ] Ensure CSRF meta tag is present in base template
+- [x] Ensure CSRF meta tag is present in base template
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
