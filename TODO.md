@@ -6,6 +6,7 @@
 - [ ] Increase test coverage to 80%+
 - [x] Verify CSRF protection in all POST requests
 - [ ] Update CSRF token handling documentation
+- [ ] Fix CSRF token in admin user index template
 
 ## Best Practices
 - Ensure date parsing and logical validation are handled separately
