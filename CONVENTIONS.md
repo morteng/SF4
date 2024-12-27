@@ -1,22 +1,12 @@
 ## Coding Conventions
-- All flash messages must use messages defined in app\constants.py - create new additions here when needed. All tests should evaluate the constant used, not the string itself.
+- All flash messages must use messages defined in app\constants.py
 - CSRF tokens must be included in all forms using: `<input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">`
-
 
 ### Testing with CSRF
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
-- Use `client.session_transaction()` for session access
 - Extract CSRF token from form using pattern: `<input[^>]*id="csrf_token"[^>]*value="([^"]+)"`
-- Ensure CSRF token is present in the HTML response before extraction
 - Test both valid and invalid CSRF scenarios
-- Verify error messages match actual implementation
 - Always make a GET request before POST to establish session
-- Handle CSRF token extraction errors gracefully
-- For form validation errors, expect 400 status code
-- Include CSRF token in both form data and headers:
-  - Form data: `csrf_token` and `_csrf_token`
-  - Header: `X-CSRFToken`
-  - Header: `X-Requested-With: XMLHttpRequest`
 
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations

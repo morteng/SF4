@@ -1,29 +1,12 @@
 # Validation Rules
-## Form Testing
-- Always use `app.test_request_context()` for form tests
-- Include all required fields in test data
-- Disable CSRF in tests using meta={'csrf': False} when appropriate
-- Initialize session with `client.get('/')` before form tests
-- Use `client.session_transaction()` for session access
-- Use `meta={'csrf': False}` to disable CSRF in tests when needed
-- Verify error messages match actual implementation
-- Test both validation success and failure cases
-
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
-- Ensure all forms include: `<input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">`
 - Include CSRF token in both form data and headers:
   - Form fields: `csrf_token` and `_csrf_token`
   - Header: `X-CSRFToken`
   - Header: `X-Requested-With: XMLHttpRequest`
 - Ensure CSRF token is present in HTML response before extraction
-- Use pattern: `<input[^>]*id="csrf_token"[^>]*value="([^"]+)"` for extraction
-- Extract CSRF token from GET requests before POST
-- Extract CSRF token from login page using reliable parsing
-- Ensure CSRF protection is enabled in test config
 - Verify token matching between form and session
-- Make GET request before POST to establish session
-- Handle CSRF token extraction errors gracefully
 
 ## Error Handling
 - Rollback on error
