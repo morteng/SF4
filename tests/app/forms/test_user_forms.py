@@ -121,16 +121,34 @@ def test_profile_form_invalid_same_username(client, setup_database):
     csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
     assert csrf_token, "CSRF token not found in form"
 
+    # Verify form data is valid
+    with client.application.test_request_context():
+        form = ProfileForm(
+            username='existinguser',
+            email='newemail@example.com',
+            csrf_token=csrf_token,
+            original_username='testuser',
+            original_email='test@example.com'
+        )
+        assert not form.validate(), "Form should be invalid with duplicate username"
+        assert FlashMessages.USERNAME_ALREADY_EXISTS.value in form.username.errors, \
+            "Expected username validation error not found"
+
     # Test form submission with duplicate username
     response = client.post('/user/profile/edit', data={
         'username': 'existinguser',
         'email': 'newemail@example.com',
         'csrf_token': csrf_token
     }, follow_redirects=True)
-
+        
+    # Debugging: Print response data if status is not 200
+    if response.status_code != 200:
+        print("Response data:", response.data.decode())
+        
     # Verify flash message was shown
-    assert response.status_code == 200
-    assert FlashMessages.USERNAME_ALREADY_EXISTS.value.encode() in response.data
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}"
+    assert FlashMessages.USERNAME_ALREADY_EXISTS.value.encode() in response.data, \
+        f"Expected flash message '{FlashMessages.USERNAME_ALREADY_EXISTS.value}' not found in response"
 
     # Log out and clean up
     client.get('/logout')
