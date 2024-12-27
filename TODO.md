@@ -6,6 +6,7 @@
 
 ## Best Practices
 - Verify leap year validation implementation returns correct error message
+- Ensure date parsing and logical validation are handled separately
 - Verify date validation error propagation in form handling
 - Ensure test data includes all required fields
 - Implement proper error message handling for custom date fields
