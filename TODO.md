@@ -32,7 +32,7 @@
 ## New Goals from Testing
 5. **Fix Template Issues**
    - [x] Fix duplicate content block in bot create template
-   - [ ] Verify all admin routes have corresponding templates
+   - [x] Verify all admin routes have corresponding templates
 
 6. **Improve Test Coverage**
    - [x] Add tests for bot routes
