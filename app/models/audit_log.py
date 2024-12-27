@@ -20,7 +20,17 @@ class AuditLog(db.Model):
     @staticmethod
     def create(user_id, action, details=None, object_type=None, object_id=None, 
               details_before=None, details_after=None, ip_address=None):
-        """Create audit log entry with before/after state tracking"""
+        """Create audit log entry with before/after state tracking
+        Args:
+            user_id: ID of user performing the action
+            action: Action being performed (create/update/delete)
+            details: Description of the action
+            object_type: Type of object being acted on
+            object_id: ID of object being acted on
+            details_before: State before the action
+            details_after: State after the action
+            ip_address: IP address of the user
+        """
         try:
             from app.models.notification import Notification, NotificationType
             

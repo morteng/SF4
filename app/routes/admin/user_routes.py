@@ -42,10 +42,11 @@ def create():
     if form.validate_on_submit():
         try:
             # Create user with audit logging
+            # Create user with hashed password
             user = User(
                 username=form.username.data,
                 email=form.email.data,
-                password=form.password.data,
+                password_hash=generate_password_hash(form.password.data),
                 is_admin=form.is_admin.data
             )
             db.session.add(user)

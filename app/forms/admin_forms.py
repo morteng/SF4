@@ -194,6 +194,9 @@ class UserForm(FlaskForm):
         super(UserForm, self).__init__(*args, **kwargs)
         self.original_username = original_username
         self.original_email = original_email
+        # Remove password field for existing users
+        if kwargs.get('obj'):
+            del self.password
 
     def validate_username(self, username):
         if username.data != self.original_username:
