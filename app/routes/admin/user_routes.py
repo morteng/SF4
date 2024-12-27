@@ -37,9 +37,13 @@ def create():
             session.modified = True
             # For HTMX requests, return the partial form
             if request.headers.get('HX-Request') == 'true':
-                return render_template('admin/users/_create_form.html', form=form), 400
+                return render_template('admin/users/_create_form.html', 
+                                    form=form, 
+                                    flash_messages=[(FlashCategory.ERROR.value, error_message)]), 400
             # For regular requests, return the full template directly
-            return render_template('admin/users/create.html', form=form), 400
+            return render_template('admin/users/create.html', 
+                                form=form, 
+                                flash_messages=[(FlashCategory.ERROR.value, error_message)]), 400
     else:
         if request.headers.get('HX-Request') == 'true':
             # HTMX response - return form with errors
