@@ -1,13 +1,12 @@
 # app/constants.py
 
-# Flash Message Categories
-FLASH_CATEGORY_SUCCESS = "success"
-FLASH_CATEGORY_ERROR = "error"
-FLASH_CATEGORY_INFO = "info"
-FLASH_CATEGORY_WARNING = "warning"
+class FlashCategory:
+    SUCCESS = "success"
+    ERROR = "error"
+    INFO = "info"
+    WARNING = "warning"
 
-# Flash Messages
-FLASH_MESSAGES = {
+class FlashMessages:
     # General
     "GENERIC_SUCCESS": "Operation completed successfully.",
     "GENERIC_ERROR": "An error occurred. Please try again.",

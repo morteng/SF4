@@ -1,11 +1,15 @@
 import logging
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import current_user
 from bleach import clean
 
+# Configure logging
 logger = logging.getLogger(__name__)
-
-logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 from flask_login import login_required
 from flask_wtf.csrf import CSRFProtect
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
@@ -21,6 +25,17 @@ csrf = CSRFProtect()
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
+    """
+    Create a new organization.
+    
+    GET: Renders the organization creation form.
+    POST: Processes the form submission to create a new organization.
+    
+    Returns:
+        GET: Rendered form template (200 OK)
+        POST: Redirect to organization index on success (302 Found)
+              Rendered form template with errors on failure (400 Bad Request)
+    """
     """Handle organization creation.
     
     GET: Render the organization creation form.
@@ -34,41 +49,48 @@ def create():
     form = OrganizationForm()
     
     if form.validate_on_submit():
-            
         try:
-            # Prepare organization data with cleaned inputs
+            # Prepare organization data with cleaned and sanitized inputs
             organization_data = {
-                'name': clean(form.name.data.strip()),
-                'description': clean(form.description.data.strip()),
-                'homepage_url': clean(form.homepage_url.data.strip()) if form.homepage_url.data else None
+                'name': clean(form.name.data.strip(), tags=[], attributes={}),
+                'description': clean(form.description.data.strip(), tags=['p', 'br', 'strong', 'em'], attributes={}),
+                'homepage_url': clean(form.homepage_url.data.strip(), tags=[], attributes={}) if form.homepage_url.data else None
             }
-            
-            # Ensure CSRF token is present
-            if not form.csrf_token.data:
-                flash_message(FLASH_MESSAGES['CSRF_MISSING'], FLASH_CATEGORY_ERROR)
-                logger.warning("CSRF token missing in organization creation")
-                return redirect(url_for('admin.organization.create'))
             
             success, error_message = create_organization(organization_data)
             if success:
-                flash_message(FLASH_MESSAGES["CREATE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-                logger.info(f"Organization '{organization_data['name']}' created successfully.")
+                flash_message(FlashMessages.CREATE_ORGANIZATION_SUCCESS, FlashCategory.SUCCESS)
+                logger.info(f"Organization '{organization_data['name']}' created successfully by user {current_user.username}")
                 return redirect(url_for('admin.organization.index'))
             else:
-                flash_message(error_message, FLASH_CATEGORY_ERROR)
                 logger.error(f"Failed to create organization: {error_message}")
+                return handle_organization_error(error_message, form, 'admin/organizations/form.html')
+                
         except IntegrityError as e:
             db.session.rollback()
-            flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DUPLICATE_ERROR'], FLASH_CATEGORY_ERROR)
-            logger.error(f"Integrity error creating organization: {str(e)}")
+            logger.error(f"Integrity error creating organization: {str(e)}", exc_info=True)
+            return handle_organization_error(
+                FlashMessages.CREATE_ORGANIZATION_DUPLICATE_ERROR,
+                form,
+                'admin/organizations/form.html'
+            )
         except SQLAlchemyError as e:
             db.session.rollback()
-            flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
-            logger.error(f"Database error creating organization: {str(e)}")
+            logger.error(f"Database error creating organization: {str(e)}", exc_info=True)
+            return handle_organization_error(
+                FlashMessages.CREATE_ORGANIZATION_DATABASE_ERROR,
+                form,
+                'admin/organizations/form.html'
+            )
         except Exception as e:
             db.session.rollback()
-            flash_message(FLASH_MESSAGES['GENERIC_ERROR'], FLASH_CATEGORY_ERROR)
-            logger.error(f"Unexpected error creating organization: {str(e)}")
+            logger.error(f"Unexpected error creating organization: {str(e)}", exc_info=True)
+            return handle_organization_error(
+                FlashMessages.GENERIC_ERROR,
+                form,
+                'admin/organizations/form.html',
+                status_code=500
+            )
     elif form.errors:
         logger.warning(f"Form validation errors: {form.errors}")
         return handle_form_errors(form)
@@ -139,6 +161,13 @@ def edit(id):
             handle_form_errors(form)
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)
+
+def handle_organization_error(message, form=None, template=None, status_code=400):
+    """Handle organization-related errors consistently"""
+    flash_message(message, FlashCategory.ERROR)
+    if form and template:
+        return render_template(template, form=form), status_code
+    return redirect(url_for('admin.organization.index'))
 
 def handle_form_errors(form):
     """Handle form validation errors and flash appropriate messages."""
