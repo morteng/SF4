@@ -7,38 +7,38 @@
     </div>
     <div class="admin-content">
         <div class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold mb-4">Edit Bot</h1>
-    
-    <form method="POST" action="{{ url_for('admin.bot.edit', id=bot.id) }}">
-        {{ form.hidden_tag() }}
-        
-        <div class="space-y-4">
-            {% for field in form %}
-                {% if field.type != 'HiddenField' and field.type != 'CSRFTokenField' %}
-                    <div class="form-group">
-                        {{ field.label(class="block text-sm font-medium text-gray-700") }}
-                        {{ field(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
-                        {% if field.errors %}
-                            <div class="text-sm text-red-600">
-                                {% for error in field.errors %}
-                                    <p>{{ error }}</p>
-                                {% endfor %}
+            <h1 class="text-2xl font-bold mb-4">Edit Bot</h1>
+            
+            <form method="POST" action="{{ url_for('admin.bot.edit', id=bot.id) }}">
+                {{ form.hidden_tag() }}
+                
+                <div class="space-y-4">
+                    {% for field in form %}
+                        {% if field.type != 'HiddenField' and field.type != 'CSRFTokenField' %}
+                            <div class="form-group">
+                                {{ field.label(class="block text-sm font-medium text-gray-700") }}
+                                {{ field(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+                                {% if field.errors %}
+                                    <div class="text-sm text-red-600">
+                                        {% for error in field.errors %}
+                                            <p>{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
                         {% endif %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
+                    {% endfor %}
+                </div>
 
-        <div class="mt-6 flex justify-end space-x-4">
-            <a href="{{ url_for('admin.bot.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Cancel
-            </a>
-            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Save Changes
-            </button>
-        </div>
-    </form>
+                <div class="mt-6 flex justify-end space-x-4">
+                    <a href="{{ url_for('admin.bot.index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Cancel
+                    </a>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

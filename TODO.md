@@ -1,12 +1,10 @@
 # TODO List
 
 ## Current Goals
-1. **Improve Test Coverage**
-   - [x] Add more test cases for bot routes
-   - [ ] Add test cases for form validation
-   - [ ] Verify error handling for all admin routes
-   - [ ] Test edge cases for form validation
-   - [ ] Add tests for template rendering
+1. **Template Improvements**
+   - [x] Fix template inheritance for admin bot edit page
+   - [ ] Verify all admin templates extend base.html
+   - [ ] Add template inheritance tests
 
 2. **Form Validation Improvements**
    - [ ] Add validation for bot status field

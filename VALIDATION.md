@@ -142,7 +142,7 @@
 
 ### Examples
 - Admin bot edit template must extend base.html
-- All templates must include required blocks (admin_content, etc)
+- All templates must include required blocks (content, etc)
 - Flash messages must use _flash_messages.html partial
 
 ### Timezone-aware Datetime Validation
