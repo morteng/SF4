@@ -226,7 +226,7 @@ def test_login_form_invalid_missing_username(client):
             'password': 'password123',
             'csrf_token': generate_csrf_token()
         })
-        assert response.status_code == 200  # Form error, no redirect
+        assert response.status_code == 400  # Expect 400 for validation errors
 
 def test_login_form_invalid_missing_password(client):
     with client.application.test_request_context():  # Added request context
