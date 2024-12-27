@@ -14,5 +14,6 @@
 - Verify UI & DB state in tests
 - Ensure CSRF protection matches production environment
 - Verify error messages match actual implementation
-- Clearly document optional vs required fields
+- Clearly document field validation rules
+- Handle empty values explicitly in custom validators
 

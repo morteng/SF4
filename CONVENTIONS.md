@@ -14,5 +14,5 @@
 - Use Flask-WTF for form handling
 - Always use form.validate() for validation (includes CSRF validation)
 - Use test_request_context() for form testing
-- Optional fields should use Optional() validator
+- For optional fields, handle empty values explicitly in custom validators
 
