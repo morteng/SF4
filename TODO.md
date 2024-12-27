@@ -5,13 +5,13 @@
 - [x] Investigate CSRF token handling in form tests
 - [ ] Verify session state maintenance in form tests
 - [x] Enable CSRF in testing environment
-- [ ] Fix profile form validation failure
-- [ ] Add error handling to debug form validation
-- [ ] Ensure CSRF tokens are properly handled in form tests
+- [x] Fix profile form validation failure
+- [x] Add error handling to debug form validation
+- [x] Ensure CSRF tokens are properly handled in form tests
 - [x] Add form validation tests
 - [x] Add comprehensive form validation tests
 - [x] Ensure tests cover all form fields and edge cases
-- [ ] Debug and fix failing form tests
+- [x] Debug and fix failing form tests
 - [ ] Add rate limiting to admin routes
 - [ ] Add CRUD integration tests
 - [ ] Increase test coverage to 80%+
