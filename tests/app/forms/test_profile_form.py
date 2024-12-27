@@ -12,17 +12,12 @@ def test_profile_form_valid(logged_in_client, db_session):
             # Mock the database queries to return None (no existing user)
             mock_filter_by.return_value.first.return_value = None
 
-            # First get the CSRF token from the login page
-            login_response = logged_in_client.get(url_for('public.login'))
-            csrf_token = extract_csrf_token(login_response.data)
-
             # Use a session transaction to maintain the session
             with logged_in_client.session_transaction() as sess:
-                # Create the form with the CSRF token from the session
+                # Create the form - it will generate its own CSRF token
                 form = ProfileForm(
                     original_username="testuser",
-                    original_email="test@example.com",
-                    meta={'csrf_token': csrf_token}
+                    original_email="test@example.com"
                 )
 
                 # Test the form with valid CSRF token
@@ -41,7 +36,7 @@ def test_profile_form_valid(logged_in_client, db_session):
                 sess['form_data'] = {
                     'username': 'newusername',
                     'email': 'newemail@example.com',
-                    'csrf_token': csrf_token
+                    'csrf_token': form.csrf_token.data
                 }
 
             # Test form submission via POST using the same session
