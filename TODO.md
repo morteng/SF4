@@ -7,6 +7,7 @@
 - [ ] Complete admin route tests
 - [ ] Add HTMX integration tests
 - [ ] Verify notification system
+- [ ] Improve database session management in tests
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
