@@ -1,6 +1,7 @@
 import pytest
 import logging
 from flask import url_for
+from flask_login import current_user
 from app.models.user import User
 from app.models.audit_log import AuditLog
 from tests.conftest import extract_csrf_token, logged_in_admin, db_session
