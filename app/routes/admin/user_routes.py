@@ -256,6 +256,15 @@ def delete(id):
             logging.error(f"Failed to delete user {id}: {e}")
             flash_message(f"{FlashMessages.DELETE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
             return redirect(url_for('admin.user.index')), 500
+            
+        except ValueError as e:
+            flash_message(str(e), FlashCategory.ERROR.value)
+            return redirect(url_for('admin.user.index')), 400
+        except Exception as e:
+            db.session.rollback()
+            logging.error(f"Failed to delete user {id}: {e}")
+            flash_message(f"{FlashMessages.DELETE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
+            return redirect(url_for('admin.user.index')), 500
 
 @admin_user_bp.route('/<int:id>/reset_password', methods=['POST'])
 @limiter.limit("5 per hour")
