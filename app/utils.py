@@ -36,7 +36,7 @@ def admin_required(f):
         audit_log = AuditLog(
             user_id=current_user.id,
             action=f.__name__,
-            details=f"Accessed admin route: {request.path}",
+            details_before=f"Accessed admin route: {request.path}",
             timestamp=datetime.utcnow()
         )
         db.session.add(audit_log)
