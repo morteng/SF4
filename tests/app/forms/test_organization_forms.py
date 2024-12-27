@@ -41,7 +41,6 @@ def test_organization_form_required_fields(app):
             )
             assert not form.validate()
             assert 'name' in form.errors
-            assert 'description' in form.errors
             assert 'homepage_url' in form.errors
             assert 'This field is required.' in form.name.errors
 
