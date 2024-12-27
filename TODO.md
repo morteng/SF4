@@ -2,22 +2,24 @@
 
 ## Current Goals
 1. **Template Improvements**
-   - [x] Verify all admin templates extend base.html
    - [ ] Add template inheritance tests
    - [ ] Verify proper error handling in all admin templates
 
 2. **Form Validation Improvements**
-   - [x] Add validation for organization fields
-   - [x] Add validation for bot status field
    - [ ] Improve error message consistency
    - [ ] Add validation for bot description length
 
-## New Goals
-1. **Improve Test Coverage**
-   - Add more test cases for bot routes
+3. **Testing Improvements**
+   - Add more test cases for organization routes
    - Verify error handling for all admin routes
    - Test edge cases for form validation
    - Add tests for template rendering
+
+## New Goals
+1. **Organization Route Testing**
+   - Add tests for invalid form submissions
+   - Test database error handling
+   - Verify proper error message display
 
 ## Knowledge & Memories
 - **Template Structure**
