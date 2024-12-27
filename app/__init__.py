@@ -65,6 +65,9 @@ def create_app(config_name='development'):
         
         # Initialize bots
         from app.models.bot import Bot
+        from app.models.notification import Notification
+        from app.models.audit_log import AuditLog
+        
         if not Bot.query.first():
             bots = [
                 Bot(name="TagBot", description="Automatically tags stipends"),
@@ -72,6 +75,24 @@ def create_app(config_name='development'):
                 Bot(name="ReviewBot", description="Flags suspicious entries")
             ]
             db.session.bulk_save_objects(bots)
+            
+            # Create initial notification
+            notification = Notification(
+                message="System initialized successfully",
+                type="system",
+                read_status=False
+            )
+            db.session.add(notification)
+            
+            # Create audit log for initialization
+            AuditLog.create(
+                user_id=0,  # System user
+                action="system_init",
+                details="Application initialized with default bots and admin user",
+                object_type="System",
+                object_id=0
+            )
+            
             db.session.commit()
 
     # Add context processor for notification count

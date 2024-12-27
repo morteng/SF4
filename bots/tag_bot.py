@@ -18,6 +18,16 @@ class TagBot:
             self.status = "active"
             self.logger.info("TagBot started.")
             
+            # Create audit log for bot start
+            from app.models.audit_log import AuditLog
+            AuditLog.create(
+                user_id=0,  # System user
+                action="bot_start",
+                details=f"TagBot started at {datetime.utcnow()}",
+                object_type="Bot",
+                object_id=self.id
+            )
+            
             # Get untagged stipends
             from app.models.stipend import Stipend
             from app.models.tag import Tag
@@ -44,6 +54,14 @@ class TagBot:
                 # Add all matching tags
                 if tags_to_add:
                     stipend.tags.extend(tags_to_add)
+                    # Create audit log for each tag addition
+                    AuditLog.create(
+                        user_id=0,  # System user
+                        action="tag_added",
+                        details=f"Added tags {[t.name for t in tags_to_add]} to stipend {stipend.id}",
+                        object_type="Stipend",
+                        object_id=stipend.id
+                    )
             
             db.session.commit()
                 
@@ -57,6 +75,16 @@ class TagBot:
                 read_status=False
             )
             db.session.add(notification)
+            
+            # Create audit log for bot completion
+            AuditLog.create(
+                user_id=0,  # System user
+                action="bot_complete",
+                details=f"TagBot completed at {datetime.utcnow()}",
+                object_type="Bot",
+                object_id=self.id
+            )
+            
             db.session.commit()
             
         except Exception as e:

@@ -288,10 +288,48 @@ class OrganizationForm(FlaskForm):
             try:
                 organization = Organization.query.filter_by(name=name.data).first()
                 if organization:
+                    # Create notification for duplicate name attempt
+                    from app.models.notification import Notification
+                    notification = Notification(
+                        message=f"Duplicate organization name attempt: {name.data}",
+                        type="user_action",
+                        read_status=False
+                    )
+                    db.session.add(notification)
+                    
+                    # Create audit log
+                    from app.models.audit_log import AuditLog
+                    AuditLog.create(
+                        user_id=current_user.id if current_user.is_authenticated else 0,
+                        action="duplicate_org_attempt",
+                        details=f"Attempt to create duplicate organization: {name.data}",
+                        object_type="Organization",
+                        object_id=organization.id if organization else None
+                    )
+                    
                     logger.warning(f"Duplicate organization name detected: {name.data}")
                     raise ValidationError('Name: Organization with this name already exists.')
             except Exception as e:
+                # Log error and create notification
                 logger.error(f"Error validating organization name: {str(e)}")
+                notification = Notification(
+                    message=f"Error validating organization name: {str(e)}",
+                    type="system",
+                    read_status=False
+                )
+                db.session.add(notification)
+                
+                # Create audit log for error
+                from app.models.audit_log import AuditLog
+                AuditLog.create(
+                    user_id=current_user.id if current_user.is_authenticated else 0,
+                    action="validation_error",
+                    details=f"Error validating organization name: {str(e)}",
+                    object_type="Organization",
+                    object_id=None
+                )
+                
+                db.session.commit()
                 raise ValidationError('Failed to validate organization name: ' + str(e))
 
     def validate_homepage_url(self, field):
