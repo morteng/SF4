@@ -18,6 +18,24 @@
   * Test both valid and invalid form submissions
   * Verify status codes in route tests
   * Check for proper error handling in templates
+  * Invalid form submissions should:
+    - Return 400 status code
+    - Display field-specific error messages
+    - Log validation errors
+    - Preserve form state
+    - Use consistent error message formatting
+
+- **Testing Best Practices**
+  * Use fixtures for common test setup
+  * Verify template rendering in route tests
+  * Check for proper error handling
+  * Test both success and failure cases
+  * When testing forms, always include CSRF token
+  * Use constants for flash messages to ensure consistency
+  * Add tests for invalid form submissions
+  * Verify status codes match expected values
+  * Test edge cases for form validation
+  * Verify proper error handling for database errors
 
 - **Testing Best Practices**
   * Use fixtures for common test setup
