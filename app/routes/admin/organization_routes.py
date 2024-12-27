@@ -1,5 +1,6 @@
 import logging
 from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask_login import current_user
 from bleach import clean
 
 logger = logging.getLogger(__name__)
