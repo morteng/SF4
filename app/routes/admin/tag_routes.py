@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app
 from flask_login import login_required
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from app.constants import FlashMessages, FlashCategory
 from app.forms.admin_forms import TagForm
 from app.services.tag_service import (
     get_tag_by_id,
@@ -24,17 +24,17 @@ def create():
         try:
             new_tag = create_tag(form.data)
             if new_tag is None:
-                flash_message(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
+                flash_message(FlashMessages.CREATE_TAG_ERROR, FlashCategory.ERROR)
                 return render_template('admin/tags/create.html', form=form)
-            flash_message(FLASH_MESSAGES["CREATE_TAG_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            flash_message(FlashMessages.CREATE_TAG_SUCCESS, FlashCategory.SUCCESS)
             return redirect(url_for('tag.index'))
         except IntegrityError as e:
             db.session.rollback()
-            flash_message(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
+            flash_message(FlashMessages.CREATE_TAG_ERROR, FlashCategory.ERROR)
             return render_template('admin/tags/create.html', form=form)
         except Exception as e:
             db.session.rollback()
-            flash_message(FLASH_MESSAGES["CREATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
+            flash_message(FlashMessages.CREATE_TAG_ERROR, FlashCategory.ERROR)
             return render_template('admin/tags/create.html', form=form)
     else:
         error_messages = []
@@ -46,7 +46,7 @@ def create():
                 msg = format_error_message(field, error)
                 error_messages.append(msg)
                 field_errors[field_name].append(msg)
-                flash_message(msg, FLASH_CATEGORY_ERROR)
+                flash_message(msg, FlashCategory.ERROR)
 
     return render_template('admin/tags/create.html', form=form)
 
@@ -58,12 +58,12 @@ def delete(id):
     if tag:
         try:
             delete_tag(tag)
-            flash_message(FLASH_MESSAGES["DELETE_TAG_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            flash_message(FlashMessages.DELETE_TAG_SUCCESS, FlashCategory.SUCCESS)
         except Exception as e:
             db.session.rollback()
-            flash_message(FLASH_MESSAGES["DELETE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
+            flash_message(FlashMessages.DELETE_TAG_ERROR, FlashCategory.ERROR)
     else:
-        flash_message(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+        flash_message(FlashMessages.GENERIC_ERROR, FlashCategory.ERROR)
     return redirect(url_for('admin.tag.index'))  # Change 'tag.index' to 'admin.tag.index'
 
 @admin_tag_bp.route('/', methods=['GET'])
@@ -79,7 +79,7 @@ def index():
 def edit(id):
     tag = get_tag_by_id(id)
     if not tag:
-        flash_message(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+        flash_message(FlashMessages.GENERIC_ERROR, FlashCategory.ERROR)
         return redirect(url_for('tag.index'))
     
     form = TagForm(obj=tag, original_name=tag.name)
@@ -87,19 +87,19 @@ def edit(id):
     if form.validate_on_submit():
         try:
             update_tag(tag, form.data)
-            flash_message(FLASH_MESSAGES["UPDATE_TAG_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            flash_message(FlashMessages.UPDATE_TAG_SUCCESS, FlashCategory.SUCCESS)
             return redirect(url_for('tag.index'))
         except IntegrityError as e:
             db.session.rollback()
-            flash_message(FLASH_MESSAGES["UPDATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
+            flash_message(FlashMessages.UPDATE_TAG_ERROR, FlashCategory.ERROR)
             return render_template('admin/tags/update.html', form=form, tag=tag)
         except Exception as e:
             db.session.rollback()
-            flash_message(FLASH_MESSAGES["UPDATE_TAG_ERROR"], FLASH_CATEGORY_ERROR)
+            flash_message(FlashMessages.UPDATE_TAG_ERROR, FlashCategory.ERROR)
             return render_template('admin/tags/update.html', form=form, tag=tag)
 
     # Add a specific flash message for invalid form data
     if request.method == 'POST':
-        flash_message(FLASH_MESSAGES["GENERIC_ERROR"], FLASH_CATEGORY_ERROR)
+        flash_message(FlashMessages.GENERIC_ERROR, FlashCategory.ERROR)
 
     return render_template('admin/tags/update.html', form=form, tag=tag)
