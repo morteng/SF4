@@ -98,7 +98,7 @@ def test_create_stipend_route(authenticated_admin: FlaskClient, stipend_data: di
     db_session.commit()
     
     # Get create page and extract CSRF token
-    create_response = logged_in_admin.get(url_for('admin.stipend.create'))
+    create_response = authenticated_admin.get(url_for('admin.stipend.create'))
     assert create_response.status_code == 200
     csrf_token = extract_csrf_token(create_response.data)
     
@@ -117,7 +117,7 @@ def test_create_stipend_route(authenticated_admin: FlaskClient, stipend_data: di
     }
     
     # Submit form
-    response = logged_in_admin.post(url_for('admin.stipend.create'), 
+    response = authenticated_admin.post(url_for('admin.stipend.create'), 
                                   data=form_data, 
                                   follow_redirects=True)
     
@@ -192,7 +192,7 @@ def test_create_stipend_with_invalid_dates(
     assert expected_message.encode() in response.data, f"Expected error message for {invalid_date} not found"
     
     logger.info(f"Completed test_create_stipend_with_invalid_dates: {invalid_date}")
-    create_response = logged_in_admin.get(url_for('admin.stipend.create'))
+    create_response = authenticated_admin.get(url_for('admin.stipend.create'))
     assert create_response.status_code == 200
 
     csrf_token = extract_csrf_token(create_response.data)
@@ -215,7 +215,7 @@ def test_create_stipend_with_invalid_dates(
         'csrf_token': csrf_token
     }
     
-    response = logged_in_admin.post(url_for('admin.stipend.create'), 
+    response = authenticated_admin.post(url_for('admin.stipend.create'), 
                                   data=invalid_data,
                                   follow_redirects=True)
  
