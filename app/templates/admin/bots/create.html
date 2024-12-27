@@ -3,6 +3,7 @@
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-2xl font-bold mb-4">Create Bot</h1>
+    {% include "_flash_messages.html" %}
     <form method="POST" action="{{ url_for('admin.bot.create') }}">
         {{ form.hidden_tag() }}
         <div class="mb-4">
