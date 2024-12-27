@@ -91,22 +91,29 @@ def test_update_user_route_with_invalid_id(logged_in_admin):
 def extract_csrf_token(response_data):
     """Extract CSRF token from HTML response."""
     import re
-    html = response_data.decode('utf-8')
+    from bs4 import BeautifulSoup
     
-    # Try multiple patterns to find CSRF token
-    patterns = [
-        r'<input[^>]*id="csrf_token"[^>]*value="([^"]+)"',
-        r'<input[^>]*name="csrf_token"[^>]*value="([^"]+)"',
-        r'<meta[^>]*name="csrf-token"[^>]*content="([^"]+)"'
-    ]
+    soup = BeautifulSoup(response_data, 'html.parser')
     
-    for pattern in patterns:
-        match = re.search(pattern, html)
-        if match:
-            return match.group(1)
+    # Look for CSRF token in meta tag
+    meta_token = soup.find('meta', attrs={'name': 'csrf-token'})
+    if meta_token:
+        return meta_token.get('content')
     
-    # Debug: Print the HTML response if no token found
-    print("HTML Response (first 1000 chars):", html[:1000])
+    # Look for CSRF token in hidden input
+    input_token = soup.find('input', attrs={'name': 'csrf_token'})
+    if input_token:
+        return input_token.get('value')
+    
+    # Look for CSRF token in form data
+    form = soup.find('form')
+    if form:
+        input_token = form.find('input', attrs={'name': 'csrf_token'})
+        if input_token:
+            return input_token.get('value')
+    
+    # If no token found, log the issue
+    logging.warning("CSRF token not found in response")
     return None
 
 def test_delete_user_route(logged_in_admin, test_user, db_session):
@@ -128,14 +135,18 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
         url_for('admin.user.delete', id=test_user.id),
         data={
             'csrf_token': csrf_token,
-            '_csrf_token': csrf_token  # Add both form field names
+            '_csrf_token': csrf_token
         },
         headers={
-            'X-CSRFToken': csrf_token,  # Add header
-            'X-Requested-With': 'XMLHttpRequest'  # Simulate AJAX request
+            'X-CSRFToken': csrf_token,
+            'X-Requested-With': 'XMLHttpRequest'
         },
         follow_redirects=True
     )
+    
+    # Verify CSRF token was used
+    with logged_in_admin.session_transaction() as session:
+        assert 'csrf_token' in session, "CSRF token not found in session"
 
     assert delete_response.status_code == 200
     
