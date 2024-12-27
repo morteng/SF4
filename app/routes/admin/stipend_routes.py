@@ -10,6 +10,7 @@ from app.constants import FlashCategory, FlashMessages
 from app.forms.admin_forms import StipendForm, OrganizationForm
 from app.models.stipend import Stipend
 from app.models.organization import Organization
+from app.models.tag import Tag
 from app.services.organization_service import get_organization_by_id
 from app.services.stipend_service import (
     get_stipend_by_id,
