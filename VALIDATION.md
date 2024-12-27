@@ -18,7 +18,6 @@
 
 ## Error Handling
 - Rollback on error
-- Leap year validation must return specific error message: 'Invalid date values (e.g., Feb 29 in non-leap years)'
 - Date parsing errors must be handled separately from logical date validation
 - Ensure validation errors are properly propagated to form errors
 - Validate leap year dates and return clear error messages
@@ -37,6 +36,5 @@
   - Timezone conversion
   - Validation
   - Future date limits
-  - Leap year validation (including Feb 29 in non-leap years)
   - Invalid date detection with clear error messages
 

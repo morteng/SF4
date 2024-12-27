@@ -5,7 +5,6 @@
 - [ ] Increase test coverage to 80%+
 
 ## Best Practices
-- Verify leap year validation implementation returns correct error message
 - Ensure date parsing and logical validation are handled separately
 - Verify date validation error propagation in form handling
 - Ensure test data includes all required fields
@@ -27,6 +26,5 @@
   - String input
   - Timezone-aware objects
   - Future date validation
-  - Leap year validation (including Feb 29 in non-leap years)
   - Invalid date detection with consistent error messages
 
