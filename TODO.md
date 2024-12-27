@@ -11,15 +11,12 @@
 
 ## Knowledge & Memories
 - CustomDateTimeField validation rules:
+  * Now properly handles timezone parameter to ensure it's always a string
   * Uses strptime for format validation
   * Validates individual date/time components
   * Handles timezone conversion
   * Provides specific error messages for different validation failures
   * Error messages must match test expectations exactly
-  * Invalid date components now return consistent error messages
-  * Removed redundant component-specific error messages
-  * Combined date validation errors into single 'invalid_date' message
-  * Simplified time validation error handling
 
 - Organization model includes basic fields: name, description, homepage_url
 - When handling database errors:

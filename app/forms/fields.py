@@ -8,8 +8,8 @@ class CustomDateTimeField(DateTimeField):
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', timezone='UTC', **kwargs):
         super().__init__(label, validators, format=format, **kwargs)
         self.format = format
-        # Store the timezone as a string directly
-        self.timezone_str = timezone
+        # Ensure timezone is a string, not an UnboundField
+        self.timezone_str = timezone if isinstance(timezone, str) else 'UTC'
         self.error_messages = {
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
             'invalid_date': 'Invalid date values (e.g., Feb 30)',
