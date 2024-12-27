@@ -8,7 +8,7 @@ from flask_login import login_user
 from app.extensions import db  # Ensure consistent session usage
 from app.forms.admin_forms import StipendForm
 from app.models.user import User
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from app.constants import FlashMessages, FlashCategory
 from flask import get_flashed_messages
 import logging
 
@@ -83,7 +83,7 @@ def test_create_stipend(test_data, db_session, app, admin_user):
     
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
+        assert FlashMessages.CREATE_STIPEND_SUCCESS.encode() in response.data
 
 def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     # Modify test data with an invalid application_deadline format
@@ -198,7 +198,7 @@ def test_create_stipend_with_invalid_date_format(test_data, db_session, app, adm
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
+        assert FlashMessages.INVALID_DATE_FORMAT.encode() in response.data
 
 def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
@@ -238,7 +238,7 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
     assert updated_stipend.summary == 'Updated summary'
     assert updated_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2024-12-31 23:59:59'
     with app.test_request_context():
-        assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
+        assert FlashMessages.UPDATE_STIPEND_SUCCESS.encode() in response.data
 
 def test_update_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
@@ -436,7 +436,7 @@ def test_delete_existing_stipend(test_data, db_session, app, admin_user):
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"].encode() in response.data
+        assert FlashMessages.DELETE_STIPEND_SUCCESS.encode() in response.data
 
 def test_delete_nonexistent_stipend(app, admin_user):
     with app.app_context(), app.test_client() as client:
@@ -447,7 +447,7 @@ def test_delete_nonexistent_stipend(app, admin_user):
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert FLASH_MESSAGES["STIPEND_NOT_FOUND"].encode() in response.data
+        assert FlashMessages.STIPEND_NOT_FOUND.encode() in response.data
 
 def test_get_stipend_by_valid_id(test_data, db_session, app):
     stipend = Stipend(**test_data)
