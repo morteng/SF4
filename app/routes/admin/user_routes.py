@@ -150,7 +150,10 @@ def index():
     else:
         users = get_all_users(page=page)
     
+    # Create a form instance to include CSRF token
+    form = UserForm()
     return render_template('admin/users/index.html', 
                          users=users,
                          search_query=search_query,
+                         form=form,
                          csrf_token=generate_csrf())
