@@ -33,6 +33,7 @@
   - Object type and ID
   - Before/after state for updates
   - Success/failure status
+- Ensure notification_count is passed to all admin templates
 - Store audit logs in separate database table
 - Include audit log reference in error responses
 - Return appropriate status codes:

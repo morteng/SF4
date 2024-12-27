@@ -15,6 +15,7 @@
 - For forms: `{{ form.csrf_token }}`
 - For HTMX: `<meta name="csrf-token" content="{{ csrf_token() }}">`
 - Validate CSRF tokens in all POST requests
+- Use `extract_csrf_token()` helper in tests
 - In routes, pass form instances to templates
 - Handle CSRF errors with 400 status code
 - Ensure CSRF tokens are included in all POST requests

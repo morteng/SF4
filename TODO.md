@@ -8,9 +8,10 @@
 - [x] Ensure consistent error handling for database errors
 - [x] Implement direct template rendering for database errors
 - [x] Add audit logging for sensitive operations
-- [ ] Fix date validation in StipendForm
+- [x] Fix date validation in StipendForm
 - [ ] Verify error message formatting in all error responses
 - [ ] Implement email notifications for password resets
+- [ ] Ensure notification_count is available in all admin templates
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
