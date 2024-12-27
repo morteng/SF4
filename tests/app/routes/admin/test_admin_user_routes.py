@@ -102,7 +102,7 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
     )
     
     # Debugging: Print the response data if needed
-    # print(delete_response.data)
+    print(delete_response.data)  # Uncomment to debug
     
     assert delete_response.status_code == 200
     
