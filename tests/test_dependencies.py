@@ -1,6 +1,6 @@
 import importlib
 import pytest
-from requirements import parse
+from requirements.parser import parse
 
 def test_flask_limiter_installed():
     """Verify flask-limiter is installed and importable"""
