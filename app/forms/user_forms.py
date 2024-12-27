@@ -10,7 +10,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 from flask import session
-from wtforms.validators import DataRequired, Email, ValidationError, EqualTo
+from wtforms.validators import DataRequired, Email, ValidationError, EqualTo, Length
 from app.models.user import User
 from app.constants import FlashMessages, FlashCategory  # Import FlashMessages and FlashCategory from constants
 from app.utils import flash_message  # Import the flash_message function
