@@ -26,6 +26,7 @@ from app.extensions import db
 
 
 class StipendForm(FlaskForm):
+    csrf_token = HiddenField('CSRF Token')
     name = StringField('Name', validators=[
         DataRequired(message="Name is required."),
         Length(max=100, message="Name cannot exceed 100 characters.")

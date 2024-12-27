@@ -231,4 +231,12 @@ def format_error_message(field: Any, error: Union[str, Exception]) -> str:
 
 def flash_message(message, category):
     from flask import flash
-    flash(message, category)
+    try:
+        flash(message, category)
+        # Log important messages
+        if category == FlashCategory.ERROR:
+            logger.error(f"Flash Error: {message}")
+        elif category == FlashCategory.WARNING:
+            logger.warning(f"Flash Warning: {message}")
+    except Exception as e:
+        logger.error(f"Failed to flash message: {e}")

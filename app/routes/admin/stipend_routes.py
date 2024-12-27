@@ -2,6 +2,14 @@ from datetime import datetime
 import logging
 
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+# Initialize rate limiter
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=["100 per hour", "10 per minute"]
+)
 from flask_login import current_user
 from app.models.audit_log import AuditLog
 from app.utils import format_error_message
@@ -28,6 +36,7 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 
 
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")
 @login_required
 @admin_required
 def create():
@@ -119,7 +128,10 @@ def create():
                 }
             return render_template('admin/stipends/create.html', form=form), 400
 
-    return render_template('admin/stipends/create.html', form=form)
+    notification_count = get_notification_count(current_user.id)
+    return render_template('admin/stipends/create.html', 
+                         form=form,
+                         notification_count=notification_count)
 
 
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])

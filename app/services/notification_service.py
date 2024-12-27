@@ -14,9 +14,14 @@ def get_notification_count(user_id):
             (Notification.user_id.is_(None)),  # Include system-wide notifications
             Notification.read_status == False
         ).count()
+        
+        # Log if count is high
+        if count > 10:
+            logger.warning(f"High notification count ({count}) for user {user_id}")
+            
         return count
     except Exception as e:
-        logging.error(f"Error getting notification count for user {user_id}: {str(e)}")
+        logger.error(f"Error getting notification count for user {user_id}: {str(e)}")
         return 0  # Return 0 to prevent template rendering issues
     finally:
         db.session.close()
