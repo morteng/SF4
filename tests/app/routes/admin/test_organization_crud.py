@@ -7,7 +7,7 @@ from tests.conftest import logged_in_admin, db_session, test_organization, organ
 import re
 import pytz
 from sqlalchemy.exc import SQLAlchemyError
-from app.constants import FLASH_MESSAGES
+from app.constants import FlashMessages
 
 def extract_csrf_token(response_data):
     csrf_regex = r'<input[^>]+name="csrf_token"[^>]+value="([^"]+)"'
@@ -49,7 +49,7 @@ def test_create_organization(logged_in_admin, db_session, organization_data):
 
         print("Flashed Messages:", flashed_messages)
 
-        expected_flash_message = FLASH_MESSAGES["CREATE_ORGANIZATION_SUCCESS"]
+        expected_flash_message = FlashMessages.CREATE_ORGANIZATION_SUCCESS.value
         assert any(
             cat == 'success' and msg == expected_flash_message
             for cat, msg in flashed_messages
@@ -115,7 +115,7 @@ def test_create_organization_with_duplicate_name(logged_in_admin, db_session, or
         with logged_in_admin.session_transaction() as sess:
             flashed_messages = sess.get('_flashes', [])
 
-        expected_flash_message = FLASH_MESSAGES["CREATE_ORGANIZATION_DUPLICATE_ERROR"]
+        expected_flash_message = FlashMessages.CREATE_ORGANIZATION_DUPLICATE_ERROR.value
         assert any(
             cat == 'error' and msg == expected_flash_message
             for cat, msg in flashed_messages
@@ -215,7 +215,7 @@ def test_create_organization_with_database_rollback(logged_in_admin, db_session,
         with logged_in_admin.session_transaction() as sess:
             flashed_messages = sess.get('_flashes', [])
 
-        expected_flash_message = FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR']
+        expected_flash_message = FlashMessages.CREATE_ORGANIZATION_DATABASE_ERROR.value
         assert any(
             cat == 'error' and msg == expected_flash_message
             for cat, msg in flashed_messages
@@ -304,7 +304,7 @@ def test_delete_organization_with_database_error(logged_in_admin, db_session, mo
         with logged_in_admin.session_transaction() as sess:
             flashed_messages = sess.get('_flashes', [])  # returns list of (category, message) pairs
 
-        expected_flash_message = FLASH_MESSAGES['DELETE_ORGANIZATION_DATABASE_ERROR']
+        expected_flash_message = FlashMessages.DELETE_ORGANIZATION_DATABASE_ERROR.value
         assert any(
             cat == 'error' and msg == expected_flash_message
             for cat, msg in flashed_messages
@@ -351,7 +351,7 @@ def test_update_organization_with_database_error(logged_in_admin, db_session, mo
         with logged_in_admin.session_transaction() as sess:
             flashed_messages = sess.get('_flashes', [])  # returns list of (category, message) pairs
 
-        expected_flash_message = FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR']
+        expected_flash_message = FlashMessages.UPDATE_ORGANIZATION_DATABASE_ERROR.value
         assert any(
             cat == 'error' and msg == expected_flash_message
             for cat, msg in flashed_messages
@@ -448,7 +448,7 @@ def test_delete_organization(logged_in_admin, db_session):
         # Print the flash messages to debug
         print("Flashed Messages:", flashed_messages)
 
-        expected_flash_message = FLASH_MESSAGES["DELETE_ORGANIZATION_SUCCESS"]
+        expected_flash_message = FlashMessages.DELETE_ORGANIZATION_SUCCESS.value
         assert any(
             cat == 'success' and msg == expected_flash_message
             for cat, msg in flashed_messages
