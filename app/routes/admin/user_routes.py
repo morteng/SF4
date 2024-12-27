@@ -143,12 +143,6 @@ def edit(id):
                                 form=form,
                                 user=user,
                                 csrf_token=csrf_token)
-    """Edit user details with proper validation and audit logging"""
-    try:
-        user = get_user_by_id(id)
-        if not user:
-            flash_message(FlashMessages.USER_NOT_FOUND.value, FlashCategory.ERROR.value)
-            return redirect(url_for('admin.user.index'))
             
         form = UserForm(
             original_username=user.username,
