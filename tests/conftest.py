@@ -218,22 +218,25 @@ def extract_csrf_token(response_data):
     """Extract CSRF token from HTML response."""
     decoded_data = response_data.decode('utf-8')
     
-    # Look for CSRF token in hidden input with id="csrf_token"
-    csrf_input = re.search(r'<input[^>]*id="csrf_token"[^>]*value="(.+?)"', decoded_data)
-    if csrf_input:
-        return csrf_input.group(1)
+    # Look for CSRF token in various possible locations
+    patterns = [
+        r'<input[^>]*id="csrf_token"[^>]*value="(.+?)"',  # id="csrf_token"
+        r'<meta[^>]*name="csrf-token"[^>]*content="(.+?)"',  # meta tag
+        r'<input[^>]*type="hidden"[^>]*name="csrf_token"[^>]*value="(.+?)"',  # hidden input
+        r'<input[^>]*name="csrf_token"[^>]*value="(.+?)"',  # any input with name
+        r'name="csrf_token"\s*value="(.+?)"',  # looser pattern
+        r'csrf_token"\s*value="(.+?)"'  # even looser pattern
+    ]
     
-    # Look for CSRF token in meta tag as fallback
-    meta_token = re.search(r'<meta[^>]*name="csrf-token"[^>]*content="(.+?)"', decoded_data)
-    if meta_token:
-        return meta_token.group(1)
+    for pattern in patterns:
+        match = re.search(pattern, decoded_data)
+        if match:
+            token = match.group(1)
+            if token and len(token) > 10:  # Basic validation
+                return token
     
-    # Look for CSRF token in any hidden input as last resort
-    hidden_input = re.search(r'<input[^>]*type="hidden"[^>]*name="csrf_token"[^>]*value="(.+?)"', decoded_data)
-    if hidden_input:
-        return hidden_input.group(1)
-    
-    logging.warning("CSRF token not found in response")
+    # Debug output
+    logging.warning("CSRF token not found in response. Response data:\n%s", decoded_data[:1000])
     return None
 
 def get_all_tags():

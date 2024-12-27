@@ -190,8 +190,12 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
     with logged_in_admin:
         # First get the CSRF token from the login page
         login_get_response = logged_in_admin.get('/login')
+        assert login_get_response.status_code == 200, \
+            f"Login page failed with status {login_get_response.status_code}"
+            
         csrf_token = extract_csrf_token(login_get_response.data)
-        assert csrf_token is not None, "CSRF token not found in login page"
+        assert csrf_token is not None, \
+            f"CSRF token not found in login page. Response: {login_get_response.data.decode('utf-8')[:1000]}"
         
         # Perform login with CSRF token
         login_response = logged_in_admin.post('/login', data={
