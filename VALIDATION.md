@@ -30,6 +30,7 @@
 - Use form-generated CSRF tokens
 
 ## Form Testing
+- Ensure correct import paths for configuration (e.g., `from app.config import TestConfig`)
 - Test both valid and invalid form submissions
 - Verify validation messages
 - Always use an application context for form tests
