@@ -217,7 +217,7 @@ class OrganizationForm(FlaskForm):
     description = TextAreaField('About', validators=[
         Optional(),
         Length(max=500, message="Description cannot exceed 500 characters.")
-    ])
+    ], render_kw={"maxlength": 500})
     homepage_url = URLField('Website', validators=[
         DataRequired(message="Website URL is required."),
         URL(message="Please enter a valid URL starting with http:// or https://.")
@@ -246,3 +246,7 @@ class OrganizationForm(FlaskForm):
     def validate_homepage_url(self, field):
         if field.data and not (field.data.startswith('http://') or field.data.startswith('https://')):
             raise ValidationError('URL must start with http:// or https://.')
+
+    def validate_description(self, field):
+        if field.data and len(field.data) > 500:
+            raise ValidationError('Description cannot exceed 500 characters.')
