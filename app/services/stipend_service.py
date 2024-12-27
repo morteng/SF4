@@ -3,7 +3,7 @@ from app.extensions import db
 from app.models import Stipend, Organization
 from datetime import datetime
 from flask import flash
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR, FLASH_CATEGORY_SUCCESS
+from app.constants import FlashMessages, FlashCategory
 
 logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
@@ -69,13 +69,13 @@ def update_stipend(stipend, data, session=db.session):
                 setattr(stipend, key, value)
 
         session.commit()
-        flash(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+        flash(FlashMessages.UPDATE_STIPEND_SUCCESS.value, FlashCategory.SUCCESS.value)
         return True
     except Exception as e:
         session.rollback()
         logging.error(f"Failed to create stipend: {e}")  # Add this line
         logging.error(f"Failed to update stipend: {e}")
-        flash(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+        flash(str(e) if str(e) else FlashMessages.UPDATE_STIPEND_ERROR.value, FlashCategory.ERROR.value)
         return False
 
 def create_stipend(stipend_data, session=db.session):
@@ -135,14 +135,14 @@ def delete_stipend(stipend_id, session=db.session):
             session.delete(stipend)
             session.commit()
             logging.info('Stipend deleted successfully.')
-            flash(FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            flash(FlashMessages.DELETE_STIPEND_SUCCESS.value, FlashCategory.SUCCESS.value)
         else:
             logging.error('Stipend not found!')
-            flash(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
+            flash(FlashMessages.STIPEND_NOT_FOUND.value, FlashCategory.ERROR.value)
     except Exception as e:
         session.rollback()
         logging.error(f"Failed to delete stipend: {e}")
-        flash(FLASH_MESSAGES["DELETE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+        flash(FlashMessages.DELETE_STIPEND_ERROR.value, FlashCategory.ERROR.value)
 
 def get_stipend_by_id(id, session=db.session):
     return session.get(Stipend, id)
