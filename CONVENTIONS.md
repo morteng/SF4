@@ -10,7 +10,8 @@
   - Sensitive operations: 10/minute
 
 ### Rate Limiting
-- User management: 100/hour
+- Admin endpoints: 100/hour
+- Sensitive operations: 10/minute
 - User creation: 10/minute
 - User deletion: 3/minute
 - Password resets: 5/hour

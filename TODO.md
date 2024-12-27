@@ -11,9 +11,9 @@
 - [x] Add audit logging for sensitive operations
 - [x] Fix date validation in StipendForm
 - [x] Implement rate limiting for sensitive operations
-- [ ] Add foreign key relationship between User and AuditLog
-- [ ] Ensure notification_count is available in all admin templates
+- [x] Add foreign key relationship between User and AuditLog
 - [ ] Complete CRUD operation tests for all admin routes
+- [ ] Add pagination tests for user management
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
