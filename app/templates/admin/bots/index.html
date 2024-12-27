@@ -5,33 +5,16 @@
 
 {% block content %}
     <h1 class="text-3xl font-bold mb-4">Manage Bots</h1>
-    <div class="overflow-x-auto">
-        <table id="bots" class="w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" aria-label="Actions">Action</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                {% from "_macros.html" import edit_button, delete_button %}
-                {% for bot in bots %}
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ bot.id }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ bot.name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ bot.description }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ bot.status }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        {{ edit_button(url_for('admin.bot.edit', id=bot.id), 'body > main') }}
-                        {{ delete_button(url_for('admin.bot.delete', id=bot.id), 'closest tr') }}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="space-y-4">
+        {% for bot in bots %}
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p><strong>{{ bot.name }}</strong>: {{ bot.description }}</p>
+                <form hx-post="{{ url_for('admin.bot.run_bot', id=bot.id) }}" hx-target="#bots" hx-swap="outerHTML" class="mt-4">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Run Bot</button>
+                </form>
+            </div>
+        {% endfor %}
     </div>
+    <a href="{{ url_for('admin.dashboard.dashboard') }}" class="mt-6 inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">Back to Dashboard</a>
 
 {% endblock %}

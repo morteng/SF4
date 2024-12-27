@@ -12,8 +12,33 @@
 </div>
 
 <div class="overflow-x-auto mt-4">
-    <div id="stipends-table">
-        {% include 'admin/stipends/_stipends_table.html' %}
-    </div>
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th scope="col" class="relative px-6 py-3">
+                    <span class="sr-only">Action</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            {% for stipend in stipends.items %}
+            <tr hx-target="this" hx-swap="outerHTML">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ stipend.id }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ stipend.name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    {% from "_macros.html" import edit_button %}
+                    {{ edit_button(url_for('admin.stipend.edit', id=stipend.id), '#main-content') }}
+                    {% from "_macros.html" import delete_button %}
+                    {{ delete_button(url_for('admin.stipend.delete', id=stipend.id), 'closest tr') }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% from "_macros.html" import pagination %}
+    {{ pagination(stipends, url_for('admin.stipend.paginate')) }}
 </div>
 {% endblock %}
