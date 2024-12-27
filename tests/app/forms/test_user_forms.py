@@ -33,37 +33,18 @@ def client(app):
     return app.test_client()
 
 def test_profile_form_valid(client, setup_database):
-    with client:  # Maintain the session across requests
-        # Mock the database queries to return None (no existing user)
-        with patch('app.forms.user_forms.User.query.filter_by') as mock_filter_by:
-            mock_filter_by.return_value.first.return_value = None
+    # Mock the database queries to return None (no existing user)
+    with patch('app.forms.user_forms.User.query.filter_by') as mock_filter_by:
+        mock_filter_by.return_value.first.return_value = None
 
-            # Create the form and get its CSRF token within a request context
-            with client.application.test_request_context():
-                # First make a GET request to establish the session
-                client.get(url_for('user.edit_profile'))
-                
-                form = ProfileForm(
-                    original_username="testuser",
-                    original_email="test@example.com"
-                )
-                csrf_token = form.csrf_token.current_token
+        # First make a GET request to establish the session and get CSRF token
+        get_response = client.get(url_for('user.edit_profile'))
+        assert get_response.status_code == 200
+        
+        # Extract CSRF token from the form
+        csrf_token = get_response.data.decode().split('name="csrf_token" value="')[1].split('"')[0]
 
-                # Test the form with valid CSRF token
-                form.username.data = "newusername"
-                form.email.data = "newemail@example.com"
-
-                # Validate the form
-                if not form.validate():
-                    print("Form validation errors:", form.errors)
-                assert form.validate() == True
-
-        # Test form submission via POST within the same session
-        with client.session_transaction() as sess:
-            sess['csrf_token'] = csrf_token  # Add the CSRF token to the session
-            print("Session CSRF Token:", sess.get('csrf_token'))
-            print("Form CSRF Token:", csrf_token)
-
+        # Test form submission via POST with valid data
         response = client.post(url_for('user.edit_profile'), data={
             'username': 'newusername',
             'email': 'newemail@example.com',
@@ -71,10 +52,8 @@ def test_profile_form_valid(client, setup_database):
         }, follow_redirects=True)
 
         # Verify the response
-        if response.status_code != 200:
-            print("Response status:", response.status_code)
-            print("Response data:", response.data)
         assert response.status_code == 200
+        assert b"Profile updated successfully" in response.data
 
 def test_profile_form_invalid_same_username(client, setup_database):
     password_hash = generate_password_hash("password123")
