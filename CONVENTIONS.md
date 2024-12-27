@@ -13,12 +13,10 @@
 - Ensure CSRF tokens are validated in form tests
 
 ### Form Testing
-- Test all form fields and validation rules
-- Use `test_request_context` for CSRF-protected forms
-- Verify both valid and invalid inputs
-- Validate CSRF tokens in all form tests
-- Test both valid and invalid form submissions
-- Use the form's generated CSRF token in tests
+- Always use `test_request_context` when testing forms
+- Include CSRF token validation in form tests
+- Use form-generated CSRF tokens in tests
+- Add error handling to debug form validation failures
 
 ### Security
 - Validate all inputs
