@@ -175,12 +175,14 @@ class BotForm(FlaskForm):
         super(BotForm, self).__init__(*args, **kwargs)
         self.original_name = original_name
 
-    def validate_name(self, name):
-        if name.data != self.original_name:
-            bot = Bot.query.filter_by(name=name.data).first()
+    def validate_name(self, field):
+        if not field.data or field.data.strip() == '':
+            raise ValidationError('Name is required.')
+        if field.data != self.original_name:
+            bot = Bot.query.filter_by(name=field.data).first()
             if bot:
                 raise ValidationError('Bot with this name already exists.')
-    
+
     def validate_status(self, field):
         if isinstance(field.data, str):
             if field.data.lower() not in ['true', 'false', 'yes', 'no', '1', '0', 'y', 'n', 'on', 'off']:

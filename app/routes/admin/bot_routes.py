@@ -28,6 +28,8 @@ def create():
             for error in errors:
                 flash_message(f"{field}: {error}", FLASH_CATEGORY_ERROR)
                 current_app.logger.error(f"Flashing error: {field}: {error}")
+        # Add specific flash message for invalid form data
+        flash_message(FLASH_MESSAGES["CREATE_BOT_INVALID_DATA"], FLASH_CATEGORY_ERROR)
         return render_template('admin/bots/create.html', form=form), 400
     return render_template('admin/bots/create.html', form=form)
 
