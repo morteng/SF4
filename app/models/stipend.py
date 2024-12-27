@@ -17,9 +17,8 @@ class Stipend(db.Model):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Remove the organization_id validation temporarily
-        # if not self.organization_id:
-        #     raise ValueError("Organization ID is required")
+        if 'tags' in kwargs:
+            self.tags = kwargs['tags']
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
     __mapper_args__ = {"confirm_deleted_rows": False}

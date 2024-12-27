@@ -29,16 +29,15 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @admin_required
 def create():
     form = StipendForm()
+    form.organization_id.choices = [(org.id, org.name) for org in Organization.query.order_by(Organization.name).all()]
+    form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.order_by(Tag.name).all()]
+    
     is_htmx = request.headers.get('HX-Request')
 
     if request.method == 'POST':
         if form.validate_on_submit():
             try:
-                # Validate application deadline
-                if form.application_deadline.data and form.application_deadline.data < datetime.utcnow():
-                    flash_message("Application deadline cannot be in the past", FlashCategory.ERROR)
-                    return render_template('admin/stipends/create.html', form=form), 400
-
+                # Prepare stipend data
                 stipend_data = {
                     'name': form.name.data,
                     'summary': form.summary.data,
@@ -46,10 +45,10 @@ def create():
                     'homepage_url': form.homepage_url.data,
                     'application_procedure': form.application_procedure.data,
                     'eligibility_criteria': form.eligibility_criteria.data,
-                    'application_deadline': form.application_deadline.data,
+                    'application_deadline': form.application_deadline.data if form.application_deadline.data else None,
                     'organization_id': form.organization_id.data,
                     'open_for_applications': form.open_for_applications.data,
-                    'tags': form.tags.data  # Add tag support
+                    'tags': [Tag.query.get(tag_id) for tag_id in form.tags.data]
                 }
                 
                 new_stipend = create_stipend(stipend_data)

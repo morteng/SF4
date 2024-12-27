@@ -52,13 +52,16 @@ class StipendForm(FlaskForm):
     ])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
-        validators=[DataRequired(message="Date is required.")],
+        validators=[Optional()],
         render_kw={
             "placeholder": "YYYY-MM-DD HH:MM:SS",
             "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
             "title": "Please enter date in YYYY-MM-DD HH:MM:SS format."
         }
     )
+    organization_id = SelectField('Organization', coerce=int, validators=[Optional()])
+    open_for_applications = BooleanField('Open for Applications', default=False)
+    tags = SelectMultipleField('Tags', coerce=int, validators=[Optional()])
 
     def validate_application_deadline(self, field):
         # Skip validation if the field is empty or invalid (CustomDateTimeField handles this)

@@ -83,49 +83,67 @@ def create_stipend(stipend_data, session=db.session):
         # Validate required fields
         if not stipend_data.get('name'):
             raise ValueError("Name is required")
-        if not stipend_data.get('organization_id'):
-            raise ValueError("Organization is required")
         
-        # Convert organization_id to int if it's a string
-        if isinstance(stipend_data['organization_id'], str):
-            try:
-                stipend_data['organization_id'] = int(stipend_data['organization_id'])
-            except ValueError:
-                raise ValueError("Invalid organization ID format")
+        # Handle organization
+        if stipend_data.get('organization_id'):
+            organization = session.get(Organization, stipend_data['organization_id'])
+            if not organization:
+                raise ValueError("Invalid organization ID")
         
-        # Validate organization exists
-        organization = session.get(Organization, stipend_data['organization_id'])
-        if not organization:
-            raise ValueError("Invalid organization ID")
-        
-        # Handle application_deadline
-        if 'application_deadline' in stipend_data:
-            if stipend_data['application_deadline'] == '':
-                stipend_data['application_deadline'] = None
-            elif isinstance(stipend_data['application_deadline'], str):
-                try:
-                    deadline = datetime.strptime(stipend_data['application_deadline'], '%Y-%m-%d %H:%M:%S')
-                    if deadline < datetime.now():
-                        raise ValueError("Application deadline cannot be in the past.")
-                    stipend_data['application_deadline'] = deadline
-                except ValueError:
-                    stipend_data['application_deadline'] = None
-        
-        # Handle open_for_applications
-        if 'open_for_applications' in stipend_data:
-            if isinstance(stipend_data['open_for_applications'], str):
-                stipend_data['open_for_applications'] = stipend_data['open_for_applications'].lower() in ['y', 'yes', 'true', '1']
-            elif not isinstance(stipend_data['open_for_applications'], bool):
-                stipend_data['open_for_applications'] = False
+        # Handle tags
+        tags = stipend_data.pop('tags', [])
         
         # Create the stipend
         new_stipend = Stipend(**stipend_data)
+        
+        # Add tags if any
+        if tags:
+            new_stipend.tags = tags
+            
         session.add(new_stipend)
         session.commit()
         return new_stipend
     except Exception as e:
         session.rollback()
         logging.error(f"Failed to create stipend: {e}")
+        raise
+
+def update_stipend(stipend_id, data, session=db.session):
+    try:
+        stipend = session.get(Stipend, stipend_id)
+        if not stipend:
+            raise ValueError("Stipend not found")
+            
+        # Handle tags
+        tags = data.pop('tags', [])
+        
+        # Update fields
+        for key, value in data.items():
+            if hasattr(stipend, key):
+                setattr(stipend, key, value)
+                
+        # Update tags
+        if tags:
+            stipend.tags = tags
+            
+        session.commit()
+        return stipend
+    except Exception as e:
+        session.rollback()
+        logging.error(f"Failed to update stipend: {e}")
+        raise
+
+def delete_stipend(stipend_id, session=db.session):
+    try:
+        stipend = session.get(Stipend, stipend_id)
+        if not stipend:
+            raise ValueError("Stipend not found")
+            
+        session.delete(stipend)
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        logging.error(f"Failed to delete stipend: {e}")
         raise
 
 def delete_stipend(stipend_id, session=db.session):
