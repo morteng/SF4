@@ -204,9 +204,13 @@ def get_all_tags():
         return Tag.query.all()
 
 @pytest.fixture(scope='function')
-def logged_in_client(client, test_user, app):
+def logged_in_client(client, test_user, app, db_session):
     """Log in as a regular user."""
     with client.application.test_request_context():
+        # Ensure the test_user is bound to the current session
+        db_session.add(test_user)
+        db_session.commit()
+
         login_response = client.get(url_for('public.login'))
         csrf_token = extract_csrf_token(login_response.data)
 
