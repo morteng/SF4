@@ -4,10 +4,9 @@
 - [x] Add CSRF protection and validation
 - [x] Set up audit logging
 - [x] Configure rate limiting
+- [ ] Fix CSRF token template usage
 - [ ] Complete admin route tests
 - [ ] Add HTMX integration tests
-- [ ] Verify notification system
-- [ ] Improve database session management in tests
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
