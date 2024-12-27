@@ -91,14 +91,27 @@ def test_time_component_validation(app, form_data):
 def test_leap_year_validation(app, form_data):
     """Test leap year validation"""
     with app.test_request_context():
+        # Create a test organization
+        org = Organization(name="Test Org", description="Test Description", homepage_url="https://test.org")
+        db.session.add(org)
+        db.session.commit()
+        form_data['organization_id'] = org.id
+
+        # Get CSRF token
+        form = StipendForm()
+        csrf_token = form.csrf_token.current_token
+        form_data['csrf_token'] = csrf_token
+
         # Valid leap year date
         form_data['application_deadline'] = '2024-02-29 12:00:00'
-        form = StipendForm(data=form_data)
+        form = StipendForm(data=form_data, meta={'csrf': False})
+        if not form.validate():
+            print("Validation errors:", form.errors)
         assert form.validate() is True
         
         # Invalid leap year date
         form_data['application_deadline'] = '2023-02-29 12:00:00'
-        form = StipendForm(data=form_data)
+        form = StipendForm(data=form_data, meta={'csrf': False})
         assert form.validate() is False
         assert 'Invalid date for month' in form.errors['application_deadline']
 
