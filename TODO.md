@@ -7,7 +7,7 @@
    - [x] Add HTMX support for all CRUD operations
    - [x] Implement consistent error handling and flash messages
    - [x] Add CSRF protection for all forms and HTMX requests
-   - [ ] Add rate limiting to admin endpoints
+   - [x] Add rate limiting to admin endpoints
    - [ ] Implement caching for frequently accessed data
    - [ ] Add bulk actions (delete, update) for stipends, tags, and organizations
    - [ ] Add search and filtering functionality to index pages

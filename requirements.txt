@@ -9,3 +9,4 @@ Flask-WTF
 WTForms
 flask-migrate
 pytz
+Flask-Limiter
