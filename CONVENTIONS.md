@@ -30,8 +30,7 @@
 - Validate CSRF tokens in all POST requests
 - Return 400 for invalid/missing CSRF tokens
 - Add CSRF token to test requests
-- Ensure unique endpoint names using blueprint naming pattern: `blueprint_name.view_name`
-- Import blueprints inside register functions to prevent circular imports
+- Use blueprint factory pattern to prevent circular imports
 
 ### Notification Badges
 - All admin templates must include a notification badge.

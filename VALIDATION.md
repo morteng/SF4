@@ -34,12 +34,10 @@
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
 - Use Flask-WTF forms for automatic CSRF validation
-- Verify request object is properly imported and accessible
 - Include CSRF token in all forms and HTMX requests
-- Ensure CSRF tokens are properly extracted in tests using `extract_csrf_token()`
+- Ensure CSRF tokens are properly extracted in tests
 - Handle missing/invalid CSRF tokens with 400 status
-- Verify endpoint names follow blueprint naming pattern: `blueprint_name.view_name`
-- Ensure blueprints are registered only once to prevent conflicts
+- Verify blueprint factory pattern implementation
 
 ## Rate Limiting
 - Verify rate limits are enforced:
