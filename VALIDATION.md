@@ -3,6 +3,8 @@
 - Initialize session with `client.get('/')` before form tests
 - Verify CSRF token presence and value in session
 - Keep form creation and validation in the same context
+- Ensure test client maintains session state between requests
+- Add assertions to verify CSRF token presence in session
 
 ## Form Validation
 - Validate CSRF tokens in all forms

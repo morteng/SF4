@@ -3,6 +3,7 @@
 - Always make an initial request (e.g., `client.get('/')`) before testing forms
 - Verify CSRF token presence and value in session
 - Keep form creation and validation in the same context
+- Ensure test client maintains session state between requests
 
 ### Form Testing with CSRF
 - Always make an initial request (e.g., `client.get('/')`) before form creation
