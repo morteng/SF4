@@ -1,6 +1,8 @@
 # TODO List
 ## High Priority
 - [x] Core CRUD & security
+- [x] Fix datetime.utcnow() deprecation warnings
+- [ ] Improve test isolation with unique credentials
 - [x] Testing:
   - Admin routes
   - User request handling

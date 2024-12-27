@@ -74,6 +74,10 @@
   - Verify flash messages
   - Ensure redirects maintain error status codes
 
+### Date/Time Handling
+- Use `datetime.utcnow()` for timestamping (legacy support)
+- For new code, prefer timezone-aware datetimes using `datetime.now(datetime.UTC)`
+
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
 - Leap year validation must explicitly check for February 29th in non-leap years with specific error message: 'Invalid date values (e.g., Feb 29 in non-leap years)'

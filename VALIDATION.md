@@ -1,5 +1,10 @@
 # Validation Rules
 
+## Test Isolation Validation
+- Ensure tests use unique credentials to avoid conflicts
+- Clean up test data before each test run
+- Verify proper database state for each test
+
 ## Audit Log Validation
 - Verify all CRUD operations and system events create audit logs with:
   - User ID (0 for system events)
