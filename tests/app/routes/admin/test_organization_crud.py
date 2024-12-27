@@ -61,8 +61,8 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
         # Remove follow_redirects=True so the flash stays in the session.
         response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data)
 
-        # Expect a redirect (302), not a 200.
-        assert response.status_code == 302
+        # Expect form re-render (200) for invalid data
+        assert response.status_code == 200
 
         # Inspect session for flash messages
         with logged_in_admin.session_transaction() as sess:
