@@ -86,7 +86,7 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 - Details Page: Full stipend info, eligibility, related orgs
 
 **Admin Section**:  
-# add more details about the admin section, including template structure and navigation implementation, ensuring htmx where possible AI! 
+
 - Basic auth login  
 - CRUD routes for stipends, tags, organizations, users, bots  
 - Bot management dashboard, notifications for flagged entries
@@ -121,6 +121,7 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 - Aim for **80%+** coverage  
 - Test hierarchy: unit > integration > end-to-end  
 - Mirror app structure in `tests/`
+- All flash messages must use messages defined in app\constants.py - create new additions here when needed. All tests should evaluate the constant used, not the string itself.
 
 Use fixtures, in-memory DB, and the Flask test client for isolation.
 
