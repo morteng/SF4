@@ -92,6 +92,11 @@ def test_create_stipend_route(authenticated_admin: FlaskClient, stipend_data: di
     assert FlashMessages.CREATE_STIPEND_SUCCESS.value.encode() in response.data, "Success message not found"
     
     logger.info("Completed test_create_stipend_route")
+    
+    # Verify flash message
+    assert FlashMessages.CREATE_STIPEND_SUCCESS.value.encode() in response.data, "Success message not found"
+    
+    logger.info("Completed test_create_stipend_route")
     # Create organization first
     organization = Organization(name='Test Org')
     db_session.add(organization)
