@@ -30,7 +30,7 @@ def test_organization_form_valid_data(app):
 
 @pytest.mark.parametrize("name,description,homepage_url,expected", [
     ("", "Valid description", "https://valid.org", False),  # Missing name
-    ("Valid Org", "", "https://valid.org", False),  # Missing description
+    ("Valid Org", "", "https://valid.org", True),  # Empty description is now allowed
     ("Valid Org", "Valid description", "invalid-url", False),  # Invalid URL
     ("Valid Org", "Valid description", "", False),  # Missing URL
     ("a" * 256, "Valid description", "https://valid.org", False),  # Name too long
