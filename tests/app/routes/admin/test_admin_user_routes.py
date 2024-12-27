@@ -94,10 +94,17 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
     csrf_token = extract_csrf_token(index_response.data)
     assert csrf_token is not None, "CSRF token not found in the response"
 
-    # Perform the DELETE operation
+    # Perform the DELETE operation with proper CSRF handling
     delete_response = logged_in_admin.post(
         url_for('admin.user.delete', id=test_user.id),
-        data={'csrf_token': csrf_token},
+        data={
+            'csrf_token': csrf_token,
+            '_csrf_token': csrf_token  # Add both form field names
+        },
+        headers={
+            'X-CSRFToken': csrf_token,  # Add header
+            'X-Requested-With': 'XMLHttpRequest'  # Simulate AJAX request
+        },
         follow_redirects=True
     )
     
