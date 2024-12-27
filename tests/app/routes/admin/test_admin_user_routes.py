@@ -33,12 +33,18 @@ def client(app):
     yield client
     ctx.pop()
 
+import uuid
+
 @pytest.fixture(scope='function')
 def test_user(db_session):
-    """Provide a test admin user."""
+    """Provide a test admin user with unique credentials."""
+    # Clean up any existing test users
+    db_session.query(User).filter(User.username.like('test_admin_%')).delete()
+    
+    # Create new test user with unique credentials
     user = User(
-        username='admin_user',
-        email='admin@example.com',
+        username=f'test_admin_{uuid.uuid4().hex[:8]}',
+        email=f'test_admin_{uuid.uuid4().hex[:8]}@example.com',
         password_hash=generate_password_hash('AdminPass123!'),
         is_admin=True
     )

@@ -42,7 +42,7 @@ def admin_required(f):
                 user_id=current_user.id,
                 action=f.__name__,
                 details_before=f"Accessed admin route: {request.path}",
-                timestamp=datetime.now(datetime.UTC)
+                timestamp=datetime.utcnow()
             )
             db.session.add(audit_log)
             db.session.commit()
