@@ -7,6 +7,15 @@ class NotificationType(Enum):
     BOT_ERROR = 'bot_error'
     USER_ACTION = 'user_action'
     SYSTEM = 'system'
+    CRUD_CREATE = 'crud_create'
+    CRUD_UPDATE = 'crud_update'
+    CRUD_DELETE = 'crud_delete'
+
+class NotificationPriority(Enum):
+    LOW = 'low'
+    MEDIUM = 'medium'
+    HIGH = 'high'
+    CRITICAL = 'critical'
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)

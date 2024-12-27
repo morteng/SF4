@@ -7,7 +7,14 @@
             <div id="nav-menu" class="hidden md:flex ml-10 space-x-4">
                 {% if current_user.is_authenticated %}
                     {% if current_user.is_admin %}
-                        <a href="#" hx-get="{{ url_for('admin.dashboard.dashboard') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link">Admin Dashboard</a>
+                        <a href="#" hx-get="{{ url_for('admin.dashboard.dashboard') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link relative">
+                            Admin Dashboard
+                            {% if Notification.get_unread_count() > 0 %}
+                            <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                                {{ Notification.get_unread_count() }}
+                            </span>
+                            {% endif %}
+                        </a>
                         <a href="#" hx-get="{{ url_for('admin.stipend.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link">Stipends</a>
                         <a href="#" hx-get="{{ url_for('admin.tag.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link">Tags</a>
                         <a href="#" hx-get="{{ url_for('admin.organization.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link">Organizations</a>

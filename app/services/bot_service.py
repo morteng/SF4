@@ -18,6 +18,17 @@ def run_bot(bot):
     try:
         bot.status = 'running'
         bot.last_run = datetime.utcnow()
+        bot.last_error = None
+        db.session.commit()
+        
+        # Create audit log
+        AuditLog.create(
+            user_id=current_user.id if current_user.is_authenticated else 0,
+            action=f'run_bot_{bot.name}',
+            object_type='Bot',
+            object_id=bot.id,
+            ip_address=request.remote_addr
+        )
         
         # Add bot-specific logic here
         if bot.name == 'TagBot':

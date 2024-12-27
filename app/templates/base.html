@@ -25,6 +25,23 @@
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>
+        // Real-time status updates
+        function updateStatus() {
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelectorAll('.status-indicator').forEach(el => {
+                        el.textContent = data.status;
+                        el.className = `status-indicator ${data.status}`;
+                    });
+                });
+        }
+        
+        // Initialize real-time updates
+        setInterval(updateStatus, 10000);
+        updateStatus();
+    </script>
+    <script>
         function toggleMobileMenu() {
             const menu = document.getElementById('nav-menu');
             menu.classList.toggle('hidden');
