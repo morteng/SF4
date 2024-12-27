@@ -78,7 +78,7 @@ def test_organization_form_name_validation(app):
             )
             assert not form.validate()
             assert 'name' in form.errors
-            assert 'Field must be between 1 and 100 characters long.' in form.name.errors
+            assert 'Organization name cannot exceed 100 characters.' in form.name.errors
 
 def test_organization_form_url_validation(app):
     """Test homepage URL validation"""
