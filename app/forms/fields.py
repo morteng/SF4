@@ -36,11 +36,11 @@ class CustomDateTimeField(DateTimeField):
                 # First try parsing the date string
                 parsed_dt = datetime.strptime(date_str, self.format)
                 
-                # Validate date components
+                # Validate date components first
                 if not self._validate_date_components(parsed_dt):
                     return
                 
-                # Validate time components
+                # Then validate time components
                 if not self._validate_time_components(parsed_dt):
                     return
                 
@@ -58,6 +58,7 @@ class CustomDateTimeField(DateTimeField):
                 elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
                     self.errors.append(self.error_messages['invalid_time'])
                 else:
+                    # Handle general date validation errors
                     self.errors.append(self.error_messages['invalid_date'])
             except pytz.UnknownTimeZoneError:
                 self.errors.append(self.error_messages['invalid_timezone'])

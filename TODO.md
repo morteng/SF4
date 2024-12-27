@@ -13,16 +13,17 @@
 
 ## Knowledge & Memories
 - CustomDateTimeField validation rules:
+  * Now properly handles invalid date/time values
+  * Returns specific error messages for different validation failures
+  * Error messages must match test expectations exactly
+  * Validation order: date components first, then time components
+  * Improved error handling for invalid date/time combinations
   * Now properly handles timezone parameter to ensure it's always a string
   * Uses strptime for format validation
   * Validates individual date/time components
   * Handles timezone conversion
-  * Provides specific error messages for different validation failures
-  * Error messages must match test expectations exactly
-  * Timezone parameter is now safely converted to string using str()
   * All datetime comparisons must be between timezone-aware datetimes
   * Added separate validation for time components (hours, minutes, seconds)
-  * Improved error handling for invalid date/time combinations
 
 - When handling datetime validation:
   * Always convert input to UTC for comparison

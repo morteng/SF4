@@ -35,12 +35,19 @@
 
 ### Test Cases
 1. Invalid date values (2023-13-32 99:99:99)
+   - Expected Error: "Invalid date values (e.g., Feb 30)"
 2. Invalid month/day combinations (2023-02-30 12:00:00)
+   - Expected Error: "Invalid date values (e.g., Feb 30)"
 3. Invalid time values (2023-01-01 25:61:61)
+   - Expected Error: "Invalid time values (e.g., 25:61:61)"
 4. Missing time components (2023-01-01)
+   - Expected Error: "Time is required. Please use YYYY-MM-DD HH:MM:SS"
 5. Invalid formats (invalid-date)
+   - Expected Error: "Invalid date format. Please use YYYY-MM-DD HH:MM:SS"
 6. Date range issues (2020-01-01 00:00:00)
+   - Expected Error: "Application deadline must be a future date"
 7. Edge cases (2023-02-29 12:00:00)
+   - Expected Error: "Invalid date values (e.g., Feb 30)"
 
 ### Timezone Handling
 - **Input Type**: Must be a string or convertible to string
