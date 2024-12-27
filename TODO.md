@@ -16,8 +16,9 @@
    - [x] Add tests for edge cases in organization routes
    - [x] Centralize test utilities
    - [x] Add factory functions for test data
-   - [ ] Verify error handling for all admin routes
-   - [ ] Test database error scenarios
+   - [x] Verify error handling for all admin routes
+   - [x] Test database error scenarios
+   - [ ] Add integration tests for all CRUD operations
 
 ## Knowledge & Memories
 - **Security Best Practices**

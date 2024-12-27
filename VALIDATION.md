@@ -3,14 +3,13 @@
 ## Validation Principles
 1. **Input Validation**
    - All user input validated client and server side
-   - Sanitize using bleach with specific allowed tags:
-     - Text: No HTML
-     - Descriptions: p, br, strong, em
-     - URLs: No HTML
+   - Sanitize using bleach with specific allowed tags
    - Validate URLs using Flask-WTF URL validator
    - Use `Enum` for constants to ensure type safety
    - Centralized test assertions in `tests/utils.py`
    - Factory functions for consistent test data
+   - Type hints for all function signatures
+   - Detailed docstrings for test functions
 
 2. **Error Handling**
    - Provide clear, user-friendly error messages using `FlashMessages`
