@@ -217,7 +217,7 @@ class OrganizationForm(FlaskForm):
     description = TextAreaField('About', validators=[
         Optional(),
         Length(max=500, message="Description cannot exceed 500 characters.")
-    ], render_kw={"maxlength": 500})
+    ], render_kw={"maxlength": 500, "data-maxlength": "500"})
     homepage_url = URLField('Website', validators=[
         DataRequired(message="Website URL is required."),
         URL(message="Please enter a valid URL starting with http:// or https://.")
@@ -248,5 +248,18 @@ class OrganizationForm(FlaskForm):
             raise ValidationError('URL must start with http:// or https://.')
 
     def validate_description(self, field):
-        if field.data and len(field.data) > 500:
-            raise ValidationError('Description cannot exceed 500 characters.')
+        """Custom validation for description field"""
+        if field.data is None:
+            return
+        
+        # Ensure the description is a string
+        if not isinstance(field.data, str):
+            raise ValidationError('Description must be a string')
+            
+        # Strip whitespace and check length
+        stripped = field.data.strip()
+        if len(stripped) > 500:
+            raise ValidationError('Description cannot exceed 500 characters')
+        
+        # Update the field data with stripped value
+        field.data = stripped
