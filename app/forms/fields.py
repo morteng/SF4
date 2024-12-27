@@ -86,7 +86,7 @@ class CustomDateTimeField(DateTimeField):
             
             # Additional validation for edge cases
             if dt.year < 1900 or dt.year > 2100:
-                self.errors.append(self.error_messages['invalid_date'])
+                self.errors.append([self.error_messages['invalid_date']])
                 return False
                 
             # Check for invalid month/day combinations
@@ -96,21 +96,21 @@ class CustomDateTimeField(DateTimeField):
                     # Check if it's a leap year
                     is_leap = (dt.year % 4 == 0 and dt.year % 100 != 0) or (dt.year % 400 == 0)
                     if not is_leap:
-                        self.errors.append('Invalid date values (e.g., Feb 30)')
+                        self.errors.append(['Invalid date values (e.g., Feb 30)'])
                         return False
                 
                 # General date validation
                 datetime(dt.year, dt.month, dt.day)
             except ValueError:
                 if dt.month == 2 and dt.day == 29:
-                    self.errors.append('Invalid date values (e.g., Feb 30)')
+                    self.errors.append(['Invalid date values (e.g., Feb 30)'])
                 else:
-                    self.errors.append(self.error_messages['invalid_date'])
+                    self.errors.append([self.error_messages['invalid_date']])
                 return False
                 
             return True
         except ValueError:
-            self.errors.append(self.error_messages['invalid_date'])
+            self.errors.append([self.error_messages['invalid_date']])
             return False
 
     def _value(self):
