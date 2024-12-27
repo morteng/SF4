@@ -39,6 +39,11 @@
    - [ ] Increase coverage for admin routes
    - [ ] Add integration tests for bot operations
 
+6. **Improve Test Coverage**
+   - [ ] Add tests for bot routes
+   - [ ] Increase coverage for admin routes
+   - [ ] Add integration tests for bot operations
+
 ## Knowledge & Memories
 - **Template Structure**
   * All admin templates extend `admin/_base.html`

@@ -159,8 +159,10 @@ class UserForm(FlaskForm):
 
 
 class BotForm(FlaskForm):
-
-    name = StringField('Name', validators=[DataRequired(), Length(max=100)])
+    name = StringField('Name', validators=[
+        DataRequired(message="Name is required."),
+        Length(max=100, message="Name cannot exceed 100 characters.")
+    ])
     description = TextAreaField('Description', validators=[
         DataRequired(message="Description is required."),
         Length(max=500, message="Description cannot exceed 500 characters.")

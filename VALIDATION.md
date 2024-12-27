@@ -230,6 +230,12 @@
 - "Failed to delete bot: {error}"
 - "Failed to run bot: {error}"
 
+### Validation Improvements
+- Added proper error handling for bot creation
+- Improved form validation with specific error messages
+- Added status field validation
+- Enhanced template error display
+
 ## Organization Form
 
 ### Name Field
