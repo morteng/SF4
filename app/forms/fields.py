@@ -23,7 +23,9 @@ class CustomDateTimeField(DateTimeField):
 
     def process_formdata(self, valuelist):
         if not valuelist or not valuelist[0]:
+            self.errors = []  # Clear any existing errors
             self.errors.append(self.error_messages['required'])
+            self.data = None
             return
             
         date_str = valuelist[0]
