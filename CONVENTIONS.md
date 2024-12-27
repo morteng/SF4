@@ -1,6 +1,9 @@
 ## Coding Conventions
 - All flash messages must use messages defined in app\constants.py
-- CSRF tokens must be included in all forms using: `<input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">`
+- CSRF tokens must be included in:
+  - All forms: `<input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">`
+  - HTMX requests: Add meta tag `<meta name="csrf-token" content="{{ csrf_token() }}">` in base template
+  - JavaScript: Include CSRF token in HTMX headers via htmx:configRequest event
 
 ### Testing with CSRF
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
