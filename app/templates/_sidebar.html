@@ -1,0 +1,43 @@
+<nav class="bg-gray-800 text-white w-64 min-h-screen p-4">
+    <div class="space-y-4">
+        <h2 class="text-lg font-bold">Admin Navigation</h2>
+        <ul class="space-y-2">
+            <li>
+                <a href="{{ url_for('admin.dashboard.dashboard') }}" 
+                   class="block px-4 py-2 hover:bg-gray-700 rounded">
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('admin.bot.index') }}" 
+                   class="block px-4 py-2 hover:bg-gray-700 rounded">
+                    Bots
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('admin.stipend.index') }}" 
+                   class="block px-4 py-2 hover:bg-gray-700 rounded">
+                    Stipends
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('admin.tag.index') }}" 
+                   class="block px-4 py-2 hover:bg-gray-700 rounded">
+                    Tags
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('admin.organization.index') }}" 
+                   class="block px-4 py-2 hover:bg-gray-700 rounded">
+                    Organizations
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('admin.user.index') }}" 
+                   class="block px-4 py-2 hover:bg-gray-700 rounded">
+                    Users
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
