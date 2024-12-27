@@ -42,6 +42,7 @@ def test_create_organization(logged_in_admin: FlaskClient, db_session: Session, 
         data = organization_data.copy()
         data['csrf_token'] = csrf_token
         data['submit'] = 'Create'  # Add the submit button value
+        data['_csrf_token'] = csrf_token  # Add this line for Flask-WTF compatibility
         
         # Ensure all required fields are present
         assert 'name' in data and data['name'], "Organization name is required"

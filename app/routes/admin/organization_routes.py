@@ -34,19 +34,11 @@ def create():
         POST: Redirect to organization index on success (302 Found)
               Rendered form template with errors on failure (400 Bad Request)
     """
-    """Handle organization creation.
-    
-    GET: Render the organization creation form.
-    POST: Validate the form and create the organization.
-    
-    Returns:
-        GET: Rendered form template
-        POST: Redirect to organization index or form with errors
-    """
     logger.info(f"Organization creation form accessed by user {current_user.username}")
     form = OrganizationForm()
     
-    if form.validate_on_submit():
+    # Ensure CSRF token is validated
+    if request.method == 'POST' and form.validate():
         try:
             # Prepare organization data with cleaned and sanitized inputs
             organization_data = {
