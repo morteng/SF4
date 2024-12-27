@@ -1,5 +1,6 @@
 ## Coding Conventions
 ### Testing
+- test config is in tests\conftest.py
 - Use enums for message types
 - Verify UI & DB state
 - Use fixtures & parameterized tests
