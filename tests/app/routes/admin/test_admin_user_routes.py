@@ -114,6 +114,50 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
         action='delete_user'
     ).first()
     assert log is not None
+    assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data
+    
+    # Verify audit log
+    log = AuditLog.query.filter_by(
+        object_type='User',
+        action='create_user'
+    ).first()
+    assert log is not None
+    assert log.user_id == admin_user.id
+    assert log.ip_address is not None
+    
+    # Read 
+    response = test_client.get('/admin/users')
+    assert response.status_code == 200
+    assert test_data['username'].encode() in response.data
+    
+    # Update
+    updated_data = test_data.copy()
+    updated_data['username'] = 'updateduser'
+    response = test_client.post('/admin/users/1/edit',
+                              data=updated_data,
+                              follow_redirects=True)
+    assert response.status_code == 200
+    assert FlashMessages.UPDATE_USER_SUCCESS.value.encode() in response.data
+    
+    # Verify audit log
+    log = AuditLog.query.filter_by(
+        object_type='User',
+        action='update_user'
+    ).first()
+    assert log is not None
+    
+    # Delete
+    response = test_client.post('/admin/users/1/delete',
+                              follow_redirects=True)
+    assert response.status_code == 200
+    assert FlashMessages.DELETE_USER_SUCCESS.value.encode() in response.data
+    
+    # Verify audit log
+    log = AuditLog.query.filter_by(
+        object_type='User',
+        action='delete_user'
+    ).first()
+    assert log is not None
 
 def test_user_crud_operations(logged_in_admin, user_data, test_user):
     """Test full CRUD operations for users"""
