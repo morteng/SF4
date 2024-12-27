@@ -5,7 +5,7 @@
 - Test success & failure cases
 - CSRF enabled in all environments
 - Include CSRF validation in all form tests
-- Use request context for form tests
+- Always use an application context for form tests
 - Use form-generated CSRF tokens in tests
 - Ensure test client maintains session state
 
@@ -32,7 +32,7 @@
 ## Form Testing
 - Test both valid and invalid form submissions
 - Verify validation messages
-- Use `test_request_context` for CSRF-protected forms
+- Always use an application context for form tests
 - Validate CSRF tokens in all form tests
 - Ensure form submissions include all required fields
 - Use form-generated CSRF tokens in tests

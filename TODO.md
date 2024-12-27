@@ -24,4 +24,5 @@
 - Maintain CSRF protection in all environments
 - Use form-generated CSRF tokens in tests
 - Ensure test client maintains session state
++- Always use an application context for form tests
 
