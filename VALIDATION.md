@@ -33,6 +33,8 @@
 - Use `client.session_transaction()` to initialize CSRF tokens
 - Ensure form creation and submission occur within the same context
 - Verify CSRF tokens are properly generated and validated
+- Initialize session with a request (e.g., `client.get('/')`) before creating forms
+- Verify CSRF token is present in session after form creation
 - Ensure all required fields are properly set
 - Validate presence of required fields
 - Enforce max lengths

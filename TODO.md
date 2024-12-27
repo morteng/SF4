@@ -8,6 +8,7 @@
 
 ## Best Practices
 - Validate & sanitize all inputs
+- Ensure session initialization in form tests
 - Use enums consistently
 - Verify UI & DB state in tests
 - Ensure CSRF tokens in all forms
