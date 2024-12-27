@@ -1,9 +1,12 @@
 import logging
+from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 from app.models.user import User
+from app.models.audit_log import AuditLog
 from app.extensions import db
-from app.utils import flash_message
+from app.utils import flash_message, validate_password_strength
 from app.constants import FlashMessages, FlashCategory
+from flask_login import current_user
 
 def get_user_by_id(user_id):
     """Get user by ID with error handling"""
