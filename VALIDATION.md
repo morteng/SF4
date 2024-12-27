@@ -89,4 +89,6 @@
     - Flash message must be set before redirect
     - Error handling follows consistent pattern across all routes
     - Database errors are logged for debugging
+    - Form state is preserved during error handling
+    - Consistent error message format is maintained
 

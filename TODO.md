@@ -63,4 +63,6 @@
   * Now properly sets flash message before redirect
   * Maintains form state during database errors
   * Follows consistent error handling pattern
+  * Ensures database session is rolled back on error
+  * Preserves form state during error handling
 
