@@ -31,6 +31,11 @@ def test_create_organization(logged_in_admin, db_session, organization_data):
         data = organization_data.copy()
         data['csrf_token'] = csrf_token
         data['submit'] = 'Create'  # Add the submit button value
+        
+        # Ensure all required fields are present
+        assert 'name' in data and data['name'], "Organization name is required"
+        assert 'description' in data, "Description is required"
+        assert 'homepage_url' in data, "Homepage URL is required"
 
         # Submit the form
         response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
