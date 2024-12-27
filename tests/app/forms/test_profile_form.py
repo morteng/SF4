@@ -5,13 +5,13 @@ import logging
 
 def test_profile_form_valid(logged_in_client, db_session):
     """Test valid profile form submission with CSRF protection"""
-    with client.application.test_request_context():
+    with logged_in_client.application.test_request_context():
         with patch('app.forms.user_forms.User.query.filter_by') as mock_filter_by:
             # Mock the database queries to return None (no existing user)
             mock_filter_by.return_value.first.return_value = None
 
             # Use a session transaction to maintain the session
-            with client.session_transaction() as sess:
+            with logged_in_client.session_transaction() as sess:
                 # Create the form and get its CSRF token
                 form = ProfileForm(
                     original_username="testuser",
