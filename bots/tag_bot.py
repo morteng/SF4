@@ -1,4 +1,5 @@
 import logging
+from datetime import timezone
 from datetime import datetime
 from app.models.audit_log import AuditLog
 from app.models.notification import Notification

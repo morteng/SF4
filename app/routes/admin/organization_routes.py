@@ -1,4 +1,5 @@
 import logging
+from app.services.notification_service import get_notification_count
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import current_user, login_required
 from app.utils import admin_required
