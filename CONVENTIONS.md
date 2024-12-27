@@ -1,9 +1,13 @@
 ## Coding Conventions
 - All flash messages must use messages defined in app\constants.py
+- Audit logging required for all CRUD operations
 - CSRF tokens must be included in:
   - All forms: `<input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">`
   - HTMX requests: Add meta tag `<meta name="csrf-token" content="{{ csrf_token() }}">` in base template
   - JavaScript: Include CSRF token in HTMX headers via htmx:configRequest event
+- Rate limiting:
+  - Admin endpoints: 100/hour
+  - Sensitive operations: 10/minute
 
 ### CSRF Token Handling
 - Use Flask-WTF forms for automatic CSRF protection

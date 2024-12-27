@@ -18,6 +18,11 @@
 - Ensure CSRF tokens are properly extracted in tests using `extract_csrf_token()`
 - Handle missing/invalid CSRF tokens with 400 status
 
+## Rate Limiting
+- Admin endpoints: 100 requests/hour
+- Sensitive operations: 10 requests/minute
+- Use Flask-Limiter for implementation
+
 ## Error Handling
 - Rollback on error
 - Return appropriate status codes:

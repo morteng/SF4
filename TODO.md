@@ -7,9 +7,9 @@
 - [x] Update flash message verification in tests
 - [x] Ensure consistent error handling for database errors
 - [x] Implement direct template rendering for database errors
+- [x] Add audit logging for sensitive operations
 - [ ] Fix date validation in StipendForm
 - [ ] Verify error message formatting in all error responses
-- [ ] Add audit logging for sensitive operations
 - [ ] Implement email notifications for password resets
 
 ## Best Practices
