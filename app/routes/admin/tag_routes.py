@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, curren
 from flask_login import login_required
 from app.constants import FlashMessages, FlashCategory
 from app.forms.admin_forms import TagForm
+from app.utils import format_error_message
 from app.services.tag_service import (
     get_tag_by_id,
     delete_tag,
