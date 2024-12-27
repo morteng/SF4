@@ -19,6 +19,15 @@ class TagBot:
             self.logger.info("TagBot started.")
             
             # Create audit log for bot start
+            AuditLog.create(
+                user_id=0,  # System user
+                action="bot_start",
+                details=f"TagBot started at {datetime.now(timezone.utc)}",
+                object_type="Bot",
+                object_id=self.id
+            )
+            
+            # Create audit log for bot start
             from app.models.audit_log import AuditLog
             AuditLog.create(
                 user_id=0,  # System user

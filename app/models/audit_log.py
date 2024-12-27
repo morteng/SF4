@@ -19,17 +19,18 @@ class AuditLog(db.Model):
     @staticmethod
     def create(user_id, action, details=None, object_type=None, object_id=None, 
               details_before=None, details_after=None, ip_address=None):
+        """Create an audit log entry with before/after state tracking"""
         try:
             log = AuditLog(
                 user_id=user_id,
                 action=action,
                 details=details,
-                object_type=object_type or 'User',  # Default to 'User' if not specified
+                object_type=object_type or 'User',
                 object_id=object_id,
                 details_before=details_before,
                 details_after=details_after,
                 ip_address=ip_address,
-                timestamp=datetime.utcnow()
+                timestamp=datetime.now(timezone.utc)  # Use timezone-aware datetime
             )
             db.session.add(log)
             

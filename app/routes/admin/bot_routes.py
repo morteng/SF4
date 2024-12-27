@@ -20,10 +20,13 @@ limiter = Limiter(
 )
 
 @admin_bot_bp.route('/create', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")
 @login_required
 @admin_required
 def create():
+    """Create a new bot with audit logging"""
     form = BotForm()
+    notification_count = get_notification_count(current_user.id)
     if form.validate_on_submit():
         try:
             new_bot = create_bot(form.data)

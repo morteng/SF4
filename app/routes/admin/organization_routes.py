@@ -39,7 +39,8 @@ csrf = CSRFProtect()
 @login_required
 @admin_required
 def create():
-    """Create new organization with audit logging"""
+    """Create new organization with audit logging and notifications"""
+    notification_count = get_notification_count(current_user.id)
     """
     Create a new organization.
     
