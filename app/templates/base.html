@@ -6,7 +6,9 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/2.0.4/htmx.min.js"></script>
+    {% if csrf_token() %}
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {% endif %}
 </head>
 <body>
     <script>

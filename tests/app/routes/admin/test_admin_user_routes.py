@@ -17,8 +17,16 @@ def user_data():
     return {
         'email': 'test@example.com',
         'password': 'StrongPass123!',  # Meets all password requirements
-        'username': 'testuser'
+        'username': 'testuser',
+        'csrf_token': 'test-csrf-token'  # Add CSRF token to test data
     }
+
+@pytest.fixture
+def client(app):
+    with app.test_client() as client:
+        with client.session_transaction() as session:
+            session['csrf_token'] = 'test-csrf-token'
+        yield client
 
 @pytest.fixture(scope='function')
 def test_user(db_session, user_data):
