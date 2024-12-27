@@ -3,17 +3,22 @@
 ## Current Goals
 1. **Complete Admin System Refactoring**
    - [x] Fix bot route URL building issues
+   - [x] Add proper error handling for bot creation
+   - [x] Update flash message constants for consistency
+   - [x] Fixed bot creation form validation and error handling
    - [ ] Implement caching for frequently accessed data
    - [ ] Add bulk actions (delete, update) for stipends, tags, and organizations
    - [ ] Add search and filtering functionality to index pages
    - [ ] Add export functionality (CSV, Excel) for all admin data
    - [ ] Implement audit logging for admin actions
 
-## Completed Tasks
-- Fixed bot route URL building issues
-- Added proper error handling for bot creation
-- Updated flash message constants for consistency
-- Fixed bot creation form validation and error handling
+## New Goals
+1. **Improve Test Coverage**
+   - [x] Add test cases for bot routes
+   - [ ] Add more test cases for form validation
+   - [ ] Verify error handling for all admin routes
+   - [ ] Test edge cases for form validation
+   - [ ] Add tests for template rendering
 
 ## Knowledge & Memories
 - **Form Validation**
