@@ -158,11 +158,11 @@ class TestCustomDateTimeField(Form):
 def test_leap_year_validation_simplified(app):
     """Test leap year validation directly on CustomDateTimeField."""
     with app.test_request_context():
-        field = TestForm().test_field
+        field = TestCustomDateTimeField().test_field
 
         # Test with a valid leap year date
         field.process_formdata(['2028-02-29 12:00:00'])
-        assert field.validate(TestForm()) is True
+        assert field.validate(TestCustomDateTimeField()) is True
         assert field.errors == []
 
         # Reset errors for next test
@@ -170,5 +170,5 @@ def test_leap_year_validation_simplified(app):
 
         # Test with an invalid leap year date
         field.process_formdata(['2023-02-29 12:00:00'])
-        assert field.validate(TestForm()) is False
+        assert field.validate(TestCustomDateTimeField()) is False
         assert 'Invalid date values (e.g., Feb 29 in non-leap years)' in field.errors
