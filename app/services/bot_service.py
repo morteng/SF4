@@ -33,16 +33,18 @@ def run_bot(bot):
             ip_address=request.remote_addr
         )
         
-        # Add bot-specific logic here
+        # Run the appropriate bot
         if bot.name == 'TagBot':
-            # Implement tagging logic
-            pass
+            from bots.tag_bot import TagBot
+            TagBot().run()
         elif bot.name == 'UpdateBot':
-            # Implement update logic
-            pass
+            from bots.update_bot import UpdateBot
+            UpdateBot().run()
         elif bot.name == 'ReviewBot':
-            # Implement review logic
-            pass
+            from bots.review_bot import ReviewBot
+            ReviewBot().run()
+        else:
+            raise ValueError(f"Unknown bot type: {bot.name}")
             
         bot.status = 'completed'
         Notification.create(
@@ -74,3 +76,17 @@ def delete_bot(bot):
 
 def get_recent_logs(limit=5):
     return Notification.query.order_by(Notification.created_at.desc()).limit(limit).all()
+
+def calculate_next_run(schedule):
+    """Calculate next run time based on schedule string"""
+    from datetime import datetime, timedelta
+    now = datetime.utcnow()
+    
+    if schedule == 'daily':
+        return now + timedelta(days=1)
+    elif schedule == 'weekly':
+        return now + timedelta(weeks=1)
+    elif schedule == 'monthly':
+        return now + timedelta(days=30)
+    else:
+        raise ValueError("Invalid schedule")

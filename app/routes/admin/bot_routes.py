@@ -153,9 +153,20 @@ def schedule(id):
             raise ValueError("Invalid schedule data")
             
         bot.schedule = schedule_data['schedule']
+        bot.next_run = calculate_next_run(schedule_data['schedule'])
         db.session.commit()
         
-        flash_message(f"Bot {bot.name} scheduled successfully", FlashCategory.SUCCESS)
+        # Create audit log
+        AuditLog.create(
+            user_id=current_user.id,
+            action='schedule_bot',
+            object_type='Bot',
+            object_id=bot.id,
+            details=f"Scheduled {bot.name} with {schedule_data['schedule']}",
+            ip_address=request.remote_addr
+        )
+        
+        flash_message(FlashMessages.BOT_SCHEDULED_SUCCESS.value, FlashCategory.SUCCESS)
         return jsonify({"status": "success"})
     except Exception as e:
         db.session.rollback()

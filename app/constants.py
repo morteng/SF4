@@ -33,6 +33,9 @@ class FlashMessages(str, Enum):
     DELETE_BOT_SUCCESS = "Bot deleted successfully."
     DELETE_BOT_ERROR = "Failed to delete bot."
     BOT_NOT_FOUND = "Bot not found."
+    BOT_SCHEDULED_SUCCESS = "Bot scheduled successfully."
+    BOT_RUN_SUCCESS = "Bot run completed successfully."
+    BOT_RUN_ERROR = "Bot run failed."
 
     # Organization Management
     CREATE_ORGANIZATION_SUCCESS = "Organization created successfully."
