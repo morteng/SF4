@@ -57,6 +57,14 @@ class StipendForm(FlaskForm):
             "placeholder": "YYYY-MM-DD HH:MM:SS",
             "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
             "title": "Please enter date in YYYY-MM-DD HH:MM:SS format."
+        },
+        error_messages={
+            'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
+            'invalid_date': 'Invalid date values (e.g., Feb 30)',
+            'invalid_time': 'Invalid time values (e.g., 25:61:61)',
+            'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
+            'required': 'Date is required',
+            'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)'
         }
     )
     organization_id = SelectField('Organization', coerce=int, validators=[Optional()])

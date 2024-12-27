@@ -1,3 +1,4 @@
+import re
 from wtforms.fields import DateTimeField, SelectField
 from wtforms.validators import ValidationError
 from datetime import datetime
@@ -35,6 +36,12 @@ class CustomDateTimeField(DateTimeField):
             self._invalid_leap_year = False
             return
             
+        date_str = valuelist[0].strip()
+        if not date_str:
+            self.errors.append(self.error_messages['required'])
+            self.data = None
+            return
+            
         date_str = valuelist[0]
         self._invalid_leap_year = False  # Reset leap year flag
             
@@ -68,6 +75,12 @@ class CustomDateTimeField(DateTimeField):
                     self.data = None
                     self._invalid_leap_year = False
                     return
+            # First check if the date string matches the expected format
+            if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
+                self.errors.append(self.error_messages['invalid_format'])
+                self.data = None
+                return
+
             try:
                 # Try to parse the full date string
                 parsed_dt = datetime.strptime(date_str, self.format)
