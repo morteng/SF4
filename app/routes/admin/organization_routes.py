@@ -91,7 +91,6 @@ def edit(id):
                     return redirect(url_for('admin.organization.edit', id=id))  # Redirect back to the edit page with errors
             except SQLAlchemyError as e:
                 db.session.rollback()
-                # Add the error message to the session before redirecting
                 flash_message(FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
                 return redirect(url_for('admin.organization.edit', id=id))
         else:

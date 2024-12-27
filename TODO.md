@@ -49,12 +49,7 @@
    - Add integration tests for organization service interactions
 
 ## Recent Fixes
-- Added application_deadline field to Organization model
-- Updated OrganizationForm to include timezone and deadline fields
-- Fixed timezone handling in organization routes
-- Fixed organization create route to properly handle invalid form data
-- Updated error handling in organization routes to use consistent flash message format
-- Added proper redirect behavior for form validation errors
+- Fixed database error handling in organization edit route to properly set flash messages
 - Updated organization form validation tests to expect field-specific error messages
 - Fixed test_timezone_handling by adding missing application_deadline field
 

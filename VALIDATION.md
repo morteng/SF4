@@ -76,8 +76,9 @@
 ### Database Error Handling
 - **Scenario**: Database error during update
 - **Expected Behavior**:
-  - User should be redirected back to edit page
-  - Flash message should be displayed with database error
-  - Form should retain previously entered values
-  - Error message should be: "Database error while updating organization."
+  * User should be redirected back to edit page
+  * Flash message should be displayed with database error
+  * Form should retain previously entered values
+  * Error message should be: "Database error while updating organization."
+  * Test Case: test_update_organization_with_database_error
 
