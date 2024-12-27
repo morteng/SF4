@@ -10,14 +10,22 @@ def app():
 
 def test_organization_form_valid_data(app):
     """Test organization form with valid data"""
-    with app.app_context():
-        form = OrganizationForm(data={
-            'name': 'Valid Org',
-            'description': 'Valid description',
-            'homepage_url': 'https://valid.org'
-        })
-        assert form.validate() is True
-        assert form.errors == {}
+    with app.test_request_context():
+        # Initialize session and CSRF token
+        client = app.test_client()
+        client.get('/')  # Access any route to initialize session
+        
+        with client.session_transaction() as session:
+            form = OrganizationForm(
+                data={
+                    'name': 'Valid Org',
+                    'description': 'Valid description',
+                    'homepage_url': 'https://valid.org'
+                },
+                meta={'csrf': False}  # Disable CSRF for testing
+            )
+            assert form.validate() is True
+            assert form.errors == {}
 
 def test_organization_form_required_fields(app):
     """Test organization form with missing required fields"""
