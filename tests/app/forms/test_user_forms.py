@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import patch
 from flask import session, url_for
 from werkzeug.security import generate_password_hash
+from bs4 import BeautifulSoup
 
 from app.forms.user_forms import ProfileForm, LoginForm
 from app import create_app
@@ -45,8 +46,9 @@ def test_profile_form_valid(client, setup_database):
         get_response = client.get(url_for('public.login'))
         assert get_response.status_code == 200
             
-        # Extract CSRF token from the login form
-        csrf_token = get_response.data.decode().split('name="csrf_token" value="')[1].split('"')[0]
+        # Extract CSRF token using BeautifulSoup
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
 
         # Now make the login POST request
         login_response = client.post(url_for('public.login'), data={
