@@ -47,10 +47,13 @@ def test_create_organization(logged_in_admin, db_session, organization_data):
         assert new_organization.homepage_url == data['homepage_url']
 
 def test_create_organization_with_invalid_form_data(logged_in_admin, db_session):
+    """Test that invalid form data is properly handled."""
     with logged_in_admin.application.app_context():
+        # Get CSRF token from the form
         response = logged_in_admin.get(url_for('admin.organization.create'))
         csrf_token = extract_csrf_token(response.data)
 
+        # Prepare invalid data
         invalid_data = {
             'name': '',
             'description': 'This is a test organization.',
@@ -59,10 +62,8 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
             'submit': 'Create'
         }
 
-        # Remove follow_redirects=True so we get the direct response
+        # Submit the form
         response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data)
-
-        # Expect form re-render (422) for invalid data
         assert response.status_code == 422
 
         # Check that we're still on the form page
@@ -70,12 +71,9 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
 
         # Inspect session for flash messages
         with logged_in_admin.session_transaction() as sess:
-            flashed_messages = sess.get('_flashes', [])  # returns list of (category, message) pairs
+            flashed_messages = sess.get('_flashes', [])
 
-        # Print the flash messages to debug
-        print("Flashed Messages:", flashed_messages)
-
-        # Update this assertion to match the exact error message
+        # Verify the correct error message is displayed
         assert any(
             cat == 'error' and 'Name is required.' in msg
             for cat, msg in flashed_messages
@@ -84,6 +82,143 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
         # Ensure no organization was created
         new_organization = db_session.query(Organization).filter_by(name=invalid_data['name']).first()
         assert new_organization is None
+
+def test_create_organization_with_duplicate_name(logged_in_admin, db_session, organization_data):
+    """Test that duplicate organization names are rejected."""
+    with logged_in_admin.application.app_context():
+        # Create first organization
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=organization_data)
+        assert response.status_code == 302
+
+        # Attempt to create duplicate organization
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=organization_data)
+        assert response.status_code == 200
+
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])
+
+        expected_flash_message = FLASH_MESSAGES["CREATE_ORGANIZATION_DUPLICATE_ERROR"]
+        assert any(
+            cat == 'error' and msg == expected_flash_message
+            for cat, msg in flashed_messages
+        ), f"Flash message not found in session. Expected: {expected_flash_message}"
+
+def test_create_organization_with_long_name(logged_in_admin, db_session):
+    """Test that long organization names are rejected."""
+    with logged_in_admin.application.app_context():
+        response = logged_in_admin.get(url_for('admin.organization.create'))
+        csrf_token = extract_csrf_token(response.data)
+
+        long_name = 'A' * 101  # Exceeds the 100-character limit
+        invalid_data = {
+            'name': long_name,
+            'description': 'This is a test organization.',
+            'homepage_url': 'http://example.com/organization',
+            'csrf_token': csrf_token,
+            'submit': 'Create'
+        }
+
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data)
+        assert response.status_code == 422
+
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])
+
+        assert any(
+            cat == 'error' and 'Name cannot exceed 100 characters.' in msg
+            for cat, msg in flashed_messages
+        ), "Field validation error not found in flash messages"
+
+def test_create_organization_with_invalid_url(logged_in_admin, db_session):
+    """Test that invalid URLs are rejected."""
+    with logged_in_admin.application.app_context():
+        response = logged_in_admin.get(url_for('admin.organization.create'))
+        csrf_token = extract_csrf_token(response.data)
+
+        invalid_data = {
+            'name': 'Test Organization',
+            'description': 'This is a test organization.',
+            'homepage_url': 'invalid-url',
+            'csrf_token': csrf_token,
+            'submit': 'Create'
+        }
+
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data)
+        assert response.status_code == 422
+
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])
+
+        assert any(
+            cat == 'error' and 'Homepage URL must be a valid URL.' in msg
+            for cat, msg in flashed_messages
+        ), "Field validation error not found in flash messages"
+
+def test_create_organization_with_empty_form(logged_in_admin, db_session):
+    """Test that empty form submissions are rejected."""
+    with logged_in_admin.application.app_context():
+        response = logged_in_admin.get(url_for('admin.organization.create'))
+        csrf_token = extract_csrf_token(response.data)
+
+        invalid_data = {
+            'name': '',
+            'description': '',
+            'homepage_url': '',
+            'csrf_token': csrf_token,
+            'submit': 'Create'
+        }
+
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data)
+        assert response.status_code == 422
+
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])
+
+        assert any(
+            cat == 'error' and 'Name is required.' in msg
+            for cat, msg in flashed_messages
+        ), "Field validation error not found in flash messages"
+
+def test_create_organization_with_database_rollback(logged_in_admin, db_session, organization_data, monkeypatch):
+    """Test that database rollback works correctly in case of errors."""
+    with logged_in_admin.application.app_context():
+        def mock_commit(*args, **kwargs):
+            raise SQLAlchemyError("Database error")
+
+        monkeypatch.setattr(db_session, 'commit', mock_commit)
+
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=organization_data)
+        assert response.status_code == 200
+
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])
+
+        expected_flash_message = FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR']
+        assert any(
+            cat == 'error' and msg == expected_flash_message
+            for cat, msg in flashed_messages
+        ), f"Flash message not found in session. Expected: {expected_flash_message}"
+
+        # Ensure no organization was created
+        new_organization = db_session.query(Organization).filter_by(name=organization_data['name']).first()
+        assert new_organization is None
+
+def test_create_organization_without_csrf_token(logged_in_admin, db_session, organization_data):
+    """Test that CSRF protection is working correctly."""
+    with logged_in_admin.application.app_context():
+        # Remove CSRF token from data
+        del organization_data['csrf_token']
+
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=organization_data)
+        assert response.status_code == 400
+
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])
+
+        assert any(
+            cat == 'error' and 'The CSRF token is missing.' in msg
+            for cat, msg in flashed_messages
+        ), "CSRF validation error not found in flash messages"
 
 def test_create_organization_with_database_error(logged_in_admin, organization_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
