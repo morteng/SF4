@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, flash
 from flask_login import login_required, current_user
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from app.constants import FlashMessages, FlashCategory
 from app.forms.admin_forms import UserForm
 from app.forms.user_forms import ProfileForm
 from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user
@@ -18,11 +18,11 @@ def create():
     if form.validate_on_submit():
         try:
             new_user = create_user(form.data)
-            flash_message(FLASH_MESSAGES["CREATE_USER_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
         except Exception as e:
             db.session.rollback()  # Ensure the session is rolled back on error
-            flash_message(f"{FLASH_MESSAGES['CREATE_USER_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
+            flash_message(f"{FlashMessages.CREATE_USER_ERROR.value} {str(e)}", FlashCategory.ERROR.value)
     else:
         if request.headers.get('HX-Request') == 'true':
             # HTMX response - return form with errors
@@ -40,7 +40,7 @@ def create():
                     field_errors[field_name].append(msg)
                     flash_message(msg, FLASH_CATEGORY_ERROR)
             if not form.validate_on_submit():
-                flash_message(FLASH_MESSAGES["CREATE_USER_INVALID_DATA"], FLASH_CATEGORY_ERROR)
+                flash_message(FlashMessages.CREATE_USER_INVALID_DATA.value, FlashCategory.ERROR.value)
     return render_template('admin/users/create.html', form=form)
 
 @admin_user_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
@@ -61,12 +61,12 @@ def edit(id):
     if request.method == 'POST' and form.validate_on_submit():
         try:
             update_user(user, form.data)
-            flash_message(FLASH_MESSAGES["UPDATE_USER_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            flash_message(FlashMessages.UPDATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
         except Exception as e:
             db.session.rollback()
             logging.error(f"Failed to update user {id}: {e}")
-            flash_message(f"{FLASH_MESSAGES['UPDATE_USER_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
+            flash_message(f"{FlashMessages.UPDATE_USER_ERROR.value} {str(e)}", FlashCategory.ERROR.value)
     
     return render_template('admin/_form_template.html', 
                          form=form, 
@@ -86,11 +86,11 @@ def delete(id):
     
     try:
         delete_user(user)
-        flash_message(FLASH_MESSAGES["DELETE_USER_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+        flash_message(FlashMessages.DELETE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
     except Exception as e:
         db.session.rollback()
         logging.error(f"Failed to delete user {id}: {e}")
-        flash_message(f"{FLASH_MESSAGES['DELETE_USER_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
+        flash_message(f"{FlashMessages.DELETE_USER_ERROR.value} {str(e)}", FlashCategory.ERROR.value)
     
     return redirect(url_for('admin.user.index'))
 
@@ -106,12 +106,12 @@ def edit_profile():
     if request.method == 'POST' and form.validate_on_submit():
         try:
             update_user(current_user, form.data)
-            flash_message(FLASH_MESSAGES["PROFILE_UPDATE_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            flash_message(FlashMessages.PROFILE_UPDATE_SUCCESS.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
         except Exception as e:
             db.session.rollback()
             logging.error(f"Failed to update user {current_user.id}: {e}")
-            flash_message(f"{FLASH_MESSAGES['PROFILE_UPDATE_ERROR']} {str(e)}", FLASH_CATEGORY_ERROR)
+            flash_message(f"{FlashMessages.PROFILE_UPDATE_ERROR.value} {str(e)}", FlashCategory.ERROR.value)
     else:
         for field, errors in form.errors.items():
             for error in errors:
