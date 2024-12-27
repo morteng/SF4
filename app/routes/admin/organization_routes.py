@@ -39,6 +39,7 @@ csrf = CSRFProtect()
 @limiter.limit("10 per minute")
 @login_required
 @admin_required
+@notification_count
 def create():
     """Create new organization with audit logging and notifications"""
     form = OrganizationForm()
@@ -136,11 +137,11 @@ def delete(id):
 
 @admin_org_bp.route('/', methods=['GET'])
 @login_required
+@notification_count
 def index():
     organizations = get_all_organizations()
     return render_template('admin/organizations/index.html', 
-                         organizations=organizations,
-                         notification_count=get_unread_notification_count())
+                         organizations=organizations)
 
 @admin_org_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @limiter.limit(ORG_RATE_LIMITS['update'])
