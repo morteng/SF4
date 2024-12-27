@@ -198,6 +198,38 @@
 - "2023-01-01 25:61:61" (invalid time)
 - "invalid-date" (invalid format)
 
+## Bot Route Validation
+
+### Test Cases
+1. **Create Bot**
+   - Valid input
+   - Missing required fields
+   - Invalid bot name (special characters)
+   - Database error during creation
+
+2. **Edit Bot**
+   - Valid update
+   - Invalid ID
+   - Validation errors
+   - Database error during update
+
+3. **Delete Bot**
+   - Valid deletion
+   - Invalid ID
+   - Database error during deletion
+
+4. **Run Bot**
+   - Successful run
+   - Invalid ID
+   - Bot runtime error
+
+### Error Messages
+- "Failed to create bot: {error}"
+- "Bot not found"
+- "Failed to update bot: {error}"
+- "Failed to delete bot: {error}"
+- "Failed to run bot: {error}"
+
 ## Organization Form
 
 ### Name Field
