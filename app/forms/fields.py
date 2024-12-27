@@ -28,20 +28,33 @@ class CustomDateTimeField(DateTimeField):
                 self.errors.append(self.error_messages['required'])
                 return
             
+            # First check if the date string matches the expected format
             try:
-                # First try parsing the date string
                 parsed_dt = datetime.strptime(date_str, self.format)
-                
-                # Validate leap year before other validations
-                if parsed_dt.month == 2 and parsed_dt.day == 29:
-                    year = parsed_dt.year
-                    is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
-                    if not is_leap:
-                        self.errors.append(self.error_messages['invalid_leap_year'])
-                        # Clear any previous format errors
-                        if 'invalid_format' in self.errors:
-                            self.errors.remove('invalid_format')
-                        return
+            except ValueError:
+                # If format is invalid, check if it's a leap year issue
+                try:
+                    # Try parsing just the date part to check for leap year
+                    date_part = date_str.split()[0]  # Get just the date portion
+                    parsed_date = datetime.strptime(date_part, '%Y-%m-%d')
+                    if parsed_date.month == 2 and parsed_date.day == 29:
+                        year = parsed_date.year
+                        is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
+                        if not is_leap:
+                            self.errors.append(self.error_messages['invalid_leap_year'])
+                            return
+                except ValueError:
+                    # If it's not a leap year issue, return format error
+                    self.errors.append(self.error_messages['invalid_format'])
+                return
+            
+            # If format is valid, proceed with other validations
+            if parsed_dt.month == 2 and parsed_dt.day == 29:
+                year = parsed_dt.year
+                is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
+                if not is_leap:
+                    self.errors.append(self.error_messages['invalid_leap_year'])
+                    return
                 
                 # Validate time components
                 if not self._validate_time_components(parsed_dt):
