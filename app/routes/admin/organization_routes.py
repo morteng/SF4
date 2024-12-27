@@ -37,7 +37,7 @@ def create():
             # Use the field's name directly instead of the label
             for error in errors:
                 # Format the error message as "Field Name: Error Message"
-                flash_message(f"{field_name.capitalize()}: {error}", FLASH_CATEGORY_ERROR)
+                flash_message(f"Org {field_name.capitalize()}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
@@ -95,6 +95,6 @@ def edit(id):
                 # Use the field's name directly instead of the label
                 for error in errors:
                     # Format the error message as "Field Name: Error Message"
-                    flash_message(f"{field_name.capitalize()}: {error}", FLASH_CATEGORY_ERROR)
+                    flash_message(f"Org {field_name.capitalize()}: {error}", FLASH_CATEGORY_ERROR)
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)
