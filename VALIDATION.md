@@ -18,6 +18,7 @@
 
 ## Error Handling
 - Rollback on error
+- Validate leap year dates and return clear error messages
 - Log details
 - Use enums for user feedback
 - Preserve form state

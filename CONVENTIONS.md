@@ -10,7 +10,7 @@
 - Verify error messages match actual implementation
 
 ### Security
-- Validate all inputs
+- Validate all inputs, including leap year dates and invalid date combinations
 - CSRF tokens required in all forms (can be disabled in tests using meta={'csrf': False})
 - Always include required fields in test data
 - Rate limit sensitive endpoints

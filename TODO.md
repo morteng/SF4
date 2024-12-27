@@ -5,7 +5,7 @@
 - [ ] Increase test coverage to 80%+
 
 ## Best Practices
-- Validate & sanitize all inputs
+- Validate & sanitize all inputs, including date validation for leap years
 - Ensure test data includes all required fields
 - Disable CSRF in tests when appropriate
 - Test CSRF protection in all form submissions
