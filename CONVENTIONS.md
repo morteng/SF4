@@ -27,6 +27,7 @@
 - Return 400 for invalid/missing CSRF tokens
 - Add CSRF token to test requests
 - Use blueprint factory pattern to prevent circular imports
+- Ensure session handling in tests with db_session.merge()
 
 ### Notification Badges
 - All admin templates must include a notification badge.

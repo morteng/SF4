@@ -3,7 +3,8 @@
 - [x] Core CRUD & security
 - [x] Fix datetime.utcnow() deprecation warnings
 - [x] Add username validation constants
-- [ ] Improve test isolation with unique credentials
+- [x] Improve test isolation with unique credentials
+- [ ] Fix DetachedInstanceError in admin user tests
 - [x] Testing:
   - Admin routes
   - User request handling

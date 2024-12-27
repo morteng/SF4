@@ -4,6 +4,7 @@
 - Ensure tests use unique credentials to avoid conflicts
 - Clean up test data before each test run
 - Verify proper database state for each test
+- Use db_session.merge() to handle detached instances
 
 ## Audit Log Validation
 - Verify all CRUD operations and system events create audit logs with:
