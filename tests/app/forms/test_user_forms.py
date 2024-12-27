@@ -8,7 +8,7 @@ from app import create_app
 from app.models.user import User
 from app.extensions import db
 from app.constants import FlashMessages, FlashCategory
-from app.utils.security import generate_csrf_token
+from app.utils import generate_csrf_token
 
 @pytest.fixture(scope='function', autouse=True)
 def setup_database(_db):
