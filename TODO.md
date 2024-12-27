@@ -3,6 +3,7 @@
 - [ ] Fix `TestConfig` import in test files
 - [ ] Verify session state maintenance in form tests
 - [ ] Verify CSRF token initialization in all form tests
+- [ ] Add session initialization checks in form tests
 - [ ] Add rate limiting to admin routes
 - [ ] Add CRUD integration tests
 - [ ] Increase test coverage to 80%+
