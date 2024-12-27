@@ -7,6 +7,10 @@
 - CSRF enabled in testing environment
 - Use request context for form tests
 
+### Testing with CSRF
+- Always use `test_request_context` when testing forms with CSRF protection
+- Ensure CSRF tokens are validated in form tests
+
 ### Security
 - Validate all inputs
 - CSRF tokens required in all forms

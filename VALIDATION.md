@@ -14,6 +14,10 @@
 - Uniqueness: Check for duplicates
 - CSRF: Validate token in all forms
 
+## Form Testing
+- Use `test_request_context` for form tests
+- Validate CSRF tokens in all form tests
+
 ## Error Handling
 - Rollback on error
 - Log details
