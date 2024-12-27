@@ -224,6 +224,7 @@
    - Implementation: Check that all url_for() calls in bot templates match registered routes
    - Test case: test_htmx_endpoint_validation
    - Implementation: Verify HTMX form actions match route endpoints
+   - Specific check: Ensure bot run form uses 'admin.bot.run' endpoint
 
 ### Test Cases
 1. **Create Bot**
