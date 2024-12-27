@@ -50,10 +50,25 @@ def test_user(db_session, user_data):
 
 def verify_user_crud_operations(test_client, admin_user, test_data):
     """Verify full CRUD operations for users"""
-    # Create
+    # First get the CSRF token from the create form
+    create_response = test_client.get('/admin/users/create')
+    assert create_response.status_code == 200
+    csrf_token = extract_csrf_token(create_response.data)
+    assert csrf_token is not None
+    
+    # Add CSRF token to test data
+    test_data['csrf_token'] = csrf_token
+    
+    # Create user
     response = test_client.post('/admin/users/create', 
                               data=test_data,
                               follow_redirects=True)
+    
+    # Debug output if test fails
+    if response.status_code != 200:
+        print("Response status:", response.status_code)
+        print("Response data:", response.data.decode('utf-8'))
+    
     assert response.status_code == 200
     assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data
     
