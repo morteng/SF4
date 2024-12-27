@@ -24,6 +24,42 @@ def create_user_data(username="testuser", email="test@example.com", password="pa
         'password': password
     }
 
+def extract_csrf_token(response_data):
+    """Extract CSRF token from HTML response."""
+    import re
+    from bs4 import BeautifulSoup
+    
+    soup = BeautifulSoup(response_data, 'html.parser')
+    
+    # Look for CSRF token in meta tag
+    meta_token = soup.find('meta', attrs={'name': 'csrf-token'})
+    if meta_token:
+        return meta_token.get('content')
+    
+    # Look for CSRF token in hidden input
+    input_token = soup.find('input', attrs={'name': 'csrf_token'})
+    if input_token:
+        return input_token.get('value')
+    
+    # Look for CSRF token in form data
+    form = soup.find('form')
+    if form:
+        input_token = form.find('input', attrs={'name': 'csrf_token'})
+        if input_token:
+            return input_token.get('value')
+    
+    # Look for CSRF token in HTMX headers
+    script_tags = soup.find_all('script')
+    for script in script_tags:
+        if 'hx-headers' in script.text:
+            match = re.search(r'"X-CSRFToken":\s*"([^"]+)"', script.text)
+            if match:
+                return match.group(1)
+    
+    # If no token found, log the issue
+    logging.warning("CSRF token not found in response")
+    return None
+
 class AuthActions:
     def __init__(self, client):
         self._client = client
