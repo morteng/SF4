@@ -2,9 +2,9 @@
 
 ## Current Goals
 1. Complete organization routes implementation
-   - Ensure consistent error display across all organization views
-   - Implement proper error handling for organization operations
    - Add timezone handling for application deadlines
+   - Implement proper error handling for organization operations
+   - Ensure consistent error display across all organization views
 
 2. Enhance test coverage for organization routes
    - Add tests for HTMX responses in organization routes
