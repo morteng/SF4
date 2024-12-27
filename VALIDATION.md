@@ -218,25 +218,28 @@
 ## Bot Route Validation
 
 ### New Test Cases
-1. **Invalid Form Submission**
-   - Test case: test_create_bot_route_with_invalid_data
-   - Implementation: Submit form with invalid data and verify:
-     * Returns 400 status code
-     * Proper error messages are displayed
-     * Form retains submitted values
-     * Error messages are logged
-   - Test invalid values for all fields
-   - Verify proper error handling for database errors
+1. **Template Validation**
+   - Verify admin bot edit template exists and extends base.html
+   - Check form rendering and error handling
+   - Test successful bot update
+   - Test validation errors
+   - Test database error handling
 
 ### Error Handling
-- **Invalid Form Data**
-  * Returns 400 status code
-  * Displays field-specific error messages
-  * Logs validation errors
-  * Preserves form state
+- **Template Not Found**
+  * Returns 404 status code
+  * Logs template error
+  * Displays proper error message
   * Uses consistent error message formatting
 
 ### Examples
+**Valid Inputs**:
+{
+    "name": "Updated Bot",
+    "description": "Updated description",
+    "status": "true"
+}
+
 **Invalid Inputs**:
 {
     "name": "",  // Empty name
@@ -245,38 +248,10 @@
 }
 
 **Expected Behavior**:
-- Returns 400 status code
+- Returns 400 status code for invalid inputs
 - Displays error messages for invalid fields
 - Logs validation errors
 - Preserves form state
-
-### Validation Improvements
-- Added template inheritance validation
-- Improved form validation with specific error messages
-- Added status field validation
-- Enhanced template error display
-- Added HTMX endpoint validation
-
-### Test Cases
-1. **Create Bot**
-   - Verify template inheritance from base.html
-   - Check form rendering and error handling
-   - Test successful bot creation
-   - Test validation errors
-   - Test database error handling
-
-2. **Run Bot**
-   - Verify HTMX form action matches route endpoint
-   - Test successful bot execution
-   - Test error handling for invalid bot ID
-   - Verify proper flash message display
-
-### Error Messages
-- "Failed to create bot: {error}"
-- "Bot not found"
-- "Failed to update bot: {error}"
-- "Failed to delete bot: {error}"
-- "Failed to run bot: {error}"
 1. **Invalid Form Submission**
    - Test case: test_create_bot_route_with_invalid_data
    - Implementation: Submit form with invalid data and verify:
