@@ -227,9 +227,14 @@ class OrganizationForm(FlaskForm):
         if len(name.data.strip()) > 100:
             raise ValidationError('Name: Organization name cannot exceed 100 characters.')
         if name.data != self.original_name:
-            organization = Organization.query.filter_by(name=name.data).first()
-            if organization:
-                raise ValidationError('Name: Organization with this name already exists.')
+            try:
+                organization = Organization.query.filter_by(name=name.data).first()
+                if organization:
+                    logger.warning(f"Duplicate organization name detected: {name.data}")
+                    raise ValidationError('Name: Organization with this name already exists.')
+            except Exception as e:
+                logger.error(f"Error validating organization name: {str(e)}")
+                raise ValidationError('Failed to validate organization name: ' + str(e))
 
     def validate_homepage_url(self, field):
         if field.data and not (field.data.startswith('http://') or field.data.startswith('https://')):
