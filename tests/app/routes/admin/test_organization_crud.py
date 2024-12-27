@@ -59,11 +59,14 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
             'submit': 'Create'
         }
 
-        # Remove follow_redirects=True so the flash stays in the session.
+        # Remove follow_redirects=True so we get the direct response
         response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data)
 
         # Expect form re-render (422) for invalid data
         assert response.status_code == 422
+
+        # Check that we're still on the form page
+        assert b'Create Organization' in response.data
 
         # Inspect session for flash messages
         with logged_in_admin.session_transaction() as sess:
@@ -77,10 +80,6 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
             cat == 'error' and 'Org Name: This field is required.' in msg
             for cat, msg in flashed_messages
         ), "Field validation error not found in flash messages"
-
-        # Confirm the final page after redirect
-        follow_response = logged_in_admin.get(response.location)
-        assert follow_response.status_code == 200
 
         # Ensure no organization was created
         new_organization = db_session.query(Organization).filter_by(name=invalid_data['name']).first()
