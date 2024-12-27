@@ -17,16 +17,11 @@
 - Password resets: 5/hour
 
 ### CSRF Token Handling
-- Use Flask-WTF forms for automatic CSRF protection
-- Include CSRF token in all forms and HTMX requests
-- For forms: `{{ form.csrf_token }}`
-- For HTMX: `<meta name="csrf-token" content="{{ csrf_token() }}">`
+- Use Flask-WTF for CSRF protection
+- Include CSRF token in all forms via `{{ csrf_token() }}`
+- Add CSRF meta tag in base template for HTMX
 - Validate CSRF tokens in all POST requests
-- Use `extract_csrf_token()` helper in tests
-- In routes, pass form instances to templates
-- Handle CSRF errors with 400 status code
-- Ensure CSRF tokens are included in all POST requests
-- Use `extract_csrf_token()` helper function in tests
+- Return 400 for invalid/missing CSRF tokens
 
 ### Notification Badges
 - All admin templates must include a notification badge.
