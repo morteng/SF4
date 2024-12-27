@@ -24,6 +24,7 @@ class CustomDateTimeField(DateTimeField):
     def process_formdata(self, valuelist):
         if valuelist:
             date_str = valuelist[0]
+            print(f"process_formdata called with date_str: {date_str}")  # Add this line
             if not date_str:
                 self.errors.append(self.error_messages['required'])
                 return
@@ -49,6 +50,7 @@ class CustomDateTimeField(DateTimeField):
                     print("ValueError during leap year check")
                     pass
 
+            print(f"Before strptime, date_str: {date_str}")  # Add this line
             try:
                 # Try to parse the full date string
                 parsed_dt = datetime.strptime(date_str, self.format)
