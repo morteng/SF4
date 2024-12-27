@@ -26,6 +26,13 @@ def init_extensions(app):
         db_session = scoped_session(Session)
         limiter.init_app(app)
         
+        # Apply rate limits to sensitive endpoints
+        limiter.limit("100/hour")(app.blueprints['admin'])
+        limiter.limit("10/minute")(app.blueprints['admin'].decorators)
+        
+        # Enable CSRF protection
+        csrf.init_app(app)
+        
         # Apply rate limits to admin routes
         limiter.limit("100/hour")(app.blueprints['admin'])
 

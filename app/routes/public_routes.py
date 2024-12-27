@@ -34,9 +34,34 @@ def login():
             flash('Invalid username or password.', 'danger')
     return render_template('login.html', form=form)
 
+from app.models.tag import Tag
+from app.models.stipend import Stipend
+
 @public_bp.route('/')
 def index():
-    return render_template('index.html')
+    tags = Tag.query.order_by(Tag.name).all()
+    stipends = Stipend.query.filter_by(open_for_applications=True).order_by(Stipend.application_deadline).limit(10).all()
+    return render_template('index.html', stipends=stipends, tags=tags)
+
+@public_bp.route('/filter', methods=['POST'])
+def filter_stipends():
+    tag_ids = request.form.getlist('tags[]')
+    search_term = request.form.get('search', '').strip()
+    
+    query = Stipend.query.filter_by(open_for_applications=True)
+    
+    if tag_ids:
+        query = query.filter(Stipend.tags.any(Tag.id.in_(tag_ids)))
+    
+    if search_term:
+        query = query.filter(
+            Stipend.name.ilike(f'%{search_term}%') |
+            Stipend.description.ilike(f'%{search_term}%')
+        )
+    
+    stipends = query.order_by(Stipend.application_deadline).all()
+    
+    return render_template('_stipend_list.html', stipends=stipends)
 
 @public_bp.route('/logout')
 @login_required  # Ensure the user is logged in to log out

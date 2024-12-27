@@ -27,3 +27,17 @@ class Notification(db.Model):
     @classmethod
     def get_unread_count(cls):
         return cls.query.filter_by(read_status=False).count()
+        
+    @classmethod
+    def create(cls, type, message, related_object=None):
+        notification = cls(
+            type=type,
+            message=message,
+            read_status=False
+        )
+        if related_object:
+            notification.related_object_type = related_object.__class__.__name__
+            notification.related_object_id = related_object.id
+        db.session.add(notification)
+        db.session.commit()
+        return notification

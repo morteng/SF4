@@ -2,6 +2,7 @@ from datetime import datetime
 import logging
 
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string
+from app.models.audit_log import AuditLog
 from app.utils import format_error_message
 from jinja2 import TemplateNotFound
 from flask_login import login_required
@@ -52,6 +53,13 @@ def create():
     if request.method == 'POST':
         if form.validate_on_submit():
             try:
+                # Audit log
+                AuditLog.create(
+                    user_id=current_user.id,
+                    action='create_stipend',
+                    details=f"Attempt to create new stipend: {form.name.data}"
+                )
+                
                 # Prepare stipend data
                 stipend_data = {
                     'name': form.name.data,

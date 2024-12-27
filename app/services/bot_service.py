@@ -11,11 +11,38 @@ def create_bot(data):
 def get_bot_by_id(bot_id):
     return db.session.get(Bot, bot_id)
 
+from datetime import datetime
+from app.models.notification import Notification, NotificationType
+
 def run_bot(bot):
-    # Implement the logic to run the bot here
-    # For now, just update its status
-    bot.status = 'running'
-    db.session.commit()
+    try:
+        bot.status = 'running'
+        bot.last_run = datetime.utcnow()
+        
+        # Add bot-specific logic here
+        if bot.name == 'TagBot':
+            # Implement tagging logic
+            pass
+        elif bot.name == 'UpdateBot':
+            # Implement update logic
+            pass
+        elif bot.name == 'ReviewBot':
+            # Implement review logic
+            pass
+            
+        bot.status = 'completed'
+        Notification.create(
+            type=NotificationType.BOT_SUCCESS,
+            message=f"{bot.name} completed successfully"
+        )
+    except Exception as e:
+        bot.status = 'failed'
+        Notification.create(
+            type=NotificationType.BOT_ERROR,
+            message=f"{bot.name} failed: {str(e)}"
+        )
+    finally:
+        db.session.commit()
 
 def get_all_bots():
     return db.session.query(Bot).all()
