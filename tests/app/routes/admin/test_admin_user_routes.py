@@ -30,7 +30,7 @@ def test_user(db_session, user_data):
 def test_create_user_route(logged_in_admin, user_data):
     create_response = logged_in_admin.get(url_for('admin.user.create'))
     assert create_response.status_code == 200
-
+    
     csrf_token = extract_csrf_token(create_response.data)
     response = logged_in_admin.post(url_for('admin.user.create'), data={
         'username': user_data['username'],
@@ -38,14 +38,12 @@ def test_create_user_route(logged_in_admin, user_data):
         'password': user_data['password'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
-
+    
     assert response.status_code == 200
     users = User.query.all()
     assert any(user.username == user_data['username'] and user.email == user_data['email'] for user in users)
-    # Assert the flash message using constants
-    # Check for successful redirect
-    assert response.status_code == 200
-    # Check for the flash message in the response HTML
+    
+    # Check for the flash message in the redirected page's HTML
     assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data, \
         f"Expected flash message '{FlashMessages.CREATE_USER_SUCCESS.value}' not found in response"
 
