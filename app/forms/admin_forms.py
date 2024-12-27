@@ -208,6 +208,7 @@ class BotForm(FlaskForm):
 
 class OrganizationForm(FlaskForm):
     id = HiddenField('ID')
+    csrf_token = HiddenField('CSRF Token')
     name = StringField('Name', validators=[
         DataRequired(message="This field is required."),
         Length(max=100, message="Organization name cannot exceed 100 characters."),
