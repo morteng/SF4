@@ -154,8 +154,16 @@ from wtforms import HiddenField
 
 class UserForm(FlaskForm):
     id = HiddenField('ID')
-    username = StringField('Username', validators=[DataRequired(), Length(max=100)])
-    email = StringField('Email', validators=[DataRequired(), Email(), Length(max=255)])
+    username = StringField('Username', validators=[
+        DataRequired(),
+        Length(min=3, max=50),
+        Regexp('^[a-zA-Z0-9_]+$', message="Username can only contain letters, numbers and underscores")
+    ])
+    email = StringField('Email', validators=[
+        DataRequired(),
+        Email(),
+        Length(max=255)
+    ])
     password = PasswordField('Password', validators=[
         Optional(),
         Length(min=8, message="Password must be at least 8 characters long.")

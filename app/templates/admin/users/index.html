@@ -9,34 +9,22 @@
     {% from "_macros.html" import primary_button %}
     {{ primary_button('Create New User', url_for('admin.user.create'), '#main-content') }}
 
+    <div class="mb-4">
+        <form method="GET" action="{{ url_for('admin.user.index') }}">
+            <input type="text" name="q" value="{{ search_query }}" 
+                   placeholder="Search users..." class="border p-2 rounded">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+                Search
+            </button>
+        </form>
+    </div>
+
     <div class="overflow-x-auto mt-6">
-        <table class="w-full border-collapse bg-white text-left text-sm">
-            <thead>
-                <tr class="bg-gray-50">
-                    <th class="px-4 py-2">ID</th>
-                    <th class="px-4 py-2">Username</th>
-                    <th class="px-4 py-2">Email</th>
-                    <th class="px-4 py-2">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr class="border-b border-gray-200">
-                    <td class="px-4 py-2">{{ user.id }}</td>
-                    <td class="px-4 py-2">{{ user.username }}</td>
-                    <td class="px-4 py-2">{{ user.email }}</td>
-                    <td class="px-4 py-2">
-                        {% from "_macros.html" import edit_button, delete_button %}
-                        {{ edit_button(url_for('admin.user.edit', id=user.id), '#main-content') }}
-                        {{ delete_button(url_for('admin.user.delete', id=user.id), 'closest tr') }}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% from "_macros.html" import user_table %}
+        {{ user_table(users) }}
     </div>
 
     {% from "_macros.html" import pagination %}
-    {{ pagination(users, 'admin.user.paginate', current_page, total_pages) }}
+    {{ pagination(users, 'admin.user.index', users.page, users.pages) }}
 </div>
 {% endblock %}

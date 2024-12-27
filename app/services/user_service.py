@@ -17,8 +17,18 @@ def delete_user(user):
         db.session.rollback()
         raise ValueError("Failed to delete user.")
 
-def get_all_users():
-    return User.query.all()
+from sqlalchemy import or_
+
+def get_all_users(page=1, per_page=10):
+    return User.query.paginate(page=page, per_page=per_page)
+
+def search_users(query, page=1, per_page=10):
+    return User.query.filter(
+        or_(
+            User.username.ilike(f'%{query}%'),
+            User.email.ilike(f'%{query}%')
+        )
+    ).paginate(page=page, per_page=per_page)
 
 def create_user(form_data):
     username = form_data['username']

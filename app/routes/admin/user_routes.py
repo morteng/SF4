@@ -142,21 +142,15 @@ def edit_profile():
 @login_required
 @admin_required
 def index():
-    return redirect(url_for('admin.user.paginate', page=1))
-
-@admin_user_bp.route('/paginate/<int:page>', methods=['GET'])
-@login_required
-@admin_required
-def paginate(page):
-    per_page = 10  # Number of users per page
-    users = get_all_users()
-    total_users = len(users)
-    start = (page - 1) * per_page
-    end = start + per_page
-    paginated_users = users[start:end]
+    page = request.args.get('page', 1, type=int)
+    search_query = request.args.get('q', '')
+    
+    if search_query:
+        users = search_users(search_query, page=page)
+    else:
+        users = get_all_users(page=page)
     
     return render_template('admin/users/index.html', 
-                         users=paginated_users,
-                         current_page=page,
-                         total_pages=(total_users + per_page - 1) // per_page,
+                         users=users,
+                         search_query=search_query,
                          csrf_token=generate_csrf())
