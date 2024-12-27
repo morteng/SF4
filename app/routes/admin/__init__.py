@@ -4,22 +4,21 @@ from flask_login import current_user
 from app.models.notification import Notification
 from app.extensions import db
 
+def notification_count(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.is_authenticated:
+            count = Notification.query.filter_by(
+                user_id=current_user.id,
+                read_status=False
+            ).count()
+            kwargs['notification_count'] = count
+        return f(*args, **kwargs)
+    return decorated_function
+
 def create_admin_blueprint():
     """Factory function to create a new admin blueprint instance"""
     admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
-    
-    # Add notification_count decorator
-    def notification_count(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            if current_user.is_authenticated:
-                count = Notification.query.filter_by(
-                    user_id=current_user.id,
-                    read_status=False
-                ).count()
-                kwargs['notification_count'] = count
-            return f(*args, **kwargs)
-        return decorated_function
     
     # Make the decorator available to routes
     admin_bp.notification_count = notification_count
