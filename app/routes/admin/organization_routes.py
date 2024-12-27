@@ -114,7 +114,7 @@ def edit(id):
                 db.session.rollback()
                 flash_message(FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
         else:
-            flash_form_errors(form)
+            handle_form_errors(form)
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)
 
