@@ -36,7 +36,8 @@ def create():
             if request.headers.get('HX-Request') == 'true':
                 return render_template('admin/users/_create_form.html', form=form), 400
             # Redirect to create page to show flash message
-            return redirect(url_for('admin.user.create'))
+            session.modified = True  # Ensure session is saved before redirect
+            return redirect(url_for('admin.user.create')), 200
     else:
         if request.headers.get('HX-Request') == 'true':
             # HTMX response - return form with errors
