@@ -23,6 +23,10 @@ def app():
     app = create_app('testing')  # Use 'testing' here, not TestConfig
     app.config['WTF_CSRF_ENABLED'] = True  # Enable CSRF for testing
     app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'  # Add CSRF secret key
+    
+    # Register blueprints
+    from app.routes.public_routes import public_bp
+    app.register_blueprint(public_bp)
 
     # Initialize database and login manager in app context
     with app.app_context():
