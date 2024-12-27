@@ -74,10 +74,6 @@ def create_app(config_name='development'):
             db.session.bulk_save_objects(bots)
             db.session.commit()
 
-    # Initialize rate limiter
-    from app.routes.admin.user_routes import init_rate_limiter
-    init_rate_limiter(app)
-
     # Add context processor for notification count
     from app.services.notification_service import get_notification_count
     from flask_login import current_user
