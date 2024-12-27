@@ -40,7 +40,6 @@ class FlashMessages(str, Enum):
     CREATE_ORGANIZATION_INVALID_FORM = "Invalid data provided for organization creation."
     CREATE_ORGANIZATION_DUPLICATE_ERROR = "An organization with this name already exists."
     CREATE_ORGANIZATION_DATABASE_ERROR = "Database error while creating organization."
-    CSRF_MISSING = "CSRF token is missing. Please refresh the page and try again."
     UPDATE_ORGANIZATION_SUCCESS = "Organization updated successfully."
     UPDATE_ORGANIZATION_ERROR = "Failed to update organization."
     UPDATE_ORGANIZATION_INVALID_FORM = "Invalid data provided for organization update."
