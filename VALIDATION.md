@@ -23,4 +23,5 @@
 - Use bleach to clean all user input
 - Require CSRF token for all POST requests
 - Implement rate limiting for admin routes
+- Use FlashMessages and FlashCategory enums for consistent error/success messaging
 
