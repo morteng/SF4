@@ -34,10 +34,10 @@ def create():
         # Flash form validation errors with proper field names
         for field_name, errors in form.errors.items():
             field = getattr(form, field_name)
-            field_label = field.label.text
+            # Use the field's name directly instead of the label
             for error in errors:
-                # Format the error message as "Field Label: Error Message"
-                flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
+                # Format the error message as "Field Name: Error Message"
+                flash_message(f"{field_name.capitalize()}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
@@ -92,9 +92,9 @@ def edit(id):
             # Flash form validation errors with proper field names
             for field_name, errors in form.errors.items():
                 field = getattr(form, field_name)
-                field_label = field.label.text
+                # Use the field's name directly instead of the label
                 for error in errors:
-                    # Format the error message as "Field Label: Error Message"
-                    flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
+                    # Format the error message as "Field Name: Error Message"
+                    flash_message(f"{field_name.capitalize()}: {error}", FLASH_CATEGORY_ERROR)
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)
