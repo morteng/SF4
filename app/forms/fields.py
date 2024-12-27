@@ -52,15 +52,9 @@ class CustomDateTimeField(DateTimeField):
                 error_str = str(e)
                 if 'does not match format' in error_str:
                     self.errors.append(self.error_messages['invalid_format'])
-                elif 'day is out of range' in error_str:
+                elif 'day is out of range' in error_str or 'month is out of range' in error_str:
                     self.errors.append(self.error_messages['invalid_date'])
-                elif 'month is out of range' in error_str:
-                    self.errors.append(self.error_messages['invalid_date'])
-                elif 'hour must be in' in error_str:
-                    self.errors.append(self.error_messages['invalid_time'])
-                elif 'minute must be in' in error_str:
-                    self.errors.append(self.error_messages['invalid_time'])
-                elif 'second must be in' in error_str:
+                elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
                     self.errors.append(self.error_messages['invalid_time'])
                 else:
                     self.errors.append(self.error_messages['invalid_date'])
