@@ -10,16 +10,16 @@ def create_admin_blueprint():
     
     # Add notification_count decorator
     def notification_count(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if current_user.is_authenticated:
-            count = Notification.query.filter_by(
-                user_id=current_user.id,
-                read_status=False
-            ).count()
-            kwargs['notification_count'] = count
-        return f(*args, **kwargs)
-    return decorated_function
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if current_user.is_authenticated:
+                count = Notification.query.filter_by(
+                    user_id=current_user.id,
+                    read_status=False
+                ).count()
+                kwargs['notification_count'] = count
+            return f(*args, **kwargs)
+        return decorated_function
 
 def register_admin_blueprints(app):
     # Create a new admin blueprint instance
