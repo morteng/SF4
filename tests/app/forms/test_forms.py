@@ -5,7 +5,7 @@ from app.config import TestConfig
 
 @pytest.fixture
 def app():
-    app = create_app(TestConfig)
+    app = create_app('testing')  # Use 'testing' instead of TestConfig
     return app
 
 @pytest.fixture
