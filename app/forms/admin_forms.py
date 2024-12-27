@@ -210,7 +210,7 @@ class OrganizationForm(FlaskForm):
     def validate_name(self, name):
         if not name.data or name.data.strip() == '':
             # Update the error message to match the test expectation
-            raise ValidationError('This field is required.')
+            raise ValidationError('Org Name: This field is required.')
         if name.data != self.original_name:
             organization = Organization.query.filter_by(name=name.data).first()
             if organization:
