@@ -36,23 +36,20 @@ def test_user(db_session, user_data):
     db_session.commit()
 
 def test_create_user_route(logged_in_admin, user_data):
-    # Test GET request with debug logging
+    # Test GET request
     create_response = logged_in_admin.get(url_for('admin.user.create'))
-    print(f"GET Response Status: {create_response.status_code}")
-    print(f"GET Response Data: {create_response.data.decode('utf-8')}")
     assert create_response.status_code == 200
+    
+    # Verify CSRF token is present
+    csrf_token = extract_csrf_token(create_response.data)
+    assert csrf_token is not None
     
     # Verify admin user context
     with logged_in_admin.session_transaction() as session:
         assert '_user_id' in session
-        admin_user_id = session['_user_id']
-        admin_user = User.query.get(int(admin_user_id))
+        admin_user = User.query.get(int(session['_user_id']))
         assert admin_user is not None
         assert admin_user.is_admin
-    
-    # Extract CSRF token
-    csrf_token = extract_csrf_token(create_response.data)
-    assert csrf_token is not None, "CSRF token not found in response"
     
     # Test POST request
     response = logged_in_admin.post(url_for('admin.user.create'), data={

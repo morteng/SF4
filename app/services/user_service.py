@@ -49,30 +49,38 @@ def search_users(query, page=1, per_page=10):
 
 def create_user(form_data):
     """Create a new user with validation and audit logging"""
-    username = form_data['username']
-    email = form_data['email']
-    password = form_data['password']
-    is_admin = form_data.get('is_admin', False)
+    try:
+        username = form_data['username']
+        email = form_data['email']
+        password = form_data['password']
+        is_admin = form_data.get('is_admin', False)
 
-    # Validate password strength
-    if not validate_password_strength(password):
-        raise ValueError(FlashMessages.PASSWORD_WEAK.value)
+        # Validate password strength
+        if not validate_password_strength(password):
+            raise ValueError(FlashMessages.PASSWORD_WEAK.value)
 
-    new_user = User(username=username, email=email, is_admin=is_admin)
-    new_user.set_password(password)
-    
-    # Audit log - ensure we use the admin user's ID
-    if current_user and current_user.is_authenticated:
-        audit_log = AuditLog(
-            user_id=current_user.id,  # Use the admin user's ID
+        # Check for existing user
+        if User.query.filter_by(username=username).first():
+            raise ValueError(FlashMessages.USERNAME_ALREADY_EXISTS.value)
+        if User.query.filter_by(email=email).first():
+            raise ValueError(FlashMessages.EMAIL_ALREADY_EXISTS.value)
+
+        new_user = User(username=username, email=email, is_admin=is_admin)
+        new_user.set_password(password)
+        
+        # Create audit log
+        AuditLog.create(
+            user_id=current_user.id,
             action='create_user',
             object_type='User',
             object_id=new_user.id,
             details=f'Created user {username}',
-            timestamp=datetime.utcnow(),
             ip_address=request.remote_addr
         )
-        db.session.add(audit_log)
+        
+        db.session.add(new_user)
+        db.session.commit()
+        return new_user
     
     try:
         db.session.add(new_user)
