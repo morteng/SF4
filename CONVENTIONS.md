@@ -27,6 +27,16 @@
 - Use `get_notification_count()` to retrieve the count.
 - The badge should be visible even if the count is 0.
 
+### Audit Logging
+- Required for all CRUD operations
+- Must include:
+  - Timestamp (UTC)
+  - User ID
+  - Action type (create/update/delete)
+  - Object type and ID
+  - Details of the operation
+  - Success/failure status
+
 ### Testing with CSRF and Error Handling
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
 - Extract CSRF token from hidden input: `<input name="csrf_token" value="...">`
