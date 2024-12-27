@@ -15,6 +15,8 @@
 - Use `client.session_transaction()` to verify CSRF tokens
 - Use form-generated CSRF tokens in tests
 - Include CSRF token in POST requests
+- Keep form creation and POST requests within the same context
+- Add debug logging for form validation errors and response status
 
 ### Form Testing
 - Always use `test_request_context` when testing forms

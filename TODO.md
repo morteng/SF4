@@ -1,7 +1,7 @@
 # TODO List
 ## High Priority
 - [x] Add CSRF protection to all forms
-- [ ] Fix CSRF token handling in profile form test
+- [x] Fix CSRF token handling in profile form test
 - [ ] Verify session state maintenance in form tests
 - [x] Enable CSRF in testing environment
 - [ ] Fix profile form validation failure

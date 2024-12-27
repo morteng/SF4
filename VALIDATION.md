@@ -29,6 +29,9 @@
 - Validate CSRF tokens in all form tests
 - Ensure form submissions include all required fields
 - Use form-generated CSRF tokens in tests
+- Add debug logging for form validation errors
+- Include response status and data in debug output
+- Keep form creation and POST requests within the same context
 
 ### Session State
 - Verify session maintains CSRF tokens
