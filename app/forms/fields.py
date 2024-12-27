@@ -18,7 +18,7 @@ class CustomDateTimeField(DateTimeField):
             'invalid_time': 'Invalid time values (e.g., 25:61:61)',
             'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
             'required': 'Date is required',
-            'invalid_leap_year': 'Invalid date: February 29th on a non-leap year'
+            'invalid_leap_year': 'Invalid date values (e.g., Feb 30)'
         }
         self.errors = []
 
