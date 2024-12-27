@@ -34,10 +34,7 @@ def create():
         for field_name, errors in form.errors.items():
             field_label = form[field_name].label.text  # Get the actual field label
             for error in errors:
-                if 'This field is required.' in error:
-                    flash_message(f"{field_label}: This field is required.", FLASH_CATEGORY_ERROR)
-                else:
-                    flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
+                flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
     return render_template('admin/organizations/form.html', form=form)
 
