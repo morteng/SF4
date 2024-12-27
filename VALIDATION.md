@@ -1,19 +1,8 @@
 # Validation Rules
-## Principles
-- Validate client & server side
-- Use enums for message types
-- Test success & failure cases
-- CSRF enabled in all environments
-- Include CSRF validation in all form tests
-- Always use an application context for form tests
-- Use form-generated CSRF tokens in tests
-- Ensure test client maintains session state
-
 ## Form Testing
-- Always use a request context (`app.test_request_context()`) when testing forms.
-- Use `client.session_transaction()` to initialize and verify session data.
-- Ensure form creation and submission occur within the same context.
-- Verify CSRF tokens are properly generated and added to the session.
+- Initialize session with `client.get('/')` before form tests
+- Verify CSRF token presence and value in session
+- Keep form creation and validation in the same context
 
 ## Form Validation
 - Validate CSRF tokens in all forms
