@@ -14,6 +14,7 @@ class FlashMessages(str, Enum):
     GENERIC_ERROR = "An error occurred. Please try again."
 
     # User Management
+    USER_CREATED = "User created successfully."
     CREATE_USER_SUCCESS = "User created successfully."
     USERNAME_ALREADY_EXISTS = "Username already exists. Please choose a different username."
     CREATE_USER_ERROR = "Failed to create user: "
