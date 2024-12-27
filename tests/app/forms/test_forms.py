@@ -1,7 +1,7 @@
 import pytest
 from app import create_app
 from app.forms.admin_forms import OrganizationForm
-from config import TestConfig
+from app.config import TestConfig
 
 @pytest.fixture
 def app():
