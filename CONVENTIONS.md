@@ -9,6 +9,10 @@
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
 - Extract CSRF token from hidden input: `<input name="csrf_token" value="...">`
 - Verify flash messages in response HTML (don't rely on redirects)
+- For database errors:
+  - Return 400 status code
+  - Render template directly with error message
+  - Pass flash messages explicitly in template context
 - Test both valid and invalid CSRF scenarios
 - Always make a GET request before POST to establish session
 - For database error tests:

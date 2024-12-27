@@ -13,6 +13,7 @@
   - Render templates directly
   - Set flash message
   - Return 400 status
+  - Pass flash messages explicitly in template context
 - Ensure validation errors are properly propagated to form errors
 - Log details including error messages
 - Use enums for user feedback with appended error details when needed
