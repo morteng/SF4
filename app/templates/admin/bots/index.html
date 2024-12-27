@@ -9,7 +9,7 @@
         {% for bot in bots %}
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <p><strong>{{ bot.name }}</strong>: {{ bot.description }}</p>
-                <form hx-post="{{ url_for('admin.bot.run_bot', id=bot.id) }}" hx-target="#bots" hx-swap="outerHTML" class="mt-4">
+                <form hx-post="{{ url_for('admin.bot.run', id=bot.id) }}" hx-target="#bots" hx-swap="outerHTML" class="mt-4">
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Run Bot</button>
                 </form>
             </div>
