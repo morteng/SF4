@@ -38,6 +38,7 @@
 - Include CSRF token in all forms and HTMX requests
 - Ensure CSRF tokens are properly extracted in tests using `extract_csrf_token()`
 - Handle missing/invalid CSRF tokens with 400 status
+- Verify endpoint names follow blueprint naming pattern: `blueprint_name.view_name`
 
 ## Rate Limiting
 - Verify rate limits are enforced:
