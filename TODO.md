@@ -8,7 +8,7 @@
 - [ ] Fix profile form validation failure
 - [ ] Add error handling to debug form validation
 - [ ] Ensure CSRF tokens are properly handled in form tests
-- [ ] Add form validation tests
+- [x] Add form validation tests
 - [ ] Add comprehensive form validation tests
 - [ ] Ensure tests cover all form fields and edge cases
 - [ ] Debug and fix failing form tests
