@@ -27,6 +27,20 @@
   - Second: 0-59
 - **Error Messages**:
   - "Invalid time values (e.g., 25:61:61)"
+  - "Time is required. Please use YYYY-MM-DD HH:MM:SS"
+  - "Invalid date format. Please use YYYY-MM-DD HH:MM:SS"
+  - "Invalid date values (e.g., Feb 30)"
+  - "Date is required"
+  - "Time is required. Please use YYYY-MM-DD HH:MM:SS"
+
+### Test Cases
+1. Invalid date values (2023-13-32 99:99:99)
+2. Invalid month/day combinations (2023-02-30 12:00:00)
+3. Invalid time values (2023-01-01 25:61:61)
+4. Missing time components (2023-01-01)
+5. Invalid formats (invalid-date)
+6. Date range issues (2020-01-01 00:00:00)
+7. Edge cases (2023-02-29 12:00:00)
 
 ### Timezone Handling
 - **Input Type**: Must be a string or convertible to string

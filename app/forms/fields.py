@@ -40,6 +40,10 @@ class CustomDateTimeField(DateTimeField):
                 if not self._validate_date_components(parsed_dt):
                     return
                 
+                # Validate time components
+                if not self._validate_time_components(parsed_dt):
+                    return
+                
                 # If parsing succeeds, proceed with timezone handling
                 local_tz = timezone(self.timezone_str)
                 local_dt = local_tz.localize(parsed_dt, is_dst=None)
@@ -57,6 +61,23 @@ class CustomDateTimeField(DateTimeField):
                     self.errors.append(self.error_messages['invalid_date'])
             except pytz.UnknownTimeZoneError:
                 self.errors.append(self.error_messages['invalid_timezone'])
+
+    def _validate_time_components(self, dt):
+        try:
+            # Check if time components are valid
+            if dt.hour < 0 or dt.hour > 23:
+                self.errors.append(self.error_messages['invalid_time'])
+                return False
+            if dt.minute < 0 or dt.minute > 59:
+                self.errors.append(self.error_messages['invalid_time'])
+                return False
+            if dt.second < 0 or dt.second > 59:
+                self.errors.append(self.error_messages['invalid_time'])
+                return False
+            return True
+        except ValueError:
+            self.errors.append(self.error_messages['invalid_time'])
+            return False
 
     def _validate_date_components(self, dt):
         try:

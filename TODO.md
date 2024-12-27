@@ -21,6 +21,8 @@
   * Error messages must match test expectations exactly
   * Timezone parameter is now safely converted to string using str()
   * All datetime comparisons must be between timezone-aware datetimes
+  * Added separate validation for time components (hours, minutes, seconds)
+  * Improved error handling for invalid date/time combinations
 
 - When handling datetime validation:
   * Always convert input to UTC for comparison
