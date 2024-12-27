@@ -25,6 +25,7 @@
 - Include CSRF token in POST requests
 - Initialize session with a request (e.g., `client.get('/')`) before form creation
 - Add assertions to verify CSRF token presence in session
+- Verify the CSRF token value matches between form and session
 
 ### Form Testing
 - Always use an application context when testing forms

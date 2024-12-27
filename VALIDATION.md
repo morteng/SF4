@@ -35,6 +35,7 @@
 - Verify CSRF tokens are properly generated and validated
 - Initialize session with a request (e.g., `client.get('/')`) before creating forms
 - Verify CSRF token is present in session after form creation
+- Verify the CSRF token value matches between form and session
 - Ensure the session is initialized (e.g., via `client.get('/')`) before creating forms that rely on CSRF tokens
 - Verify the CSRF token is present in the session after form creation
 - Ensure test client maintains session state between requests
