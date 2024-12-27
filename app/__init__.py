@@ -42,12 +42,7 @@ def create_app(config_name='development'):
     from app.routes.admin.user_routes import limiter
     limiter.init_app(app)
 
-    # Register blueprints
-    from app.routes.admin import register_admin_blueprints
-    register_admin_blueprints(app)  # For admin routes
-
-    from app.routes import register_blueprints
-    register_blueprints(app)        # Register other blueprints
+    # Blueprints will be registered in the app context below
 
     # Add CSRF error handler
     from flask_wtf.csrf import CSRFError
@@ -58,6 +53,13 @@ def create_app(config_name='development'):
         return FlashMessages.CSRF_INVALID.value, 400
 
     with app.app_context():
+        # Register blueprints
+        from app.routes.admin import register_admin_blueprints
+        register_admin_blueprints(app)  # For admin routes
+
+        from app.routes import register_blueprints
+        register_blueprints(app)        # Register other blueprints
+        
         # Initialize extensions
         init_extensions(app)
         
