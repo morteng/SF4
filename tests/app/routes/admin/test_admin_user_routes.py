@@ -100,8 +100,8 @@ def extract_csrf_token(response_data):
     
     soup = BeautifulSoup(response_data, 'html.parser')
     
-    # Look for CSRF token in hidden input with id="csrf_token"
-    csrf_input = soup.find('input', {'id': 'csrf_token'})
+    # Look for CSRF token in hidden input with name="csrf_token"
+    csrf_input = soup.find('input', {'name': 'csrf_token'})
     if csrf_input:
         return csrf_input.get('value')
     
@@ -111,8 +111,8 @@ def extract_csrf_token(response_data):
         return meta_token.get('content')
     
     # Look for CSRF token in any hidden input as last resort
-    hidden_input = soup.find('input', {'type': 'hidden', 'name': 'csrf_token'})
-    if hidden_input:
+    hidden_input = soup.find('input', {'type': 'hidden'})
+    if hidden_input and hidden_input.get('name') == 'csrf_token':
         return hidden_input.get('value')
     
     logging.warning("CSRF token not found in response")
