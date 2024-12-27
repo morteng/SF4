@@ -2,6 +2,7 @@
 
 ## Current Goals
 1. **Template Improvements**
+   - [x] Verify all admin templates extend base.html
    - [ ] Add template inheritance tests
    - [ ] Verify proper error handling in all admin templates
 

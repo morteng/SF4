@@ -145,6 +145,12 @@
 - All templates must include required blocks (content, etc)
 - Flash messages must use _flash_messages.html partial
 
+### Best Practices
+- Use consistent template paths
+- Verify template includes work from any directory
+- Test template inheritance chain
+- Check for proper error handling in templates
+
 ### Timezone-aware Datetime Validation
 
 **Test Cases**:
