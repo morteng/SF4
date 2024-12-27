@@ -146,6 +146,11 @@
 - Improved error handling for missing templates
 - Added checks for required template blocks
 
+### Examples
+- Admin bot create template must extend base.html
+- All templates must include required blocks (content, etc)
+- Flash messages must use _flash_messages.html partial
+
 ### Timezone-aware Datetime Validation
 
 **Test Cases**:
