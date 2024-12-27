@@ -70,6 +70,11 @@
   * Timezone-aware datetimes must be converted to UTC using astimezone(pytz.UTC)
   * Comparisons between naive and timezone-aware datetimes will raise TypeError
 
+### Dependency Validation Improvements
+- Added test cases for requirements-parser package
+- Updated dependency validation to use RequirementsParser class
+- Added error handling for missing requirements-parser package
+
 ### Dependency Validation
 
 **Required Packages**:

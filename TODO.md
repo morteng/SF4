@@ -106,6 +106,8 @@
    - Add export functionality for audit logs
 
 ## Recent Fixes
+- Added requirements-parser to requirements.txt to fix dependency testing
+- Updated test_dependencies.py to use correct RequirementsParser import
 - Consolidated form templates into `admin/_form_template.html`
 - Standardized index templates using `admin/_index_template.html`
 - Added HTMX support for all CRUD operations

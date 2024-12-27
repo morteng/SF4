@@ -1,6 +1,6 @@
 import importlib
 import pytest
-from requirements.parser import parse
+from requirements.parser import RequirementsParser
 
 def test_flask_limiter_installed():
     """Verify flask-limiter is installed and importable"""
@@ -10,7 +10,8 @@ def test_flask_limiter_installed():
 def test_all_requirements_installed():
     """Verify all packages in requirements.txt are installed"""
     with open("requirements.txt") as f:
-        requirements = parse(f)
+        parser = RequirementsParser()
+        requirements = parser.parse(f)
     
     for req in requirements:
         try:
