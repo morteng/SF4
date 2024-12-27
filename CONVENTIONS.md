@@ -17,5 +17,10 @@
 - For optional fields, handle empty values explicitly in custom validators
 - Ensure test users remain bound to session during authentication tests
 - Use consistent CSRF error messages across all endpoints
-- Ensure datetime fields properly handle timezone conversion, string formatting, and future date validation
+- Ensure datetime fields properly handle:
+  - Timezone conversion
+  - String formatting
+  - Future date validation
+  - Leap year validation
+  - Invalid date detection (e.g., Feb 30)
 

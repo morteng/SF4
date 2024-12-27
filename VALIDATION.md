@@ -25,5 +25,10 @@
 - Handle empty values explicitly in custom validators
 - Ensure test users remain bound to session during authentication
 - Verify consistent error messages for CSRF validation failures
-- Ensure datetime fields properly handle timezone conversion, validation, and future date limits
+- Ensure datetime fields properly handle:
+  - Timezone conversion
+  - Validation
+  - Future date limits
+  - Leap year validation
+  - Invalid date detection
 

@@ -20,5 +20,10 @@
 - Clearly document field validation rules
 - Handle empty values explicitly in custom validators
 - Standardize CSRF error message handling across all endpoints
-- Ensure datetime fields handle string input, timezone-aware objects, and future date validation
+- Ensure datetime fields handle:
+  - String input
+  - Timezone-aware objects
+  - Future date validation
+  - Leap year validation
+  - Invalid date detection
 
