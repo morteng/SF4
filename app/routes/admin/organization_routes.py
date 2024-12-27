@@ -57,7 +57,7 @@ def index():
 @limiter.limit("10 per minute")
 @login_required
 @admin_required
-@admin_bp.notification_count
+@notification_count
 def create():
     """Create a new organization"""
     # Audit log creation
@@ -128,7 +128,7 @@ def create():
 @limiter.limit(ORG_RATE_LIMITS['delete'])
 @login_required
 @admin_required
-@admin_bp.notification_count
+@notification_count
 def delete(id):
     """
     Handle the deletion of an organization.
@@ -169,7 +169,7 @@ def delete(id):
 @admin_org_bp.route('/paginate/<int:page>', methods=['GET'])
 @login_required
 @admin_required
-@admin_bp.notification_count
+@notification_count
 def index(page=1):
     """List organizations with pagination"""
     per_page = 20  # Items per page
@@ -180,7 +180,7 @@ def index(page=1):
 @admin_org_bp.route('/<int:id>', methods=['GET'])
 @login_required
 @admin_required
-@admin_bp.notification_count
+@notification_count
 def view(id):
     """View organization details"""
     organization = get_organization_by_id(id)
@@ -193,7 +193,7 @@ def view(id):
 @limiter.limit(ORG_RATE_LIMITS['update'])
 @login_required
 @admin_required
-@admin_bp.notification_count
+@notification_count
 def edit(id):
     """Edit an existing organization"""
     organization = get_organization_by_id(id)
