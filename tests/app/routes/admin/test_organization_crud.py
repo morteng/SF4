@@ -18,9 +18,17 @@ def extract_csrf_token(response_data):
 
 def test_create_organization(logged_in_admin, db_session, organization_data):
     with logged_in_admin.application.app_context():
-        data = organization_data
-        response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
+        # Get CSRF token from the form
+        response = logged_in_admin.get(url_for('admin.organization.create'))
+        assert response.status_code == 200
+        csrf_token = extract_csrf_token(response.data)
 
+        # Include CSRF token in the POST data
+        data = organization_data.copy()
+        data['csrf_token'] = csrf_token
+
+        # Submit the form
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=data)
         assert response.status_code == 302
 
         expected_url = url_for('admin.organization.index', _external=False)
