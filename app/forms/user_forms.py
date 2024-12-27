@@ -22,7 +22,7 @@ class ProfileForm(FlaskForm):
         if username.data != self.original_username:
             user = User.query.filter_by(username=username.data).first()
             if user:
-                raise ValidationError('Username already exists.')
+                raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS.value)
 
     def validate_email(self, email):
         if email.data != self.original_email:
