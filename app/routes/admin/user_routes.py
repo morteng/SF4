@@ -75,9 +75,19 @@ def edit(id):
             obj=user
         )
         form.id.data = user.id
-    except ValueError as e:
-        flash_message(str(e), FlashCategory.ERROR.value)
-        return redirect(url_for('admin.user.index'))
+        
+        # Add role management
+        if request.method == 'POST' and form.validate_on_submit():
+            # Handle role changes
+            if 'is_admin' in request.form:
+                user.is_admin = request.form['is_admin'] == 'true'
+            
+            # Handle password reset
+            if 'reset_password' in request.form and request.form['reset_password'] == 'true':
+                user.set_password('temporary_password')  # Implement proper password reset logic
+                flash_message("Password reset initiated", FlashCategory.SUCCESS)
+                
+            db.session.commit()
     if request.method == 'POST' and form.validate_on_submit():
         try:
             update_user(user, form.data)

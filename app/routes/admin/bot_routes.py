@@ -65,18 +65,35 @@ def index():
 @admin_required
 def run(id):
     bot = get_bot_by_id(id)
-    if bot:
-        try:
-            run_bot(bot)
-            flash_message(FlashMessages.GENERIC_SUCCESS.value, FlashCategory.SUCCESS.value)  # Use generic success message for running a bot
-            current_app.logger.info(f"Flash message set: {FlashMessages.GENERIC_SUCCESS.value}")
-        except Exception as e:
-            db.session.rollback()
-            flash_message(f"{FlashMessages.GENERIC_ERROR.value}{str(e)}", FlashCategory.ERROR.value)
-            current_app.logger.error(f"Failed to run bot: {e}")
-    else:
-        flash_message(FLASH_MESSAGES["BOT_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific bot not found message
-        current_app.logger.error(f"Bot not found with id: {id}")
+    if not bot:
+        flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)
+        return redirect(url_for('admin.bot.index'))
+
+    try:
+        # Run the bot and capture results
+        result = run_bot(bot)
+        
+        # Update bot status and last run time
+        bot.status = result['status']
+        bot.last_run = datetime.utcnow()
+        db.session.commit()
+        
+        # Create appropriate notification
+        notification_type = NotificationType.BOT_SUCCESS if result['success'] else NotificationType.BOT_ERROR
+        notification = Notification(
+            message=f"Bot {bot.name} run completed: {result['message']}",
+            type=notification_type,
+            read_status=False
+        )
+        db.session.add(notification)
+        db.session.commit()
+        
+        flash_message(result['message'], FlashCategory.SUCCESS if result['success'] else FlashCategory.ERROR)
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Failed to run bot {bot.name}: {e}")
+        flash_message(f"Failed to run bot: {str(e)}", FlashCategory.ERROR)
+        
     return redirect(url_for('admin.bot.index'))
 
 @admin_bot_bp.route('/<int:id>/edit', methods=['GET', 'POST'])

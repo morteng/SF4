@@ -34,6 +34,11 @@ def create():
     if request.method == 'POST':
         if form.validate_on_submit():
             try:
+                # Validate application deadline
+                if form.application_deadline.data and form.application_deadline.data < datetime.utcnow():
+                    flash_message("Application deadline cannot be in the past", FlashCategory.ERROR)
+                    return render_template('admin/stipends/create.html', form=form), 400
+
                 stipend_data = {
                     'name': form.name.data,
                     'summary': form.summary.data,
@@ -43,7 +48,8 @@ def create():
                     'eligibility_criteria': form.eligibility_criteria.data,
                     'application_deadline': form.application_deadline.data,
                     'organization_id': form.organization_id.data,
-                    'open_for_applications': form.open_for_applications.data
+                    'open_for_applications': form.open_for_applications.data,
+                    'tags': form.tags.data  # Add tag support
                 }
                 
                 new_stipend = create_stipend(stipend_data)
