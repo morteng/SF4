@@ -17,7 +17,7 @@
   - Timezone conversion
   - String formatting
   - Future date validation
-  - Leap year validation (including Feb 29 in non-leap years)
+  - Leap year validation (including Feb 29 in non-leap years) with specific error message
   - Invalid date detection with clear error messages
 - CSRF tokens required in all forms (can be disabled in tests using meta={'csrf': False})
 - Always include required fields in test data

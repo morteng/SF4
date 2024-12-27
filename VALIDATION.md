@@ -23,7 +23,7 @@
 - Validate leap year dates and return clear error messages
 - Custom date fields must provide specific error messages for:
   - Invalid date formats
-  - Leap year violations
+  - Leap year violations (including Feb 29 in non-leap years)
   - Timezone conversion errors
 - Log details
 - Use enums for user feedback
