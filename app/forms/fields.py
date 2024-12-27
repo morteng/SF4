@@ -29,11 +29,11 @@ class CustomDateTimeField(DateTimeField):
         date_str = valuelist[0]
         print(f"process_formdata called with date_str: {date_str}")  # Add this line
             
-            # First check for leap year dates
-            print(f"Date string: {date_str}")
-            if '02-29' in date_str:
-                print("Found 02-29 in date string")
-                try:
+        # First check for leap year dates
+        print(f"Date string: {date_str}")
+        if '02-29' in date_str:
+            print("Found 02-29 in date string")
+            try:
                     # Extract just the date portion
                     date_part = date_str.split()[0]
                     parsed_date = datetime.strptime(date_part, '%Y-%m-%d')
