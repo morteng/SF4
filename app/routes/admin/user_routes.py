@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from app.constants import FlashMessages, FlashCategory
 from app.forms.admin_forms import UserForm
 from app.forms.user_forms import ProfileForm
-from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user
+from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user, search_users
 from app.utils import admin_required, flash_message, format_error_message
 import logging
 from app.extensions import db  # Import the db object
