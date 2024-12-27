@@ -250,6 +250,13 @@
 - Logs validation errors
 - Preserves form state
 
+### Validation Improvements
+- Added template inheritance validation
+- Improved form validation with specific error messages
+- Added status field validation
+- Enhanced template error display
+- Added HTMX endpoint validation
+
 ### Test Cases
 1. **Create Bot**
    - Verify template inheritance from base.html
