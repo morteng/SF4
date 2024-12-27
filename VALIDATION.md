@@ -128,6 +128,24 @@
 - "Package version mismatch in requirements.txt"
 - "Rate limiting not properly configured"
 
+## Template Validation
+
+### Test Cases
+1. Verify all templates extend the correct base template
+2. Check for proper use of flash messages
+3. Validate form error handling
+4. Test template inheritance chain
+
+### Error Messages
+- "Template not found: {template_name}"
+- "Missing required block: {block_name}"
+- "Invalid template inheritance"
+
+### Validation Improvements
+- Added template inheritance validation
+- Improved error handling for missing templates
+- Added checks for required template blocks
+
 ### Timezone-aware Datetime Validation
 
 **Test Cases**:
