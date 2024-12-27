@@ -27,6 +27,7 @@
 - Add CSRF meta tag in base template for HTMX
 - Validate CSRF tokens in all POST requests
 - Return 400 for invalid/missing CSRF tokens
+- Extract CSRF token in tests using `extract_csrf_token()`
 
 ### Notification Badges
 - All admin templates must include a notification badge.

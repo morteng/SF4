@@ -27,6 +27,8 @@
 - Include in forms: `<input name="csrf_token" value="{{ csrf_token }}">`
 - Add meta tag for HTMX: `<meta name="csrf-token" content="{{ csrf_token }}">`
 - Return 400 for invalid/missing tokens
+- Ensure CSRF token is properly extracted in tests
+- Verify CSRF token presence in all form submissions
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests

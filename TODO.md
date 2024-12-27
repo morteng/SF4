@@ -1,11 +1,12 @@
 # TODO List
 ## High Priority
 - [x] Core CRUD & security
-- [ ] Testing:
+- [x] Testing:
   - Admin routes
   - User request handling
   - HTMX integration
   - Rate limiting (org CRUD)
+- [ ] Fix datetime.utcnow() deprecation warnings
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
