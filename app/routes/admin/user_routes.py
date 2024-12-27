@@ -31,9 +31,6 @@ limiter = Limiter(
 @admin_required
 def create():
     """Create a new user with proper validation and audit logging"""
-    if not current_app:
-        return redirect(url_for('admin.dashboard.dashboard'))
-        
     form = UserForm()
     notification_count = get_notification_count(current_user.id)
     
