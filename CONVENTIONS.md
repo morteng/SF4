@@ -11,5 +11,5 @@
 - This file is a summary of our notable achievements. If it gets too long, collaps and summarise it. Any key learnings that are new should be added to the TODO.md files knowledge. 
 
 # VALIDATION.md
-- This file is a summary of our validation tests. Update it and expand it when you need to.
+- A summary of our validation tests. Update it and expand it when you need to.
 
