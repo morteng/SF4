@@ -12,7 +12,7 @@ def test_testing_config():
     assert config.DEBUG is False
     assert config.TESTING is True
     assert config.SQLALCHEMY_DATABASE_URI == 'sqlite:///:memory:'
-    assert config.WTF_CSRF_ENABLED is False
+    assert config.WTF_CSRF_ENABLED is True  # Changed from False to True
 
 def test_production_config():
     config = ProductionConfig()
