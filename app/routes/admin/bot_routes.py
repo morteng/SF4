@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string, get_flashed_messages
+from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string, get_flashed_messages, jsonify
 from flask_login import login_required
 from app.models.notification import Notification, NotificationType
 from app.forms.admin_forms import BotForm
@@ -97,14 +97,9 @@ def run(id):
             read_status=False
         )
         
-        # Add error log if bot failed
+        # Add error notification if bot failed
         if not result['success']:
-            error_log = BotErrorLog(
-                bot_id=bot.id,
-                error_message=result['message'],
-                timestamp=datetime.utcnow()
-            )
-            db.session.add(error_log)
+            current_app.logger.error(f"Bot {bot.name} failed: {result['message']}")
         
         db.session.add(notification)
         db.session.commit()
