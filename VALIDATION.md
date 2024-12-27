@@ -25,6 +25,7 @@
   - Invalid date formats
   - Leap year violations (including Feb 29 in non-leap years)
   - Timezone conversion errors
+  - Missing/empty values
 - Log details
 - Use enums for user feedback
 - Preserve form state
