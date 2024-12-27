@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, flash, session
+from app.services.notification_service import get_notification_count
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import generate_csrf
@@ -32,6 +33,7 @@ def init_rate_limiter(app):
 @admin_required
 def create():
     form = UserForm()
+    notification_count = get_notification_count(current_user.id)
     if form.validate_on_submit():
         try:
             new_user = create_user(form.data)
@@ -45,6 +47,7 @@ def create():
                 return render_template('admin/users/_create_form.html', form=form), 400
             return render_template('admin/users/create.html', 
                                 form=form,
+                                notification_count=notification_count,
                                 form_title='Create User'), 400
         except Exception as e:
             db.session.rollback()
@@ -77,7 +80,9 @@ def create():
                     field_errors[field_name].append(msg)
                     flash_message(msg, FlashCategory.ERROR.value)
             flash_message(FlashMessages.CREATE_USER_INVALID_DATA.value, FlashCategory.ERROR.value)
-    return render_template('admin/users/create.html', form=form)
+    return render_template('admin/users/create.html', 
+                         form=form,
+                         notification_count=notification_count)
 
 @admin_user_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
