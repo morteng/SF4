@@ -29,7 +29,9 @@ class CustomDateTimeField(DateTimeField):
                 return
             
             # First check for leap year dates
+            print(f"Date string: {date_str}")
             if '02-29' in date_str:
+                print("Found 02-29 in date string")
                 try:
                     # Extract just the date portion
                     date_part = date_str.split()[0]
@@ -38,33 +40,36 @@ class CustomDateTimeField(DateTimeField):
                         year = parsed_date.year
                         is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
                         if not is_leap:
+                            print("Not a leap year, appending error")
                             self.errors = []
                             self.errors.append(self.error_messages['invalid_leap_year'])
+                            print(f"Errors after appending: {self.errors}")
                             return
                 except ValueError:
+                    print("ValueError during leap year check")
                     pass
-            
+
             try:
                 # Try to parse the full date string
                 parsed_dt = datetime.strptime(date_str, self.format)
-                
+
                 # Validate time components
                 if not self._validate_time_components(parsed_dt):
                     return
-                
+
                 # Validate date components
                 if not self._validate_date_components(parsed_dt):
                     return
-                
+
                 # If all validations pass, proceed with timezone handling
                 local_tz = timezone(self.timezone_str)
                 local_dt = local_tz.localize(parsed_dt, is_dst=None)
                 self.data = local_dt.astimezone(utc)
                 self.raw_value = date_str
-                
+
             except ValueError as e:
                 error_str = str(e)
-                
+
                 # Handle specific error cases
                 if 'does not match format' in error_str:
                     self.errors.append(self.error_messages['invalid_format'])
