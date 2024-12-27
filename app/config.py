@@ -23,6 +23,7 @@ class Config(object):
     RATELIMIT_STORAGE_URI = 'memory://'  # For development, use Redis in production
     RATELIMIT_STRATEGY = 'fixed-window'
     RATELIMIT_DEFAULT = "200 per day;50 per hour"
+    RATELIMIT_USER_MANAGEMENT = "10 per minute"  # Rate limit for user management endpoints
 
 class TestConfig(Config):
     DEBUG = False

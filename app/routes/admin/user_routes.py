@@ -7,11 +7,19 @@ from app.forms.user_forms import ProfileForm
 from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user, search_users
 from app.utils import admin_required, flash_message, format_error_message
 import logging
+from datetime import datetime
 from app.extensions import db  # Import the db object
 
 admin_user_bp = Blueprint('user', __name__, url_prefix='/users')
 
+# Initialize rate limiter
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=[current_app.config['RATELIMIT_USER_MANAGEMENT']]
+)
+
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")  # More restrictive limit for user creation
 @login_required
 @admin_required
 def create():
@@ -113,6 +121,7 @@ def edit(id):
         return redirect(url_for('admin.user.index')), 500
 
 @admin_user_bp.route('/<int:id>/delete', methods=['POST'])
+@limiter.limit("3 per minute")  # More restrictive limit for user deletion
 @login_required
 @admin_required
 def delete(id):
@@ -132,6 +141,7 @@ def delete(id):
         return redirect(url_for('admin.user.index')), 500
 
 @admin_user_bp.route('/edit_profile', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")  # Rate limit for profile edits
 @login_required
 @admin_required
 def edit_profile():
