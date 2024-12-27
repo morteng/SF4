@@ -1,4 +1,7 @@
 import logging
+from functools import wraps
+from flask_login import current_user
+from app.models.notification import Notification
 from app.services.notification_service import get_notification_count
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import current_user, login_required
@@ -40,7 +43,7 @@ csrf = CSRFProtect()
 @limiter.limit("10 per minute")
 @login_required
 @admin_required
-@notification_count
+@admin_bp.notification_count
 def create():
     """Create new organization with audit logging and notifications"""
     form = OrganizationForm()
@@ -100,6 +103,8 @@ def create():
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
 @limiter.limit(ORG_RATE_LIMITS['delete'])
 @login_required
+@admin_required
+@admin_bp.notification_count
 def delete(id):
     """
     Handle the deletion of an organization.
@@ -138,7 +143,8 @@ def delete(id):
 
 @admin_org_bp.route('/', methods=['GET'])
 @login_required
-@notification_count
+@admin_required
+@admin_bp.notification_count
 def index():
     organizations = get_all_organizations()
     return render_template('admin/organizations/index.html', 
@@ -147,6 +153,8 @@ def index():
 @admin_org_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @limiter.limit(ORG_RATE_LIMITS['update'])
 @login_required
+@admin_required
+@admin_bp.notification_count
 def edit(id):
     organization = get_organization_by_id(id)
     if not organization:
