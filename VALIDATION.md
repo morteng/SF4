@@ -131,7 +131,7 @@
 ## Template Validation
 
 ### New Test Cases
-1. Verify all admin templates extend base.html
+1. Verify all admin templates extend admin/layout.html
 2. Check for proper template inheritance chain
 3. Validate template rendering for all admin routes
 
@@ -141,8 +141,8 @@
 - "Missing required block: {block_name}"
 
 ### Examples
-- Admin bot create template must extend base.html
-- All templates must include required blocks (content, etc)
+- Admin bot edit template must extend admin/layout.html
+- All templates must include required blocks (admin_content, etc)
 - Flash messages must use _flash_messages.html partial
 
 ### Timezone-aware Datetime Validation

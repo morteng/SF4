@@ -2,11 +2,31 @@
 
 ## Current Goals
 1. **Improve Test Coverage**
-   - [ ] Add more test cases for bot routes
+   - [x] Add more test cases for bot routes
    - [ ] Add test cases for form validation
    - [ ] Verify error handling for all admin routes
    - [ ] Test edge cases for form validation
    - [ ] Add tests for template rendering
+
+2. **Form Validation Improvements**
+   - [ ] Add validation for bot status field
+   - [ ] Improve error message consistency
+   - [ ] Add validation for bot description length
+
+## Knowledge & Memories
+- **Template Structure**
+  * Admin templates should extend admin/layout.html
+  * admin/layout.html extends base.html
+  * Use consistent block names (admin_content for admin pages)
+  * Include admin sidebar in all admin pages
+  * Use proper form error handling with invalid-feedback class
+
+- **Testing Best Practices**
+  * Verify template inheritance chain in tests
+  * Check for proper error handling in templates
+  * Test both success and failure cases
+  * When testing forms, always include CSRF token
+  * Use constants for flash messages to ensure consistency
 
 2. **Form Validation Improvements**
    - [ ] Add validation for bot status field
