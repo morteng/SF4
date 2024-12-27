@@ -13,5 +13,5 @@
 - Return appropriate status codes:
   - 200 for success
   - 400 for validation/database errors
-  - Maintain error status codes through redirects
+  - Render templates directly for error responses instead of redirecting
 

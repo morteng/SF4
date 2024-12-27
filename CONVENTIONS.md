@@ -8,9 +8,10 @@
 ### Testing with CSRF and Error Handling
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
 - Extract CSRF token from hidden input: `<input name="csrf_token" value="...">`
-- Verify flash messages in response HTML after redirects
+- Verify flash messages in response HTML (don't rely on redirects)
 - Test both valid and invalid CSRF scenarios
 - Always make a GET request before POST to establish session
+- For database error tests, verify flash messages directly in response
 - For error scenarios:
   - Check response status codes (400 for errors)
   - Verify flash messages
