@@ -1,7 +1,7 @@
 import pytest
 import logging
 import re
-from datetime import datetime
+from datetime import datetime, UTC
 from flask import url_for
 from app.services.user_service import get_all_users
 from flask_login import current_user
@@ -217,6 +217,9 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
             "CSRF token not found in response. If already logged in, ensure the dashboard template includes a CSRF token"
         
             
+        # Refresh the test_user instance to ensure it's attached to the session
+        db_session.refresh(test_user)
+
         # Perform login with CSRF token
         login_response = logged_in_admin.post('/login', data={
             'username': test_user.username,
@@ -281,19 +284,19 @@ def test_get_all_users_sorting(db_session):
     user1 = User(
         username='user1',
         email='user1@example.com',
-        created_at=datetime(2024, 1, 1),
+        created_at=datetime(2024, 1, 1, tzinfo=UTC),
         password_hash='hash1'
     )
     user2 = User(
         username='user2',
         email='user2@example.com',
-        created_at=datetime(2024, 1, 2),
+        created_at=datetime(2024, 1, 2, tzinfo=UTC),
         password_hash='hash2'
     )
     user3 = User(
         username='user3',
         email='user3@example.com',
-        created_at=datetime(2024, 1, 3),
+        created_at=datetime(2024, 1, 3, tzinfo=UTC),
         password_hash='hash3'
     )
     db_session.add_all([user1, user2, user3])
