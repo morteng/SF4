@@ -1,98 +1,26 @@
 # Validation Rules
 
 ## Validation Principles
-### Input Validation
 - Validate all form inputs client and server side
-- Use Enum constants (FlashMessages, FlashCategory)
-- Centralized test utilities in tests/utils.py
-- Factory functions for consistent test data
-- Type hints for all function signatures
-- Detailed docstrings for test functions
-
-### Error Handling
-- Use FlashMessages for consistent error messages
-- Log detailed error information using logger
-- Use context managers for database operations
-- Rollback database sessions on errors
-- Verify database state after operations
-
-### Security
-- Use CSRF tokens for all forms
-- Implement rate limiting for sensitive endpoints
-- Validate and sanitize all URLs
-- Use type hints for better code clarity
+- Use Enum constants for consistent messages
+- Centralize test utilities in tests/utils.py
+- Use factory functions for test data
 - Verify both success and failure scenarios
 
 ## Form Validation
-
 ### Organization Form
-- **Name**:
-  - Required
-  - Max length: 100 characters
-  - Error messages:
-    - "Name is required"
-    - "Name must be between 1 and 100 characters"
-    
-- **Homepage URL**:
-  - Optional
-  - Must be valid URL if provided
-  - Must start with http:// or https://
-  - Validated using validate_url utility
-
-- **Description**:
-  - Required
-  - Max length: 500 characters
-  - Error messages:
-    - "Description is required"
-    - "Description must be less than 500 characters"
-
-- **Homepage URL**:
-  - Optional
-  - Must be valid URL if provided
-  - Must start with http:// or https://
-  - Error messages:
-    - "Invalid URL format"
-
-### Test Cases
-1. **Valid Inputs**:
-   - Name: "Test Organization"
-   - Description: "Test description"
-   - Homepage URL: "https://example.org"
-
-2. **Invalid Inputs**:
-   - Name: "" (empty)
-   - Name: "Org@123!" (special characters)
-   - Description: "a" * 501 (too long)
-   - Homepage URL: "invalid-url"
+- **Name**: Required, max 100 chars
+- **Homepage URL**: Optional, valid URL
+- **Description**: Required, max 500 chars
 
 ## Error Handling Patterns
-
-### Database Errors
 - Rollback session on error
 - Log detailed error information
 - Display user-friendly message
 - Preserve form state
 
-### Form Validation Errors
-- Display field-specific messages
-- Highlight invalid fields
-- Preserve valid input
-- Log validation errors
-
 ## Security Best Practices
-
-### Input Sanitization
 - Use bleach to clean all user input
-- Strip whitespace from text fields
-- Validate URLs before processing
-
-### CSRF Protection
 - Require CSRF token for all POST requests
-- Validate token on server side
-- Generate new token for each form
-
-### Rate Limiting
 - Implement rate limiting for admin routes
-- Use Flask-Limiter for configuration
-- Log rate limit violations
 
