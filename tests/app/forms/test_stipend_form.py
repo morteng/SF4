@@ -102,8 +102,8 @@ def test_leap_year_validation(app, form_data):
         csrf_token = form.csrf_token.current_token
         form_data['csrf_token'] = csrf_token
 
-        # Valid leap year date (use a distant future date)
-        form_data['application_deadline'] = '2100-02-28 12:00:00'
+        # Valid leap year date within 5-year limit
+        form_data['application_deadline'] = '2028-02-29 12:00:00'  # 2028 is a leap year
         form = StipendForm(data=form_data, meta={'csrf': False})
         if not form.validate():
             print("Validation errors:", form.errors)
