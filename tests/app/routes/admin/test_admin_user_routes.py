@@ -188,15 +188,18 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
     
     # Log in the admin user
     with logged_in_admin:
-        # Check if we're already logged in by accessing a protected page
-        index_response = logged_in_admin.get('/admin/dashboard')
-            
-        if index_response.status_code == 302:
-            # Already logged in, get CSRF token from the redirected page
-            redirected_response = logged_in_admin.get(index_response.headers['Location'])
-            csrf_token = extract_csrf_token(redirected_response.data)
+        # First verify if we're already logged in
+        with logged_in_admin.session_transaction() as session:
+            is_logged_in = '_user_id' in session
+                
+        if is_logged_in:
+            # If already logged in, get CSRF token from a protected page
+            dashboard_response = logged_in_admin.get('/admin/dashboard')
+            assert dashboard_response.status_code == 200, \
+                f"Dashboard failed with status {dashboard_response.status_code}"
+            csrf_token = extract_csrf_token(dashboard_response.data)
         else:
-            # Not logged in, get CSRF token from login page
+            # If not logged in, get CSRF token from login page
             login_get_response = logged_in_admin.get('/login')
             assert login_get_response.status_code == 200, \
                 f"Login page failed with status {login_get_response.status_code}"
