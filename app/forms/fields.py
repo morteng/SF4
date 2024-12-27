@@ -66,19 +66,20 @@ class CustomDateTimeField(DateTimeField):
                             is_leap = (parsed_date.year % 4 == 0 and 
                                       (parsed_date.year % 100 != 0 or parsed_date.year % 400 == 0))
                             if not is_leap:
-                                raise ValidationError(self.error_messages['invalid_leap_year'])
+                                self.errors.append(self.error_messages['invalid_leap_year'])
+                                return
                     except ValueError:
                         pass
                 
                 # Handle other error cases
                 if 'does not match format' in error_str:
-                    raise ValidationError(self.error_messages['invalid_format'])
+                    self.errors.append(self.error_messages['invalid_format'])
                 elif 'day is out of range' in error_str or 'month is out of range' in error_str or 'day must be in' in error_str:
-                    raise ValidationError(self.error_messages['invalid_date'])
+                    self.errors.append(self.error_messages['invalid_date'])
                 elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
-                    raise ValidationError(self.error_messages['invalid_time'])
+                    self.errors.append(self.error_messages['invalid_time'])
                 else:
-                    raise ValidationError(self.error_messages['invalid_date'])
+                    self.errors.append(self.error_messages['invalid_date'])
             except ValidationError as e:
                 self.errors.append(str(e))
             except pytz.UnknownTimeZoneError:
