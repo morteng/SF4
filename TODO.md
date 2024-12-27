@@ -1,12 +1,7 @@
 # TODO List
 ## High Priority
-- [x] Fix CSRF token initialization in form tests
-- [x] Add session initialization checks in form tests
-- [x] Verify CSRF token presence in session after form creation
-- [x] Verify CSRF token value matches between form and session
 - [ ] Add CRUD integration tests
 - [ ] Increase test coverage to 80%+
-- [ ] Document session initialization requirements in test cases
 
 ## Best Practices
 - Validate & sanitize all inputs
