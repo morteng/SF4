@@ -12,27 +12,19 @@
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+/code implement the suggested changes
 
 /test
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+/code implement the suggested changes
 
 /test
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
+/code implement the suggested changes
 
 /test
 
@@ -55,27 +47,19 @@
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+/code implement the suggested changes
 
 /test
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+/code implement the suggested changes
 
 /test
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
+/code implement the suggested changes
 
 /test
 
@@ -98,27 +82,19 @@
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+/code implement the suggested changes
 
 /test
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+/code implement the suggested changes
 
 /test
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
+/code implement the suggested changes
 
 /test
 
@@ -141,27 +117,19 @@
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+/code implement the suggested changes
 
 /test
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+/code implement the suggested changes
 
 /test
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
+/code implement the suggested changes
 
 /test
 
