@@ -38,7 +38,7 @@ def create():
                     msg = format_error_message(field, error)
                     error_messages.append(msg)
                     field_errors[field_name].append(msg)
-                    flash_message(msg, FLASH_CATEGORY_ERROR)
+                    flash_message(msg, FlashCategory.ERROR.value)
             if not form.validate_on_submit():
                 flash_message(FlashMessages.CREATE_USER_INVALID_DATA.value, FlashCategory.ERROR.value)
     return render_template('admin/users/create.html', form=form)
@@ -115,7 +115,7 @@ def edit_profile():
     else:
         for field, errors in form.errors.items():
             for error in errors:
-                flash_message(error, FLASH_CATEGORY_ERROR)  # Flash each error message using flash_message
+                flash_message(error, FlashCategory.ERROR.value)  # Flash each error message using flash_message
     return render_template('admin/users/edit_profile.html', form=form)
 
 @admin_user_bp.route('/', methods=['GET'])
