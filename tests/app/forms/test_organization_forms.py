@@ -29,10 +29,21 @@ def test_organization_form_valid_data(app):
 
 def test_organization_form_required_fields(app):
     """Test organization form with missing required fields"""
-    with app.app_context():
-        form = OrganizationForm(data={})
-        assert form.validate() is False
-        assert 'This field is required.' in form.name.errors
+    with app.test_request_context():
+        # Initialize session and CSRF token
+        client = app.test_client()
+        client.get('/')  # Access any route to initialize session
+        
+        with client.session_transaction() as session:
+            form = OrganizationForm(
+                data={},
+                meta={'csrf': False}  # Disable CSRF for testing
+            )
+            assert not form.validate()
+            assert 'name' in form.errors
+            assert 'description' in form.errors
+            assert 'homepage_url' in form.errors
+            assert 'This field is required.' in form.name.errors
 
 def test_organization_form_name_validation(app):
     """Test organization name validation rules"""
