@@ -112,23 +112,26 @@ def test_organization_form_url_validation(app):
             )
             assert form.validate() is True
 
-def test_organization_form_description_validation(app):
+def test_organization_form_description_validation(app, client):
     """Test description field validation"""
-    with app.app_context():
+    with app.test_request_context():
+        # Initialize session and CSRF token
+        client.get('/')
+        
         # Test max length
         long_desc = 'a' * 501
         form = OrganizationForm(data={
             'name': 'Valid Org',
             'description': long_desc,
             'homepage_url': 'https://valid.org'
-        })
-        assert form.validate() is False
-        assert 'Field must be between 0 and 500 characters long.' in form.description.errors
+        }, meta={'csrf': False})
+        assert not form.validate()
+        assert 'Description cannot exceed 500 characters.' in form.description.errors
 
         # Test optional field
         form = OrganizationForm(data={
             'name': 'Valid Org',
             'description': '',
             'homepage_url': 'https://valid.org'
-        })
+        }, meta={'csrf': False})
         assert form.validate() is True
