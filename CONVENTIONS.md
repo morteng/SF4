@@ -13,6 +13,12 @@
 - Validate all inputs, including leap year dates and invalid date combinations
 - Leap year validation must explicitly check for February 29th in non-leap years
 - Ensure date validation errors are properly propagated to form errors
+- Custom date fields must handle:
+  - Timezone conversion
+  - String formatting
+  - Future date validation
+  - Leap year validation (including Feb 29 in non-leap years)
+  - Invalid date detection with clear error messages
 - CSRF tokens required in all forms (can be disabled in tests using meta={'csrf': False})
 - Always include required fields in test data
 - Rate limit sensitive endpoints

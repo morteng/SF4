@@ -8,6 +8,7 @@
 - Validate & sanitize all inputs, including explicit leap year validation for February 29th
 - Verify date validation error propagation in form handling
 - Ensure test data includes all required fields
+- Implement proper error message handling for custom date fields
 - Disable CSRF in tests when appropriate
 - Test CSRF protection in all form submissions
 - Verify proper error responses for invalid CSRF

@@ -21,6 +21,10 @@
 - Leap year validation must return specific error message for February 29th in non-leap years
 - Ensure validation errors are properly propagated to form errors
 - Validate leap year dates and return clear error messages
+- Custom date fields must provide specific error messages for:
+  - Invalid date formats
+  - Leap year violations
+  - Timezone conversion errors
 - Log details
 - Use enums for user feedback
 - Preserve form state
