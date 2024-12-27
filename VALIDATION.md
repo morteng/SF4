@@ -18,6 +18,7 @@
 
 ## Error Handling
 - Rollback on error
+- Leap year validation must return specific error message for February 29th in non-leap years
 - Ensure validation errors are properly propagated to form errors
 - Validate leap year dates and return clear error messages
 - Log details

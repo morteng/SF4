@@ -5,7 +5,7 @@
 - [ ] Increase test coverage to 80%+
 
 ## Best Practices
-- Validate & sanitize all inputs, including date validation for leap years
+- Validate & sanitize all inputs, including explicit leap year validation for February 29th
 - Verify date validation error propagation in form handling
 - Ensure test data includes all required fields
 - Disable CSRF in tests when appropriate

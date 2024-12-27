@@ -11,6 +11,7 @@
 
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
+- Leap year validation must explicitly check for February 29th in non-leap years
 - Ensure date validation errors are properly propagated to form errors
 - CSRF tokens required in all forms (can be disabled in tests using meta={'csrf': False})
 - Always include required fields in test data
