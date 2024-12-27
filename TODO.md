@@ -1,6 +1,7 @@
 # TODO List
 ## High Priority
 - [x] Fix CSRF token initialization in form tests
+- [x] Add session initialization checks in form tests
 - [ ] Add session initialization checks in form tests
 - [ ] Add CRUD integration tests
 - [ ] Increase test coverage to 80%+

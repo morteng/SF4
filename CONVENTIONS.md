@@ -9,6 +9,8 @@
 - Always make an initial request (e.g., `client.get('/')`) before form creation
 - Verify CSRF token presence and value in session
 - Keep form creation and submission in the same context
+- Use `client.session_transaction()` to verify session state
+- Compare form-generated CSRF token with session token
 
 ### Form Testing
 - Always use an application context when testing forms

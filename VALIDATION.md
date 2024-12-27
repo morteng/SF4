@@ -26,6 +26,8 @@
 - Keep form creation and validation in the same context
 - Ensure test client maintains session state between requests
 - Add assertions to verify CSRF token presence in session
+- Use `client.session_transaction()` to access and verify session data
+- Compare form-generated CSRF token with session token
 - Ensure the session is initialized (e.g., via `client.get('/')`) before creating forms that rely on CSRF tokens
 - Verify the CSRF token is present in the session after form creation
 - Ensure all required fields are properly set
