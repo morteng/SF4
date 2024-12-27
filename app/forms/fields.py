@@ -60,8 +60,8 @@ class CustomDateTimeField(DateTimeField):
             except ValueError as e:
                 error_str = str(e)
                 
-                # Check if the error is specifically about February 29th
-                if 'day is out of range for month' in error_str:
+                # First check if this is a leap year error
+                if 'day is out of range for month' in error_str or 'day must be in' in error_str:
                     try:
                         # Try parsing just the date portion
                         date_part = date_str.split()[0]
@@ -70,6 +70,8 @@ class CustomDateTimeField(DateTimeField):
                             year = parsed_date.year
                             is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
                             if not is_leap:
+                                # Clear any existing errors to ensure our specific message is shown
+                                self.errors = []
                                 self.errors.append(self.error_messages['invalid_leap_year'])
                                 return
                     except ValueError:
@@ -78,12 +80,8 @@ class CustomDateTimeField(DateTimeField):
                 # Handle other error cases
                 if 'does not match format' in error_str:
                     self.errors.append(self.error_messages['invalid_format'])
-                elif 'day is out of range' in error_str or 'month is out of range' in error_str or 'day must be in' in error_str:
-                    # Check if this is specifically a leap year error
-                    if '29' in error_str and 'February' in error_str:
-                        self.errors.append(self.error_messages['invalid_leap_year'])
-                    else:
-                        self.errors.append(self.error_messages['invalid_date'])
+                elif 'day is out of range' in error_str or 'month is out of range' in error_str:
+                    self.errors.append(self.error_messages['invalid_date'])
                 elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
                     self.errors.append(self.error_messages['invalid_time'])
                 else:
