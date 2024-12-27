@@ -37,6 +37,8 @@ def test_create_user_route(logged_in_admin, user_data):
         'username': user_data['username'],
         'email': user_data['email'],
         'password': user_data['password'],
+        'is_admin': False,  # Required BooleanField
+        'submit': 'Create',  # Required SubmitField
         'csrf_token': csrf_token
     }, follow_redirects=True)
     
