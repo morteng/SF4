@@ -46,6 +46,8 @@ class CustomDateTimeField(DateTimeField):
                 local_tz = timezone(self.timezone_str)
                 local_dt = local_tz.localize(parsed_dt, is_dst=None)
                 self.data = local_dt.astimezone(utc)
+                # Store the raw string value for form display
+                self.raw_value = date_str
                 
             except ValueError as e:
                 error_str = str(e)
@@ -101,6 +103,8 @@ class CustomDateTimeField(DateTimeField):
             return False
 
     def _value(self):
+        if hasattr(self, 'raw_value'):
+            return self.raw_value
         if self.raw_data:
             return " ".join(self.raw_data)
         if self.data:
