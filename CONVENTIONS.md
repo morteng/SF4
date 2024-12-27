@@ -1,6 +1,7 @@
 ## Coding Conventions
 ### Testing
 - test config is in tests\conftest.py
+- Use `from app.config import TestConfig` for importing test configuration
 - Use enums for message types
 - Verify UI & DB state
 - Use fixtures & parameterized tests

@@ -1,5 +1,6 @@
 # TODO List
 ## High Priority
+- [ ] Fix `TestConfig` import in test files
 - [x] Add CSRF protection to all forms
 - [x] Fix CSRF token handling in profile form test
 - [x] Investigate CSRF token handling in form tests
