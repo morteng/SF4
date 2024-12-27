@@ -33,6 +33,17 @@ def admin_required(f):
             return redirect(url_for('public.login'))
             
         if not current_user.is_admin:
+            # Create audit log for unauthorized access attempt
+            AuditLog.create(
+                user_id=current_user.id if current_user.is_authenticated else None,
+                action='unauthorized_access',
+                object_type='AdminPanel',
+                details=f'Attempted access to {request.path}'
+            )
+            flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
+            return abort(403)
+            
+        if not current_user.is_admin:
             flash_message(FlashMessages.ADMIN_REQUIRED.value, FlashCategory.ERROR.value)
             return abort(403)
             

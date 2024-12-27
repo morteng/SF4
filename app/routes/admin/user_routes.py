@@ -30,6 +30,31 @@ limiter = Limiter(
 @login_required
 @admin_required
 def create():
+    """Create a new user with audit logging and validation"""
+    form = UserForm()
+    if form.validate_on_submit():
+        try:
+            # Create user with audit logging
+            user = User(
+                username=form.username.data,
+                email=form.email.data,
+                password=form.password.data,
+                is_admin=form.is_admin.data
+            )
+            db.session.add(user)
+            db.session.commit()
+            
+            # Create audit log
+            AuditLog.create(
+                user_id=current_user.id,
+                action='create_user',
+                object_type='User',
+                object_id=user.id,
+                details=f'Created user {user.username}'
+            )
+            
+            flash_message(FlashMessages.USER_CREATED.value, FlashCategory.SUCCESS.value)
+            return redirect(url_for('admin.user.index'))
     """Create a new user with proper validation and audit logging"""
     form = UserForm()
     notification_count = get_notification_count(current_user.id)

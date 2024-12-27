@@ -17,8 +17,15 @@ def notification_count(f):
     return decorated_function
 
 def create_admin_blueprint():
-    """Factory function to create a new admin blueprint instance"""
+    """Factory function to create a new admin blueprint instance with security and logging"""
     admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
+    
+    # Add before_request handler for security checks
+    @admin_bp.before_request
+    def check_admin_access():
+        if not current_user.is_authenticated or not current_user.is_admin:
+            flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
+            return redirect(url_for('public.login'))
     
     # Make the decorator available to routes
     admin_bp.notification_count = notification_count

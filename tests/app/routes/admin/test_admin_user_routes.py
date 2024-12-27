@@ -175,6 +175,42 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
     assert log is not None
 
 def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session):
+    """Test full CRUD operations for users with audit logging"""
+    # Ensure the test user doesn't already exist
+    existing_user = User.query.filter_by(username=user_data['username']).first()
+    if existing_user:
+        db_session.delete(existing_user)
+        db_session.commit()
+    
+    # Use a unique username for the test
+    unique_user_data = user_data.copy()
+    unique_user_data['username'] = 'unique_testuser'
+    
+    # Log in the admin user
+    with logged_in_admin:
+        # First get the CSRF token from the login page
+        login_get_response = logged_in_admin.get('/login')
+        csrf_token = extract_csrf_token(login_get_response.data)
+        assert csrf_token is not None, "CSRF token not found in login page"
+        
+        # Perform login with CSRF token
+        login_response = logged_in_admin.post('/login', data={
+            'username': test_user.username,
+            'password': 'AdminPass123!',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        
+        assert login_response.status_code == 200, \
+            f"Login failed with status {login_response.status_code}. Response: {login_response.data.decode('utf-8')}"
+        
+        # Verify admin user is logged in
+        with logged_in_admin.session_transaction() as session:
+            assert '_user_id' in session, "Admin user is not logged in"
+            assert session['_user_id'] == str(test_user.id), \
+                f"Expected logged in user ID {test_user.id} but got {session['_user_id']}"
+    
+        # Verify CRUD operations
+        verify_user_crud_operations(logged_in_admin, test_user, unique_user_data)
     """Test full CRUD operations for users"""
     # Ensure the test user doesn't already exist
     existing_user = User.query.filter_by(username=user_data['username']).first()

@@ -169,9 +169,9 @@ from wtforms import HiddenField
 class UserForm(FlaskForm):
     id = HiddenField('ID')
     username = StringField('Username', validators=[
-        DataRequired(),
-        Length(min=3, max=50),
-        Regexp('^[a-zA-Z0-9_]+$', message="Username can only contain letters, numbers and underscores")
+        DataRequired(message=FlashMessages.USERNAME_REQUIRED.value),
+        Length(min=3, max=50, message=FlashMessages.USERNAME_LENGTH.value),
+        Regexp('^[a-zA-Z0-9_]+$', message=FlashMessages.USERNAME_FORMAT.value)
     ])
     email = StringField('Email', validators=[
         DataRequired(),
