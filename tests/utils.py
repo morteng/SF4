@@ -31,21 +31,21 @@ def extract_csrf_token(response_data):
     
     soup = BeautifulSoup(response_data, 'html.parser')
     
-    # Look for CSRF token in meta tag
+    # Look for CSRF token in meta tag first
     meta_token = soup.find('meta', attrs={'name': 'csrf-token'})
-    if meta_token:
+    if meta_token and meta_token.get('content'):
         return meta_token.get('content')
     
     # Look for CSRF token in hidden input
     input_token = soup.find('input', attrs={'name': 'csrf_token'})
-    if input_token:
+    if input_token and input_token.get('value'):
         return input_token.get('value')
     
     # Look for CSRF token in form data
     form = soup.find('form')
     if form:
         input_token = form.find('input', attrs={'name': 'csrf_token'})
-        if input_token:
+        if input_token and input_token.get('value'):
             return input_token.get('value')
     
     # Look for CSRF token in HTMX headers

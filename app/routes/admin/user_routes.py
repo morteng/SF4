@@ -192,4 +192,5 @@ def index():
                          users=users,
                          search_query=search_query,
                          form=form,
-                         csrf_token=generate_csrf())
+                         csrf_token=generate_csrf(),
+                         _meta={'csrf': True})  # Ensure CSRF is enabled
