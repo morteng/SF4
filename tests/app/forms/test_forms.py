@@ -1,32 +1,28 @@
 import pytest
-from app import create_app
+from flask import Flask
 from app.forms.admin_forms import OrganizationForm
 from app.config import TestConfig
 
 @pytest.fixture
 def app():
-    app = create_app('testing')
-    with app.app_context():
-        yield app
+    app = Flask(__name__)
+    app.config.from_object(TestConfig)
+    return app
 
-@pytest.fixture
-def client(app):
-    """Test client fixture"""
-    return app.test_client()
-
-def test_organization_form_valid_data():
+def test_organization_form_valid_data(app):
     """Test organization form with valid data"""
-    # Create form with valid data, disabling CSRF for testing
-    form = OrganizationForm(
-        data={
-            'name': 'Valid Org',
-            'description': 'Valid description',
-            'homepage_url': 'https://valid.org'
-        },
-        meta={'csrf': False}
-    )
-    
-    assert form.validate(), f"Form validation failed with errors: {form.errors}"
+    with app.app_context():
+        # Create form with valid data, disabling CSRF for testing
+        form = OrganizationForm(
+            data={
+                'name': 'Valid Org',
+                'description': 'Valid description',
+                'homepage_url': 'https://valid.org'
+            },
+            meta={'csrf': False}
+        )
+        
+        assert form.validate(), f"Form validation failed with errors: {form.errors}"
 
 @pytest.mark.parametrize("name,description,homepage_url,expected", [
     ("", "Valid description", "https://valid.org", False),  # Missing name
