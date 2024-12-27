@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from app.forms.user_forms import ProfileForm
 from app.models.user import User  # Import the User model
 from app.extensions import db  # Import the db from extensions
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR
+from app.constants import FlashMessages, FlashCategory
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
@@ -23,8 +23,8 @@ def edit_profile():
         # Check for duplicate username
         existing_user = User.query.filter_by(username=new_username).first()
         if existing_user and existing_user.id != current_user.id:
-            flash(FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"], FLASH_CATEGORY_ERROR)
-            print(f"Flash message set: {FLASH_MESSAGES['USERNAME_ALREADY_EXISTS']} with category {FLASH_CATEGORY_ERROR}")
+            flash(FlashMessages.USERNAME_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
+            print(f"Flash message set: {FlashMessages.USERNAME_ALREADY_EXISTS.value} with category {FlashCategory.ERROR.value}")
             return redirect(url_for('user.edit_profile'))
         
         current_user.username = new_username
@@ -32,13 +32,13 @@ def edit_profile():
         
         # Update the user directly in the database
         db.session.commit()
-        flash(FLASH_MESSAGES["PROFILE_UPDATE_SUCCESS"])
-        print(f"Flash message set: {FLASH_MESSAGES['PROFILE_UPDATE_SUCCESS']}")
+        flash(FlashMessages.PROFILE_UPDATE_SUCCESS.value)
+        print(f"Flash message set: {FlashMessages.PROFILE_UPDATE_SUCCESS.value}")
         return redirect(url_for('user.profile'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
     else:
-        flash(FLASH_MESSAGES["PROFILE_UPDATE_INVALID_DATA"], FLASH_CATEGORY_ERROR)
-        print(f"Flash message set: {FLASH_MESSAGES['PROFILE_UPDATE_INVALID_DATA']} with category {FLASH_CATEGORY_ERROR}")
+        flash(FlashMessages.PROFILE_UPDATE_INVALID_DATA.value, FlashCategory.ERROR.value)
+        print(f"Flash message set: {FlashMessages.PROFILE_UPDATE_INVALID_DATA.value} with category {FlashCategory.ERROR.value}")
     return render_template('user/edit_profile.html', form=form)
