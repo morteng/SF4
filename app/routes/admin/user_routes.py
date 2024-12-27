@@ -33,6 +33,8 @@ def create():
             db.session.rollback()
             error_message = f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}"
             flash_message(error_message, FlashCategory.ERROR.value)
+            # Ensure the flash message is available in the current request
+            session.modified = True
             # Render the create template directly with 400 status
             return render_template('admin/users/create.html', form=form), 400
     else:

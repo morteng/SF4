@@ -174,7 +174,7 @@ def test_create_user_route_with_database_error(logged_in_admin, user_data, db_se
             
         monkeypatch.setattr(db_session, 'commit', mock_commit)
             
-        response = logged_in_admin.post(url_for('admin.user.create'), data=data, follow_redirects=True)
+        response = logged_in_admin.post(url_for('admin.user.create'), data=data)
             
         # Check for error response - should be 400 with template rendered directly
         assert response.status_code == 400
