@@ -82,23 +82,34 @@ def test_organization_form_name_validation(app):
 
 def test_organization_form_url_validation(app):
     """Test homepage URL validation"""
-    with app.app_context():
-        # Test invalid URL format
-        form = OrganizationForm(data={
-            'name': 'Valid Org',
-            'description': 'Valid description',
-            'homepage_url': 'not-a-url'
-        })
-        assert form.validate() is False
-        assert 'Invalid URL format.' in form.homepage_url.errors
+    with app.test_request_context():
+        # Initialize session and CSRF token
+        client = app.test_client()
+        client.get('/')  # Access any route to initialize session
+        
+        with client.session_transaction() as session:
+            # Test invalid URL format
+            form = OrganizationForm(
+                data={
+                    'name': 'Valid Org',
+                    'description': 'Valid description',
+                    'homepage_url': 'not-a-url'
+                },
+                meta={'csrf': False}  # Disable CSRF for testing
+            )
+            assert form.validate() is False
+            assert 'Invalid URL format.' in form.homepage_url.errors
 
-        # Test valid URL
-        form = OrganizationForm(data={
-            'name': 'Valid Org',
-            'description': 'Valid description',
-            'homepage_url': 'https://valid.org'
-        })
-        assert form.validate() is True
+            # Test valid URL
+            form = OrganizationForm(
+                data={
+                    'name': 'Valid Org',
+                    'description': 'Valid description',
+                    'homepage_url': 'https://valid.org'
+                },
+                meta={'csrf': False}  # Disable CSRF for testing
+            )
+            assert form.validate() is True
 
 def test_organization_form_description_validation(app):
     """Test description field validation"""
