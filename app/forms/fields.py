@@ -34,12 +34,9 @@ class CustomDateTimeField(DateTimeField):
             return
             
         date_str = valuelist[0]
-        print(f"process_formdata called with date_str: {date_str}")  # Add this line
             
         # First check for leap year dates
-        print(f"Date string: {date_str}")
         if '02-29' in date_str:
-            print("Found 02-29 in date string")
             try:
                 # Extract just the date portion
                 date_part = date_str.split()[0]
@@ -48,16 +45,13 @@ class CustomDateTimeField(DateTimeField):
                     year = parsed_date.year
                     is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
                     if not is_leap:
-                        print("Not a leap year, appending error")
                         self.errors = []
                         self.errors.append(self.error_messages['invalid_leap_year'])
-                        print(f"Errors after appending: {self.errors}")
+                        self.data = None
                         return
             except ValueError:
-                print("ValueError during leap year check")
+                # If we can't parse the date, let the main validation handle it
                 pass
-
-            print(f"Before strptime, date_str: {date_str}")  # Add this line
             try:
                 # Try to parse the full date string
                 parsed_dt = datetime.strptime(date_str, self.format)
