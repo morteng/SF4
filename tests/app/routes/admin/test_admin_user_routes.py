@@ -44,52 +44,45 @@ def test_user(db_session, user_data):
     db_session.commit()
 
 def test_create_user_route(logged_in_admin, user_data, db_session):
+    """Test user creation with proper CSRF and audit logging"""
     # Test GET request
-    with logged_in_admin.application.app_context():
-        create_response = logged_in_admin.get(url_for('admin.user.create'))
-        assert create_response.status_code == 200
-        
-        # Verify CSRF token is present
-        csrf_token = extract_csrf_token(create_response.data)
-        assert csrf_token is not None
-        
-        # Verify admin user context
-        with logged_in_admin.session_transaction() as session:
-            assert '_user_id' in session
-            admin_user = db_session.get(User, int(session['_user_id']))
-            assert admin_user is not None
-            assert admin_user.is_admin
-        
-        # Test POST request
-        response = logged_in_admin.post(url_for('admin.user.create'), data={
-            'username': user_data['username'],
-            'email': user_data['email'],
-            'password': user_data['password'],
-            'is_admin': False,
-            'submit': 'Create',
-            'csrf_token': csrf_token
-        }, follow_redirects=True)
+    create_response = logged_in_admin.get(url_for('admin.user.create'))
+    assert create_response.status_code == 200
     
-    print(f"POST Response Status: {response.status_code}")
-    print(f"POST Response Data: {response.data.decode('utf-8')}")
+    # Verify CSRF token is present
+    csrf_token = extract_csrf_token(create_response.data)
+    assert csrf_token is not None
+    
+    # Test POST request
+    response = logged_in_admin.post(url_for('admin.user.create'), data={
+        'username': user_data['username'],
+        'email': user_data['email'],
+        'password': user_data['password'],
+        'is_admin': False,
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
     
     # Verify response
     assert response.status_code == 200
     assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data
     
     # Verify user creation
-    users = User.query.all()
-    assert any(user.username == user_data['username'] and user.email == user_data['email'] for user in users)
+    created_user = User.query.filter_by(username=user_data['username']).first()
+    assert created_user is not None
+    assert created_user.email == user_data['email']
     
-    # Verify notification badge is present
-    assert b'notification-badge' in response.data
-    
-    # Verify audit log was created
-    audit_log = AuditLog.query.filter_by(action='create_user').first()
+    # Verify audit log
+    audit_log = AuditLog.query.filter_by(
+        action='create_user',
+        object_type='User',
+        object_id=created_user.id
+    ).first()
     assert audit_log is not None
-    assert audit_log.object_type == 'User'
     assert audit_log.details == f'Created user {user_data["username"]}'
     assert audit_log.ip_address is not None
+    
+    # Verify notification badge
+    assert b'notification-badge' in response.data
 
 def test_create_user_route_with_invalid_data(logged_in_admin, user_data):
     create_response = logged_in_admin.get(url_for('admin.user.create'))

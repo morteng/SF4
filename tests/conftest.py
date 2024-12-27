@@ -87,7 +87,9 @@ def admin_user(db_session, app):
 def logged_in_admin(client, admin_user, db_session):
     """Log in as the admin user."""
     # Ensure admin_user is bound to the current session
-    db_session.refresh(admin_user)
+    with client.application.app_context():
+        admin_user = db_session.merge(admin_user)
+        db_session.refresh(admin_user)
     
     # Get CSRF token
     login_response = client.get(url_for('public.login'))
@@ -103,6 +105,7 @@ def logged_in_admin(client, admin_user, db_session):
     assert response.status_code == 200, "Admin login failed."
     with client.session_transaction() as session:
         assert '_user_id' in session, "Admin session not established."
+        assert session['_user_id'] == str(admin_user.id)
     
     yield client
     
