@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, PasswordField
 from flask import session
 from wtforms.validators import DataRequired, Email, ValidationError, EqualTo
 from app.models.user import User
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR  # Import FLASH_MESSAGES and FLASH_CATEGORY_ERROR from constants
+from app.constants import FlashMessages, FlashCategory  # Import FlashMessages and FlashCategory from constants
 from app.utils import flash_message  # Import the flash_message function
 
 class ProfileForm(FlaskForm):
@@ -15,15 +15,15 @@ class ProfileForm(FlaskForm):
         if username.data != self.original_username:
             user = User.query.filter_by(username=username.data).first()
             if user:
-                flash_message(FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"], FLASH_CATEGORY_ERROR)
-                raise ValidationError(FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"])
+                flash_message(FlashMessages.USERNAME_ALREADY_EXISTS, FlashCategory.ERROR)
+                raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS)
 
     def validate_email(self, email):
         if email.data != self.original_email:
             user = User.query.filter_by(email=email.data).first()
             if user:
-                flash_message(FLASH_MESSAGES["EMAIL_ALREADY_EXISTS"], FLASH_CATEGORY_ERROR)
-                raise ValidationError(FLASH_MESSAGES["EMAIL_ALREADY_EXISTS"])
+                flash_message(FlashMessages.EMAIL_ALREADY_EXISTS, FlashCategory.ERROR)
+                raise ValidationError(FlashMessages.EMAIL_ALREADY_EXISTS)
 
     def __init__(self, original_username, original_email, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
@@ -46,9 +46,9 @@ class RegisterForm(FlaskForm):
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
-            raise ValidationError(FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"])
+            raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS)
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
-            raise ValidationError(FLASH_MESSAGES["EMAIL_ALREADY_EXISTS"])
+            raise ValidationError(FlashMessages.EMAIL_ALREADY_EXISTS)
