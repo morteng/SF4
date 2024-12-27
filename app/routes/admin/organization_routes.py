@@ -91,14 +91,16 @@ def edit(id):
                     return redirect(url_for('admin.organization.edit', id=id))  # Redirect back to the edit page with errors
             except SQLAlchemyError as e:
                 db.session.rollback()
+                # Add the specific database error message
                 flash_message(FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
+                # Redirect back to edit page with form data preserved
                 return redirect(url_for('admin.organization.edit', id=id))
         else:
             # Flash form validation errors
+            flash_message(FLASH_MESSAGES["UPDATE_ORGANIZATION_INVALID_FORM"], FLASH_CATEGORY_ERROR)
             for field, errors in form.errors.items():
                 for error in errors:
-                    flash_message(f"{field}: {error}", FLASH_CATEGORY_ERROR)
-            flash_message(FLASH_MESSAGES["UPDATE_ORGANIZATION_INVALID_FORM"], FLASH_CATEGORY_ERROR)
-            return redirect(url_for('admin.organization.edit', id=id))  # Redirect back to the edit page with errors
+                    flash_message(f"{getattr(form, field).label.text}: {error}", FLASH_CATEGORY_ERROR)
+            return redirect(url_for('admin.organization.edit', id=id))
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)

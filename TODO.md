@@ -52,4 +52,5 @@
 - Fixed database error handling in organization edit route to properly set flash messages
 - Updated organization form validation tests to expect field-specific error messages
 - Fixed test_timezone_handling by adding missing application_deadline field
+- Improved error message formatting in organization edit route to use field labels
 
