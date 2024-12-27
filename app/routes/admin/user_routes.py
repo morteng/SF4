@@ -103,6 +103,11 @@ def edit(id):
                          form_action=url_for('admin.user.edit', id=user.id),
                          back_url=url_for('admin.user.index'),
                          back_text='Users')
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Error in edit route for user {id}: {e}")
+        flash_message(f"An unexpected error occurred: {str(e)}", FlashCategory.ERROR.value)
+        return redirect(url_for('admin.user.index')), 500
 
 @admin_user_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
