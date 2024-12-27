@@ -17,4 +17,5 @@
 - Verify error messages match actual implementation
 - Clearly document field validation rules
 - Handle empty values explicitly in custom validators
+- Standardize CSRF error message handling across all endpoints
 

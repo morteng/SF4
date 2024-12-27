@@ -15,4 +15,5 @@
 - Use test_request_context() for form testing
 - For optional fields, handle empty values explicitly in custom validators
 - Ensure test users remain bound to session during authentication tests
+- Use consistent CSRF error messages across all endpoints
 

@@ -22,4 +22,5 @@
 - Clearly document field validation rules
 - Handle empty values explicitly in custom validators
 - Ensure test users remain bound to session during authentication
+- Verify consistent error messages for CSRF validation failures
 
