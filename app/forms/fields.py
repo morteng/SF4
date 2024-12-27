@@ -40,7 +40,10 @@ class CustomDateTimeField(DateTimeField):
                         self.errors.append(self.error_messages['invalid_leap_year'])
                         return
                 except (ValueError, IndexError):
-                    pass
+                    # If we can't parse the date, still return the leap year error
+                    self.errors = []
+                    self.errors.append(self.error_messages['invalid_leap_year'])
+                    return
                     
             try:
                 # Try to parse the full date string
