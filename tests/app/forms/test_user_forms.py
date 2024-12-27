@@ -38,21 +38,22 @@ def test_profile_form_valid(client, setup_database):
         with patch('app.forms.user_forms.User.query.filter_by') as mock_filter_by:
             mock_filter_by.return_value.first.return_value = None
 
-            # Create the form and get its CSRF token
-            form = ProfileForm(
-                original_username="testuser",
-                original_email="test@example.com"
-            )
-            csrf_token = form.csrf_token.current_token
+            # Create the form and get its CSRF token within a request context
+            with client.application.test_request_context():
+                form = ProfileForm(
+                    original_username="testuser",
+                    original_email="test@example.com"
+                )
+                csrf_token = form.csrf_token.current_token
 
-            # Test the form with valid CSRF token
-            form.username.data = "newusername"
-            form.email.data = "newemail@example.com"
+                # Test the form with valid CSRF token
+                form.username.data = "newusername"
+                form.email.data = "newemail@example.com"
 
-            # Validate the form
-            if not form.validate():
-                print("Form validation errors:", form.errors)
-            assert form.validate() == True
+                # Validate the form
+                if not form.validate():
+                    print("Form validation errors:", form.errors)
+                assert form.validate() == True
 
         # Test form submission via POST within the same session
         with client.session_transaction() as sess:
