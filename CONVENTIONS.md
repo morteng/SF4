@@ -1,4 +1,5 @@
 ## Coding Conventions
+- Fix one issue or file at a time, don't try to do too much in one edit. This makes it easier to understand what was changed and why. It also makes it easier to roll back changes if necessary.
 - Use type hints consistently for better code clarity and IDE support
 - Add detailed docstrings to all test functions
 - Group related tests logically with clear descriptions
