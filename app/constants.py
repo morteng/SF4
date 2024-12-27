@@ -77,7 +77,6 @@ class FlashMessages(str, Enum):
     DELETE_TAG_ERROR = "Failed to delete tag."
 
     # CSRF
-    CSRF_MISSING = "CSRF token is missing. Please try again."
     CSRF_INVALID = "Invalid CSRF token. Please refresh the page and try again."
 
     # Authentication
