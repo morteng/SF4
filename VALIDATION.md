@@ -278,6 +278,34 @@
 - Enhanced template error display
 - Added HTMX endpoint validation
 
+### Test Cases
+1. **Create Bot**
+   - Verify template inheritance from base.html
+   - Check form rendering and error handling
+   - Test successful bot creation
+   - Test validation errors
+   - Test database error handling
+
+2. **Run Bot**
+   - Verify HTMX form action matches route endpoint
+   - Test successful bot execution
+   - Test error handling for invalid bot ID
+   - Verify proper flash message display
+
+### Error Messages
+- "Failed to create bot: {error}"
+- "Bot not found"
+- "Failed to update bot: {error}"
+- "Failed to delete bot: {error}"
+- "Failed to run bot: {error}"
+
+### Validation Improvements
+- Added template inheritance validation
+- Improved form validation with specific error messages
+- Added status field validation
+- Enhanced template error display
+- Added HTMX endpoint validation
+
 ## Organization Form
 
 ### Name Field

@@ -37,3 +37,10 @@
   * Test edge cases for form validation
   * Verify proper error handling for database errors
 
+## New Goals
+1. **Improve Test Coverage**
+   - Add more test cases for bot routes
+   - Verify error handling for all admin routes
+   - Test edge cases for form validation
+   - Add tests for template rendering
+
