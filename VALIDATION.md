@@ -1,25 +1,27 @@
 # Validation Rules
 
 ## Validation Principles
-1. **Input Validation**
-   - Validate all form inputs client and server side
-   - Use `Enum` constants (FlashMessages, FlashCategory)
-   - Centralized test utilities in `tests/utils.py`
-   - Factory functions for consistent test data
-   - Type hints for all function signatures
-   - Detailed docstrings for test functions
+### Input Validation
+- Validate all form inputs client and server side
+- Use Enum constants (FlashMessages, FlashCategory)
+- Centralized test utilities in tests/utils.py
+- Factory functions for consistent test data
+- Type hints for all function signatures
+- Detailed docstrings for test functions
 
-2. **Error Handling**
-   - Use FlashMessages for consistent error messages
-   - Log detailed error information using `logger`
-   - Use context managers for database operations
-   - Rollback database sessions on errors
+### Error Handling
+- Use FlashMessages for consistent error messages
+- Log detailed error information using logger
+- Use context managers for database operations
+- Rollback database sessions on errors
+- Verify database state after operations
 
-3. **Security**
-   - Use CSRF tokens for all forms
-   - Implement rate limiting for sensitive endpoints
-   - Validate and sanitize all URLs
-   - Use type hints for better code clarity
+### Security
+- Use CSRF tokens for all forms
+- Implement rate limiting for sensitive endpoints
+- Validate and sanitize all URLs
+- Use type hints for better code clarity
+- Verify both success and failure scenarios
 
 ## Form Validation
 

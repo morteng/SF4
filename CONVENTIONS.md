@@ -1,18 +1,27 @@
 ## Coding Conventions
-- Fix one issue or file at a time, don't try to do too much in one edit. This makes it easier to understand what was changed and why. It also makes it easier to roll back changes if necessary.
-- Use type hints consistently for better code clarity and IDE support
-- Add detailed docstrings to all test functions
-- Group related tests logically with clear descriptions
-- Use fixtures for test setup to reduce duplication
-- Validate all form inputs both client and server side
-- Use `Enum` for constants to ensure type safety
-- Maintain logging with clear, structured messages using `logger`
-- Use bleach for input sanitization with specific allowed tags
-- Keep CSS in `app/static/css/main.css` and JS in `app/static/js/main.js`
-- Use Tailwind for styling and HTMX for dynamic interactions
-- Centralize test utilities in `tests/utils.py`
-- Use factory functions for test data creation
-- Write tests that verify both success and failure scenarios
+### Testing
+- Use type hints consistently in test functions
+- Add detailed docstrings explaining test purpose
+- Use fixtures for common setup (e.g., authenticated_admin)
+- Parameterize tests for multiple scenarios
+- Verify both UI responses and database state
+- Include edge case and error scenario tests
+- Use logging for test execution tracking
+- Centralize test utilities in tests/utils.py
+
+### Security
+- Validate all form inputs client and server side
+- Use CSRF tokens for all forms
+- Implement rate limiting for sensitive endpoints
+- Use bleach for input sanitization
+- Use Enum for constants to ensure type safety
+
+### Code Organization
+- Keep CSS in app/static/css/main.css
+- Keep JS in app/static/js/main.js
+- Use Tailwind for styling
+- Use HTMX for dynamic interactions
+- Maintain clear separation between routes, models, and services
 
 ## TODO.md
 - This file must be updated every time we do any file updates so that it always reflects our goal, plan and tasks. Always use full paths when referencing files to avoid confusion. This is a memory store for you, so jot down any salient thoughts about tests or code you would like to keep in mind for later. If you learn something about the codebase that would be good to know later, include the knowledge here. Do this after editing any other files. Always update TODO.md.
