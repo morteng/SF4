@@ -138,7 +138,7 @@ def test_missing_date(app, form_data):
         assert form.validate() is False
         assert 'Date is required.' in form.errors['application_deadline']
 
-class TestForm(Form):
+class TestCustomDateTimeField(Form):
     test_field = CustomDateTimeField(
         label='Test Field',
         format='%Y-%m-%d %H:%M:%S',

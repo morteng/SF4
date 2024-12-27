@@ -12,7 +12,8 @@ def get_bot_by_id(bot_id):
     return db.session.get(Bot, bot_id)
 
 from datetime import datetime
-from flask import current_user, request
+from flask import request
+from flask_login import current_user
 from app.models.notification import Notification, NotificationType
 from app.models.audit_log import AuditLog
 
