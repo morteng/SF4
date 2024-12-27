@@ -2,24 +2,76 @@
 
 {% block content %}
 <div class="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-    <h2 class="text-2xl font-bold mb-4">{{ 'Edit' if form.id.data else 'Create' }} {{ form_title }}</h2>
-    <form method="POST" action="{{ form_action }}" class="space-y-4">
+    <h1 class="text-2xl font-bold mb-4">{{ 'Edit' if form.id.data else 'Create' }} {{ form_title }}</h1>
+    
+    {# Flash messages container #}
+    <div id="flash-messages" class="mb-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }} p-3 rounded mb-2">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <form method="POST" action="{{ form_action }}" class="space-y-4" 
+          hx-target="#form-container"
+          hx-swap="outerHTML"
+          hx-indicator="#form-loading">
+        
         {{ form.hidden_tag() }}
+        
         {% for field in form %}
             {% if field.type != 'HiddenField' and field.type != 'CSRFTokenField' %}
-                <div class="flex flex-col space-y-1">
-                    {{ field.label(class_="text-gray-700") }}
-                    {{ field(class_="border border-gray-300 p-2 rounded w-full") }}
-                    {% for error in field.errors %}
-                        <span class="text-red-500 text-sm">{{ error }}</span>
-                    {% endfor %}
+                <div class="form-group">
+                    {{ field.label(class_="block text-gray-700 font-medium mb-1") }}
+                    
+                    {% if field.type == 'BooleanField' %}
+                        <div class="flex items-center">
+                            {{ field(class_="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded") }}
+                            {{ field.label(class_="ml-2 text-gray-700") }}
+                        </div>
+                    {% else %}
+                        {{ field(
+                            class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm",
+                            **{"aria-describedby": field.name + "-error" if field.errors else ""}
+                        ) }}
+                    {% endif %}
+
+                    {% if field.errors %}
+                        <div id="{{ field.name }}-error" class="mt-1 text-sm text-red-600">
+                            {% for error in field.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    {% if field.description %}
+                        <p class="mt-2 text-sm text-gray-500">{{ field.description }}</p>
+                    {% endif %}
                 </div>
             {% endif %}
         {% endfor %}
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-            {% if form.id.data %}Update{% else %}Create{% endif %}
-        </button>
+
+        <div class="flex justify-between items-center mt-6">
+            <a href="{{ back_url }}" class="text-blue-600 hover:text-blue-800">
+                &larr; Back to {{ back_text }}
+            </a>
+            <button type="submit" 
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    aria-label="{{ 'Update' if form.id.data else 'Create' }} {{ form_title }}">
+                {{ 'Update' if form.id.data else 'Create' }}
+            </button>
+        </div>
     </form>
-    <a href="{{ back_url }}" class="text-blue-500 hover:underline">Back to {{ back_text }}</a>
+
+    {# Loading indicator #}
+    <div id="form-loading" class="htmx-indicator mt-4">
+        <div class="flex items-center">
+            <div class="animate-spin h-5 w-5 mr-2 text-indigo-600"></div>
+            <span class="text-gray-600">Processing...</span>
+        </div>
+    </div>
 </div>
 {% endblock %}

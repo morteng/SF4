@@ -33,12 +33,27 @@
             document.documentElement.classList.toggle('dark');
         });
 
-        // Add error handling for HTMX responses
+        // Enhanced HTMX error handling
         document.body.addEventListener('htmx:afterRequest', function(evt) {
+            const target = document.querySelector(evt.detail.elt.getAttribute('hx-target'));
+            
             if (evt.detail.failed) {
+                // Handle server errors
+                if (evt.detail.xhr.status >= 500) {
+                    const errorMessage = 'Server error occurred. Please try again later.';
+                    const flashContainer = document.getElementById('flash-messages');
+                    if (flashContainer) {
+                        flashContainer.innerHTML = `
+                            <div class="flash error p-3 rounded mb-2">
+                                ${errorMessage}
+                            </div>
+                        `;
+                    }
+                }
+                
+                // Handle validation errors
                 const form = evt.detail.elt.closest('form');
                 if (form) {
-                    // Add error classes to invalid fields
                     const errorFields = form.querySelectorAll('.is-invalid');
                     errorFields.forEach(field => {
                         field.classList.add('border-red-500');
@@ -47,6 +62,14 @@
                             feedback.classList.remove('hidden');
                         }
                     });
+                }
+            }
+            
+            // Focus on first error field
+            if (target) {
+                const firstError = target.querySelector('.is-invalid');
+                if (firstError) {
+                    firstError.focus();
                 }
             }
         });

@@ -4,3 +4,18 @@
 {% set form_action = url_for('admin.bot.create_or_edit', id=form.id.data) %}
 {% set back_url = url_for('admin.bot.index') %}
 {% set back_text = "Bots" %}
+
+{% block extra_fields %}
+    {# Add any bot-specific fields here #}
+    <div class="form-group">
+        {{ form.status.label(class_="block text-gray-700 font-medium mb-1") }}
+        {{ form.status(class_="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
+        {% if form.status.errors %}
+            <div id="status-error" class="mt-1 text-sm text-red-600">
+                {% for error in form.status.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
