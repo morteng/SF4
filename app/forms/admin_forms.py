@@ -161,7 +161,8 @@ class UserForm(FlaskForm):
 class BotForm(FlaskForm):
     name = StringField('Name', validators=[
         DataRequired(message="Name is required."),
-        Length(max=100, message="Name cannot exceed 100 characters.")
+        Length(max=100, message="Name cannot exceed 100 characters."),
+        Regexp('^[A-Za-z0-9 ]*$', message='Name must contain only letters, numbers, and spaces.')
     ])
     description = TextAreaField('Description', validators=[
         DataRequired(message="Description is required."),
@@ -179,6 +180,14 @@ class BotForm(FlaskForm):
             bot = Bot.query.filter_by(name=name.data).first()
             if bot:
                 raise ValidationError('Bot with this name already exists.')
+    
+    def validate_status(self, field):
+        if isinstance(field.data, str):
+            if field.data.lower() not in ['true', 'false', 'yes', 'no', '1', '0', 'y', 'n', 'on', 'off']:
+                raise ValidationError('Invalid status value')
+            field.data = field.data.lower() in ['true', 'yes', '1', 'y', 'on']
+        elif field.data is None:
+            field.data = False
 
 
 class OrganizationForm(FlaskForm):
