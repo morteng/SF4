@@ -26,8 +26,10 @@
 - Handle missing/invalid CSRF tokens with 400 status
 
 ## Rate Limiting
-- Admin endpoints: 100 requests/hour
-- Sensitive operations: 10 requests/minute
+- User management: 100 requests/hour
+- User creation: 10 requests/minute
+- User deletion: 3 requests/minute
+- Password resets: 5 requests/hour
 - Use Flask-Limiter for implementation
 
 ### Notification Badge Validation

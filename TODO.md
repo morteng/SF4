@@ -10,8 +10,8 @@
 - [x] Implement direct template rendering for database errors
 - [x] Add audit logging for sensitive operations
 - [x] Fix date validation in StipendForm
+- [x] Implement rate limiting for sensitive operations
 - [ ] Ensure notification_count is available in all admin templates
-- [ ] Fix template rendering errors in admin routes
 - [ ] Complete CRUD operation tests for all admin routes
 
 ## Best Practices
