@@ -93,9 +93,6 @@ def extract_csrf_token(response_data):
     import re
     html = response_data.decode('utf-8')
     
-    # Debug: Print first 1000 characters of HTML
-    print("HTML Response:", html[:1000])
-    
     # Try multiple patterns to find CSRF token
     patterns = [
         r'<input[^>]*id="csrf_token"[^>]*value="([^"]+)"',
@@ -106,10 +103,10 @@ def extract_csrf_token(response_data):
     for pattern in patterns:
         match = re.search(pattern, html)
         if match:
-            print(f"Found CSRF token using pattern: {pattern}")
             return match.group(1)
     
-    print("No CSRF token found in HTML response")
+    # Debug: Print the HTML response if no token found
+    print("HTML Response (first 1000 chars):", html[:1000])
     return None
 
 def test_delete_user_route(logged_in_admin, test_user, db_session):
@@ -119,7 +116,7 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
     
     # Extract the CSRF token
     csrf_token = extract_csrf_token(index_response.data)
-    assert csrf_token is not None, "CSRF token not found in the response"
+    assert csrf_token is not None, f"CSRF token not found in the response. HTML: {index_response.data.decode()[:1000]}"
     
     # Verify the CSRF token in the session
     with logged_in_admin.session_transaction() as session:
