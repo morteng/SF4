@@ -2,9 +2,8 @@
 
 ## Current Goals
 1. **Template Improvements**
-   - [x] Fix template inheritance for admin bot edit page
-   - [x] Verify all admin templates extend base.html
    - [ ] Add template inheritance tests
+   - [ ] Verify proper error handling in all admin templates
 
 2. **Form Validation Improvements**
    - [ ] Add validation for bot status field
@@ -13,9 +12,9 @@
 
 ## Knowledge & Memories
 - **Template Structure**
-  * Admin templates should extend base.html directly
+  * Admin templates must extend base.html directly
   * Use consistent block names (content for all pages)
-  * Include admin sidebar in all admin pages
+  * Include admin/_sidebar.html in all admin pages
   * Use proper form error handling with invalid-feedback class
   * Admin templates should use flex layout with fixed sidebar width
   * Main content area should be flexible to fill remaining space
