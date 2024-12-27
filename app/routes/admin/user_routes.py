@@ -61,6 +61,7 @@ def create():
                 timestamp=datetime.utcnow()
             )
             db.session.add(audit_log)
+            db.session.add(audit_log)
             db.session.commit()
             
             flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)

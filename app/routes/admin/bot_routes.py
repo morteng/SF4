@@ -18,6 +18,17 @@ def create():
     if form.validate_on_submit():
         try:
             new_bot = create_bot(form.data)
+            
+            # Create audit log
+            AuditLog.create(
+                user_id=current_user.id,
+                action='create_bot',
+                object_type='Bot',
+                object_id=new_bot.id,
+                details=f'Created bot {new_bot.name}',
+                ip_address=request.remote_addr
+            )
+            
             flash_message(FlashMessages.CREATE_BOT_SUCCESS.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.bot.index'))
         except Exception as e:

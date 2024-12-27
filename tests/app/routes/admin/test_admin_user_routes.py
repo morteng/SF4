@@ -85,6 +85,9 @@ def test_create_user_route(logged_in_admin, user_data):
     assert audit_log.object_type == 'User'
     assert audit_log.details == f'Created user {user_data["username"]}'
     assert audit_log.ip_address is not None
+    assert audit_log.details == f'Created user {user_data["username"]}'
+    assert audit_log.object_type == 'User'
+    assert audit_log.object_id == new_user.id
 
 def test_create_user_route_with_invalid_data(logged_in_admin, user_data):
     create_response = logged_in_admin.get(url_for('admin.user.create'))
