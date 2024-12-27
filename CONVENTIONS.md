@@ -22,8 +22,7 @@
 
 ### CSRF Token Handling
 - Use Flask-WTF for CSRF protection
-- Include CSRF token in all forms via `{{ csrf_token }}` (not callable)
-- Ensure `request` is imported from Flask when accessing form data
+- Include CSRF token in all forms via `{{ csrf_token }}`
 - Add CSRF meta tag in base template for HTMX
 - Validate CSRF tokens in all POST requests
 - Return 400 for invalid/missing CSRF tokens

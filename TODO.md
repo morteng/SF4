@@ -7,6 +7,7 @@
   - HTMX integration
   - Rate limiting (org CRUD)
 - [ ] Fix datetime.utcnow() deprecation warnings
+- [ ] Complete CRUD test coverage for all entities
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
