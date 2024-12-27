@@ -15,6 +15,10 @@ from app.models.organization import Organization
 from app.models.audit_log import AuditLog
 from app.constants import FlashMessages, FlashCategory
 from app.extensions import db, limiter
+from app.routes.admin import create_admin_blueprint
+
+# Create admin blueprint instance
+admin_bp = create_admin_blueprint()
 
 # Configure logging
 logger = logging.getLogger(__name__)
