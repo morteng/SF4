@@ -1,10 +1,11 @@
 # Validation Rules
 ## Form Testing
-- Use `app.test_request_context()` for proper context
+- Always use `app.test_request_context()` for form tests
 - Initialize session with `client.get('/')` before form tests
 - Use `client.session_transaction()` for session access
 - Use `meta={'csrf': False}` to disable CSRF in tests when needed
 - Verify error messages match actual implementation
+- Test both validation success and failure cases
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all forms
