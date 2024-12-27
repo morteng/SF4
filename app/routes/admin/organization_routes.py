@@ -36,9 +36,6 @@ def create():
         for field, errors in form.errors.items():
             field_obj = getattr(form, field)
             field_label = field_obj.label.text
-            # Map field labels to test-expected names
-            if field_label == 'Org Name':
-                field_label = 'Name'  # Change to match test expectation
             for error in errors:
                 flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
