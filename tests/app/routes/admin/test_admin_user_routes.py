@@ -68,7 +68,8 @@ def test_create_user_route(logged_in_admin, user_data):
     # Verify audit log was created
     audit_log = AuditLog.query.filter_by(action='create_user').first()
     assert audit_log is not None
-    assert audit_log.user_id == logged_in_admin.user.id
+    with logged_in_admin.application.app_context():
+        assert audit_log.user_id == current_user.id
     assert audit_log.ip_address is not None
 
 def test_create_user_route_with_invalid_data(logged_in_admin, user_data):

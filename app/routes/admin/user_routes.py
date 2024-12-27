@@ -40,7 +40,13 @@ def create():
     if form.validate_on_submit():
         try:
             new_user = create_user(form.data)
-            flash(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
+            # Create audit log entry
+            AuditLog.create(
+                user_id=current_user.id,
+                action='create_user',
+                details=f'Created user {new_user.username}'
+            )
+            flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
             session.modified = True
             return redirect(url_for('admin.user.index'))
         except ValueError as e:
@@ -57,6 +63,12 @@ def create():
         except Exception as e:
             db.session.rollback()
             error_message = f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}"
+            # Log the error
+            AuditLog.create(
+                user_id=current_user.id,
+                action='create_user_error',
+                details=error_message
+            )
             flash_message(error_message, FlashCategory.ERROR.value)
             
             template = 'admin/users/_create_form.html' if request.headers.get('HX-Request') == 'true' else 'admin/users/create.html'

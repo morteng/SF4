@@ -191,7 +191,7 @@ class UserForm(FlaskForm):
         if username.data != self.original_username:
             user = User.query.filter_by(username=username.data).first()
             if user is not None:
-                raise ValidationError(FlashMessages.FORM_DUPLICATE_USERNAME.value)
+                raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS.value)
 
     def validate_email(self, email):
         if email.data != self.original_email:
