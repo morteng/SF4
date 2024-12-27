@@ -5,6 +5,7 @@
 - Test success & failure cases
 - CSRF enabled in all environments
 - Include CSRF validation in all form tests
+- Use request context for form tests
 
 ## Form Validation
 - Required fields: Validate presence

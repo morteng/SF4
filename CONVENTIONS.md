@@ -5,6 +5,7 @@
 - Use fixtures & parameterized tests
 - Include CSRF token validation in form tests
 - CSRF enabled in testing environment
+- Use request context for form tests
 
 ### Security
 - Validate all inputs

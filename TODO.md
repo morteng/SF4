@@ -5,6 +5,7 @@
 - [ ] Add rate limiting to admin routes
 - [ ] Add CRUD integration tests
 - [ ] Increase test coverage to 80%+
+- [ ] Fix form tests to work with CSRF protection
 
 ## Best Practices
 - Validate & sanitize all inputs
