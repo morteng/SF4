@@ -5,8 +5,9 @@
 
 ## Best Practices
 - Validate & sanitize all inputs
-- Ensure CSRF protection is enabled in test config
+- Ensure proper request context for form tests
 - Verify session initialization in form tests
+- Test both CSRF-enabled and disabled scenarios
 - Use enums consistently
 - Use form.validate() instead of manual CSRF validation
 - Verify UI & DB state in tests
