@@ -52,15 +52,15 @@ def create():
     form.organization_id.choices = [(org.id, org.name) for org in organizations]
     form.tags.choices = [(tag.id, tag.name) for tag in tags]
     
-    # Add audit log
     if request.method == 'POST':
-        audit_log = AuditLog(
+        # Create audit log before operation
+        AuditLog.create(
             user_id=current_user.id,
             action='create_stipend',
-            details=f"Attempt to create new stipend",
-            timestamp=datetime.utcnow()
+            details='Attempting to create new stipend',
+            object_type='Stipend',
+            ip_address=request.remote_addr
         )
-        db.session.add(audit_log)
     
     is_htmx = request.headers.get('HX-Request')
 

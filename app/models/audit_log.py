@@ -31,17 +31,25 @@ class AuditLog(db.Model):
                 details_before=details_before,
                 details_after=details_after,
                 ip_address=ip_address,
-                timestamp=datetime.now(timezone.utc)  # Use timezone-aware datetime
+                timestamp=datetime.now(timezone.utc)
             )
             db.session.add(log)
             
-            # Create notification for audit log creation
-            from app.models.notification import Notification
+            # Create appropriate notification based on action type
+            from app.models.notification import Notification, NotificationType
+            notification_type = {
+                'create': NotificationType.CRUD_CREATE,
+                'update': NotificationType.CRUD_UPDATE,
+                'delete': NotificationType.CRUD_DELETE
+            }.get(action.split('_')[0], NotificationType.SYSTEM)
+            
             notification = Notification(
-                message=f"Audit log created for {action} on {object_type} {object_id}",
-                type="system",
+                message=f"{action.capitalize()} operation on {object_type} {object_id}",
+                type=notification_type,
                 read_status=False,
-                user_id=user_id
+                user_id=user_id,
+                related_object_type=object_type,
+                related_object_id=object_id
             )
             db.session.add(notification)
             

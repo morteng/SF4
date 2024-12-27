@@ -59,9 +59,25 @@ def create_app(config_name='development'):
         return FlashMessages.CSRF_INVALID.value, 400
 
     with app.app_context():
-        init_extensions(app)  # Initialize extensions within the application context
-        db.create_all()  # Creates all tables if they don't exist
-        init_admin_user()  # Initialize the admin user
+        # Initialize extensions
+        init_extensions(app)
+        
+        # Create database tables
+        db.create_all()
+        
+        # Initialize admin user
+        init_admin_user()
+        
+        # Initialize default bots if they don't exist
+        from app.models.bot import Bot
+        if not Bot.query.first():
+            bots = [
+                Bot(name="TagBot", description="Automatically tags stipends"),
+                Bot(name="UpdateBot", description="Updates stale stipend data"),
+                Bot(name="ReviewBot", description="Flags suspicious entries")
+            ]
+            db.session.bulk_save_objects(bots)
+            db.session.commit()
         
         # Initialize bots
         from app.models.bot import Bot
