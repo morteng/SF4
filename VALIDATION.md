@@ -9,11 +9,13 @@
 - Use form-generated CSRF tokens in tests
 
 ## Form Validation
-- Required fields: Validate presence
-- Length: Enforce max lengths
-- Format: Validate URLs, dates
-- Uniqueness: Check for duplicates
-- CSRF: Validate token in all forms
+- Validate CSRF tokens in all forms
+- Add error handling to debug validation failures
+- Ensure all required fields are properly set
+- Validate presence of required fields
+- Enforce max lengths
+- Validate URLs and dates
+- Check for duplicates
 - Use form-generated CSRF tokens
 
 ## Form Testing
