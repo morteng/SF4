@@ -49,7 +49,7 @@ def create():
 def edit(id):
     user = get_user_by_id(id)
     if not user:
-        flash_message(FLASH_MESSAGES["USER_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific user not found message
+        flash_message(FlashMessages.USER_NOT_FOUND.value, FlashCategory.ERROR.value)  # Use specific user not found message
         return redirect(url_for('admin.user.index'))
     
     form = UserForm(
@@ -81,7 +81,7 @@ def edit(id):
 def delete(id):
     user = get_user_by_id(id)
     if not user:
-        flash_message(FLASH_MESSAGES["USER_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific user not found message
+        flash_message(FlashMessages.USER_NOT_FOUND.value, FlashCategory.ERROR.value)  # Use specific user not found message
         return redirect(url_for('admin.user.index'))
     
     try:
