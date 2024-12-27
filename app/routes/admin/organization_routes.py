@@ -33,9 +33,7 @@ def create():
     else:
         # Flash form validation errors with expected format
         for field_name, errors in form.errors.items():
-            field = getattr(form, field_name)
-            # Use the field name in the format the test expects
-            field_label = 'Org Name' if field_name == 'name' else field.label.text
+            field_label = 'Org Name' if field_name == 'name' else form[field_name].label.text
             for error in errors:
                 flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
@@ -91,9 +89,7 @@ def edit(id):
         else:
             # Flash form validation errors with expected format
             for field_name, errors in form.errors.items():
-                field = getattr(form, field_name)
-                # Use the field name in the format the test expects
-                field_label = 'Org Name' if field_name == 'name' else field.label.text
+                field_label = 'Org Name' if field_name == 'name' else form[field_name].label.text
                 for error in errors:
                     flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
 
