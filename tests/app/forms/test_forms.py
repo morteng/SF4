@@ -16,36 +16,40 @@ def test_organization_form_valid_data(app, client):
     """Test organization form with valid data"""
     # Ensure CSRF is enabled for this test
     app.config['WTF_CSRF_ENABLED'] = True
-    
+    app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'  # Add secret key for CSRF
+
     # Make a request to initialize the session
-    client.get('/')
-    
+    response = client.get('/')
+    assert response.status_code == 200  # Ensure the request was successful
+
     with app.test_request_context():
+        # Debug session state after initial request
+        with client.session_transaction() as session:
+            print("Session after initial request:", session)
+            assert 'csrf_token' in session, "CSRF token not found in session"
+
         # Create form within the request context
         form = OrganizationForm()
-        
-        # Verify CSRF token in session
+        assert form.csrf_token.current_token, "CSRF token not generated in form"
+
+        # Verify CSRF token in session matches the form's token
         with client.session_transaction() as session:
-            print("Session contents:", session)  # Debug session state
-            assert 'csrf_token' in session, "CSRF token not found in session"
+            assert session['csrf_token'] == form.csrf_token.current_token, "CSRF token mismatch"
+
+        # Create form with valid data and the actual CSRF token
+        form = OrganizationForm(data={
+            'name': 'Valid Org',
+            'description': 'Valid description',
+            'homepage_url': 'https://valid.org',
+            'csrf_token': form.csrf_token.current_token
+        })
+        
+        # Debug logging for validation errors and response
+        if not form.validate():
+            print("Form validation errors:", form.errors)
+            print("Response status:", form.validate())
             
-            # Get the actual CSRF token from the form
-            csrf_token = form.csrf_token.current_token
-            
-            # Create form with valid data and the actual CSRF token
-            form = OrganizationForm(data={
-                'name': 'Valid Org',
-                'description': 'Valid description',
-                'homepage_url': 'https://valid.org',
-                'csrf_token': csrf_token
-            })
-            
-            # Debug logging for validation errors and response
-            if not form.validate():
-                print("Form validation errors:", form.errors)
-                print("Response status:", form.validate())
-                
-            assert form.validate()
+        assert form.validate()
 
 @pytest.mark.parametrize("name,description,homepage_url,expected", [
     ("", "Valid description", "https://valid.org", False),  # Missing name
