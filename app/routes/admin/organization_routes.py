@@ -33,11 +33,7 @@ def create():
     logger.info(f"Organization creation form accessed by user {current_user.username}")
     form = OrganizationForm()
     
-    # Add CSRF token to form context
-    form.csrf_token.data = request.cookies.get('csrf_token')
-    
     if form.validate_on_submit():
-        # CSRF token is automatically validated by Flask-WTF
             
         try:
             # Prepare organization data with cleaned inputs
