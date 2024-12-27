@@ -21,8 +21,13 @@ def create():
             new_user = create_user(form.data)
             flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
+        except ValueError as e:
+            db.session.rollback()
+            flash_message(str(e), FlashCategory.ERROR.value)
+            if request.headers.get('HX-Request') == 'true':
+                return render_template('admin/users/_create_form.html', form=form), 400
         except Exception as e:
-            db.session.rollback()  # Ensure the session is rolled back on error
+            db.session.rollback()
             error_message = f"{FlashMessages.CREATE_USER_ERROR.value}{str(e)}"
             flash_message(error_message, FlashCategory.ERROR.value)
             if request.headers.get('HX-Request') == 'true':

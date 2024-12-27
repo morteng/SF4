@@ -32,14 +32,12 @@ def create_user(form_data):
     try:
         db.session.add(new_user)
         db.session.commit()
-    except IntegrityError:
+    except IntegrityError as e:
         db.session.rollback()
-        flash_message(FlashMessages.USERNAME_ALREADY_EXISTS, FlashCategory.ERROR)
-        raise ValueError(FlashMessages.USERNAME_ALREADY_EXISTS.value)
+        raise ValueError(f"{FlashMessages.USERNAME_ALREADY_EXISTS.value}: {str(e)}")
     except Exception as e:
         db.session.rollback()
-        flash_message(FlashMessages.CREATE_USER_ERROR, FlashCategory.ERROR)
-        raise ValueError(FlashMessages.CREATE_USER_ERROR.value)
+        raise ValueError(f"{FlashMessages.CREATE_USER_ERROR.value}{str(e)}")
     
     return new_user
 
