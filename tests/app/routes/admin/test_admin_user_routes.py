@@ -69,8 +69,9 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
         print("Response status:", response.status_code)
         print("Response data:", response.data.decode('utf-8'))
     
-    assert response.status_code == 200
-    assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data
+    assert response.status_code == 200, f"Expected 200 OK but got {response.status_code}. Response: {response.data.decode('utf-8')}"
+    assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data, \
+        f"Expected success message but got: {response.data.decode('utf-8')}"
     
     # Verify audit log
     log = AuditLog.query.filter_by(
