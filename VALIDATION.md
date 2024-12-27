@@ -225,6 +225,8 @@
    - Test case: test_htmx_endpoint_validation
    - Implementation: Verify HTMX form actions match route endpoints
    - Specific check: Ensure bot run form uses 'admin.bot.run' endpoint
+   - Add validation for all HTMX form actions to match their corresponding route endpoints
+   - Include test cases for both GET and POST form actions
 
 ### Test Cases
 1. **Create Bot**

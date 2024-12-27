@@ -19,6 +19,7 @@
   * When using HTMX forms, ensure the endpoint matches the route definition exactly
   * Test failures often indicate URL endpoint mismatches between templates and routes
   * The bot run route endpoint is 'admin.bot.run' not 'admin.bot.run_bot'
+  * Always verify url_for() calls match the actual route endpoints
 
 - **Testing Best Practices**
   * Use fixtures for common test setup
