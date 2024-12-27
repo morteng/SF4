@@ -86,6 +86,7 @@ class FlashMessages(str, Enum):
     REGISTER_SUCCESS = "Registered successfully."
     REGISTER_ERROR = "Registration failed. Please try again."
     LOGIN_INVALID_CREDENTIALS = "Invalid username or password."
+    PASSWORD_WEAK = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
 
     # Form Validation
     FORM_VALIDATION_ERROR = "Form validation failed. Please check your input."
