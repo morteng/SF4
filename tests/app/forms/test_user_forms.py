@@ -184,20 +184,24 @@ def test_profile_form_invalid_same_email(client, setup_database):
     db.session.commit()
 
 def test_login_form_valid(client):
-    with client.application.test_request_context():  # Added request context
-        # Test form validation with CSRF token
-        form = LoginForm(csrf_token=generate_csrf_token())
-        form.username.data = "testuser"
-        form.password.data = "password123"
-        assert form.validate() == True
+    # First make a GET request to establish session and get CSRF token
+    get_response = client.get(url_for('public.login'))
+    assert get_response.status_code == 200
 
-        # Test form submission via POST
-        response = client.post(url_for('public.login'), data={
-            'username': 'testuser',
-            'password': 'password123',
-            'csrf_token': generate_csrf_token()
-        })
-        assert response.status_code == 302  # Redirect on success
+    # Extract CSRF token using BeautifulSoup
+    soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+    csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+    assert csrf_token, "CSRF token not found in form"
+
+    # Test form submission with the correct CSRF token
+    response = client.post(url_for('public.login'), data={
+        'username': 'testuser',
+        'password': 'password123',
+        'csrf_token': csrf_token
+    }, follow_redirects=False)  # Don't follow redirects to verify status code
+
+    # Verify the response status code
+    assert response.status_code == 302, f"Expected 302, got {response.status_code}"
 
 def test_login_form_invalid_missing_username(client):
     with client.application.test_request_context():  # Added request context
