@@ -187,6 +187,13 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
         db_session.delete(existing_user)
         db_session.commit()
     
+    # Verify audit log for deletion
+    audit_log = AuditLog.query.filter_by(
+        action='delete_user',
+        object_type='User'
+    ).first()
+    assert audit_log is not None
+    
     # Use a unique username for the test
     unique_user_data = user_data.copy()
     unique_user_data['username'] = 'unique_testuser'

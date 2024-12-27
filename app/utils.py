@@ -38,10 +38,20 @@ def admin_required(f):
                 user_id=current_user.id if current_user.is_authenticated else None,
                 action='unauthorized_access',
                 object_type='AdminPanel',
-                details=f'Attempted access to {request.path}'
+                details=f'Attempted access to {request.path}',
+                ip_address=request.remote_addr
             )
             flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
             return abort(403)
+            
+        # Log admin access
+        AuditLog.create(
+            user_id=current_user.id,
+            action=f.__name__,
+            object_type='AdminPanel',
+            details=f"Accessed admin route: {request.path}",
+            ip_address=request.remote_addr
+        )
             
         if not current_user.is_admin:
             flash_message(FlashMessages.ADMIN_REQUIRED.value, FlashCategory.ERROR.value)
