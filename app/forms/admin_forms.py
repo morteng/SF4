@@ -219,7 +219,7 @@ class OrganizationForm(FlaskForm):
         Length(max=500, message="Description cannot exceed 500 characters.")
     ])
     homepage_url = URLField('Website', validators=[
-        Optional(),
+        DataRequired(message="Website URL is required."),
         URL(message="Please enter a valid URL starting with http:// or https://.")
     ])
     submit = SubmitField('Create')
