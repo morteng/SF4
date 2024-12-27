@@ -31,7 +31,8 @@
 - Always use form.validate() for validation (includes CSRF validation)
 - Use test_request_context() for form testing
 - For optional fields, handle empty values explicitly in custom validators
-- Ensure test users remain bound to session during authentication tests
+- Ensure test users are properly initialized with required fields
+- Use application's actual login mechanism in tests instead of manual session manipulation
 - Use consistent CSRF error messages across all endpoints
 - Ensure datetime fields properly handle:
   - Timezone conversion

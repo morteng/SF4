@@ -16,7 +16,8 @@
 - Add robust CSRF token extraction in tests
 - Use enums consistently for error messages
 - Ensure CSRF tokens match between form and session
-- Fix session binding issues in authentication tests
+- Ensure proper user initialization in authentication tests
+- Verify login mechanism works correctly in test environment
 - Use form.validate() instead of manual CSRF validation
 - Verify UI & DB state in tests
 - Ensure CSRF protection matches production environment

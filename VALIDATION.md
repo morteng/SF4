@@ -34,7 +34,9 @@
 - Preserve form state
 - Clearly document field validation rules
 - Handle empty values explicitly in custom validators
-- Ensure test users remain bound to session during authentication
+- Initialize test users with all required fields
+- Use application's actual login flow in tests
+- Verify CSRF token handling in authentication tests
 - Verify consistent error messages for CSRF validation failures
 - Ensure datetime fields properly handle:
   - Timezone conversion
