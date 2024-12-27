@@ -10,8 +10,9 @@
 - Test both validation success and failure cases
 
 ## CSRF Token Validation
-- Validate CSRF tokens in all forms
+- Validate CSRF tokens in all POST requests
 - Include CSRF token in form submissions
+- Extract CSRF token from GET requests before POST
 - Extract CSRF token from login page using reliable parsing
 - Ensure CSRF protection is enabled in test config
 - Verify token matching between form and session
