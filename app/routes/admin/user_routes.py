@@ -19,8 +19,8 @@ def create():
     if form.validate_on_submit():
         try:
             new_user = create_user(form.data)
-            flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
-            return redirect(url_for('admin.user.index')), 200
+            flash(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
+            return redirect(url_for('admin.user.index'))
         except ValueError as e:
             db.session.rollback()
             flash_message(str(e), FlashCategory.ERROR.value)
