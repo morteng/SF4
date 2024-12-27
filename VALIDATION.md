@@ -15,6 +15,13 @@
 - Use form-generated CSRF tokens in tests
 - Ensure CSRF tokens are properly initialized in forms
 - Add error handling to debug validation failures
+
+### CSRF Token Validation
+- Validate CSRF tokens in all forms
+- Include CSRF token in form submissions
+- Use form-generated CSRF tokens in tests
+- Ensure CSRF tokens are properly initialized in forms
+- Add error handling to debug validation failures
 - Ensure all required fields are properly set
 - Validate presence of required fields
 - Enforce max lengths

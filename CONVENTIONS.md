@@ -18,6 +18,14 @@
 - Keep form creation and POST requests within the same context
 - Add debug logging for form validation errors and response status
 
+### Form Testing with CSRF
+- Use `test_request_context` for CSRF-protected forms
+- Ensure test client maintains session state
+- Use `client.session_transaction()` to verify CSRF tokens
+- Use form-generated CSRF tokens in tests
+- Include CSRF token in POST requests
+- Keep form creation and POST requests within the same context
+
 ### Form Testing
 - Always use `test_request_context` when testing forms
 - Include CSRF token validation in form tests
