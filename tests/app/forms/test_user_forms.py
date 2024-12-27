@@ -39,8 +39,6 @@ def test_profile_form_valid(client, setup_database):
         )
         form.username.data = "newusername"
         form.email.data = "newemail@example.com"
-        form.password.data = "ValidPassword123!"  # Add required field
-        form.confirm_password.data = "ValidPassword123!"  # Add required field
         print(form.errors)  # Debugging: Print validation errors
         assert form.validate() == True
 
