@@ -25,6 +25,7 @@ ORG_RATE_LIMITS = {
 from flask_login import login_required
 from flask_wtf.csrf import CSRFProtect
 from app.constants import FlashMessages, FlashCategory
+from app.routes.admin import notification_count
 from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization, update_organization
 from app.utils import get_unread_notification_count
