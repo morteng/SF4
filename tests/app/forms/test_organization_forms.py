@@ -64,7 +64,7 @@ def test_organization_form_name_validation(app):
             )
             assert not form.validate()
             assert 'name' in form.errors
-            assert 'Name must contain only letters, numbers, and spaces.' in form.name.errors
+            assert 'Organization name must contain only letters, numbers, and spaces.' in form.name.errors
 
             # Test max length
             long_name = 'a' * 101
