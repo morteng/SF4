@@ -249,6 +249,37 @@
 - Displays error messages for invalid fields
 - Logs validation errors
 - Preserves form state
+1. **Invalid Form Submission**
+   - Test case: test_create_bot_route_with_invalid_data
+   - Implementation: Submit form with invalid data and verify:
+     * Returns 400 status code
+     * Proper error messages are displayed
+     * Form retains submitted values
+     * Error messages are logged
+   - Test invalid values for all fields
+   - Verify proper error handling for database errors
+
+### Error Handling
+- **Invalid Form Data**
+  * Returns 400 status code
+  * Displays field-specific error messages
+  * Logs validation errors
+  * Preserves form state
+  * Uses consistent error message formatting
+
+### Examples
+**Invalid Inputs**:
+{
+    "name": "",  // Empty name
+    "description": "a" * 501,  // Too long
+    "status": "invalid_status"  // Invalid value
+}
+
+**Expected Behavior**:
+- Returns 400 status code
+- Displays error messages for invalid fields
+- Logs validation errors
+- Preserves form state
 
 ### Validation Improvements
 - Added template inheritance validation

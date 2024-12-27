@@ -31,7 +31,7 @@ def create():
                 current_app.logger.error(f"Form validation error - {field}: {error}")
         flash_message(FLASH_MESSAGES["CREATE_BOT_INVALID_DATA"], FLASH_CATEGORY_ERROR)
         current_app.logger.error("Invalid form data submitted for bot creation")
-        return render_template('admin/bots/create.html', form=form), 400
+        return render_template('admin/bots/create.html', form=form, flash_messages=get_flashed_messages()), 400
     return render_template('admin/bots/create.html', form=form)
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])

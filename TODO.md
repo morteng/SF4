@@ -13,6 +13,7 @@
 - Fixed bot route URL building issues
 - Added proper error handling for bot creation
 - Updated flash message constants for consistency
+- Fixed bot creation form validation and error handling
 
 ## Knowledge & Memories
 - **Form Validation**
