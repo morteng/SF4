@@ -6,6 +6,9 @@ logger = logging.getLogger(__name__)
 import logging
 
 logger = logging.getLogger(__name__)
+import logging
+
+logger = logging.getLogger(__name__)
 from flask import session
 from wtforms.validators import DataRequired, Email, ValidationError, EqualTo
 from app.models.user import User
