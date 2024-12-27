@@ -2,6 +2,7 @@
 ## High Priority
 - [x] Add CSRF token to admin user index template
 - [x] Verify CSRF token handling in all form submissions
+- [x] Implement password strength validation
 - [x] Implement proper CSRF token decoding in tests
 - [x] Update flash message verification in tests
 - [x] Ensure consistent error handling for database errors

@@ -2,6 +2,7 @@
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
 - Include CSRF token in form fields: `<input name="csrf_token" value="{{ csrf_token }}">`
+- For HTMX requests, include meta tag: `<meta name="csrf-token" content="{{ csrf_token() }}">`
 - Use `decode_csrf_token()` to properly verify tokens
 
 ## Error Handling

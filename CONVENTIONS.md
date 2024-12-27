@@ -28,6 +28,12 @@
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
 - Leap year validation must explicitly check for February 29th in non-leap years with specific error message: 'Invalid date values (e.g., Feb 29 in non-leap years)'
+- Password strength requirements:
+  - Minimum 8 characters
+  - At least one uppercase letter
+  - At least one lowercase letter
+  - At least one number
+  - At least one special character
 - Date validation must handle both parsing errors and logical date validation separately
 - CSRF tokens required in all POST requests (can be disabled in tests using meta={'csrf': False})
 - Ensure validation errors are properly propagated to form errors and return appropriate HTTP status codes
