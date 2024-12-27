@@ -1,11 +1,12 @@
-## notes
-- Use session.get() instead of query.get() for better performance
-- All admin routes have an admin. prefix
-- Keep all CSS in app\static\css\main.css and JS in app\static\js\main.js
-- Use Tailwind and HTMX whenever possible
-- Always validate CSRF tokens in POST requests
-- Use type hints for better code clarity
-- Validate URLs using the validate_url utility
+## Coding Conventions
+- Use Flask's built-in flash messaging system
+- Keep error handling consistent using handle_organization_error helper
+- Use direct database operations in routes for simplicity
+- Maintain logging with clear, structured messages
+- Use bleach for input sanitization with specific allowed tags
+- Keep CSS in app/static/css/main.css and JS in app/static/js/main.js
+- Use Tailwind for styling and HTMX for dynamic interactions
+- Validate all form inputs both client and server side
 
 ## TODO.md
 - This file must be updated every time we do any file updates so that it always reflects our goal, plan and tasks. Always use full paths when referencing files to avoid confusion. This is a memory store for you, so jot down any salient thoughts about tests or code you would like to keep in mind for later. If you learn something about the codebase that would be good to know later, include the knowledge here. Do this after editing any other files. Always update TODO.md.

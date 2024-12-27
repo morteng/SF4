@@ -1,10 +1,13 @@
 # Validation Rules
 
-## Core Principles
+## Validation Principles
 1. **Input Validation**
-   - All user input must be validated
-   - Use both client-side and server-side validation
-   - Sanitize input using bleach
+   - All user input validated client and server side
+   - Sanitize using bleach with specific allowed tags:
+     - Text: No HTML
+     - Descriptions: p, br, strong, em
+     - URLs: No HTML
+   - Validate URLs using Flask-WTF URL validator
 
 2. **Error Handling**
    - Provide clear, user-friendly error messages
