@@ -2,6 +2,7 @@ import pytest
 import logging
 from flask import url_for
 from app.models.user import User
+from app.models.audit_log import AuditLog
 from tests.conftest import extract_csrf_token, logged_in_admin, db_session
 from app.constants import FlashMessages, FlashCategory
 from werkzeug.security import generate_password_hash
