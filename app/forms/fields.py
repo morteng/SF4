@@ -48,13 +48,20 @@ class CustomDateTimeField(DateTimeField):
                 # Store the raw string value for form display
                 self.raw_value = date_str
                 
+                # If parsing succeeds, proceed with timezone handling
+                local_tz = timezone(self.timezone_str)
+                local_dt = local_tz.localize(parsed_dt, is_dst=None)
+                self.data = local_dt.astimezone(utc)
+                # Store the raw string value for form display
+                self.raw_value = date_str
+                
             except ValueError as e:
                 error_str = str(e)
                 if 'does not match format' in error_str:
                     self.errors.append(self.error_messages['invalid_format'])
                 elif 'day is out of range' in error_str or 'month is out of range' in error_str or 'day must be in' in error_str:
                     # Check if it's a February 29th error
-                    if 'day is out of range' in error_str and parsed_dt.month == 2 and parsed_dt.day == 29:
+                    if 'day is out of range' in error_str and '2' in error_str and '29' in error_str:
                         self.errors.append('Invalid date values (e.g., Feb 29 in non-leap years)')
                     else:
                         self.errors.append(self.error_messages['invalid_date'])
