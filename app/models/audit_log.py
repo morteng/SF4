@@ -3,7 +3,7 @@ from app.extensions import db
 
 class AuditLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     action = db.Column(db.String(100), nullable=False)
     object_type = db.Column(db.String(50), nullable=True)
     object_id = db.Column(db.Integer, nullable=True)
