@@ -50,10 +50,25 @@ def test_user(db_session, user_data):
 
 def test_get_all_users_sorting(db_session):
     """Test sorting functionality in get_all_users()"""
-    # Create test users
-    user1 = User(username='user1', email='user1@example.com', created_at=datetime(2024, 1, 1))
-    user2 = User(username='user2', email='user2@example.com', created_at=datetime(2024, 1, 2))
-    user3 = User(username='user3', email='user3@example.com', created_at=datetime(2024, 1, 3))
+    # Create test users with password hashes
+    user1 = User(
+        username='user1',
+        email='user1@example.com',
+        created_at=datetime(2024, 1, 1),
+        password_hash='hash1'
+    )
+    user2 = User(
+        username='user2',
+        email='user2@example.com',
+        created_at=datetime(2024, 1, 2),
+        password_hash='hash2'
+    )
+    user3 = User(
+        username='user3',
+        email='user3@example.com',
+        created_at=datetime(2024, 1, 3),
+        password_hash='hash3'
+    )
     db_session.add_all([user1, user2, user3])
     db_session.commit()
 
