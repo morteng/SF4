@@ -28,19 +28,23 @@ class CustomDateTimeField(DateTimeField):
                 self.errors.append(self.error_messages['required'])
                 return
             
-            try:
-                # First try to parse the full date string
-                parsed_dt = datetime.strptime(date_str, self.format)
-                
-                # Validate leap year explicitly
-                if parsed_dt.month == 2 and parsed_dt.day == 29:
-                    year = parsed_dt.year
+            # First check for leap year dates
+            if '-02-29' in date_str:
+                try:
+                    # Extract just the date portion
+                    date_part = date_str.split()[0]
+                    year = int(date_part.split('-')[0])
                     is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
                     if not is_leap:
-                        # Clear any existing errors to ensure our specific message is shown
                         self.errors = []
                         self.errors.append(self.error_messages['invalid_leap_year'])
                         return
+                except (ValueError, IndexError):
+                    pass
+                    
+            try:
+                # Try to parse the full date string
+                parsed_dt = datetime.strptime(date_str, self.format)
                 
                 # Validate time components
                 if not self._validate_time_components(parsed_dt):
