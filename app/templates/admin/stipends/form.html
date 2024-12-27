@@ -1,6 +1,0 @@
-{% extends "admin/_form_template.html" %}
-
-{% set form_title = "Stipend" %}
-{% set form_action = url_for('admin.stipend.create_or_edit', id=form.id.data) %}
-{% set back_url = url_for('admin.stipend.index') %}
-{% set back_text = "Stipends" %}

@@ -1,9 +1,53 @@
+/test
+/add PROJECT.md
 /add CONVENTIONS.md
+/add VALIDATION.md
 /add TODO.md
 
-/code "fix issues revealed by testing, asking questions or noted in todo.md."
+/code
 
-/read PROJECT.md
+/architect "fix issues revealed by testing, asking questions or noted in todo.md."
 
-/architect "Clean up todo list, remove completed tasks. Keep important memories, knowledge and any goals you have been given. Update with new memories, knowledge and goals. Be specific and describe exactly how to accomplish things."
+/code
 
+/architect "Clean up todo list, remove completed tasks. Keep important memories, knowledge and any goals you have been given. Update with new memories, knowledge and goals. Be specific and describe exactly how to accomplish things. also update VALIDATION.md if new tests are needed."
+
+/code
+
+/architect "fix issues revealed by testing, asking questions or noted in todo.md."
+
+/code
+
+/architect "Clean up todo list, remove completed tasks. Keep important memories, knowledge and any goals you have been given. Update with new memories, knowledge and goals. Be specific and describe exactly how to accomplish things. also update VALIDATION.md if new tests are needed."
+
+/code
+
+/architect "fix issues revealed by testing, asking questions or noted in todo.md."
+
+/reset
+
+/test
+/add PROJECT.md
+/add CONVENTIONS.md
+/add VALIDATION.md
+/add TODO.md
+
+/code
+
+/architect "fix issues revealed by testing, asking questions or noted in todo.md."
+
+/code
+
+/architect "Clean up todo list, remove completed tasks. Keep important memories, knowledge and any goals you have been given. Update with new memories, knowledge and goals. Be specific and describe exactly how to accomplish things. also update VALIDATION.md if new tests are needed."
+
+/code
+
+/architect "fix issues revealed by testing, asking questions or noted in todo.md."
+
+/code
+
+/architect "Clean up todo list, remove completed tasks. Keep important memories, knowledge and any goals you have been given. Update with new memories, knowledge and goals. Be specific and describe exactly how to accomplish things. also update VALIDATION.md if new tests are needed."
+
+/code
+
+/architect "fix issues revealed by testing, asking questions or noted in todo.md."
