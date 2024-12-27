@@ -1,5 +1,8 @@
+import logging
 from datetime import datetime
 from app.extensions import db
+
+logger = logging.getLogger(__name__)
 
 class AuditLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)

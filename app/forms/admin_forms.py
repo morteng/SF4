@@ -163,6 +163,7 @@ class TagForm(FlaskForm):
             raise ValidationError('Tag with this name already exists.')
 
 
+from flask_login import current_user
 from wtforms import HiddenField
 
 class UserForm(FlaskForm):
