@@ -28,18 +28,25 @@ class CustomDateTimeField(DateTimeField):
                 self.errors.append(self.error_messages['required'])
                 return
             
+            # First check for leap year dates
+            if '02-29' in date_str:
+                try:
+                    # Extract just the date portion
+                    date_part = date_str.split()[0]
+                    parsed_date = datetime.strptime(date_part, '%Y-%m-%d')
+                    if parsed_date.month == 2 and parsed_date.day == 29:
+                        year = parsed_date.year
+                        is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
+                        if not is_leap:
+                            self.errors = []
+                            self.errors.append(self.error_messages['invalid_leap_year'])
+                            return
+                except ValueError:
+                    pass
+            
             try:
-                # First try to parse the full date string
+                # Try to parse the full date string
                 parsed_dt = datetime.strptime(date_str, self.format)
-                
-                # Check for leap year violations
-                if parsed_dt.month == 2 and parsed_dt.day == 29:
-                    year = parsed_dt.year
-                    is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
-                    if not is_leap:
-                        self.errors = []
-                        self.errors.append(self.error_messages['invalid_leap_year'])
-                        return
                 
                 # Validate time components
                 if not self._validate_time_components(parsed_dt):
@@ -62,21 +69,6 @@ class CustomDateTimeField(DateTimeField):
                 if 'does not match format' in error_str:
                     self.errors.append(self.error_messages['invalid_format'])
                 elif 'day is out of range' in error_str or 'month is out of range' in error_str:
-                    # Check if this is a leap year error
-                    if '29' in date_str and '02' in date_str:
-                        try:
-                            # Try parsing just the date portion
-                            date_part = date_str.split()[0]
-                            parsed_date = datetime.strptime(date_part, '%Y-%m-%d')
-                            if parsed_date.month == 2 and parsed_date.day == 29:
-                                year = parsed_date.year
-                                is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
-                                if not is_leap:
-                                    self.errors = []
-                                    self.errors.append(self.error_messages['invalid_leap_year'])
-                                    return
-                        except ValueError:
-                            pass
                     self.errors.append(self.error_messages['invalid_date'])
                 elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
                     self.errors.append(self.error_messages['invalid_time'])
