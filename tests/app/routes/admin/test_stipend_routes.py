@@ -3,7 +3,7 @@ from flask import url_for
 from app.models.stipend import Stipend
 from tests.conftest import extract_csrf_token
 from app.models.organization import Organization
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from app.constants import FlashMessages, FlashCategory
 from datetime import datetime, timedelta
 
 @pytest.fixture(scope='function')
@@ -73,7 +73,7 @@ def test_create_stipend_route(logged_in_admin, stipend_data, db_session):
     assert created_stipend.organization_id == organization.id
     
     # Verify flash message
-    assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
+    assert FlashMessages.CREATE_STIPEND_SUCCESS.value.encode() in response.data
 
 def test_create_stipend_route_with_invalid_application_deadline_format(logged_in_admin, stipend_data, db_session):
     create_response = logged_in_admin.get(url_for('admin.stipend.create'))
@@ -161,7 +161,7 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
     assert updated_stipend.name == 'Updated Stipend'
 
     # Verify the success flash message
-    assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in final_response.data
+    assert FlashMessages.UPDATE_STIPEND_SUCCESS.value.encode() in final_response.data
 
 def test_delete_stipend_route(logged_in_admin, test_stipend, db_session):
     response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id), follow_redirects=True)
@@ -169,7 +169,7 @@ def test_delete_stipend_route(logged_in_admin, test_stipend, db_session):
     deleted_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
     assert deleted_stipend is None
     # Assert the flash message
-    assert FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"].encode() in response.data
+    assert FlashMessages.DELETE_STIPEND_SUCCESS.value.encode() in response.data
 
 def test_index_stipend_route(logged_in_admin, test_stipend):
     response = logged_in_admin.get(url_for('admin.stipend.index'))
@@ -214,7 +214,7 @@ def test_create_stipend_route_htmx(logged_in_admin, stipend_data, db_session):
     assert created_stipend is not None
     assert created_stipend.summary == stipend_data['summary']
     # Verify the flash message for successful creation
-    assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
+    assert FlashMessages.CREATE_STIPEND_SUCCESS.value.encode() in response.data
 
 def test_create_stipend_route_with_invalid_application_deadline_format_htmx(logged_in_admin, stipend_data, db_session):
     # Create an organization for the test
@@ -315,4 +315,4 @@ def test_update_stipend_route_htmx(logged_in_admin, test_stipend, db_session):
     updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
     assert updated_stipend.name == 'Updated Stipend'
     # Assert the flash message
-    assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
+    assert FlashMessages.UPDATE_STIPEND_SUCCESS.value.encode() in response.data
