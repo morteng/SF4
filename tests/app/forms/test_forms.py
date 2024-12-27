@@ -14,14 +14,17 @@ def client(app):
 
 def test_organization_form_valid_data(app, client):
     """Test organization form with valid data"""
-    with app.test_request_context():  # Add a request context
+    # Initialize session with a request
+    client.get('/')  # This ensures the session is properly initialized
+
+    with app.test_request_context():
         with client.session_transaction() as session:
             # Create form to generate CSRF token
             form = OrganizationForm()
             
             # Get CSRF token from form and verify it's in session
             csrf_token = form.csrf_token.current_token
-            assert 'csrf_token' in session
+            assert 'csrf_token' in session  # This should now pass
             
             # Test form validation with CSRF token
             form = OrganizationForm(data={
