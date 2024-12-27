@@ -1,5 +1,18 @@
 # Validation Rules
 
+## Audit Log Validation
+- Verify all CRUD operations create audit logs
+- Check logs contain required fields:
+  - user_id
+  - action
+  - object_type
+  - object_id
+  - timestamp
+  - ip_address
+- Ensure logs are created for both success and failure cases
+- Validate audit log details field contains operation-specific information
+- Verify object_type is always set (defaults to 'User' if not specified)
+
 ## Notification Handling
 - notification_count must be passed to all admin templates
 - notification_count should be retrieved using get_notification_count()
