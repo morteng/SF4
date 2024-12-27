@@ -139,7 +139,7 @@ def test_create_stipend_with_all_fields(test_data, db_session, app, admin_user):
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
+        assert FlashMessages.CREATE_STIPEND_SUCCESS.encode() in response.data
 
 def test_create_stipend_with_missing_optional_fields(db_session, app, admin_user):
     # Create an organization first
@@ -178,7 +178,7 @@ def test_create_stipend_with_missing_optional_fields(db_session, app, admin_user
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"].encode() in response.data
+        assert FlashMessages.CREATE_STIPEND_SUCCESS.encode() in response.data
 
 def test_create_stipend_with_invalid_date_format(test_data, db_session, app, admin_user):
     # Modify test data with an invalid application_deadline format
@@ -265,7 +265,7 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
+        assert FlashMessages.INVALID_DATE_FORMAT.encode() in response.data
 
 def test_update_stipend_open_for_applications(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
@@ -302,7 +302,7 @@ def test_update_stipend_open_for_applications(test_data, db_session, app, admin_
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
+        assert FlashMessages.UPDATE_STIPEND_SUCCESS.encode() in response.data
 
 def test_update_stipend_open_for_applications_as_string(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
@@ -340,7 +340,7 @@ def test_update_stipend_open_for_applications_as_string(test_data, db_session, a
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
+        assert FlashMessages.UPDATE_STIPEND_SUCCESS.encode() in response.data
 
 def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
@@ -388,7 +388,7 @@ def test_update_stipend_change_all_fields(test_data, db_session, app, admin_user
  
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"].encode() in response.data
+        assert FlashMessages.UPDATE_STIPEND_SUCCESS.encode() in response.data
 
 def test_update_stipend_with_empty_application_deadline(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
@@ -417,7 +417,7 @@ def test_update_stipend_with_empty_application_deadline(test_data, db_session, a
 
     # Check if the correct flash message was set
     with app.test_request_context():
-        assert FLASH_MESSAGES["INVALID_DATE_FORMAT"].encode() in response.data
+        assert FlashMessages.INVALID_DATE_FORMAT.encode() in response.data
 
 def test_delete_existing_stipend(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)
