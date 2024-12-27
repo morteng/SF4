@@ -122,7 +122,7 @@ def test_time_component_validation(app, form_data):
 def test_missing_date(app, form_data):
     """Test missing date validation"""
         # Add the key with a dummy value before deleting it
-        form_data['application_deadline'] = '2025-12-31 23:59:59'  # Or any valid date string
+        form_data['application_deadline'] = '2025-12-31 23:59:59'
         del form_data['application_deadline']
         form = StipendForm(data=form_data)
         assert form.validate() is False
