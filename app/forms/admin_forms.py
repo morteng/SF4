@@ -193,6 +193,7 @@ class BotForm(FlaskForm):
 
 
 class OrganizationForm(FlaskForm):
+    id = HiddenField('ID')
     name = StringField('Org Name', validators=[
         DataRequired(),
         Length(max=100),
