@@ -5,6 +5,11 @@ from typing import Any, Union
 import logging
 from flask import abort, redirect, url_for, flash
 from typing import Any, Union
+from flask_wtf.csrf import generate_csrf
+
+def generate_csrf_token():
+    """Generate a CSRF token for form validation."""
+    return generate_csrf()
 
 # Configure logging
 logger = logging.getLogger(__name__)
