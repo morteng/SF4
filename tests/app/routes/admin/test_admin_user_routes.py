@@ -89,23 +89,29 @@ def test_update_user_route_with_invalid_id(logged_in_admin):
     assert url_for('admin.user.index', _external=False) == update_response.headers['Location']
 
 def test_delete_user_route(logged_in_admin, test_user, db_session):
-    # Perform the DELETE operation
     # Get CSRF token from the user index page
     index_response = logged_in_admin.get(url_for('admin.user.index'))
     csrf_token = extract_csrf_token(index_response.data)
-        
+    assert csrf_token is not None, "CSRF token not found in the response"
+
+    # Perform the DELETE operation
     delete_response = logged_in_admin.post(
         url_for('admin.user.delete', id=test_user.id),
         data={'csrf_token': csrf_token},
-        follow_redirects=True  # Follow the redirect to capture flash messages
+        follow_redirects=True
     )
-    assert delete_response.status_code == 200  # After following redirects, status should be 200
     
-    # Ensure the user is no longer in the session after deleting
+    # Debugging: Print the response data if needed
+    # print(delete_response.data)
+    
+    assert delete_response.status_code == 200
+    
+    # Verify user is deleted
     db_session.expire_all()
     updated_user = db_session.get(User, test_user.id)
     assert updated_user is None
-    # Assert the flash message using constants
+    
+    # Verify flash message
     assert_flash_message(delete_response, FlashMessages.DELETE_USER_SUCCESS)
 
 def test_delete_user_route_with_invalid_id(logged_in_admin):

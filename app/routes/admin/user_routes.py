@@ -80,7 +80,7 @@ def edit(id):
 def delete(id):
     user = get_user_by_id(id)
     if not user:
-        flash_message(FlashMessages.USER_NOT_FOUND.value, FlashCategory.ERROR.value)  # Use specific user not found message
+        flash_message(FlashMessages.USER_NOT_FOUND.value, FlashCategory.ERROR.value)
         return redirect(url_for('admin.user.index'))
     
     try:
@@ -91,7 +91,7 @@ def delete(id):
         db.session.rollback()
         logging.error(f"Failed to delete user {id}: {e}")
         flash_message(f"{FlashMessages.DELETE_USER_ERROR.value} {str(e)}", FlashCategory.ERROR.value)
-        return redirect(url_for('admin.user.index')), 400
+        return redirect(url_for('admin.user.index'))
 
 @admin_user_bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
