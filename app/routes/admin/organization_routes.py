@@ -33,7 +33,7 @@ def create():
         # Handle form validation errors
         for field_name, errors in form.errors.items():
             # Use the field name directly instead of the label
-            field_label = field_name.capitalize()
+            field_label = 'Name' if field_name == 'name' else field_name.capitalize()
             for error in errors:
                 if 'This field is required.' in error:
                     flash_message(f"{field_label}: This field is required.", FLASH_CATEGORY_ERROR)
