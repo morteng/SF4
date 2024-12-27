@@ -15,9 +15,8 @@
 
 ## Knowledge & Memories
 - **Template Structure**
-  * Admin templates should extend admin/layout.html
-  * admin/layout.html extends base.html
-  * Use consistent block names (admin_content for admin pages)
+  * Admin templates should extend base.html directly
+  * Use consistent block names (content for all pages)
   * Include admin sidebar in all admin pages
   * Use proper form error handling with invalid-feedback class
 
@@ -85,6 +84,11 @@
    - Verify error handling for all admin routes
    - Test edge cases for form validation
    - Add tests for template rendering
+
+1. **Template Improvements**
+   - [ ] Create consistent admin template structure
+   - [ ] Add template inheritance tests
+   - [ ] Verify all admin templates extend base.html
 
 ## New Goals
 1. **Improve Test Coverage**
