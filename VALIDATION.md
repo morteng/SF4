@@ -12,4 +12,5 @@
 - Log details
 - Use enums for user feedback
 - Preserve form state
+- Verify flash messages in session rather than response HTML
 
