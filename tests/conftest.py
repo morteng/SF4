@@ -17,10 +17,10 @@ from app.models.tag import Tag
 # Ignore SAWarnings for cleaner test output
 warnings.filterwarnings("ignore", category=SAWarning)
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='session')
 def app():
-    """Create and configure a new app instance for each test function."""
-    app = create_app('testing')  # Use 'testing' here, not TestConfig
+    """Create and configure a new app instance for the test session."""
+    app = create_app('testing')
     app.config['WTF_CSRF_ENABLED'] = True  # Enable CSRF for testing
     app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'  # Add CSRF secret key
     

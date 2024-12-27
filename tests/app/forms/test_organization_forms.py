@@ -3,11 +3,6 @@ from app import create_app
 from app.forms.admin_forms import OrganizationForm
 from app.config import TestConfig
 
-@pytest.fixture(scope='session')
-def app():
-    """Create and configure a new app instance for each test session."""
-    app = create_app('testing')
-    return app
 
 def test_organization_form_valid_data(app):
     """Test organization form with valid data"""
