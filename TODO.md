@@ -7,5 +7,6 @@
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
-- Standardize CSRF error message handling across all endpoints
+- Standardize error message handling across all endpoints
+- Verify error scenarios using session-based flash message checks
 

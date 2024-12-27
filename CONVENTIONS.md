@@ -5,12 +5,13 @@
   - HTMX requests: Add meta tag `<meta name="csrf-token" content="{{ csrf_token() }}">` in base template
   - JavaScript: Include CSRF token in HTMX headers via htmx:configRequest event
 
-### Testing with CSRF
+### Testing with CSRF and Error Handling
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
 - Extract CSRF token from hidden input: `<input name="csrf_token" value="...">`
 - Verify flash messages in session rather than response HTML
 - Test both valid and invalid CSRF scenarios
 - Always make a GET request before POST to establish session
+- For error scenarios, check session for flash messages using substring matching
 
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
