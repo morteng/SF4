@@ -6,12 +6,10 @@
 
 ## Error Handling
 - Rollback on error
-- Return 400 status code for form validation and database errors
+- Return appropriate status codes (400 for validation/database errors, 200 for success)
 - Ensure validation errors are properly propagated to form errors
-- Return appropriate HTTP status codes (400 for validation/database errors)
-- Return 200 status code with redirects after successful operations
 - Log details including error messages
 - Use enums for user feedback with appended error details when needed
 - Preserve form state
-- Verify flash messages in session using substring matching
+- Verify flash messages in response HTML after redirects
 

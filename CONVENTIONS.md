@@ -8,10 +8,10 @@
 ### Testing with CSRF and Error Handling
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
 - Extract CSRF token from hidden input: `<input name="csrf_token" value="...">`
-- Verify flash messages in session rather than response HTML
+- Verify flash messages in response HTML after redirects
 - Test both valid and invalid CSRF scenarios
 - Always make a GET request before POST to establish session
-- For error scenarios, check session for flash messages using substring matching
+- For error scenarios, check response status codes and flash messages
 
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
