@@ -76,7 +76,6 @@ def edit(id):
         )
         form.id.data = user.id
         
-        # Add role management
         if request.method == 'POST' and form.validate_on_submit():
             # Handle role changes
             if 'is_admin' in request.form:
@@ -87,16 +86,16 @@ def edit(id):
                 user.set_password('temporary_password')  # Implement proper password reset logic
                 flash_message("Password reset initiated", FlashCategory.SUCCESS)
                 
+            try:
+                update_user(user, form.data)
+                flash_message(FlashMessages.UPDATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
+                return redirect(url_for('admin.user.index'))
+            except Exception as e:
+                db.session.rollback()
+                logging.error(f"Failed to update user {id}: {e}")
+                flash_message(f"{FlashMessages.UPDATE_USER_ERROR.value} {str(e)}", FlashCategory.ERROR.value)
+                
             db.session.commit()
-    if request.method == 'POST' and form.validate_on_submit():
-        try:
-            update_user(user, form.data)
-            flash_message(FlashMessages.UPDATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
-            return redirect(url_for('admin.user.index'))
-        except Exception as e:
-            db.session.rollback()
-            logging.error(f"Failed to update user {id}: {e}")
-            flash_message(f"{FlashMessages.UPDATE_USER_ERROR.value} {str(e)}", FlashCategory.ERROR.value)
     
     return render_template('admin/_form_template.html', 
                          form=form, 
