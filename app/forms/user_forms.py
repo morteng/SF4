@@ -21,16 +21,11 @@ class ProfileForm(FlaskForm):
     submit = SubmitField('Save Changes')
 
     def validate_username(self, username: StringField) -> None:
-        try:
-            if username.data != self.original_username:
-                user = User.query.filter_by(username=username.data).first()
-                if user:
-                    flash_message(FlashMessages.USERNAME_ALREADY_EXISTS, FlashCategory.ERROR)
-                    raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS)
-        except Exception as e:
-            logger.error(f"Error validating username: {e}")
-            flash_message(FlashMessages.GENERIC_ERROR, FlashCategory.ERROR)
-            raise ValidationError(FlashMessages.GENERIC_ERROR)
+        if username.data != self.original_username:
+            user = User.query.filter_by(username=username.data).first()
+            if user:
+                flash_message(FlashMessages.USERNAME_ALREADY_EXISTS, FlashCategory.ERROR)
+                raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS)
 
     def validate_email(self, email: StringField) -> None:
         if email.data != self.original_email:
