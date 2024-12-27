@@ -23,14 +23,14 @@ class FlashMessages:
     USER_NOT_FOUND = "User not found."
 
     # Bot Management
-    "CREATE_BOT_SUCCESS": "Bot created successfully.",
-    "CREATE_BOT_ERROR": "Failed to create bot: ",
-    "CREATE_BOT_INVALID_DATA": "Invalid data provided for bot creation.",
-    "UPDATE_BOT_SUCCESS": "Bot updated successfully.",
-    "UPDATE_BOT_ERROR": "Failed to update bot.",
-    "DELETE_BOT_SUCCESS": "Bot deleted successfully.",
-    "DELETE_BOT_ERROR": "Failed to delete bot.",
-    "BOT_NOT_FOUND": "Bot not found.",
+    CREATE_BOT_SUCCESS = "Bot created successfully."
+    CREATE_BOT_ERROR = "Failed to create bot: "
+    CREATE_BOT_INVALID_DATA = "Invalid data provided for bot creation."
+    UPDATE_BOT_SUCCESS = "Bot updated successfully."
+    UPDATE_BOT_ERROR = "Failed to update bot."
+    DELETE_BOT_SUCCESS = "Bot deleted successfully."
+    DELETE_BOT_ERROR = "Failed to delete bot."
+    BOT_NOT_FOUND = "Bot not found."
 
     # Organization Management
     "CREATE_ORGANIZATION_SUCCESS": "Organization created successfully.",

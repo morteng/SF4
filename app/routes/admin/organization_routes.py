@@ -1,15 +1,11 @@
 import logging
-from flask import Blueprint, render_template, redirect, url_for, request
-from flask_login import current_user
+from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask_login import current_user, login_required
 from bleach import clean
+from flask_wtf.csrf import CSRFProtect
 
 # Configure logging
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler = logging.StreamHandler()
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 from flask_login import login_required
 from flask_wtf.csrf import CSRFProtect
 from app.constants import FlashMessages, FlashCategory
@@ -57,23 +53,20 @@ def create():
                 'homepage_url': clean(form.homepage_url.data.strip(), tags=[], attributes={}) if form.homepage_url.data else None
             }
             
-            success, error_message = create_organization(organization_data)
-            if success:
-                flash_message(FlashMessages.CREATE_ORGANIZATION_SUCCESS, FlashCategory.SUCCESS)
-                logger.info(f"Organization '{organization_data['name']}' created successfully by user {current_user.username}")
-                return redirect(url_for('admin.organization.index'))
-            else:
-                logger.error(f"Failed to create organization: {error_message}")
-                return handle_organization_error(error_message, form, 'admin/organizations/form.html')
+            # Create organization
+            organization = Organization(**organization_data)
+            db.session.add(organization)
+            db.session.commit()
+            
+            flash('Organization created successfully!', 'success')
+            logger.info(f"Organization '{organization_data['name']}' created successfully by user {current_user.username}")
+            return redirect(url_for('admin.organization.index'))
                 
         except IntegrityError as e:
             db.session.rollback()
             logger.error(f"Integrity error creating organization: {str(e)}", exc_info=True)
-            return handle_organization_error(
-                FlashMessages.CREATE_ORGANIZATION_DUPLICATE_ERROR,
-                form,
-                'admin/organizations/form.html'
-            )
+            flash('An organization with this name already exists.', 'error')
+            return render_template('admin/organizations/form.html', form=form), 400
         except SQLAlchemyError as e:
             db.session.rollback()
             logger.error(f"Database error creating organization: {str(e)}", exc_info=True)
@@ -164,7 +157,7 @@ def edit(id):
 
 def handle_organization_error(message, form=None, template=None, status_code=400):
     """Handle organization-related errors consistently"""
-    flash_message(message, FlashCategory.ERROR)
+    flash(message, category='error')
     if form and template:
         return render_template(template, form=form), status_code
     return redirect(url_for('admin.organization.index'))
