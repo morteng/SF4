@@ -49,15 +49,16 @@ def test_organization_form_valid_data(app):
     ("Valid Org", "Valid description", "", False),  # Missing URL
     ("a" * 256, "Valid description", "https://valid.org", False),  # Name too long
 ])
-def test_organization_form_invalid_data(name, description, homepage_url, expected):
+def test_organization_form_invalid_data(app, name, description, homepage_url, expected):
     """Test organization form with invalid data"""
-    form = OrganizationForm(
-        data={
-            'name': name,
-            'description': description,
-            'homepage_url': homepage_url
-        },
-        meta={'csrf': False}
-    )
-    
-    assert form.validate() == expected, f"Expected validation to be {expected} for {name}, {description}, {homepage_url}"
+    with app.app_context():
+        form = OrganizationForm(
+            data={
+                'name': name,
+                'description': description,
+                'homepage_url': homepage_url
+            },
+            meta={'csrf': False}
+        )
+        
+        assert form.validate() == expected, f"Expected validation to be {expected} for {name}, {description}, {homepage_url}"
