@@ -1,5 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app
-from flask_login import login_required
+from flask_login import login_required, current_user
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from app.models.audit_log import AuditLog
 from app.constants import FlashMessages, FlashCategory
 from app.forms.admin_forms import TagForm
 from app.utils import format_error_message
@@ -15,6 +18,12 @@ from sqlalchemy.exc import IntegrityError  # Import IntegrityError
 from app.utils import admin_required, flash_message
 
 admin_tag_bp = Blueprint('tag', __name__, url_prefix='/tags')
+
+# Initialize rate limiter
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=["100 per hour", "10 per minute"]
+)
 
 @admin_tag_bp.route('/create', methods=['GET', 'POST'])
 @login_required

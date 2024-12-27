@@ -1,6 +1,7 @@
 import logging
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import current_user, login_required
+from app.utils import admin_required
 from bleach import clean
 from flask_wtf.csrf import CSRFProtect
 from flask_limiter import Limiter
