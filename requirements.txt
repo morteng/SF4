@@ -12,3 +12,4 @@ pytz
 Flask-Limiter
 requirements-parser==0.5.0
 requirements-parser
+setuptools
