@@ -6,6 +6,7 @@
 - Ensure test client maintains session state between requests
 - Use `app.test_request_context()` when accessing session data
 - Validate CSRF token matches between form and session
+- Document session initialization requirements in test cases
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all forms

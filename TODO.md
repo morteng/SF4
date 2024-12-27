@@ -6,6 +6,7 @@
 - [x] Verify CSRF token value matches between form and session
 - [ ] Add CRUD integration tests
 - [ ] Increase test coverage to 80%+
+- [ ] Document session initialization requirements in test cases
 
 ## Best Practices
 - Validate & sanitize all inputs
