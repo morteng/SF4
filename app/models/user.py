@@ -10,6 +10,7 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
+    notifications = db.relationship('Notification', backref='user', lazy=True)
 
     __mapper_args__ = {"confirm_deleted_rows": False}
 

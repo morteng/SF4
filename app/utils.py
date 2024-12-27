@@ -114,7 +114,7 @@ import re
 from typing import Tuple
 
 def validate_password_strength(password: str) -> bool:
-    """Validate password strength.
+    """Validate password strength according to project requirements.
     
     Args:
         password: Password to validate
@@ -122,16 +122,31 @@ def validate_password_strength(password: str) -> bool:
     Returns:
         bool: True if password meets strength requirements
     """
+    # Minimum 8 characters
     if len(password) < 8:
         return False
+    
+    # At least one uppercase letter
     if not re.search(r'[A-Z]', password):
         return False
+    
+    # At least one lowercase letter
     if not re.search(r'[a-z]', password):
         return False
+    
+    # At least one number
     if not re.search(r'[0-9]', password):
         return False
+    
+    # At least one special character
     if not re.search(r'[^A-Za-z0-9]', password):
         return False
+    
+    # Check against common passwords
+    common_passwords = ['password', '123456', 'qwerty']
+    if password.lower() in common_passwords:
+        return False
+        
     return True
 
 def get_unread_notification_count() -> int:

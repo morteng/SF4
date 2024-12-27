@@ -34,6 +34,15 @@ def init_rate_limiter(app):
 def create():
     form = UserForm()
     notification_count = get_notification_count(current_user.id)
+    
+    # Audit log
+    audit_log = AuditLog(
+        user_id=current_user.id,
+        action='create_user',
+        details_before='Creating new user',
+        timestamp=datetime.utcnow()
+    )
+    db.session.add(audit_log)
     if form.validate_on_submit():
         try:
             new_user = create_user(form.data)
