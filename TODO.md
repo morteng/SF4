@@ -5,7 +5,7 @@
 - [x] Verify error handling for database errors
 - [x] Implement password strength validation
 - [x] Add audit logging for sensitive operations
-- [x] Fix date validation in StipendForm
+- [x] Add IP address tracking to audit logs
 - [x] Implement rate limiting for sensitive operations
 - [x] Add foreign key relationship between User and AuditLog
 - [ ] Complete CRUD operation tests for all admin routes
