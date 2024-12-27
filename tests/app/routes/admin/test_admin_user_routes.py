@@ -91,13 +91,25 @@ def test_update_user_route_with_invalid_id(logged_in_admin):
 def extract_csrf_token(response_data):
     """Extract CSRF token from HTML response."""
     import re
-    # Search for the CSRF token in the hidden input field
-    match = re.search(
-        r'<input[^>]*id="csrf_token"[^>]*value="([^"]+)"', 
-        response_data.decode('utf-8')
-    )
-    if match:
-        return match.group(1)
+    html = response_data.decode('utf-8')
+    
+    # Debug: Print first 1000 characters of HTML
+    print("HTML Response:", html[:1000])
+    
+    # Try multiple patterns to find CSRF token
+    patterns = [
+        r'<input[^>]*id="csrf_token"[^>]*value="([^"]+)"',
+        r'<input[^>]*name="csrf_token"[^>]*value="([^"]+)"',
+        r'<meta[^>]*name="csrf-token"[^>]*content="([^"]+)"'
+    ]
+    
+    for pattern in patterns:
+        match = re.search(pattern, html)
+        if match:
+            print(f"Found CSRF token using pattern: {pattern}")
+            return match.group(1)
+    
+    print("No CSRF token found in HTML response")
     return None
 
 def test_delete_user_route(logged_in_admin, test_user, db_session):
