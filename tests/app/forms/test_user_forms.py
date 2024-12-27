@@ -48,6 +48,7 @@ def test_profile_form_valid(client, setup_database):
             # Test the form with valid CSRF token
             form.username.data = "newusername"
             form.email.data = "newemail@example.com"
+            
             # Add debugging output
             if not form.validate():
                 print("Form validation errors:", form.errors)
@@ -60,6 +61,11 @@ def test_profile_form_valid(client, setup_database):
                 'email': 'newemail@example.com',
                 'csrf_token': csrf_token
             }, follow_redirects=True)
+            
+            # Add debugging output for the response
+            if response.status_code != 200:
+                print("Response status:", response.status_code)
+                print("Response data:", response.data)
             
             assert response.status_code == 200
 

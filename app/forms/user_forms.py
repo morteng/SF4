@@ -34,7 +34,8 @@ class ProfileForm(FlaskForm):
         super().__init__(*args, **kwargs)
         self.original_username = original_username
         self.original_email = original_email
-        self.csrf_token.data = generate_csrf_token()  # Initialize CSRF token
+        # Initialize CSRF token
+        self.csrf_token.data = generate_csrf_token()
 
 
 class LoginForm(FlaskForm):
