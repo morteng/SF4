@@ -17,7 +17,8 @@ class CustomDateTimeField(DateTimeField):
             'invalid_date': 'Invalid date values (e.g., Feb 30)',
             'invalid_time': 'Invalid time values (e.g., 25:61:61)',
             'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
-            'required': 'Date is required'
+            'required': 'Date is required',
+            'invalid_leap_year': 'Invalid date: February 29th on a non-leap year'
         }
         self.errors = []
 
@@ -92,10 +93,11 @@ class CustomDateTimeField(DateTimeField):
             try:
                 datetime(dt.year, dt.month, dt.day)
             except ValueError:
-                # Special case for leap years
                 if dt.month == 2 and dt.day == 29:
-                    raise ValidationError('Invalid date values (e.g., Feb 30)')
-                raise ValidationError(self.error_messages['invalid_date'])
+                    self.errors.append(self.error_messages['invalid_leap_year'])
+                    return False
+                self.errors.append(self.error_messages['invalid_date'])
+                return False
                 
             return True
         except ValueError:
