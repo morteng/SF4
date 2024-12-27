@@ -30,14 +30,13 @@ def test_create_bot_route(logged_in_admin, bot_data):
     response = logged_in_admin.post(url_for('admin.bot.create'), data={
         'name': bot_data['name'],
         'description': bot_data['description'],
-        'status': 'true' if bot_data['status'] else 'false',  # Convert boolean to string
+        'status': 'true' if bot_data['status'] else 'false',
         'csrf_token': csrf_token
     }, follow_redirects=True)
 
     assert response.status_code == 200
     bots = Bot.query.all()
     assert any(bot.name == bot_data['name'] and bot.description == bot_data['description'] for bot in bots)
-    # Assert the flash message using constants
     assert FLASH_MESSAGES["CREATE_BOT_SUCCESS"].encode() in response.data
 
 def test_create_bot_route_with_invalid_data(logged_in_admin, bot_data):

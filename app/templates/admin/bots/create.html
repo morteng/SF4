@@ -1,68 +1,6 @@
 {% extends "admin/_base.html" %}
 
 {% block content %}
-<h1>Create Bot</h1>
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-        {{ form.name.label }}
-        {{ form.name(class="form-control") }}
-        {% if form.name.errors %}
-            <div class="text-danger">
-                {% for error in form.name.errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
-{% endblock %}
-{% extends "admin/_base.html" %}
-
-{% block content %}
-<h1>Create Bot</h1>
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-        {{ form.name.label }}
-        {{ form.name(class="form-control") }}
-        {% if form.name.errors %}
-            <div class="text-danger">
-                {% for error in form.name.errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.description.label }}
-        {{ form.description(class="form-control") }}
-        {% if form.description.errors %}
-            <div class="text-danger">
-                {% for error in form.description.errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.status.label }}
-        {{ form.status(class="form-control") }}
-        {% if form.status.errors %}
-            <div class="text-danger">
-                {% for error in form.status.errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
-{% endblock %}
-{% extends "admin/_base.html" %}
-
-{% block content %}
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-2xl font-bold mb-4">Create Bot</h1>
     <form method="POST" action="{{ url_for('admin.bot.create') }}">
