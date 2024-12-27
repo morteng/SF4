@@ -37,20 +37,13 @@ def register_admin_blueprints(app):
     from .tag_routes import admin_tag_bp
     from .dashboard_routes import admin_dashboard_bp
 
-    # Register sub-blueprints only if they haven't been registered
-    if 'admin.users' not in app.blueprints:
-        admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')
-    if 'admin.bots' not in app.blueprints:
-        admin_bp.register_blueprint(admin_bot_bp, url_prefix='/bots')
-    if 'admin.organizations' not in app.blueprints:
-        admin_bp.register_blueprint(admin_org_bp, url_prefix='/organizations')
-    if 'admin.stipends' not in app.blueprints:
-        admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
-    if 'admin.tags' not in app.blueprints:
-        admin_bp.register_blueprint(admin_tag_bp, url_prefix='/tags')
-    if 'admin.dashboard' not in app.blueprints:
-        admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
+    # Register sub-blueprints with unique prefixes
+    admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')
+    admin_bp.register_blueprint(admin_bot_bp, url_prefix='/bots')
+    admin_bp.register_blueprint(admin_org_bp, url_prefix='/organizations')
+    admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
+    admin_bp.register_blueprint(admin_tag_bp, url_prefix='/tags')
+    admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
     
     # Register the main admin blueprint
-    if 'admin' not in app.blueprints:
-        app.register_blueprint(admin_bp)
+    app.register_blueprint(admin_bp)

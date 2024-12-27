@@ -43,22 +43,6 @@ from app.utils import flash_message
 admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 csrf = CSRFProtect()
 
-@admin_org_bp.route('/', methods=['GET'])
-@admin_org_bp.route('/paginate/<int:page>', methods=['GET'])
-@login_required
-@admin_required
-@notification_count
-def index(page=1):
-    """List organizations with optional pagination"""
-    per_page = 20  # Items per page
-    organizations = get_all_organizations()
-    
-    # Only paginate if a page number is provided
-    if request.path.startswith('/paginate'):
-        organizations = organizations.paginate(page=page, per_page=per_page)
-    
-    return render_template('admin/organizations/index.html',
-                         organizations=organizations)
 
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")
