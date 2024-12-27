@@ -17,10 +17,7 @@ from app.constants import FlashMessages, FlashCategory
 from app.extensions import db, limiter
 from app.routes.admin import create_admin_blueprint
 
-# Create admin blueprint instance
-admin_bp = create_admin_blueprint()
-
-# Import notification_count after creating the blueprint
+# Import notification_count directly
 from app.routes.admin import notification_count
 
 # Configure logging
@@ -35,7 +32,7 @@ ORG_RATE_LIMITS = {
 from flask_login import login_required
 from flask_wtf.csrf import CSRFProtect
 from app.constants import FlashMessages, FlashCategory
-from app.routes.admin import create_admin_blueprint, notification_count
+from app.routes.admin import notification_count
 from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization, update_organization
 from app.utils import get_unread_notification_count
@@ -49,7 +46,7 @@ csrf = CSRFProtect()
 @admin_org_bp.route('/', methods=['GET'])
 @login_required
 @admin_required
-@admin_bp.notification_count
+@notification_count
 def index():
     """List all organizations"""
     organizations = get_all_organizations()

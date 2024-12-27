@@ -22,6 +22,8 @@ def create_admin_blueprint():
     
     # Make the decorator available to routes
     admin_bp.notification_count = notification_count
+    
+    return admin_bp  # Add this return statement
 
 def register_admin_blueprints(app):
     # Create a new admin blueprint instance
