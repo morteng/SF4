@@ -136,6 +136,7 @@ def create():
 
 
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")  # Add rate limiting
 @login_required
 @admin_required
 def edit(id):
@@ -165,12 +166,25 @@ def edit(id):
                 
                 # Update the stipend
                 updated_stipend = update_stipend(stipend, stipend_data, session=db.session)
+                # Create notification
+                Notification.create(
+                    type="stipend_updated",
+                    message=f"Stipend updated: {updated_stipend.name}",
+                    related_object=updated_stipend
+                )
+                
                 flash_message(FlashMessages["UPDATE_STIPEND_SUCCESS"], FlashCategory.SUCCESS)
                 
                 if is_htmx:
                     try:
                         # Return the updated row with HTMX headers
-                        return render_template('admin/stipends/_stipend_row.html', stipend=updated_stipend), 200
+                        return render_template(
+                            'admin/stipends/_stipend_row.html', 
+                            stipend=updated_stipend
+                        ), 200, {
+                            'HX-Retarget': '#stipend-table',
+                            'HX-Reswap': 'outerHTML'
+                        }
                     except Exception as e:
                         current_app.logger.error(f"Failed to render stipend row template: {e}")
                         return render_template_string(
@@ -179,10 +193,18 @@ def edit(id):
                 # For non-HTMX requests, redirect to index
                 return redirect(url_for('admin.stipend.index'))
 
+            except ValidationError as e:
+                db.session.rollback()
+                current_app.logger.error(f"Validation error updating stipend: {e}")
+                flash_message(f"Validation error: {str(e)}", FlashCategory.ERROR)
+            except IntegrityError as e:
+                db.session.rollback()
+                current_app.logger.error(f"Database error updating stipend: {e}")
+                flash_message("Database integrity error occurred", FlashCategory.ERROR)
             except Exception as e:
                 db.session.rollback()
                 current_app.logger.error(f"Failed to update stipend: {e}")
-                flash_message(str(e) if str(e) else FlashMessages["UPDATE_STIPEND_ERROR"], FlashCategory.ERROR)
+                flash_message(FlashMessages["UPDATE_STIPEND_ERROR"], FlashCategory.ERROR)
                 if is_htmx:
                     return render_template(
                         'admin/stipends/_form.html',
@@ -224,6 +246,7 @@ def edit(id):
 
 
 @admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])
+@limiter.limit("3 per minute")  # Add rate limiting for delete
 @login_required
 @admin_required
 def delete(id):
@@ -235,7 +258,25 @@ def delete(id):
         return redirect(url_for('admin.stipend.index'))
 
     try:
+        # Add audit logging before deletion
+        audit_log = AuditLog(
+            user_id=current_user.id,
+            action='delete_stipend',
+            details=f"Attempt to delete stipend: {stipend.name}",
+            object_type="Stipend",
+            object_id=stipend.id
+        )
+        db.session.add(audit_log)
+        
         delete_stipend(stipend.id)
+        
+        # Create notification
+        Notification.create(
+            type="stipend_deleted",
+            message=f"Stipend deleted: {stipend.name}",
+            related_object=stipend
+        )
+        
         flash_message(FlashMessages["DELETE_STIPEND_SUCCESS"], FlashCategory.SUCCESS)
         if request.headers.get('HX-Request'):
             return render_template('_flash_messages.html'), 200
