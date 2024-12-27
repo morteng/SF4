@@ -36,14 +36,16 @@
 - The badge should be visible even if the count is 0.
 
 ### Audit Logging
-- Required for all CRUD operations
+- Required for all CRUD operations and system events
 - Must include:
-  - User ID
-  - Action type (create/update/delete)
+  - User ID (0 for system events)
+  - Action type (create/update/delete/system_event)
   - Object type and ID
   - Timestamp (UTC)
-  - IP address
+  - IP address (if available)
   - Operation details
+  - Before/after state for updates
+- Must create notification for audit log creation
 - Must include:
   - Timestamp (UTC)
   - User ID
