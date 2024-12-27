@@ -113,19 +113,17 @@ def extract_csrf_token(response_data):
     return None
 
 def test_delete_user_route(logged_in_admin, test_user, db_session):
-    # Get CSRF token from the user index page
+    # Make a GET request to initialize the session and get the CSRF token
     index_response = logged_in_admin.get(url_for('admin.user.index'))
+    assert index_response.status_code == 200, "Failed to load user index page"
+    
+    # Extract the CSRF token
     csrf_token = extract_csrf_token(index_response.data)
     assert csrf_token is not None, "CSRF token not found in the response"
     
-    # Debug: Print extracted CSRF token
-    print(f"Extracted CSRF token: {csrf_token}")
-
     # Verify the CSRF token in the session
     with logged_in_admin.session_transaction() as session:
         session_csrf_token = session.get('csrf_token')
-        # Debug: Print session CSRF token
-        print(f"Session CSRF token: {session_csrf_token}")
         assert session_csrf_token == csrf_token, "CSRF token mismatch between session and form"
 
     # Perform the DELETE operation with proper CSRF handling
@@ -141,9 +139,6 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
         },
         follow_redirects=True
     )
-
-    # Debugging: Print the response data if needed
-    print(delete_response.data)  # Uncomment to debug
 
     assert delete_response.status_code == 200
     
