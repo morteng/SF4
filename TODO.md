@@ -1,5 +1,6 @@
 # TODO List
 ## High Priority
+- [x] Verify CSRF token extraction in tests
 - [ ] Add remaining form validation tests
 - [ ] Add CRUD integration tests
 - [ ] Increase test coverage to 80%+

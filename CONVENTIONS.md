@@ -5,7 +5,8 @@
 ### Testing with CSRF
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
 - Use `client.session_transaction()` for session access
-- Extract CSRF token from form or login page using reliable parsing
+- Extract CSRF token from form using pattern: `<input[^>]*id="csrf_token"[^>]*value="([^"]+)"`
+- Ensure CSRF token is present in the HTML response before extraction
 - Test both valid and invalid CSRF scenarios
 - Verify error messages match actual implementation
 - Always make a GET request before POST to establish session

@@ -15,6 +15,8 @@
   - Form fields: `csrf_token` and `_csrf_token`
   - Header: `X-CSRFToken`
   - Header: `X-Requested-With: XMLHttpRequest`
+- Ensure CSRF token is present in HTML response before extraction
+- Use pattern: `<input[^>]*id="csrf_token"[^>]*value="([^"]+)"` for extraction
 - Extract CSRF token from GET requests before POST
 - Extract CSRF token from login page using reliable parsing
 - Ensure CSRF protection is enabled in test config
