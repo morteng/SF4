@@ -183,6 +183,10 @@ def test_create_user_route_with_database_error(logged_in_admin, user_data, db_se
         decoded_response = response.data.decode('utf-8')
         assert FlashMessages.CREATE_USER_ERROR.value in decoded_response, \
             f"Expected flash message containing '{FlashMessages.CREATE_USER_ERROR.value}' not found in response. Response was: {decoded_response}"
+            
+        # Verify the user was not created
+        users = User.query.all()
+        assert not any(user.username == data['username'] for user in users)
 
         users = User.query.all()
         assert not any(user.username == data['username'] for user in users)  # Ensure no user was created
