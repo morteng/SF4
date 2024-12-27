@@ -24,6 +24,15 @@ class Config(object):
     RATELIMIT_STRATEGY = 'fixed-window'
     RATELIMIT_DEFAULT = "200 per day;50 per hour"
 
+class TestConfig(Config):
+    DEBUG = False
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    WTF_CSRF_ENABLED = True  # Enable CSRF in testing to match production
+    SERVER_NAME = 'localhost'
+    APPLICATION_ROOT = '/'
+    PREFERRED_URL_SCHEME = 'http'
+
 class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = False
