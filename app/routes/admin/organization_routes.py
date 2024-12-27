@@ -14,7 +14,6 @@ admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 def create():
     form = OrganizationForm()
     if form.validate_on_submit():
-        # Handle valid form submission
         organization_data = {
             'name': form.name.data,
             'description': form.description.data,
@@ -30,15 +29,13 @@ def create():
         except SQLAlchemyError as e:
             db.session.rollback()
             flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
-            return render_template('admin/organizations/form.html', form=form), 200
+            return render_template('admin/organizations/form.html', form=form), 500
     else:
-        # Flash individual field errors with proper field names
+        # Flash all validation errors
         for field_name, errors in form.errors.items():
             field = getattr(form, field_name)
-            field_label = field.label.text
             for error in errors:
-                # Format the error message as "Field Label: Error Message"
-                flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
+                flash_message(f"{field.label.text}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
