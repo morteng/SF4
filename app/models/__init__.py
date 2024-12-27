@@ -4,6 +4,7 @@ from .notification import Notification
 from .organization import Organization
 from .stipend import Stipend
 from .tag import Tag
+from .audit_log import AuditLog
 
 def init_models(app):
     from app.extensions import db
