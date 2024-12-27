@@ -5,6 +5,20 @@
   - HTMX requests: Add meta tag `<meta name="csrf-token" content="{{ csrf_token() }}">` in base template
   - JavaScript: Include CSRF token in HTMX headers via htmx:configRequest event
 
+### CSRF Token Handling
+- All forms must include a CSRF token input field:
+  ```html
+  <input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">
+  ```
+- For HTMX requests, include a meta tag in the base template:
+  ```html
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  ```
+- Ensure CSRF tokens are passed to templates in routes:
+  ```python
+  return render_template('template.html', csrf_token=generate_csrf())
+  ```
+
 ### Testing with CSRF and Error Handling
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
 - Extract CSRF token from hidden input: `<input name="csrf_token" value="...">`
