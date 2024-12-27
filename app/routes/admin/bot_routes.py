@@ -78,7 +78,6 @@ def run(id):
         # Update bot status and last run time
         bot.status = result['status']
         bot.last_run = datetime.utcnow()
-        db.session.commit()
         
         # Create appropriate notification
         notification_type = NotificationType.BOT_SUCCESS if result['success'] else NotificationType.BOT_ERROR
@@ -87,6 +86,16 @@ def run(id):
             type=notification_type,
             read_status=False
         )
+        
+        # Add error log if bot failed
+        if not result['success']:
+            error_log = BotErrorLog(
+                bot_id=bot.id,
+                error_message=result['message'],
+                timestamp=datetime.utcnow()
+            )
+            db.session.add(error_log)
+        
         db.session.add(notification)
         db.session.commit()
         
@@ -97,6 +106,31 @@ def run(id):
         flash_message(f"Failed to run bot: {str(e)}", FlashCategory.ERROR)
         
     return redirect(url_for('admin.bot.index'))
+
+@admin_bot_bp.route('/<int:id>/schedule', methods=['POST'])
+@login_required
+@admin_required
+def schedule(id):
+    bot = get_bot_by_id(id)
+    if not bot:
+        flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)
+        return redirect(url_for('admin.bot.index'))
+
+    try:
+        schedule_data = request.get_json()
+        if not schedule_data or 'schedule' not in schedule_data:
+            raise ValueError("Invalid schedule data")
+            
+        bot.schedule = schedule_data['schedule']
+        db.session.commit()
+        
+        flash_message(f"Bot {bot.name} scheduled successfully", FlashCategory.SUCCESS)
+        return jsonify({"status": "success"})
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Failed to schedule bot {bot.name}: {e}")
+        flash_message(f"Failed to schedule bot: {str(e)}", FlashCategory.ERROR)
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 @admin_bot_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required

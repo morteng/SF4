@@ -21,8 +21,24 @@ from app.extensions import db  # Import the db object
 
 def admin_required(f):
     def decorated_function(*args, **kwargs):
-        if not current_user.is_authenticated or not current_user.is_admin:
+        if not current_user.is_authenticated:
+            flash_message(FlashMessages.LOGIN_REQUIRED.value, FlashCategory.ERROR.value)
+            return redirect(url_for('public.login'))
+            
+        if not current_user.is_admin:
+            flash_message(FlashMessages.ADMIN_REQUIRED.value, FlashCategory.ERROR.value)
             return abort(403)
+            
+        # Add audit log
+        audit_log = AuditLog(
+            user_id=current_user.id,
+            action=f.__name__,
+            details=f"Accessed admin route: {request.path}",
+            timestamp=datetime.utcnow()
+        )
+        db.session.add(audit_log)
+        db.session.commit()
+        
         return f(*args, **kwargs)
     decorated_function.__name__ = f.__name__
     return decorated_function

@@ -30,8 +30,22 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @admin_required
 def create():
     form = StipendForm()
-    form.organization_id.choices = [(org.id, org.name) for org in Organization.query.order_by(Organization.name).all()]
-    form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.order_by(Tag.name).all()]
+    # Populate organization and tag choices
+    organizations = Organization.query.order_by(Organization.name).all()
+    tags = Tag.query.order_by(Tag.name).all()
+    
+    form.organization_id.choices = [(org.id, org.name) for org in organizations]
+    form.tags.choices = [(tag.id, tag.name) for tag in tags]
+    
+    # Add audit log
+    if request.method == 'POST':
+        audit_log = AuditLog(
+            user_id=current_user.id,
+            action='create_stipend',
+            details=f"Attempt to create new stipend",
+            timestamp=datetime.utcnow()
+        )
+        db.session.add(audit_log)
     
     is_htmx = request.headers.get('HX-Request')
 

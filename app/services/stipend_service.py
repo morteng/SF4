@@ -81,27 +81,53 @@ def update_stipend(stipend, data, session=db.session):
 def create_stipend(stipend_data, session=db.session):
     try:
         # Validate required fields
-        if not stipend_data.get('name'):
-            raise ValueError("Name is required")
+        required_fields = ['name', 'summary', 'description', 'organization_id']
+        for field in required_fields:
+            if not stipend_data.get(field):
+                raise ValueError(f"{field.replace('_', ' ').title()} is required")
         
-        # Handle organization
-        if stipend_data.get('organization_id'):
-            organization = session.get(Organization, stipend_data['organization_id'])
-            if not organization:
-                raise ValueError("Invalid organization ID")
+        # Validate organization
+        organization = session.get(Organization, stipend_data['organization_id'])
+        if not organization:
+            raise ValueError("Invalid organization ID")
         
-        # Handle tags
-        tags = stipend_data.pop('tags', [])
+        # Validate tags
+        tags = []
+        if 'tags' in stipend_data:
+            tag_ids = stipend_data.pop('tags')
+            tags = session.query(Tag).filter(Tag.id.in_(tag_ids)).all()
+            if len(tags) != len(tag_ids):
+                raise ValueError("One or more invalid tags provided")
+        
+        # Validate application deadline
+        if 'application_deadline' in stipend_data:
+            deadline = stipend_data['application_deadline']
+            if deadline and isinstance(deadline, str):
+                try:
+                    deadline = datetime.strptime(deadline, '%Y-%m-%d %H:%M:%S')
+                    if deadline < datetime.utcnow():
+                        raise ValueError("Application deadline cannot be in the past")
+                    stipend_data['application_deadline'] = deadline
+                except ValueError as e:
+                    raise ValueError("Invalid application deadline format. Use YYYY-MM-DD HH:MM:SS")
         
         # Create the stipend
         new_stipend = Stipend(**stipend_data)
+        new_stipend.tags = tags
         
-        # Add tags if any
-        if tags:
-            new_stipend.tags = tags
-            
         session.add(new_stipend)
         session.commit()
+        
+        # Add audit log
+        audit_log = AuditLog(
+            user_id=current_user.id,
+            action='create_stipend',
+            details=f"Created stipend: {new_stipend.name}",
+            timestamp=datetime.utcnow()
+        )
+        session.add(audit_log)
+        session.commit()
+        
         return new_stipend
     except Exception as e:
         session.rollback()
