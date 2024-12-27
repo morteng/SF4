@@ -267,6 +267,10 @@ def reset_password(id):
     """Reset a user's password with audit logging"""
     try:
         user = get_user_by_id(id)
+        if not user:
+            flash_message(FlashMessages.USER_NOT_FOUND.value, FlashCategory.ERROR.value)
+            return redirect(url_for('admin.user.index')), 404
+            
         temp_password = generate_temp_password()
         user.set_password(temp_password)
         
@@ -287,6 +291,7 @@ def reset_password(id):
         
         flash_message(FlashMessages.PASSWORD_RESET_SUCCESS.value, FlashCategory.SUCCESS.value)
         return redirect(url_for('admin.user.index')), 200
+        
     except Exception as e:
         db.session.rollback()
         logging.error(f"Failed to reset password for user {id}: {e}")
