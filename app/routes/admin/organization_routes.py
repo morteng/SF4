@@ -13,33 +13,31 @@ admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 @login_required
 def create():
     form = OrganizationForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            organization_data = {
-                'name': form.name.data,
-                'description': form.description.data,
-                'homepage_url': form.homepage_url.data
-            }
-            try:
-                success, error_message = create_organization(organization_data)
-                if success:
-                    flash_message(FLASH_MESSAGES["CREATE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-                    return redirect(url_for('admin.organization.index'))
-                else:
-                    flash_message(error_message, FLASH_CATEGORY_ERROR)
-            except SQLAlchemyError as e:
-                db.session.rollback()
-                flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
-                return render_template('admin/organizations/form.html', form=form), 200
-        else:
-            # Flash individual field errors
-            for field, errors in form.errors.items():
-                field_obj = getattr(form, field)
-                for error in errors:
-                    flash_message(f"{field_obj.label.text}: {error}", FLASH_CATEGORY_ERROR)
+    if form.validate_on_submit():
+        # Handle valid form submission
+        organization_data = {
+            'name': form.name.data,
+            'description': form.description.data,
+            'homepage_url': form.homepage_url.data
+        }
+        try:
+            success, error_message = create_organization(organization_data)
+            if success:
+                flash_message(FLASH_MESSAGES["CREATE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                return redirect(url_for('admin.organization.index'))
+            else:
+                flash_message(error_message, FLASH_CATEGORY_ERROR)
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
             return render_template('admin/organizations/form.html', form=form), 200
-
-    return render_template('admin/organizations/form.html', form=form)
+    else:
+        # Flash individual field errors
+        for field, errors in form.errors.items():
+            field_obj = getattr(form, field)
+            for error in errors:
+                flash_message(f"{field_obj.label.text}: {error}", FLASH_CATEGORY_ERROR)
+        return render_template('admin/organizations/form.html', form=form), 200
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
