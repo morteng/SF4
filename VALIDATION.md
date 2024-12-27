@@ -48,6 +48,12 @@
    - Expected Error: "Application deadline must be a future date"
 7. Edge cases (2023-02-29 12:00:00)
    - Expected Error: "Invalid date values (e.g., Feb 30)"
+   
+### Validation Improvements
+- Fixed error message for invalid dates to show "Invalid date values (e.g., Feb 30)" instead of "Date is required"
+- Improved error handling for invalid date/time combinations
+- Added specific error handling for invalid date/time values
+- Maintained proper error message hierarchy
 
 ### Timezone Handling
 - **Input Type**: Must be a string or convertible to string
