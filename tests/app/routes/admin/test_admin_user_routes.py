@@ -100,9 +100,9 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
     ).first()
     assert log is not None
 
-def test_user_crud_operations(logged_in_admin, user_data):
+def test_user_crud_operations(logged_in_admin, user_data, test_user):
     """Test full CRUD operations for users"""
-    verify_user_crud_operations(logged_in_admin, user_data)
+    verify_user_crud_operations(logged_in_admin, test_user, user_data)
 
 def test_get_all_users_sorting(db_session):
     """Test sorting functionality in get_all_users()"""
