@@ -12,7 +12,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 from flask_login import login_required
 from flask_wtf.csrf import CSRFProtect
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from app.constants import FlashMessages, FlashCategory
 from app.forms.admin_forms import OrganizationForm
 from app.services.organization_service import get_organization_by_id, delete_organization, get_all_organizations, create_organization, update_organization
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError

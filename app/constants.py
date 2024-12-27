@@ -8,11 +8,11 @@ class FlashCategory:
 
 class FlashMessages:
     # General
-    "GENERIC_SUCCESS": "Operation completed successfully.",
-    "GENERIC_ERROR": "An error occurred. Please try again.",
+    GENERIC_SUCCESS = "Operation completed successfully."
+    GENERIC_ERROR = "An error occurred. Please try again."
 
     # User Management
-    "CREATE_USER_SUCCESS": "User created successfully.",
+    CREATE_USER_SUCCESS = "User created successfully."
     "USERNAME_ALREADY_EXISTS": "Username already exists. Please choose a different username.",
     "CREATE_USER_ERROR": "Failed to create user: ",
     "CREATE_USER_INVALID_DATA": "Invalid data provided for user creation.",
