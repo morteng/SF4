@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Admin Dashboard</title>
+    <script src="https://unpkg.com/htmx.org@1.9.0"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Users</h1>
+        
+        <div class="search-container">
+            <form method="GET" action="/admin/users/">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="text" name="q" value="" 
+                       placeholder="Search users..." class="border p-2 rounded">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+                    Search
+                </button>
+            </form>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>user1</td>
+                    <td>user1@example.com</td>
+                    <td>
+                        <button 
+                            hx-delete="/admin/users/1/delete"
+                            hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'
+                            hx-target="closest tr"
+                            hx-swap="outerHTML swap:0.5s">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>user2</td>
+                    <td>user2@example.com</td>
+                    <td>
+                        <button 
+                            hx-delete="/admin/users/2/delete"
+                            hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'
+                            hx-target="closest tr"
+                            hx-swap="outerHTML swap:0.5s">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>user3</td>
+                    <td>user3@example.com</td>
+                    <td>
+                        <button 
+                            hx-delete="/admin/users/3/delete"
+                            hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'
+                            hx-target="closest tr"
+                            hx-swap="outerHTML swap:0.5s">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
