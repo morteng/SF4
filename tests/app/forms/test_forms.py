@@ -14,18 +14,19 @@ def client(app):
 
 def test_organization_form_valid_data(app):
     """Test organization form with valid data"""
-    # Create form with valid data, disabling CSRF for testing
-    form = OrganizationForm(
-        data={
-            'name': 'Valid Org',
-            'description': 'Valid description',
-            'homepage_url': 'https://valid.org'
-        },
-        meta={'csrf': False}
-    )
-    
-    # Validate the form and print errors if validation fails
-    assert form.validate(), f"Form validation failed with errors: {form.errors}"
+    with app.app_context():
+        # Create form with valid data, disabling CSRF for testing
+        form = OrganizationForm(
+            data={
+                'name': 'Valid Org',
+                'description': 'Valid description',
+                'homepage_url': 'https://valid.org'
+            },
+            meta={'csrf': False}
+        )
+        
+        # Validate the form and print errors if validation fails
+        assert form.validate(), f"Form validation failed with errors: {form.errors}"
 
 @pytest.mark.parametrize("name,description,homepage_url,expected", [
     ("", "Valid description", "https://valid.org", False),  # Missing name
