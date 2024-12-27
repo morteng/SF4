@@ -31,7 +31,8 @@ class CustomDateTimeField(DateTimeField):
     def process_formdata(self, valuelist):
         if not valuelist or not valuelist[0]:
             self.errors = []  # Clear any existing errors
-            self.errors.append(self.error_messages['required'])
+            # Use our custom error message instead of the default
+            self.errors.append(self.error_messages.get('required', 'Date is required'))
             self.data = None
             self._invalid_leap_year = False
             return
