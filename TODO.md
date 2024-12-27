@@ -9,8 +9,8 @@
 - [ ] Add error handling to debug form validation
 - [ ] Ensure CSRF tokens are properly handled in form tests
 - [x] Add form validation tests
-- [ ] Add comprehensive form validation tests
-- [ ] Ensure tests cover all form fields and edge cases
+- [x] Add comprehensive form validation tests
+- [x] Ensure tests cover all form fields and edge cases
 - [ ] Debug and fix failing form tests
 - [ ] Add rate limiting to admin routes
 - [ ] Add CRUD integration tests
