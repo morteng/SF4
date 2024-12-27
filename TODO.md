@@ -16,10 +16,14 @@
   * Flash messages are displayed using `_flash_messages.html`
   * Buttons use standardized macros from `_macros.html`
   * URL endpoints must match exactly what's defined in routes
+  * When using HTMX forms, ensure the endpoint matches the route definition exactly
+  * Test failures often indicate URL endpoint mismatches between templates and routes
 
 - **Testing Best Practices**
   * Use fixtures for common test setup
   * Verify template rendering in route tests
   * Check for proper error handling
   * Test both success and failure cases
+  * When testing forms, always include CSRF token
+  * Use constants for flash messages to ensure consistency
 

@@ -222,6 +222,8 @@
    - Verify all template URLs match actual route endpoints
    - Test case: test_bot_url_endpoints
    - Implementation: Check that all url_for() calls in bot templates match registered routes
+   - Test case: test_htmx_endpoint_validation
+   - Implementation: Verify HTMX form actions match route endpoints
 
 ### Test Cases
 1. **Create Bot**
@@ -230,6 +232,12 @@
    - Test successful bot creation
    - Test validation errors
    - Test database error handling
+
+2. **Run Bot**
+   - Verify HTMX form action matches route endpoint
+   - Test successful bot execution
+   - Test error handling for invalid bot ID
+   - Verify proper flash message display
 
 ### Error Messages
 - "Failed to create bot: {error}"
@@ -243,6 +251,7 @@
 - Improved form validation with specific error messages
 - Added status field validation
 - Enhanced template error display
+- Added HTMX endpoint validation
 
 ## Organization Form
 
