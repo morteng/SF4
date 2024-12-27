@@ -2,12 +2,6 @@
 
 ## Current Goals
 1. **Complete Admin System Refactoring**
-   - [x] Consolidate form templates into `admin/_form_template.html`
-   - [x] Standardize index templates using `admin/_index_template.html`
-   - [x] Add HTMX support for all CRUD operations
-   - [x] Implement consistent error handling and flash messages
-   - [x] Add CSRF protection for all forms and HTMX requests
-   - [x] Add rate limiting to admin endpoints
    - [ ] Implement caching for frequently accessed data
    - [ ] Add bulk actions (delete, update) for stipends, tags, and organizations
    - [ ] Add search and filtering functionality to index pages
@@ -15,8 +9,6 @@
    - [ ] Implement audit logging for admin actions
 
 2. **Enhance Security**
-   - [x] Add CSRF protection to all forms and HTMX requests
-   - [ ] Add rate limiting to prevent abuse of admin endpoints
    - [ ] Implement IP-based access restrictions for admin routes
    - [ ] Add two-factor authentication (2FA) for admin users
 
@@ -111,6 +103,7 @@
 - Added HTMX support for all CRUD operations
 - Implemented consistent error handling and flash messages
 - Added CSRF protection for all forms and HTMX requests
+- Added rate limiting to admin endpoints using Flask-Limiter
 - Standardized buttons and actions using `_macros.html`
 - Consolidated flash messages into `_flash_messages.html`
 

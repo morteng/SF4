@@ -112,6 +112,22 @@
 - None (will default to 'UTC')
 - "Invalid/Timezone" (will raise UnknownTimeZoneError)
 
+### Dependency Validation
+
+**Required Packages**:
+- Flask-Limiter must be installed and properly configured
+- All packages in requirements.txt must be installed
+
+**Test Cases**:
+1. Verify Flask-Limiter is installed and importable
+2. Verify all requirements.txt packages are installed
+3. Verify rate limiting is working on admin endpoints
+
+**Error Messages**:
+- "Missing required package: Flask-Limiter"
+- "Package version mismatch in requirements.txt"
+- "Rate limiting not properly configured"
+
 ### Examples
 
 **Valid Inputs**:
