@@ -208,8 +208,10 @@ class OrganizationForm(FlaskForm):
         self.original_name = original_name or None
 
     def validate_name(self, name):
+        if not name.data or name.data.strip() == '':
+            raise ValidationError('This field is required.')
         if name.data != self.original_name:
-            organization = db.session.get(Organization, name.data)
+            organization = Organization.query.filter_by(name=name.data).first()
             if organization:
                 raise ValidationError('Organization with this name already exists.')
 
