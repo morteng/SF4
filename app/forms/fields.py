@@ -86,6 +86,7 @@ class CustomDateTimeField(DateTimeField):
             
             # Additional validation for edge cases
             if dt.year < 1900 or dt.year > 2100:
+                print(f"Adding invalid date error: {self.error_messages['invalid_date']}")  # Debugging
                 self.errors.append(self.error_messages['invalid_date'])
                 return False
                 
@@ -96,20 +97,26 @@ class CustomDateTimeField(DateTimeField):
                     # Check if it's a leap year
                     is_leap = (dt.year % 4 == 0 and (dt.year % 100 != 0 or dt.year % 400 == 0))
                     if not is_leap:
-                        self.errors.append('Invalid date values (e.g., Feb 29 in non-leap years)')
+                        error_msg = 'Invalid date values (e.g., Feb 29 in non-leap years)'
+                        print(f"Adding leap year error: {error_msg}")  # Debugging
+                        self.errors.append(error_msg)
                         return False
                 
                 # General date validation
                 datetime(dt.year, dt.month, dt.day)
             except ValueError:
                 if dt.month == 2 and dt.day == 29:
-                    self.errors.append('Invalid date values (e.g., Feb 29 in non-leap years)')
+                    error_msg = 'Invalid date values (e.g., Feb 29 in non-leap years)'
+                    print(f"Adding leap year error: {error_msg}")  # Debugging
+                    self.errors.append(error_msg)
                 else:
+                    print(f"Adding invalid date error: {self.error_messages['invalid_date']}")  # Debugging
                     self.errors.append(self.error_messages['invalid_date'])
                 return False
                 
             return True
         except ValueError:
+            print(f"Adding invalid date error: {self.error_messages['invalid_date']}")  # Debugging
             self.errors.append(self.error_messages['invalid_date'])
             return False
 
