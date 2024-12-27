@@ -164,15 +164,11 @@ def test_create_user_route_with_database_error(logged_in_admin, user_data, db_se
             
         monkeypatch.setattr(db_session, 'commit', mock_commit)
         
-        response = logged_in_admin.post(url_for('admin.user.create'), data=data)
-        
-        assert response.status_code == 400
-        # Assert the flash message using constants
-        # Check that the flash message starts with the expected error message
-        with logged_in_admin.session_transaction() as session:
-            flashed_messages = session.get('_flashes', [])
-            assert any(FlashMessages.CREATE_USER_ERROR.value in msg[1] for msg in flashed_messages), \
-                f"Expected flash message containing '{FlashMessages.CREATE_USER_ERROR.value}' not found in session"
+        response = logged_in_admin.post(url_for('admin.user.create'), data=data, follow_redirects=True)
+            
+        assert response.status_code == 200
+        # Check for the flash message in the response HTML
+        assert FlashMessages.CREATE_USER_ERROR.value in response.data.decode('utf-8')
 
         users = User.query.all()
         assert not any(user.username == data['username'] for user in users)  # Ensure no user was created
