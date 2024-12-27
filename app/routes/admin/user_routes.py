@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, flash
+from flask_wtf.csrf import generate_csrf
 from flask_login import login_required, current_user
 from app.constants import FlashMessages, FlashCategory
 from app.forms.admin_forms import UserForm
