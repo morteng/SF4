@@ -98,7 +98,8 @@ def test_organization_form_url_validation(app):
                 meta={'csrf': False}  # Disable CSRF for testing
             )
             assert form.validate() is False
-            assert 'Invalid URL format.' in form.homepage_url.errors
+            assert 'Please enter a valid URL starting with http:// or https://.' in form.homepage_url.errors
+            assert 'URL must start with http:// or https://.' in form.homepage_url.errors
 
             # Test valid URL
             form = OrganizationForm(
