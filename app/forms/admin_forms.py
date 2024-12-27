@@ -8,7 +8,8 @@ from wtforms.validators import ValidationError
 import logging
 from wtforms import (
     StringField, TextAreaField, URLField, BooleanField, 
-    SubmitField, SelectField, PasswordField, SelectMultipleField
+    SubmitField, SelectField, PasswordField, SelectMultipleField,
+    HiddenField
 )
 
 # Configure logging

@@ -2,6 +2,7 @@ from datetime import datetime
 import logging
 
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string
+from app.services.notification_service import get_notification_count
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
