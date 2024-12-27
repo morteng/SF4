@@ -46,12 +46,23 @@ from app.utils import flash_message
 admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 csrf = CSRFProtect()
 
+@admin_org_bp.route('/', methods=['GET'])
+@login_required
+@admin_required
+@admin_bp.notification_count
+def index():
+    """List all organizations"""
+    organizations = get_all_organizations()
+    return render_template('admin/organizations/index.html',
+                         organizations=organizations)
+
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")
 @login_required
 @admin_required
 @admin_bp.notification_count
 def create():
+    """Create a new organization"""
     """Create new organization with audit logging and notifications"""
     form = OrganizationForm()
     
@@ -149,13 +160,28 @@ def delete(id):
     return redirect(url_for('admin.organization.index'))
 
 @admin_org_bp.route('/', methods=['GET'])
+@admin_org_bp.route('/paginate/<int:page>', methods=['GET'])
 @login_required
 @admin_required
 @admin_bp.notification_count
-def index():
-    organizations = get_all_organizations()
-    return render_template('admin/organizations/index.html', 
+def index(page=1):
+    """List organizations with pagination"""
+    per_page = 20  # Items per page
+    organizations = get_all_organizations().paginate(page=page, per_page=per_page)
+    return render_template('admin/organizations/index.html',
                          organizations=organizations)
+
+@admin_org_bp.route('/<int:id>', methods=['GET'])
+@login_required
+@admin_required
+@admin_bp.notification_count
+def view(id):
+    """View organization details"""
+    organization = get_organization_by_id(id)
+    if not organization:
+        flash_message(FlashMessages.ORGANIZATION_NOT_FOUND, FlashCategory.ERROR)
+        return redirect(url_for('admin.organization.index'))
+    return render_template('admin/organizations/view.html', organization=organization)
 
 @admin_org_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @limiter.limit(ORG_RATE_LIMITS['update'])
@@ -163,6 +189,7 @@ def index():
 @admin_required
 @admin_bp.notification_count
 def edit(id):
+    """Edit an existing organization"""
     organization = get_organization_by_id(id)
     if not organization:
         flash_message(FlashMessages.ORGANIZATION_NOT_FOUND, FlashCategory.ERROR)
@@ -219,9 +246,21 @@ def handle_form_errors(form):
                 message = FlashMessages.FORM_INVALID_URL.format(field=field_label)
             elif 'Invalid characters' in error:
                 message = FlashMessages.FORM_INVALID_CHARACTERS.format(field=field_label)
+            elif 'Invalid date format' in error:
+                message = FlashMessages.FORM_INVALID_DATE_FORMAT.format(field=field_label)
             else:
                 message = f"{field_label}: {error}"
             
             flash_message(message, FlashCategory.ERROR)
             logger.warning(f"Form validation error: {message}")
+            
+            # Audit log the validation error
+            AuditLog.create(
+                user_id=current_user.id,
+                action='validation_error',
+                object_type='Organization',
+                object_id=None,
+                details=f"Validation error in {field_label}: {error}",
+                ip_address=request.remote_addr
+            )
     return render_template('admin/organizations/form.html', form=form), 422
