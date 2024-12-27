@@ -61,7 +61,7 @@ def test_profile_form_invalid_csrf(client):
                     original_username="testuser",
                     original_email="test@example.com"
                 )
-                csrf_token = form.csrf_token.current_token
+                csrf_token = form.csrf_token._value()
                 sess['csrf_token'] = csrf_token
 
             # Submit with invalid CSRF token
