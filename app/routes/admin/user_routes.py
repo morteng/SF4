@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, flash, session
+from app.models.user import User
 from datetime import datetime
 from app.models.audit_log import AuditLog
 from app.services.notification_service import get_notification_count
