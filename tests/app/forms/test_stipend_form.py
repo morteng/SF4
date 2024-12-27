@@ -1,5 +1,6 @@
 import pytest
 from datetime import datetime, timedelta
+from flask_wtf.csrf import generate_csrf
 from app.forms.admin_forms import StipendForm
 from app.models.organization import Organization
 from app.extensions import db
@@ -7,7 +8,12 @@ from app.forms.fields import CustomDateTimeField
 from wtforms import Form, StringField
 
 @pytest.fixture
-def form_data():
+def form_data(app):
+    # Create a test organization
+    org = Organization(name="Test Org", description="Test Description", homepage_url="https://test.org")
+    db.session.add(org)
+    db.session.commit()
+
     return {
         'name': 'Test Stipend',
         'summary': 'Test summary',
@@ -15,7 +21,7 @@ def form_data():
         'homepage_url': 'https://example.com',
         'application_procedure': 'Test procedure',
         'eligibility_criteria': 'Test criteria',
-        'organization_id': 1,
+        'organization_id': org.id,  # Use the created organization's ID
         'open_for_applications': True
     }
 
@@ -51,6 +57,9 @@ def test_invalid_date_format(app, form_data):
     ]
     
     with app.test_request_context():
+        # Add CSRF token to form data
+        form_data['csrf_token'] = generate_csrf()
+        
         for date in invalid_dates:
             form_data['application_deadline'] = date
             form = StipendForm(data=form_data)
