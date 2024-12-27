@@ -25,6 +25,9 @@ def test_organization_form_valid_data(app, client):
             assert form.csrf_token.current_token == session['csrf_token']
             
             # Test form validation with CSRF token
+            # Get CSRF token from the form
+            csrf_token = form.csrf_token.current_token
+            
             form = OrganizationForm(data={
                 'name': 'Valid Org',
                 'description': 'Valid description',
