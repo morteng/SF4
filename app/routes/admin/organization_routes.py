@@ -34,7 +34,7 @@ def create():
         for field_name, errors in form.errors.items():
             field_label = form[field_name].label.text
             for error in errors:
-                # Update this line to match the expected format
+                # Format the error message as "Field Label: Error Message"
                 flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
     return render_template('admin/organizations/form.html', form=form)
