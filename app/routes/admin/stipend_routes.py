@@ -44,6 +44,18 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @login_required
 @admin_required
 def create():
+    """Create new stipend with HTMX support and audit logging"""
+    form = StipendForm()
+    is_htmx = request.headers.get('HX-Request')
+    
+    # Create audit log before operation
+    AuditLog.create(
+        user_id=current_user.id,
+        action='create_stipend',
+        details='Attempting to create new stipend',
+        object_type='Stipend',
+        ip_address=request.remote_addr
+    )
     form = StipendForm()
     # Populate organization and tag choices
     organizations = Organization.query.order_by(Organization.name).all()

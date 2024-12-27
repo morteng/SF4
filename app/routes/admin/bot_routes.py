@@ -100,6 +100,22 @@ def index():
 @admin_required
 def run(id):
     """Run bot with status tracking and notifications"""
+    bot = get_bot_by_id(id)
+    if not bot:
+        flash_message(FlashMessages.BOT_NOT_FOUND, FlashCategory.ERROR)
+        return redirect(url_for('admin.bot.index'))
+
+    try:
+        # Create audit log
+        AuditLog.create(
+            user_id=current_user.id,
+            action='run_bot',
+            object_type='Bot',
+            object_id=bot.id,
+            details=f'Running bot {bot.name}',
+            ip_address=request.remote_addr
+        )
+    """Run bot with status tracking and notifications"""
     """Run bot with status tracking and notifications"""
     bot = get_bot_by_id(id)
     if not bot:

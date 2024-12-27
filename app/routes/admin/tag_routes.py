@@ -37,15 +37,27 @@ def create():
                 flash_message(FlashMessages.CREATE_TAG_ERROR, FlashCategory.ERROR)
                 return render_template('admin/tags/create.html', form=form)
             flash_message(FlashMessages.CREATE_TAG_SUCCESS, FlashCategory.SUCCESS)
-            return redirect(url_for('tag.index'))
+            
+            if request.headers.get('HX-Request'):
+                return render_template('admin/tags/_tag_row.html', tag=new_tag), 200, {
+                    'HX-Trigger': 'tagCreated',
+                    'HX-Reswap': 'outerHTML',
+                    'HX-Retarget': '#tag-table'
+                }
+            return redirect(url_for('admin.tag.index'))
         except IntegrityError as e:
             db.session.rollback()
             flash_message(FlashMessages.CREATE_TAG_ERROR, FlashCategory.ERROR)
             return render_template('admin/tags/create.html', form=form)
-        except Exception as e:
+        except IntegrityError as e:
             db.session.rollback()
             flash_message(FlashMessages.CREATE_TAG_ERROR, FlashCategory.ERROR)
-            return render_template('admin/tags/create.html', form=form)
+            return render_template('admin/tags/create.html', form=form), 400
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Failed to create tag: {e}")
+            flash_message(FlashMessages.GENERIC_ERROR, FlashCategory.ERROR)
+            return render_template('admin/tags/create.html', form=form), 500
     else:
         error_messages = []
         field_errors = {}
