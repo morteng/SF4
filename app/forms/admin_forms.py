@@ -215,7 +215,7 @@ class OrganizationForm(FlaskForm):
         Regexp('^[A-Za-z0-9 ]*$', message='Organization name must contain only letters, numbers, and spaces.')
     ])
     description = TextAreaField('About', validators=[
-        DataRequired(message="This field is required."),
+        Optional(),
         Length(max=500, message="Description cannot exceed 500 characters.")
     ])
     homepage_url = URLField('Website', validators=[
