@@ -10,6 +10,13 @@
    - Add integration tests for stipend service interactions
 
 ## Knowledge & Memories
+- CustomDateTimeField validation rules:
+  * Uses strptime for format validation
+  * Validates individual date/time components
+  * Handles timezone conversion
+  * Provides specific error messages for different validation failures
+  * Error messages must match test expectations exactly
+
 - Organization model includes basic fields: name, description, homepage_url
 - When handling database errors:
   * Always set flash message before redirect

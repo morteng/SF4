@@ -19,6 +19,9 @@
   - Day: 1-31 (month-dependent)
 - **Error Messages**:
   - "Invalid date values (e.g., Feb 30)"
+  - "Year must be between 1900 and 2100"
+  - "Month must be between 1 and 12"
+  - "Day must be between 1 and 31"
 
 ### Time Validation
 - **Valid Time Range**:
