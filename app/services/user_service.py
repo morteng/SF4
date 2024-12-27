@@ -81,18 +81,13 @@ def create_user(form_data):
         db.session.add(new_user)
         db.session.commit()
         return new_user
-    
-    try:
-        db.session.add(new_user)
-        db.session.commit()
+        
     except IntegrityError as e:
         db.session.rollback()
         raise ValueError(f"{FlashMessages.USERNAME_ALREADY_EXISTS.value}: {str(e)}")
     except Exception as e:
         db.session.rollback()
-        raise ValueError(f"{FlashMessages.CREATE_USER_ERROR.value}{str(e)}")
-    
-    return new_user
+        raise ValueError(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}")
 
 def update_user(user, form_data):
     print(f"Updating user with data: {form_data}")  # Debug statement
