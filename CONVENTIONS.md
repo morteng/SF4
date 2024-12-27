@@ -15,4 +15,5 @@
 - Always use form.validate() for validation (includes CSRF validation)
 - Use test_request_context() for form testing
 - For optional fields, handle empty values explicitly in custom validators
+- Ensure test users remain bound to session during authentication tests
 

@@ -21,4 +21,5 @@
 - Preserve form state
 - Clearly document field validation rules
 - Handle empty values explicitly in custom validators
+- Ensure test users remain bound to session during authentication
 

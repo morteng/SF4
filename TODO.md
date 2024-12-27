@@ -10,6 +10,7 @@
 - Verify session initialization in form tests
 - Test both CSRF-enabled and disabled scenarios
 - Use enums consistently
+- Fix session binding issues in authentication tests
 - Use form.validate() instead of manual CSRF validation
 - Verify UI & DB state in tests
 - Ensure CSRF protection matches production environment
