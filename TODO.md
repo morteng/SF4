@@ -6,8 +6,9 @@
   - User request handling
   - HTMX integration
   - Rate limiting
-- [ ] Fix datetime.utcnow() deprecation warnings
+- [x] Fix datetime.utcnow() deprecation warnings
 - [ ] Complete CRUD test coverage
+- [ ] Add audit logging for all operations
 
 ## Best Practices
 - Ensure CSRF protection matches production environment

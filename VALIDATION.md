@@ -36,15 +36,19 @@
 - Handle missing/invalid CSRF tokens with 400 status
 
 ## Rate Limiting
-- Admin: 100/hour
-- Sensitive ops: 10/minute
-- User CRUD:
-  - Create: 10/minute
-  - Delete: 3/minute
-- Password resets: 5/hour
-- Organization CRUD:
-  - Create/Update: 10/minute
-  - Delete: 3/minute
+- Verify rate limits are enforced:
+  - Admin: 100/hour (global)
+  - Sensitive ops: 10/minute (per endpoint)
+  - Stipend CRUD:
+    - Create/Update: 10/minute
+    - Delete: 3/minute
+  - User CRUD:
+    - Create: 10/minute
+    - Delete: 3/minute
+  - Password resets: 5/hour
+  - Organization CRUD:
+    - Create/Update: 10/minute
+    - Delete: 3/minute
 
 ### Notification Badge Validation
 - All admin templates must include a notification badge.
