@@ -33,14 +33,19 @@ def client(app):
 
 def test_profile_form_valid(client, setup_database):
     with client.application.test_request_context():
-        form = ProfileForm(
-            original_username="testuser",
-            original_email="test@example.com"
-        )
-        form.username.data = "newusername"
-        form.email.data = "newemail@example.com"
-        print(form.errors)  # Debugging: Print validation errors
-        assert form.validate() == True
+        with patch('app.forms.user_forms.User.query.filter_by') as mock_filter_by:
+            # Mock the database queries to return None (no existing user)
+            mock_filter_by.return_value.first.return_value = None
+
+            # Test the form
+            form = ProfileForm(
+                original_username="testuser",
+                original_email="test@example.com"
+            )
+            form.username.data = "newusername"
+            form.email.data = "newemail@example.com"
+            print(form.errors)  # Debugging: Print validation errors
+            assert form.validate() == True
 
 def test_profile_form_invalid_same_username(client, setup_database):
     password_hash = generate_password_hash("password123")
