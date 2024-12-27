@@ -22,6 +22,7 @@
 - Organization CRUD:
   - Create/Update: 10/minute
   - Delete: 3/minute
+- Bot operations: 10/hour
 
 ### CSRF Token Handling
 - Use Flask-WTF for CSRF protection

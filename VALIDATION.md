@@ -23,6 +23,7 @@
 - notification_count should be retrieved using get_notification_count()
 - Handle notification_count errors gracefully (return 0 on error)
 - Ensure notification_count is updated in real-time
+- All notifications must have a valid user_id (0 for system notifications)
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
