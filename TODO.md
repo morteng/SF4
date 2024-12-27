@@ -8,6 +8,7 @@
 - Ensure date parsing and logical validation are handled separately
 - Verify date validation error propagation in form handling
 - Ensure test data includes all required fields
+- Update tests to expect 400 status code for form validation errors
 - Implement proper error message handling for custom date fields
 - Disable CSRF in tests when appropriate
 - Test CSRF protection in all form submissions

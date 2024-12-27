@@ -10,6 +10,7 @@
 - Verify error messages match actual implementation
 - Always make a GET request before POST to establish session
 - Handle CSRF token extraction errors gracefully
+- For form validation errors, expect 400 status code
 
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
