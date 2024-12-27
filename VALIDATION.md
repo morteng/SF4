@@ -2,7 +2,7 @@
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
 - Include CSRF token in form fields: `<input name="csrf_token" value="{{ csrf_token }}">`
-- Verify raw CSRF token matches session token directly
+- Use `decode_csrf_token()` to properly verify tokens
 
 ## Error Handling
 - Rollback on error

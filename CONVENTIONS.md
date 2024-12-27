@@ -8,7 +8,7 @@
 ### Testing with CSRF
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
 - Extract CSRF token from hidden input: `<input name="csrf_token" value="...">`
-- Compare raw token with session token directly (no deserialization needed)
+- Use `decode_csrf_token()` from utils to properly decode the token
 - Test both valid and invalid CSRF scenarios
 - Always make a GET request before POST to establish session
 
