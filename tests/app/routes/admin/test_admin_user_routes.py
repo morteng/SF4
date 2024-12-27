@@ -121,8 +121,11 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
     assert index_response.status_code == 200, "Failed to load user index page"
     
     # Extract the CSRF token
+    response_html = index_response.data.decode('utf-8')
     csrf_token = extract_csrf_token(index_response.data)
-    assert csrf_token is not None, f"CSRF token not found in the response. HTML: {index_response.data.decode()[:1000]}"
+    if csrf_token is None:
+        logging.error("CSRF token not found. Response HTML:\n%s", response_html[:1000])
+    assert csrf_token is not None, "CSRF token not found in the response"
     
     # Verify the token in the session matches the form token
     with logged_in_admin.session_transaction() as session:

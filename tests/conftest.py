@@ -197,8 +197,26 @@ def test_required_packages():
         pytest.fail("Flask-Limiter is not installed")
 
 def extract_csrf_token(response_data):
-    match = re.search(r'name="csrf_token".*?value="(.+?)"', response_data.decode('utf-8'))
-    return match.group(1) if match else "dummy_csrf_token"
+    """Extract CSRF token from HTML response."""
+    decoded_data = response_data.decode('utf-8')
+    
+    # Look for CSRF token in hidden input with id="csrf_token"
+    csrf_input = re.search(r'<input[^>]*id="csrf_token"[^>]*value="(.+?)"', decoded_data)
+    if csrf_input:
+        return csrf_input.group(1)
+    
+    # Look for CSRF token in meta tag as fallback
+    meta_token = re.search(r'<meta[^>]*name="csrf-token"[^>]*content="(.+?)"', decoded_data)
+    if meta_token:
+        return meta_token.group(1)
+    
+    # Look for CSRF token in any hidden input as last resort
+    hidden_input = re.search(r'<input[^>]*type="hidden"[^>]*name="csrf_token"[^>]*value="(.+?)"', decoded_data)
+    if hidden_input:
+        return hidden_input.group(1)
+    
+    logging.warning("CSRF token not found in response")
+    return None
 
 def get_all_tags():
     with current_app.app_context():  # Ensure application context is set
