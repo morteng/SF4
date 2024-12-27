@@ -5,17 +5,25 @@ from app.utils import flash_message
 from app.constants import FlashMessages, FlashCategory
 
 def get_user_by_id(user_id):
-    return db.session.get(User, user_id)
+    """Get user by ID with error handling"""
+    user = db.session.get(User, user_id)
+    if not user:
+        raise ValueError(FlashMessages.USER_NOT_FOUND.value)
+    return user
 
 def delete_user(user):
+    """Delete user with proper error handling and logging"""
     if not user:
-        raise ValueError("User does not exist.")
-    db.session.delete(user)
+        raise ValueError(FlashMessages.USER_NOT_FOUND.value)
+    
     try:
+        db.session.delete(user)
         db.session.commit()
+        logging.info(f"User {user.id} deleted successfully")
     except Exception as e:
         db.session.rollback()
-        raise ValueError("Failed to delete user.")
+        logging.error(f"Failed to delete user {user.id}: {str(e)}")
+        raise ValueError(f"{FlashMessages.DELETE_USER_ERROR.value}: {str(e)}")
 
 from sqlalchemy import or_
 

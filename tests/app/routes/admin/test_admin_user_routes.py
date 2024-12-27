@@ -116,16 +116,46 @@ def extract_csrf_token(response_data):
     return None
 
 def test_delete_user_route(logged_in_admin, test_user, db_session):
-    # Make a GET request to initialize the session and get the CSRF token
+    """Test user deletion with proper CSRF handling"""
+    # Initialize session and get CSRF token
     index_response = logged_in_admin.get(url_for('admin.user.index'))
-    assert index_response.status_code == 200, "Failed to load user index page"
-    
-    # Extract the CSRF token
-    response_html = index_response.data.decode('utf-8')
+    assert index_response.status_code == 200
     csrf_token = extract_csrf_token(index_response.data)
-    if csrf_token is None:
-        logging.error("CSRF token not found. Response HTML:\n%s", response_html[:1000])
-    assert csrf_token is not None, "CSRF token not found in the response"
+    
+    # Verify CSRF token exists
+    assert csrf_token is not None, "CSRF token not found in response"
+    
+    # Perform deletion
+    delete_response = logged_in_admin.post(
+        url_for('admin.user.delete', id=test_user.id),
+        data={'csrf_token': csrf_token},
+        follow_redirects=True
+    )
+    
+    # Verify response
+    assert delete_response.status_code == 200
+    assert FlashMessages.DELETE_USER_SUCCESS.value.encode() in delete_response.data
+    
+    # Verify user is deleted
+    deleted_user = db_session.get(User, test_user.id)
+    assert deleted_user is None
+
+def test_delete_user_route_invalid_id(logged_in_admin):
+    """Test deleting a non-existent user"""
+    # Initialize session and get CSRF token
+    index_response = logged_in_admin.get(url_for('admin.user.index'))
+    csrf_token = extract_csrf_token(index_response.data)
+    
+    # Attempt to delete non-existent user
+    delete_response = logged_in_admin.post(
+        url_for('admin.user.delete', id=9999),
+        data={'csrf_token': csrf_token},
+        follow_redirects=True
+    )
+    
+    # Verify error response
+    assert delete_response.status_code == 400
+    assert FlashMessages.USER_NOT_FOUND.value.encode() in delete_response.data
     
     # Verify the token in the session matches the form token
     with logged_in_admin.session_transaction() as session:
