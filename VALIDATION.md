@@ -217,6 +217,12 @@
 
 ## Bot Route Validation
 
+### New Test Cases
+1. **URL Endpoint Validation**
+   - Verify all template URLs match actual route endpoints
+   - Test case: test_bot_url_endpoints
+   - Implementation: Check that all url_for() calls in bot templates match registered routes
+
 ### Test Cases
 1. **Create Bot**
    - Verify template inheritance from base.html
