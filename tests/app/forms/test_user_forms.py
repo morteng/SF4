@@ -38,12 +38,14 @@ def test_profile_form_valid(client, setup_database):
             # Mock the database queries to return None (no existing user)
             mock_filter_by.return_value.first.return_value = None
 
-            # Test the form with valid CSRF token
+            # Create the form and get its CSRF token
             form = ProfileForm(
                 original_username="testuser",
-                original_email="test@example.com",
-                csrf_token=generate_csrf_token()
+                original_email="test@example.com"
             )
+            csrf_token = form.csrf_token.current_token
+
+            # Test the form with valid CSRF token
             form.username.data = "newusername"
             form.email.data = "newemail@example.com"
             assert form.validate() == True
@@ -52,8 +54,8 @@ def test_profile_form_valid(client, setup_database):
             response = client.post(url_for('user.edit_profile'), data={
                 'username': 'newusername',
                 'email': 'newemail@example.com',
-                'csrf_token': generate_csrf_token()
-            }, follow_redirects=True)  # Add follow_redirects=True to handle redirects
+                'csrf_token': csrf_token  # Use the form's CSRF token
+            }, follow_redirects=True)
             assert response.status_code == 200  # Check for successful response
 
 def test_profile_form_invalid_same_username(client, setup_database):
