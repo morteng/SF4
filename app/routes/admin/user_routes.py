@@ -40,7 +40,7 @@ def create():
         return render_template('admin/users/create.html', 
                             form=form,
                             notification_count=notification_count,
-                            csrf_token=csrf_token)
+                            csrf_token=csrf_token), 200
     
     if request.method == 'GET':
         # Generate CSRF token for the form
