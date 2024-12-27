@@ -37,7 +37,7 @@ def create():
             field_obj = getattr(form, field)
             field_label = field_obj.label.text
             # Map field labels to test-expected names
-            if field_label == 'Name':
+            if field_label == 'Org Name':  # Changed from 'Name' to 'Org Name'
                 field_label = 'Org Name'
             for error in errors:
                 flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
