@@ -1,4 +1,7 @@
 ## Coding Conventions
+- All flash messages must use messages defined in app\constants.py - create new additions here when needed. All tests should evaluate the constant used, not the string itself.
+
+
 ### Testing with CSRF
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
 - Use `client.session_transaction()` for session access
