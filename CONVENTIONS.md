@@ -1,15 +1,9 @@
 ## Coding Conventions
 ### Testing
-- test config is in tests\conftest.py
-- Use `from app.config import TestConfig` for importing test configuration
-- Use enums for message types
-- Verify UI & DB state
-- Use fixtures & parameterized tests
-- Include CSRF token validation in form tests
-- CSRF enabled in testing environment
-- Always use an application context for form tests
-- When testing forms, always use the form's generated CSRF token
-- Ensure test client maintains session state for CSRF validation using `client.session_transaction()`
+- Always use a request context (`app.test_request_context()`) when testing forms with CSRF tokens.
+- Use `client.session_transaction()` to initialize and verify session data, including CSRF tokens.
+- Ensure form creation and submission occur within the same context.
+- Verify CSRF tokens are properly generated and added to the session.
 
 ### Testing with CSRF
 - Always use an application context for form tests

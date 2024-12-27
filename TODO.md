@@ -1,19 +1,7 @@
 # TODO List
 ## High Priority
 - [ ] Fix `TestConfig` import in test files
-- [ ] Fix CSRF token handling in form tests
-- [x] Add CSRF protection to all forms
-- [x] Fix CSRF token handling in profile form test
-- [x] Investigate CSRF token handling in form tests
 - [ ] Verify session state maintenance in form tests
-- [x] Enable CSRF in testing environment
-- [x] Fix profile form validation failure
-- [x] Add error handling to debug form validation
-- [x] Ensure CSRF tokens are properly handled in form tests
-- [x] Add form validation tests
-- [x] Add comprehensive form validation tests
-- [x] Ensure tests cover all form fields and edge cases
-- [x] Debug and fix failing form tests
 - [ ] Add rate limiting to admin routes
 - [ ] Add CRUD integration tests
 - [ ] Increase test coverage to 80%+

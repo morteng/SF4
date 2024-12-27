@@ -9,6 +9,12 @@
 - Use form-generated CSRF tokens in tests
 - Ensure test client maintains session state
 
+## Form Testing
+- Always use a request context (`app.test_request_context()`) when testing forms.
+- Use `client.session_transaction()` to initialize and verify session data.
+- Ensure form creation and submission occur within the same context.
+- Verify CSRF tokens are properly generated and added to the session.
+
 ## Form Validation
 - Validate CSRF tokens in all forms
 - Include CSRF token in form submissions
