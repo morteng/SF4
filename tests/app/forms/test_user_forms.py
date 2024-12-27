@@ -89,19 +89,29 @@ def test_profile_form_invalid_same_username(client, setup_database):
     db.session.commit()
 
     # Create and log in as test user
-    test_user = User(username="testuser", email="test@example.com", password_hash=password_hash)
+    test_user = User(
+        username="testuser", 
+        email="test@example.com", 
+        password_hash=password_hash,
+        is_active=True  # Ensure user is active
+    )
     db.session.add(test_user)
     db.session.commit()
     
-    # Simulate login
-    with client.session_transaction() as session:
-        session['user_id'] = test_user.id
-
-    # Get CSRF token
+    # Properly log in using the login route
+    login_response = client.post('/login', data={
+        'username': 'testuser',
+        'password': 'password123',
+        'csrf_token': 'test-csrf-token'  # Add CSRF token
+    }, follow_redirects=True)
+    assert login_response.status_code == 200, "Login failed"
+    
+    # Get CSRF token from the profile edit page
     get_response = client.get('/user/profile/edit')
-    assert get_response.status_code == 200
+    assert get_response.status_code == 200, "Failed to access profile edit page"
     soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
     csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+    assert csrf_token, "CSRF token not found in form"
 
     # Test form submission with duplicate username
     response = client.post('/user/profile/edit', data={
@@ -114,7 +124,8 @@ def test_profile_form_invalid_same_username(client, setup_database):
     assert response.status_code == 200
     assert FlashMessages.USERNAME_ALREADY_EXISTS.value.encode() in response.data
 
-    # Clean up
+    # Log out and clean up
+    client.get('/logout')
     db.session.delete(user)
     db.session.delete(test_user)
     db.session.commit()
