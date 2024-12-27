@@ -20,7 +20,6 @@ def create():
         try:
             new_user = create_user(form.data)
             flash(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
-            # Ensure the session is saved before redirecting
             session.modified = True
             return redirect(url_for('admin.user.index'))
         except ValueError as e:
@@ -28,12 +27,11 @@ def create():
             flash_message(str(e), FlashCategory.ERROR.value)
             if request.headers.get('HX-Request') == 'true':
                 return render_template('admin/users/_create_form.html', form=form), 400
-            return redirect(url_for('admin.user.create')), 400
+            return render_template('admin/users/create.html', form=form), 400
         except Exception as e:
             db.session.rollback()
             error_message = f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}"
             flash_message(error_message, FlashCategory.ERROR.value)
-            session.modified = True
             
             # For both HTMX and regular requests, render the appropriate template directly
             template = 'admin/users/_create_form.html' if request.headers.get('HX-Request') == 'true' else 'admin/users/create.html'
