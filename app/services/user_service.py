@@ -72,31 +72,22 @@ def search_users(query, page=1, per_page=10):
 def create_user(form_data):
     """Create a new user with validation and audit logging"""
     try:
-        username = form_data['username']
-        email = form_data['email']
-        password = form_data['password']
-        is_admin = form_data.get('is_admin', False)
-        
-        # Detailed audit logging
-        audit_details = {
-            'username': username,
-            'email': email,
-            'is_admin': is_admin,
-            'created_by': current_user.username
-        }
-
-        # Validate password strength
-        if not validate_password_strength(password):
-            raise ValueError(FlashMessages.PASSWORD_WEAK.value)
-
-        # Check for existing user
-        if User.query.filter_by(username=username).first():
+        # Validate unique fields
+        if User.query.filter_by(username=form_data['username']).first():
             raise ValueError(FlashMessages.USERNAME_ALREADY_EXISTS.value)
-        if User.query.filter_by(email=email).first():
+        if User.query.filter_by(email=form_data['email']).first():
             raise ValueError(FlashMessages.EMAIL_ALREADY_EXISTS.value)
-
-        new_user = User(username=username, email=email, is_admin=is_admin)
-        new_user.set_password(password)
+        
+        # Create user
+        new_user = User(
+            username=form_data['username'],
+            email=form_data['email'],
+            is_admin=form_data.get('is_admin', False)
+        )
+        new_user.set_password(form_data['password'])
+        
+        db.session.add(new_user)
+        db.session.commit()
         
         # Create audit log
         AuditLog.create(
@@ -104,20 +95,14 @@ def create_user(form_data):
             action='create_user',
             object_type='User',
             object_id=new_user.id,
-            details=f'Created user {username}',
+            details=f'Created user {new_user.username}',
             ip_address=request.remote_addr
         )
         
-        db.session.add(new_user)
-        db.session.commit()
         return new_user
-        
-    except IntegrityError as e:
-        db.session.rollback()
-        raise ValueError(f"{FlashMessages.USERNAME_ALREADY_EXISTS.value}: {str(e)}")
     except Exception as e:
         db.session.rollback()
-        raise ValueError(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}")
+        raise ValueError(f"Error creating user: {str(e)}")
 
 def update_user(user, form_data):
     print(f"Updating user with data: {form_data}")  # Debug statement

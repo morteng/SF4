@@ -339,45 +339,17 @@ def edit_profile():
 @login_required
 @admin_required
 def index():
-    """List users with search, pagination, and sorting"""
-    try:
-        page = request.args.get('page', 1, type=int)
-        per_page = request.args.get('per_page', 10, type=int)
-        search_query = request.args.get('q', '')
-        sort_by = request.args.get('sort_by', 'created_at')
-        sort_order = request.args.get('sort_order', 'desc')
-        
-        if search_query:
-            # Handle sorting and pagination
-            query = User.query
-            if search_query:
-                query = query.filter(User.username.ilike(f'%{search_query}%') | 
-                                   User.email.ilike(f'%{search_query}%'))
-        
-            # Apply sorting
-            if sort_by == 'username':
-                query = query.order_by(User.username.asc() if sort_order == 'asc' else User.username.desc())
-            elif sort_by == 'email':
-                query = query.order_by(User.email.asc() if sort_order == 'asc' else User.email.desc())
-            else:
-                query = query.order_by(User.created_at.desc())
-        
-            # Apply pagination
-            users = query.paginate(page=page, per_page=per_page, error_out=False)
-        else:
-            users = get_all_users(page=page, per_page=per_page, 
-                                sort_by=sort_by, sort_order=sort_order)
-        
-        form = UserForm()
-        return render_template('admin/users/index.html', 
-                            users=users,
-                            search_query=search_query,
-                            form=form,
-                            sort_by=sort_by,
-                            sort_order=sort_order,
-                            csrf_token=generate_csrf(),
-                            _meta={'csrf': True})
-    except Exception as e:
-        logging.error(f"Error in user index route: {str(e)}")
-        flash_message(FlashMessages.GENERIC_ERROR.value, FlashCategory.ERROR.value)
-        return redirect(url_for('admin.dashboard.dashboard'))
+    """List users with pagination and search"""
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    search_query = request.args.get('q', '')
+    
+    if search_query:
+        users = search_users(search_query, page=page, per_page=per_page)
+    else:
+        users = get_all_users(page=page, per_page=per_page)
+    
+    return render_template('admin/users/index.html', 
+                         users=users,
+                         search_query=search_query,
+                         csrf_token=generate_csrf())
