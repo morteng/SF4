@@ -81,25 +81,27 @@ def admin_user(db_session, app):
     yield user
 
 @pytest.fixture(scope='function')
-def logged_in_admin(client, admin_user, db_session, app):
+def logged_in_admin(client, admin_user, db_session):
     """Log in as the admin user."""
-    with client.application.test_request_context():
-        # Merge the admin_user into the current session to ensure it's not detached
-        admin_user = db_session.merge(admin_user)
-        
-        login_response = client.get(url_for('public.login'))
-        csrf_token = extract_csrf_token(login_response.data)
-
-        response = client.post(url_for('public.login'), data={
-            'username': admin_user.username,
-            'password': 'password123',
-            'csrf_token': csrf_token
-        }, follow_redirects=True)
-
-        assert response.status_code == 200, "Admin login failed."
-        with client.session_transaction() as session:
-            assert '_user_id' in session, "Admin session not established."
+    # Get CSRF token
+    login_response = client.get(url_for('public.login'))
+    csrf_token = extract_csrf_token(login_response.data)
+    
+    # Perform login
+    response = client.post(url_for('public.login'), data={
+        'username': admin_user.username,
+        'password': 'password123',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+    
+    assert response.status_code == 200, "Admin login failed."
+    with client.session_transaction() as session:
+        assert '_user_id' in session, "Admin session not established."
+    
     yield client
+    
+    # Logout after test
+    client.get(url_for('public.logout'))
 
 @pytest.fixture(scope='function')
 def user_data():

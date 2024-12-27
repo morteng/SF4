@@ -43,31 +43,32 @@ def test_user(db_session, user_data):
     db_session.delete(user)
     db_session.commit()
 
-def test_create_user_route(logged_in_admin, user_data):
+def test_create_user_route(logged_in_admin, user_data, db_session):
     # Test GET request
-    create_response = logged_in_admin.get(url_for('admin.user.create'))
-    assert create_response.status_code == 200
-    
-    # Verify CSRF token is present
-    csrf_token = extract_csrf_token(create_response.data)
-    assert csrf_token is not None
-    
-    # Verify admin user context
-    with logged_in_admin.session_transaction() as session:
-        assert '_user_id' in session
-        admin_user = User.query.get(int(session['_user_id']))
-        assert admin_user is not None
-        assert admin_user.is_admin
-    
-    # Test POST request
-    response = logged_in_admin.post(url_for('admin.user.create'), data={
-        'username': user_data['username'],
-        'email': user_data['email'],
-        'password': user_data['password'],
-        'is_admin': False,
-        'submit': 'Create',
-        'csrf_token': csrf_token
-    }, follow_redirects=True)
+    with logged_in_admin.application.app_context():
+        create_response = logged_in_admin.get(url_for('admin.user.create'))
+        assert create_response.status_code == 200
+        
+        # Verify CSRF token is present
+        csrf_token = extract_csrf_token(create_response.data)
+        assert csrf_token is not None
+        
+        # Verify admin user context
+        with logged_in_admin.session_transaction() as session:
+            assert '_user_id' in session
+            admin_user = db_session.get(User, int(session['_user_id']))
+            assert admin_user is not None
+            assert admin_user.is_admin
+        
+        # Test POST request
+        response = logged_in_admin.post(url_for('admin.user.create'), data={
+            'username': user_data['username'],
+            'email': user_data['email'],
+            'password': user_data['password'],
+            'is_admin': False,
+            'submit': 'Create',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
     
     print(f"POST Response Status: {response.status_code}")
     print(f"POST Response Data: {response.data.decode('utf-8')}")
