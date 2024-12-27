@@ -18,6 +18,7 @@
   - View: No limit
 - Password resets: 5/hour
 - Bot operations: 10/hour
+- Bot scheduling: 5/hour
 
 ### CSRF Token Handling
 - Use Flask-WTF for CSRF protection

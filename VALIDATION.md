@@ -48,6 +48,8 @@
     - Delete: 3/minute
     - View: No limit
   - Password resets: 5/hour
+  - Bot operations: 10/hour
+  - Bot scheduling: 5/hour
 
 ### Notification Badge Validation
 - All admin templates must include a notification badge.

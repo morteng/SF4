@@ -11,6 +11,7 @@
 - [x] Add audit logging for all operations
 - [x] Fix notification.user_id constraint issues
 - [x] Implement blueprint factory pattern
+- [x] Implement bot scheduling
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
