@@ -37,12 +37,15 @@ class CustomDateTimeField(DateTimeField):
             
             try:
                 # First try parsing the date string
-                datetime.strptime(date_str, self.format)
+                parsed_dt = datetime.strptime(date_str, self.format)
+                
+                # Validate date components
+                if not self._validate_date_components(parsed_dt):
+                    return
                 
                 # If parsing succeeds, proceed with timezone handling
                 local_tz = timezone(self.timezone)
-                naive_dt = datetime.strptime(date_str, self.format)
-                local_dt = local_tz.localize(naive_dt, is_dst=None)
+                local_dt = local_tz.localize(parsed_dt, is_dst=None)
                 self.data = local_dt.astimezone(utc)
                 
             except ValueError as e:

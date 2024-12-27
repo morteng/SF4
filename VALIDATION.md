@@ -1,5 +1,50 @@
 # Validation Rules
 
+## Date/Time Field Validation
+
+### Required Fields
+- **Required**: Yes
+- **Error Messages**:
+  - "Date is required"
+
+### Format Validation
+- **Format**: YYYY-MM-DD HH:MM:SS
+- **Error Messages**:
+  - "Invalid date format. Please use YYYY-MM-DD HH:MM:SS"
+
+### Date Validation
+- **Valid Date Range**:
+  - Year: 1900-2100
+  - Month: 1-12
+  - Day: 1-31 (month-dependent)
+- **Error Messages**:
+  - "Invalid date values (e.g., Feb 30)"
+
+### Time Validation
+- **Valid Time Range**:
+  - Hour: 0-23
+  - Minute: 0-59
+  - Second: 0-59
+- **Error Messages**:
+  - "Invalid time values (e.g., 25:61:61)"
+
+### Timezone Validation
+- **Valid Timezones**: pytz.all_timezones
+- **Error Messages**:
+  - "Invalid timezone selected"
+
+### Examples
+
+**Valid Inputs**:
+- "2023-01-01 12:00:00"
+- "2024-02-29 23:59:59" (leap year)
+
+**Invalid Inputs**:
+- "2023-13-32 99:99:99" (invalid date/time)
+- "2023-02-30 12:00:00" (invalid date)
+- "2023-01-01 25:61:61" (invalid time)
+- "invalid-date" (invalid format)
+
 ## Organization Form
 
 ### Name Field

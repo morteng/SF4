@@ -1,13 +1,13 @@
 # TODO List
 
 ## Current Goals
-1. Complete organization routes implementation
-   - Implement proper error handling for organization operations
-   - Ensure consistent error display across all organization views
+1. Complete date/time validation implementation
+   - Add comprehensive tests for all date/time validation scenarios
+   - Ensure consistent error messages across all date/time fields
 
-2. Enhance test coverage for organization routes
-   - Add tests for HTMX responses in organization routes
-   - Add integration tests for organization service interactions
+2. Enhance test coverage for stipend routes
+   - Add tests for HTMX responses in stipend routes
+   - Add integration tests for stipend service interactions
 
 ## Knowledge & Memories
 - Organization model includes basic fields: name, description, homepage_url
