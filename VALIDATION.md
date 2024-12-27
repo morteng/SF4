@@ -5,7 +5,7 @@
 ### Required Fields
 - **Required**: Yes
 - **Error Messages**:
-  - "Date is required"  # Updated to match implementation
+  - "Date is required"
 
 ### Format Validation
 - **Format**: YYYY-MM-DD HH:MM:SS
@@ -18,8 +18,7 @@
   - Month: 1-12
   - Day: 1-31 (month-dependent)
 - **Error Messages**:
-  - "Invalid date values (e.g., Feb 30)"  # Updated error message
-  - "Date is required"  # Added required field message
+  - "Invalid date values (e.g., Feb 30)"
 
 ### Time Validation
 - **Valid Time Range**:

@@ -8,7 +8,6 @@ class CustomDateTimeField(DateTimeField):
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', timezone='UTC', **kwargs):
         super().__init__(label, validators, format=format, **kwargs)
         self.format = format
-        # Ensure timezone is always a string
         self.timezone_str = str(timezone) if timezone else 'UTC'
         self.error_messages = {
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
@@ -17,7 +16,6 @@ class CustomDateTimeField(DateTimeField):
             'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
             'required': 'Date is required'
         }
-        # Initialize errors as a list
         self.errors = []
 
     def process_formdata(self, valuelist):
