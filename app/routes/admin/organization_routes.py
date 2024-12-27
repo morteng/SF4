@@ -37,6 +37,8 @@ def create():
             for error in errors:
                 if 'This field is required.' in error:
                     flash_message(f"{field_label}: This field is required.", FLASH_CATEGORY_ERROR)
+                elif 'already exists' in error:
+                    flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
                 else:
                     flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
