@@ -9,6 +9,7 @@ from app.constants import FlashMessages, FlashCategory
 from werkzeug.security import generate_password_hash
 from tests.utils import assert_flash_message, create_user_data
 from app.utils import validate_password_strength
+from app import db
 
 @pytest.fixture(scope='function')
 def user_data():
