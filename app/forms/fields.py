@@ -32,15 +32,14 @@ class CustomDateTimeField(DateTimeField):
             try:
                 # Try parsing just the date portion
                 date_part = date_str.split()[0]
-                parsed_date = datetime.strptime(date_part, '%Y-%m-%d')
-                if parsed_date.month == 2 and parsed_date.day == 29:
-                    year = parsed_date.year
+                year, month, day = map(int, date_part.split('-'))
+                if month == 2 and day == 29:
                     is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
                     if not is_leap:
                         self.errors = []
                         self.errors.append(self.error_messages['invalid_leap_year'])
                         return
-            except ValueError:
+            except (ValueError, IndexError):
                 # If we can't parse the date, continue to other validations
                 pass
             
