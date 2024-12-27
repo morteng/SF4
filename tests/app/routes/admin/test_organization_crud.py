@@ -55,7 +55,8 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
             'name': '',
             'description': 'This is a test organization.',
             'homepage_url': 'http://example.com/organization',
-            'csrf_token': csrf_token
+            'csrf_token': csrf_token,
+            'submit': 'Create'
         }
 
         # Remove follow_redirects=True so the flash stays in the session.
