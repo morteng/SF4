@@ -75,27 +75,7 @@ class CustomDateTimeField(DateTimeField):
             
             # Additional validation for edge cases
             if dt.year < 1900 or dt.year > 2100:
-                self.errors.append('Year must be between 1900 and 2100')
-                return False
-                
-            if dt.month < 1 or dt.month > 12:
-                self.errors.append('Month must be between 1 and 12')
-                return False
-                
-            if dt.day < 1 or dt.day > 31:
-                self.errors.append('Day must be between 1 and 31')
-                return False
-                
-            if dt.hour < 0 or dt.hour > 23:
-                self.errors.append('Hour must be between 0 and 23')
-                return False
-                
-            if dt.minute < 0 or dt.minute > 59:
-                self.errors.append('Minute must be between 0 and 59')
-                return False
-                
-            if dt.second < 0 or dt.second > 59:
-                self.errors.append('Second must be between 0 and 59')
+                self.errors.append(self.error_messages['invalid_date'])
                 return False
                 
             return True
