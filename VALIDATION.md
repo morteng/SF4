@@ -3,17 +3,18 @@
 ## Principles
 - Validate client & server side
 - Test success & failure cases
-- Use enums consistently
+- Use FlashCategory enum for message types
 
-## Organization Form
-- Name: Required, ≤100 chars
-- URL: Optional, valid
-- Description: Required, ≤500 chars
+## Form Validation
+- Required fields: Validate presence
+- Length: Enforce max lengths
+- Format: Validate URLs, dates
+- Uniqueness: Check for duplicates
 
 ## Error Handling
 - Rollback on error
 - Log details
-- User-friendly messages
+- Use FlashMessages for user feedback
 - Preserve form state
 
 ## Security

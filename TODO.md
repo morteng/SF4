@@ -8,6 +8,6 @@
 ## Best Practices
 - Validate & sanitize all inputs
 - CSRF tokens for all POSTs
-- Use enums for assertions
+- Use FlashCategory enum consistently
 - Verify UI & DB state in tests
 
