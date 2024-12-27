@@ -36,30 +36,33 @@ class CustomDateTimeField(DateTimeField):
                 return
             
             try:
-                # Parse in local timezone
+                # First try parsing the date string
+                datetime.strptime(date_str, self.format)
+                
+                # If parsing succeeds, proceed with timezone handling
                 local_tz = timezone(self.timezone)
                 naive_dt = datetime.strptime(date_str, self.format)
                 local_dt = local_tz.localize(naive_dt, is_dst=None)
-                
-                # Convert to UTC for storage
                 self.data = local_dt.astimezone(utc)
                 
-                # Validate components
-                if not self._validate_date_components(self.data):
+            except ValueError as e:
+                error_str = str(e)
+                if 'does not match format' in error_str:
+                    self.errors.append(self.error_messages['invalid_format'])
+                elif 'day is out of range' in error_str:
                     self.errors.append(self.error_messages['invalid_date'])
-                    
-            except Exception as e:
-                if isinstance(e, ValueError):
-                    if 'does not match format' in str(e):
-                        self.errors.append(self.error_messages['invalid_format'])
-                    elif 'day is out of range' in str(e):
-                        self.errors.append(self.error_messages['invalid_date'])
-                    elif 'is ambiguous' in str(e):
-                        self.errors.append(self.error_messages['daylight_saving'])
-                elif isinstance(e, pytz.UnknownTimeZoneError):
-                    self.errors.append(self.error_messages['invalid_timezone'])
+                elif 'month is out of range' in error_str:
+                    self.errors.append(self.error_messages['invalid_date'])
+                elif 'hour must be in' in error_str:
+                    self.errors.append(self.error_messages['invalid_time'])
+                elif 'minute must be in' in error_str:
+                    self.errors.append(self.error_messages['invalid_time'])
+                elif 'second must be in' in error_str:
+                    self.errors.append(self.error_messages['invalid_time'])
                 else:
                     self.errors.append(self.error_messages['invalid_date'])
+            except pytz.UnknownTimeZoneError:
+                self.errors.append(self.error_messages['invalid_timezone'])
 
     def _validate_date_components(self, dt):
         try:
