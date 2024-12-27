@@ -30,7 +30,7 @@ def create():
             db.session.rollback()
             flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
     else:
-        # Handle form validation errors - let the form handle the error message format
+        # Handle form validation errors
         for field_name, errors in form.errors.items():
             for error in errors:
                 flash_message(error, FLASH_CATEGORY_ERROR)
