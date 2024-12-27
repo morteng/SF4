@@ -92,8 +92,7 @@ def test_profile_form_invalid_same_username(client, setup_database):
     test_user = User(
         username="testuser", 
         email="test@example.com", 
-        password_hash=password_hash,
-        is_active=True  # Ensure user is active
+        password_hash=password_hash
     )
     db.session.add(test_user)
     db.session.commit()
