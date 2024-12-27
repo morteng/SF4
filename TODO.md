@@ -54,4 +54,5 @@
 - Fixed test_timezone_handling by adding missing application_deadline field
 - Improved error message formatting in organization edit route to use field labels
 - Fixed database error handling to properly redirect back to edit page with flash message
+- Fixed test_update_organization_with_database_error by ensuring proper flash message is set
 

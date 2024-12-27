@@ -86,4 +86,5 @@
     - Database session should be rolled back
     - User should be redirected to edit page with error message
     - Form should maintain its state
+    - Flash message must be set before redirect
 
