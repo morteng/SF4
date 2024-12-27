@@ -8,11 +8,8 @@ class CustomDateTimeField(DateTimeField):
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', timezone='UTC', **kwargs):
         super().__init__(label, validators, format=format, **kwargs)
         self.format = format
-        self.timezone = SelectField(
-            'Timezone',
-            choices=[(tz, tz) for tz in pytz.all_timezones],
-            default='UTC'
-        )
+        # Store the timezone as a string directly
+        self.timezone_str = timezone
         self.error_messages = {
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
             'invalid_date': 'Invalid date values (e.g., Feb 30)',
@@ -44,7 +41,8 @@ class CustomDateTimeField(DateTimeField):
                     return
                 
                 # If parsing succeeds, proceed with timezone handling
-                local_tz = timezone(self.timezone)
+                # Use the stored timezone string directly
+                local_tz = timezone(self.timezone_str)
                 local_dt = local_tz.localize(parsed_dt, is_dst=None)
                 self.data = local_dt.astimezone(utc)
                 
