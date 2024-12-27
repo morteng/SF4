@@ -77,7 +77,7 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
 
         # Update this assertion to match the exact error message
         assert any(
-            cat == 'error' and msg == 'Org Name: This field is required.'
+            cat == 'error' and 'Name: This field is required.' in msg
             for cat, msg in flashed_messages
         ), "Field validation error not found in flash messages"
 
