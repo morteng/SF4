@@ -101,3 +101,12 @@ class FlashMessages(str, Enum):
     PROFILE_UPDATE_ERROR = "Failed to update profile."
     EMAIL_ALREADY_EXISTS = "Email already exists. Please choose a different email address."
     PROFILE_UPDATE_INVALID_DATA = "Invalid data provided for profile update."
+    
+    # User Status Management
+    USER_ACTIVATED = "User activated successfully."
+    USER_DEACTIVATED = "User deactivated successfully."
+    SELF_DEACTIVATION_ERROR = "Cannot deactivate your own account."
+    USER_STATUS_UPDATE_ERROR = "Failed to update user status."
+    PASSWORD_RESET_SUCCESS = "Password reset successfully."
+    PASSWORD_RESET_ERROR = "Failed to reset password."
+    USER_SEARCH_ERROR = "Failed to search users."
