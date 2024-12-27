@@ -10,7 +10,7 @@
 - Use CSRF tokens for all forms
 - Implement rate limiting for sensitive endpoints
 - Use bleach for input sanitization
-- Use FlashMessages and FlashCategory enums for consistent messaging
+- Use FlashMessages and FlashCategory enums for consistent messaging (access values with .value)
 
 ### Code Organization
 - Keep CSS in app/static/css/main.css
