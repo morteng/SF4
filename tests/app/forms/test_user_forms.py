@@ -62,8 +62,9 @@ def test_profile_form_valid(client, setup_database):
         get_response = client.get(url_for('user.edit_profile'))
         assert get_response.status_code == 200
         
-        # Extract CSRF token from the form
-        csrf_token = get_response.data.decode().split('name="csrf_token" value="')[1].split('"')[0]
+        # Extract CSRF token using BeautifulSoup
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
 
         # Test form submission via POST with valid data
         response = client.post(url_for('user.edit_profile'), data={
