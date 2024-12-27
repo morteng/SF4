@@ -3,8 +3,9 @@ from app import create_app
 from app.forms.admin_forms import OrganizationForm
 from app.config import TestConfig
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def app():
+    """Create and configure a new app instance for each test session."""
     app = create_app('testing')
     return app
 
