@@ -22,5 +22,5 @@
 - Use bleach for input sanitization
 - Require CSRF tokens for all POST requests
 - Implement rate limiting for sensitive endpoints
-- Use FlashMessages and FlashCategory enums consistently
+- Use FlashMessages and FlashCategory enums for flash messages
 

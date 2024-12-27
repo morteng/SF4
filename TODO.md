@@ -16,6 +16,7 @@
    - [x] Parameterize test scenarios
    - [x] Add database state verification
    - [x] Migrate all code to use FlashMessages and FlashCategory enums
+   - [x] Update tests to use FlashMessages and FlashCategory enums
    - [ ] Add integration tests for all CRUD operations
 
 ## Knowledge & Memories
