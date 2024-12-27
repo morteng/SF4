@@ -92,29 +92,25 @@ def test_update_user_route_with_invalid_id(logged_in_admin):
 
 def extract_csrf_token(response_data):
     """Extract CSRF token from HTML response."""
-    import re
     from bs4 import BeautifulSoup
     
     soup = BeautifulSoup(response_data, 'html.parser')
     
-    # Look for CSRF token in meta tag
-    meta_token = soup.find('meta', attrs={'name': 'csrf-token'})
+    # Look for CSRF token in hidden input with id="csrf_token"
+    csrf_input = soup.find('input', {'id': 'csrf_token'})
+    if csrf_input:
+        return csrf_input.get('value')
+    
+    # Look for CSRF token in meta tag as fallback
+    meta_token = soup.find('meta', {'name': 'csrf-token'})
     if meta_token:
         return meta_token.get('content')
     
-    # Look for CSRF token in hidden input
-    input_token = soup.find('input', attrs={'name': 'csrf_token'})
-    if input_token:
-        return input_token.get('value')
+    # Look for CSRF token in any hidden input as last resort
+    hidden_input = soup.find('input', {'type': 'hidden', 'name': 'csrf_token'})
+    if hidden_input:
+        return hidden_input.get('value')
     
-    # Look for CSRF token in form data
-    form = soup.find('form')
-    if form:
-        input_token = form.find('input', attrs={'name': 'csrf_token'})
-        if input_token:
-            return input_token.get('value')
-    
-    # If no token found, log the issue
     logging.warning("CSRF token not found in response")
     return None
 
