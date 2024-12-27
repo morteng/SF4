@@ -114,4 +114,5 @@
 - Added rate limiting to admin endpoints using Flask-Limiter
 - Standardized buttons and actions using `_macros.html`
 - Consolidated flash messages into `_flash_messages.html`
+- Added Flask-Limiter to requirements.txt to fix ModuleNotFoundError
 

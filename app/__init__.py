@@ -1,5 +1,12 @@
 import os  # Import the os module here
 from flask import Flask
+
+try:
+    from flask_limiter import Limiter
+except ImportError:
+    raise ImportError(
+        "Flask-Limiter is required. Please install it using 'pip install Flask-Limiter==3.5.0'"
+    )
 from app.extensions import db, login_manager, migrate, init_extensions  # Add 'migrate' and 'init_extensions' here
 from flask_wtf import CSRFProtect
 from dotenv import load_dotenv

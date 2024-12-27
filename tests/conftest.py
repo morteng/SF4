@@ -188,6 +188,13 @@ def tag_data():
     }
 
 # Helper Function
+def test_required_packages():
+    try:
+        import flask_limiter
+        assert True
+    except ImportError:
+        pytest.fail("Flask-Limiter is not installed")
+
 def extract_csrf_token(response_data):
     match = re.search(r'name="csrf_token".*?value="(.+?)"', response_data.decode('utf-8'))
     return match.group(1) if match else "dummy_csrf_token"
