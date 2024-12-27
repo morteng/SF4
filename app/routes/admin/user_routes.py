@@ -26,12 +26,14 @@ def create():
             flash_message(str(e), FlashCategory.ERROR.value)
             if request.headers.get('HX-Request') == 'true':
                 return render_template('admin/users/_create_form.html', form=form), 400
+            return redirect(url_for('admin.user.index'))
         except Exception as e:
             db.session.rollback()
             error_message = f"{FlashMessages.CREATE_USER_ERROR.value}{str(e)}"
             flash_message(error_message, FlashCategory.ERROR.value)
             if request.headers.get('HX-Request') == 'true':
                 return render_template('admin/users/_create_form.html', form=form), 400
+            return redirect(url_for('admin.user.index'))
     else:
         if request.headers.get('HX-Request') == 'true':
             # HTMX response - return form with errors
