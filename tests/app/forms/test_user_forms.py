@@ -53,12 +53,17 @@ def test_profile_form_invalid_same_username(client, setup_database):
             assert not is_valid
 
 def test_profile_form_invalid_same_email(client, setup_database):
-    # Test with existing email
+    # Clean up any existing test users
+    User.query.filter_by(email="existing@example.com").delete()
+    db.session.commit()
+
+    # Add a test user with a unique email
     password_hash = generate_password_hash("password123")
     user = User(username="existinguser", email="existing@example.com", password_hash=password_hash)
     db.session.add(user)
     db.session.commit()
 
+    # Test with existing email
     form = ProfileForm(original_username="testuser", original_email="test@example.com")
     with client.application.app_context():
         with client.application.test_request_context():
@@ -71,54 +76,10 @@ def test_profile_form_invalid_same_email(client, setup_database):
     form.email.data = "invalid-email"
     assert not form.validate()
     assert "Invalid email address." in form.email.errors
-    # Test with existing email
-    password_hash = generate_password_hash("password123")
-    user = User(username="existinguser", email="existing@example.com", password_hash=password_hash)
-    db.session.add(user)
+
+    # Clean up after the test
+    User.query.filter_by(email="existing@example.com").delete()
     db.session.commit()
-
-    form = ProfileForm(original_username="testuser", original_email="test@example.com")
-    with client.application.app_context():
-        with client.application.test_request_context():
-            form.username.data = "newusername"
-            form.email.data = "existing@example.com"
-            assert not form.validate()
-            assert FlashMessages.EMAIL_ALREADY_EXISTS in form.email.errors
-
-    # Test with invalid email format
-    form.email.data = "invalid-email"
-    assert not form.validate()
-    assert "Invalid email address." in form.email.errors
-    # Test with existing email
-    password_hash = generate_password_hash("password123")
-    user = User(username="existinguser", email="existing@example.com", password_hash=password_hash)
-    db.session.add(user)
-    db.session.commit()
-
-    form = ProfileForm(original_username="testuser", original_email="test@example.com")
-    with client.application.app_context():
-        with client.application.test_request_context():
-            form.username.data = "newusername"
-            form.email.data = "existing@example.com"
-            assert not form.validate()
-            assert FlashMessages.EMAIL_ALREADY_EXISTS in form.email.errors
-
-    # Test with invalid email format
-    form.email.data = "invalid-email"
-    assert not form.validate()
-    assert "Invalid email address." in form.email.errors
-    password_hash = generate_password_hash("password123")
-    user = User(username="existinguser", email="existing@example.com", password_hash=password_hash)
-    db.session.add(user)
-    db.session.commit()
-
-    form = ProfileForm(original_username="testuser", original_email="test@example.com")
-    with client.application.app_context():
-        with client.application.test_request_context():
-            form.username.data = "newusername"
-            form.email.data = "existing@example.com"
-            assert not form.validate()
-            assert FlashMessages.EMAIL_ALREADY_EXISTS in form.email.errors
 
 def test_login_form_valid(client):
     form = LoginForm()
