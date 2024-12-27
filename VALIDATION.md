@@ -206,22 +206,26 @@
    - Missing required fields
    - Invalid bot name (special characters)
    - Database error during creation
+   - Template rendering validation
 
 2. **Edit Bot**
    - Valid update
    - Invalid ID
    - Validation errors
    - Database error during update
+   - Template rendering validation
 
 3. **Delete Bot**
    - Valid deletion
    - Invalid ID
    - Database error during deletion
+   - Template rendering validation
 
 4. **Run Bot**
    - Successful run
    - Invalid ID
    - Bot runtime error
+   - Template rendering validation
 
 ### Error Messages
 - "Failed to create bot: {error}"

@@ -35,7 +35,7 @@
    - [ ] Verify all admin routes have corresponding templates
 
 6. **Improve Test Coverage**
-   - [ ] Add tests for bot routes
+   - [x] Add tests for bot routes
    - [ ] Increase coverage for admin routes
    - [ ] Add integration tests for bot operations
 
