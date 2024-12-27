@@ -7,7 +7,7 @@ from app.forms.user_forms import ProfileForm, LoginForm
 from app import create_app
 from app.models.user import User
 from app.extensions import db
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR  
+from app.constants import FlashMessages, FlashCategory
 
 @pytest.fixture(scope='function', autouse=True)
 def setup_database(_db):
@@ -47,7 +47,7 @@ def test_profile_form_invalid_same_username(client, setup_database):
             form.username.data = "existinguser"
             form.email.data = "newemail@example.com"
             is_valid = form.validate()
-            mock_flash.assert_called_once_with(FLASH_MESSAGES["USERNAME_ALREADY_EXISTS"], FLASH_CATEGORY_ERROR)
+            mock_flash.assert_called_once_with(FlashMessages.USERNAME_ALREADY_EXISTS, FlashCategory.ERROR)
             assert not is_valid
 
 def test_profile_form_invalid_same_email(client, setup_database):
@@ -62,7 +62,7 @@ def test_profile_form_invalid_same_email(client, setup_database):
             form.username.data = "newusername"
             form.email.data = "existing@example.com"
             assert not form.validate()
-            assert FLASH_MESSAGES["EMAIL_ALREADY_EXISTS"] in form.email.errors
+            assert FlashMessages.EMAIL_ALREADY_EXISTS in form.email.errors
 
 def test_login_form_valid(client):
     form = LoginForm()
