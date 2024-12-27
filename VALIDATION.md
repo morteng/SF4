@@ -30,5 +30,5 @@
   - Validation
   - Future date limits
   - Leap year validation (including Feb 29 in non-leap years)
-  - Invalid date detection
+  - Invalid date detection with clear error messages
 

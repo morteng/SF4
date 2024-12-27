@@ -22,5 +22,5 @@
   - String formatting
   - Future date validation
   - Leap year validation (including Feb 29 in non-leap years)
-  - Invalid date detection (e.g., Feb 30)
+  - Invalid date detection (e.g., Feb 30) with clear error messages
 
