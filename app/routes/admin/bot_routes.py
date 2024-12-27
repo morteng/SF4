@@ -115,9 +115,6 @@ def run(id):
             details=f'Running bot {bot.name}',
             ip_address=request.remote_addr
         )
-    """Run bot with status tracking and notifications"""
-    """Run bot with status tracking and notifications"""
-    bot = get_bot_by_id(id)
     if not bot:
         flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)
         return redirect(url_for('admin.bot.index'))
