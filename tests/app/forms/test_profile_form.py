@@ -56,13 +56,9 @@ def test_profile_form_invalid_csrf(logged_in_client):
         with patch('app.forms.user_forms.User.query.filter_by') as mock_filter_by:
             mock_filter_by.return_value.first.return_value = None
 
-            with logged_in_client.session_transaction() as sess:
-                form = ProfileForm(
-                    original_username="testuser",
-                    original_email="test@example.com"
-                )
-                csrf_token = form.csrf_token._value()
-                sess['csrf_token'] = csrf_token
+            # Get valid CSRF token from login page
+            login_response = logged_in_client.get(url_for('public.login'))
+            valid_csrf = extract_csrf_token(login_response.data)
 
             # Submit with invalid CSRF token
             response = logged_in_client.post(url_for('user.edit_profile'), data={
@@ -72,6 +68,6 @@ def test_profile_form_invalid_csrf(logged_in_client):
             }, follow_redirects=True)
 
             assert response.status_code == 400
-            assert b"CSRF token is invalid" in response.data
+            assert FlashMessages.CSRF_INVALID.value.encode() in response.data
             # Verify that the user's profile was not updated
             mock_filter_by.assert_not_called()

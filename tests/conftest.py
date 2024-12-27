@@ -20,7 +20,8 @@ warnings.filterwarnings("ignore", category=SAWarning)
 def app():
     """Create and configure a new app instance for each test function."""
     app = create_app('testing')  # Use 'testing' here, not TestConfig
-    app.config['WTF_CSRF_ENABLED'] = False  # Ensure CSRF is disabled
+    app.config['WTF_CSRF_ENABLED'] = True  # Enable CSRF for testing
+    app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'  # Add CSRF secret key
 
     with app.app_context():
         db.session.expire_on_commit = False
