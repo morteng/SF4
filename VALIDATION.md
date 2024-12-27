@@ -15,7 +15,9 @@
 - CSRF: Validate token in all forms
 
 ## Form Testing
-- Use `test_request_context` for form tests
+- Test both valid and invalid form submissions
+- Verify validation messages
+- Use `test_request_context` for CSRF-protected forms
 - Validate CSRF tokens in all form tests
 
 ## Error Handling

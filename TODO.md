@@ -2,7 +2,8 @@
 ## High Priority
 - [x] Add CSRF protection to all forms
 - [x] Enable CSRF in testing environment
-- [x] Fix form tests to work with CSRF protection
+- [ ] Fix form tests to work with CSRF protection
+- [ ] Add form validation tests
 - [ ] Add rate limiting to admin routes
 - [ ] Add CRUD integration tests
 - [ ] Increase test coverage to 80%+

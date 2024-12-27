@@ -11,6 +11,11 @@
 - Always use `test_request_context` when testing forms with CSRF protection
 - Ensure CSRF tokens are validated in form tests
 
+### Form Testing
+- Use `test_request_context` for form tests
+- Validate CSRF tokens in all form tests
+- Test both valid and invalid form submissions
+
 ### Security
 - Validate all inputs
 - CSRF tokens required in all forms
