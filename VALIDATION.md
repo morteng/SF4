@@ -22,6 +22,11 @@
 - Use form-generated CSRF tokens in tests
 - Ensure CSRF tokens are properly initialized in forms
 - Add error handling to debug validation failures
+
+### CSRF Token Validation in Tests
+- Use `client.session_transaction()` to initialize CSRF tokens
+- Ensure form creation and submission occur within the same context
+- Verify CSRF tokens are properly generated and validated
 - Ensure all required fields are properly set
 - Validate presence of required fields
 - Enforce max lengths
