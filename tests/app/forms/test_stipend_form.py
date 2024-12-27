@@ -9,21 +9,22 @@ from wtforms import Form, StringField
 
 @pytest.fixture
 def form_data(app):
-    # Create a test organization
-    org = Organization(name="Test Org", description="Test Description", homepage_url="https://test.org")
-    db.session.add(org)
-    db.session.commit()
+    # Create a test organization within application context
+    with app.app_context():
+        org = Organization(name="Test Org", description="Test Description", homepage_url="https://test.org")
+        db.session.add(org)
+        db.session.commit()
 
-    return {
-        'name': 'Test Stipend',
-        'summary': 'Test summary',
-        'description': 'Test description',
-        'homepage_url': 'https://example.com',
-        'application_procedure': 'Test procedure',
-        'eligibility_criteria': 'Test criteria',
-        'organization_id': org.id,  # Use the created organization's ID
-        'open_for_applications': True
-    }
+        return {
+            'name': 'Test Stipend',
+            'summary': 'Test summary',
+            'description': 'Test description',
+            'homepage_url': 'https://example.com',
+            'application_procedure': 'Test procedure',
+            'eligibility_criteria': 'Test criteria',
+            'organization_id': org.id,  # Use the created organization's ID
+            'open_for_applications': True
+        }
 
 def test_valid_date_format(app, form_data):
     """Test valid date format"""
