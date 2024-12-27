@@ -77,10 +77,7 @@ def delete(id):
     Returns:
         Redirect to the organization index page with appropriate flash message.
     """
-    # Verify CSRF token
-    if not request.form.get('csrf_token'):
-        flash_message(FLASH_MESSAGES['CSRF_MISSING'], FLASH_CATEGORY_ERROR)
-        return redirect(url_for('admin.organization.index'))
+    # CSRF token is automatically validated by Flask-WTF
     
     organization = get_organization_by_id(id)
     if organization:
