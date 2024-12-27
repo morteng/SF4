@@ -347,6 +347,44 @@
 - Enhanced template error display
 - Added HTMX endpoint validation
 
+## Bot Route Validation
+
+### New Test Cases
+1. **Template Validation**
+   - Verify admin bot edit template exists and extends base.html
+   - Check form rendering and error handling
+   - Test successful bot update
+   - Test validation errors
+   - Test database error handling
+
+### Error Handling
+- **Template Not Found**
+  * Returns 404 status code
+  * Logs template error
+  * Displays proper error message
+  * Uses consistent error message formatting
+
+### Examples
+**Valid Inputs**:
+{
+    "name": "Updated Bot",
+    "description": "Updated description",
+    "status": "active"
+}
+
+**Invalid Inputs**:
+{
+    "name": "",  // Empty name
+    "description": "a" * 501,  // Too long
+    "status": "invalid_status"  // Invalid value
+}
+
+**Expected Behavior**:
+- Returns 400 status code for invalid inputs
+- Displays error messages for invalid fields
+- Logs validation errors
+- Preserves form state
+
 ## Organization Form
 
 ### Name Field

@@ -17,6 +17,17 @@
   * Use consistent block names (content for all pages)
   * Include admin sidebar in all admin pages
   * Use proper form error handling with invalid-feedback class
+  * Admin templates should use flex layout with fixed sidebar width
+  * Main content area should be flexible to fill remaining space
+
+- **Testing Best Practices**
+  * Verify template inheritance chain in tests
+  * Check for proper error handling in templates
+  * Test both success and failure cases
+  * When testing forms, always include CSRF token
+  * Use constants for flash messages to ensure consistency
+  * Test template rendering for all admin routes
+  * Verify proper error handling for database errors
 
 - **Testing Best Practices**
   * Verify template inheritance chain in tests
