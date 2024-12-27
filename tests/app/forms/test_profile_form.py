@@ -17,7 +17,7 @@ def test_profile_form_valid(client, db_session):
                     original_username="testuser",
                     original_email="test@example.com"
                 )
-                csrf_token = form.csrf_token.current_token
+                csrf_token = form.csrf_token._value()
 
                 # Test the form with valid CSRF token
                 form.username.data = "newusername"
