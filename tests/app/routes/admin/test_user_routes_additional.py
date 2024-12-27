@@ -3,7 +3,7 @@ from flask import url_for
 from app.forms.user_forms import ProfileForm, LoginForm
 from app.models.user import User
 from tests.conftest import extract_csrf_token, logged_in_client
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from app.constants import FlashMessages, FlashCategory
 
 @pytest.fixture(scope='function')
 def user_data():
@@ -42,7 +42,7 @@ def test_login_route(logged_in_client, user_data):
 
     assert response.status_code == 200
     # Assert the flash message using constants
-    assert FLASH_MESSAGES["LOGIN_SUCCESS"].encode() in response.data
+    assert FlashMessages.LOGIN_SUCCESS.value.encode() in response.data
 
 def test_login_route_with_invalid_credentials(logged_in_client, user_data):
     # Update the route from 'user.login' to 'public.login'
@@ -61,7 +61,7 @@ def test_login_route_with_invalid_credentials(logged_in_client, user_data):
     # Assert the flash message using constants and category
     with logged_in_client.session_transaction() as session:
         flashed_messages = session['_flashes']
-        assert (FLASH_CATEGORY_ERROR, FLASH_MESSAGES["LOGIN_INVALID_CREDENTIALS"]) in flashed_messages
+        assert (FlashCategory.ERROR.value, FlashMessages.LOGIN_INVALID_CREDENTIALS.value) in flashed_messages
 
     # Ensure that the user is not redirected to a protected page
     assert b'Login' in response.data  # Check if login form is still present
@@ -84,7 +84,7 @@ def test_edit_profile_route(logged_in_client, test_user):
 
     assert response.status_code == 200
     # Assert the flash message using constants
-    assert FLASH_MESSAGES["PROFILE_UPDATE_SUCCESS"].encode() in response.data
+    assert FlashMessages.PROFILE_UPDATE_SUCCESS.value.encode() in response.data
 
 def test_edit_profile_route_with_invalid_data(logged_in_client, test_user):
     edit_response = logged_in_client.get(url_for('user.edit_profile'))
@@ -100,5 +100,5 @@ def test_edit_profile_route_with_invalid_data(logged_in_client, test_user):
 
     assert response.status_code == 200
     # Assert the flash message using constants
-    assert FLASH_MESSAGES["PROFILE_UPDATE_INVALID_DATA"].encode() in response.data
+    assert FlashMessages.PROFILE_UPDATE_INVALID_DATA.value.encode() in response.data
 
