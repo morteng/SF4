@@ -27,7 +27,9 @@ def create():
             flash_message(str(e), FlashCategory.ERROR.value)
             if request.headers.get('HX-Request') == 'true':
                 return render_template('admin/users/_create_form.html', form=form), 400
-            return render_template('admin/users/create.html', form=form), 400
+            return render_template('admin/users/create.html', 
+                                form=form,
+                                form_title='Create User'), 400
         except Exception as e:
             db.session.rollback()
             error_message = f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}"
