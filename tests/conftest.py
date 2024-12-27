@@ -46,8 +46,10 @@ def app():
 @pytest.fixture(scope='function')
 def _db(app):
     """Provide the SQLAlchemy database session for each test function."""
-    with app.app_context():
-        yield db
+    ctx = app.app_context()
+    ctx.push()
+    yield db
+    ctx.pop()
 
 @pytest.fixture(scope='function')
 def db_session(_db, app):

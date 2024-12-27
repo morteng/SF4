@@ -23,10 +23,13 @@ def user_data():
 
 @pytest.fixture
 def client(app):
-    with app.test_client() as client:
-        with client.session_transaction() as session:
-            session['csrf_token'] = 'test-csrf-token'
-        yield client
+    ctx = app.test_request_context()
+    ctx.push()
+    client = app.test_client()
+    with client.session_transaction() as session:
+        session['csrf_token'] = 'test-csrf-token'
+    yield client
+    ctx.pop()
 
 @pytest.fixture(scope='function')
 def test_user(db_session, user_data):
