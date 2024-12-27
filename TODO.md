@@ -17,6 +17,11 @@
 - Application deadlines should be stored in UTC but displayed in user's local timezone
 - Use pytz for timezone conversions
 - Add validation to ensure application deadlines are in the future
+- When handling database errors:
+  * Always set flash message before redirect
+  * Rollback database session
+  * Redirect back to edit page to preserve form state
+  * Use consistent error message format from FLASH_MESSAGES
 - Organization routes implementation details:
   * Uses consistent CRUD pattern with admin. prefix
   * Supports both full page and HTMX responses
