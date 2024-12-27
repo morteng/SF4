@@ -31,11 +31,10 @@ def create():
             flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
             return render_template('admin/organizations/form.html', form=form), 500
     else:
-        # Flash all validation errors
-        for field_name, errors in form.errors.items():
-            field = getattr(form, field_name)
+        # Flash form validation errors
+        for field, errors in form.errors.items():
             for error in errors:
-                flash_message(f"{field.label.text}: {error}", FLASH_CATEGORY_ERROR)
+                flash_message(f"{getattr(form, field).label.text}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
