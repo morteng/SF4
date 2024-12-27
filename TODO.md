@@ -44,9 +44,13 @@
 
 - **Security Enhancements**
   * CSRF tokens are included in all forms and HTMX requests
-  * Rate limiting is implemented using Flask-Limiter
+  * Rate limiting is implemented using Flask-Limiter (v3.5.0)
   * IP-based access restrictions are added to admin routes
   * Two-factor authentication (2FA) is implemented for admin users
+- **Dependencies**
+  * Flask-Limiter is required for rate limiting functionality
+  * All packages in requirements.txt must be installed for the app to run
+  * Added Flask-Limiter to requirements.txt to fix ModuleNotFoundError
 
 - **Performance Optimizations**
   * Caching is implemented using Flask-Caching
