@@ -21,9 +21,19 @@ def edit_profile():
     if request.method == 'POST':
         if not form.validate():
             if 'csrf_token' in form.errors:
-                flash(FlashMessages.CSRF_INVALID.value, FlashCategory.ERROR.value)
+                flash_message(FlashMessages.CSRF_INVALID, FlashCategory.ERROR)
                 return render_template('user/edit_profile.html', form=form), 400
-            flash(FlashMessages.PROFILE_UPDATE_INVALID_DATA.value, FlashCategory.ERROR.value)
+            
+            # Handle specific validation errors
+            if 'username' in form.errors:
+                for error in form.username.errors:
+                    if error == FlashMessages.USERNAME_ALREADY_EXISTS.value:
+                        flash_message(FlashMessages.USERNAME_ALREADY_EXISTS, FlashCategory.ERROR)
+                    else:
+                        flash_message(FlashMessages.PROFILE_UPDATE_INVALID_DATA, FlashCategory.ERROR)
+            else:
+                flash_message(FlashMessages.PROFILE_UPDATE_INVALID_DATA, FlashCategory.ERROR)
+            
             return render_template('user/edit_profile.html', form=form), 400
             
         new_username = form.username.data
