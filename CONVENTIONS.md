@@ -12,4 +12,5 @@
 - CSRF tokens required in all forms
 - Rate limit sensitive endpoints
 - Use Flask-WTF for form handling
+- Always use form.validate() for validation (includes CSRF validation)
 

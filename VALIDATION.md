@@ -1,7 +1,8 @@
 # Validation Rules
 ## Form Testing
 - Initialize session with `client.get('/')` before form tests
-- Verify CSRF token presence and value in session
+- Verify CSRF token presence in session
+- Use form.validate() for validation (includes CSRF validation)
 - Keep form creation and validation in same context
 - Use `app.test_request_context()` for session access
 
