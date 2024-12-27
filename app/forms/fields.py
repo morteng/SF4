@@ -29,7 +29,7 @@ class CustomDateTimeField(DateTimeField):
                 return
             
             try:
-                # First check if the date string matches the expected format
+                # First try to parse the full date string
                 parsed_dt = datetime.strptime(date_str, self.format)
                 
                 # Validate leap year
@@ -57,19 +57,21 @@ class CustomDateTimeField(DateTimeField):
                 
             except ValueError as e:
                 error_str = str(e)
-                # Check if it's a leap year issue
-                try:
-                    # Try parsing just the date part
-                    date_part = date_str.split()[0]  # Get just the date portion
-                    parsed_date = datetime.strptime(date_part, '%Y-%m-%d')
-                    if parsed_date.month == 2 and parsed_date.day == 29:
-                        year = parsed_date.year
-                        is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
-                        if not is_leap:
-                            self.errors.append(self.error_messages['invalid_leap_year'])
-                            return
-                except ValueError:
-                    pass
+                
+                # Check if the error is specifically about February 29th
+                if 'day is out of range for month' in error_str:
+                    try:
+                        # Try parsing just the date portion
+                        date_part = date_str.split()[0]
+                        parsed_date = datetime.strptime(date_part, '%Y-%m-%d')
+                        if parsed_date.month == 2 and parsed_date.day == 29:
+                            year = parsed_date.year
+                            is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
+                            if not is_leap:
+                                self.errors.append(self.error_messages['invalid_leap_year'])
+                                return
+                    except ValueError:
+                        pass
                 
                 # Handle other error cases
                 if 'does not match format' in error_str:
