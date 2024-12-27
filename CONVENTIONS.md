@@ -4,6 +4,7 @@
 - Verify UI & DB state
 - Use fixtures & parameterized tests
 - Include CSRF token validation in form tests
+- Enable CSRF in testing environment
 
 ### Security
 - Validate all inputs

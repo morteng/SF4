@@ -10,4 +10,5 @@
 - Use enums consistently
 - Verify UI & DB state in tests
 - Ensure CSRF tokens in all forms
+- Enable CSRF in testing environment
 

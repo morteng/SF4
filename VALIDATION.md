@@ -4,6 +4,7 @@
 - Use enums for message types
 - Test success & failure cases
 - Include CSRF validation
+- Enable CSRF in testing environment
 
 ## Form Validation
 - Required fields: Validate presence
