@@ -24,6 +24,6 @@
   - String input
   - Timezone-aware objects
   - Future date validation
-  - Leap year validation
+  - Leap year validation (including Feb 29 in non-leap years)
   - Invalid date detection
 

@@ -29,6 +29,6 @@
   - Timezone conversion
   - Validation
   - Future date limits
-  - Leap year validation
+  - Leap year validation (including Feb 29 in non-leap years)
   - Invalid date detection
 
