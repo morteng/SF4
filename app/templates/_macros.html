@@ -80,10 +80,10 @@
 </table>
 {% endmacro %}
 
-{% macro pagination(paginated_data, endpoint, current_page, total_pages) %}
+{% macro pagination(paginated_data, endpoint, current_page=1, total_pages=1) %}
 <nav class="mt-4">
     <ul class="pagination flex justify-center items-center space-x-2">
-        {% if current_page > 1 %}
+        {% if current_page is defined and current_page is not none and current_page > 1 %}
             <li>
                 <a href="{{ url_for(endpoint, page=current_page - 1) }}" 
                    class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
@@ -96,7 +96,9 @@
                 Page {{ current_page }} of {{ total_pages }}
             </span>
         </li>
-        {% if current_page < total_pages %}
+        {% if current_page is defined and current_page is not none and 
+              total_pages is defined and total_pages is not none and 
+              current_page < total_pages %}
             <li>
                 <a href="{{ url_for(endpoint, page=current_page + 1) }}" 
                    class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-100">
