@@ -42,7 +42,8 @@ def test_organization_form_valid_data(app, client):
         # Create form with the existing CSRF token
         form = OrganizationForm()
         form.csrf_token.data = csrf_token  # Explicitly set the CSRF token
-        assert form.csrf_token.current_token == csrf_token, "Form CSRF token mismatch"
+        # Validate the CSRF token instead of direct comparison
+        assert form.validate_csrf_token(form.csrf_token), "CSRF token validation failed"
 
         # Create form with valid data and the actual CSRF token
         form = OrganizationForm(data={
