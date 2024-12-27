@@ -44,148 +44,46 @@ def create():
             # Create user
             new_user = create_user(form.data)
             
-            # Create audit log with all required fields
-            audit_log = AuditLog(
+            # Create audit log
+            AuditLog.create(
                 user_id=current_user.id,
                 action='create_user',
                 object_type='User',
                 object_id=new_user.id,
                 details=f'Created user {new_user.username}',
-                details_before=None,
-                details_after=str({
-                    'username': new_user.username,
-                    'email': new_user.email,
-                    'is_admin': new_user.is_admin
-                }),
-                ip_address=request.remote_addr,
-                timestamp=datetime.utcnow()
-            )
-            db.session.add(audit_log)
-            db.session.add(audit_log)
-            db.session.commit()
-            
-            flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
-            return redirect(url_for('admin.user.index'))
-        except ValueError as e:
-            db.session.rollback()
-            flash_message(str(e), FlashCategory.ERROR.value)
-            
-            # Log the failed attempt
-            AuditLog.create(
-                user_id=current_user.id,
-                action='create_user_failed',
-                details=f'Failed to create user: {str(e)}',
                 ip_address=request.remote_addr
             )
             
-            template = 'admin/users/_create_form.html' if request.headers.get('HX-Request') == 'true' else 'admin/users/create.html'
-            return render_template(template, 
-                                form=form,
-                                notification_count=notification_count,
-                                form_title='Create User'), 400
-        except Exception as e:
-            db.session.rollback()
-            error_message = f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}"
-            # Log the error with audit details
-            AuditLog.create(
-                user_id=current_user.id,
-                action='create_user_error',
-                details=error_message,
-                object_type='User',
-                ip_address=request.remote_addr,
-                details_before=str(form.data),
-                details_after=None
-            )
-            flash_message(error_message, FlashCategory.ERROR.value)
-            
-            template = 'admin/users/_create_form.html' if request.headers.get('HX-Request') == 'true' else 'admin/users/create.html'
-            
-            flashed_messages = [(FlashCategory.ERROR.value, error_message)]
-            
-            return render_template(template, 
-                                form=form, 
-                                flash_messages=flashed_messages,
-                                notification_count=notification_count), 400
-    else:
-        if request.headers.get('HX-Request') == 'true':
-            return render_template('admin/users/_create_form.html', 
-                                form=form,
-                                notification_count=notification_count), 400
-        else:
-            error_messages = []
-            field_errors = {}
-            for field_name, errors in form.errors.items():
-                field = getattr(form, field_name)
-                field_errors[field_name] = []
-                for error in errors:
-                    msg = format_error_message(field, error)
-                    error_messages.append(msg)
-                    field_errors[field_name].append(msg)
-                    flash_message(msg, FlashCategory.ERROR.value)
-            flash_message(FlashMessages.CREATE_USER_INVALID_DATA.value, FlashCategory.ERROR.value)
-    return render_template('admin/users/create.html', 
-                         form=form,
-                         notification_count=notification_count)
-    
-    # Create audit log entry
-    audit_log = AuditLog(
-        user_id=current_user.id,
-        action='create_user',
-        details_before='Creating new user',
-        timestamp=datetime.utcnow(),
-        ip_address=request.remote_addr
-    )
-    db.session.add(audit_log)
-    db.session.commit()
-    if form.validate_on_submit():
-        try:
-            new_user = create_user(form.data)
-            flash(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
-            session.modified = True
+            flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
+            
         except ValueError as e:
             db.session.rollback()
             flash_message(str(e), FlashCategory.ERROR.value)
-            if request.headers.get('HX-Request') == 'true':
-                return render_template('admin/users/_create_form.html', form=form), 400
             return render_template('admin/users/create.html', 
                                 form=form,
-                                notification_count=notification_count,
-                                form_title='Create User'), 400
+                                notification_count=notification_count), 400
+                                
         except Exception as e:
             db.session.rollback()
             error_message = f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}"
             flash_message(error_message, FlashCategory.ERROR.value)
-            
-            # For both HTMX and regular requests, render the appropriate template directly
-            template = 'admin/users/_create_form.html' if request.headers.get('HX-Request') == 'true' else 'admin/users/create.html'
-            
-            # Get flashed messages and pass them explicitly to the template
-            flashed_messages = [(FlashCategory.ERROR.value, error_message)]
-            
-            return render_template(template, 
-                                form=form, 
-                                flash_messages=flashed_messages), 400
+            return render_template('admin/users/create.html', 
+                                form=form,
+                                notification_count=notification_count), 500
     else:
-        if request.headers.get('HX-Request') == 'true':
-            # HTMX response - return form with errors
-            return render_template('admin/users/_create_form.html', form=form), 400
-        else:
-            # Regular form submission
-            error_messages = []
-            field_errors = {}
-            for field_name, errors in form.errors.items():
-                field = getattr(form, field_name)
-                field_errors[field_name] = []
-                for error in errors:
-                    msg = format_error_message(field, error)
-                    error_messages.append(msg)
-                    field_errors[field_name].append(msg)
-                    flash_message(msg, FlashCategory.ERROR.value)
-            flash_message(FlashMessages.CREATE_USER_INVALID_DATA.value, FlashCategory.ERROR.value)
-    return render_template('admin/users/create.html', 
-                         form=form,
-                         notification_count=notification_count)
+        # Handle form validation errors
+        error_messages = []
+        for field_name, errors in form.errors.items():
+            field = getattr(form, field_name)
+            for error in errors:
+                msg = format_error_message(field, error)
+                error_messages.append(msg)
+                flash_message(msg, FlashCategory.ERROR.value)
+                
+        return render_template('admin/users/create.html', 
+                            form=form,
+                            notification_count=notification_count), 400
 
 @admin_user_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
