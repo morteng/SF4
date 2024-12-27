@@ -40,7 +40,8 @@ def test_organization_form_valid_data(app, client):
             csrf_token = session['csrf_token']
             
         # Create form with the existing CSRF token
-        form = OrganizationForm(csrf_token=csrf_token)
+        form = OrganizationForm()
+        form.csrf_token.data = csrf_token  # Explicitly set the CSRF token
         assert form.csrf_token.current_token == csrf_token, "Form CSRF token mismatch"
 
         # Create form with valid data and the actual CSRF token
@@ -48,7 +49,7 @@ def test_organization_form_valid_data(app, client):
             'name': 'Valid Org',
             'description': 'Valid description',
             'homepage_url': 'https://valid.org',
-            'csrf_token': form.csrf_token.current_token
+            'csrf_token': csrf_token  # Use the session token
         })
         
         # Debug logging for validation errors and response
