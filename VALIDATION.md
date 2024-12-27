@@ -11,6 +11,7 @@
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
+- Ensure all forms include: `<input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">`
 - Include CSRF token in both form data and headers:
   - Form fields: `csrf_token` and `_csrf_token`
   - Header: `X-CSRFToken`

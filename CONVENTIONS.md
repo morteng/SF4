@@ -1,5 +1,6 @@
 ## Coding Conventions
 - All flash messages must use messages defined in app\constants.py - create new additions here when needed. All tests should evaluate the constant used, not the string itself.
+- CSRF tokens must be included in all forms using: `<input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token() }}">`
 
 
 ### Testing with CSRF
