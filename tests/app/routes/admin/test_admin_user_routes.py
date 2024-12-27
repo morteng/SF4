@@ -194,7 +194,10 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
                 
         if is_logged_in:
             # If already logged in, get CSRF token from a protected page
-            dashboard_response = logged_in_admin.get('/admin/dashboard')
+            dashboard_response = logged_in_admin.get('/admin/dashboard/')
+            if dashboard_response.status_code == 308:
+                # Follow the redirect if needed
+                dashboard_response = logged_in_admin.get(dashboard_response.headers['Location'])
             assert dashboard_response.status_code == 200, \
                 f"Dashboard failed with status {dashboard_response.status_code}"
             csrf_token = extract_csrf_token(dashboard_response.data)
