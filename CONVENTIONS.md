@@ -1,10 +1,11 @@
 ## Coding Conventions
 ### Testing with CSRF
 - Initialize session with `client.get('/')` before form tests
-- Verify CSRF token presence and value in session
+- Ensure `WTF_CSRF_ENABLED=True` in test config
+- Verify CSRF token presence in session
 - Keep form creation and validation in same context
 - Use `app.test_request_context()` for session access
-- Validate CSRF token matches between form and session
+- Use form-generated CSRF token in test submissions
 
 ### Security
 - Validate all inputs

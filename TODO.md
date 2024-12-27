@@ -5,10 +5,11 @@
 
 ## Best Practices
 - Validate & sanitize all inputs
-- Ensure session initialization in form tests
+- Ensure CSRF protection is enabled in test config
+- Verify session initialization in form tests
 - Use enums consistently
 - Verify UI & DB state in tests
-- Ensure CSRF protection in all environments
+- Ensure CSRF protection matches production environment
 - Add CSRF token validation tests for all forms
 - Document session initialization requirements
 - Use session_transaction() for session verification

@@ -9,7 +9,8 @@
 - Validate CSRF tokens in all forms
 - Include CSRF token in form submissions
 - Use form-generated CSRF tokens in tests
-- Ensure CSRF tokens are properly initialized in forms
+- Ensure CSRF protection is enabled in test config
+- Verify CSRF token presence in session
 
 ## Error Handling
 - Rollback on error
