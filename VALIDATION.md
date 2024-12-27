@@ -20,6 +20,11 @@
 - Use `test_request_context` for CSRF-protected forms
 - Validate CSRF tokens in all form tests
 
+## Form Validation Testing
+- Test all required fields and constraints
+- Verify error messages for invalid inputs
+- Use `form.errors` to debug validation failures
+
 ## Error Handling
 - Rollback on error
 - Log details

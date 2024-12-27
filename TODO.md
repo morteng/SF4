@@ -4,6 +4,9 @@
 - [x] Enable CSRF in testing environment
 - [ ] Fix form tests to work with CSRF protection
 - [ ] Add form validation tests
+- [ ] Add comprehensive form validation tests
+- [ ] Ensure tests cover all form fields and edge cases
+- [ ] Debug and fix failing form tests
 - [ ] Add rate limiting to admin routes
 - [ ] Add CRUD integration tests
 - [ ] Increase test coverage to 80%+
