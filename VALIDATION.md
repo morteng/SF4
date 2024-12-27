@@ -1,7 +1,13 @@
 # Validation Rules
 
 ## Audit Log Validation
-- Verify all CRUD operations create audit logs
+- Verify all CRUD operations create audit logs with:
+  - User ID
+  - Action type
+  - Object type and ID
+  - Timestamp
+  - IP address
+  - Operation details
 - Check logs contain:
   - user_id, action, object_type, object_id
   - timestamp, ip_address

@@ -2,7 +2,7 @@
 ## High Priority
 - [x] Implement core CRUD functionality
 - [x] Add CSRF protection and validation
-- [x] Set up audit logging
+- [x] Set up audit logging (all CRUD operations)
 - [x] Configure rate limiting
 - [x] Fix CSRF token template usage
 - [ ] Complete admin route tests

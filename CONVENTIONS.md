@@ -33,6 +33,13 @@
 ### Audit Logging
 - Required for all CRUD operations
 - Must include:
+  - User ID
+  - Action type (create/update/delete)
+  - Object type and ID
+  - Timestamp (UTC)
+  - IP address
+  - Operation details
+- Must include:
   - Timestamp (UTC)
   - User ID
   - IP address
