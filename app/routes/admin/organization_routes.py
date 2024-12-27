@@ -3,11 +3,23 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import current_user, login_required
 from bleach import clean
 from flask_wtf.csrf import CSRFProtect
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from datetime import datetime
 from app.models.organization import Organization
+from app.models.audit_log import AuditLog
 from app.constants import FlashMessages, FlashCategory
+from app.extensions import db, limiter
 
 # Configure logging
 logger = logging.getLogger(__name__)
+
+# Rate limiting configuration
+ORG_RATE_LIMITS = {
+    'create': "10 per minute",
+    'update': "10 per minute", 
+    'delete': "3 per minute"
+}
 from flask_login import login_required
 from flask_wtf.csrf import CSRFProtect
 from app.constants import FlashMessages, FlashCategory
@@ -22,6 +34,7 @@ admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 csrf = CSRFProtect()
 
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
+@limiter.limit(ORG_RATE_LIMITS['create'])
 @login_required
 def create():
     """
@@ -53,7 +66,17 @@ def create():
             db.session.add(organization)
             db.session.commit()
             
-            flash('Organization created successfully!', 'success')
+            # Create audit log
+            AuditLog.create(
+                user_id=current_user.id,
+                action='create_organization',
+                object_type='Organization',
+                object_id=organization.id,
+                details=f'Created organization {organization.name}',
+                ip_address=request.remote_addr
+            )
+            
+            flash_message(FlashMessages.CREATE_ORGANIZATION_SUCCESS, FlashCategory.SUCCESS)
             logger.info(f"Organization '{organization_data['name']}' created successfully by user {current_user.username}")
             return redirect(url_for('admin.organization.index'))
                 
@@ -86,6 +109,7 @@ def create():
     return render_template('admin/organizations/form.html', form=form)
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
+@limiter.limit(ORG_RATE_LIMITS['delete'])
 @login_required
 def delete(id):
     """
@@ -102,6 +126,16 @@ def delete(id):
     organization = get_organization_by_id(id)
     if organization:
         try:
+            # Create audit log before deletion
+            AuditLog.create(
+                user_id=current_user.id,
+                action='delete_organization',
+                object_type='Organization',
+                object_id=organization.id,
+                details=f'Deleted organization {organization.name}',
+                ip_address=request.remote_addr
+            )
+            
             delete_organization(organization)
             flash_message(FlashMessages.DELETE_ORGANIZATION_SUCCESS, FlashCategory.SUCCESS)
         except SQLAlchemyError as e:
@@ -122,6 +156,7 @@ def index():
                          notification_count=get_unread_notification_count())
 
 @admin_org_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
+@limiter.limit(ORG_RATE_LIMITS['update'])
 @login_required
 def edit(id):
     organization = get_organization_by_id(id)
@@ -140,6 +175,16 @@ def edit(id):
             try:
                 success, error_message = update_organization(organization, update_data)
                 if success:
+                    # Create audit log for update
+                    AuditLog.create(
+                        user_id=current_user.id,
+                        action='update_organization',
+                        object_type='Organization',
+                        object_id=organization.id,
+                        details=f'Updated organization {organization.name}',
+                        ip_address=request.remote_addr
+                    )
+                    
                     flash_message(FlashMessages.UPDATE_ORGANIZATION_SUCCESS, FlashCategory.SUCCESS)
                     return redirect(url_for('admin.organization.index'))
                 else:
