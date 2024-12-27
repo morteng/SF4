@@ -15,6 +15,7 @@
 - Extract CSRF token from login page for tests
 - Ensure CSRF protection is enabled in test config
 - Verify token matching between form and session
+- Make GET request before POST to establish session
 
 ## Error Handling
 - Rollback on error

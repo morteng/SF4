@@ -8,6 +8,7 @@
 - Extract CSRF token from form or login page
 - Test both valid and invalid CSRF scenarios
 - Verify error messages match actual implementation
+- Always make a GET request before POST to establish session
 
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
