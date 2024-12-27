@@ -30,7 +30,7 @@ def init_rate_limiter(app):
     limiter.default_limits = [app.config['RATELIMIT_USER_MANAGEMENT']]
 
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
-@limiter.limit("5 per minute")  # More restrictive limit for user creation
+@limiter.limit("10 per minute")  # Matches project specification for sensitive operations
 @login_required
 @admin_required
 def create():
