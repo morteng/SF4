@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import patch
 from flask import session, url_for
+from bs4 import BeautifulSoup
 from werkzeug.security import generate_password_hash
 from bs4 import BeautifulSoup
 
@@ -97,11 +98,19 @@ def test_profile_form_invalid_same_username(client, setup_database):
     db.session.add(test_user)
     db.session.commit()
     
-    # Properly log in using the login route
-    login_response = client.post('/login', data={
+    # First make a GET request to establish session and get CSRF token
+    get_response = client.get(url_for('public.login'))
+    assert get_response.status_code == 200
+            
+    # Extract CSRF token using BeautifulSoup
+    soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+    csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+
+    # Now make the login POST request
+    login_response = client.post(url_for('public.login'), data={
         'username': 'testuser',
         'password': 'password123',
-        'csrf_token': 'test-csrf-token'  # Add CSRF token
+        'csrf_token': csrf_token
     }, follow_redirects=True)
     assert login_response.status_code == 200, "Login failed"
     
