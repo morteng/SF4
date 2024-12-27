@@ -30,15 +30,10 @@ def create():
             db.session.rollback()
             flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
     else:
-        # Handle form validation errors
+        # Handle form validation errors - let the form handle the error message format
         for field_name, errors in form.errors.items():
-            field_label = 'Org Name' if field_name == 'name' else form[field_name].label.text
             for error in errors:
-                if 'This field is required.' in error:
-                    # Update this line to match the test expectation
-                    flash_message(f"{field_label}: This field is required.", FLASH_CATEGORY_ERROR)
-                else:
-                    flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
+                flash_message(error, FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
     return render_template('admin/organizations/form.html', form=form)
 
