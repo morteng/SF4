@@ -124,10 +124,14 @@ def edit(id):
                 update_user(user, form.data)
                 flash_message(FlashMessages.UPDATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
                 return redirect(url_for('admin.user.index'))
+            except ValueError as e:
+                db.session.rollback()
+                logging.error(f"Validation error updating user {id}: {e}")
+                flash_message(str(e), FlashCategory.ERROR.value)
             except Exception as e:
                 db.session.rollback()
                 logging.error(f"Failed to update user {id}: {e}")
-                flash_message(f"{FlashMessages.UPDATE_USER_ERROR.value} {str(e)}", FlashCategory.ERROR.value)
+                flash_message(f"{FlashMessages.UPDATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
                 
             db.session.commit()
     

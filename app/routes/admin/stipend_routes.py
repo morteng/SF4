@@ -95,7 +95,7 @@ def create():
             except Exception as e:
                 db.session.rollback()
                 current_app.logger.error(f"Failed to create stipend: {e}")
-                flash_message(str(e), FlashCategory.ERROR)
+                flash_message(f"{FlashMessages.CREATE_STIPEND_ERROR.value}: {str(e)}", FlashCategory.ERROR)
                 if is_htmx:
                     return render_template(
                         'admin/stipends/_form.html',
