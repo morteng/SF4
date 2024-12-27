@@ -271,7 +271,7 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
         with logged_in_admin.session_transaction() as sess:
             flashed_messages = sess.get('_flashes', [])  # returns list of (category, message) pairs
 
-        expected_flash_message = FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR']
+        expected_flash_message = FlashMessages.CREATE_ORGANIZATION_DATABASE_ERROR.value
         assert any(
             cat == 'error' and msg == expected_flash_message
             for cat, msg in flashed_messages
