@@ -7,11 +7,6 @@ from app.config import TestConfig
 def app():
     app = create_app('testing')
     with app.app_context():
-        # Manually register blueprints for testing
-        from app.routes.admin import register_admin_blueprints
-        from app.routes import register_blueprints
-        register_admin_blueprints(app)
-        register_blueprints(app)
         yield app
 
 @pytest.fixture
