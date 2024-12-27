@@ -77,9 +77,16 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
     log = AuditLog.query.filter_by(
         object_type='User',
         action='create_user'
-    ).first()
-    assert log is not None
-    assert log.user_id == admin_user.id
+    ).order_by(AuditLog.id.desc()).first()
+    assert log is not None, "No audit log entry found for user creation"
+        
+    # Debug: Print current user and logged user
+    print(f"Admin user ID: {admin_user.id}")
+    print(f"Logged user ID: {log.user_id}")
+        
+    # Verify the audit log user matches the admin user
+    assert log.user_id == admin_user.id, \
+        f"Expected audit log user ID {admin_user.id} but got {log.user_id}"
     assert log.ip_address is not None
     
     # Read 
@@ -171,6 +178,12 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
     # Use a unique username for the test
     unique_user_data = user_data.copy()
     unique_user_data['username'] = 'unique_testuser'
+    
+    # Verify admin user is logged in
+    with logged_in_admin.session_transaction() as session:
+        assert 'user_id' in session, "Admin user is not logged in"
+        assert session['user_id'] == test_user.id, \
+            f"Expected logged in user ID {test_user.id} but got {session['user_id']}"
     
     verify_user_crud_operations(logged_in_admin, test_user, unique_user_data)
 
