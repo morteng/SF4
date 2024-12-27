@@ -28,43 +28,55 @@ class CustomDateTimeField(DateTimeField):
                 self.errors.append(self.error_messages['required'])
                 return
             
-            # First check for leap year dates
-            if '-02-29' in date_str:
-                try:
-                    # Extract just the date portion
-                    date_part = date_str.split()[0]
-                    year = int(date_part.split('-')[0])
+            try:
+                # Parse the date first
+                parsed_dt = datetime.strptime(date_str, self.format)
+                
+                # Check for leap year violations
+                if parsed_dt.month == 2 and parsed_dt.day == 29:
+                    year = parsed_dt.year
                     is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
                     if not is_leap:
                         self.errors = []
                         self.errors.append(self.error_messages['invalid_leap_year'])
                         return
-                except (ValueError, IndexError):
-                    # If we can't parse the date, still return the leap year error
-                    self.errors = []
-                    self.errors.append(self.error_messages['invalid_leap_year'])
-                    return
-                    
-            # Now check for general date format validity
-            try:
-                parsed_dt = datetime.strptime(date_str, self.format)
+                
                 # Validate time components
                 if not self._validate_time_components(parsed_dt):
                     return
+                
                 # Validate date components
                 if not self._validate_date_components(parsed_dt):
                     return
+                
                 # If all validations pass, proceed with timezone handling
                 local_tz = timezone(self.timezone_str)
                 local_dt = local_tz.localize(parsed_dt, is_dst=None)
                 self.data = local_dt.astimezone(utc)
                 self.raw_value = date_str
+                
             except ValueError as e:
                 error_str = str(e)
                 # Handle specific error cases
                 if 'does not match format' in error_str:
                     self.errors.append(self.error_messages['invalid_format'])
                 elif 'day is out of range' in error_str or 'month is out of range' in error_str:
+                    # Check if this is specifically a leap year error
+                    if '29' in date_str and '02' in date_str:
+                        try:
+                            # Try parsing just the date portion
+                            date_part = date_str.split()[0]
+                            parsed_date = datetime.strptime(date_part, '%Y-%m-%d')
+                            if parsed_date.month == 2 and parsed_date.day == 29:
+                                year = parsed_date.year
+                                is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
+                                if not is_leap:
+                                    # Clear any existing errors to ensure our specific message is shown
+                                    self.errors = []
+                                    self.errors.append(self.error_messages['invalid_leap_year'])
+                                    return
+                        except ValueError:
+                            pass
                     self.errors.append(self.error_messages['invalid_date'])
                 elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
                     self.errors.append(self.error_messages['invalid_time'])
