@@ -120,7 +120,6 @@ def run(id):
             ip_address=request.remote_addr
         )
 
-    try:
         # Run the appropriate bot based on name
         if bot.name == 'TagBot':
             from bots.tag_bot import TagBot
