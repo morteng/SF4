@@ -50,7 +50,7 @@ def test_profile_form_valid(logged_in_client, db_session):
             assert response.status_code == 200
             assert b"Profile updated successfully" in response.data
 
-def test_profile_form_invalid_csrf(client, setup_database):
+def test_profile_form_invalid_csrf(client):
     """Test profile form submission with invalid CSRF token"""
     with client.application.test_request_context():
         with patch('app.forms.user_forms.User.query.filter_by') as mock_filter_by:
