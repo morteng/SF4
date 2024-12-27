@@ -1,9 +1,8 @@
 # Validation Rules
-
 ## Principles
 - Validate client & server side
+- Use enums for message types
 - Test success & failure cases
-- Use `FlashMessages` and `FlashCategory` enums for message types
 
 ## Form Validation
 - Required fields: Validate presence
@@ -14,7 +13,7 @@
 ## Error Handling
 - Rollback on error
 - Log details
-- Use `FlashMessages` for user feedback
+- Use enums for user feedback
 - Preserve form state
 
 ## Security

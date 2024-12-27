@@ -1,19 +1,16 @@
 ## Coding Conventions
 ### Testing
-- Type hints & docstrings required
-- Use fixtures & parameterized tests
-- Verify UI & DB state
 - Use enums (`FlashMessages`, `FlashCategory`) consistently
-- Use factory functions (`tests/utils.py`)
+- Verify UI & DB state
+- Use fixtures & parameterized tests
 
 ### Security
 - Validate all inputs
 - CSRF tokens required
 - Rate limit sensitive endpoints
-- Sanitize with bleach
 
 ### Code Organization
 - CSS: Tailwind in `main.css`
 - JS: HTMX in `main.js`
-- Constants: Use `FlashMessages` and `FlashCategory` enums
+- Constants: Use enums for messages and categories
 
