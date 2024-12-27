@@ -56,14 +56,25 @@ class CustomDateTimeField(DateTimeField):
                 
             except ValueError as e:
                 error_str = str(e)
+                # First check for leap year error
+                if 'day is out of range' in error_str and '2' in error_str and '29' in error_str:
+                    # Check if it's a February 29th error
+                    try:
+                        # Try to parse the date to confirm it's a leap year issue
+                        parsed_date = datetime.strptime(valuelist[0], self.format)
+                        if parsed_date.month == 2 and parsed_date.day == 29:
+                            is_leap = (parsed_date.year % 4 == 0 and 
+                                      (parsed_date.year % 100 != 0 or parsed_date.year % 400 == 0))
+                            if not is_leap:
+                                raise ValidationError(self.error_messages['invalid_leap_year'])
+                    except ValueError:
+                        pass
+                
+                # Handle other error cases
                 if 'does not match format' in error_str:
                     raise ValidationError(self.error_messages['invalid_format'])
                 elif 'day is out of range' in error_str or 'month is out of range' in error_str or 'day must be in' in error_str:
-                    # Check if it's a February 29th error
-                    if 'day is out of range' in error_str and '2' in error_str and '29' in error_str:
-                        raise ValidationError(self.error_messages['invalid_leap_year'])
-                    else:
-                        raise ValidationError(self.error_messages['invalid_date'])
+                    raise ValidationError(self.error_messages['invalid_date'])
                 elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
                     raise ValidationError(self.error_messages['invalid_time'])
                 else:
