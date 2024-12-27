@@ -71,6 +71,6 @@ def test_profile_form_invalid_csrf(logged_in_client):
             }, follow_redirects=True)
 
             assert response.status_code == 400
-            assert FlashMessages.CSRF_INVALID.value.encode() in response.data
+            assert response.data == FlashMessages.CSRF_INVALID.value.encode()
             # Verify that the user's profile was not updated
             mock_filter_by.assert_not_called()

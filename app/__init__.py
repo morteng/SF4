@@ -46,6 +46,14 @@ def create_app(config_name='development'):
     from app.routes import register_blueprints
     register_blueprints(app)        # Register other blueprints
 
+    # Add CSRF error handler
+    from flask_wtf.csrf import CSRFError
+    from app.constants import FlashMessages
+
+    @app.errorhandler(CSRFError)
+    def handle_csrf_error(e):
+        return FlashMessages.CSRF_INVALID.value, 400
+
     with app.app_context():
         init_extensions(app)  # Initialize extensions within the application context
         db.create_all()  # Creates all tables if they don't exist
