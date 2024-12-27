@@ -1,17 +1,16 @@
 import pytest
+import logging
 from flask import url_for
 from app.models.user import User
 from tests.conftest import extract_csrf_token, logged_in_admin
 from app.constants import FlashMessages, FlashCategory
 from werkzeug.security import generate_password_hash
+from tests.utils import assert_flash_message, create_user_data
 
 @pytest.fixture(scope='function')
 def user_data():
-    return {
-        'username': 'testuser',
-        'email': 'test@example.com',
-        'password': 'password123'
-    }
+    logging.info("Creating user test data")
+    return create_user_data()
 
 @pytest.fixture(scope='function')
 def test_user(db_session, user_data):
@@ -44,7 +43,7 @@ def test_create_user_route(logged_in_admin, user_data):
     users = User.query.all()
     assert any(user.username == user_data['username'] and user.email == user_data['email'] for user in users)
     # Assert the flash message using constants
-    assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data
+    assert_flash_message(response, FlashMessages.CREATE_USER_SUCCESS)
 
 def test_create_user_route_with_invalid_data(logged_in_admin, user_data):
     create_response = logged_in_admin.get(url_for('admin.user.create'))
@@ -63,7 +62,7 @@ def test_create_user_route_with_invalid_data(logged_in_admin, user_data):
     users = User.query.all()
     assert not any(user.username == '' for user in users)  # Ensure no user with an empty username was created
     # Assert the flash message using constants
-    assert FlashMessages.CREATE_USER_INVALID_DATA.value.encode() in response.data
+    assert_flash_message(response, FlashMessages.CREATE_USER_INVALID_DATA)
 
 def test_update_user_route(logged_in_admin, test_user, db_session):
     update_response = logged_in_admin.get(url_for('admin.user.edit', id=test_user.id))  # Change here
@@ -82,7 +81,7 @@ def test_update_user_route(logged_in_admin, test_user, db_session):
     updated_user = db_session.get(User, test_user.id)
     assert updated_user.username == 'updateduser'
     # Assert the flash message using constants
-    assert FlashMessages.UPDATE_USER_SUCCESS.value.encode() in response.data
+    assert_flash_message(response, FlashMessages.UPDATE_USER_SUCCESS)
 
 def test_update_user_route_with_invalid_id(logged_in_admin):
     update_response = logged_in_admin.get(url_for('admin.user.edit', id=9999))  # Change here
@@ -102,7 +101,7 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
     updated_user = db_session.get(User, test_user.id)
     assert updated_user is None
     # Assert the flash message using constants
-    assert FlashMessages.DELETE_USER_SUCCESS.value.encode() in delete_response.data
+    assert_flash_message(delete_response, FlashMessages.DELETE_USER_SUCCESS)
 
 def test_delete_user_route_with_invalid_id(logged_in_admin):
     delete_response = logged_in_admin.post(url_for('admin.user.delete', id=9999))
@@ -122,7 +121,7 @@ def test_create_user_route_with_database_error(logged_in_admin, user_data, db_se
         
         assert response.status_code == 200
         # Assert the flash message using constants
-        assert FlashMessages.CREATE_USER_ERROR.value.encode() in response.data
+        assert_flash_message(response, FlashMessages.CREATE_USER_ERROR)
 
         users = User.query.all()
         assert not any(user.username == data['username'] for user in users)  # Ensure no user was created
