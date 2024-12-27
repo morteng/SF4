@@ -18,22 +18,28 @@ def profile():
 def edit_profile():
     form = ProfileForm(original_username=current_user.username, original_email=current_user.email)
     
-    if form.validate_on_submit():
+    if request.method == 'POST':
+        if not form.validate():
+            if 'csrf_token' in form.errors:
+                flash(FlashMessages.CSRF_INVALID.value, FlashCategory.ERROR.value)
+                return render_template('user/edit_profile.html', form=form), 400
+            flash(FlashMessages.PROFILE_UPDATE_INVALID_DATA.value, FlashCategory.ERROR.value)
+            return render_template('user/edit_profile.html', form=form), 400
+            
         new_username = form.username.data
         existing_user = User.query.filter_by(username=new_username).first()
         if existing_user and existing_user.id != current_user.id:
             flash(FlashMessages.USERNAME_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
             return redirect(url_for('user.edit_profile'))
+            
         current_user.username = new_username
         current_user.email = form.email.data
         db.session.commit()
         flash(FlashMessages.PROFILE_UPDATE_SUCCESS.value, FlashCategory.SUCCESS.value)
         return redirect(url_for('user.profile'))
+        
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    else:
-        flash(FlashMessages.PROFILE_UPDATE_INVALID_DATA.value, FlashCategory.ERROR.value)
-        print(f"Form errors: {form.errors}")  # Log form errors
     
     return render_template('user/edit_profile.html', form=form)

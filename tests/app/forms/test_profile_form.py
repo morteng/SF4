@@ -73,3 +73,5 @@ def test_profile_form_invalid_csrf(logged_in_client):
 
             assert response.status_code == 400
             assert b"CSRF token is invalid" in response.data
+            # Verify that the user's profile was not updated
+            mock_filter_by.assert_not_called()
