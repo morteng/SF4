@@ -87,9 +87,12 @@ def test_update_user_route(logged_in_admin, test_user, db_session):
     assert_flash_message(response, FlashMessages.UPDATE_USER_SUCCESS)
 
 def test_update_user_route_with_invalid_id(logged_in_admin):
-    update_response = logged_in_admin.get(url_for('admin.user.edit', id=9999))  # Change here
+    update_response = logged_in_admin.get(url_for('admin.user.edit', id=9999))
     assert update_response.status_code == 302
     assert url_for('admin.user.index', _external=False) == update_response.headers['Location']
+    # Follow the redirect to verify the flash message
+    index_response = logged_in_admin.get(update_response.headers['Location'])
+    assert FlashMessages.USER_NOT_FOUND.value.encode() in index_response.data
 
 def extract_csrf_token(response_data):
     """Extract CSRF token from HTML response."""

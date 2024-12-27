@@ -67,17 +67,17 @@ def create():
 @login_required
 @admin_required
 def edit(id):
-    user = get_user_by_id(id)
-    if not user:
-        flash_message(FlashMessages.USER_NOT_FOUND.value, FlashCategory.ERROR.value)  # Use specific user not found message
+    try:
+        user = get_user_by_id(id)
+        form = UserForm(
+            original_username=user.username,
+            original_email=user.email,
+            obj=user
+        )
+        form.id.data = user.id
+    except ValueError as e:
+        flash_message(str(e), FlashCategory.ERROR.value)
         return redirect(url_for('admin.user.index'))
-    
-    form = UserForm(
-        original_username=user.username,
-        original_email=user.email,
-        obj=user
-    )
-    form.id.data = user.id
     if request.method == 'POST' and form.validate_on_submit():
         try:
             update_user(user, form.data)
