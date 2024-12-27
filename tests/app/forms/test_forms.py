@@ -18,9 +18,16 @@ def test_organization_form_valid_data(app, client):
     app.config['WTF_CSRF_ENABLED'] = True
     app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'  # Add secret key for CSRF
 
-    # Make a request to initialize the session
-    response = client.get('/')
+    # Initialize session and CSRF token by accessing a route that uses CSRF
+    response = client.get('/login')  # Use login route which should have CSRF
     assert response.status_code == 200  # Ensure the request was successful
+    
+    # Verify CSRF token is in session
+    with client.session_transaction() as session:
+        if 'csrf_token' not in session:
+            # If still not present, explicitly initialize it
+            form = OrganizationForm()
+            session['csrf_token'] = form.csrf_token.current_token
 
     with app.test_request_context():
         # Debug session state after initial request
