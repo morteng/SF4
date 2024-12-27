@@ -49,15 +49,15 @@ class CustomDateTimeField(DateTimeField):
             except ValueError as e:
                 error_str = str(e)
                 if 'does not match format' in error_str:
-                    self.errors.append(self.error_messages['invalid_format'])
+                    raise ValidationError(self.error_messages['invalid_format'])
                 elif 'day is out of range' in error_str or 'month is out of range' in error_str or 'day must be in' in error_str:
-                    self.errors.append(self.error_messages['invalid_date'])
+                    raise ValidationError(self.error_messages['invalid_date'])
                 elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
-                    self.errors.append(self.error_messages['invalid_time'])
+                    raise ValidationError(self.error_messages['invalid_time'])
                 else:
-                    self.errors.append(self.error_messages['invalid_date'])
+                    raise ValidationError(self.error_messages['invalid_date'])
             except ValidationError as e:
-                self.errors.append(str(e))
+                raise ValidationError(str(e))
             except pytz.UnknownTimeZoneError:
                 self.errors.append(self.error_messages['invalid_timezone'])
 
@@ -96,8 +96,7 @@ class CustomDateTimeField(DateTimeField):
                     # Check if it's a leap year
                     is_leap = (dt.year % 4 == 0 and (dt.year % 100 != 0 or dt.year % 400 == 0))
                     if not is_leap:
-                        self.errors.append('Invalid date values (e.g., Feb 29 in non-leap years)')
-                        return False
+                        raise ValidationError('Invalid date values (e.g., Feb 29 in non-leap years)')
                 
                 # General date validation
                 datetime(dt.year, dt.month, dt.day)
