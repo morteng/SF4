@@ -88,15 +88,32 @@ def test_update_user_route_with_invalid_id(logged_in_admin):
     assert update_response.status_code == 302
     assert url_for('admin.user.index', _external=False) == update_response.headers['Location']
 
+def extract_csrf_token(response_data):
+    """Extract CSRF token from HTML response."""
+    import re
+    # Search for the CSRF token in the hidden input field
+    match = re.search(
+        r'<input[^>]*id="csrf_token"[^>]*value="([^"]+)"', 
+        response_data.decode('utf-8')
+    )
+    if match:
+        return match.group(1)
+    return None
+
 def test_delete_user_route(logged_in_admin, test_user, db_session):
     # Get CSRF token from the user index page
     index_response = logged_in_admin.get(url_for('admin.user.index'))
     csrf_token = extract_csrf_token(index_response.data)
     assert csrf_token is not None, "CSRF token not found in the response"
+    
+    # Debug: Print extracted CSRF token
+    print(f"Extracted CSRF token: {csrf_token}")
 
     # Verify the CSRF token in the session
     with logged_in_admin.session_transaction() as session:
         session_csrf_token = session.get('csrf_token')
+        # Debug: Print session CSRF token
+        print(f"Session CSRF token: {session_csrf_token}")
         assert session_csrf_token == csrf_token, "CSRF token mismatch between session and form"
 
     # Perform the DELETE operation with proper CSRF handling
