@@ -49,17 +49,17 @@ class CustomDateTimeField(DateTimeField):
             except ValueError as e:
                 error_str = str(e)
                 if 'does not match format' in error_str:
-                    self.errors = [self.error_messages['invalid_format']]
+                    self.errors.append(self.error_messages['invalid_format'])
                 elif 'day is out of range' in error_str or 'month is out of range' in error_str or 'day must be in' in error_str:
-                    self.errors = [self.error_messages['invalid_date']]
+                    self.errors.append(self.error_messages['invalid_date'])
                 elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
-                    self.errors = [self.error_messages['invalid_time']]
+                    self.errors.append(self.error_messages['invalid_time'])
                 else:
-                    self.errors = [self.error_messages['invalid_date']]
+                    self.errors.append(self.error_messages['invalid_date'])
             except ValidationError as e:
-                self.errors = [str(e)]
+                self.errors.append(str(e))
             except pytz.UnknownTimeZoneError:
-                self.errors = [self.error_messages['invalid_timezone']]
+                self.errors.append(self.error_messages['invalid_timezone'])
 
     def _validate_time_components(self, dt):
         try:
