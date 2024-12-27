@@ -3,6 +3,7 @@
 import pytest
 import warnings
 import re
+import logging
 from datetime import datetime
 from sqlalchemy.exc import SAWarning
 from flask import url_for, current_app
