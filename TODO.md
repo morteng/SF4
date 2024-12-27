@@ -31,16 +31,11 @@
 
 ## New Goals from Testing
 5. **Fix Template Issues**
-   - [x] Create missing bot templates
+   - [x] Fix duplicate content block in bot create template
    - [ ] Verify all admin routes have corresponding templates
 
 6. **Improve Test Coverage**
    - [x] Add tests for bot routes
-   - [ ] Increase coverage for admin routes
-   - [ ] Add integration tests for bot operations
-
-6. **Improve Test Coverage**
-   - [ ] Add tests for bot routes
    - [ ] Increase coverage for admin routes
    - [ ] Add integration tests for bot operations
 
