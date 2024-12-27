@@ -1,0 +1,20 @@
+{% extends "admin/_base.html" %}
+
+{% block content %}
+<h1>Create Bot</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.name.label }}
+        {{ form.name(class="form-control") }}
+        {% if form.name.errors %}
+            <div class="text-danger">
+                {% for error in form.name.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+{% endblock %}

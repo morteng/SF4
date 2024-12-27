@@ -13,56 +13,17 @@ admin_bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
 @admin_required
 def create():
     form = BotForm()
-    is_htmx = request.headers.get('HX-Request')
-
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            try:
-                new_bot = create_bot(form.data)
-                flash_message(FLASH_MESSAGES["CREATE_BOT_SUCCESS"], FLASH_CATEGORY_SUCCESS)
-                current_app.logger.info(f"Flash message set: {FLASH_MESSAGES['CREATE_BOT_SUCCESS']}")
-                
-                if is_htmx:
-                    return render_template('admin/bots/_bot_row.html', bot=new_bot), 200
-                return redirect(url_for('admin.bot.index'))
-            except Exception as e:
-                db.session.rollback()
-                error_message = f"{FLASH_MESSAGES['CREATE_BOT_ERROR']}{str(e)}"
-                flash_message(error_message, FLASH_CATEGORY_ERROR)
-                current_app.logger.error(f"Failed to create bot: {e}")
-                if is_htmx:
-                    return render_template_string(
-                        f"<tr><td colspan='4'>Error creating bot: {error_message}</td></tr>"
-                    ), 400
-                return render_template('admin/bots/create.html', form=form), 400
-        else:
-            flash_message(FLASH_MESSAGES["CREATE_BOT_INVALID_DATA"], FLASH_CATEGORY_ERROR)
-            current_app.logger.error("Invalid data provided for bot creation")
-            
-            error_messages = []
-            field_errors = {}
-            for field_name, errors in form.errors.items():
-                field = getattr(form, field_name)
-                field_errors[field_name] = []
-                for error in errors:
-                    msg = format_error_message(field, error)
-                    error_messages.append(msg)
-                    field_errors[field_name].append(msg)
-                    current_app.logger.error(f"Form validation error: {msg}")
-                    
-            if is_htmx:
-                return render_template(
-                    'admin/bots/_create_form.html', 
-                    form=form,
-                    error_messages=error_messages,
-                    field_errors=field_errors,
-                    is_htmx=True
-                ), 400
-            return render_template('admin/bots/create.html', 
-                                form=form,
-                                error_messages=error_messages,
-                                field_errors=field_errors), 400
-
+    if form.validate_on_submit():
+        try:
+            new_bot = create_bot(form.data)
+            flash_message(FLASH_MESSAGES["CREATE_BOT_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            return redirect(url_for('admin.bot.index'))
+        except Exception as e:
+            db.session.rollback()
+            flash_message(f"{FLASH_MESSAGES['CREATE_BOT_ERROR']}{str(e)}", FLASH_CATEGORY_ERROR)
+            current_app.logger.error(f"Failed to create bot: {e}")
+            return render_template('admin/bots/create.html', form=form), 400
+    
     return render_template('admin/bots/create.html', form=form)
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])

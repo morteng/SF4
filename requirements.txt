@@ -9,6 +9,7 @@ Flask-WTF
 WTForms
 flask-migrate
 pytz
-Flask-Limiter
+Flask-Limiter==3.5.0
 requirements-parser
 setuptools
+redis  # Add this for production rate limiting storage

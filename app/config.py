@@ -9,6 +9,10 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'a_very_secret_key'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = True  # Ensure CSRF protection is enabled
+    # Add these lines
+    RATELIMIT_STORAGE_URI = 'memory://'  # For development, use Redis in production
+    RATELIMIT_STRATEGY = 'fixed-window'
+    RATELIMIT_DEFAULT = "200 per day;50 per hour"
 
 class DevelopmentConfig(Config):
     DEBUG = True
