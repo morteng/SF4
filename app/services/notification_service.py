@@ -1,3 +1,4 @@
+import logging
 from app.models.notification import Notification
 
 def get_notification_by_id(notification_id):
