@@ -33,11 +33,13 @@ class CustomDateTimeField(DateTimeField):
                 # First try parsing the date string
                 parsed_dt = datetime.strptime(date_str, self.format)
                 
-                # Validate date components
-                self._validate_date_components(parsed_dt)
+                # Validate time components first
+                if not self._validate_time_components(parsed_dt):
+                    return
                 
-                # Validate time components
-                self._validate_time_components(parsed_dt)
+                # Then validate date components
+                if not self._validate_date_components(parsed_dt):
+                    return
                 
                 # If parsing succeeds, proceed with timezone handling
                 local_tz = timezone(self.timezone_str)
@@ -51,7 +53,11 @@ class CustomDateTimeField(DateTimeField):
                 if 'does not match format' in error_str:
                     self.errors.append(self.error_messages['invalid_format'])
                 elif 'day is out of range' in error_str or 'month is out of range' in error_str or 'day must be in' in error_str:
-                    self.errors.append(self.error_messages['invalid_date'])
+                    # Check if it's a February 29th error
+                    if 'day is out of range' in error_str and parsed_dt.month == 2 and parsed_dt.day == 29:
+                        self.errors.append('Invalid date values (e.g., Feb 29 in non-leap years)')
+                    else:
+                        self.errors.append(self.error_messages['invalid_date'])
                 elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
                     self.errors.append(self.error_messages['invalid_time'])
                 else:
