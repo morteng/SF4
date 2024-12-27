@@ -7,17 +7,20 @@
 - CSRF enabled in testing environment
 - Use request context for form tests
 - When testing forms, always use the form's generated CSRF token
+- Ensure test client maintains session state for CSRF validation
 
 ### Testing with CSRF
 - Always use `test_request_context` when testing forms with CSRF protection
 - Ensure CSRF tokens are validated in form tests
 - Use form-generated CSRF tokens in tests
 - Include CSRF token in POST requests
+- Ensure test client maintains session state for CSRF validation
 
 ### Form Testing
 - Always use `test_request_context` when testing forms
 - Include CSRF token validation in form tests
 - Use form-generated CSRF tokens in tests
+- Ensure test client maintains session state for CSRF validation
 - Add error handling to debug form validation failures
 
 ### Security
