@@ -16,7 +16,16 @@ def extract_csrf_token(response_data):
         return match.group(1)
     return None
 
-def test_create_organization(logged_in_admin, db_session, organization_data):
+def test_create_organization(logged_in_admin: FlaskClient, db_session: Session, organization_data: dict) -> None:
+    """Test successful organization creation workflow.
+    
+    Verifies that:
+    - The form can be accessed
+    - CSRF token is present
+    - Form submission redirects correctly
+    - Success flash message is displayed
+    - Organization is created in the database
+    """
     """Test successful organization creation workflow"""
     with logged_in_admin.application.app_context():
         # Get CSRF token from the form
@@ -64,7 +73,14 @@ def test_create_organization(logged_in_admin, db_session, organization_data):
         assert new_organization.description == data['description']
         assert new_organization.homepage_url == data['homepage_url']
 
-def test_create_organization_with_invalid_form_data(logged_in_admin, db_session):
+def test_create_organization_with_invalid_form_data(logged_in_admin: FlaskClient, db_session: Session) -> None:
+    """Test that invalid form data is properly handled.
+    
+    Verifies that:
+    - Form submission fails with invalid data
+    - Error message is displayed
+    - No organization is created
+    """
     """Test that invalid form data is properly handled."""
     with logged_in_admin.application.app_context():
         # Get CSRF token from the form
@@ -101,7 +117,14 @@ def test_create_organization_with_invalid_form_data(logged_in_admin, db_session)
         new_organization = db_session.query(Organization).filter_by(name=invalid_data['name']).first()
         assert new_organization is None
 
-def test_create_organization_with_duplicate_name(logged_in_admin, db_session, organization_data):
+def test_create_organization_with_duplicate_name(logged_in_admin: FlaskClient, db_session: Session, organization_data: dict) -> None:
+    """Test that duplicate organization names are rejected.
+    
+    Verifies that:
+    - First organization is created successfully
+    - Second organization with same name is rejected
+    - Correct error message is displayed
+    """
     """Test that duplicate organization names are rejected."""
     with logged_in_admin.application.app_context():
         # Create first organization
@@ -121,7 +144,14 @@ def test_create_organization_with_duplicate_name(logged_in_admin, db_session, or
             for cat, msg in flashed_messages
         ), f"Flash message not found in session. Expected: {expected_flash_message}"
 
-def test_create_organization_with_long_name(logged_in_admin, db_session):
+def test_create_organization_with_long_name(logged_in_admin: FlaskClient, db_session: Session) -> None:
+    """Test that long organization names are rejected.
+    
+    Verifies that:
+    - Organization name exceeding 100 characters is rejected
+    - Correct error message is displayed
+    - No organization is created
+    """
     """Test that long organization names are rejected."""
     with logged_in_admin.application.app_context():
         response = logged_in_admin.get(url_for('admin.organization.create'))
@@ -147,7 +177,14 @@ def test_create_organization_with_long_name(logged_in_admin, db_session):
             for cat, msg in flashed_messages
         ), "Field validation error not found in flash messages"
 
-def test_create_organization_with_invalid_url(logged_in_admin, db_session):
+def test_create_organization_with_invalid_url(logged_in_admin: FlaskClient, db_session: Session) -> None:
+    """Test that invalid URLs are rejected.
+    
+    Verifies that:
+    - Invalid URL format is rejected
+    - Correct error message is displayed
+    - No organization is created
+    """
     """Test that invalid URLs are rejected."""
     with logged_in_admin.application.app_context():
         response = logged_in_admin.get(url_for('admin.organization.create'))
@@ -176,7 +213,14 @@ def test_create_organization_with_invalid_url(logged_in_admin, db_session):
         new_organization = db_session.query(Organization).filter_by(name=invalid_data['name']).first()
         assert new_organization is None
 
-def test_create_organization_with_empty_form(logged_in_admin, db_session):
+def test_create_organization_with_empty_form(logged_in_admin: FlaskClient, db_session: Session) -> None:
+    """Test that empty form submissions are rejected.
+    
+    Verifies that:
+    - Empty form submission is rejected
+    - Correct error message is displayed
+    - No organization is created
+    """
     """Test that empty form submissions are rejected."""
     with logged_in_admin.application.app_context():
         response = logged_in_admin.get(url_for('admin.organization.create'))
@@ -201,7 +245,19 @@ def test_create_organization_with_empty_form(logged_in_admin, db_session):
             for cat, msg in flashed_messages
         ), "Field validation error not found in flash messages"
 
-def test_create_organization_with_database_rollback(logged_in_admin, db_session, organization_data, monkeypatch):
+def test_create_organization_with_database_rollback(
+    logged_in_admin: FlaskClient, 
+    db_session: Session, 
+    organization_data: dict, 
+    monkeypatch: MonkeyPatch
+) -> None:
+    """Test that database rollback works correctly in case of errors.
+    
+    Verifies that:
+    - Database error triggers rollback
+    - Correct error message is displayed
+    - No organization is created
+    """
     """Test that database rollback works correctly in case of errors."""
     with logged_in_admin.application.app_context():
         def mock_commit(*args, **kwargs):
@@ -225,7 +281,18 @@ def test_create_organization_with_database_rollback(logged_in_admin, db_session,
         new_organization = db_session.query(Organization).filter_by(name=organization_data['name']).first()
         assert new_organization is None
 
-def test_create_organization_without_csrf_token(logged_in_admin, db_session, organization_data):
+def test_create_organization_without_csrf_token(
+    logged_in_admin: FlaskClient, 
+    db_session: Session, 
+    organization_data: dict
+) -> None:
+    """Test that CSRF protection is working correctly.
+    
+    Verifies that:
+    - Form submission without CSRF token is rejected
+    - Correct error message is displayed
+    - No organization is created
+    """
     """Test that CSRF protection is working correctly."""
     with logged_in_admin.application.app_context():
         # Remove CSRF token from data
@@ -252,7 +319,19 @@ def test_create_organization_without_csrf_token(logged_in_admin, db_session, org
             for cat, msg in flashed_messages
         ), "CSRF validation error not found in flash messages"
 
-def test_create_organization_with_database_error(logged_in_admin, organization_data, db_session, monkeypatch):
+def test_create_organization_with_database_error(
+    logged_in_admin: FlaskClient, 
+    organization_data: dict, 
+    db_session: Session, 
+    monkeypatch: MonkeyPatch
+) -> None:
+    """Test handling of database errors during organization creation.
+    
+    Verifies that:
+    - Database error is handled gracefully
+    - Correct error message is displayed
+    - No organization is created
+    """
     with logged_in_admin.application.app_context():
         data = organization_data
 
@@ -281,7 +360,18 @@ def test_create_organization_with_database_error(logged_in_admin, organization_d
         follow_response = logged_in_admin.get(response.location)
         assert follow_response.status_code == 200
 
-def test_delete_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
+def test_delete_organization_with_database_error(
+    logged_in_admin: FlaskClient, 
+    db_session: Session, 
+    monkeypatch: MonkeyPatch
+) -> None:
+    """Test handling of database errors during organization deletion.
+    
+    Verifies that:
+    - Database error is handled gracefully
+    - Correct error message is displayed
+    - Organization is not deleted
+    """
     with logged_in_admin.application.app_context():
         # Create org
         new_org = Organization(name="Org ID 1", description="Testing", homepage_url="http://example.org")
@@ -314,7 +404,18 @@ def test_delete_organization_with_database_error(logged_in_admin, db_session, mo
         follow_response = logged_in_admin.get(response.location)
         assert follow_response.status_code == 200
 
-def test_update_organization_with_database_error(logged_in_admin, db_session, monkeypatch):
+def test_update_organization_with_database_error(
+    logged_in_admin: FlaskClient, 
+    db_session: Session, 
+    monkeypatch: MonkeyPatch
+) -> None:
+    """Test handling of database errors during organization update.
+    
+    Verifies that:
+    - Database error is handled gracefully
+    - Correct error message is displayed
+    - Organization is not updated
+    """
     with logged_in_admin.application.app_context():
         # Create an organization first
         new_org = Organization(
@@ -361,7 +462,14 @@ def test_update_organization_with_database_error(logged_in_admin, db_session, mo
         follow_response = logged_in_admin.get(response.location)
         assert follow_response.status_code == 200
 
-def test_update_organization_with_invalid_form_data(logged_in_admin, db_session):
+def test_update_organization_with_invalid_form_data(logged_in_admin: FlaskClient, db_session: Session) -> None:
+    """Test handling of invalid form data during organization update.
+    
+    Verifies that:
+    - Invalid form data is rejected
+    - Correct error message is displayed
+    - Organization is not updated
+    """
     with logged_in_admin.application.app_context():
         # Create an organization first
         org = Organization(name="Test Org", description="Initial Description", homepage_url="http://example.com")
@@ -405,7 +513,14 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, db_session)
         assert org.name != invalid_data['name']
 
 
-def test_create_organization_with_empty_description(logged_in_admin, db_session):
+def test_create_organization_with_empty_description(logged_in_admin: FlaskClient, db_session: Session) -> None:
+    """Test handling of empty description during organization creation.
+    
+    Verifies that:
+    - Empty description is rejected
+    - Correct error message is displayed
+    - No organization is created
+    """
     with logged_in_admin.application.app_context():
         response = logged_in_admin.get(url_for('admin.organization.create'))
         csrf_token = extract_csrf_token(response.data)
@@ -429,7 +544,14 @@ def test_create_organization_with_empty_description(logged_in_admin, db_session)
             for cat, msg in flashed_messages
         ), "Field validation error not found in flash messages"
 
-def test_delete_organization(logged_in_admin, db_session):
+def test_delete_organization(logged_in_admin: FlaskClient, db_session: Session) -> None:
+    """Test successful organization deletion.
+    
+    Verifies that:
+    - Organization is deleted successfully
+    - Correct success message is displayed
+    - Organization is removed from database
+    """
     with logged_in_admin.application.app_context():
         # Create an organization first
         org = Organization(name="Test Org", description="Initial Description", homepage_url="http://example.com")
