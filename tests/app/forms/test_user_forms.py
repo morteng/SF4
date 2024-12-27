@@ -22,7 +22,7 @@ def setup_database(_db):
         _db.session.rollback()
         _db.drop_all()
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='function')
 def app():
     app = create_app('testing')  # Ensures 'testing' config is loaded
     with app.app_context():
