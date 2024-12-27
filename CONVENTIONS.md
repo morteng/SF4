@@ -12,7 +12,8 @@
 - For database errors:
   - Return 400 status code
   - Render template directly with error message
-  - Pass flash messages explicitly in template context
+  - Pass flash messages explicitly in template context using `flash_messages` parameter
+  - Ensure error messages are properly formatted with error details
 - Test both valid and invalid CSRF scenarios
 - Always make a GET request before POST to establish session
 - For database error tests:

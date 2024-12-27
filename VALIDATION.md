@@ -11,9 +11,10 @@
   - 200 for success
 - For database errors:
   - Render templates directly
-  - Set flash message
+  - Set flash message with error details
   - Return 400 status
-  - Pass flash messages explicitly in template context
+  - Pass flash messages explicitly in template context using `flash_messages` parameter
+  - Ensure error messages follow format: "Error message: error details"
 - Ensure validation errors are properly propagated to form errors
 - Log details including error messages
 - Use enums for user feedback with appended error details when needed

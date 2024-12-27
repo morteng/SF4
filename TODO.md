@@ -6,6 +6,7 @@
 - [x] Update flash message verification in tests
 - [x] Ensure consistent error handling for database errors
 - [x] Implement direct template rendering for database errors
+- [ ] Verify error message formatting in all error responses
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
