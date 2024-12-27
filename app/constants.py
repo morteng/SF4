@@ -50,6 +50,11 @@ class FlashMessages(str, Enum):
     INVALID_URL_FORMAT = "URL must start with http:// or https://."
     INVALID_FUTURE_DATE = "Date must be in the future."
     INVALID_PAST_DATE = "Date must be in the past."
+    ORGANIZATION_CREATE_SUCCESS = "Organization created successfully."
+    ORGANIZATION_UPDATE_SUCCESS = "Organization updated successfully."
+    ORGANIZATION_DELETE_SUCCESS = "Organization deleted successfully."
+    ORGANIZATION_DUPLICATE_NAME = "An organization with this name already exists."
+    ORGANIZATION_INVALID_DATA = "Invalid organization data provided."
 
     # Form Validation Messages
     FORM_FIELD_REQUIRED = "{field} is required."

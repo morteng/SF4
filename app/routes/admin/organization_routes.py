@@ -39,78 +39,64 @@ csrf = CSRFProtect()
 @limiter.limit("10 per minute")
 @login_required
 @admin_required
+@admin_org_bp.route('/create', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")
+@login_required
+@admin_required
 def create():
     """Create new organization with audit logging and notifications"""
-    notification_count = get_notification_count(current_user.id)
-    """
-    Create a new organization.
-    
-    GET: Renders the organization creation form.
-    POST: Processes the form submission to create a new organization.
-    
-    Returns:
-        GET: Rendered form template (200 OK)
-        POST: Redirect to organization index on success (302 Found)
-              Rendered form template with errors on failure (400 Bad Request)
-    """
-    logger.info(f"Organization creation form accessed by user {current_user.username}")
     form = OrganizationForm()
     
-    # Ensure CSRF token is validated
-    if request.method == 'POST' and form.validate():
-        try:
-            # Prepare organization data with cleaned and sanitized inputs
-            organization_data = {
-                'name': clean(form.name.data.strip(), tags=[], attributes={}),
-                'description': clean(form.description.data.strip(), tags=['p', 'br', 'strong', 'em'], attributes={}),
-                'homepage_url': clean(form.homepage_url.data.strip(), tags=[], attributes={}) if form.homepage_url.data else None
-            }
-            
-            # Create organization
-            organization = Organization(**organization_data)
-            db.session.add(organization)
-            db.session.commit()
-            
-            # Create audit log
-            AuditLog.create(
-                user_id=current_user.id,
-                action='create_organization',
-                object_type='Organization',
-                object_id=organization.id,
-                details=f'Created organization {organization.name}',
-                ip_address=request.remote_addr
-            )
-            
-            flash_message(FlashMessages.CREATE_ORGANIZATION_SUCCESS, FlashCategory.SUCCESS)
-            logger.info(f"Organization '{organization_data['name']}' created successfully by user {current_user.username}")
-            return redirect(url_for('admin.organization.index'))
+    if request.method == 'POST':
+        if form.validate():
+            try:
+                # Prepare organization data
+                organization_data = {
+                    'name': clean(form.name.data.strip(), tags=[], attributes={}),
+                    'description': clean(form.description.data.strip(), tags=['p', 'br', 'strong', 'em'], attributes={}),
+                    'homepage_url': clean(form.homepage_url.data.strip(), tags=[], attributes={}) if form.homepage_url.data else None
+                }
                 
-        except IntegrityError as e:
-            db.session.rollback()
-            logger.error(f"Integrity error creating organization: {str(e)}", exc_info=True)
-            flash('An organization with this name already exists.', 'error')
-            return render_template('admin/organizations/form.html', form=form), 400
-        except SQLAlchemyError as e:
-            db.session.rollback()
-            logger.error(f"Database error creating organization: {str(e)}", exc_info=True)
-            return handle_organization_error(
-                FlashMessages.CREATE_ORGANIZATION_DATABASE_ERROR,
-                form,
-                'admin/organizations/form.html'
-            )
-        except Exception as e:
-            db.session.rollback()
-            logger.error(f"Unexpected error creating organization: {str(e)}", exc_info=True)
-            return handle_organization_error(
-                FlashMessages.GENERIC_ERROR,
-                form,
-                'admin/organizations/form.html',
-                status_code=500
-            )
-    elif form.errors:
-        logger.warning(f"Form validation errors: {form.errors}")
-        return handle_form_errors(form)
-        
+                # Check for duplicate name
+                if Organization.query.filter_by(name=organization_data['name']).first():
+                    flash_message(FlashMessages.ORGANIZATION_DUPLICATE_NAME, FlashCategory.ERROR)
+                    return render_template('admin/organizations/form.html', form=form), 400
+                
+                # Create organization
+                organization = Organization(**organization_data)
+                db.session.add(organization)
+                db.session.commit()
+                
+                # Create audit log
+                AuditLog.create(
+                    user_id=current_user.id,
+                    action='create',
+                    object_type='Organization',
+                    object_id=organization.id,
+                    details=f'Created organization {organization.name}',
+                    ip_address=request.remote_addr
+                )
+                
+                flash_message(FlashMessages.ORGANIZATION_CREATE_SUCCESS, FlashCategory.SUCCESS)
+                return redirect(url_for('admin.organization.index'))
+                
+            except IntegrityError as e:
+                db.session.rollback()
+                logger.error(f"Integrity error creating organization: {str(e)}", exc_info=True)
+                flash_message(FlashMessages.ORGANIZATION_DUPLICATE_NAME, FlashCategory.ERROR)
+                return render_template('admin/organizations/form.html', form=form), 400
+                
+            except SQLAlchemyError as e:
+                db.session.rollback()
+                logger.error(f"Database error creating organization: {str(e)}", exc_info=True)
+                flash_message(FlashMessages.GENERIC_ERROR, FlashCategory.ERROR)
+                return render_template('admin/organizations/form.html', form=form), 500
+                
+        else:
+            logger.warning(f"Form validation errors: {form.errors}")
+            flash_message(FlashMessages.ORGANIZATION_INVALID_DATA, FlashCategory.ERROR)
+            return handle_form_errors(form)
+            
     return render_template('admin/organizations/form.html', form=form)
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
