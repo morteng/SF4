@@ -41,10 +41,18 @@ def test_profile_form_valid(client, setup_database):
 
     # Log in the user
     with client:
+        # First make a GET request to establish session and get CSRF token
+        get_response = client.get(url_for('public.login'))
+        assert get_response.status_code == 200
+            
+        # Extract CSRF token from the login form
+        csrf_token = get_response.data.decode().split('name="csrf_token" value="')[1].split('"')[0]
+
+        # Now make the login POST request
         login_response = client.post(url_for('public.login'), data={
             'username': 'testuser',
             'password': 'password123',
-            'csrf_token': generate_csrf_token()
+            'csrf_token': csrf_token
         }, follow_redirects=True)
         assert login_response.status_code == 200
 
