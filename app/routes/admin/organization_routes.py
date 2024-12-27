@@ -20,6 +20,9 @@ from app.routes.admin import create_admin_blueprint
 # Create admin blueprint instance
 admin_bp = create_admin_blueprint()
 
+# Import notification_count after creating the blueprint
+from app.routes.admin import notification_count
+
 # Configure logging
 logger = logging.getLogger(__name__)
 
