@@ -3,7 +3,7 @@
 ## High Priority
 1. **Security Enhancements**
    - [ ] Add rate limiting to all admin routes
-   - [ ] Implement CSRF protection for all forms
+   - [ ] Enhance CSRF protection with token validation
    - [ ] Add input sanitization using bleach
 
 2. **Error Handling**

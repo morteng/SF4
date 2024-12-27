@@ -22,11 +22,15 @@
 - **Name**:
   - Required
   - Max length: 100 characters
-  - Allowed characters: letters, numbers, spaces
   - Error messages:
     - "Name is required"
-    - "Name must contain only letters, numbers, and spaces"
     - "Name must be between 1 and 100 characters"
+    
+- **Homepage URL**:
+  - Optional
+  - Must be valid URL if provided
+  - Must start with http:// or https://
+  - Validated using validate_url utility
 
 - **Description**:
   - Required
