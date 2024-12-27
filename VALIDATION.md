@@ -219,30 +219,11 @@
 
 ### Test Cases
 1. **Create Bot**
-   - Valid input
-   - Missing required fields
-   - Invalid bot name (special characters)
-   - Database error during creation
-   - Template rendering validation
-
-2. **Edit Bot**
-   - Valid update
-   - Invalid ID
-   - Validation errors
-   - Database error during update
-   - Template rendering validation
-
-3. **Delete Bot**
-   - Valid deletion
-   - Invalid ID
-   - Database error during deletion
-   - Template rendering validation
-
-4. **Run Bot**
-   - Successful run
-   - Invalid ID
-   - Bot runtime error
-   - Template rendering validation
+   - Verify template inheritance from base.html
+   - Check form rendering and error handling
+   - Test successful bot creation
+   - Test validation errors
+   - Test database error handling
 
 ### Error Messages
 - "Failed to create bot: {error}"
@@ -252,7 +233,7 @@
 - "Failed to run bot: {error}"
 
 ### Validation Improvements
-- Added proper error handling for bot creation
+- Added template inheritance validation
 - Improved form validation with specific error messages
 - Added status field validation
 - Enhanced template error display

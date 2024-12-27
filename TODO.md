@@ -2,7 +2,6 @@
 
 ## Current Goals
 1. **Complete Admin System Refactoring**
-   - [x] Fix template inheritance for admin/bots/create.html
    - [ ] Implement caching for frequently accessed data
    - [ ] Add bulk actions (delete, update) for stipends, tags, and organizations
    - [ ] Add search and filtering functionality to index pages
