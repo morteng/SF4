@@ -13,14 +13,14 @@ class FlashMessages:
 
     # User Management
     CREATE_USER_SUCCESS = "User created successfully."
-    "USERNAME_ALREADY_EXISTS": "Username already exists. Please choose a different username.",
-    "CREATE_USER_ERROR": "Failed to create user: ",
-    "CREATE_USER_INVALID_DATA": "Invalid data provided for user creation.",
-    "UPDATE_USER_SUCCESS": "User updated successfully.",
-    "UPDATE_USER_ERROR": "Failed to update user.",
-    "DELETE_USER_SUCCESS": "User deleted successfully.",
-    "DELETE_USER_ERROR": "Failed to delete user.",
-    "USER_NOT_FOUND": "User not found.",
+    USERNAME_ALREADY_EXISTS = "Username already exists. Please choose a different username."
+    CREATE_USER_ERROR = "Failed to create user: "
+    CREATE_USER_INVALID_DATA = "Invalid data provided for user creation."
+    UPDATE_USER_SUCCESS = "User updated successfully."
+    UPDATE_USER_ERROR = "Failed to update user."
+    DELETE_USER_SUCCESS = "User deleted successfully."
+    DELETE_USER_ERROR = "Failed to delete user."
+    USER_NOT_FOUND = "User not found."
 
     # Bot Management
     "CREATE_BOT_SUCCESS": "Bot created successfully.",

@@ -115,13 +115,13 @@ def delete(id):
     if organization:
         try:
             delete_organization(organization)
-            flash_message(FLASH_MESSAGES["DELETE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+            flash_message(FlashMessages.DELETE_ORGANIZATION_SUCCESS, FlashCategory.SUCCESS)
         except SQLAlchemyError as e:
             db.session.rollback()
             logger.error(f"Database error deleting organization {id}: {str(e)}")
-            flash_message(FLASH_MESSAGES['DELETE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
+            flash_message(FlashMessages.DELETE_ORGANIZATION_DATABASE_ERROR, FlashCategory.ERROR)
     else:
-        flash_message(FLASH_MESSAGES["ORGANIZATION_NOT_FOUND"], FLASH_CATEGORY_ERROR)
+        flash_message(FlashMessages.ORGANIZATION_NOT_FOUND, FlashCategory.ERROR)
     
     return redirect(url_for('admin.organization.index'))
 
@@ -150,13 +150,13 @@ def edit(id):
             try:
                 success, error_message = update_organization(organization, update_data)
                 if success:
-                    flash_message(FLASH_MESSAGES["UPDATE_ORGANIZATION_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                    flash_message(FlashMessages.UPDATE_ORGANIZATION_SUCCESS, FlashCategory.SUCCESS)
                     return redirect(url_for('admin.organization.index'))
                 else:
-                    flash_message(error_message, FLASH_CATEGORY_ERROR)
+                    flash_message(error_message, FlashCategory.ERROR)
             except SQLAlchemyError as e:
                 db.session.rollback()
-                flash_message(FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
+                flash_message(FlashMessages.UPDATE_ORGANIZATION_DATABASE_ERROR, FlashCategory.ERROR)
         else:
             handle_form_errors(form)
 
@@ -175,14 +175,14 @@ def handle_form_errors(form):
         field_label = form[field_name].label.text
         for error in errors:
             if 'This field is required.' in error:
-                message = FLASH_MESSAGES["FORM_FIELD_REQUIRED"].format(field=field_label)
+                message = FlashMessages.FORM_FIELD_REQUIRED.format(field=field_label)
             elif 'Invalid URL format' in error:
-                message = FLASH_MESSAGES["FORM_INVALID_URL"].format(field=field_label)
+                message = FlashMessages.FORM_INVALID_URL.format(field=field_label)
             elif 'Invalid characters' in error:
-                message = FLASH_MESSAGES["FORM_INVALID_CHARACTERS"].format(field=field_label)
+                message = FlashMessages.FORM_INVALID_CHARACTERS.format(field=field_label)
             else:
                 message = f"{field_label}: {error}"
             
-            flash_message(message, FLASH_CATEGORY_ERROR)
+            flash_message(message, FlashCategory.ERROR)
             logger.warning(f"Form validation error: {message}")
     return render_template('admin/organizations/form.html', form=form), 422
