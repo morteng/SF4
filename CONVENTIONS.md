@@ -1,6 +1,6 @@
 ## Coding Conventions
 ### Testing
-- Use enums consistently
+- Use enums for message types
 - Verify UI & DB state
 - Use fixtures & parameterized tests
 

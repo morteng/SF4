@@ -1,6 +1,5 @@
 # TODO List
 ## High Priority
-- [x] Fix flash message enum imports
 - [ ] Add rate limiting to admin routes
 - [ ] Add CRUD integration tests
 - [ ] Increase test coverage to 80%+
