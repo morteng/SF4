@@ -16,4 +16,5 @@
 - For optional fields, handle empty values explicitly in custom validators
 - Ensure test users remain bound to session during authentication tests
 - Use consistent CSRF error messages across all endpoints
+- Ensure datetime fields properly handle timezone conversion and string formatting
 
