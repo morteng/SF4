@@ -17,16 +17,10 @@
 - Ensure notification_count is updated in real-time
 
 ## CSRF Token Validation
-- Validate CSRF tokens in all POST requests.
-- Include CSRF token in form fields:
-  ```html
-  <input name="csrf_token" value="{{ csrf_token }}">
-  ```
-- For HTMX requests, include meta tag:
-  ```html
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  ```
-- Use `decode_csrf_token()` to properly verify tokens.
+- Validate CSRF tokens in all POST requests
+- Include in forms: `<input name="csrf_token" value="{{ csrf_token() }}">`
+- Add meta tag for HTMX: `<meta name="csrf-token" content="{{ csrf_token() }}">`
+- Return 400 for invalid/missing tokens
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
