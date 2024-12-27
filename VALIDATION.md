@@ -22,6 +22,7 @@
 - Rollback on error
 - Date parsing errors must be handled separately from logical date validation
 - Ensure validation errors are properly propagated to form errors
+- Return appropriate HTTP status codes (400 for validation errors, 200 for successful form submissions with errors)
 - Validate leap year dates and return clear error messages
 - Custom date fields must provide specific error messages for:
   - Invalid date formats

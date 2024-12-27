@@ -22,6 +22,7 @@
 - Verify UI & DB state in tests
 - Ensure CSRF protection matches production environment
 - Verify error messages match actual implementation
+- Ensure validation errors return appropriate HTTP status codes (400 for validation errors)
 - Clearly document field validation rules
 - Handle empty values explicitly in custom validators
 - Standardize CSRF error message handling across all endpoints
