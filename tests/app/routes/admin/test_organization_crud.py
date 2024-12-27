@@ -29,7 +29,6 @@ def test_create_organization(logged_in_admin: FlaskClient, db_session: Session, 
     - Success flash message is displayed
     - Organization is created in the database
     """
-    """Test successful organization creation workflow"""
     with logged_in_admin.application.app_context():
         # Get CSRF token from the form
         response = logged_in_admin.get(url_for('admin.organization.create'))
@@ -84,7 +83,6 @@ def test_create_organization_with_invalid_form_data(logged_in_admin: FlaskClient
     - Error message is displayed
     - No organization is created
     """
-    """Test that invalid form data is properly handled."""
     with logged_in_admin.application.app_context():
         # Get CSRF token from the form
         response = logged_in_admin.get(url_for('admin.organization.create'))
@@ -128,7 +126,6 @@ def test_create_organization_with_duplicate_name(logged_in_admin: FlaskClient, d
     - Second organization with same name is rejected
     - Correct error message is displayed
     """
-    """Test that duplicate organization names are rejected."""
     with logged_in_admin.application.app_context():
         # Create first organization
         response = logged_in_admin.post(url_for('admin.organization.create'), data=organization_data)
@@ -155,7 +152,6 @@ def test_create_organization_with_long_name(logged_in_admin: FlaskClient, db_ses
     - Correct error message is displayed
     - No organization is created
     """
-    """Test that long organization names are rejected."""
     with logged_in_admin.application.app_context():
         response = logged_in_admin.get(url_for('admin.organization.create'))
         csrf_token = extract_csrf_token(response.data)
@@ -188,7 +184,6 @@ def test_create_organization_with_invalid_url(logged_in_admin: FlaskClient, db_s
     - Correct error message is displayed
     - No organization is created
     """
-    """Test that invalid URLs are rejected."""
     with logged_in_admin.application.app_context():
         response = logged_in_admin.get(url_for('admin.organization.create'))
         csrf_token = extract_csrf_token(response.data)
@@ -224,7 +219,6 @@ def test_create_organization_with_empty_form(logged_in_admin: FlaskClient, db_se
     - Correct error message is displayed
     - No organization is created
     """
-    """Test that empty form submissions are rejected."""
     with logged_in_admin.application.app_context():
         response = logged_in_admin.get(url_for('admin.organization.create'))
         csrf_token = extract_csrf_token(response.data)
@@ -261,7 +255,6 @@ def test_create_organization_with_database_rollback(
     - Correct error message is displayed
     - No organization is created
     """
-    """Test that database rollback works correctly in case of errors."""
     with logged_in_admin.application.app_context():
         def mock_commit(*args, **kwargs):
             raise SQLAlchemyError("Database error")
@@ -296,7 +289,6 @@ def test_create_organization_without_csrf_token(
     - Correct error message is displayed
     - No organization is created
     """
-    """Test that CSRF protection is working correctly."""
     with logged_in_admin.application.app_context():
         # Remove CSRF token from data
         data = organization_data.copy()
