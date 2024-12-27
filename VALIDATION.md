@@ -29,10 +29,11 @@
   - "Invalid time values (e.g., 25:61:61)"
 
 ### Timezone Handling
-- **Input Type**: Must be a string
+- **Input Type**: Must be a string or convertible to string
 - **Default Value**: 'UTC'
 - **Error Handling**:
-  * If invalid type provided, defaults to 'UTC'
+  * If invalid type provided, converts to string
+  * If None provided, defaults to 'UTC'
   * Properly converts string timezone to pytz timezone object
   * Handles UnknownTimeZoneError gracefully
 
@@ -41,10 +42,7 @@
 **Valid Inputs**:
 - "UTC"
 - "America/New_York"
-- "Europe/London"
-
-**Invalid Inputs**:
-- UnboundField objects (will default to 'UTC')
+- SelectField object (will be converted to string)
 - None (will default to 'UTC')
 - "Invalid/Timezone" (will raise UnknownTimeZoneError)
 

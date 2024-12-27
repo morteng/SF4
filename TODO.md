@@ -17,6 +17,7 @@
   * Handles timezone conversion
   * Provides specific error messages for different validation failures
   * Error messages must match test expectations exactly
+  * Timezone parameter is now safely converted to string using str()
 
 - Organization model includes basic fields: name, description, homepage_url
 - When handling database errors:
