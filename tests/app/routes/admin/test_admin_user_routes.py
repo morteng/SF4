@@ -159,9 +159,19 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
     ).first()
     assert log is not None
 
-def test_user_crud_operations(logged_in_admin, user_data, test_user):
+def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session):
     """Test full CRUD operations for users"""
-    verify_user_crud_operations(logged_in_admin, test_user, user_data)
+    # Ensure the test user doesn't already exist
+    existing_user = User.query.filter_by(username=user_data['username']).first()
+    if existing_user:
+        db_session.delete(existing_user)
+        db_session.commit()
+    
+    # Use a unique username for the test
+    unique_user_data = user_data.copy()
+    unique_user_data['username'] = 'unique_testuser'
+    
+    verify_user_crud_operations(logged_in_admin, test_user, unique_user_data)
 
 def test_get_all_users_sorting(db_session):
     """Test sorting functionality in get_all_users()"""
