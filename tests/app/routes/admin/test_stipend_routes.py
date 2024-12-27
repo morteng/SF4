@@ -228,7 +228,59 @@ def test_create_stipend_with_invalid_dates(
             b'Invalid datetime' in response.data or
             b'date format' in response.data)
 
-def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
+def test_update_stipend_route(authenticated_admin: FlaskClient, test_stipend: Stipend, db_session) -> None:
+    """Test that a stipend can be updated successfully through the admin interface."""
+    logger.info("Starting test_update_stipend_route")
+    
+    # Get the edit page to extract CSRF token
+    update_response = authenticated_admin.get(url_for('admin.stipend.edit', id=test_stipend.id))
+    assert update_response.status_code == 200, "Failed to load edit stipend page"
+    csrf_token = extract_csrf_token(update_response.data)
+
+    # Prepare updated data
+    updated_data = {
+        'name': 'Updated Stipend',
+        'summary': test_stipend.summary,
+        'description': test_stipend.description,
+        'homepage_url': test_stipend.homepage_url,
+        'application_procedure': test_stipend.application_procedure,
+        'eligibility_criteria': test_stipend.eligibility_criteria,
+        'application_deadline': (datetime.now() + timedelta(days=365)).strftime('%Y-%m-%d %H:%M:%S'),
+        'organization_id': test_stipend.organization_id,
+        'open_for_applications': True,
+        'csrf_token': csrf_token
+    }
+
+    # Test HTMX case
+    htmx_response = authenticated_admin.post(
+        url_for('admin.stipend.edit', id=test_stipend.id),
+        data=updated_data,
+        headers={'HX-Request': 'true'}
+    )
+    assert htmx_response.status_code == 200, "HTMX update failed"
+    assert b'<tr hx-target="this" hx-swap="outerHTML">' in htmx_response.data, "HTMX response format incorrect"
+
+    # Test non-HTMX case
+    non_htmx_response = authenticated_admin.post(
+        url_for('admin.stipend.edit', id=test_stipend.id),
+        data=updated_data
+    )
+    assert non_htmx_response.status_code == 302, "Non-HTMX update failed"
+    assert non_htmx_response.location.startswith('/admin/stipends/'), "Incorrect redirect location"
+
+    # Follow the redirect for non-HTMX case
+    final_response = authenticated_admin.get(non_htmx_response.location)
+    assert final_response.status_code == 200, "Failed to load redirect page"
+
+    # Verify the stipend was updated
+    updated_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
+    assert updated_stipend is not None, "Stipend not found in database"
+    assert updated_stipend.name == 'Updated Stipend', "Stipend name not updated"
+
+    # Verify the success flash message
+    assert FlashMessages.UPDATE_STIPEND_SUCCESS.value.encode() in final_response.data, "Success message not found"
+    
+    logger.info("Completed test_update_stipend_route")
     # Get the edit page to extract CSRF token
     update_response = logged_in_admin.get(url_for('admin.stipend.edit', id=test_stipend.id))
     assert update_response.status_code == 200
@@ -279,7 +331,24 @@ def test_update_stipend_route(logged_in_admin, test_stipend, db_session):
     # Verify the success flash message
     assert FlashMessages.UPDATE_STIPEND_SUCCESS.value.encode() in final_response.data
 
-def test_delete_stipend_route(logged_in_admin, test_stipend, db_session):
+def test_delete_stipend_route(authenticated_admin: FlaskClient, test_stipend: Stipend, db_session) -> None:
+    """Test that a stipend can be deleted successfully through the admin interface."""
+    logger.info("Starting test_delete_stipend_route")
+    
+    response = authenticated_admin.post(
+        url_for('admin.stipend.delete', id=test_stipend.id), 
+        follow_redirects=True
+    )
+    assert response.status_code == 200, "Failed to delete stipend"
+    
+    # Verify the stipend was deleted
+    deleted_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
+    assert deleted_stipend is None, "Stipend was not deleted from database"
+    
+    # Verify the success flash message
+    assert FlashMessages.DELETE_STIPEND_SUCCESS.value.encode() in response.data, "Success message not found"
+    
+    logger.info("Completed test_delete_stipend_route")
     response = logged_in_admin.post(url_for('admin.stipend.delete', id=test_stipend.id), follow_redirects=True)
     assert response.status_code == 200
     deleted_stipend = Stipend.query.filter_by(id=test_stipend.id).first()
@@ -287,12 +356,28 @@ def test_delete_stipend_route(logged_in_admin, test_stipend, db_session):
     # Assert the flash message
     assert FlashMessages.DELETE_STIPEND_SUCCESS.value.encode() in response.data
 
-def test_index_stipend_route(logged_in_admin, test_stipend):
+def test_index_stipend_route(authenticated_admin: FlaskClient, test_stipend: Stipend) -> None:
+    """Test that the stipend index page displays stipends correctly."""
+    logger.info("Starting test_index_stipend_route")
+    
+    response = authenticated_admin.get(url_for('admin.stipend.index'))
+    assert response.status_code == 200, "Failed to load stipend index page"
+    assert test_stipend.name.encode() in response.data, "Stipend not found in index page"
+    
+    logger.info("Completed test_index_stipend_route")
     response = logged_in_admin.get(url_for('admin.stipend.index'))
     assert response.status_code == 200
     assert test_stipend.name.encode() in response.data
 
-def test_paginate_stipend_route(logged_in_admin, test_stipend):
+def test_paginate_stipend_route(authenticated_admin: FlaskClient, test_stipend: Stipend) -> None:
+    """Test that stipend pagination works correctly."""
+    logger.info("Starting test_paginate_stipend_route")
+    
+    response = authenticated_admin.get(url_for('admin.stipend.paginate', page=1))
+    assert response.status_code == 200, "Failed to load paginated stipends"
+    assert test_stipend.name.encode() in response.data, "Stipend not found in paginated results"
+    
+    logger.info("Completed test_paginate_stipend_route")
     response = logged_in_admin.get(url_for('admin.stipend.paginate', page=1))
     assert response.status_code == 200
     assert test_stipend.name.encode() in response.data
