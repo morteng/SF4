@@ -37,7 +37,8 @@ def create():
             field_obj = getattr(form, field)
             for error in errors:
                 flash_message(f"{field_obj.label.text}: {error}", FLASH_CATEGORY_ERROR)
-        return render_template('admin/organizations/form.html', form=form), 200
+        # Stay on the same page for form validation errors
+        return render_template('admin/organizations/form.html', form=form), 422
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
