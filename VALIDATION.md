@@ -3,9 +3,10 @@
 - Validate CSRF tokens in all POST requests
 - Include CSRF token in:
   - Form fields: `csrf_token` and `_csrf_token`
-  - Meta tag: `<meta name="csrf-token" content="{{ csrf_token() }}">`
+  - Meta tag: `<meta name="csrf-token" content="{{ csrf_token }}">`
   - Headers: `X-CSRFToken` and `X-Requested-With: XMLHttpRequest`
-  - HTMX requests: Add CSRF token via htmx:configRequest event
+  - HTMX requests: Add CSRF token via hx-headers
+- Verify CSRF token matches session token
 
 ## Error Handling
 - Rollback on error
