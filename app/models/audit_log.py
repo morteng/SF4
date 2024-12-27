@@ -20,11 +20,12 @@ class AuditLog(db.Model):
             user_id=user_id,
             action=action,
             details=details,
-            object_type=object_type,
+            object_type=object_type or 'User',  # Default to 'User' if not specified
             object_id=object_id,
             details_before=details_before,
             details_after=details_after,
-            ip_address=ip_address
+            ip_address=ip_address,
+            timestamp=datetime.utcnow()
         )
         db.session.add(log)
         db.session.commit()

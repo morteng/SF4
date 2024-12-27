@@ -79,11 +79,15 @@ def create():
         except Exception as e:
             db.session.rollback()
             error_message = f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}"
-            # Log the error
+            # Log the error with audit details
             AuditLog.create(
                 user_id=current_user.id,
                 action='create_user_error',
-                details=error_message
+                details=error_message,
+                object_type='User',
+                ip_address=request.remote_addr,
+                details_before=str(form.data),
+                details_after=None
             )
             flash_message(error_message, FlashCategory.ERROR.value)
             
@@ -371,8 +375,22 @@ def index():
         sort_order = request.args.get('sort_order', 'desc')
         
         if search_query:
-            users = search_users(search_query, page=page, per_page=per_page, 
-                               sort_by=sort_by, sort_order=sort_order)
+            # Handle sorting and pagination
+            query = User.query
+            if search_query:
+                query = query.filter(User.username.ilike(f'%{search_query}%') | 
+                                   User.email.ilike(f'%{search_query}%'))
+        
+            # Apply sorting
+            if sort_by == 'username':
+                query = query.order_by(User.username.asc() if sort_order == 'asc' else User.username.desc())
+            elif sort_by == 'email':
+                query = query.order_by(User.email.asc() if sort_order == 'asc' else User.email.desc())
+            else:
+                query = query.order_by(User.created_at.desc())
+        
+            # Apply pagination
+            users = query.paginate(page=page, per_page=per_page, error_out=False)
         else:
             users = get_all_users(page=page, per_page=per_page, 
                                 sort_by=sort_by, sort_order=sort_order)
