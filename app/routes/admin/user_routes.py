@@ -190,6 +190,7 @@ def create():
 @login_required
 @admin_required
 def edit(id):
+    """Edit user details with proper validation and audit logging"""
     try:
         user = get_user_by_id(id)
         if not user:
@@ -201,7 +202,6 @@ def edit(id):
             original_email=user.email,
             obj=user
         )
-        form.id.data = user.id
         
         if request.method == 'POST' and form.validate_on_submit():
             # Validate unique fields
@@ -213,17 +213,7 @@ def edit(id):
                 flash_message("Email already exists", FlashCategory.ERROR.value)
                 return render_template('admin/users/edit.html', form=form), 400
                 
-            # Handle role changes
-            if 'is_admin' in request.form:
-                user.is_admin = request.form['is_admin'] == 'true'
-            
-            # Handle password reset
-            if 'reset_password' in request.form and request.form['reset_password'] == 'true':
-                temp_password = generate_temp_password()
-                user.set_password(temp_password)
-                # TODO: Send email with temporary password
-                flash_message("Password reset initiated", FlashCategory.SUCCESS)
-                
+            # Update user details
             try:
                 update_user(user, form.data)
                 
@@ -250,12 +240,9 @@ def edit(id):
                 
             db.session.commit()
     
-        return render_template('admin/_form_template.html', 
-                         form=form, 
-                         form_title='User',
-                         form_action=url_for('admin.user.edit', id=user.id),
-                         back_url=url_for('admin.user.index'),
-                         back_text='Users')
+        return render_template('admin/users/edit.html', 
+                         form=form,
+                         user=user)
     except ValueError as e:
         flash_message(str(e), FlashCategory.ERROR.value)
         return redirect(url_for('admin.user.index'))
@@ -385,24 +372,30 @@ def edit_profile():
 @login_required
 @admin_required
 def index():
-    """List users with search and pagination"""
+    """List users with search, pagination, and sorting"""
     try:
         page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 10, type=int)
         search_query = request.args.get('q', '')
+        sort_by = request.args.get('sort_by', 'created_at')
+        sort_order = request.args.get('sort_order', 'desc')
         
         if search_query:
-            users = search_users(search_query, page=page)
+            users = search_users(search_query, page=page, per_page=per_page, 
+                               sort_by=sort_by, sort_order=sort_order)
         else:
-            users = get_all_users(page=page)
+            users = get_all_users(page=page, per_page=per_page, 
+                                sort_by=sort_by, sort_order=sort_order)
         
-        # Create a form instance to include CSRF token
         form = UserForm()
         return render_template('admin/users/index.html', 
                             users=users,
                             search_query=search_query,
                             form=form,
+                            sort_by=sort_by,
+                            sort_order=sort_order,
                             csrf_token=generate_csrf(),
-                            _meta={'csrf': True})  # Ensure CSRF is enabled
+                            _meta={'csrf': True})
     except Exception as e:
         logging.error(f"Error in user index route: {str(e)}")
         flash_message(FlashMessages.GENERIC_ERROR.value, FlashCategory.ERROR.value)

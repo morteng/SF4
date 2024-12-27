@@ -177,10 +177,32 @@ class UserForm(FlaskForm):
     ])
     password = PasswordField('Password', validators=[
         Optional(),
-        Length(min=8, message="Password must be at least 8 characters long.")
+        Length(min=8, message="Password must be at least 8 characters long."),
+        Regexp('^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
+               message="Password must contain at least one uppercase, one lowercase, one number and one special character")
     ])
     is_admin = BooleanField('Is Admin')
-    submit = SubmitField('Create')
+    is_active = BooleanField('Is Active', default=True)
+    created_at = DateTimeField('Created At', format='%Y-%m-%d %H:%M:%S', render_kw={'readonly': True})
+    updated_at = DateTimeField('Updated At', format='%Y-%m-%d %H:%M:%S', render_kw={'readonly': True})
+    submit = SubmitField('Save')
+
+    def __init__(self, original_username=None, original_email=None, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        self.original_username = original_username
+        self.original_email = original_email
+
+    def validate_username(self, username):
+        if username.data != self.original_username:
+            user = User.query.filter_by(username=username.data).first()
+            if user is not None:
+                raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS.value)
+
+    def validate_email(self, email):
+        if email.data != self.original_email:
+            user = User.query.filter_by(email=email.data).first()
+            if user is not None:
+                raise ValidationError(FlashMessages.FORM_DUPLICATE_EMAIL.value)
 
     def __init__(self, original_username=None, original_email=None, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
