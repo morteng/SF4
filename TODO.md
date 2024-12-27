@@ -6,6 +6,8 @@
 
 ## Best Practices
 - Validate & sanitize all inputs
+- Ensure test data includes all required fields
+- Disable CSRF in tests when appropriate
 - Test CSRF protection in all form submissions
 - Verify proper error responses for invalid CSRF
 - Use enums consistently for error messages

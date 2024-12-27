@@ -8,7 +8,8 @@
 
 ### Security
 - Validate all inputs
-- CSRF tokens required in all forms (can be disabled in tests)
+- CSRF tokens required in all forms (can be disabled in tests using meta={'csrf': False})
+- Always include required fields in test data
 - Rate limit sensitive endpoints
 - Use Flask-WTF for form handling
 - Always use form.validate() for validation (includes CSRF validation)
