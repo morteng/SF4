@@ -2,32 +2,16 @@
 
 ## Current Goals
 1. **Complete Admin System Refactoring**
+   - [x] Fix template inheritance for admin/bots/create.html
    - [ ] Implement caching for frequently accessed data
    - [ ] Add bulk actions (delete, update) for stipends, tags, and organizations
    - [ ] Add search and filtering functionality to index pages
    - [ ] Add export functionality (CSV, Excel) for all admin data
    - [ ] Implement audit logging for admin actions
 
-2. **Enhance Security**
-   - [ ] Implement IP-based access restrictions for admin routes
-   - [ ] Add two-factor authentication (2FA) for admin users
-
-3. **Optimize Performance**
-   - [ ] Add caching for frequently accessed data (e.g., stipends, tags, organizations)
-   - [ ] Optimize database queries using `selectinload` or `joinedload`
-   - [ ] Implement pagination for all admin lists
-   - [ ] Add lazy loading for large datasets
-
-4. **Improve User Experience**
-   - [ ] Add bulk actions for stipends, tags, and organizations
-   - [ ] Add search and filtering functionality to index pages
-   - [ ] Add export functionality for all admin data
-   - [ ] Add confirmation dialogs for delete actions
-   - [ ] Add loading indicators for HTMX requests
-
 ## Knowledge & Memories
 - **Template Structure**
-  * All admin templates should extend `base.html`
+  * All admin templates should extend `base.html` directly
   * Forms use consistent styling and error handling
   * Flash messages are displayed using `_flash_messages.html`
   * Buttons use standardized macros from `_macros.html`
