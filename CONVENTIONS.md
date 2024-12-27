@@ -4,6 +4,9 @@
 - Verify CSRF token presence in session after form creation
 - Keep form creation and validation in the same context
 - Ensure test client maintains session state for CSRF validation
+- Use `app.test_request_context()` when accessing session data
+- Validate CSRF token matches between form and session
+- Test both valid and invalid CSRF token scenarios
 
 ### Security
 - Validate all inputs

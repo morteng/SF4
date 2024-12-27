@@ -13,4 +13,6 @@
 - Use enums consistently
 - Verify UI & DB state in tests
 - Ensure CSRF protection in all environments
+- Add CSRF token validation tests for all forms
+- Document session initialization requirements
 
