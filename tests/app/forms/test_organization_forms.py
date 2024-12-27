@@ -47,25 +47,38 @@ def test_organization_form_required_fields(app):
 
 def test_organization_form_name_validation(app):
     """Test organization name validation rules"""
-    with app.app_context():
-        # Test invalid characters
-        form = OrganizationForm(data={
-            'name': 'Invalid@Org!',
-            'description': 'Valid description',
-            'homepage_url': 'https://valid.org'
-        })
-        assert form.validate() is False
-        assert 'Name must contain only letters, numbers, and spaces.' in form.name.errors
+    with app.test_request_context():
+        # Initialize session and CSRF token
+        client = app.test_client()
+        client.get('/')  # Access any route to initialize session
+        
+        with client.session_transaction() as session:
+            # Test invalid characters
+            form = OrganizationForm(
+                data={
+                    'name': 'Invalid@Org!',
+                    'description': 'Valid description',
+                    'homepage_url': 'https://valid.org'
+                },
+                meta={'csrf': False}  # Disable CSRF for testing
+            )
+            assert not form.validate()
+            assert 'name' in form.errors
+            assert 'Name must contain only letters, numbers, and spaces.' in form.name.errors
 
-        # Test max length
-        long_name = 'a' * 101
-        form = OrganizationForm(data={
-            'name': long_name,
-            'description': 'Valid description',
-            'homepage_url': 'https://valid.org'
-        })
-        assert form.validate() is False
-        assert 'Field must be between 1 and 100 characters long.' in form.name.errors
+            # Test max length
+            long_name = 'a' * 101
+            form = OrganizationForm(
+                data={
+                    'name': long_name,
+                    'description': 'Valid description',
+                    'homepage_url': 'https://valid.org'
+                },
+                meta={'csrf': False}  # Disable CSRF for testing
+            )
+            assert not form.validate()
+            assert 'name' in form.errors
+            assert 'Field must be between 1 and 100 characters long.' in form.name.errors
 
 def test_organization_form_url_validation(app):
     """Test homepage URL validation"""
