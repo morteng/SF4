@@ -14,11 +14,16 @@ from app.extensions import db  # Import the db object
 
 admin_user_bp = Blueprint('user', __name__, url_prefix='/users')
 
-# Initialize rate limiter
+# Initialize rate limiter with default values
 limiter = Limiter(
     key_func=get_remote_address,
-    default_limits=[current_app.config['RATELIMIT_USER_MANAGEMENT']]
+    default_limits=["200 per day", "50 per hour"]  # Default fallback values
 )
+
+def init_rate_limiter(app):
+    """Initialize rate limiter with app-specific configuration"""
+    limiter.init_app(app)
+    limiter.default_limits = [app.config['RATELIMIT_USER_MANAGEMENT']]
 
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
 @limiter.limit("5 per minute")  # More restrictive limit for user creation

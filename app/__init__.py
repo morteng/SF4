@@ -59,4 +59,8 @@ def create_app(config_name='development'):
         db.create_all()  # Creates all tables if they don't exist
         init_admin_user()  # Initialize the admin user
 
+    # Initialize rate limiter
+    from app.routes.admin.user_routes import init_rate_limiter
+    init_rate_limiter(app)
+
     return app
