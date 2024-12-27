@@ -62,6 +62,20 @@ def init_admin_user() -> None:
 
 from urllib.parse import urlparse
 import re
+from itsdangerous import URLSafeTimedSerializer
+from flask import current_app
+
+def decode_csrf_token(encoded_token):
+    """Decode a CSRF token from its encoded form.
+    
+    Args:
+        encoded_token: The encoded CSRF token from the form
+        
+    Returns:
+        str: The decoded raw CSRF token
+    """
+    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+    return serializer.loads(encoded_token)
 
 def validate_url(url: str) -> bool:
     """Validate URL format.

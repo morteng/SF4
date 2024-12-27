@@ -125,10 +125,14 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
     csrf_token = extract_csrf_token(index_response.data)
     assert csrf_token is not None, f"CSRF token not found in the response. HTML: {index_response.data.decode()[:1000]}"
     
-    # Verify the CSRF token in the session matches the form token
+    # Decode the CSRF token from the form
+    from app.utils import decode_csrf_token
+    decoded_csrf_token = decode_csrf_token(csrf_token)
+        
+    # Verify the CSRF token in the session matches the decoded form token
     with logged_in_admin.session_transaction() as session:
         session_csrf_token = session.get('csrf_token')
-        assert session_csrf_token == csrf_token, "CSRF token mismatch between session and form"
+        assert session_csrf_token == decoded_csrf_token, "CSRF token mismatch between session and form"
 
     # Perform the DELETE operation with proper CSRF handling
     delete_response = logged_in_admin.post(
