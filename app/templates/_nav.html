@@ -9,9 +9,9 @@
                     {% if current_user.is_admin %}
                         <a href="#" hx-get="{{ url_for('admin.dashboard.dashboard') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link relative">
                             Admin Dashboard
-                            {% if Notification.get_unread_count() > 0 %}
+                            {% if notification_count > 0 %}
                             <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
-                                {{ Notification.get_unread_count() }}
+                                {{ notification_count }}
                             </span>
                             {% endif %}
                         </a>
