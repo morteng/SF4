@@ -15,7 +15,9 @@
     {% from "_macros.html" import htmx_loading_indicator, flash_messages %}
     
     {{ htmx_loading_indicator() }}
-    {{ flash_messages() }}
+    <div class="container mx-auto px-4">
+        {{ flash_messages() }}
+    </div>
 
     <main id="main-content" class="p-4">
         {% block content %}{% endblock %}

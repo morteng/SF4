@@ -1,40 +1,41 @@
 <nav class="bg-gray-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-16">
             <div class="flex-shrink-0">
-                <!-- Logo or brand name -->
                 <a href="{{ url_for('public.index') }}" class="text-white font-bold text-xl">Brand</a>
             </div>
-            <div id="nav-menu" class="mobile-menu hidden md:flex ml-10 space-x-4">
+            <div id="nav-menu" class="hidden md:flex ml-10 space-x-4">
                 {% if current_user.is_authenticated %}
                     {% if current_user.is_admin %}
-                        {% from "_macros.html" import primary_button %}
-                        {{ primary_button('Admin Dashboard', url_for('admin.dashboard.dashboard'), '#main-content') }}
-                        {{ primary_button('Bots', url_for('admin.bot.index'), '#main-content') }}
-                        {{ primary_button('Organizations', url_for('admin.organization.index'), '#main-content') }}
-                        {{ primary_button('Stipends', url_for('admin.stipend.index'), '#main-content') }}
-                        {{ primary_button('Tags', url_for('admin.tag.index'), '#main-content') }}
-                        {{ primary_button('Users', url_for('admin.user.index'), '#main-content') }}
+                        <a href="#" hx-get="{{ url_for('admin.dashboard.dashboard') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link">Admin Dashboard</a>
+                        <a href="#" hx-get="{{ url_for('admin.stipend.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link">Stipends</a>
+                        <a href="#" hx-get="{{ url_for('admin.tag.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link">Tags</a>
+                        <a href="#" hx-get="{{ url_for('admin.organization.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link">Organizations</a>
+                        <a href="#" hx-get="{{ url_for('admin.user.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link">Users</a>
+                        <a href="#" hx-get="{{ url_for('admin.bot.index') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link">Bots</a>
                     {% else %}
-                        <a href="{{ url_for('public.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                        <a href="{{ url_for('user.profile') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Profile</a>
+                        <a href="{{ url_for('public.index') }}" class="nav-link">Home</a>
+                        <a href="{{ url_for('user.profile') }}" class="nav-link">Profile</a>
                     {% endif %}
-                   
-                    <a href="{{ url_for('public.logout') }}" class="text-red-400 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Logout</a>
+                    <a href="{{ url_for('public.logout') }}" class="nav-link text-red-400">Logout</a>
                 {% else %}
-                    <a href="{{ url_for('public.login') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Login</a>
-                    <a href="{{ url_for('public.register') }}" class="text-green-400 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Register</a>
+                    <a href="{{ url_for('public.login') }}" class="nav-link">Login</a>
+                    <a href="{{ url_for('public.register') }}" class="nav-link text-green-400">Register</a>
                 {% endif %}
             </div>
             <button id="nav-toggle" onclick="toggleMobileMenu()" class="inline-flex items-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" aria-expanded="false">
                 <span class="sr-only">Toggle menu</span>
-                <!-- Icon when menu is closed. -->
                 <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                 </svg>
             </button>
         </div>
     </div>
-
 </nav>
+
+<style>
+    .nav-link {
+        @apply text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium;
+    }
+</style>
 
