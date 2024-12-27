@@ -3,6 +3,8 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import current_user, login_required
 from bleach import clean
 from flask_wtf.csrf import CSRFProtect
+from app.models.organization import Organization
+from app.constants import FlashMessages, FlashCategory
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -129,7 +131,7 @@ def index():
 def edit(id):
     organization = get_organization_by_id(id)
     if not organization:
-        flash_message(FLASH_MESSAGES["ORGANIZATION_NOT_FOUND"], FLASH_CATEGORY_ERROR)
+        flash_message(FlashMessages.ORGANIZATION_NOT_FOUND, FlashCategory.ERROR)
         return redirect(url_for('admin.organization.index'))
 
     form = OrganizationForm(obj=organization)

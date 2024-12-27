@@ -33,23 +33,23 @@ class FlashMessages:
     BOT_NOT_FOUND = "Bot not found."
 
     # Organization Management
-    "CREATE_ORGANIZATION_SUCCESS": "Organization created successfully.",
-    "CREATE_ORGANIZATION_ERROR": "Failed to create organization: ",
-    "CREATE_ORGANIZATION_INVALID_FORM": "Invalid data provided for organization creation.",
-    "CREATE_ORGANIZATION_DUPLICATE_ERROR": "An organization with this name already exists.",
-    "CREATE_ORGANIZATION_DATABASE_ERROR": "Database error while creating organization.",
-    "CSRF_MISSING": "CSRF token is missing. Please refresh the page and try again.",
-    "UPDATE_ORGANIZATION_SUCCESS": "Organization updated successfully.",
-    "UPDATE_ORGANIZATION_ERROR": "Failed to update organization.",
-    "UPDATE_ORGANIZATION_INVALID_FORM": "Invalid data provided for organization update.",
-    "UPDATE_ORGANIZATION_DATABASE_ERROR": "Database error while updating organization.",  
-    "DELETE_ORGANIZATION_SUCCESS": "Organization deleted successfully.",
-    "DELETE_ORGANIZATION_DATABASE_ERROR": "Database error while deleting organization.",
-    "ORGANIZATION_NOT_FOUND": "Organization not found.",
-    "INVALID_URL_FORMAT": "URL must start with http:// or https://.",
-    "INVALID_DATE_FORMAT": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS.",
-    "INVALID_FUTURE_DATE": "Date must be in the future.",
-    "INVALID_PAST_DATE": "Date must be in the past.",
+    CREATE_ORGANIZATION_SUCCESS = "Organization created successfully."
+    CREATE_ORGANIZATION_ERROR = "Failed to create organization: "
+    CREATE_ORGANIZATION_INVALID_FORM = "Invalid data provided for organization creation."
+    CREATE_ORGANIZATION_DUPLICATE_ERROR = "An organization with this name already exists."
+    CREATE_ORGANIZATION_DATABASE_ERROR = "Database error while creating organization."
+    CSRF_MISSING = "CSRF token is missing. Please refresh the page and try again."
+    UPDATE_ORGANIZATION_SUCCESS = "Organization updated successfully."
+    UPDATE_ORGANIZATION_ERROR = "Failed to update organization."
+    UPDATE_ORGANIZATION_INVALID_FORM = "Invalid data provided for organization update."
+    UPDATE_ORGANIZATION_DATABASE_ERROR = "Database error while updating organization."
+    DELETE_ORGANIZATION_SUCCESS = "Organization deleted successfully."
+    DELETE_ORGANIZATION_DATABASE_ERROR = "Database error while deleting organization."
+    ORGANIZATION_NOT_FOUND = "Organization not found."
+    INVALID_URL_FORMAT = "URL must start with http:// or https://."
+    INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+    INVALID_FUTURE_DATE = "Date must be in the future."
+    INVALID_PAST_DATE = "Date must be in the past."
 
     # Form Validation Messages
     "FORM_FIELD_REQUIRED": "{field} is required.",
