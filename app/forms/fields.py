@@ -96,14 +96,13 @@ class CustomDateTimeField(DateTimeField):
                     # Check if it's a leap year
                     is_leap = (dt.year % 4 == 0 and dt.year % 100 != 0) or (dt.year % 400 == 0)
                     if not is_leap:
-                        self.errors = [self.error_messages['invalid_leap_year']]
-                        return False
+                        raise ValidationError(self.error_messages['invalid_leap_year'])
                 
                 # General date validation
                 datetime(dt.year, dt.month, dt.day)
             except ValueError:
                 if dt.month == 2 and dt.day == 29:
-                    self.errors = [self.error_messages['invalid_leap_year']]
+                    raise ValidationError(self.error_messages['invalid_leap_year'])
                 else:
                     self.errors.append(self.error_messages['invalid_date'])
                 return False
