@@ -2,21 +2,15 @@
 
 ## Current Goals
 1. Complete organization routes implementation
-   - Add timezone handling for application deadlines
    - Implement proper error handling for organization operations
    - Ensure consistent error display across all organization views
 
 2. Enhance test coverage for organization routes
    - Add tests for HTMX responses in organization routes
    - Add integration tests for organization service interactions
-   - Add tests for timezone conversion functionality
 
 ## Knowledge & Memories
-- Organization model now includes application_deadline field with timezone support
-- Timezone handling must be implemented in both forms and routes
-- Application deadlines should be stored in UTC but displayed in user's local timezone
-- Use pytz for timezone conversions
-- Add validation to ensure application deadlines are in the future
+- Organization model includes basic fields: name, description, homepage_url
 - When handling database errors:
   * Always set flash message before redirect
   * Rollback database session
@@ -54,9 +48,11 @@
    - Add integration tests for organization service interactions
 
 ## Recent Fixes
+- Removed application_deadline field and related timezone handling code
+- Updated Organization model and form to remove deadline-related fields
+- Updated organization tests to remove deadline-related test cases
 - Fixed database error handling in organization edit route to properly set flash messages and redirect
 - Updated organization form validation tests to expect field-specific error messages
-- Fixed test_timezone_handling by adding missing application_deadline field
 - Improved error message formatting in organization edit route to use field labels
 - Fixed database error handling to properly redirect back to edit page with flash message
 - Fixed test_update_organization_with_database_error by ensuring proper flash message is set
