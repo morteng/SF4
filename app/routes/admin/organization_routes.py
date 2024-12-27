@@ -35,6 +35,7 @@ def create():
             field_label = form[field_name].label.text  # Get the actual field label
             for error in errors:
                 if 'This field is required.' in error:
+                    # Change this line to match the test's expected format
                     flash_message(f"{field_label}: This field is required.", FLASH_CATEGORY_ERROR)
                 else:
                     flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
