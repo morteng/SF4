@@ -8,6 +8,8 @@
 - [x] Ensure consistent error handling for database errors
 - [x] Implement direct template rendering for database errors
 - [ ] Verify error message formatting in all error responses
+- [ ] Add audit logging for sensitive operations
+- [ ] Implement email notifications for password resets
 
 ## Best Practices
 - Ensure CSRF protection matches production environment

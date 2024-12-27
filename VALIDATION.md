@@ -16,6 +16,8 @@
 - Use Flask-WTF forms for automatic CSRF validation
 - Include CSRF token in forms: `{{ form.csrf_token }}`
 - For HTMX requests, include meta tag: `<meta name="csrf-token" content="{{ csrf_token() }}">`
+- Ensure CSRF tokens are properly extracted in tests using `extract_csrf_token()`
+- Handle missing CSRF tokens with 400 status code
 
 ## Error Handling
 - Rollback on error

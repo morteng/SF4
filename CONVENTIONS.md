@@ -17,6 +17,8 @@
   ```
 - In routes, pass form instances to templates
 - Handle CSRF errors with 400 status code
+- Ensure CSRF tokens are included in all POST requests
+- Use `extract_csrf_token()` helper function in tests
 
 ### Testing with CSRF and Error Handling
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
