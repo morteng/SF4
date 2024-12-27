@@ -177,7 +177,8 @@ def test_create_user_route_with_database_error(logged_in_admin, user_data, db_se
         response = logged_in_admin.post(url_for('admin.user.create'), data=data, follow_redirects=True)
             
         # Check for error response
-        assert response.status_code == 400
+        assert response.status_code == 200  # After redirect, status should be 200
+            
         # Check for the flash message in the response HTML
         decoded_response = response.data.decode('utf-8')
         assert FlashMessages.CREATE_USER_ERROR.value in decoded_response, \
