@@ -31,7 +31,7 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 - HTMX for dynamic interaction
 
 **Bots**:  
-- **TagBot**: Auto-tags stipends, just build the bot scaffolding for now.
+- **TagBot**: Auto-tags stipends, just build the scaffolding for it for now.
 - **UpdateBot**: Updates and flags stale entries, just build the bot scaffolding for now. 
 - **ReviewBot**: Flags suspicious entries for admin review, just build the bot scaffolding for now.
 
@@ -86,6 +86,7 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 - Details Page: Full stipend info, eligibility, related orgs
 
 **Admin Section**:  
+# add more details about the admin section, including template structure AI!
 - Basic auth login  
 - CRUD routes for stipends, tags, organizations, users, bots  
 - Bot management dashboard, notifications for flagged entries
@@ -109,7 +110,7 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 
 1. **Small, Frequent Commits** with descriptive messages  
 2. **Test-Driven Development** where possible  
-3. **Error Handling & Logging**: Don’t just `print` stack traces, sir  
+3. **Error Handling & Logging**: Don’t just `print` stack traces  
 4. **Code Reviews**: Peer review before merging
 
 ---
