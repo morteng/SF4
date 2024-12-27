@@ -9,7 +9,6 @@
 - [x] Fix datetime.utcnow() deprecation warnings
 - [ ] Complete CRUD test coverage
 - [x] Add audit logging for all operations
-- [ ] Fix form validation context issues
 - [ ] Fix notification.user_id constraint issues
 
 ## Best Practices

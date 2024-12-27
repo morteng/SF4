@@ -26,9 +26,10 @@
 
 ### CSRF Token Handling
 - Use Flask-WTF for CSRF protection
-- Include CSRF token in all forms
+- Include CSRF token in all forms and HTMX requests
 - Validate CSRF tokens in all POST requests
 - Return 400 for invalid/missing CSRF tokens
+- Add CSRF token to test requests
 
 ### Notification Badges
 - All admin templates must include a notification badge.

@@ -27,8 +27,9 @@
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
-- Include CSRF token in all forms
+- Include CSRF token in all forms and HTMX requests
 - Return 400 for invalid/missing tokens
+- Ensure CSRF tokens are properly extracted in tests
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
