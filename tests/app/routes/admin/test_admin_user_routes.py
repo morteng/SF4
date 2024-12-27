@@ -33,16 +33,18 @@ def test_user(db_session, user_data):
     db_session.commit()
 
 def test_create_user_route(logged_in_admin, user_data):
+    # Test GET request
     create_response = logged_in_admin.get(url_for('admin.user.create'))
     assert create_response.status_code == 200
     
+    # Test POST request
     csrf_token = extract_csrf_token(create_response.data)
     response = logged_in_admin.post(url_for('admin.user.create'), data={
         'username': user_data['username'],
         'email': user_data['email'],
         'password': user_data['password'],
-        'is_admin': False,  # Required BooleanField
-        'submit': 'Create',  # Required SubmitField
+        'is_admin': False,
+        'submit': 'Create',
         'csrf_token': csrf_token
     }, follow_redirects=True)
     
@@ -51,13 +53,22 @@ def test_create_user_route(logged_in_admin, user_data):
         logging.error(f"Unexpected status code: {response.status_code}")
         logging.error(f"Response data: {response.data.decode('utf-8')}")
     
+    # Verify response
     assert response.status_code == 200
+    assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data
+    
+    # Verify user creation
     users = User.query.all()
     assert any(user.username == user_data['username'] and user.email == user_data['email'] for user in users)
     
-    # Check for the flash message in the response
-    assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data, \
-        f"Expected flash message '{FlashMessages.CREATE_USER_SUCCESS.value}' not found in response"
+    # Verify notification count is present
+    assert b'notification_count' in response.data
+    
+    # Verify audit log was created
+    audit_log = AuditLog.query.filter_by(action='create_user').first()
+    assert audit_log is not None
+    assert audit_log.user_id == logged_in_admin.user.id
+    assert audit_log.ip_address is not None
 
 def test_create_user_route_with_invalid_data(logged_in_admin, user_data):
     create_response = logged_in_admin.get(url_for('admin.user.create'))
