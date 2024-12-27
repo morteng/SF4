@@ -31,12 +31,12 @@ def create():
                 db.session.rollback()
                 flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
         else:
-            # Flash the generic invalid form message first
-            flash_message(FLASH_MESSAGES["CREATE_ORGANIZATION_INVALID_FORM"], FLASH_CATEGORY_ERROR)
-            # Then add individual field errors
+            # Flash individual field errors
             for field, errors in form.errors.items():
+                field_obj = getattr(form, field)
                 for error in errors:
-                    flash_message(f"{getattr(form, field).label.text}: {error}", FLASH_CATEGORY_ERROR)
+                    flash_message(f"{field_obj.label.text}: {error}", FLASH_CATEGORY_ERROR)
+            return render_template('admin/organizations/form.html', form=form), 200
 
     return render_template('admin/organizations/form.html', form=form)
 
