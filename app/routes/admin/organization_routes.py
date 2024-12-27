@@ -1,4 +1,7 @@
+import logging
 from flask import Blueprint, render_template, redirect, url_for, request, flash
+
+logger = logging.getLogger(__name__)
 from flask_login import login_required
 from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
 from app.forms.admin_forms import OrganizationForm
@@ -12,6 +15,12 @@ admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
+    """
+    Handle the creation of a new organization.
+    
+    GET: Render the organization creation form.
+    POST: Validate the form and create the organization.
+    """
     form = OrganizationForm()
     if form.validate_on_submit():
         organization_data = {

@@ -208,8 +208,10 @@ class OrganizationForm(FlaskForm):
         self.original_name = original_name or None
 
     def validate_name(self, name):
-        if not name.data or name.data.strip() == '':
+        if not name.data or not name.data.strip():
             raise ValidationError('This field is required.')
+        if len(name.data.strip()) > 100:
+            raise ValidationError('Organization name cannot exceed 100 characters.')
         if name.data != self.original_name:
             organization = Organization.query.filter_by(name=name.data).first()
             if organization:

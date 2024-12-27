@@ -238,6 +238,30 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, db_session)
         assert org.name != invalid_data['name']
 
 
+def test_create_organization_with_empty_description(logged_in_admin, db_session):
+    with logged_in_admin.application.app_context():
+        response = logged_in_admin.get(url_for('admin.organization.create'))
+        csrf_token = extract_csrf_token(response.data)
+
+        invalid_data = {
+            'name': 'Test Organization',
+            'description': '',  # Empty description
+            'homepage_url': 'http://example.com/organization',
+            'csrf_token': csrf_token,
+            'submit': 'Create'
+        }
+
+        response = logged_in_admin.post(url_for('admin.organization.create'), data=invalid_data)
+        assert response.status_code == 422
+        assert b'Create Organization' in response.data
+
+        with logged_in_admin.session_transaction() as sess:
+            flashed_messages = sess.get('_flashes', [])
+        assert any(
+            cat == 'error' and 'About: This field is required.' in msg
+            for cat, msg in flashed_messages
+        ), "Field validation error not found in flash messages"
+
 def test_delete_organization(logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
         # Create an organization first
