@@ -103,6 +103,9 @@ def edit(id):
                          form_action=url_for('admin.user.edit', id=user.id),
                          back_url=url_for('admin.user.index'),
                          back_text='Users')
+    except ValueError as e:
+        flash_message(str(e), FlashCategory.ERROR.value)
+        return redirect(url_for('admin.user.index'))
     except Exception as e:
         db.session.rollback()
         logging.error(f"Error in edit route for user {id}: {e}")
