@@ -20,6 +20,8 @@ def test_valid_date_format(app, form_data):
     form_data['application_deadline'] = '2025-12-31 23:59:59'
     with app.test_request_context():
         form = StipendForm(data=form_data)
+        if not form.validate():
+            print("Validation errors:", form.errors)
         assert form.validate() is True
 
 def test_invalid_date_format(app, form_data):
