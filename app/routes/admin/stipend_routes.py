@@ -6,12 +6,7 @@ from app.utils import format_error_message
 from jinja2 import TemplateNotFound
 from flask_login import login_required
 
-from app.constants import (
-    FLASH_CATEGORY_INFO,
-    FLASH_MESSAGES,
-    FLASH_CATEGORY_SUCCESS,
-    FLASH_CATEGORY_ERROR
-)
+from app.constants import FlashCategory, FLASH_MESSAGES
 from app.forms.admin_forms import StipendForm, OrganizationForm
 from app.models.stipend import Stipend
 from app.models.organization import Organization
@@ -52,7 +47,7 @@ def create():
                 }
                 
                 new_stipend = create_stipend(stipend_data)
-                flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                flash_message(FLASH_MESSAGES["CREATE_STIPEND_SUCCESS"], FlashCategory.SUCCESS)
 
                 if is_htmx:
                     try:
@@ -71,7 +66,7 @@ def create():
             except Exception as e:
                 db.session.rollback()
                 current_app.logger.error(f"Failed to create stipend: {e}")
-                flash_message(str(e), FLASH_CATEGORY_ERROR)
+                flash_message(str(e), FlashCategory.ERROR)
                 if is_htmx:
                     return render_template(
                         'admin/stipends/_form.html',
@@ -104,7 +99,7 @@ def create():
 def edit(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
-        flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
+        flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FlashCategory.ERROR)
         return redirect(url_for('admin.stipend.index'))
 
     form = StipendForm(obj=stipend)
@@ -128,7 +123,7 @@ def edit(id):
                 
                 # Update the stipend
                 updated_stipend = update_stipend(stipend, stipend_data, session=db.session)
-                flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+                flash_message(FLASH_MESSAGES["UPDATE_STIPEND_SUCCESS"], FlashCategory.SUCCESS)
                 
                 if is_htmx:
                     try:
@@ -145,7 +140,7 @@ def edit(id):
             except Exception as e:
                 db.session.rollback()
                 current_app.logger.error(f"Failed to update stipend: {e}")
-                flash_message(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+                flash_message(str(e) if str(e) else FLASH_MESSAGES["UPDATE_STIPEND_ERROR"], FlashCategory.ERROR)
                 if is_htmx:
                     return render_template(
                         'admin/stipends/_form.html',
@@ -199,14 +194,14 @@ def delete(id):
 
     try:
         delete_stipend(stipend.id)
-        flash_message(FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"], FLASH_CATEGORY_SUCCESS)
+        flash_message(FLASH_MESSAGES["DELETE_STIPEND_SUCCESS"], FlashCategory.SUCCESS)
         if request.headers.get('HX-Request'):
             return render_template('_flash_messages.html'), 200
         return redirect(url_for('admin.stipend.index'))
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(f"Failed to delete stipend: {e}")
-        flash_message(FLASH_MESSAGES["DELETE_STIPEND_ERROR"], FLASH_CATEGORY_ERROR)
+        flash_message(FLASH_MESSAGES["DELETE_STIPEND_ERROR"], FlashCategory.ERROR)
         if request.headers.get('HX-Request'):
             return render_template('_flash_messages.html'), 500
         return redirect(url_for('stipend.index'))
