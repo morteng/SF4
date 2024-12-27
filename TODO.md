@@ -4,6 +4,8 @@
 1. Complete date/time validation implementation
    - Add comprehensive tests for all date/time validation scenarios
    - Ensure consistent error messages across all date/time fields
+   - Add tests for timezone-aware datetime comparisons
+   - Add edge case tests for datetime validation
 
 2. Enhance test coverage for stipend routes
    - Add tests for HTMX responses in stipend routes
@@ -25,6 +27,7 @@
   * Ensure both compared datetimes are timezone-aware
   * Use pytz.UTC.localize() for naive datetimes
   * Use astimezone(pytz.UTC) for timezone-aware datetimes
+  * All datetime comparisons must be between timezone-aware datetimes
 
 - Organization model includes basic fields: name, description, homepage_url
 - When handling database errors:

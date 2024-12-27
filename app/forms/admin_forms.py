@@ -79,10 +79,8 @@ class StipendForm(FlaskForm):
                 else:
                     raise ValidationError('Invalid date values (e.g., Feb 30)')
 
-        # Convert now to UTC for comparison
+        # Ensure both datetimes are timezone-aware
         now = datetime.now(pytz.UTC)
-        
-        # Ensure field.data is in UTC
         if field.data.tzinfo is None:
             field.data = pytz.UTC.localize(field.data)
         else:

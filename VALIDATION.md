@@ -43,6 +43,20 @@
   * Timezone-aware datetimes must be converted to UTC using astimezone(pytz.UTC)
   * Comparisons between naive and timezone-aware datetimes will raise TypeError
 
+### Timezone-aware Datetime Validation
+
+**Test Cases**:
+1. Compare timezone-aware datetime with UTC
+2. Compare naive datetime with timezone-aware datetime (should convert naive to UTC)
+3. Compare datetimes in different timezones (should convert both to UTC)
+4. Validate future date with timezone conversion
+5. Validate max future date (5 years) with timezone conversion
+
+**Error Messages**:
+- "Application deadline must be a future date"
+- "Application deadline cannot be more than 5 years in the future"
+- "Invalid timezone conversion"
+
 ### Examples
 
 **Valid Comparisons**:
