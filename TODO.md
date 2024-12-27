@@ -2,6 +2,8 @@
 
 ## Current Goals
 1. **Complete Admin System Refactoring**
+   - [ ] Add dependency validation checks during app startup
+   - [ ] Verify all required packages are installed and importable
    - [ ] Implement caching for frequently accessed data
    - [ ] Add bulk actions (delete, update) for stipends, tags, and organizations
    - [ ] Add search and filtering functionality to index pages
@@ -49,6 +51,8 @@
   * Two-factor authentication (2FA) is implemented for admin users
 - **Dependencies**
   * Flask-Limiter is required for rate limiting functionality
+  * Added dependency validation to ensure all required packages are installed
+  * Added error handling for missing dependencies
   * All packages in requirements.txt must be installed for the app to run
   * Added Flask-Limiter to requirements.txt to fix ModuleNotFoundError
 
