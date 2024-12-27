@@ -123,13 +123,17 @@ def handle_form_errors(form):
     for field_name, errors in form.errors.items():
         field_label = form[field_name].label.text
         for error in errors:
-            # Use more user-friendly messages
-            if 'This field is required.' in error:
-                message = f"{field_label} is required."
-            elif 'Organization name must contain only letters, numbers, and spaces.' in error:
-                message = f"{field_label} can only contain letters, numbers, and spaces."
+            # Preserve field name if already in error message
+            if ':' in error:
+                message = error
             else:
-                message = f"{field_label}: {error}"
+                # Use more user-friendly messages
+                if 'This field is required.' in error:
+                    message = f"{field_label} is required."
+                elif 'Organization name must contain only letters, numbers, and spaces.' in error:
+                    message = f"{field_label} can only contain letters, numbers, and spaces."
+                else:
+                    message = f"{field_label}: {error}"
             
             flash_message(message, FLASH_CATEGORY_ERROR)
             logger.warning(f"Form validation error: {message}")
