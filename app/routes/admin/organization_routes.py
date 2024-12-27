@@ -39,10 +39,6 @@ csrf = CSRFProtect()
 @limiter.limit("10 per minute")
 @login_required
 @admin_required
-@admin_org_bp.route('/create', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")
-@login_required
-@admin_required
 def create():
     """Create new organization with audit logging and notifications"""
     form = OrganizationForm()
