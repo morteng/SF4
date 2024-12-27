@@ -14,4 +14,5 @@
 - Verify UI & DB state in tests
 - Ensure CSRF protection matches production environment
 - Verify error messages match actual implementation
+- Clearly document optional vs required fields
 

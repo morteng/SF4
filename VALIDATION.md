@@ -19,4 +19,5 @@
 - Log details
 - Use enums for user feedback
 - Preserve form state
+- Clearly indicate optional vs required fields in validation messages
 
