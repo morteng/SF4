@@ -40,11 +40,18 @@ def create():
         # CSRF token is automatically validated by Flask-WTF
             
         try:
+            # Prepare organization data with cleaned inputs
             organization_data = {
                 'name': clean(form.name.data.strip()),
                 'description': clean(form.description.data.strip()),
                 'homepage_url': clean(form.homepage_url.data.strip()) if form.homepage_url.data else None
             }
+            
+            # Ensure CSRF token is present
+            if not form.csrf_token.data:
+                flash_message(FLASH_MESSAGES['CSRF_MISSING'], FLASH_CATEGORY_ERROR)
+                logger.warning("CSRF token missing in organization creation")
+                return redirect(url_for('admin.organization.create'))
             
             success, error_message = create_organization(organization_data)
             if success:
