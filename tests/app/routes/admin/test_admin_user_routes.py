@@ -123,13 +123,55 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
     # Initialize session and get CSRF token
     index_response = logged_in_admin.get(url_for('admin.user.index'))
     assert index_response.status_code == 200
-        
+    
     # Extract CSRF token with debug logging
     csrf_token = extract_csrf_token(index_response.data)
     logging.info(f"Extracted CSRF token: {csrf_token}")
     
     # Verify CSRF token exists
     assert csrf_token is not None, "CSRF token not found in response. Response content: " + index_response.data.decode('utf-8')
+
+def test_reset_password_route(logged_in_admin, test_user):
+    """Test password reset functionality"""
+    # Get CSRF token
+    index_response = logged_in_admin.get(url_for('admin.user.index'))
+    csrf_token = extract_csrf_token(index_response.data)
+    
+    # Reset password
+    response = logged_in_admin.post(
+        url_for('admin.user.reset_password', id=test_user.id),
+        data={'csrf_token': csrf_token},
+        follow_redirects=True
+    )
+    
+    assert response.status_code == 200
+    assert FlashMessages.PASSWORD_RESET_SUCCESS.value.encode() in response.data
+
+def test_toggle_active_route(logged_in_admin, test_user):
+    """Test user activation/deactivation"""
+    # Get CSRF token
+    index_response = logged_in_admin.get(url_for('admin.user.index'))
+    csrf_token = extract_csrf_token(index_response.data)
+    
+    # Deactivate user
+    response = logged_in_admin.post(
+        url_for('admin.user.toggle_active', id=test_user.id),
+        data={'csrf_token': csrf_token},
+        follow_redirects=True
+    )
+    
+    assert response.status_code == 200
+    assert FlashMessages.USER_DEACTIVATED.value.encode() in response.data
+    
+    # Reactivate user
+    response = logged_in_admin.post(
+        url_for('admin.user.toggle_active', id=test_user.id),
+        data={'csrf_token': csrf_token},
+        follow_redirects=True
+    )
+    
+    assert response.status_code == 200
+    assert FlashMessages.USER_ACTIVATED.value.encode() in response.data
     
     # Perform deletion
     delete_response = logged_in_admin.post(

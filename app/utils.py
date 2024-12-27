@@ -115,6 +115,18 @@ def validate_password_strength(password: str) -> bool:
         return False
     return True
 
+def generate_temp_password(length: int = 12) -> str:
+    """Generate a temporary password with the specified length.
+    
+    Args:
+        length: Length of the password to generate
+        
+    Returns:
+        str: Generated temporary password
+    """
+    chars = string.ascii_letters + string.digits + "!@#$%^&*"
+    return ''.join(secrets.choice(chars) for _ in range(length))
+
 def validate_url(url: str) -> bool:
     """Validate URL format.
     

@@ -135,11 +135,20 @@ def delete(id):
     """Delete a user with proper error handling and response codes"""
     try:
         user = get_user_by_id(id)
+        
+        # Prevent self-deletion
+        if user.id == current_user.id:
+            flash_message("Cannot delete your own account", FlashCategory.ERROR.value)
+            return redirect(url_for('admin.user.index')), 400
+            
         delete_user(user)
+        
         # Audit log
         logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.utcnow()}")
+        
         flash_message(FlashMessages.DELETE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
         return redirect(url_for('admin.user.index')), 200
+        
     except ValueError as e:
         flash_message(str(e), FlashCategory.ERROR.value)
         return redirect(url_for('admin.user.index')), 400
@@ -147,6 +156,55 @@ def delete(id):
         db.session.rollback()
         logging.error(f"Failed to delete user {id}: {e}")
         flash_message(f"{FlashMessages.DELETE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
+        return redirect(url_for('admin.user.index')), 500
+
+@admin_user_bp.route('/<int:id>/reset_password', methods=['POST'])
+@limiter.limit("5 per hour")
+@login_required
+@admin_required
+def reset_password(id):
+    """Reset a user's password"""
+    try:
+        user = get_user_by_id(id)
+        temp_password = generate_temp_password()
+        user.set_password(temp_password)
+        db.session.commit()
+        
+        # TODO: Send email with temporary password
+        logging.info(f"Password reset for user {user.id} by admin {current_user.id}")
+        
+        flash_message(FlashMessages.PASSWORD_RESET_SUCCESS.value, FlashCategory.SUCCESS.value)
+        return redirect(url_for('admin.user.index')), 200
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Failed to reset password for user {id}: {e}")
+        flash_message(FlashMessages.PASSWORD_RESET_ERROR.value, FlashCategory.ERROR.value)
+        return redirect(url_for('admin.user.index')), 500
+
+@admin_user_bp.route('/<int:id>/toggle_active', methods=['POST'])
+@limiter.limit("10 per hour")
+@login_required
+@admin_required
+def toggle_active(id):
+    """Activate/Deactivate a user"""
+    try:
+        user = get_user_by_id(id)
+        
+        # Prevent self-deactivation
+        if user.id == current_user.id:
+            flash_message("Cannot deactivate your own account", FlashCategory.ERROR.value)
+            return redirect(url_for('admin.user.index')), 400
+            
+        user.is_active = not user.is_active
+        db.session.commit()
+        
+        message = FlashMessages.USER_ACTIVATED.value if user.is_active else FlashMessages.USER_DEACTIVATED.value
+        flash_message(message, FlashCategory.SUCCESS.value)
+        return redirect(url_for('admin.user.index')), 200
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Failed to toggle active status for user {id}: {e}")
+        flash_message("Failed to update user status", FlashCategory.ERROR.value)
         return redirect(url_for('admin.user.index')), 500
 
 @admin_user_bp.route('/edit_profile', methods=['GET', 'POST'])
