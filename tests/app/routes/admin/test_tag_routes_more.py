@@ -1,7 +1,7 @@
 from flask import url_for
 from app.models.tag import Tag
 from tests.conftest import logged_in_admin, tag_data, extract_csrf_token, get_all_tags
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_SUCCESS, FLASH_CATEGORY_ERROR
+from app.constants import FlashMessages, FlashCategory
 from sqlalchemy.exc import IntegrityError
 import pytest
 from app.services.tag_service import create_tag
@@ -25,7 +25,7 @@ def test_create_tag_with_valid_data(logged_in_admin, tag_data):
     assert response.status_code == 200
     tags = get_all_tags()
     assert any(tag.name == tag_data['name'] and tag.category == tag_data['category'] for tag in tags)
-    assert FLASH_MESSAGES["CREATE_TAG_SUCCESS"].encode() in response.data
+    assert FlashMessages.CREATE_TAG_SUCCESS.value.encode() in response.data
 
 def test_create_tag_with_invalid_form_data(logged_in_admin):
     create_response = logged_in_admin.get(url_for('admin.tag.create'))
@@ -38,7 +38,7 @@ def test_create_tag_with_invalid_form_data(logged_in_admin):
     }, follow_redirects=True)
 
     assert response.status_code == 200
-    assert FLASH_MESSAGES["GENERIC_ERROR"].encode() in response.data
+    assert FlashMessages.GENERIC_ERROR.value.encode() in response.data
 
 def test_create_tag_with_integrity_error(logged_in_admin, tag_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
@@ -60,13 +60,13 @@ def test_create_tag_with_integrity_error(logged_in_admin, tag_data, db_session, 
         }, follow_redirects=True)
 
         assert response.status_code == 200
-        assert FLASH_MESSAGES["CREATE_TAG_ERROR"].encode() in response.data
+        assert FlashMessages.CREATE_TAG_ERROR.value.encode() in response.data
 
 def test_delete_nonexistent_tag(logged_in_admin):
     # Attempt to delete a tag that does not exist
     response = logged_in_admin.post(url_for('admin.tag.delete', id=9999), follow_redirects=True)
     assert response.status_code == 200
-    assert FLASH_MESSAGES["GENERIC_ERROR"].encode() in response.data
+    assert FlashMessages.GENERIC_ERROR.value.encode() in response.data
 
 def test_delete_tag_with_integrity_error(logged_in_admin, tag_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
@@ -81,7 +81,7 @@ def test_delete_tag_with_integrity_error(logged_in_admin, tag_data, db_session, 
 
         response = logged_in_admin.post(url_for('admin.tag.delete', id=new_tag.id), follow_redirects=True)
         assert response.status_code == 200
-        assert FLASH_MESSAGES["DELETE_TAG_ERROR"].encode() in response.data
+        assert FlashMessages.DELETE_TAG_ERROR.value.encode() in response.data
 
 def test_index_route(logged_in_admin, tag_data, db_session):
     with logged_in_admin.application.app_context():
@@ -127,7 +127,7 @@ def test_update_tag_with_valid_data(logged_in_admin, tag_data, db_session):
         assert response.status_code == 200
         tags = get_all_tags()
         assert any(tag.name == tag_data['name'] and tag.category == tag_data['category'] for tag in tags)
-        assert FLASH_MESSAGES["UPDATE_TAG_SUCCESS"].encode() in response.data
+        assert FlashMessages.UPDATE_TAG_SUCCESS.value.encode() in response.data
 
 def test_update_tag_with_invalid_form_data(logged_in_admin, tag_data, db_session):
     with logged_in_admin.application.app_context():
@@ -146,7 +146,7 @@ def test_update_tag_with_invalid_form_data(logged_in_admin, tag_data, db_session
         )
         
         assert response.status_code == 200
-        assert FLASH_MESSAGES["GENERIC_ERROR"].encode() in response.data
+        assert FlashMessages.GENERIC_ERROR.value.encode() in response.data
 
 def test_update_tag_with_integrity_error(logged_in_admin, tag_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
@@ -174,4 +174,4 @@ def test_update_tag_with_integrity_error(logged_in_admin, tag_data, db_session, 
         )
         
         assert response.status_code == 200
-        assert FLASH_MESSAGES["UPDATE_TAG_ERROR"].encode() in response.data
+        assert FlashMessages.UPDATE_TAG_ERROR.value.encode() in response.data
