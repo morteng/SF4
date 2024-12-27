@@ -14,6 +14,9 @@ def client(app):
 
 def test_organization_form_valid_data(app, client):
     """Test organization form with valid data"""
+    # Ensure CSRF is enabled for this test
+    app.config['WTF_CSRF_ENABLED'] = True
+    
     # Make a request to initialize the session
     client.get('/')
     

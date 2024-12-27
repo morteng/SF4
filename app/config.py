@@ -29,6 +29,7 @@ class TestConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     WTF_CSRF_ENABLED = True  # Enable CSRF in testing to match production
+    WTF_CSRF_SECRET_KEY = 'test-secret-key'  # Add a test CSRF secret key
     SERVER_NAME = 'localhost'
     APPLICATION_ROOT = '/'
     PREFERRED_URL_SCHEME = 'http'

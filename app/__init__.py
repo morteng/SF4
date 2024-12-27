@@ -27,7 +27,7 @@ def create_app(config_name='development'):
 
     # Configure CSRF protection
     app.config['WTF_CSRF_ENABLED'] = True
-    app.config['WTF_CSRF_SECRET_KEY'] = app.config['SECRET_KEY']
+    app.config['WTF_CSRF_SECRET_KEY'] = app.config.get('WTF_CSRF_SECRET_KEY', app.config['SECRET_KEY'])
     csrf = CSRFProtect()
     csrf.init_app(app)
 
