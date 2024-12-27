@@ -39,19 +39,16 @@ def test_organization_form_valid_data(app, client):
         with client.session_transaction() as session:
             csrf_token = session['csrf_token']
             
-        # Create form with the existing CSRF token
-        form = OrganizationForm()
-        form.csrf_token.data = csrf_token  # Explicitly set the CSRF token
-        # Validate the CSRF token instead of direct comparison
-        assert form.validate_csrf_token(form.csrf_token), "CSRF token validation failed"
-
-        # Create form with valid data and the actual CSRF token
+        # Create form with valid data including the CSRF token
         form = OrganizationForm(data={
             'name': 'Valid Org',
             'description': 'Valid description',
             'homepage_url': 'https://valid.org',
             'csrf_token': csrf_token  # Use the session token
         })
+            
+        # Validate the form (this will automatically validate the CSRF token)
+        assert form.validate(), "Form validation failed"
         
         # Debug logging for validation errors and response
         if not form.validate():
