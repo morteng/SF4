@@ -39,10 +39,11 @@
 - Must include:
   - Timestamp (UTC)
   - User ID
+  - IP address
   - Action type (create/update/delete)
   - Object type and ID
-  - Details of the operation
-  - Success/failure status
+  - Details before/after changes
+  - Operation status
 
 ### Testing with CSRF and Error Handling
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`

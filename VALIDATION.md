@@ -2,13 +2,10 @@
 
 ## Audit Log Validation
 - Verify all CRUD operations create audit logs
-- Check logs contain required fields:
-  - user_id
-  - action
-  - object_type
-  - object_id
-  - timestamp
-  - ip_address
+- Check logs contain:
+  - user_id, action, object_type, object_id
+  - timestamp, ip_address
+  - details_before, details_after
 - Ensure logs are created for both success and failure cases
 - Validate audit log details field contains operation-specific information
 - Verify object_type is always set (defaults to 'User' if not specified)
