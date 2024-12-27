@@ -33,7 +33,7 @@ class TestingConfig(Config):
     DEBUG = False
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    WTF_CSRF_ENABLED = False  # Disable CSRF in testing
+    WTF_CSRF_ENABLED = True  # Enable CSRF in testing
     SERVER_NAME = 'localhost'
     APPLICATION_ROOT = '/'
     PREFERRED_URL_SCHEME = 'http'
