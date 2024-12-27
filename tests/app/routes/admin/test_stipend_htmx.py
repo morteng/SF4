@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import logging  # Import the logging module
 from app.models.stipend import Stipend
 from tests.conftest import logged_in_admin, db_session, stipend_data
-from app.constants import FLASH_MESSAGES, FLASH_CATEGORY_ERROR, FLASH_CATEGORY_SUCCESS  # Import the constants
+from app.constants import FlashMessages, FlashCategory  # Import the constants
 
 def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
@@ -18,7 +18,7 @@ def test_create_stipend_with_invalid_form_data_htmx(stipend_data, logged_in_admi
         )
 
         assert response.status_code == 400  # Ensure status code is 400 for invalid data
-        assert b'Name is required.' in response.data  # Updated to match the actual error message
+        assert FlashMessages.FORM_FIELD_REQUIRED.value.format(field="Name") in response.data
 
 def test_create_stipend_with_invalid_application_deadline(stipend_data, logged_in_admin, db_session):
     test_cases = [
@@ -83,7 +83,7 @@ def test_create_stipend_with_past_date(stipend_data, logged_in_admin, db_session
             }
         )
         assert response.status_code == 400
-        assert b'Application deadline cannot be in the past' in response.data
+        assert FlashMessages.INVALID_DATE_PAST.value in response.data
 
 def test_create_stipend_with_far_future_date(stipend_data, logged_in_admin, db_session):
     with logged_in_admin.application.app_context():
@@ -97,5 +97,5 @@ def test_create_stipend_with_far_future_date(stipend_data, logged_in_admin, db_s
             }
         )
         assert response.status_code == 400
-        assert b'Application deadline cannot be more than 5 years in the future' in response.data
+        assert FlashMessages.INVALID_DATE_FUTURE.value in response.data
 
