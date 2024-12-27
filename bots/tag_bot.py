@@ -25,16 +25,25 @@ class TagBot:
             
             # Basic tagging logic
             for stipend in untagged_stipends:
-                # Example: Tag based on keywords in description
-                if "research" in stipend.description.lower():
-                    research_tag = Tag.query.filter_by(name="Research").first()
-                    if research_tag:
-                        stipend.tags.append(research_tag)
-                
-                if "internship" in stipend.description.lower():
-                    internship_tag = Tag.query.filter_by(name="Internship").first()
-                    if internship_tag:
-                        stipend.tags.append(internship_tag)
+                # Enhanced tagging logic
+                tags_to_add = []
+            
+                # Check for multiple keywords
+                keywords = {
+                    'Research': ['research', 'study', 'academic'],
+                    'Internship': ['internship', 'training', 'placement'],
+                    'Scholarship': ['scholarship', 'grant', 'funding']
+                }
+            
+                for tag_name, keyword_list in keywords.items():
+                    if any(keyword in stipend.description.lower() for keyword in keyword_list):
+                        tag = Tag.query.filter_by(name=tag_name).first()
+                        if tag and tag not in stipend.tags:
+                            tags_to_add.append(tag)
+            
+                # Add all matching tags
+                if tags_to_add:
+                    stipend.tags.extend(tags_to_add)
             
             db.session.commit()
                 

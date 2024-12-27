@@ -55,6 +55,14 @@ def create_user(form_data):
         email = form_data['email']
         password = form_data['password']
         is_admin = form_data.get('is_admin', False)
+        
+        # Detailed audit logging
+        audit_details = {
+            'username': username,
+            'email': email,
+            'is_admin': is_admin,
+            'created_by': current_user.username
+        }
 
         # Validate password strength
         if not validate_password_strength(password):
