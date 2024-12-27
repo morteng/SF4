@@ -67,7 +67,7 @@ def create():
                                     form=form,
                                     notification_count=notification_count), 400
                 
-            # Create user
+            # Create user with audit logging
             user_data = {
                 'username': form.username.data,
                 'email': form.email.data,
@@ -86,8 +86,18 @@ def create():
                 ip_address=request.remote_addr
             )
             
+            # Create audit log
+            AuditLog.create(
+                user_id=current_user.id,
+                action='create_user',
+                object_type='User',
+                object_id=new_user.id,
+                details=f'Created user {new_user.username}',
+                ip_address=request.remote_addr
+            )
+            
             flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
-            return redirect(url_for('admin.user.index'))
+            return redirect(url_for('admin.user.index')), 200
             
         except Exception as e:
             db.session.rollback()
@@ -219,7 +229,18 @@ def delete(id):
             flash_message("Cannot delete your own account", FlashCategory.ERROR.value)
             return redirect(url_for('admin.user.index')), 400
             
-        delete_user(user)
+        try:
+            delete_user(user)
+            
+            # Create audit log
+            AuditLog.create(
+                user_id=current_user.id,
+                action='delete_user',
+                object_type='User',
+                object_id=user.id,
+                details=f'Deleted user {user.username}',
+                ip_address=request.remote_addr
+            )
         
         # Audit log
         logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.utcnow()}")

@@ -83,6 +83,16 @@ def test_create_user_route(logged_in_admin, user_data, db_session):
     assert audit_log is not None
     assert audit_log.details == f'Created user {user_data["username"]}'
     assert audit_log.ip_address is not None
+    
+    # Verify audit log
+    audit_log = AuditLog.query.filter_by(
+        action='create_user',
+        object_type='User',
+        object_id=created_user.id
+    ).first()
+    assert audit_log is not None
+    assert audit_log.details == f'Created user {user_data["username"]}'
+    assert audit_log.ip_address is not None
     assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data
     
     # Verify user creation
