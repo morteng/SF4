@@ -33,15 +33,12 @@ def create():
             db.session.rollback()
             error_message = f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}"
             flash_message(error_message, FlashCategory.ERROR.value)
-            # Ensure the flash message is available in the current request
             session.modified = True
-            # For HTMX requests, return the partial form
-            if request.headers.get('HX-Request') == 'true':
-                return render_template('admin/users/_create_form.html', 
-                                    form=form, 
-                                    flash_messages=[(FlashCategory.ERROR.value, error_message)]), 400
-            # For regular requests, return the full template directly
-            return render_template('admin/users/create.html', 
+            
+            # For both HTMX and regular requests, render the appropriate template directly
+            template = 'admin/users/_create_form.html' if request.headers.get('HX-Request') == 'true' else 'admin/users/create.html'
+            
+            return render_template(template, 
                                 form=form, 
                                 flash_messages=[(FlashCategory.ERROR.value, error_message)]), 400
     else:
