@@ -33,16 +33,10 @@ def create():
     else:
         # Handle form validation errors
         for field_name, errors in form.errors.items():
-            # Use 'Org Name' as the label for the name field
             field_label = 'Org Name' if field_name == 'name' else form[field_name].label.text
             for error in errors:
-                # Handle the specific required field message
                 if field_name == 'name' and 'This field is required.' in error:
                     flash_message("Org Name: This field is required.", FLASH_CATEGORY_ERROR)
-                elif field_name == 'name' and 'Organization name must contain only letters, numbers, and spaces.' in error:
-                    flash_message("Org Name: Organization name must contain only letters, numbers, and spaces.", FLASH_CATEGORY_ERROR)
-                elif field_name == 'name' and 'Organization with this name already exists.' in error:
-                    flash_message("Org Name: Organization with this name already exists.", FLASH_CATEGORY_ERROR)
                 else:
                     flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
