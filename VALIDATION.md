@@ -237,7 +237,7 @@
 {
     "name": "Updated Bot",
     "description": "Updated description",
-    "status": "true"
+    "status": "active"
 }
 
 **Invalid Inputs**:
