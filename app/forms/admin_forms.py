@@ -55,30 +55,10 @@ class StipendForm(FlaskForm):
     )
 
     def validate_application_deadline(self, field):
-        if not field.data:
-            raise ValidationError('Date is required')
+        # Skip validation if the field is empty or invalid (CustomDateTimeField handles this)
+        if not field.data or field.errors:
+            return
         
-        # Handle string input
-        if isinstance(field.data, str):
-            try:
-                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-            except ValueError as e:
-                error_str = str(e)
-                if 'does not match format' in error_str:
-                    raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-                elif 'day is out of range' in error_str:
-                    raise ValidationError('Invalid date values (e.g., Feb 30)')
-                elif 'month is out of range' in error_str:
-                    raise ValidationError('Invalid date values (e.g., Feb 30)')
-                elif 'hour must be in' in error_str:
-                    raise ValidationError('Invalid time values (e.g., 25:61:61)')
-                elif 'minute must be in' in error_str:
-                    raise ValidationError('Invalid time values (e.g., 25:61:61)')
-                elif 'second must be in' in error_str:
-                    raise ValidationError('Invalid time values (e.g., 25:61:61)')
-                else:
-                    raise ValidationError('Invalid date values (e.g., Feb 30)')
-
         # Ensure both datetimes are timezone-aware
         now = datetime.now(pytz.UTC)
         if field.data.tzinfo is None:
