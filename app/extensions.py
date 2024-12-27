@@ -10,10 +10,24 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 csrf = CSRFProtect()  # Initialize CSRF protection
 migrate = Migrate()
-limiter = Limiter(key_func=get_remote_address)
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
+)
 
 Session = None
 db_session = None
+
+def init_extensions(app):
+    global Session, db_session
+    with app.app_context():
+        Session = sessionmaker(bind=db.engine)
+        db_session = scoped_session(Session)
+        limiter.init_app(app)
+        
+        # Apply rate limits to admin routes
+        limiter.limit("100/hour")(app.blueprints['admin'])
 
 def init_extensions(app):
     global Session, db_session
