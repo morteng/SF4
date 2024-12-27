@@ -33,11 +33,22 @@ def client(app):
     return app.test_client()
 
 def test_profile_form_valid(client, setup_database):
-    # Mock the database queries to return None (no existing user)
-    with patch('app.forms.user_forms.User.query.filter_by') as mock_filter_by:
-        mock_filter_by.return_value.first.return_value = None
+    # Create a test user
+    password_hash = generate_password_hash("password123")
+    user = User(username="testuser", email="test@example.com", password_hash=password_hash)
+    db.session.add(user)
+    db.session.commit()
 
-        # First make a GET request to establish the session and get CSRF token
+    # Log in the user
+    with client:
+        login_response = client.post(url_for('public.login'), data={
+            'username': 'testuser',
+            'password': 'password123',
+            'csrf_token': generate_csrf_token()
+        }, follow_redirects=True)
+        assert login_response.status_code == 200
+
+        # Now access the profile edit page
         get_response = client.get(url_for('user.edit_profile'))
         assert get_response.status_code == 200
         
@@ -54,6 +65,10 @@ def test_profile_form_valid(client, setup_database):
         # Verify the response
         assert response.status_code == 200
         assert b"Profile updated successfully" in response.data
+
+        # Clean up
+        db.session.delete(user)
+        db.session.commit()
 
 def test_profile_form_invalid_same_username(client, setup_database):
     password_hash = generate_password_hash("password123")
