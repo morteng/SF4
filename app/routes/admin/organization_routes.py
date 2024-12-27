@@ -35,7 +35,7 @@ def create():
         for field_name, errors in form.errors.items():
             field_label = 'Org Name' if field_name == 'name' else form[field_name].label.text
             for error in errors:
-                if 'This field is required.' in error:
+                if 'This field is required.' in error.strip():
                     flash_message(f"{field_label}: This field is required.", FLASH_CATEGORY_ERROR)
                 elif 'already exists' in error:
                     flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
