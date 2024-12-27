@@ -99,13 +99,15 @@ def edit(id):
                 db.session.rollback()
                 flash_message(FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
         else:
-            # Handle form validation errors
-            for field_name, errors in form.errors.items():
-                field_label = form[field_name].label.text
-                for error in errors:
-                    if 'This field is required.' in error:
-                        flash_message(f"{field_label}: This field is required.", FLASH_CATEGORY_ERROR)
-                    else:
-                        flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
+            flash_form_errors(form)
 
     return render_template('admin/organizations/form.html', form=form, organization=organization)
+
+def flash_form_errors(form):
+    """Helper function to flash form validation errors."""
+    for field_name, errors in form.errors.items():
+        field_label = form[field_name].label.text
+        for error in errors:
+            message = f"{field_label}: {error}"
+            flash_message(message, FLASH_CATEGORY_ERROR)
+            logger.warning(f"Form validation error: {message}")
