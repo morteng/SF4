@@ -27,21 +27,16 @@ class CustomDateTimeField(DateTimeField):
             if not date_str:
                 self.errors.append(self.error_messages['required'])
                 return
-            print(f"Processing date string: {date_str}")  # Debugging
             
             try:
                 # First try parsing the date string
                 parsed_dt = datetime.strptime(date_str, self.format)
                 
-                # Validate date components first
-                if not self._validate_date_components(parsed_dt):
-                    self.errors = [self.error_messages['invalid_date']]
-                    return
+                # Validate date components
+                self._validate_date_components(parsed_dt)
                 
-                # Then validate time components
-                if not self._validate_time_components(parsed_dt):
-                    self.errors = [self.error_messages['invalid_time']]
-                    return
+                # Validate time components
+                self._validate_time_components(parsed_dt)
                 
                 # If parsing succeeds, proceed with timezone handling
                 local_tz = timezone(self.timezone_str)
@@ -60,9 +55,10 @@ class CustomDateTimeField(DateTimeField):
                     self.errors = [self.error_messages['invalid_time']]
                 else:
                     self.errors = [self.error_messages['invalid_date']]
+            except ValidationError as e:
+                self.errors = [str(e)]
             except pytz.UnknownTimeZoneError:
-                self.errors.append(self.error_messages['invalid_timezone'])
-                self.errors.append(self.error_messages['invalid_timezone'])
+                self.errors = [self.error_messages['invalid_timezone']]
 
     def _validate_time_components(self, dt):
         try:
