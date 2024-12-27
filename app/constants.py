@@ -51,6 +51,12 @@ FLASH_MESSAGES = {
     "INVALID_FUTURE_DATE": "Date must be in the future.",
     "INVALID_PAST_DATE": "Date must be in the past.",
 
+    # Form Validation Messages
+    "FORM_FIELD_REQUIRED": "{field} is required.",
+    "FORM_INVALID_URL": "{field} must be a valid URL starting with http:// or https://.",
+    "FORM_INVALID_DATE_FORMAT": "{field} must be in the format YYYY-MM-DD HH:MM:SS.",
+    "FORM_INVALID_CHARACTERS": "{field} contains invalid characters.",
+
     # Stipend Management
     "CREATE_STIPEND_SUCCESS": "Stipend created successfully.",
     "CREATE_STIPEND_ERROR": "Failed to create stipend.",
