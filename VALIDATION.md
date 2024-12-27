@@ -23,6 +23,8 @@
 ### CSRF Token Validation in Tests
 - Initialize session with `client.get('/')` before form tests
 - Verify CSRF token presence in session after form creation
+- Verify CSRF token value matches between form and session
+- Use `client.session_transaction()` to access and verify session data
 - Keep form creation and validation in the same context
 - Ensure test client maintains session state between requests
 - Add assertions to verify CSRF token presence in session
