@@ -12,8 +12,5 @@
 - Use form.validate() instead of manual CSRF validation
 - Verify UI & DB state in tests
 - Ensure CSRF protection matches production environment
-- Add CSRF token validation tests for all forms
-- Document session initialization requirements
-- Use session_transaction() for session verification
-- Verify CSRF token generation with form.csrf_token.current_token
+- Verify error messages match actual implementation
 
