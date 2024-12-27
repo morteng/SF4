@@ -14,15 +14,17 @@ def client(app):
 
 def test_organization_form_valid_data(app, client):
     """Test organization form with valid data"""
+    # Make a request to initialize the session
+    client.get('/')
+    
     with app.test_request_context():
-        # Initialize session and create form in the same context
-        client.get('/')
+        # Create form within the request context
         form = OrganizationForm()
         
         # Verify CSRF token in session
         with client.session_transaction() as session:
-            assert 'csrf_token' in session
-            assert form.csrf_token.current_token == session['csrf_token']
+            assert 'csrf_token' in session, "CSRF token not found in session"
+            assert form.csrf_token.current_token == session['csrf_token'], "CSRF token mismatch"
             
             # Test form validation with CSRF token
             # Get CSRF token from the form

@@ -25,8 +25,11 @@ def create_app(config_name='development'):
     db.init_app(app)
     login_manager.init_app(app)
 
+    # Configure CSRF protection
+    app.config['WTF_CSRF_ENABLED'] = True
+    app.config['WTF_CSRF_SECRET_KEY'] = app.config['SECRET_KEY']
     csrf = CSRFProtect()
-    csrf.init_app(app)  # Initialize CSRF protection
+    csrf.init_app(app)
 
     migrate.init_app(app, db)  # Initialize Flask-Migrate here
 
