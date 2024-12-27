@@ -7,6 +7,7 @@
 - Include CSRF validation in all form tests
 - Use request context for form tests
 - Use form-generated CSRF tokens in tests
+- Ensure test client maintains session state
 
 ## Form Validation
 - Validate CSRF tokens in all forms
