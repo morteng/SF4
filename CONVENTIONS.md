@@ -21,6 +21,7 @@
   - Leap year validation (including Feb 29 in non-leap years) with specific error message: 'Invalid date values (e.g., Feb 29 in non-leap years)'
   - Invalid date detection with clear error messages
   - Missing/empty values with 'required' error message
+  - Proper error state propagation in validation chain
 - CSRF tokens required in all forms (can be disabled in tests using meta={'csrf': False})
 - Always include required fields in test data
 - Rate limit sensitive endpoints

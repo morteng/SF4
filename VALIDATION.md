@@ -26,6 +26,7 @@
   - Leap year violations (including Feb 29 in non-leap years)
   - Timezone conversion errors
   - Missing/empty values
+  - Proper error state propagation in validation chain
 - Log details
 - Use enums for user feedback
 - Preserve form state
