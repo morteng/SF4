@@ -90,9 +90,9 @@ def edit(id):
                 flash_message(FLASH_MESSAGES['UPDATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
         else:
             # Flash form validation errors with proper field names
-            for field, errors in form.errors.items():
-                field_obj = getattr(form, field)
-                field_label = field_obj.label.text
+            for field_name, errors in form.errors.items():
+                field = getattr(form, field_name)
+                field_label = field.label.text
                 for error in errors:
                     # Format the error message as "Field Label: Error Message"
                     flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
