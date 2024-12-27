@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, url_for
 from functools import wraps
 from flask_login import current_user
 from app.models.notification import Notification
+from app.models.audit_log import AuditLog
 from app.extensions import db
 from app.utils import flash_message
 from app.constants import FlashMessages, FlashCategory
