@@ -48,13 +48,13 @@ class CustomDateTimeField(DateTimeField):
                         self.errors = []
                         self.errors.append(self.error_messages['invalid_leap_year'])
                         self.data = None
-                        return False  # Explicitly return False for invalid leap year
+                        return  # Stop processing if invalid leap year
             except ValueError as e:
-                # If we can't parse the date, add error and return False
+                # If we can't parse the date, add error and stop processing
                 self.errors = []
                 self.errors.append(str(e))
                 self.data = None
-                return False
+                return  # Stop processing if invalid date format
             try:
                 # Try to parse the full date string
                 parsed_dt = datetime.strptime(date_str, self.format)
