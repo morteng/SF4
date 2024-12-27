@@ -195,7 +195,7 @@ class BotForm(FlaskForm):
 class OrganizationForm(FlaskForm):
     id = HiddenField('ID')
     name = StringField('Org Name', validators=[
-        DataRequired(message="This field is required."),
+        DataRequired(message="Org Name: This field is required."),
         Length(max=100, message="Organization name cannot exceed 100 characters."),
         Regexp('^[A-Za-z0-9 ]*$', message='Organization name must contain only letters, numbers, and spaces.')
     ])
