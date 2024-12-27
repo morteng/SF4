@@ -122,4 +122,4 @@ def edit_profile():
 @admin_required
 def index():
     users = get_all_users()
-    return render_template('admin/users/index.html', users=users)
+    return render_template('admin/users/index.html', users=users, csrf_token=generate_csrf())
