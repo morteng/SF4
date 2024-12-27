@@ -88,6 +88,9 @@ class FlashMessages(str, Enum):
     CSRF_INVALID = "Invalid CSRF token. Please refresh the page and try again."
 
     # Authentication
+    USERNAME_REQUIRED = "Username is required."
+    USERNAME_LENGTH = "Username must be between 3 and 50 characters."
+    USERNAME_FORMAT = "Username can only contain letters, numbers and underscores."
     LOGIN_SUCCESS = "Logged in successfully."
     LOGIN_ERROR = "Invalid username or password."
     LOGOUT_SUCCESS = "Logged out successfully."
