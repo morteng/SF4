@@ -41,7 +41,6 @@ class CustomDateTimeField(DateTimeField):
                     return
                 
                 # If parsing succeeds, proceed with timezone handling
-                # Use the stored timezone string directly
                 local_tz = timezone(self.timezone_str)
                 local_dt = local_tz.localize(parsed_dt, is_dst=None)
                 self.data = local_dt.astimezone(utc)
@@ -67,6 +66,13 @@ class CustomDateTimeField(DateTimeField):
             
             # Additional validation for edge cases
             if dt.year < 1900 or dt.year > 2100:
+                self.errors.append(self.error_messages['invalid_date'])
+                return False
+                
+            # Check for invalid month/day combinations
+            try:
+                datetime(dt.year, dt.month, dt.day)
+            except ValueError:
                 self.errors.append(self.error_messages['invalid_date'])
                 return False
                 
