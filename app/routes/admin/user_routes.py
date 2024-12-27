@@ -256,6 +256,8 @@ def delete(id):
             logging.error(f"Failed to delete user {id}: {e}")
             flash_message(f"{FlashMessages.DELETE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
             return redirect(url_for('admin.user.index')), 500
+        finally:
+            db.session.close()
 
 @admin_user_bp.route('/<int:id>/reset_password', methods=['POST'])
 @limiter.limit("5 per hour")
