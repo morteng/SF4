@@ -4,7 +4,7 @@
             <div class="flex-shrink-0">
                 <a href="{{ url_for('public.index') }}" class="text-white font-bold text-xl">Brand</a>
             </div>
-            <div id="nav-menu" class="hidden md:flex ml-10 space-x-4">
+            <div id="nav-menu" class="hidden md:flex ml-10 space-x-4 items-center">
                 {% if current_user.is_authenticated %}
                     {% if current_user.is_admin %}
                         <a href="#" hx-get="{{ url_for('admin.dashboard.dashboard') }}" hx-target="#main-content" hx-swap="innerHTML" class="nav-link relative">
@@ -25,6 +25,12 @@
                         <a href="{{ url_for('user.profile') }}" class="nav-link">Profile</a>
                     {% endif %}
                     <a href="{{ url_for('public.logout') }}" class="nav-link text-red-400">Logout</a>
+                    <!-- Notification badge -->
+                    <div class="notification-badge ml-4">
+                        <span class="bg-blue-500 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                            {{ notification_count if notification_count is defined else 0 }}
+                        </span>
+                    </div>
                 {% else %}
                     <a href="{{ url_for('public.login') }}" class="nav-link">Login</a>
                     <a href="{{ url_for('public.register') }}" class="nav-link text-green-400">Register</a>
