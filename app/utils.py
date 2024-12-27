@@ -1,6 +1,13 @@
 # app/utils.py
 import os
+import logging
+from typing import Any, Union
+import logging
 from flask import abort, redirect, url_for, flash
+from typing import Any, Union
+
+# Configure logging
+logger = logging.getLogger(__name__)
 from flask_login import current_user, login_required as _login_required  # Import the original login_required
 from .models.user import User
 from werkzeug.security import generate_password_hash
@@ -18,24 +25,47 @@ def admin_required(f):
 # Define login_required in utils.py
 login_required = _login_required
 
-def init_admin_user():
-    load_dotenv()  # Load environment variables from .env file
-    username = os.environ.get('ADMIN_USERNAME')
-    password = os.environ.get('ADMIN_PASSWORD')
-    email = os.environ.get('ADMIN_EMAIL')
+def init_admin_user() -> None:
+    """
+    Initialize the admin user from environment variables.
+    
+    Raises:
+        RuntimeError: If required environment variables are missing
+    """
+    try:
+        load_dotenv()  # Load environment variables from .env file
+        username = os.environ.get('ADMIN_USERNAME')
+        password = os.environ.get('ADMIN_PASSWORD')
+        email = os.environ.get('ADMIN_EMAIL')
 
-    if not User.query.filter_by(username=username).first():
-        admin_user = User(
-            username=username,
-            password_hash=generate_password_hash(password),
-            email=email,
-            is_admin=True
-        )
-        db.session.add(admin_user)
-        db.session.commit()
+        if not all([username, password, email]):
+            raise RuntimeError("Missing required environment variables for admin user")
 
-def format_error_message(field, error):
-    """Format error messages consistently for both HTMX and regular requests"""
+        if not User.query.filter_by(username=username).first():
+            admin_user = User(
+                username=username,
+                password_hash=generate_password_hash(password),
+                email=email,
+                is_admin=True
+            )
+            db.session.add(admin_user)
+            db.session.commit()
+            logger.info("Admin user initialized successfully")
+    except Exception as e:
+        logger.error(f"Error initializing admin user: {str(e)}")
+        raise RuntimeError(f"Failed to initialize admin user: {str(e)}")
+
+def format_error_message(field: Any, error: Union[str, Exception]) -> str:
+    """
+    Format error messages consistently for both HTMX and regular requests.
+    
+    Args:
+        field: The form field that generated the error
+        error: The error message or exception
+        
+    Returns:
+        str: Formatted error message with field name/label
+    """
     error_map = {
         'invalid_format': 'Invalid format. Please use YYYY-MM-DD HH:MM:SS',
         'invalid_date': 'Invalid date values',

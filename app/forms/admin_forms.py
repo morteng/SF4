@@ -1,12 +1,17 @@
 import pytz
+import logging
 from datetime import datetime
 from flask_wtf import FlaskForm
 from app.forms.fields import CustomDateTimeField
 from wtforms.validators import ValidationError
+import logging
 from wtforms import (
     StringField, TextAreaField, URLField, BooleanField, 
     SubmitField, SelectField, PasswordField
 )
+
+# Configure logging
+logger = logging.getLogger(__name__)
 from wtforms.validators import (
     DataRequired, Length, Optional, ValidationError, 
     URL, Email, Regexp
@@ -119,7 +124,16 @@ class TagForm(FlaskForm):
         super(TagForm, self).__init__(*args, **kwargs)
         self.original_name = original_name
 
-    def validate_name(self, name):
+    def validate_name(self, name: StringField) -> None:
+        """
+        Validate the organization name field.
+        
+        Args:
+            name: The name field to validate
+            
+        Raises:
+            ValidationError: If the name is invalid
+        """
         if self.original_name and name.data == self.original_name:
             return  # Skip validation if the name hasn't changed
         tag = Tag.query.filter_by(name=name.data).first()
