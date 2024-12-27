@@ -37,14 +37,16 @@ def create():
     form = UserForm()
     notification_count = get_notification_count(current_user.id)
     
-    # Audit log
+    # Create audit log entry
     audit_log = AuditLog(
         user_id=current_user.id,
         action='create_user',
         details_before='Creating new user',
-        timestamp=datetime.utcnow()
+        timestamp=datetime.utcnow(),
+        ip_address=request.remote_addr
     )
     db.session.add(audit_log)
+    db.session.commit()
     if form.validate_on_submit():
         try:
             new_user = create_user(form.data)
