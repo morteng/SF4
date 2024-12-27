@@ -1,6 +1,6 @@
 ## Coding Conventions
 ### Testing
-- Use enums (`FlashMessages`, `FlashCategory`) consistently
+- Use enums consistently
 - Verify UI & DB state
 - Use fixtures & parameterized tests
 
@@ -10,7 +10,7 @@
 - Rate limit sensitive endpoints
 
 ### Code Organization
-- CSS: Tailwind in `main.css`
-- JS: HTMX in `main.js`
-- Constants: Use enums for messages and categories
+- CSS: Tailwind in main.css
+- JS: HTMX in main.js
+- Constants: Use enums
 

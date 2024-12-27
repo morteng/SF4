@@ -17,7 +17,7 @@
 - Preserve form state
 
 ## Security
-- Sanitize with bleach
+- Sanitize inputs
 - CSRF tokens required
 - Rate limit sensitive endpoints
 
