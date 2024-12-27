@@ -35,8 +35,8 @@ def create():
             flash_message(error_message, FlashCategory.ERROR.value)
             if request.headers.get('HX-Request') == 'true':
                 return render_template('admin/users/_create_form.html', form=form), 400
-            # Redirect back to create page to show error message
-            return redirect(url_for('admin.user.create')), 400
+            # Render the create template directly with error status
+            return render_template('admin/users/create.html', form=form), 400
     else:
         if request.headers.get('HX-Request') == 'true':
             # HTMX response - return form with errors
