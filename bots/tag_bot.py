@@ -20,12 +20,23 @@ class TagBot:
             
             # Get untagged stipends
             from app.models.stipend import Stipend
+            from app.models.tag import Tag
             untagged_stipends = Stipend.query.filter(~Stipend.tags.any()).all()
             
             # Basic tagging logic
             for stipend in untagged_stipends:
-                # Add your tagging logic here
-                pass
+                # Example: Tag based on keywords in description
+                if "research" in stipend.description.lower():
+                    research_tag = Tag.query.filter_by(name="Research").first()
+                    if research_tag:
+                        stipend.tags.append(research_tag)
+                
+                if "internship" in stipend.description.lower():
+                    internship_tag = Tag.query.filter_by(name="Internship").first()
+                    if internship_tag:
+                        stipend.tags.append(internship_tag)
+            
+            db.session.commit()
                 
             self.status = "completed"
             self.last_run = datetime.utcnow()

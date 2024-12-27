@@ -116,7 +116,9 @@ def delete(id):
 @login_required
 def index():
     organizations = get_all_organizations()
-    return render_template('admin/organizations/index.html', organizations=organizations)
+    return render_template('admin/organizations/index.html', 
+                         organizations=organizations,
+                         notification_count=get_unread_notification_count())
 
 @admin_org_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required

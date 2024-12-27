@@ -134,6 +134,11 @@ def validate_password_strength(password: str) -> bool:
         return False
     return True
 
+def get_unread_notification_count() -> int:
+    """Get count of unread notifications"""
+    from app.models.notification import Notification
+    return Notification.query.filter_by(read_status=False).count()
+
 def generate_temp_password(length: int = 12) -> str:
     """Generate a temporary password with the specified length.
     

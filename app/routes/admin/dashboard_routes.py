@@ -9,4 +9,6 @@ admin_dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 @login_required
 @admin_required
 def dashboard():
-    return render_template('admin/dashboard.html')
+    from app.models.notification import Notification
+    notification_count = Notification.query.filter_by(read_status=False).count()
+    return render_template('admin/dashboard.html', notification_count=notification_count)

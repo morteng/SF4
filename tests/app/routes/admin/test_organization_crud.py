@@ -19,7 +19,36 @@ def extract_csrf_token(response_data):
         return match.group(1)
     return None
 
-def test_create_organization(logged_in_admin: FlaskClient, db_session: Session, organization_data: dict) -> None:
+def test_organization_crud_workflow(logged_in_admin: FlaskClient, db_session: Session) -> None:
+    """Test full CRUD workflow for organizations"""
+    # Create
+    create_response = logged_in_admin.post(url_for('admin.organization.create'), data={
+        'name': 'Test Org',
+        'description': 'Test Description',
+        'homepage_url': 'http://test.org',
+        'csrf_token': extract_csrf_token(logged_in_admin.get(url_for('admin.organization.create')).data)
+    })
+    assert create_response.status_code == 302
+    
+    # Read
+    org = Organization.query.filter_by(name='Test Org').first()
+    assert org is not None
+    
+    # Update
+    update_response = logged_in_admin.post(url_for('admin.organization.edit', id=org.id), data={
+        'name': 'Updated Org',
+        'description': 'Updated Description',
+        'homepage_url': 'http://updated.org',
+        'csrf_token': extract_csrf_token(logged_in_admin.get(url_for('admin.organization.edit', id=org.id)).data)
+    })
+    assert update_response.status_code == 302
+    updated_org = Organization.query.get(org.id)
+    assert updated_org.name == 'Updated Org'
+    
+    # Delete
+    delete_response = logged_in_admin.post(url_for('admin.organization.delete', id=org.id))
+    assert delete_response.status_code == 302
+    assert Organization.query.get(org.id) is None
     """Test successful organization creation workflow.
     
     Verifies that:
