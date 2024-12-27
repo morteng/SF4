@@ -5,7 +5,7 @@
 - [ ] Increase test coverage to 80%+
 
 ## Best Practices
-- Ensure leap year validation returns specific error message for February 29th in non-leap years
+- Ensure leap year validation returns specific error message: 'Invalid date values (e.g., Feb 29 in non-leap years)'
 - Verify date validation error propagation in form handling
 - Ensure test data includes all required fields
 - Implement proper error message handling for custom date fields
