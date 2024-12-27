@@ -1,4 +1,6 @@
 ## Coding Conventions
+- Fix one issue or file at a time, don't try to do too much in one edit. This makes it easier to understand what was changed and why. It also makes it easier to roll back changes if necessary.
+
 - Use Flask's built-in flash messaging system with `FlashMessages` and `FlashCategory` enums
 - Implement robust error handling with try-except blocks and logging
 - Use type hints for better code clarity and IDE support
