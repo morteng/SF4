@@ -76,11 +76,12 @@ def create_app(config_name='development'):
             ]
             db.session.bulk_save_objects(bots)
             
-            # Create initial notification
+            # Create initial notification with system user (0)
             notification = Notification(
                 message="System initialized successfully",
                 type="system",
-                read_status=False
+                read_status=False,
+                user_id=0  # System user
             )
             db.session.add(notification)
             
