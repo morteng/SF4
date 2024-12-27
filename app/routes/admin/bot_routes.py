@@ -49,7 +49,7 @@ def delete(id):
             flash_message(f"{FlashMessages.DELETE_BOT_ERROR.value}{str(e)}", FlashCategory.ERROR.value)
             current_app.logger.error(f"Failed to delete bot: {e}")
     else:
-        flash_message(FLASH_MESSAGES["BOT_NOT_FOUND"], FLASH_CATEGORY_ERROR)  # Use specific bot not found message
+        flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)  # Use specific bot not found message
         current_app.logger.error(f"Bot not found with id: {id}")
     return redirect(url_for('admin.bot.index'))
 
@@ -68,8 +68,8 @@ def run(id):
     if bot:
         try:
             run_bot(bot)
-            flash_message(FLASH_MESSAGES["GENERIC_SUCCESS"], FLASH_CATEGORY_SUCCESS)  # Use generic success message for running a bot
-            current_app.logger.info(f"Flash message set: {FLASH_MESSAGES['GENERIC_SUCCESS']}")
+            flash_message(FlashMessages.GENERIC_SUCCESS.value, FlashCategory.SUCCESS.value)  # Use generic success message for running a bot
+            current_app.logger.info(f"Flash message set: {FlashMessages.GENERIC_SUCCESS.value}")
         except Exception as e:
             db.session.rollback()
             flash_message(f"{FlashMessages.GENERIC_ERROR.value}{str(e)}", FlashCategory.ERROR.value)
