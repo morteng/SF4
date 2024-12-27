@@ -189,9 +189,13 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
     # Add CSRF token to user data
     user_data['csrf_token'] = csrf_token
         
-    # Create a user first
+    # Create a user first with hashed password
+    user_data_with_hash = user_data.copy()
+    del user_data_with_hash['password']  # Remove plain password
+    user_data_with_hash['password_hash'] = generate_password_hash(user_data['password'])
+    
     create_response = logged_in_admin.post('/admin/users/create', 
-                                         data=user_data,
+                                         data=user_data_with_hash,
                                          follow_redirects=True)
     assert create_response.status_code == 200
     assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in create_response.data
