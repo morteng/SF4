@@ -214,8 +214,11 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, db_session)
         # Remove follow_redirects=True so the flash stays in the session.
         response = logged_in_admin.post(url_for('admin.organization.edit', id=org.id), data=invalid_data)
 
-        # Expect a redirect (302), not a 200.
-        assert response.status_code == 302
+        # Expect form re-render (422) for invalid data
+        assert response.status_code == 422
+
+        # Check that we're still on the form page
+        assert b'Edit Organization' in response.data
 
         # Inspect session for flash messages
         with logged_in_admin.session_transaction() as sess:
@@ -224,15 +227,11 @@ def test_update_organization_with_invalid_form_data(logged_in_admin, db_session)
         # Print the flash messages to debug
         print("Flashed Messages:", flashed_messages)
 
-        expected_flash_message = FLASH_MESSAGES["UPDATE_ORGANIZATION_INVALID_FORM"]
+        # Expect field-specific validation message
         assert any(
-            cat == 'error' and msg == expected_flash_message
+            cat == 'error' and 'Org Name: This field is required.' in msg
             for cat, msg in flashed_messages
-        ), f"Flash message not found in session. Expected: {expected_flash_message}"
-
-        # Confirm the final page after redirect
-        follow_response = logged_in_admin.get(response.location)
-        assert follow_response.status_code == 200
+        ), "Field validation error not found in flash messages"
 
         # Ensure organization was not updated
         org = db_session.query(Organization).filter_by(id=org.id).first()
