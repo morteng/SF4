@@ -75,6 +75,11 @@
 - Updated dependency validation to use RequirementsParser class
 - Added error handling for missing requirements-parser package
 
+### Dependency Validation Improvements
+- Added test cases for requirements-parser package
+- Updated dependency validation to use RequirementsParser class
+- Added error handling for missing requirements-parser package
+
 ### Dependency Validation
 
 **Required Packages**:
