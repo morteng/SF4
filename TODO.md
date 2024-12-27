@@ -3,7 +3,7 @@
 ## Current Goals
 1. **Template Improvements**
    - [x] Fix template inheritance for admin bot edit page
-   - [ ] Verify all admin templates extend base.html
+   - [x] Verify all admin templates extend base.html
    - [ ] Add template inheritance tests
 
 2. **Form Validation Improvements**
