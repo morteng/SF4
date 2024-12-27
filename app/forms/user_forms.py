@@ -1,19 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, HiddenField
-import logging
-
-logger = logging.getLogger(__name__)
-import logging
-
-logger = logging.getLogger(__name__)
-import logging
-
-logger = logging.getLogger(__name__)
-from flask import session
 from wtforms.validators import DataRequired, Email, ValidationError, EqualTo, Length
 from app.models.user import User
-from app.constants import FlashMessages, FlashCategory  # Import FlashMessages and FlashCategory from constants
-from app.utils import flash_message  # Import the flash_message function
+from app.utils import generate_csrf_token
 
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[
@@ -44,6 +33,7 @@ class ProfileForm(FlaskForm):
         super().__init__(*args, **kwargs)
         self.original_username = original_username
         self.original_email = original_email
+        self.csrf_token.data = generate_csrf_token()  # Initialize CSRF token
 
 
 class LoginForm(FlaskForm):

@@ -48,15 +48,20 @@ def test_profile_form_valid(client, setup_database):
             # Test the form with valid CSRF token
             form.username.data = "newusername"
             form.email.data = "newemail@example.com"
+            # Add debugging output
+            if not form.validate():
+                print("Form validation errors:", form.errors)
+            
             assert form.validate() == True
 
             # Test form submission via POST
             response = client.post(url_for('user.edit_profile'), data={
                 'username': 'newusername',
                 'email': 'newemail@example.com',
-                'csrf_token': csrf_token  # Use the form's CSRF token
+                'csrf_token': csrf_token
             }, follow_redirects=True)
-            assert response.status_code == 200  # Check for successful response
+            
+            assert response.status_code == 200
 
 def test_profile_form_invalid_same_username(client, setup_database):
     password_hash = generate_password_hash("password123")
