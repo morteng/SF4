@@ -118,11 +118,11 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
     # Make a GET request to initialize the session and get the CSRF token
     index_response = logged_in_admin.get(url_for('admin.user.index'))
     assert index_response.status_code == 200, "Failed to load user index page"
-
+    
     # Extract the CSRF token
     csrf_token = extract_csrf_token(index_response.data)
     assert csrf_token is not None, f"CSRF token not found in the response. HTML: {index_response.data.decode()[:1000]}"
-
+    
     # Verify the token in the session matches the form token
     with logged_in_admin.session_transaction() as session:
         session_csrf_token = session.get('csrf_token')
@@ -148,6 +148,50 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
         flashed_messages = session.get('_flashes', [])
         assert any(msg[1] == FlashMessages.DELETE_USER_SUCCESS.value for msg in flashed_messages), \
             f"Expected flash message '{FlashMessages.DELETE_USER_SUCCESS.value}' not found in session"
+
+def test_deactivate_user_route(logged_in_admin, test_user):
+    # Get CSRF token
+    index_response = logged_in_admin.get(url_for('admin.user.index'))
+    csrf_token = extract_csrf_token(index_response.data)
+    
+    # Deactivate user
+    response = logged_in_admin.post(
+        url_for('admin.user.deactivate', id=test_user.id),
+        data={'csrf_token': csrf_token},
+        follow_redirects=True
+    )
+    
+    assert response.status_code == 200
+    assert FlashMessages.USER_DEACTIVATED.value.encode() in response.data
+
+def test_activate_user_route(logged_in_admin, test_user):
+    # First deactivate the user
+    test_user.is_active = False
+    db_session.commit()
+    
+    # Get CSRF token
+    index_response = logged_in_admin.get(url_for('admin.user.index'))
+    csrf_token = extract_csrf_token(index_response.data)
+    
+    # Activate user
+    response = logged_in_admin.post(
+        url_for('admin.user.activate', id=test_user.id),
+        data={'csrf_token': csrf_token},
+        follow_redirects=True
+    )
+    
+    assert response.status_code == 200
+    assert FlashMessages.USER_ACTIVATED.value.encode() in response.data
+    assert test_user.is_active is True
+
+def test_password_strength_validation():
+    # Test weak passwords
+    assert validate_password_strength("weak") is False
+    assert validate_password_strength("weak123") is False
+    assert validate_password_strength("Weak") is False
+    
+    # Test strong password
+    assert validate_password_strength("StrongPass123!") is True
 
 def test_delete_user_route_with_invalid_id(logged_in_admin):
     delete_response = logged_in_admin.post(url_for('admin.user.delete', id=9999))

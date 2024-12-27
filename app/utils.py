@@ -91,6 +91,30 @@ def decode_csrf_token(encoded_token):
         logger.error(f"Failed to decode CSRF token: {str(e)}")
         raise
 
+import re
+from typing import Tuple
+
+def validate_password_strength(password: str) -> bool:
+    """Validate password strength.
+    
+    Args:
+        password: Password to validate
+        
+    Returns:
+        bool: True if password meets strength requirements
+    """
+    if len(password) < 8:
+        return False
+    if not re.search(r'[A-Z]', password):
+        return False
+    if not re.search(r'[a-z]', password):
+        return False
+    if not re.search(r'[0-9]', password):
+        return False
+    if not re.search(r'[^A-Za-z0-9]', password):
+        return False
+    return True
+
 def validate_url(url: str) -> bool:
     """Validate URL format.
     
