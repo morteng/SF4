@@ -51,6 +51,12 @@ def create():
                 object_type='User',
                 object_id=new_user.id,
                 details=f'Created user {new_user.username}',
+                details_before=None,
+                details_after=str({
+                    'username': new_user.username,
+                    'email': new_user.email,
+                    'is_admin': new_user.is_admin
+                }),
                 ip_address=request.remote_addr,
                 timestamp=datetime.utcnow()
             )
