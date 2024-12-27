@@ -62,7 +62,7 @@ def init_admin_user() -> None:
 
 from urllib.parse import urlparse
 import re
-from itsdangerous import URLSafeTimedSerializer
+from itsdangerous import URLSafeTimedSerializer, TimestampSigner
 from flask import current_app
 
 def decode_csrf_token(encoded_token):
@@ -74,8 +74,10 @@ def decode_csrf_token(encoded_token):
     Returns:
         str: The decoded raw CSRF token
     """
-    serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
-    return serializer.loads(encoded_token)
+    # Create a signer with the same configuration as Flask-WTF
+    signer = TimestampSigner(current_app.config['SECRET_KEY'], salt='csrf-token')
+    # Unsigned the token to get the raw value
+    return signer.unsign(encoded_token, max_age=None)
 
 def validate_url(url: str) -> bool:
     """Validate URL format.
