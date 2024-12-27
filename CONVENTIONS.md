@@ -5,15 +5,9 @@
 - Keep form creation and validation in the same context
 
 ### Form Testing with CSRF
-- Always use a request context when testing forms with CSRF tokens
-- Use `client.session_transaction()` to initialize CSRF tokens
-- Ensure form creation and submission occur within the same context
-- Ensure test client maintains session state
-- Use form-generated CSRF tokens in tests and ensure they are added to the session
-- Include CSRF token in POST requests
-- Initialize session with a request (e.g., `client.get('/')`) before form creation
-- Add assertions to verify CSRF token presence in session
-- Verify the CSRF token value matches between form and session
+- Always make an initial request (e.g., `client.get('/')`) before form creation
+- Verify CSRF token presence and value in session
+- Keep form creation and submission in the same context
 
 ### Form Testing
 - Always use an application context when testing forms

@@ -19,14 +19,9 @@
 - Add error handling to debug validation failures
 
 ### CSRF Token Validation in Tests
-- Use `client.session_transaction()` to initialize CSRF tokens
-- Ensure form creation and submission occur within the same context
-- Verify CSRF tokens are properly generated and validated
-- Initialize session with a request (e.g., `client.get('/')`) before creating forms
-- Verify CSRF token is present in session after form creation
-- Verify the CSRF token value matches between form and session
-- Ensure the session is initialized (e.g., via `client.get('/')`) before creating forms that rely on CSRF tokens
-- Verify the CSRF token is present in the session after form creation
+- Always make an initial request (e.g., `client.get('/')`) before testing forms
+- Verify CSRF token presence and value in session
+- Keep form creation and validation in the same context
 - Ensure test client maintains session state between requests
 - Add assertions to verify CSRF token presence in session
 - Ensure the session is initialized (e.g., via `client.get('/')`) before creating forms that rely on CSRF tokens
