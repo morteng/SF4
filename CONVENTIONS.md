@@ -11,6 +11,7 @@
 
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
+- Ensure date validation errors are properly propagated to form errors
 - CSRF tokens required in all forms (can be disabled in tests using meta={'csrf': False})
 - Always include required fields in test data
 - Rate limit sensitive endpoints

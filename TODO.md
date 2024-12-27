@@ -6,6 +6,7 @@
 
 ## Best Practices
 - Validate & sanitize all inputs, including date validation for leap years
+- Verify date validation error propagation in form handling
 - Ensure test data includes all required fields
 - Disable CSRF in tests when appropriate
 - Test CSRF protection in all form submissions
