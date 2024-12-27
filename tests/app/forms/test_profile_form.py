@@ -37,12 +37,17 @@ def test_profile_form_valid(logged_in_client, db_session):
                 assert form.validate() == True
                 assert form.csrf_token.validate(form) == True
 
-            # Test form submission via POST
-            response = logged_in_client.post(url_for('user.edit_profile'), data={
-                'username': 'newusername',
-                'email': 'newemail@example.com',
-                'csrf_token': csrf_token
-            }, follow_redirects=True)
+                # Store the form data in the session for the POST request
+                sess['form_data'] = {
+                    'username': 'newusername',
+                    'email': 'newemail@example.com',
+                    'csrf_token': csrf_token
+                }
+
+            # Test form submission via POST using the same session
+            response = logged_in_client.post(url_for('user.edit_profile'), 
+                data=sess['form_data'],
+                follow_redirects=True)
 
             # Add detailed error handling and debugging
             if response.status_code != 200:
