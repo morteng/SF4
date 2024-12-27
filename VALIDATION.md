@@ -7,6 +7,9 @@
 - Use `app.test_request_context()` when accessing session data
 - Validate CSRF token matches between form and session
 - Document session initialization requirements in test cases
+- Use session_transaction() when verifying session state
+- Verify CSRF token generation with form.csrf_token.current_token
+- Ensure CSRF token is present before form submission
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all forms

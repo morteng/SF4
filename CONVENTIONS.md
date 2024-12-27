@@ -8,6 +8,8 @@
 - Validate CSRF token matches between form and session
 - Test both valid and invalid CSRF token scenarios
 - Document session initialization requirements in test cases
+- Use session_transaction() when verifying session state
+- Verify CSRF token generation with form.csrf_token.current_token
 
 ### Security
 - Validate all inputs

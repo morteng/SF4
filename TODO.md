@@ -16,4 +16,6 @@
 - Ensure CSRF protection in all environments
 - Add CSRF token validation tests for all forms
 - Document session initialization requirements
+- Use session_transaction() for session verification
+- Verify CSRF token generation with form.csrf_token.current_token
 
