@@ -41,9 +41,9 @@ def test_create_user_route(logged_in_admin, user_data):
     
     # Verify admin user context
     with logged_in_admin.session_transaction() as session:
-        assert 'user_id' in session
-        admin_user_id = session['user_id']
-        admin_user = User.query.get(admin_user_id)
+        assert '_user_id' in session
+        admin_user_id = session['_user_id']
+        admin_user = User.query.get(int(admin_user_id))  # Convert to int since _user_id is stored as string
         assert admin_user is not None
         assert admin_user.is_admin
     
