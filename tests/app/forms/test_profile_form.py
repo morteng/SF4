@@ -3,7 +3,7 @@ from flask import url_for
 from app.forms.user_forms import ProfileForm
 import logging
 
-def test_profile_form_valid(client, setup_database):
+def test_profile_form_valid(client, db_session):
     """Test valid profile form submission with CSRF protection"""
     with client.application.test_request_context():
         with patch('app.forms.user_forms.User.query.filter_by') as mock_filter_by:
