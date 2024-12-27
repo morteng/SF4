@@ -118,7 +118,6 @@ def test_profile_form_invalid_same_username(client, setup_database):
     db.session.delete(user)
     db.session.delete(test_user)
     db.session.commit()
-            assert not is_valid
 
 def test_profile_form_invalid_same_email(client, setup_database):
     # Clean up any existing test users
