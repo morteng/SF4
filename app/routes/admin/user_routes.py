@@ -45,13 +45,27 @@ def create():
                             notification_count=notification_count,
                             csrf_token=csrf_token)
     
+    if request.method == 'GET':
+        # Generate CSRF token for the form
+        csrf_token = generate_csrf()
+        return render_template('admin/users/create.html', 
+                            form=form,
+                            notification_count=notification_count,
+                            csrf_token=csrf_token)
+    
     if form.validate_on_submit():
         try:
             # Validate unique fields
             if User.query.filter_by(username=form.username.data).first():
-                raise ValueError("Username already exists")
+                flash_message(FlashMessages.USERNAME_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
+                return render_template('admin/users/create.html', 
+                                    form=form,
+                                    notification_count=notification_count), 400
             if User.query.filter_by(email=form.email.data).first():
-                raise ValueError("Email already exists")
+                flash_message(FlashMessages.EMAIL_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
+                return render_template('admin/users/create.html', 
+                                    form=form,
+                                    notification_count=notification_count), 400
                 
             # Create user
             new_user = create_user(form.data)
@@ -68,6 +82,14 @@ def create():
             
             flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
+            
+        except Exception as e:
+            db.session.rollback()
+            logging.error(f"Error creating user: {str(e)}")
+            flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
+            return render_template('admin/users/create.html', 
+                                form=form,
+                                notification_count=notification_count), 500
             
         except ValueError as e:
             db.session.rollback()
@@ -98,6 +120,7 @@ def create():
                             notification_count=notification_count), 400
 
 @admin_user_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")
 @login_required
 @admin_required
 def edit(id):
@@ -114,15 +137,34 @@ def edit(id):
             obj=user
         )
         
+        if request.method == 'GET':
+            csrf_token = generate_csrf()
+            return render_template('admin/users/edit.html', 
+                                form=form,
+                                user=user,
+                                csrf_token=csrf_token)
+    """Edit user details with proper validation and audit logging"""
+    try:
+        user = get_user_by_id(id)
+        if not user:
+            flash_message(FlashMessages.USER_NOT_FOUND.value, FlashCategory.ERROR.value)
+            return redirect(url_for('admin.user.index'))
+            
+        form = UserForm(
+            original_username=user.username,
+            original_email=user.email,
+            obj=user
+        )
+        
         if request.method == 'POST' and form.validate_on_submit():
             # Validate unique fields
             if user.username != form.username.data and User.query.filter_by(username=form.username.data).first():
-                flash_message("Username already exists", FlashCategory.ERROR.value)
-                return render_template('admin/users/edit.html', form=form), 400
+                flash_message(FlashMessages.USERNAME_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
+                return render_template('admin/users/edit.html', form=form, user=user), 400
                 
             if user.email != form.email.data and User.query.filter_by(email=form.email.data).first():
-                flash_message("Email already exists", FlashCategory.ERROR.value)
-                return render_template('admin/users/edit.html', form=form), 400
+                flash_message(FlashMessages.EMAIL_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
+                return render_template('admin/users/edit.html', form=form, user=user), 400
                 
             # Update user details
             try:
@@ -144,12 +186,12 @@ def edit(id):
                 db.session.rollback()
                 logging.error(f"Validation error updating user {id}: {e}")
                 flash_message(str(e), FlashCategory.ERROR.value)
+                return render_template('admin/users/edit.html', form=form, user=user), 400
             except Exception as e:
                 db.session.rollback()
                 logging.error(f"Failed to update user {id}: {e}")
                 flash_message(f"{FlashMessages.UPDATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
-                
-            db.session.commit()
+                return render_template('admin/users/edit.html', form=form, user=user), 500
     
         return render_template('admin/users/edit.html', 
                          form=form,
