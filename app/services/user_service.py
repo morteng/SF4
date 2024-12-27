@@ -69,7 +69,8 @@ def create_user(form_data):
             object_type='User',
             object_id=new_user.id,
             details=f'Created user {username}',
-            timestamp=datetime.utcnow()
+            timestamp=datetime.utcnow(),
+            ip_address=request.remote_addr
         )
         db.session.add(audit_log)
     
