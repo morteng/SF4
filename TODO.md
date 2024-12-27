@@ -2,7 +2,7 @@
 ## High Priority
 - [x] Add CSRF protection to all forms
 - [x] Fix CSRF token handling in profile form test
-- [ ] Investigate CSRF token handling in form tests
+- [x] Investigate CSRF token handling in form tests
 - [ ] Verify session state maintenance in form tests
 - [x] Enable CSRF in testing environment
 - [ ] Fix profile form validation failure
