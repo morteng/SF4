@@ -30,6 +30,7 @@ def create():
             except SQLAlchemyError as e:
                 db.session.rollback()
                 flash_message(FLASH_MESSAGES['CREATE_ORGANIZATION_DATABASE_ERROR'], FLASH_CATEGORY_ERROR)
+                return render_template('admin/organizations/form.html', form=form), 200
         else:
             # Flash individual field errors
             for field, errors in form.errors.items():
