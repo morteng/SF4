@@ -5,9 +5,9 @@
   - Admin routes
   - User request handling
   - HTMX integration
-  - Rate limiting (org CRUD)
+  - Rate limiting
 - [ ] Fix datetime.utcnow() deprecation warnings
-- [ ] Complete CRUD test coverage for all entities
+- [ ] Complete CRUD test coverage
 
 ## Best Practices
 - Ensure CSRF protection matches production environment

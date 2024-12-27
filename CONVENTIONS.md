@@ -22,11 +22,9 @@
 
 ### CSRF Token Handling
 - Use Flask-WTF for CSRF protection
-- Include CSRF token in all forms via `{{ csrf_token }}`
-- Add CSRF meta tag in base template for HTMX
+- Include CSRF token in all forms
 - Validate CSRF tokens in all POST requests
 - Return 400 for invalid/missing CSRF tokens
-- Extract CSRF token in tests using `extract_csrf_token()`
 
 ### Notification Badges
 - All admin templates must include a notification badge.
