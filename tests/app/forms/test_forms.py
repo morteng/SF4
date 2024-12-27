@@ -2,12 +2,30 @@ import pytest
 from flask import Flask
 from app.forms.admin_forms import OrganizationForm
 from app.config import TestConfig
+from app.extensions import db
 
 @pytest.fixture
 def app():
+    """Create and configure a new app instance for each test."""
     app = Flask(__name__)
     app.config.from_object(TestConfig)
-    return app
+    
+    # Set up in-memory SQLite database for testing
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # Initialize extensions
+    db.init_app(app)
+    
+    # Create all database tables
+    with app.app_context():
+        db.create_all()
+    
+    yield app
+    
+    # Clean up after the test
+    with app.app_context():
+        db.drop_all()
 
 def test_organization_form_valid_data(app):
     """Test organization form with valid data"""
