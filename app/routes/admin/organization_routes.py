@@ -34,11 +34,7 @@ def create():
         for field_name, errors in form.errors.items():
             field_label = 'Name' if field_name == 'name' else form[field_name].label.text
             for error in errors:
-                if 'This field is required.' in error or 'Name is required.' in error:
-                    # Use consistent format for required field validation errors
-                    flash_message(f"{field_label}: This field is required.", FLASH_CATEGORY_ERROR)
-                else:
-                    flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
+                flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
     return render_template('admin/organizations/form.html', form=form)
 
