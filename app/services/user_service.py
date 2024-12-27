@@ -1,3 +1,4 @@
+import logging
 from sqlalchemy.exc import IntegrityError
 from app.models.user import User
 from app.extensions import db
