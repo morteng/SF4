@@ -159,13 +159,21 @@ def test_delete_user_route_with_invalid_id(logged_in_admin):
 
 def test_create_user_route_with_database_error(logged_in_admin, user_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
-        data = user_data
+        # First get the CSRF token
+        get_response = logged_in_admin.get(url_for('admin.user.create'))
+        assert get_response.status_code == 200
+        csrf_token = extract_csrf_token(get_response.data)
+        assert csrf_token is not None, "CSRF token not found in response"
+            
+        # Prepare data with CSRF token
+        data = user_data.copy()
+        data['csrf_token'] = csrf_token
 
         def mock_commit(*args, **kwargs):
             raise Exception("Database error")
             
         monkeypatch.setattr(db_session, 'commit', mock_commit)
-        
+            
         response = logged_in_admin.post(url_for('admin.user.create'), data=data, follow_redirects=True)
             
         # Check for error response
