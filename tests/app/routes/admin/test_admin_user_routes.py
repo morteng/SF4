@@ -123,10 +123,13 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
     # Initialize session and get CSRF token
     index_response = logged_in_admin.get(url_for('admin.user.index'))
     assert index_response.status_code == 200
+        
+    # Extract CSRF token with debug logging
     csrf_token = extract_csrf_token(index_response.data)
+    logging.info(f"Extracted CSRF token: {csrf_token}")
     
     # Verify CSRF token exists
-    assert csrf_token is not None, "CSRF token not found in response"
+    assert csrf_token is not None, "CSRF token not found in response. Response content: " + index_response.data.decode('utf-8')
     
     # Perform deletion
     delete_response = logged_in_admin.post(

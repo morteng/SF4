@@ -34,19 +34,26 @@ def extract_csrf_token(response_data):
     # Look for CSRF token in meta tag first
     meta_token = soup.find('meta', attrs={'name': 'csrf-token'})
     if meta_token and meta_token.get('content'):
+        logging.info("Found CSRF token in meta tag")
         return meta_token.get('content')
     
     # Look for CSRF token in hidden input
-    input_token = soup.find('input', attrs={'name': 'csrf_token'})
+    input_token = soup.find('input', attrs={'name': 'csrf_token', 'type': 'hidden'})
     if input_token and input_token.get('value'):
+        logging.info("Found CSRF token in hidden input")
         return input_token.get('value')
     
     # Look for CSRF token in form data
     form = soup.find('form')
     if form:
-        input_token = form.find('input', attrs={'name': 'csrf_token'})
+        input_token = form.find('input', attrs={'name': 'csrf_token', 'type': 'hidden'})
         if input_token and input_token.get('value'):
+            logging.info("Found CSRF token in form")
             return input_token.get('value')
+    
+    # Debug: Log the HTML if no token found
+    logging.warning("CSRF token not found in response. HTML content:")
+    logging.warning(soup.prettify())
     
     # Look for CSRF token in HTMX headers
     script_tags = soup.find_all('script')
