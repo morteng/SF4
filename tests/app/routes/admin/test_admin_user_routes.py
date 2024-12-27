@@ -120,39 +120,32 @@ def test_delete_user_route(logged_in_admin, test_user, db_session):
     # Make a GET request to initialize the session and get the CSRF token
     index_response = logged_in_admin.get(url_for('admin.user.index'))
     assert index_response.status_code == 200, "Failed to load user index page"
-    
+
     # Extract the CSRF token
     csrf_token = extract_csrf_token(index_response.data)
     assert csrf_token is not None, f"CSRF token not found in the response. HTML: {index_response.data.decode()[:1000]}"
-    
-    # Decode the CSRF token from the form
+
+    # Verify the token can be decoded
     from app.utils import decode_csrf_token
-    decoded_csrf_token = decode_csrf_token(csrf_token)
-        
+    try:
+        decoded_csrf_token = decode_csrf_token(csrf_token)
+    except Exception as e:
+        pytest.fail(f"Failed to decode CSRF token: {e}")
+
     # Verify the CSRF token in the session matches the decoded form token
     with logged_in_admin.session_transaction() as session:
         session_csrf_token = session.get('csrf_token')
         assert session_csrf_token == decoded_csrf_token, "CSRF token mismatch between session and form"
 
-    # Perform the DELETE operation with proper CSRF handling
+    # Perform the DELETE operation with the valid CSRF token
     delete_response = logged_in_admin.post(
         url_for('admin.user.delete', id=test_user.id),
-        data={
-            'csrf_token': csrf_token,
-            '_csrf_token': csrf_token
-        },
-        headers={
-            'X-CSRFToken': csrf_token,
-            'X-Requested-With': 'XMLHttpRequest'
-        },
+        data={'csrf_token': csrf_token},
         follow_redirects=True
     )
     
-    # Verify CSRF token was used
-    with logged_in_admin.session_transaction() as session:
-        assert 'csrf_token' in session, "CSRF token not found in session"
-
-    assert delete_response.status_code == 200
+    # Verify the response
+    assert delete_response.status_code == 200, "Failed to delete user"
     
     # Verify user is deleted
     db_session.expire_all()

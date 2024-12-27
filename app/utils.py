@@ -73,14 +73,23 @@ def decode_csrf_token(encoded_token):
         
     Returns:
         str: The decoded raw CSRF token
+        
+    Raises:
+        BadSignature: If the token is invalid or tampered with
     """
     # Create a serializer with the same configuration as Flask-WTF
     serializer = URLSafeTimedSerializer(
         current_app.config['SECRET_KEY'],
         salt='csrf-token'
     )
-    # Load the token to get the raw value
-    return serializer.loads(encoded_token, max_age=None)
+    
+    try:
+        # Load the token to get the raw value
+        return serializer.loads(encoded_token, max_age=None)
+    except Exception as e:
+        # Log the error for debugging
+        logger.error(f"Failed to decode CSRF token: {str(e)}")
+        raise
 
 def validate_url(url: str) -> bool:
     """Validate URL format.
