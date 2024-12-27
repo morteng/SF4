@@ -241,12 +241,12 @@ def delete(id):
                 details=f'Deleted user {user.username}',
                 ip_address=request.remote_addr
             )
-        
-        # Audit log
-        logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.utcnow()}")
-        
-        flash_message(FlashMessages.DELETE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
-        return redirect(url_for('admin.user.index')), 200
+            
+            # Audit log
+            logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.utcnow()}")
+            
+            flash_message(FlashMessages.DELETE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
+            return redirect(url_for('admin.user.index')), 200
         
     except ValueError as e:
         flash_message(str(e), FlashCategory.ERROR.value)
