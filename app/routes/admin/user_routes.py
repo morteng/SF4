@@ -97,7 +97,7 @@ def edit(id):
                 
             db.session.commit()
     
-    return render_template('admin/_form_template.html', 
+        return render_template('admin/_form_template.html', 
                          form=form, 
                          form_title='User',
                          form_action=url_for('admin.user.edit', id=user.id),
