@@ -14,6 +14,7 @@ class CustomDateTimeField(DateTimeField):
         super().__init__(label, validators, format=format, **kwargs)
         self.format = format
         self.timezone_str = str(timezone) if timezone else 'UTC'
+        self._invalid_leap_year = False  # Track invalid leap year state
         # Initialize default error messages
         self.error_messages = {
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
@@ -31,9 +32,11 @@ class CustomDateTimeField(DateTimeField):
             self.errors = []  # Clear any existing errors
             self.errors.append(self.error_messages['required'])
             self.data = None
+            self._invalid_leap_year = False
             return
             
         date_str = valuelist[0]
+        self._invalid_leap_year = False  # Reset leap year flag
             
         # First check for leap year dates
         if '02-29' in date_str:
@@ -48,12 +51,14 @@ class CustomDateTimeField(DateTimeField):
                         self.errors = []
                         self.errors.append(self.error_messages['invalid_leap_year'])
                         self.data = None
+                        self._invalid_leap_year = True
                         return  # Stop processing if invalid leap year
             except ValueError as e:
                 # If we can't parse the date, add error and stop processing
                 self.errors = []
                 self.errors.append(str(e))
                 self.data = None
+                self._invalid_leap_year = False
                 return  # Stop processing if invalid date format
             try:
                 # Try to parse the full date string
@@ -121,6 +126,10 @@ class CustomDateTimeField(DateTimeField):
                 datetime(dt.year, dt.month, dt.day)
             except ValueError:
                 raise ValidationError(self.error_messages['invalid_date'])
+                
+            # Check leap year flag
+            if self._invalid_leap_year:
+                raise ValidationError(self.error_messages['invalid_leap_year'])
                 
             return True
         except ValueError:
