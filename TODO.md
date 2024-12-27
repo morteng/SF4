@@ -13,6 +13,7 @@
 - Test CSRF protection in all form submissions
 - Verify proper error responses for invalid CSRF
 - Ensure GET request before POST to establish session
+- Add robust CSRF token extraction in tests
 - Use enums consistently for error messages
 - Ensure CSRF tokens match between form and session
 - Fix session binding issues in authentication tests

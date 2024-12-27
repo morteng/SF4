@@ -5,10 +5,11 @@
 ### Testing with CSRF
 - Enable CSRF in test config: `WTF_CSRF_ENABLED = True`
 - Use `client.session_transaction()` for session access
-- Extract CSRF token from form or login page
+- Extract CSRF token from form or login page using reliable parsing
 - Test both valid and invalid CSRF scenarios
 - Verify error messages match actual implementation
 - Always make a GET request before POST to establish session
+- Handle CSRF token extraction errors gracefully
 
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations
