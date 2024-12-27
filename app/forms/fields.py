@@ -100,6 +100,7 @@ class CustomDateTimeField(DateTimeField):
                 
             return True
         except ValueError:
+            self.errors.append(self.error_messages['invalid_date'])
             return False
 
     def _value(self):
