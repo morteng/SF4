@@ -181,18 +181,41 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
 
 def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session):
     """Test full CRUD operations for users with audit logging"""
-    # Ensure the test user doesn't already exist
-    existing_user = User.query.filter_by(username=user_data['username']).first()
-    if existing_user:
-        db_session.delete(existing_user)
-        db_session.commit()
-    
-    # Verify audit log for deletion
+    # First get CSRF token
+    create_response = logged_in_admin.get('/admin/users/create')
+    csrf_token = extract_csrf_token(create_response.data)
+    assert csrf_token is not None
+        
+    # Add CSRF token to user data
+    user_data['csrf_token'] = csrf_token
+        
+    # Create a user first
+    create_response = logged_in_admin.post('/admin/users/create', 
+                                         data=user_data,
+                                         follow_redirects=True)
+    assert create_response.status_code == 200
+    assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in create_response.data
+        
+    # Get the created user
+    created_user = User.query.filter_by(username=user_data['username']).first()
+    assert created_user is not None
+        
+    # Now delete the user
+    delete_response = logged_in_admin.post(f'/admin/users/{created_user.id}/delete',
+                                         data={'csrf_token': csrf_token},
+                                         follow_redirects=True)
+    assert delete_response.status_code == 200
+    assert FlashMessages.DELETE_USER_SUCCESS.value.encode() in delete_response.data
+        
+    # Verify audit log was created for the deletion
     audit_log = AuditLog.query.filter_by(
         action='delete_user',
-        object_type='User'
+        object_type='User',
+        object_id=created_user.id
     ).first()
     assert audit_log is not None
+    assert audit_log.user_id == test_user.id
+    assert audit_log.ip_address is not None
     
     # Use a unique username for the test
     unique_user_data = user_data.copy()
