@@ -1,6 +1,15 @@
 // Main JavaScript file for HTMX and other interactions
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Add CSRF token to all HTMX requests
+    document.body.addEventListener('htmx:configRequest', function(evt) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || 
+                         document.querySelector('input[name="csrf_token"]')?.value;
+        if (csrfToken) {
+            evt.detail.headers['X-CSRFToken'] = csrfToken;
+        }
+    });
+
     // HTMX indicator
     document.body.addEventListener('htmx:beforeRequest', () => {
         document.getElementById('htmx-indicator').style.display = 'block';
