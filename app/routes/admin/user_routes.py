@@ -38,9 +38,12 @@ def create():
             # For both HTMX and regular requests, render the appropriate template directly
             template = 'admin/users/_create_form.html' if request.headers.get('HX-Request') == 'true' else 'admin/users/create.html'
             
+            # Get flashed messages and pass them explicitly to the template
+            flashed_messages = [(FlashCategory.ERROR.value, error_message)]
+            
             return render_template(template, 
                                 form=form, 
-                                flash_messages=[(FlashCategory.ERROR.value, error_message)]), 400
+                                flash_messages=flashed_messages), 400
     else:
         if request.headers.get('HX-Request') == 'true':
             # HTMX response - return form with errors
