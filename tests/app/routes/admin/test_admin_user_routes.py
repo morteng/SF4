@@ -11,7 +11,11 @@ from app.utils import validate_password_strength
 @pytest.fixture(scope='function')
 def user_data():
     logging.info("Creating user test data")
-    return create_user_data()
+    return {
+        'email': 'test@example.com',
+        'password': 'StrongPass123!',  # Meets all password requirements
+        'username': 'testuser'
+    }
 
 @pytest.fixture(scope='function')
 def test_user(db_session, user_data):
@@ -41,6 +45,11 @@ def test_create_user_route(logged_in_admin, user_data):
         'submit': 'Create',  # Required SubmitField
         'csrf_token': csrf_token
     }, follow_redirects=True)
+    
+    # Debug logging to help identify validation issues
+    if response.status_code != 200:
+        logging.error(f"Unexpected status code: {response.status_code}")
+        logging.error(f"Response data: {response.data.decode('utf-8')}")
     
     assert response.status_code == 200
     users = User.query.all()
