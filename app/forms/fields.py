@@ -27,6 +27,7 @@ class CustomDateTimeField(DateTimeField):
             if not date_str:
                 self.errors.append(self.error_messages['required'])
                 return
+            print(f"Processing date string: {date_str}")  # Debugging
             
             try:
                 # First try parsing the date string

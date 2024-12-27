@@ -62,6 +62,7 @@ class StipendForm(FlaskForm):
     def validate_application_deadline(self, field):
         # Skip validation if the field is empty or invalid (CustomDateTimeField handles this)
         if not field.data or field.errors:
+            print(f"Field data: {field.data}, Errors: {field.errors}")  # Debugging
             return
         
         # If we somehow still have a string, convert it to datetime
