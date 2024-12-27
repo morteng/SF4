@@ -2,43 +2,13 @@
 
 {% block title %}Manage Stipends{% endblock %}
 
-{% from "_macros.html" import flash_messages %}
 {% block content %}
-<h1 class="text-2xl font-bold mb-4">Manage Stipends</h1>
-<a href="#" hx-get="{{ url_for('admin.stipend.create') }}" hx-target="#main-content" hx-swap="innerHTML" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Create New Stipend</a>
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Manage Stipends</h1>
+    
+    {% from "_macros.html" import primary_button %}
+    {{ primary_button('Create New Stipend', url_for('admin.stipend.create'), '#main-content') }}
 
-<div id="flash-messages-container">
-    {{ flash_messages() }}
-</div>
-
-<div class="overflow-x-auto mt-4">
-    <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-            <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">Action</span>
-                </th>
-            </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-            {% for stipend in stipends.items %}
-            <tr hx-target="this" hx-swap="outerHTML">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ stipend.id }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ stipend.name }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    {% from "_macros.html" import edit_button %}
-                    {{ edit_button(url_for('admin.stipend.edit', id=stipend.id), '#main-content') }}
-                    {% from "_macros.html" import delete_button %}
-                    {{ delete_button(url_for('admin.stipend.delete', id=stipend.id), 'closest tr') }}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    {% from "_macros.html" import pagination %}
-    {{ pagination(stipends, url_for('admin.stipend.paginate')) }}
+    {% include 'admin/stipends/_stipends_table.html' %}
 </div>
 {% endblock %}
