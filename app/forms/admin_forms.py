@@ -64,6 +64,13 @@ class StipendForm(FlaskForm):
         if not field.data or field.errors:
             return
         
+        # If we somehow still have a string, convert it to datetime
+        if isinstance(field.data, str):
+            try:
+                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise ValidationError('Invalid date format')
+    
         # Ensure datetime is timezone-aware
         now = datetime.now(pytz.UTC)
         if field.data.tzinfo is None:
