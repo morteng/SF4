@@ -35,7 +35,10 @@ def create():
         for field_name, errors in form.errors.items():
             field_label = 'Org Name' if field_name == 'name' else form[field_name].label.text
             for error in errors:
-                flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
+                if field_name == 'name' and 'This field is required.' in error:
+                    flash_message("Org Name: This field is required.", FLASH_CATEGORY_ERROR)
+                else:
+                    flash_message(f"{field_label}: {error}", FLASH_CATEGORY_ERROR)
         return render_template('admin/organizations/form.html', form=form), 422
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
