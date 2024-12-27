@@ -30,6 +30,11 @@
 - Ensure form submissions include all required fields
 - Use form-generated CSRF tokens in tests
 
+### Session State
+- Verify session maintains CSRF tokens
+- Use `client.session_transaction()` to debug session issues
+- Ensure test client preserves cookies between requests
+
 ## Form Validation Testing
 - Test all required fields and constraints
 - Verify error messages for invalid inputs
