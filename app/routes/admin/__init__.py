@@ -21,6 +21,19 @@ def notification_count(f):
 def create_admin_blueprint():
     """Factory function to create a new admin blueprint instance with security and logging"""
     admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
+
+    def log_audit(action, object_type, object_id, details=None):
+        """Helper function to log admin actions"""
+        if current_user.is_authenticated:
+            audit_log = AuditLog(
+                user_id=current_user.id,
+                action=action,
+                object_type=object_type,
+                object_id=object_id,
+                details=details
+            )
+            db.session.add(audit_log)
+            db.session.commit()
     
     # Add before_request handler for security checks
     @admin_bp.before_request

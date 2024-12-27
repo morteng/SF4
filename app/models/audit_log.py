@@ -20,6 +20,35 @@ class AuditLog(db.Model):
     @staticmethod
     def create(user_id, action, details=None, object_type=None, object_id=None, 
               details_before=None, details_after=None, ip_address=None):
+        """Create audit log entry and corresponding notification"""
+        from app.models.notification import Notification, NotificationType
+        
+        # Create audit log
+        log = AuditLog(
+            user_id=user_id,
+            action=action,
+            details=details,
+            object_type=object_type,
+            object_id=object_id,
+            details_before=details_before,
+            details_after=details_after,
+            ip_address=ip_address,
+            timestamp=datetime.utcnow()
+        )
+        db.session.add(log)
+        
+        # Create notification
+        notification = Notification(
+            message=f"{action} on {object_type} {object_id}",
+            type=NotificationType.USER_ACTION,
+            user_id=user_id,
+            related_object_type=object_type,
+            related_object_id=object_id
+        )
+        db.session.add(notification)
+        
+        db.session.commit()
+        return log
         """Create an audit log entry with before/after state tracking"""
         try:
             log = AuditLog(

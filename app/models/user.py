@@ -36,3 +36,8 @@ class User(db.Model):
 
     def get_id(self):
         return str(self.id)
+
+    @classmethod
+    def get_by_id(cls, user_id, session):
+        """Get user by ID with proper session handling"""
+        return session.query(cls).get(user_id)

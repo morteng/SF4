@@ -24,7 +24,13 @@ def init_extensions(app):
     with app.app_context():
         Session = sessionmaker(bind=db.engine)
         db_session = scoped_session(Session)
+        
+        # Initialize rate limiting
         limiter.init_app(app)
+        
+        # Apply rate limits to admin endpoints
+        limiter.limit("100/hour")(app.blueprints['admin'])
+        limiter.limit("10/minute")(app.blueprints['admin'].decorators)
         
         # Apply rate limits to sensitive endpoints
         limiter.limit("100/hour")(app.blueprints['admin'])
