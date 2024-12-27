@@ -52,7 +52,12 @@ def test_user(db_session):
     db_session.add(user)
     db_session.commit()
     yield user
-    db_session.delete(user)
+    try:
+        db_session.delete(user)
+        db_session.commit()
+    except Exception as e:
+        db_session.rollback()
+        raise e
     db_session.commit()
 
 def verify_user_crud_operations(test_client, admin_user, test_data):
@@ -211,8 +216,6 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
         assert csrf_token is not None, \
             "CSRF token not found in response. If already logged in, ensure the dashboard template includes a CSRF token"
         
-        # Refresh test_user within session
-        test_user = db_session.merge(test_user)
             
         # Perform login with CSRF token
         login_response = logged_in_admin.post('/login', data={
@@ -230,8 +233,9 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
         # Verify admin user is logged in
         with logged_in_admin.session_transaction() as session:
             assert '_user_id' in session, "Admin user is not logged in"
-            assert session['_user_id'] == str(test_user.id), \
-                f"Expected logged in user ID {test_user.id} but got {session['_user_id']}"
+            logged_in_user = db_session.get(User, session['_user_id'])
+            assert logged_in_user.id == test_user.id, \
+                f"Logged in user ID {logged_in_user.id} does not match test user ID {test_user.id}"
     
         # Verify CRUD operations
         verify_user_crud_operations(logged_in_admin, test_user, unique_user_data)
