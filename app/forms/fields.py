@@ -9,9 +9,12 @@ class CustomDateTimeField(DateTimeField):
     """Custom DateTimeField with timezone support and enhanced validation."""
     """Custom DateTimeField with timezone support and enhanced validation."""
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', timezone='UTC', **kwargs):
+        # Extract error_messages from kwargs to avoid passing it to Field.__init__()
+        error_messages = kwargs.pop('error_messages', {})
         super().__init__(label, validators, format=format, **kwargs)
         self.format = format
         self.timezone_str = str(timezone) if timezone else 'UTC'
+        # Initialize default error messages
         self.error_messages = {
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
             'invalid_date': 'Invalid date values (e.g., Feb 30)',
@@ -20,6 +23,8 @@ class CustomDateTimeField(DateTimeField):
             'required': 'Date is required',
             'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)'
         }
+        # Update with any custom error messages passed in
+        self.error_messages.update(error_messages)
 
     def process_formdata(self, valuelist):
         if not valuelist or not valuelist[0]:
