@@ -161,7 +161,7 @@ def edit(id):
                     msg = format_error_message(field, error)
                     error_messages.append(msg)
                     field_errors[field_name].append(msg)
-                    flash_message(msg, FLASH_CATEGORY_ERROR)
+                    flash_message(msg, FlashCategory.ERROR)
                 
             if is_htmx:
                 return render_template(
@@ -187,7 +187,7 @@ def edit(id):
 def delete(id):
     stipend = get_stipend_by_id(id)
     if not stipend:
-        flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FLASH_CATEGORY_ERROR)
+        flash_message(FLASH_MESSAGES["STIPEND_NOT_FOUND"], FlashCategory.ERROR)
         if request.headers.get('HX-Request'):
             return render_template('_flash_messages.html'), 404
         return redirect(url_for('admin.stipend.index'))
