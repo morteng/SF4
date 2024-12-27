@@ -5,6 +5,7 @@
 - Parameterize tests for multiple scenarios
 - Verify both UI responses and database state
 - Use `FlashMessages` and `FlashCategory` enums for assertions
+- Use factory functions in tests/utils.py for test data
 
 ### Security
 - Validate all form inputs
@@ -18,4 +19,5 @@
 - Use Tailwind for styling
 - Use HTMX for dynamic interactions
 - Use FlashMessages and FlashCategory enums for flash messages
+- Centralize test utilities in tests/utils.py
 

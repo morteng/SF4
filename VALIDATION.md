@@ -2,9 +2,8 @@
 
 ## Validation Principles
 - Validate all form inputs client and server side
-- Centralize test utilities in tests/utils.py
-- Use factory functions for test data
 - Verify both success and failure scenarios
+- Use FlashMessages and FlashCategory enums consistently
 
 ## Form Validation
 ### Organization Form
@@ -22,5 +21,4 @@
 - Use bleach for input sanitization
 - Require CSRF tokens for all POST requests
 - Implement rate limiting for sensitive endpoints
-- Use FlashMessages and FlashCategory enums for flash messages
 

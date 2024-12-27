@@ -6,28 +6,18 @@
    - [x] Add input sanitization
    - [ ] Add rate limiting to admin routes
 
-2. **Error Handling**
-   - [x] Add comprehensive error handling
-   - [x] Improve form validation error messages
-   - [x] Add logging for critical operations
-
-3. **Testing Improvements**
-   - [x] Add tests for edge cases
-   - [x] Parameterize test scenarios
-   - [x] Add database state verification
-   - [x] Migrate all code to use FlashMessages and FlashCategory enums
-   - [x] Update tests to use FlashMessages and FlashCategory enums
+2. **Testing Improvements**
    - [ ] Add integration tests for all CRUD operations
+   - [ ] Increase test coverage to 80%+
 
 ## Knowledge & Memories
 - **Security Best Practices**
   * Always sanitize user input
   * Validate all form data
   * Use CSRF tokens for all POST requests
-  * Use FlashMessages and FlashCategory enums consistently
 
-- **Error Handling Patterns**
-  * Use try-except blocks for database operations
-  * Rollback database sessions on errors
-  * Provide user-friendly error messages
+- **Testing Patterns**
+  * Use factory functions for test data
+  * Verify both UI responses and database state
+  * Use FlashMessages and FlashCategory enums for assertions
 
