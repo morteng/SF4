@@ -17,5 +17,5 @@
 - Keep JS in app/static/js/main.js
 - Use Tailwind for styling
 - Use HTMX for dynamic interactions
-- Use enums (FlashMessages, FlashCategory) instead of raw constants
+- Use FlashMessages and FlashCategory enums consistently
 

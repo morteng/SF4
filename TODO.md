@@ -15,7 +15,7 @@
    - [x] Add tests for edge cases
    - [x] Parameterize test scenarios
    - [x] Add database state verification
-   - [x] Update tests to use FlashMessages and FlashCategory enums
+   - [x] Migrate all code to use FlashMessages and FlashCategory enums
    - [ ] Add integration tests for all CRUD operations
 
 ## Knowledge & Memories
@@ -23,7 +23,7 @@
   * Always sanitize user input
   * Validate all form data
   * Use CSRF tokens for all POST requests
-  * Use enums for flash messages and categories
+  * Use FlashMessages and FlashCategory enums consistently
 
 - **Error Handling Patterns**
   * Use try-except blocks for database operations

@@ -19,7 +19,8 @@
 - Preserve form state
 
 ## Security Best Practices
-- Use bleach to clean all user input
-- Require CSRF token for all POST requests
-- Implement rate limiting for admin routes
+- Use bleach for input sanitization
+- Require CSRF tokens for all POST requests
+- Implement rate limiting for sensitive endpoints
+- Use FlashMessages and FlashCategory enums consistently
 
