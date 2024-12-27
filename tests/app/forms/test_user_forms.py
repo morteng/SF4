@@ -183,7 +183,13 @@ def test_profile_form_invalid_same_email(client, setup_database):
     User.query.filter_by(email="existing@example.com").delete()
     db.session.commit()
 
-def test_login_form_valid(client):
+def test_login_form_valid(client, setup_database):
+    # Create test user in database
+    password_hash = generate_password_hash("password123")
+    user = User(username="testuser", email="test@example.com", password_hash=password_hash)
+    db.session.add(user)
+    db.session.commit()
+
     # First make a GET request to establish session and get CSRF token
     get_response = client.get(url_for('public.login'))
     assert get_response.status_code == 200
@@ -202,6 +208,10 @@ def test_login_form_valid(client):
 
     # Verify the response status code
     assert response.status_code == 302, f"Expected 302, got {response.status_code}"
+
+    # Clean up
+    db.session.delete(user)
+    db.session.commit()
 
 def test_login_form_invalid_missing_username(client):
     with client.application.test_request_context():  # Added request context
