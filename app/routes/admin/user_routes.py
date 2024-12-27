@@ -33,11 +33,8 @@ def create():
             db.session.rollback()
             error_message = f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}"
             flash_message(error_message, FlashCategory.ERROR.value)
-            if request.headers.get('HX-Request') == 'true':
-                return render_template('admin/users/_create_form.html', form=form), 400
-            # Redirect to create page to show flash message
-            session.modified = True  # Ensure session is saved before redirect
-            return redirect(url_for('admin.user.create')), 200
+            # Render the create template directly with 400 status
+            return render_template('admin/users/create.html', form=form), 400
     else:
         if request.headers.get('HX-Request') == 'true':
             # HTMX response - return form with errors
