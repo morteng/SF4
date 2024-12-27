@@ -169,15 +169,15 @@ class UserForm(FlaskForm):
 
     def validate_username(self, username):
         if username.data != self.original_username:
-            user = db.session.get(User, username.data)  # Updated to use db.session.get
+            user = db.session.get(User, username.data)
             if user is not None:
-                raise ValidationError('Please use a different username.')
+                raise ValidationError(FlashMessages.FORM_DUPLICATE_USERNAME.value)
 
     def validate_email(self, email):
         if email.data != self.original_email:
-            user = db.session.get(User, email.data)  # Updated to use db.session.get
+            user = db.session.get(User, email.data)
             if user is not None:
-                raise ValidationError('Please use a different email address.')
+                raise ValidationError(FlashMessages.FORM_DUPLICATE_EMAIL.value)
 
 
 class BotForm(FlaskForm):

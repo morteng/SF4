@@ -39,8 +39,7 @@ def create():
                     error_messages.append(msg)
                     field_errors[field_name].append(msg)
                     flash_message(msg, FlashCategory.ERROR.value)
-            if not form.validate_on_submit():
-                flash_message(FlashMessages.CREATE_USER_INVALID_DATA.value, FlashCategory.ERROR.value)
+            flash_message(FlashMessages.FORM_VALIDATION_ERROR.value, FlashCategory.ERROR.value)
     return render_template('admin/users/create.html', form=form)
 
 @admin_user_bp.route('/<int:id>/edit', methods=['GET', 'POST'])

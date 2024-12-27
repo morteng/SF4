@@ -87,6 +87,13 @@ class FlashMessages(str, Enum):
     REGISTER_ERROR = "Registration failed. Please try again."
     LOGIN_INVALID_CREDENTIALS = "Invalid username or password."
 
+    # Form Validation
+    FORM_VALIDATION_ERROR = "Form validation failed. Please check your input."
+    FORM_SUBMISSION_ERROR = "Form submission failed. Please try again."
+    FORM_INVALID_CSRF = "Invalid CSRF token. Please refresh the page and try again."
+    FORM_DUPLICATE_USERNAME = "Username already exists. Please choose a different username."
+    FORM_DUPLICATE_EMAIL = "Email already exists. Please choose a different email address."
+
     # Profile Management
     UPDATE_PROFILE_SUCCESS = "Profile updated successfully."
     PROFILE_UPDATE_SUCCESS = "Profile updated successfully."
