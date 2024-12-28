@@ -429,6 +429,10 @@ def test_stipend_update_operation(app, form_data, test_db):
         assert create_log.action == 'create_stipend'
         assert create_log.details_after is not None
 
+def filter_model_fields(data, model_class):
+    """Filter out form fields that don't exist in the model"""
+    return {k: v for k, v in data.items() if hasattr(model_class, k)}
+
 def test_stipend_delete_operation(app, form_data, test_db):
     """Test CRUD delete operation"""
     with app.test_request_context():
@@ -438,13 +442,26 @@ def test_stipend_delete_operation(app, form_data, test_db):
         # Create stipend
         form = StipendForm(data=form_data)
         form.tags.choices = tag_choices
-        stipend = Stipend(**form.data)
-        db.session.add(stipend)
-        db.session.commit()
+        
+        # Filter out non-model fields
+        model_data = filter_model_fields(form.data, Stipend)
+        
+        # Create stipend instance
+        stipend = Stipend(**model_data)
+        
+        # Save to database
+        test_db.session.add(stipend)
+        test_db.session.commit()
+        
+        # Verify creation
+        assert Stipend.query.count() == 1
         
         # Delete stipend
-        db.session.delete(stipend)
-        db.session.commit()
+        test_db.session.delete(stipend)
+        test_db.session.commit()
+        
+        # Verify deletion
+        assert Stipend.query.count() == 0
         
         # Verify audit log
         log = AuditLog.query.filter_by(object_type='Stipend', object_id=stipend.id).first()
