@@ -1,11 +1,13 @@
 # TODO List
 ## High Priority
 - [x] Fix form validation for required fields
-- [ ] Add audit log viewing interface
+- [x] Add audit log viewing interface
 - [x] Implement proper bot scaffolding
-- [ ] Add test coverage for timezone handling
-- [ ] Update datetime handling to use timezone-aware objects
+- [x] Add test coverage for timezone handling
+- [x] Update datetime handling to use timezone-aware objects
 - [x] Implement audit logging for delete operations
+- [ ] Add notification system test coverage
+- [ ] Improve error handling for audit logs
 
 ## Completed
 - [x] Implement CRUD operations with audit logging

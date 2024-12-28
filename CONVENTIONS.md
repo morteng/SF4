@@ -9,10 +9,10 @@
 - **CSRF Protection**: Include CSRF tokens in all forms and HTMX requests
 - **Audit Logging**: Log all CRUD operations with required fields
   - Must include: user_id, action, ip_address, http_method, endpoint
-  - Optional: object_type, object_id, details_before, details_after (JSON serialized)
-  - object_id required when object_type is provided
-  - Timestamps in UTC
-  - Rollback on audit log failure
+  - Optional: object_type, object_id, details (JSON serialized)
+  - user_id can be null for system events
+  - Timestamps in UTC (timezone-aware)
+  - Handle errors gracefully without rollback
   - Use consistent action names (e.g., 'delete_stipend')
 - Notifications must:
   - Use NotificationType enum values
