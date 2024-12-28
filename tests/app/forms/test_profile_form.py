@@ -10,9 +10,7 @@ import logging
 
 def test_profile_form_valid(logged_in_client, db_session, test_user, app):
     """Test valid profile form submission with CSRF protection"""
-    with app.app_context():
-    """Test valid profile form submission with CSRF protection"""
-    with logged_in_client.application.app_context():
+    with app.app_context(), logged_in_client.application.app_context():
         # Get CSRF token from edit profile page
         edit_profile_response = logged_in_client.get(url_for('user.edit_profile'))
         csrf_token = extract_csrf_token(edit_profile_response.data)
