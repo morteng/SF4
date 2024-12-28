@@ -1,12 +1,12 @@
 # TODO List
 ## High Priority
 - [ ] Fix SelectMultipleField choices validation in StipendForm
-- [ ] Complete admin interface security checks
-- [ ] Add HTMX integration for dynamic content updates
+- [ ] Add future date validation (5 year limit)
+- [ ] Implement audit logging for all CRUD operations
+- [ ] Add CSRF protection to all forms
 
 ## Completed
-- [x] Implement audit logging in admin blueprint
+- [x] Implement basic admin interface
 - [x] Add date validation constraints
 - [x] Fix rate limiting implementation
-- [x] Add SelectMultipleField choices validation
 
