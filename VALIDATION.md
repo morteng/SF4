@@ -13,7 +13,7 @@
   - Action type (create/update/delete/system_event)
   - Object type and ID
   - Timestamp (UTC)
-  - IP address (if available)
+  - IP address (required for all operations)
   - Operation details
   - Before/after state for updates
 - Verify audit logs create corresponding notifications

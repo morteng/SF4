@@ -1,11 +1,12 @@
 # TODO List
 ## High Priority
 - [x] Core CRUD & security
-- [ ] Implement password hashing using werkzeug.security
+- [x] Implement password hashing using werkzeug.security
 - [ ] Fix remaining datetime.utcnow() deprecation warnings
 - [x] Add username validation constants
 - [x] Improve test isolation with unique credentials
-- [ ] Fix DetachedInstanceError in admin user tests
+- [x] Fix DetachedInstanceError in admin user tests
+- [ ] Ensure IP address logging for all audit logs
 - [x] Testing:
   - Admin routes
   - User request handling
