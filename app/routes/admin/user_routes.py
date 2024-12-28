@@ -273,15 +273,16 @@ def delete(id):
         
     try:
         try:
+            username = user.username
             delete_user(user)
-            
-            # Create audit log
+                
+            # Create audit log with captured username
             AuditLog.create(
                 user_id=current_user.id,
                 action='delete_user',
                 object_type='User',
                 object_id=user.id,
-                details=f'Deleted user {user.username}',
+                details=f'Deleted user {username}',
                 ip_address=request.remote_addr
             )
             
