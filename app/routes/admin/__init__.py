@@ -156,13 +156,20 @@ def register_admin_blueprints(app):
     from .dashboard_routes import admin_dashboard_bp
 
     # Configure rate limits for each blueprint
+    def apply_rate_limits(bp):
+        @bp.before_request
+        def limit_requests():
+            limiter.limit("100 per hour")(lambda: None)()
+            if request.method == 'POST':
+                limiter.limit("10 per minute")(lambda: None)()
+            if request.method == 'DELETE':
+                limiter.limit("3 per minute")(lambda: None)()
+            if request.method == 'POST' and request.path.endswith('/reset_password'):
+                limiter.limit("5 per hour", key_func=lambda: f"{get_remote_address()}_reset_password")(lambda: None)()
+
     for bp in [admin_user_bp, admin_bot_bp, admin_org_bp, 
                admin_stipend_bp, admin_tag_bp]:
-        bp.before_request(lambda: limiter.limit("100 per hour"))  # Global admin limit
-        bp.before_request(lambda: limiter.limit("10 per minute", methods=['POST']))  # Create/Update
-        bp.before_request(lambda: limiter.limit("3 per minute", methods=['DELETE']))  # Delete
-        bp.before_request(lambda: limiter.limit("5 per hour", methods=['POST'], key_func=lambda: f"{get_remote_address()}_reset_password", 
-                          path_func=lambda: request.path.endswith('/reset_password')))  # Password resets
+        apply_rate_limits(bp)
 
     # Register sub-blueprints with unique prefixes
     admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')
