@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, request
+from flask import Blueprint, redirect, url_for, request, current_app
 from flask_wtf.csrf import validate_csrf
 from functools import wraps
 from flask_login import current_user
