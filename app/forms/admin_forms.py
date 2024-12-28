@@ -180,9 +180,7 @@ class UserForm(FlaskForm):
     ])
     password = PasswordField('Password', validators=[
         DataRequired(message="Password is required."),
-        Length(min=8, message="Password must be at least 8 characters long."),
-        Regexp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
-               message="Password must contain at least one uppercase, one lowercase, one number and one special character")
+        Length(min=8, message="Password must be at least 8 characters long.")
     ])
     is_admin = BooleanField('Is Admin')
     is_active = BooleanField('Is Active', default=True)

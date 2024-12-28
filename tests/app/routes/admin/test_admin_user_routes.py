@@ -203,14 +203,23 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, client):
         assert csrf_token is not None
 
         # Create user
+        # Create form data with proper field names
+        form_data = {
+            'username': user_data['username'],
+            'email': user_data['email'],
+            'password': 'StrongPass123!',  # Valid password
+            'is_admin': 'False',  # Must be string for form submission
+            'csrf_token': csrf_token
+        }
+            
+        # Submit the form with proper headers
         create_response = logged_in_admin.post('/admin/users/create',
-                                            data={
-                                                **user_data,
-                                                'csrf_token': csrf_token,
-                                                'is_admin': False,
-                                                'password': 'StrongPass123!'  # Add valid password
-                                            },
-                                            follow_redirects=True)
+                                            data=form_data,
+                                            follow_redirects=True,
+                                            headers={
+                                                'X-CSRFToken': csrf_token,
+                                                'Content-Type': 'application/x-www-form-urlencoded'
+                                            })
             
         # Verify user creation
         assert create_response.status_code == 200, \

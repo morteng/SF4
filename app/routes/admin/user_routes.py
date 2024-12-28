@@ -48,16 +48,15 @@ def create():
     
     if form.validate_on_submit():
         try:
-            # Prepare user data
-            user_data = {
-                'username': form.username.data,
-                'email': form.email.data,
-                'password': form.password.data,
-                'is_admin': form.is_admin.data if hasattr(form, 'is_admin') else False
-            }
-
-            # Create user through service layer
-            new_user = create_user(user_data, current_user.id)
+            # Create user with proper data
+            new_user = User(
+                username=form.username.data,
+                email=form.email.data,
+                password_hash=generate_password_hash(form.password.data),
+                is_admin=form.is_admin.data
+            )
+            db.session.add(new_user)
+            db.session.commit()
             
             # Verify user creation
             if not new_user or not new_user.id:
