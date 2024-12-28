@@ -7,73 +7,70 @@ from app.constants import FlashMessages, FlashCategory
 
 logging.basicConfig(level=logging.INFO)  # Set logging level to INFO
 
-def update_stipend(stipend, data, session=db.session):
+def update_stipend(stipend, data, user_id, ip_address, session=db.session):
+    """Update a stipend with audit logging."""
     try:
-        # Ensure open_for_applications is present with default False
-        if 'open_for_applications' not in data:
-            data['open_for_applications'] = False
+        # Validate required fields
+        required_fields = ['name', 'summary', 'description', 'organization_id']
+        for field in required_fields:
+            if not data.get(field):
+                raise ValueError(f"{field.replace('_', ' ').title()} is required")
 
-        # Handle organization_id separately
-        organization_id = data.pop('organization_id', None)
-        if organization_id:
-            organization = session.get(Organization, organization_id)
-            if not organization:
-                raise ValueError(f"Invalid organization ID: {organization_id}")
-            stipend.organization = organization
+        # Capture before state for audit log
+        before_state = stipend.to_dict()
 
-        # Process other fields
+        # Handle organization
+        organization = session.get(Organization, data['organization_id'])
+        if not organization:
+            raise ValueError("Invalid organization ID")
+        stipend.organization = organization
+
+        # Handle tags
+        if 'tags' in data:
+            tag_ids = data.pop('tags')
+            tags = session.query(Tag).filter(Tag.id.in_(tag_ids)).all()
+            if len(tags) != len(tag_ids):
+                raise ValueError("One or more invalid tags provided")
+            stipend.tags = tags
+
+        # Handle application deadline
+        if 'application_deadline' in data:
+            deadline = data['application_deadline']
+            if deadline:
+                try:
+                    deadline = datetime.strptime(deadline, '%Y-%m-%d %H:%M:%S')
+                    if deadline < datetime.utcnow():
+                        raise ValueError("Application deadline cannot be in the past")
+                    if (deadline - datetime.utcnow()).days > 365 * 5:
+                        raise ValueError("Application deadline cannot be more than 5 years in the future")
+                    data['application_deadline'] = deadline
+                except ValueError:
+                    raise ValueError("Invalid application deadline format. Use YYYY-MM-DD HH:MM:SS")
+
+        # Update fields
         for key, value in data.items():
-            if key.startswith('_'):
-                continue
-
-            if key == 'application_deadline':
-                if value == '':
-                    value = None
-                elif isinstance(value, str):
-                    try:
-                        value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
-                        now = datetime.now()
-                        if value < now:
-                            raise ValueError("Application deadline cannot be in the past.")
-                        if (value - now).days > 365 * 5:
-                            raise ValueError("Application deadline cannot be more than 5 years in the future.")
-                    except ValueError as e:
-                        if 'does not match format' in str(e):
-                            raise ValueError("Invalid date format. Please use YYYY-MM-DD HH:MM:SS")
-                        elif 'day is out of range' in str(e):
-                            raise ValueError("Invalid date values (e.g., Feb 30)")
-                        elif 'hour must be in' in str(e):
-                            raise ValueError("Invalid time values (e.g., 25:61:61)")
-                        elif 'month must be in' in str(e):
-                            raise ValueError("Invalid date values (e.g., Feb 30)")
-                        elif 'minute must be in' in str(e):
-                            raise ValueError("Invalid time values (e.g., 25:61:61)")
-                        elif 'second must be in' in str(e):
-                            raise ValueError("Invalid time values (e.g., 25:61:61)")
-                        else:
-                            raise ValueError("Invalid date/time values")
-                elif isinstance(value, datetime):
-                    if value < datetime.now():
-                        raise ValueError("Application deadline cannot be in the past.")
-                elif value is not None:
-                    raise ValueError("Invalid date format")
-            elif key == 'open_for_applications' and value is not None:
-                if isinstance(value, str):
-                    if value.lower() not in ['y', 'yes', 'true', '1', 'n', 'no', 'false', '0']:
-                        raise ValueError("Open for Applications must be a boolean value.")
-                    value = value.lower() in ['y', 'yes', 'true', '1']
-                elif not isinstance(value, bool):
-                    raise ValueError("Open for Applications must be a boolean value.")
-
             if hasattr(stipend, key):
                 setattr(stipend, key, value)
 
+        # Add audit log
+        audit = AuditLog(
+            user_id=user_id,
+            action_type='update',
+            object_type='stipend',
+            object_id=stipend.id,
+            ip_address=ip_address,
+            http_method='POST',
+            endpoint=f'/admin/stipends/{stipend.id}/edit',
+            before_state=before_state,
+            after_state=stipend.to_dict()
+        )
+        session.add(audit)
         session.commit()
+
         flash(FlashMessages.UPDATE_STIPEND_SUCCESS.value, FlashCategory.SUCCESS.value)
         return True
     except Exception as e:
         session.rollback()
-        logging.error(f"Failed to create stipend: {e}")  # Add this line
         logging.error(f"Failed to update stipend: {e}")
         flash(str(e) if str(e) else FlashMessages.UPDATE_STIPEND_ERROR.value, FlashCategory.ERROR.value)
         return False

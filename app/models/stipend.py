@@ -51,6 +51,7 @@ class Stipend(db.Model):
         return f'<Stipend {self.name}>'
 
     def to_dict(self):
+        """Convert stipend to dictionary with all relevant data."""
         return {
             'id': self.id,
             'name': self.name,
@@ -62,7 +63,12 @@ class Stipend(db.Model):
             'application_deadline': self.application_deadline.isoformat() if self.application_deadline else None,
             'open_for_applications': self.open_for_applications,
             'organization_id': self.organization_id,
-            'tags': [tag.name for tag in self.tags],
+            'organization': self.organization.name if self.organization else None,
+            'tags': [{'id': tag.id, 'name': tag.name} for tag in self.tags],
             'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
+            'updated_at': self.updated_at.isoformat(),
+            'is_active': self.open_for_applications and (
+                not self.application_deadline or 
+                self.application_deadline > datetime.utcnow()
+            )
         }
