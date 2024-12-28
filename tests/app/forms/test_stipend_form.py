@@ -478,9 +478,10 @@ def test_stipend_update_operation(app, form_data, test_db):
         form = StipendForm(data=form_data)
         form.tags.choices = tag_choices
         
-        # Convert application_deadline to datetime
+        # Convert application_deadline to datetime and localize to UTC
         from datetime import datetime
-        deadline = datetime.strptime(form.application_deadline.data, '%Y-%m-%d %H:%M:%S')
+        from pytz import utc
+        deadline = utc.localize(datetime.strptime(form.application_deadline.data, '%Y-%m-%d %H:%M:%S'))
         
         # Create stipend
         stipend = Stipend.create({
