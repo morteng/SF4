@@ -206,21 +206,30 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
     assert delete_response.status_code == 200
     assert FlashMessages.DELETE_USER_SUCCESS.value.encode() in delete_response.data
         
-    # Verify audit log was created for the deletion
-    audit_log = AuditLog.query.filter_by(
+    # Verify audit logs were created for all operations
+    create_log = AuditLog.query.filter_by(
+        action='create_user',
+        object_type='User',
+        object_id=created_user.id
+    ).first()
+    assert create_log is not None
+        
+    delete_log = AuditLog.query.filter_by(
         action='delete_user',
         object_type='User',
         object_id=created_user.id
     ).first()
-    assert audit_log is not None
+    assert delete_log is not None
         
     # Get the current logged in admin user
     with logged_in_admin.session_transaction() as session:
         admin_user_id = session['_user_id']
         
-    # Verify the audit log was created by the admin user
-    assert audit_log.user_id == int(admin_user_id)
-    assert audit_log.ip_address is not None
+    # Verify the audit logs were created by the admin user
+    assert create_log.user_id == int(admin_user_id)
+    assert delete_log.user_id == int(admin_user_id)
+    assert create_log.ip_address is not None
+    assert delete_log.ip_address is not None
     
     # Use a unique username for the test
     unique_user_data = user_data.copy()

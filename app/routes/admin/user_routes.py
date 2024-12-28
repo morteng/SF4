@@ -32,9 +32,16 @@ limiter = Limiter(
 @admin_required
 def create():
     """Create a new user with proper validation and audit logging"""
-    """Create a new user with audit logging and validation"""
     form = UserForm()
     notification_count = get_notification_count(current_user.id)
+    
+    # Create audit log for access
+    AuditLog.create(
+        user_id=current_user.id,
+        action='access_create_user',
+        object_type='User',
+        ip_address=request.remote_addr
+    )
     
     if request.method == 'GET':
         return render_template('admin/users/create.html', 

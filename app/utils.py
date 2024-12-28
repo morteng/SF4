@@ -44,6 +44,15 @@ def admin_required(f):
             flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
             return abort(403)
             
+        # Create audit log for admin access
+        AuditLog.create(
+            user_id=current_user.id,
+            action=f.__name__,
+            object_type='AdminPanel',
+            details=f"Accessed admin route: {request.path}",
+            ip_address=request.remote_addr
+        )
+            
         # Log admin access
         AuditLog.create(
             user_id=current_user.id,
