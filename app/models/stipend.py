@@ -57,6 +57,14 @@ class Stipend(db.Model):
         from flask import request
         from app.models.tag import Tag
         
+        # Validate required fields
+        required_fields = ['name', 'summary', 'description', 'homepage_url', 
+                          'application_procedure', 'eligibility_criteria',
+                          'application_deadline', 'organization_id']
+        for field in required_fields:
+            if field not in data:
+                raise ValueError(f"Missing required field: {field}")
+        
         # Get current state before update
         before = self.to_dict()
         
