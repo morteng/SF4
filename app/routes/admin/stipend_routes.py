@@ -36,7 +36,7 @@ from app.services.stipend_service import (
     update_stipend
 )
 from app.extensions import db
-from app.utils import admin_required, flash_message
+from app.utils import admin_required, flash_message, log_audit, create_notification
 
 admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 
