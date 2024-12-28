@@ -40,15 +40,18 @@ class Notification(db.Model):
         return cls.query.filter_by(read_status=False).count()
         
     @classmethod
-    def create(cls, type, message, related_object=None):
+    def create(cls, type, message, related_object=None, user_id=None):
         notification = cls(
             type=type,
             message=message,
-            read_status=False
+            read_status=False,
+            user_id=user_id
         )
         if related_object:
             notification.related_object_type = related_object.__class__.__name__
             notification.related_object_id = related_object.id
+            if user_id is None and hasattr(related_object, 'user_id'):
+                notification.user_id = related_object.user_id
         db.session.add(notification)
         db.session.commit()
         return notification
