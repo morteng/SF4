@@ -11,8 +11,11 @@
 
 ### Audit Log Validation
 - Verify all CRUD operations create audit logs
-- Check logs contain required fields
+- Check logs contain required fields:
+  - User ID, Action type, Object type, Object ID
+  - Timestamp, IP address, HTTP method, Endpoint
 - Ensure logs are created for both success and failure cases
+- Validate before/after state for update operations
 
 ### Notification Handling
 - notification_count must be passed to all admin templates

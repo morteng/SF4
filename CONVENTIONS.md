@@ -23,6 +23,6 @@
   - Object type and ID
   - Timestamp (timezone-aware UTC)
   - IP address
-  - Before/after state for updates
   - HTTP method and endpoint
+  - Before/after state for updates (where applicable)
 
