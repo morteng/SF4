@@ -1,9 +1,9 @@
 # TODO List
 
 ## High Priority
-- [ ] Improve error case test coverage
-- [ ] Add critical operation logging
 - [ ] Fix database session management
+- [ ] Add critical operation logging
+- [ ] Improve error case test coverage
 
 ## Completed
 - [x] Fix CSRF validation
