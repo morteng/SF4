@@ -107,10 +107,10 @@ def test_organization_form_url_validation(app):
             )
             assert form.validate() is True
 
-def test_organization_form_description_validation(app, client):
+def test_organization_form_description_validation(app):
     """Test description field validation"""
-    with app.test_request_context():
-        # Initialize session and CSRF token
+    with app.test_client() as client:
+        # Initialize session
         client.get('/')
         
         # Test max length
