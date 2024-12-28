@@ -177,7 +177,9 @@ class CustomDateTimeField(DateTimeField):
                 
             # Add future date validation
             now = datetime.now(utc)
-            if dt < now:
+            # Make the parsed date timezone-aware using UTC
+            dt_utc = utc.localize(dt)
+            if dt_utc < now:
                 raise ValidationError(self.error_messages['past_date'])
                 
             return True
