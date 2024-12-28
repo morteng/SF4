@@ -78,13 +78,13 @@ def create_app(config_name='development'):
             # Initialize extensions first
             init_extensions(app)
             
-            # Only run migrations and init admin user if not in test mode
+            # Run migrations before any database operations
+            from flask_migrate import upgrade
+            upgrade()  # Apply migrations first
+            
+            # Only initialize admin user if not in test mode
             if not app.config.get('TESTING'):
-                from flask_migrate import upgrade
-                upgrade()
-                
-                # Initialize default data
-                init_admin_user()
+                init_admin_user()  # Now the tables exist
             
             # Register blueprints
             from app.routes.admin import register_admin_blueprints
