@@ -285,6 +285,13 @@ def delete(id):
                 details=f'Deleted user {username}',
                 ip_address=request.remote_addr
             )
+                
+            # Create notification
+            Notification.create(
+                type='user_deleted',
+                message=f'User {username} was deleted',
+                related_object=f'User:{user.id}'
+            )
             
             # Audit log
             logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.utcnow()}")

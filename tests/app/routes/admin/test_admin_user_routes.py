@@ -216,6 +216,14 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
     ).first()
     assert create_log is not None
     assert create_log.ip_address is not None
+        
+    # Verify notification was created
+    notification = Notification.query.filter_by(
+        type='user_created',
+        message=f'User {user_data["username"]} was created'
+    ).first()
+    assert notification is not None
+    assert notification.read_status is False
     
     # Update user
     update_response = logged_in_admin.post(f'/admin/users/{created_user.id}/edit',
@@ -261,6 +269,15 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
     delete_log = next(log for log in logs if log.action == 'delete_user')
     assert delete_log is not None
     assert delete_log.details == f"Deleted user {user_data['username']}"
+    assert delete_log.ip_address is not None
+        
+    # Verify notification was created
+    notification = Notification.query.filter_by(
+        type='user_deleted',
+        message=f'User {user_data["username"]} was deleted'
+    ).first()
+    assert notification is not None
+    assert notification.read_status is False
     
     # Verify all logs have IP addresses
     for log in logs:
