@@ -1,8 +1,8 @@
 # TODO List
 
 ## High Priority  
-- [ ] Fix database session management  
-- [ ] Add critical operation logging  
+- [x] Fix database session management  
+- [x] Add critical operation logging  
 - [ ] Improve error case test coverage  
 
 ## Completed  

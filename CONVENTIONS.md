@@ -5,6 +5,7 @@
 - Always rollback on database errors
 - Log errors with context using logger.error()
 - Validate inputs before processing
+- Preserve original exception types when re-raising
 
 ## Context Management  
 - Use Flask's context managers  
