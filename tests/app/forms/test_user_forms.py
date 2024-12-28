@@ -399,9 +399,9 @@ def test_profile_form_rate_limiting(client, setup_database):
                 'username': 'testuser',
                 'email': 'test@example.com',
                 'csrf_token': csrf_token
-            })
+            }, follow_redirects=True)  # Follow redirects
             responses.append(response.status_code)
-
+    
         # Verify rate limiting response
         assert 429 in responses, "Rate limiting not triggered"
         assert responses.count(200) == 10, "Expected 10 successful requests before rate limit"
