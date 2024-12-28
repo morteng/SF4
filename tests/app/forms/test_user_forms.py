@@ -329,7 +329,15 @@ def test_profile_form_invalid_csrf_token(client, setup_database):
     db.session.commit()
 
     with client:
-        # Login user
+        # First get the login page to establish session and get CSRF token
+        get_response = client.get(url_for('public.login'))
+        assert get_response.status_code == 200
+        
+        # Extract CSRF token using BeautifulSoup
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+        
+        # Test with invalid CSRF token
         login_response = client.post(url_for('public.login'), data={
             'username': 'testuser',
             'password': 'password123',
@@ -338,6 +346,15 @@ def test_profile_form_invalid_csrf_token(client, setup_database):
         
         assert login_response.status_code == 400
         assert b"CSRF token is invalid" in login_response.data
+        
+        # Test with missing CSRF token
+        login_response = client.post(url_for('public.login'), data={
+            'username': 'testuser',
+            'password': 'password123'
+        })
+        
+        assert login_response.status_code == 400
+        assert b"CSRF session token is missing" in login_response.data
 
 def test_profile_form_rate_limiting(client, setup_database):
     """Test rate limiting on profile form submissions"""
