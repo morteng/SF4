@@ -38,6 +38,12 @@ class AuditLog(db.Model):
             raise ValueError("object_id is required when object_type is provided")
             
         try:
+            # Convert dictionaries to JSON strings
+            if isinstance(details_before, dict):
+                details_before = json.dumps(details_before)
+            if isinstance(details_after, dict):
+                details_after = json.dumps(details_after)
+
             # Create the audit log entry
             log = AuditLog(
                 user_id=user_id,
