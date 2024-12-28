@@ -40,7 +40,7 @@ class Stipend(db.Model):
                     raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS")
         
             # Then validate date range
-            now = utc.localize(datetime.now())
+            now = datetime.now(timezone.utc)
             if data['application_deadline'] < now:
                 raise ValueError("Application deadline must be a future date")
             if (data['application_deadline'] - now).days > 365 * 5:
@@ -127,7 +127,7 @@ class Stipend(db.Model):
                     except ValueError:
                         raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS")
                 
-                now = utc.localize(datetime.now())
+                now = datetime.now(timezone.utc)
                 if data['application_deadline'] < now:
                     raise ValueError("Application deadline must be a future date")
                 if (data['application_deadline'] - now).days > 365 * 5:
