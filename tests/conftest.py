@@ -311,7 +311,14 @@ def logged_in_client(client, test_user, app, db_session, mock_rate_limiter):
         try:
             csrf_token = extract_csrf_token(login_response.data)
         except ValueError as e:
-            pytest.fail(f"Failed to extract CSRF token: {e}")
+            # If rate limiting is still an issue, disable it explicitly
+            with app.test_request_context():
+                if hasattr(app, 'extensions') and 'limiter' in app.extensions:
+                    limiter = app.extensions['limiter']
+                    limiter.enabled = False
+            # Retry extracting the CSRF token
+            login_response = client.get(url_for('public.login'))
+            csrf_token = extract_csrf_token(login_response.data)
 
         # Submit login form
         response = client.post(url_for('public.login'), data={
