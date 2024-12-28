@@ -8,9 +8,10 @@
 - **Flash Messages**: Use FlashMessages enum from app\constants.py for all flash messages
 - **CSRF Protection**: Include CSRF tokens in all forms and HTMX requests
 - **Audit Logging**: Log all CRUD operations with required fields
-  - Must include: user_id, action, object_type, object_id
-  - Optional: details_before, details_after (JSON serialized)
-  - Timestamps in UTC, include IP address and HTTP method
+  - Must include: user_id, action, ip_address, http_method, endpoint
+  - Optional: object_type, object_id, details_before, details_after (JSON serialized)
+  - object_id required when object_type is provided
+  - Timestamps in UTC
   - Rollback on audit log failure
   - Use consistent action names (e.g., 'delete_stipend')
 - Notifications must:
