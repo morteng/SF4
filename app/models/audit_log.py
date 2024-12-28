@@ -1,6 +1,5 @@
 import logging
-from datetime import datetime
-from datetime import timezone
+from datetime import datetime, timezone
 from app.extensions import db
 
 logger = logging.getLogger(__name__)
@@ -34,7 +33,7 @@ class AuditLog(db.Model):
                 details_before=details_before,
                 details_after=details_after,
                 ip_address=ip_address,
-                timestamp=datetime.now(timezone.UTC)
+                timestamp=datetime.now(timezone.utc)
             )
             db.session.add(log)
             
