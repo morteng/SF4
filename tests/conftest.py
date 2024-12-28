@@ -81,9 +81,11 @@ def db_session(_db, app):
 @pytest.fixture(scope='function')
 def client(app):
     """Provides a test client for the application with proper context management."""
-    # Disable rate limiting for tests
-    if 'limiter' in app.extensions:
-        app.extensions['limiter'].enabled = False
+    # Ensure rate limiting is disabled
+    if hasattr(app, 'extensions') and 'limiter' in app.extensions:
+        limiter = app.extensions['limiter']
+        limiter.enabled = False
+        limiter.reset()
     
     # Create a new test client
     client = app.test_client()

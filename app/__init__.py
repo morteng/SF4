@@ -47,23 +47,21 @@ def create_app(config_name='development'):
     def load_user(user_id):
         return db.session.get(User, int(user_id))  
 
-    # Initialize rate limiter with admin-specific limits
+    # Initialize rate limiter
     limiter = Limiter(
         get_remote_address,
         app=app,
         default_limits=["200 per day", "50 per hour"],
-        application_limits=[
-            "10/minute;100/hour",  # Create/Update
-            "3/minute;30/hour",    # Delete
-            "10/hour",             # Bot operations
-            "5/hour",              # Password resets
-            "3/minute"             # Login attempts
-        ]
+        storage_uri="memory://",
+        enabled=not app.config.get('TESTING')  # Disable in test environment
     )
+
+    # Register blueprints before applying rate limits
+    from app.routes.admin import register_admin_blueprints
+    register_admin_blueprints(app)
     
-    # Disable rate limiting in test environment
-    if app.config.get('TESTING'):
-        limiter.enabled = False
+    # Apply specific limits to admin routes
+    limiter.limit("10 per minute")(admin_user_bp)
 
     # Blueprints will be registered in the app context below
 

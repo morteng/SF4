@@ -32,7 +32,6 @@ limiter = Limiter(
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 @admin_required
-@limiter.limit("10 per minute")
 def create():
     """Create a new user with audit logging and notifications"""
     """Create a new user with proper validation and audit logging"""
