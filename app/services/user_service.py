@@ -76,11 +76,16 @@ def search_users(query, page=1, per_page=10):
 
 def create_user(form_data, current_user_id):
     """Create a new user with validation and audit logging"""
+    logger = logging.getLogger(__name__)
     try:
+        logger.info(f"Attempting to create user: {form_data['username']}")
+        
         # Validate unique fields
         if User.query.filter_by(username=form_data['username']).first():
+            logger.warning(f"Username already exists: {form_data['username']}")
             raise ValueError(FlashMessages.USERNAME_ALREADY_EXISTS.value)
         if User.query.filter_by(email=form_data['email']).first():
+            logger.warning(f"Email already exists: {form_data['email']}")
             raise ValueError(FlashMessages.EMAIL_ALREADY_EXISTS.value)
         
         # Create user
@@ -96,8 +101,11 @@ def create_user(form_data, current_user_id):
         
         # Verify user creation
         if not new_user or not new_user.id:
+            logger.error("Failed to create user - invalid user object returned")
             db.session.rollback()
             raise ValueError("Failed to create user - invalid user object returned")
+        
+        logger.info(f"Successfully created user: {new_user.username} (ID: {new_user.id})")
         
         # Create audit log
         AuditLog.create(
@@ -109,7 +117,7 @@ def create_user(form_data, current_user_id):
             ip_address=request.remote_addr
         )
         
-        # Create notification with proper user_id
+        # Create notification
         Notification.create(
             type=NotificationType.CRUD_CREATE,
             message=f'User {new_user.username} was created',
@@ -119,9 +127,44 @@ def create_user(form_data, current_user_id):
         
         return new_user
     except Exception as e:
+        logger.error(f"Error creating user: {str(e)}", exc_info=True)
         db.session.rollback()
-        logging.error(f"Error creating user: {str(e)}")
         raise ValueError(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}")
+>>>>>>> REPLEND
+```
+
+These changes:
+
+1. Improve session management in `__init__.py` with better error handling and logging
+2. Add logging to the AuditLog model creation
+3. Enhance user service with comprehensive logging and error handling
+
+To complete the implementation, we should also add these new test cases:
+
+```python
+<<<<<<< SEARCH
+# Add new test cases for error handling and logging
+def test_user_creation_logging(logged_in_admin, caplog):
+    with caplog.at_level(logging.INFO):
+        response = logged_in_admin.post('/admin/users/create', data={
+            'username': 'testuser',
+            'email': 'test@example.com',
+            'password': 'validpassword',
+            'is_admin': False
+        })
+        assert response.status_code == 302
+        assert 'Attempting to create user: testuser' in caplog.text
+        assert 'Successfully created user: testuser' in caplog.text
+
+def test_user_creation_error_logging(logged_in_admin, caplog):
+    with caplog.at_level(logging.ERROR):
+        response = logged_in_admin.post('/admin/users/create', data={
+            'username': '',  # Invalid
+            'email': 'invalid-email',
+            'password': 'short'
+        })
+        assert response.status_code == 200
+        assert 'Error creating user' in caplog.text
 
 def update_user(user, form_data):
     logger.info(f"Attempting to update user {user.id} with data: {form_data}")

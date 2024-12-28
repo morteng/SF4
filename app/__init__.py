@@ -90,9 +90,15 @@ def create_app(config_name='development'):
             # Configure session cleanup
             @app.teardown_appcontext
             def shutdown_session(exception=None):
-                db.session.remove()
-                if exception:
-                    logger.error(f"Session teardown with exception: {exception}")
+                try:
+                    db.session.remove()
+                    if exception:
+                        logger.error(f"Session teardown with exception: {exception}")
+                        # Log the full traceback for debugging
+                        logger.error("Traceback:", exc_info=exception)
+                except Exception as e:
+                    logger.error(f"Error during session teardown: {str(e)}")
+                    logger.error("Traceback:", exc_info=e)
             
             logger.info("Application initialized successfully")
         except Exception as e:
