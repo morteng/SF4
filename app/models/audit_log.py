@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 class AuditLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     action = db.Column(db.String(100), nullable=False)
     object_type = db.Column(db.String(50), nullable=True)
     object_id = db.Column(db.Integer, nullable=True)
@@ -24,7 +24,7 @@ class AuditLog(db.Model):
     ip_address = db.Column(db.String(45), nullable=True)
     http_method = db.Column(db.String(10), nullable=True)
     endpoint = db.Column(db.String(100), nullable=True)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    timestamp = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
 
     @staticmethod
     def create(user_id, action, details=None, object_type=None, object_id=None,
