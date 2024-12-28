@@ -55,13 +55,21 @@ class Stipend(db.Model):
         """Update stipend fields with audit logging"""
         from app.models.audit_log import AuditLog
         from flask import request
+        from app.models.tag import Tag
         
         # Get current state before update
         before = self.to_dict()
         
         # Update fields
         for key, value in data.items():
-            setattr(self, key, value)
+            if key == 'tags':
+                # Convert tag IDs to Tag instances if necessary
+                self.tags = [
+                    Tag.query.get(tag_id) if isinstance(tag_id, int) else tag_id
+                    for tag_id in value
+                ]
+            else:
+                setattr(self, key, value)
         
         # Commit changes
         db.session.commit()

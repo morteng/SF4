@@ -466,7 +466,7 @@ def test_stipend_update_operation(app, form_data, test_db):
             'name': 'Updated Stipend Name',
             'summary': 'Updated summary',
             'description': 'Updated description',
-            'tags': [tag_choices[0][0]]
+            'tags': [Tag.query.get(tag_choices[0][0])]  # Convert ID to Tag instance
         }
         updated_stipend = stipend.update(updated_data, user_id=1)
         
