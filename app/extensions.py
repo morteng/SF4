@@ -35,7 +35,26 @@ def init_extensions(app):
         
         # Initialize rate limiting
         limiter.init_app(app)
-        app.extensions['limiter'] = limiter  # Explicitly register limiter
+        app.extensions['limiter'] = limiter
         
         # Enable CSRF protection
         csrf.init_app(app)
+        
+        # Initialize audit logging
+        from app.models.audit_log import AuditLog
+        from flask import request
+        from flask_login import current_user
+        
+        @app.after_request
+        def log_request(response):
+            if request.endpoint and request.endpoint.startswith('admin.'):
+                AuditLog.create(
+                    user_id=current_user.id if current_user.is_authenticated else 0,
+                    action=request.method,
+                    object_type=request.endpoint.split('.')[-1],
+                    ip_address=request.remote_addr,
+                    http_method=request.method,
+                    endpoint=request.endpoint,
+                    commit=False  # Let the route handler commit
+                )
+            return response

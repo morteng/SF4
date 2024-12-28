@@ -29,7 +29,7 @@ class AuditLog(db.Model):
     @staticmethod
     def create(user_id, action, details=None, object_type=None, object_id=None,
               details_before=None, details_after=None, ip_address=None,
-              http_method=None, endpoint=None):
+              http_method=None, endpoint=None, commit=True):
         """Create audit log with JSON serialization and validation"""
         if details_before and not isinstance(details_before, (dict, str)):
             raise ValueError("details_before must be dict or JSON string")
@@ -57,7 +57,8 @@ class AuditLog(db.Model):
             timestamp=datetime.now(timezone.utc)
         )
         db.session.add(log)
-        db.session.commit()
+        if commit:
+            db.session.commit()
         
         # Create notification if this isn't being called from Notification.create()
         if object_type != 'Notification':

@@ -43,11 +43,17 @@ def create_app(config_name='development'):
     def load_user(user_id):
         return db.session.get(User, int(user_id))  
 
-    # Initialize rate limiter
+    # Initialize rate limiter with admin-specific limits
     limiter = Limiter(
         get_remote_address,
         app=app,
-        default_limits=["200 per day", "50 per hour"]
+        default_limits=["200 per day", "50 per hour"],
+        application_limits=[
+            "10/minute;100/hour",  # Create/Update
+            "3/minute;30/hour",    # Delete
+            "10/hour",             # Bot operations
+            "5/hour"               # Password resets
+        ]
     )
 
     # Blueprints will be registered in the app context below
