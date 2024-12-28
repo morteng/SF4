@@ -47,6 +47,14 @@ def create():
                             notification_count=notification_count)
     
     if form.validate_on_submit():
+        # Check for existing username/email
+        if User.query.filter_by(username=form.username.data).first():
+            flash_message(FlashMessages.USERNAME_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
+            return render_template('admin/users/create.html', form=form), 400
+        if User.query.filter_by(email=form.email.data).first():
+            flash_message(FlashMessages.EMAIL_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
+            return render_template('admin/users/create.html', form=form), 400
+
         try:
             # Create user with proper data
             new_user = User(
@@ -58,20 +66,25 @@ def create():
             db.session.add(new_user)
             db.session.commit()
 
-            # Create audit log
+            # Create audit log with before/after state
             AuditLog.create(
                 user_id=current_user.id,
                 action='create_user',
                 object_type='User',
                 object_id=new_user.id,
-                details=f'Created new user {new_user.username}',
+                details_before=None,
+                details_after={
+                    'username': new_user.username,
+                    'email': new_user.email,
+                    'is_admin': new_user.is_admin
+                },
                 ip_address=request.remote_addr
             )
 
-            # Create notification using proper enum value
+            # Create notification
             Notification.create(
                 type='user_created',
-                message=f'User {new_user.username} was created',
+                message=FlashMessages.USER_CREATED.value.format(username=new_user.username),
                 related_object=new_user,
                 user_id=current_user.id
             )
@@ -81,7 +94,7 @@ def create():
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Error creating user: {str(e)}")
-            flash_message(f"Error creating user: {str(e)}", FlashCategory.ERROR.value)
+            flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
             return render_template('admin/users/create.html', form=form), 500
             
             # Verify user creation
@@ -195,16 +208,25 @@ def edit(id):
                 
             # Update user details
             try:
-                old_username = user.username
+                old_data = {
+                    'username': user.username,
+                    'email': user.email,
+                    'is_admin': user.is_admin
+                }
                 update_user(user, form.data)
                 
-                # Create audit log with both old and new username
+                # Create audit log with before/after state
                 AuditLog.create(
                     user_id=current_user.id,
                     action='update_user',
                     object_type='User',
                     object_id=user.id,
-                    details=f'Updated username from {old_username} to {user.username}',
+                    details_before=old_data,
+                    details_after={
+                        'username': user.username,
+                        'email': user.email,
+                        'is_admin': user.is_admin
+                    },
                     ip_address=request.remote_addr
                 )
                 
@@ -249,26 +271,31 @@ def delete(id):
         return redirect(url_for('admin.user.index')), 400
         
     try:
-        try:
-            username = user.username
-            delete_user(user)
+        username = user.username
+        delete_user(user)
                 
-            # Create audit log with captured username
-            AuditLog.create(
-                user_id=current_user.id,
-                action='delete_user',
-                object_type='User',
-                object_id=user.id,
-                details=f'Deleted user {username}',
-                ip_address=request.remote_addr
-            )
+        # Create audit log with before state
+        AuditLog.create(
+            user_id=current_user.id,
+            action='delete_user',
+            object_type='User',
+            object_id=user.id,
+            details_before={
+                'username': user.username,
+                'email': user.email,
+                'is_admin': user.is_admin
+            },
+            details_after=None,
+            ip_address=request.remote_addr
+        )
                 
-            # Create notification
-            Notification.create(
-                type='user_deleted',
-                message=f'User {username} was deleted',
-                related_object=f'User:{user.id}'
-            )
+        # Create notification
+        Notification.create(
+            type='user_deleted',
+            message=FlashMessages.DELETE_USER_SUCCESS.value.format(username=username),
+            related_object=f'User:{user.id}',
+            user_id=current_user.id
+        )
             
             # Audit log
             logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.utcnow()}")

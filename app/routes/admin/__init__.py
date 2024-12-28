@@ -39,6 +39,12 @@ def create_admin_blueprint():
     # Add before_request handler for security checks
     @admin_bp.before_request
     def check_admin_access():
+        # Verify CSRF token for POST requests
+        if request.method == 'POST' and not validate_csrf(request.form.get('csrf_token')):
+            flash_message(FlashMessages.CSRF_ERROR.value, FlashCategory.ERROR.value)
+            return redirect(url_for('public.login'))
+        
+        # Check admin access
         if not current_user.is_authenticated or not current_user.is_admin:
             flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
             return redirect(url_for('public.login'))
@@ -82,9 +88,11 @@ def register_admin_blueprints(app):
     # Configure rate limits for each blueprint
     for bp in [admin_user_bp, admin_bot_bp, admin_org_bp, 
                admin_stipend_bp, admin_tag_bp]:
-        bp.before_request(lambda: limiter.limit("100 per hour"))
-        bp.before_request(lambda: limiter.limit("10 per minute", methods=['POST']))
-        bp.before_request(lambda: limiter.limit("3 per minute", methods=['DELETE']))
+        bp.before_request(lambda: limiter.limit("100 per hour"))  # Global admin limit
+        bp.before_request(lambda: limiter.limit("10 per minute", methods=['POST']))  # Create/Update
+        bp.before_request(lambda: limiter.limit("3 per minute", methods=['DELETE']))  # Delete
+        bp.before_request(lambda: limiter.limit("5 per hour", methods=['POST'], key_func=lambda: f"{get_remote_address()}_reset_password", 
+                          path_func=lambda: request.path.endswith('/reset_password')))  # Password resets
 
     # Register sub-blueprints with unique prefixes
     admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')
