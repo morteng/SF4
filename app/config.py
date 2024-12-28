@@ -40,6 +40,7 @@ class TestConfig(Config):
     RATELIMIT_DEFAULT = "9999999 per second"  # Effectively disable rate limits
     RATELIMIT_USER_MANAGEMENT = "9999999 per second"
     RATELIMIT_BOT_OPERATIONS = "9999999 per second"
+    RATELIMIT_LOGIN = "9999999 per second"  # Add specific login rate limit override
 
 class DevelopmentConfig(Config):
     DEBUG = True
