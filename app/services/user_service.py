@@ -90,6 +90,11 @@ def create_user(form_data, current_user_id):
         db.session.add(new_user)
         db.session.commit()
         
+        # Verify user creation
+        if not new_user or not new_user.id:
+            db.session.rollback()
+            raise ValueError("Failed to create user - invalid user object returned")
+        
         # Create audit log
         AuditLog.create(
             user_id=current_user_id,
@@ -104,7 +109,7 @@ def create_user(form_data, current_user_id):
         Notification.create(
             type='user_created',
             message=f'User {new_user.username} was created',
-            related_object=f'User:{new_user.id}'
+            related_object=new_user  # Pass the user object directly
         )
         
         return new_user
