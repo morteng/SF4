@@ -117,13 +117,13 @@ def create():
                                     form=form,
                                     notification_count=notification_count), 500
 
-    except Exception as e:
-        db.session.rollback()
-        logging.error(f"Error creating user: {str(e)}")
-        flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR)
-        return render_template('admin/users/create.html', 
-                            form=form,
-                            notification_count=notification_count), 500
+        except Exception as e:
+            db.session.rollback()
+            logging.error(f"Error creating user: {str(e)}")
+            flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR)
+            return render_template('admin/users/create.html', 
+                                form=form,
+                                notification_count=notification_count), 500
 
     # Handle form validation errors
     error_messages = []
