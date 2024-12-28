@@ -90,7 +90,11 @@ def test_past_date(app, form_data):
     yesterday = datetime.now() - timedelta(days=1)
     form_data['application_deadline'] = yesterday.strftime('%Y-%m-%d %H:%M:%S')
     with app.test_request_context():
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+            
         form = StipendForm(data=form_data)
+        form.tags.choices = tag_choices  # Set the choices
         assert form.validate() is False
         assert 'Application deadline must be a future date' in form.errors['application_deadline']
 
