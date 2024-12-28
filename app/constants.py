@@ -160,7 +160,6 @@ class FlashMessages(str, Enum):
     
     # Authentication
     ADMIN_ACCESS_ERROR = "Error accessing admin panel. Please try again."
-    USERNAME_REQUIRED = "Username is required."
     USERNAME_LENGTH = "Username must be between 3 and 50 characters."
     USERNAME_FORMAT = "Username can only contain letters, numbers and underscores."
     LOGIN_SUCCESS = "Logged in successfully."
