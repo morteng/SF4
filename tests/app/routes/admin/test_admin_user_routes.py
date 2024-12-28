@@ -52,12 +52,11 @@ def test_user(db_session):
     db_session.add(user)
     db_session.commit()
     yield user
-    try:
-        db_session.delete(user)
-        db_session.commit()
-    except Exception as e:
-        db_session.rollback()
-        raise e
+        
+    # Clean up - refresh user instance before deletion
+    user = db_session.merge(user)
+    db_session.delete(user)
+    db_session.commit()
     db_session.commit()
 
 def verify_user_crud_operations(test_client, admin_user, test_data):
@@ -215,9 +214,12 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
     ).first()
     assert audit_log is not None
         
-    # Refresh test_user to ensure it's attached to the session
-    test_user = db_session.merge(test_user)
-    assert audit_log.user_id == test_user.id
+    # Get the current logged in admin user
+    with logged_in_admin.session_transaction() as session:
+        admin_user_id = session['_user_id']
+        
+    # Verify the audit log was created by the admin user
+    assert audit_log.user_id == int(admin_user_id)
     assert audit_log.ip_address is not None
     
     # Use a unique username for the test
