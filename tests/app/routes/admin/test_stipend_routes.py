@@ -471,3 +471,29 @@ def test_update_stipend_route_htmx(logged_in_admin, test_stipend, db_session):
     assert updated_stipend.name == 'Updated Stipend'
     # Assert the flash message
     assert FlashMessages.UPDATE_STIPEND_SUCCESS.value.encode() in response.data
+import pytest
+from app.models import Stipend, AuditLog
+
+def test_create_stipend(client, admin_user, db):
+    client.post('/login', data={
+        'username': admin_user.username,
+        'password': 'password'
+    })
+    response = client.post('/admin/stipends/create', data={
+        'name': 'Test Stipend',
+        'summary': 'Test Summary',
+        'description': 'Test Description',
+        'homepage_url': 'https://example.com',
+        'application_procedure': 'Test Procedure',
+        'eligibility_criteria': 'Test Criteria',
+        'application_deadline': '2025-12-31 23:59:59',
+        'open_for_applications': True
+    })
+    assert response.status_code == 302
+    stipend = Stipend.query.filter_by(name='Test Stipend').first()
+    assert stipend is not None
+    
+    # Verify audit log
+    audit_log = AuditLog.query.filter_by(object_type='stipend', object_id=stipend.id).first()
+    assert audit_log is not None
+    assert audit_log.action_type == 'create'
