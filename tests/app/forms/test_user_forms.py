@@ -391,10 +391,8 @@ def test_profile_form_rate_limiting(client, setup_database):
     # Reset rate limiter storage
     limiter = current_app.extensions.get('limiter')
     if limiter and limiter._storage:
-        # Clear all rate limits for the test
         limiter.reset()
-        # Instead of clear(), use reset() which properly clears all keys
-    
+
     # Create test user
     password_hash = generate_password_hash("password123")
     user = User(username="testuser", email="test@example.com", password_hash=password_hash)
@@ -433,11 +431,8 @@ def test_profile_form_rate_limiting(client, setup_database):
             if i > 0 and i % 5 == 0:
                 # Add delay to avoid rate limiting
                 time.sleep(2)
-                get_response = client.get(url_for('user.edit_profile'))
-                if get_response.status_code == 429:
-                    # If rate limited, wait and try again
-                    time.sleep(2)
-                    get_response = client.get(url_for('user.edit_profile'))
+                # Use a different endpoint to get CSRF token to avoid rate limiting
+                get_response = client.get(url_for('public.index'))
                 assert get_response.status_code == 200, f"Failed to refresh CSRF token after {i} requests"
                 soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
                 csrf_input = soup.find('input', {'name': 'csrf_token'})
@@ -452,7 +447,7 @@ def test_profile_form_rate_limiting(client, setup_database):
             responses.append(response.status_code)
             
             # Add small delay between requests
-            time.sleep(0.5)
+            time.sleep(0.1)
     
         # Verify all requests were successful
         assert all(r == 200 for r in responses), "Some requests failed unexpectedly"
