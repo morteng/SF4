@@ -214,6 +214,9 @@ def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session)
         object_id=created_user.id
     ).first()
     assert audit_log is not None
+        
+    # Refresh test_user to ensure it's attached to the session
+    test_user = db_session.merge(test_user)
     assert audit_log.user_id == test_user.id
     assert audit_log.ip_address is not None
     
