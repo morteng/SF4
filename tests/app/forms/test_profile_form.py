@@ -10,18 +10,19 @@ import logging
 
 def test_profile_form_valid(logged_in_client, db_session, test_user):
     """Test valid profile form submission with CSRF protection"""
-    # Get CSRF token from login page
-    login_response = logged_in_client.get(url_for('public.login'))
-    csrf_token = extract_csrf_token(login_response.data)
-    
+    # Get CSRF token from edit profile page
+    edit_profile_response = logged_in_client.get(url_for('user.edit_profile'))
+    csrf_token = extract_csrf_token(edit_profile_response.data)
+    assert csrf_token is not None, "CSRF token not found in response."
+
     # Test form submission
     response = logged_in_client.post(url_for('user.edit_profile'), data={
         'username': 'newusername',
         'email': 'newemail@example.com',
         'csrf_token': csrf_token
     }, follow_redirects=True)
-    
-    assert response.status_code == 200
+
+    assert response.status_code == 200, f"Expected status code 200, got {response.status_code}. Response: {response.data.decode('utf-8')}"
     assert b"Profile updated successfully" in response.data
     
     # Verify the user was actually updated

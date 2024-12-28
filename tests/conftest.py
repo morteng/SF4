@@ -82,9 +82,9 @@ def client(app):
     if 'limiter' in app.extensions:
         app.extensions['limiter'].enabled = False
     
-    # Create a new test client for each test
-    with app.test_client() as client:
-        with app.app_context():
+    # Create a new test client with proper context management
+    with app.app_context():
+        with app.test_client() as client:
             yield client
 
 @pytest.fixture(scope='function')
@@ -241,36 +241,22 @@ def generate_csrf_token():
     return generate_csrf()
 
 def extract_csrf_token(response_data):
-    """Extract CSRF token from response data with enhanced error handling."""
+    """Extract CSRF token from response data."""
     try:
         decoded_data = response_data.decode('utf-8')
-        
-        # Look for CSRF token in various possible locations
-        patterns = [
-            r'<input[^>]*id="csrf_token"[^>]*value="([^"]+)"',  # id="csrf_token"
-            r'<meta[^>]*name="csrf-token"[^>]*content="([^"]+)"',  # meta tag
-            r'<input[^>]*type="hidden"[^>]*name="csrf_token"[^>]*value="([^"]+)"',  # hidden input
-            r'<input[^>]*name="csrf_token"[^>]*value="([^"]+)"',  # any input with name
-            r'name="csrf_token"\s*value="([^"]+)"',  # looser pattern
-            r'csrf_token"\s*value="([^"]+)"'  # even looser pattern
-        ]
-        
-        for pattern in patterns:
-            match = re.search(pattern, decoded_data)
-            if match:
-                token = match.group(1)
-                if token and len(token) > 10:  # Basic validation
-                    return token
-        
-        # If not found, try to find in session
-        from flask import session
-        if 'csrf_token' in session:
-            return session['csrf_token']
-        
-        # Debug output
-        logging.error("CSRF token not found in response. Response data:\n%s", decoded_data[:1000])
+        # Look for CSRF token in hidden input field
+        match = re.search(r'<input[^>]*name="csrf_token"[^>]*value="([^"]+)"', decoded_data)
+        if match:
+            return match.group(1)
+        # Look for CSRF token in meta tag
+        match = re.search(r'<meta[^>]*name="csrf-token"[^>]*content="([^"]+)"', decoded_data)
+        if match:
+            return match.group(1)
+        # Look for CSRF token in form
+        match = re.search(r'name="csrf_token"\s*value="([^"]+)"', decoded_data)
+        if match:
+            return match.group(1)
         return None
-        
     except Exception as e:
         logging.error(f"Error extracting CSRF token: {str(e)}")
         return None

@@ -29,6 +29,11 @@ def edit_profile():
             if 'csrf_token' in form.errors:
                 flash_message(FlashMessages.CSRF_INVALID, FlashCategory.ERROR)
                 return render_template('user/edit_profile.html', form=form), 400
+            
+            # Ensure CSRF token is present and valid
+            if not form.csrf_token.data:
+                flash_message(FlashMessages.CSRF_INVALID, FlashCategory.ERROR)
+                return render_template('user/edit_profile.html', form=form), 400
                 
             # Handle specific validation errors
             if 'username' in form.errors:
