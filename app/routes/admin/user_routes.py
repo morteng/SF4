@@ -16,7 +16,7 @@ from app.forms.user_forms import ProfileForm
 from app.services.user_service import get_user_by_id, delete_user, get_all_users, create_user, update_user, search_users
 from app.utils import admin_required, flash_message, format_error_message
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from app.extensions import db  # Import the db object
 
 admin_user_bp = Blueprint('user', __name__, url_prefix='/users')
