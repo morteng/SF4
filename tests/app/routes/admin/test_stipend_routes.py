@@ -48,7 +48,38 @@ def test_stipend(db_session, stipend_data):
     db_session.delete(stipend)
     db_session.commit()
 
-def test_create_stipend_route(authenticated_admin: FlaskClient, db_session) -> None:
+def test_create_duplicate_stipend(authenticated_admin: FlaskClient, db_session) -> None:
+    """Test that duplicate stipends cannot be created."""
+    # First create a valid stipend
+    test_create_stipend_route(authenticated_admin, db_session)
+    
+    # Try to create same stipend again
+    create_response = authenticated_admin.get(url_for('admin.stipend.create'))
+    csrf_token = extract_csrf_token(create_response.data)
+    
+    # Use same data as first creation
+    form_data = {
+        'name': 'Test Stipend',
+        'summary': 'Test summary',
+        'description': 'Test description',
+        'homepage_url': 'http://example.com',
+        'application_procedure': 'Apply online',
+        'eligibility_criteria': 'Open to all',
+        'application_deadline': (datetime.now(timezone.utc) + timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S'),
+        'organization_id': '1',  # Assuming org ID 1 exists
+        'tags': ['1'],  # Assuming tag ID 1 exists
+        'open_for_applications': True,
+        'csrf_token': csrf_token
+    }
+    
+    response = authenticated_admin.post(
+        url_for('admin.stipend.create'), 
+        data=form_data,
+        follow_redirects=True
+    )
+    
+    assert response.status_code == 400
+    assert b'Stipend with this name already exists' in response.data
     """Test that a stipend can be created successfully through the admin interface.
     
     Verifies:

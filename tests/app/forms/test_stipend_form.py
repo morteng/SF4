@@ -203,7 +203,26 @@ def test_time_component_validation(app, form_data):
 #             print("Validation errors:", form.errors)
 #         assert any('Invalid date values (e.g., Feb 29 in non-leap years)' in error for error in form.errors['application_deadline'])
 
-def test_missing_date(app, form_data):
+def test_missing_required_fields(app, form_data):
+    """Test validation of all required fields."""
+    required_fields = [
+        'name', 'summary', 'description', 'homepage_url',
+        'application_procedure', 'eligibility_criteria',
+        'application_deadline', 'organization_id'
+    ]
+    
+    with app.test_request_context():
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        
+        for field in required_fields:
+            invalid_data = form_data.copy()
+            del invalid_data[field]
+            
+            form = StipendForm(data=invalid_data, meta={'csrf': False})
+            form.tags.choices = tag_choices
+            assert form.validate() is False
+            assert field in form.errors
     """Test missing date validation"""
     with app.test_request_context():
         # Add the key with a dummy value before deleting it
