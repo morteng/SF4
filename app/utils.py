@@ -5,7 +5,8 @@ import string
 import secrets
 from datetime import datetime, timezone
 from typing import Any, Union
-from flask import abort, redirect, url_for, flash, request
+from flask import abort, redirect, url_for, flash, request, current_app
+from app.models.notification import Notification
 from flask_wtf.csrf import generate_csrf
 from app.models.audit_log import AuditLog
 from app.constants import FlashMessages, FlashCategory

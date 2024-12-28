@@ -1,7 +1,9 @@
+from flask import current_app, request
 from app.extensions import db
 from datetime import datetime
 from enum import Enum
 from sqlalchemy import ForeignKey
+from app.models.audit_log import AuditLog
 
 class NotificationType(Enum):
     BOT_SUCCESS = 'bot_success'

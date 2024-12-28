@@ -1,7 +1,9 @@
 import logging
 import json
 from datetime import datetime, timezone
+from flask import current_app
 from app.extensions import db
+from app.models.notification import Notification
 
 logger = logging.getLogger(__name__)
 
