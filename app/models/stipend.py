@@ -29,10 +29,34 @@ class Stipend(db.Model):
         return stipend
 
     def update(self, data):
-        """Update stipend fields"""
+        """Update stipend fields with audit logging"""
+        from app.models.audit_log import AuditLog
+        from flask import request
+        from flask_login import current_user
+        
+        # Get current state before update
+        before = self.to_dict()
+        
+        # Update fields
         for key, value in data.items():
             setattr(self, key, value)
+        
+        # Commit changes
         db.session.commit()
+        
+        # Create audit log
+        AuditLog.create(
+            user_id=current_user.id if current_user and current_user.is_authenticated else 0,
+            action='update_stipend',
+            object_type='Stipend',
+            object_id=self.id,
+            details_before=before,
+            details_after=self.to_dict(),
+            ip_address=request.remote_addr if request else '127.0.0.1',
+            http_method='POST',
+            endpoint='admin.stipend.edit'
+        )
+        
         return self
 
     @staticmethod

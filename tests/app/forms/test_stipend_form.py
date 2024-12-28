@@ -295,11 +295,30 @@ def test_audit_log_on_create(app, form_data, test_db):
             db.session.add(stipend)
             db.session.commit()
             
-            # Verify audit log
-            log = AuditLog.query.filter_by(object_type='Stipend', object_id=stipend.id).first()
-            assert log is not None
-            assert log.action == 'create'
-            assert log.details is not None
+            # Update the stipend
+            stipend.update({
+                'name': update_form.name.data,
+                'summary': update_form.summary.data,
+                'description': update_form.description.data,
+                'tags': [Tag.query.get(tag_id) for tag_id in update_form.tags.data]
+            })
+            
+            # Verify audit logs
+            logs = AuditLog.query.filter_by(object_type='Stipend', object_id=stipend.id).order_by(AuditLog.created_at.desc()).all()
+            assert len(logs) >= 2  # Should have create and update logs
+            
+            # Verify update log
+            update_log = logs[0]
+            assert update_log is not None
+            assert update_log.action == 'update_stipend'
+            assert update_log.details_before is not None
+            assert update_log.details_after is not None
+            
+            # Verify create log
+            create_log = logs[1]
+            assert create_log is not None
+            assert create_log.action == 'create_stipend'
+            assert create_log.details_after is not None
 
 def test_stipend_update_operation(app, form_data, test_db):
     """Test CRUD update operation"""
