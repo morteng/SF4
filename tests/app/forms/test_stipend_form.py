@@ -59,6 +59,7 @@ def form_data(app):
             'organization_id': org.id,
             'tags': [tag.id],  # Add the required tag
             'open_for_applications': True,
+            'application_deadline': '2025-12-31 23:59:59',  # Add valid future date
             'csrf_token': csrf_token  # Add CSRF token
         }
 
