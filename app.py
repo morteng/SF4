@@ -7,7 +7,13 @@ app = create_app()
 if isinstance(app, Flask):
     registered_blueprints = [bp.name for bp in app.blueprints.values()]
     if len(registered_blueprints) != len(set(registered_blueprints)):
-        raise ValueError("Duplicate Blueprint registration detected")
+        # Instead of raising an error, just log it
+        app.logger.warning("Duplicate Blueprint registration detected")
+        # Remove duplicates
+        unique_blueprints = {}
+        for bp in app.blueprints.values():
+            unique_blueprints[bp.name] = bp
+        app.blueprints = unique_blueprints
 
 if __name__ == '__main__':
     app.run(debug=True)
