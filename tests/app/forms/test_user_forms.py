@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 from app.forms.user_forms import ProfileForm, LoginForm
 from app import create_app
 from app.models.user import User
+from app.models.audit_log import AuditLog
 from app.extensions import db
 from app.constants import FlashMessages, FlashCategory
 from app.utils import generate_csrf_token, flash_message

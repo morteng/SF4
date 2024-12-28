@@ -4,8 +4,9 @@ from flask_login import current_user, login_required
 from flask_wtf.csrf import CSRFError
 from app.utils import flash_message
 from app.forms.user_forms import ProfileForm
-from app.models.user import User  # Import the User model
-from app.extensions import db  # Import the db from extensions
+from app.models.user import User
+from app.models.audit_log import AuditLog
+from app.extensions import db, limiter
 from app.constants import FlashMessages, FlashCategory
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
