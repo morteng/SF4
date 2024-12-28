@@ -3,7 +3,7 @@ import logging
 from sqlalchemy.exc import IntegrityError
 from wtforms.validators import ValidationError
 
-from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string
+from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string, flash
 from app.models.notification import Notification
 from app.services.notification_service import get_notification_count
 from flask_limiter import Limiter
