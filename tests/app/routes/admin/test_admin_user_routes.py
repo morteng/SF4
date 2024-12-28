@@ -180,34 +180,34 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
 
 def test_user_crud_operations(logged_in_admin, db_session, test_user):
     """Test full CRUD operations for users with audit logging"""
-    # First, properly log in the test user
+    # Create unique test data
+    unique_id = str(uuid.uuid4())[:8]
+    user_data = {
+        'username': f'testuser_{unique_id}',
+        'email': f'testuser_{unique_id}@example.com',
+        'password': 'TestPass123!',
+        'is_admin': False
+    }
+
+    # Perform all operations within the logged_in_admin context
     with logged_in_admin:
         # Set up session
         with logged_in_admin.session_transaction() as session:
             session['_user_id'] = str(test_user.id)
             session['_fresh'] = True
-            
-        # Create unique test data
-        unique_id = str(uuid.uuid4())[:8]
-        user_data = {
-            'username': f'testuser_{unique_id}',
-            'email': f'testuser_{unique_id}@example.com',
-            'password': 'TestPass123!',
-            'is_admin': False
-        }
-    
-    # Get CSRF token
-    create_response = logged_in_admin.get('/admin/users/create')
-    csrf_token = extract_csrf_token(create_response.data)
-    assert csrf_token is not None
-    
-    # Create user
-    create_response = logged_in_admin.post('/admin/users/create', 
-                                         data={
-                                             **user_data,
-                                             'csrf_token': csrf_token
-                                         },
-                                         follow_redirects=True)
+
+        # Get CSRF token
+        create_response = logged_in_admin.get('/admin/users/create')
+        csrf_token = extract_csrf_token(create_response.data)
+        assert csrf_token is not None
+
+        # Create user
+        create_response = logged_in_admin.post('/admin/users/create',
+                                            data={
+                                                **user_data,
+                                                'csrf_token': csrf_token
+                                            },
+                                            follow_redirects=True)
     assert create_response.status_code == 200
     assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in create_response.data
     
