@@ -70,7 +70,7 @@ def create():
 
             # Create notification using proper enum value
             Notification.create(
-                type=NotificationType.USER_CREATED,
+                type='user_created',
                 message=f'User {new_user.username} was created',
                 related_object=new_user,
                 user_id=current_user.id
