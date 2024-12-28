@@ -33,8 +33,8 @@ from app.extensions import db
 class StipendForm(FlaskForm):
     csrf_token = HiddenField('CSRF Token')
     name = StringField('Name', validators=[
-        DataRequired(message="Name is required."),
-        Length(max=100, message="Name cannot exceed 100 characters.")
+        DataRequired(message=FlashMessages.NAME_REQUIRED.value),
+        Length(max=100, message=FlashMessages.NAME_LENGTH.value)
     ])
     summary = TextAreaField('Summary', validators=[
         DataRequired(message="Summary is required."),

@@ -6,9 +6,15 @@ import pytz
 from pytz import timezone, utc
 
 class CustomDateTimeField(DateTimeField):
-    """Custom DateTimeField with timezone support and enhanced validation."""
-    """Custom DateTimeField with timezone support and enhanced validation."""
-    """Custom DateTimeField with timezone support and enhanced validation."""
+    """Custom DateTimeField with timezone support and enhanced validation.
+    
+    Features:
+    - Timezone awareness (converts to UTC)
+    - Future date validation (up to 5 years)
+    - Leap year validation
+    - Strict format enforcement (YYYY-MM-DD HH:MM:SS)
+    - Comprehensive error messages
+    """
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', timezone='UTC', **kwargs):
         # Extract error_messages from kwargs to avoid passing it to Field.__init__()
         error_messages = kwargs.pop('error_messages', {})
