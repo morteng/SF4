@@ -1,6 +1,7 @@
 import logging
 import json
 from datetime import datetime, timezone
+from app.constants import NotificationType
 from flask import current_app
 from app.extensions import db
 # Lazy import to avoid circular dependency
@@ -51,7 +52,7 @@ class AuditLog(db.Model):
             # Create notification using lazy import
             Notification = get_notification_model()
             Notification.create(
-                type='audit_log',
+                type=NotificationType.AUDIT_LOG,
                 message=f"{action.capitalize()} operation on {object_type} {object_id}",
                 related_object=log,
                 user_id=user_id
