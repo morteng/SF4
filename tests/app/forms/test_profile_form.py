@@ -9,21 +9,14 @@ import logging
 def test_profile_form_valid(logged_in_client, db_session, test_user):
     """Test valid profile form submission with CSRF protection"""
     with logged_in_client.application.test_request_context('/user/profile/edit'):
-        # Push application context
-        ctx = logged_in_client.application.app_context()
-        ctx.push()
-        
-        try:
-            # Test form submission
-            response = logged_in_client.post('/user/profile/edit', data={
-                'username': 'newusername',
-                'email': 'newemail@example.com',
-                'csrf_token': generate_csrf()
-            })
-            assert response.status_code == 302  # Should redirect
-        finally:
-            # Clean up contexts
-            ctx.pop()
+        # Test form submission
+        response = logged_in_client.post('/user/profile/edit', data={
+            'username': 'newusername',
+            'email': 'newemail@example.com',
+            'csrf_token': generate_csrf()
+        })
+        assert response.status_code == 302  # Should redirect
+
         # Use a session transaction to maintain the session
         with logged_in_client.session_transaction() as sess:
             # Create the form with the test user's current credentials
