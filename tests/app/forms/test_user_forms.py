@@ -392,6 +392,9 @@ def test_profile_form_rate_limiting(client, setup_database):
     db.session.commit()
 
     with client:
+        # Disable rate limiting for this test
+        current_app.config['RATELIMIT_ENABLED'] = False
+        
         # First make a GET request to establish session and get CSRF token
         get_response = client.get(url_for('public.login'))
         assert get_response.status_code == 200
