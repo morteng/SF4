@@ -130,20 +130,7 @@ def create_user(form_data, current_user_id):
         logger.error(f"Error creating user: {str(e)}", exc_info=True)
         db.session.rollback()
         raise ValueError(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}")
-```
 
-These changes:
-
-1. Improve session management in `__init__.py` with better error handling and logging
-2. Add logging to the AuditLog model creation
-3. Enhance user service with comprehensive logging and error handling
-
-To complete the implementation, we should also add these new test cases:
-
-```python
-<<<<<<< SEARCH
-# Add new test cases for error handling and logging
-def test_user_creation_logging(logged_in_admin, caplog):
     with caplog.at_level(logging.INFO):
         response = logged_in_admin.post('/admin/users/create', data={
             'username': 'testuser',
