@@ -69,12 +69,12 @@ def create():
                     user_id=current_user.id,
                     action=FlashMessages.AUDIT_CREATE.value,
                     object_type='User',
-                    object_id=user.id,
+                    object_id=new_user.id,
                     details_before=None,
                     details_after={
-                        'username': user.username,
-                        'email': user.email,
-                        'is_admin': user.is_admin
+                        'username': new_user.username,
+                        'email': new_user.email,
+                        'is_admin': new_user.is_admin
                     },
                     ip_address=request.remote_addr
                 )
@@ -82,8 +82,8 @@ def create():
                 # Create notification with proper type and message
                 Notification.create(
                     type='user_created',
-                    message=FlashMessages.USER_CREATED.value.format(username=user.username),
-                    related_object=f'User:{user.id}',
+                    message=FlashMessages.USER_CREATED.value.format(username=new_user.username),
+                    related_object=f'User:{new_user.id}',
                     user_id=current_user.id
                 )
                 
