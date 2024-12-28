@@ -27,10 +27,11 @@ def edit_profile():
     
     if request.method == 'POST':
         # Validate CSRF token first
-        if not form.validate_csrf_token(form.csrf_token):
-            logging.warning("Invalid CSRF token in profile update request")
-            flash_message(FlashMessages.CSRF_INVALID, FlashCategory.ERROR)
-            return render_template('user/edit_profile.html', form=form), 400
+        if not form.validate():
+            if 'csrf_token' in form.errors:
+                logging.warning("Invalid CSRF token in profile update request")
+                flash_message(FlashMessages.CSRF_INVALID, FlashCategory.ERROR)
+                return render_template('user/edit_profile.html', form=form), 400
             
         if form.validate():
             try:

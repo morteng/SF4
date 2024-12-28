@@ -16,6 +16,9 @@ def test_profile_form_valid(logged_in_client, db_session, test_user):
     assert csrf_token is not None, "CSRF token not found in response."
 
     # Test form submission
+    with logged_in_client.session_transaction() as session:
+        session['_csrf_token'] = csrf_token
+
     response = logged_in_client.post(url_for('user.edit_profile'), data={
         'username': 'newusername',
         'email': 'newemail@example.com',
