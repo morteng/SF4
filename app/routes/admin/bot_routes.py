@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from app.services.notification_service import get_notification_count, create_notification
+from app.services.notification_service import get_notification_count, create_crud_notification
 from app.utils import log_audit
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string, get_flashed_messages, jsonify
 from flask_login import login_required, current_user
@@ -60,11 +60,11 @@ def create():
                 after=new_bot.to_dict()
             )
             
-            # Create notification
-            create_notification(
-                type='bot_created',
-                message=f'New bot created: {new_bot.name}',
-                related_object=new_bot,
+            # Create CRUD notification
+            create_crud_notification(
+                action='create',
+                object_type='Bot',
+                object_id=new_bot.id,
                 user_id=current_user.id
             )
             
