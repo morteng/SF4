@@ -271,25 +271,20 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
             invalid_notification.mark_as_read()
         assert str(exc_info.value) == "Cannot mark unsaved notification as read"
 
-    # Perform CRUD operations within the logged_in_admin context
-    with logged_in_admin:
-            # Set up session
-            with logged_in_admin.session_transaction() as session:
-                session['_user_id'] = str(test_user.id)
-                session['_fresh'] = True
+    # Set up session
+    with logged_in_admin.session_transaction() as session:
+        session['_user_id'] = str(test_user.id)
+        session['_fresh'] = True
+        session['csrf_token'] = 'test-csrf-token'
 
-            # Initialize session with CSRF token
-            with logged_in_admin.session_transaction() as session:
-                session['csrf_token'] = 'test-csrf-token'
-
-                # Get create form and extract CSRF token
-                create_response = logged_in_admin.get('/admin/users/create')
-                assert create_response.status_code == 200
-                csrf_token = extract_csrf_token(create_response.data)
-                if csrf_token is None:
-                    logging.error("CSRF token not found in response. Response content:\n%s", 
-                                create_response.data.decode('utf-8')[:1000])
-                assert csrf_token is not None, "CSRF token not found in create form response"
+    # Get create form and extract CSRF token
+    create_response = logged_in_admin.get('/admin/users/create')
+    assert create_response.status_code == 200
+    csrf_token = extract_csrf_token(create_response.data)
+    if csrf_token is None:
+        logging.error("CSRF token not found in response. Response content:\n%s", 
+                    create_response.data.decode('utf-8')[:1000])
+    assert csrf_token is not None, "CSRF token not found in create form response"
 
     """Test full CRUD operations with audit logging and notifications"""
     
