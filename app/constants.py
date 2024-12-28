@@ -10,6 +10,7 @@ class NotificationType(Enum):
     CRUD_CREATE = 'crud_create'
     CRUD_UPDATE = 'crud_update'
     CRUD_DELETE = 'crud_delete'
+    AUDIT_LOG = 'audit_log'
 
 class NotificationPriority(Enum):
     LOW = 'low'
@@ -128,6 +129,7 @@ class FlashMessages(str, Enum):
     AUDIT_DELETE = "delete"
     
     # Authentication
+    ADMIN_ACCESS_ERROR = "Error accessing admin panel. Please try again."
     USERNAME_REQUIRED = "Username is required."
     USERNAME_LENGTH = "Username must be between 3 and 50 characters."
     USERNAME_FORMAT = "Username can only contain letters, numbers and underscores."
