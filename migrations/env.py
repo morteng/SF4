@@ -32,6 +32,11 @@ def get_engine_url():
         return str(get_engine().url).replace('%', '%%')
 
 
+def get_metadata():
+    if hasattr(target_db, 'metadatas'):
+        return target_db.metadatas[None]
+    return target_db.metadata
+
 # Set the SQLAlchemy URL for Alembic
 config.set_main_option('sqlalchemy.url', get_engine_url())
 
@@ -42,12 +47,6 @@ target_metadata = get_metadata()
 # Ensure the metadata is properly configured for autogenerate
 if not target_metadata:
     raise RuntimeError("Could not find target metadata for migrations")
-
-
-def get_metadata():
-    if hasattr(target_db, 'metadatas'):
-        return target_db.metadatas[None]
-    return target_db.metadata
 
 
 def run_migrations_offline():
