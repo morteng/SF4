@@ -1,13 +1,13 @@
 # TODO List
 
 ## High Priority
-- [ ] Improve test coverage for error cases
-- [ ] Add logging for critical operations
-- [ ] Fix database session management in tests
+- [ ] Improve error case test coverage
+- [ ] Add critical operation logging
+- [ ] Fix database session management
 
 ## Completed
-- [x] Fix CSRF token validation in profile form
-- [x] Fix audit log error handling
+- [x] Fix CSRF validation
+- [x] Fix audit log handling
 - [x] Add notification error handling
-- [x] Fix profile form test context management
+- [x] Fix profile form tests
 

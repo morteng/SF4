@@ -1,22 +1,19 @@
 ## Coding Conventions
 
 ### Error Handling
-- Use try/except blocks for database operations
-- Always rollback on errors
+- Use try/except with specific exceptions
+- Always rollback on database errors
 - Log errors with context using logger.error()
-- Use specific exception types
-- Validate CSRF tokens before form processing
+- Validate inputs before processing
 
 ### Context Management
-- Use Flask's built-in context managers
-- Avoid manual context management in tests
-- Use `with` statements for resource management
-- Ensure proper context cleanup in tests
+- Use Flask's context managers
+- Ensure proper cleanup in tests
+- Avoid manual context management
 
 ### Testing
-- Test both success and error cases
-- Verify database state after operations
-- Use fixtures for test setup/teardown
-- Test CSRF token validation
-- Use session_transaction for session management in tests
+- Test success and error cases
+- Verify database state
+- Use fixtures for setup/teardown
+- Test edge cases and validation
 
