@@ -97,9 +97,13 @@ def create_app(config_name='development'):
                 from flask_migrate import upgrade
                 upgrade()  # Apply migrations only if env.py exists
             
-            # Only initialize admin user if not in test mode
-            if not app.config.get('TESTING'):
-                init_admin_user()  # Now the tables exist
+            # Only initialize admin user if not in test mode and after migrations
+            if not app.config.get('TESTING') and os.path.exists(env_path):
+                try:
+                    init_admin_user()  # Now the tables exist
+                except Exception as e:
+                    logger.warning(f"Admin user initialization failed: {str(e)}")
+                    logger.warning("This is normal during initial setup. Run 'flask db upgrade' to create the database tables.")
             
             # Register blueprints
             from app.routes.admin import register_admin_blueprints
@@ -131,8 +135,6 @@ def create_app(config_name='development'):
             logger.error(f"Failed to initialize application: {str(e)}")
             raise RuntimeError(f"Application initialization failed: {str(e)}")
         
-        # Initialize admin user
-        init_admin_user()
         
         # Initialize default bots if they don't exist
         from app.models.bot import Bot
