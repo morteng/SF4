@@ -55,6 +55,9 @@ def test_profile_form_invalid_csrf(logged_in_client):
         with patch('app.forms.user_forms.User.query.filter_by') as mock_filter_by:
             mock_filter_by.return_value.first.return_value = None
 
+            # Log out first to ensure the login page is accessible
+            logged_in_client.get(url_for('public.logout'))
+
             # Get valid CSRF token from login page
             login_response = logged_in_client.get(url_for('public.login'))
             valid_csrf = extract_csrf_token(login_response.data)
