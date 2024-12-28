@@ -222,6 +222,10 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
             # Verify no invalid log was created
             invalid_logs = AuditLog.query.filter_by(user_id=test_user.id, action=None).all()
             assert len(invalid_logs) == 0
+            
+        except Exception as e:
+            logger.error(f"Test failed with error: {str(e)}")
+            raise
 
     # Test audit log rollback
     with app.app_context():
