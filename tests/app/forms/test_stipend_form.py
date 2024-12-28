@@ -295,13 +295,16 @@ def test_audit_log_on_create(app, form_data, test_db):
             db.session.add(stipend)
             db.session.commit()
             
+            # Create update data
+            update_data = {
+                'name': 'Updated Stipend Name',
+                'summary': 'Updated summary',
+                'description': 'Updated description',
+                'tags': [tag_choices[0][0]]  # Use first tag
+            }
+            
             # Update the stipend
-            stipend.update({
-                'name': update_form.name.data,
-                'summary': update_form.summary.data,
-                'description': update_form.description.data,
-                'tags': [Tag.query.get(tag_id) for tag_id in update_form.tags.data]
-            })
+            stipend.update(update_data)
             
             # Verify audit logs
             logs = AuditLog.query.filter_by(object_type='Stipend', object_id=stipend.id).order_by(AuditLog.created_at.desc()).all()
