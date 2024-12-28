@@ -310,7 +310,6 @@ def logged_in_client(client, test_user, app, db_session):
     
     # Logout after test
     client.get(url_for('public.logout'))
-    yield client
 
 @pytest.fixture(scope='function')
 def test_tag(db_session, app):
