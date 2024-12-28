@@ -65,8 +65,8 @@ class Notification(db.Model):
             db.session.commit()
             
             # Only create audit log if this isn't being called from AuditLog.create()
-            if not isinstance(related_object, AuditLog):
-                AuditLog = get_audit_log_model()
+            AuditLog = get_audit_log_model()
+            if related_object is None or not isinstance(related_object, AuditLog):
                 AuditLog.create(
                     user_id=user_id,
                     action='create_notification',
