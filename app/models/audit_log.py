@@ -30,13 +30,10 @@ class AuditLog(db.Model):
     def create(user_id, action, details=None, object_type=None, object_id=None,
               details_before=None, details_after=None, ip_address=None,
               http_method=None, endpoint=None, commit=True, notify=True):
+        """Create audit log entry with enhanced error handling and logging"""
         logger = logging.getLogger(__name__)
         try:
             logger.info(f"Creating audit log: {action} by user {user_id}")
-        """Create audit log entry with enhanced error handling and logging"""
-        logger = logging.getLogger(__name__)
-        
-        try:
             # Validate required fields
             if not action:
                 logger.error("Attempt to create audit log without action")

@@ -130,7 +130,6 @@ def create_user(form_data, current_user_id):
         logger.error(f"Error creating user: {str(e)}", exc_info=True)
         db.session.rollback()
         raise ValueError(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}")
->>>>>>> REPLEND
 ```
 
 These changes:
