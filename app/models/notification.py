@@ -1,24 +1,8 @@
 from flask import current_app, request
 from app.extensions import db
 from datetime import datetime
-from enum import Enum
 from sqlalchemy import ForeignKey
-from app.models.audit_log import AuditLog
-
-class NotificationType(Enum):
-    BOT_SUCCESS = 'bot_success'
-    BOT_ERROR = 'bot_error'
-    USER_ACTION = 'user_action'
-    SYSTEM = 'system'
-    CRUD_CREATE = 'crud_create'
-    CRUD_UPDATE = 'crud_update'
-    CRUD_DELETE = 'crud_delete'
-
-class NotificationPriority(Enum):
-    LOW = 'low'
-    MEDIUM = 'medium'
-    HIGH = 'high'
-    CRITICAL = 'critical'
+from app.constants import NotificationType, NotificationPriority
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -2,6 +2,21 @@
 
 from enum import Enum
 
+class NotificationType(Enum):
+    BOT_SUCCESS = 'bot_success'
+    BOT_ERROR = 'bot_error'
+    USER_ACTION = 'user_action'
+    SYSTEM = 'system'
+    CRUD_CREATE = 'crud_create'
+    CRUD_UPDATE = 'crud_update'
+    CRUD_DELETE = 'crud_delete'
+
+class NotificationPriority(Enum):
+    LOW = 'low'
+    MEDIUM = 'medium'
+    HIGH = 'high'
+    CRITICAL = 'critical'
+
 class FlashCategory(str, Enum):
     SUCCESS = "success"
     ERROR = "error"
