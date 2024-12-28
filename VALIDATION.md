@@ -34,6 +34,7 @@
 - Ensure notification_count is updated in real-time
 - All notifications must have a valid user_id (0 for system notifications)
 - Notifications must be created for all CRUD operations
+- Validate notification user_id matches either current user or system (0)
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
