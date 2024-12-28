@@ -367,17 +367,29 @@ def test_profile_form_rate_limiting(client, setup_database):
     db.session.commit()
 
     with client:
-        # Use a request context to generate the CSRF token
-        with client.application.test_request_context():
-            csrf_token = generate_csrf_token()
+        # First make a GET request to establish session and get CSRF token
+        get_response = client.get(url_for('public.login'))
+        assert get_response.status_code == 200
+        
+        # Extract CSRF token using BeautifulSoup
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+        assert csrf_token, "CSRF token not found in form"
 
         # Login user
         login_response = client.post(url_for('public.login'), data={
             'username': 'testuser',
             'password': 'password123',
             'csrf_token': csrf_token
-        })
-        assert login_response.status_code in [200, 302], "Login failed"
+        }, follow_redirects=True)
+        assert login_response.status_code == 200, "Login failed"
+
+        # Get CSRF token from the profile edit page
+        get_response = client.get(url_for('user.edit_profile'))
+        assert get_response.status_code == 200, "Failed to access profile edit page"
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+        assert csrf_token, "CSRF token not found in profile form"
 
         # Submit profile form multiple times to trigger rate limiting
         for _ in range(11):  # Assuming rate limit is 10 requests per minute
