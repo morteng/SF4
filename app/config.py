@@ -45,6 +45,7 @@ class TestConfig(Config):
     RATELIMIT_GLOBAL = "9999999 per second"
     RATELIMIT_HEADERS_ENABLED = False
     RATELIMIT_IN_MEMORY_FALLBACK_ENABLED = True
+    RATELIMIT_STRATEGY = 'fixed-window-elastic-expiry'  # More forgiving for tests
     
     # Enable detailed error logging for tests
     LOGGING_LEVEL = 'DEBUG'
