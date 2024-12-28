@@ -73,9 +73,8 @@ def db_session(_db, app):
 @pytest.fixture(scope='function')
 def client(app):
     """Provides a test client for the application."""
-    with app.test_client() as client:
-        with app.app_context():
-            yield client
+    # Create a new test client for each test
+    return app.test_client()
 
 @pytest.fixture(scope='function')
 def admin_user(db_session, app):
