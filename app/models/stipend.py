@@ -22,10 +22,29 @@ class Stipend(db.Model):
 
     @staticmethod
     def create(data):
-        """Create a new stipend with validation"""
+        """Create a new stipend with validation and audit logging"""
+        from app.models.audit_log import AuditLog
+        from flask import request
+        from flask_login import current_user
+        
+        # Create stipend
         stipend = Stipend(**data)
         db.session.add(stipend)
         db.session.commit()
+        
+        # Create audit log
+        AuditLog.create(
+            user_id=current_user.id if current_user and current_user.is_authenticated else 0,
+            action='create_stipend',
+            object_type='Stipend',
+            object_id=stipend.id,
+            details_before=None,
+            details_after=stipend.to_dict(),
+            ip_address=request.remote_addr if request else '127.0.0.1',
+            http_method='POST',
+            endpoint='admin.stipend.create'
+        )
+        
         return stipend
 
     def update(self, data):
