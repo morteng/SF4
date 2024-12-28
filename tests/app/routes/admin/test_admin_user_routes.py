@@ -245,6 +245,10 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
                     assert create_response.status_code == 200
                     csrf_token = extract_csrf_token(create_response.data)
                     assert csrf_token is not None
+                except Exception as e:
+                    logging.error(f"Failed to get create form: {str(e)}")
+                    raise
+
     """Test full CRUD operations with audit logging and notifications"""
     
     # Create unique test data
