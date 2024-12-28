@@ -453,9 +453,16 @@ def test_profile_form_rate_limiting(client, setup_database):
             # Add small delay between requests
             time.sleep(0.5)
     
-        # Verify rate limiting response
-        assert 429 in responses, "Rate limiting not triggered"
-        assert responses.count(200) == 20, f"Expected 20 successful requests before rate limit, got {responses.count(200)}. Responses: {responses}"
+        # Verify all requests were successful
+        assert all(r == 200 for r in responses), "Some requests failed unexpectedly"
+        
+        # Make one more request to trigger rate limiting
+        response = client.post(url_for('user.edit_profile'), data={
+            'username': 'testuser',
+            'email': 'test@example.com',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        assert response.status_code == 429, "Rate limiting was not triggered"
 
 def test_profile_update_creates_audit_log(client, setup_database):
     """Test that profile updates create audit logs"""
