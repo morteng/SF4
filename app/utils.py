@@ -362,12 +362,17 @@ from contextlib import contextmanager
 @contextmanager
 def db_session_scope():
     """Provide a transactional scope around a series of operations."""
+    session = db.session
     try:
-        yield db.session
-        db.session.commit()
-    except:
-        db.session.rollback()
+        yield session
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        logger.error(f"Database operation failed: {str(e)}")
         raise
+    finally:
+        # Ensure session is properly closed
+        session.close()
 
 def log_operation(operation):
     """Decorator for logging operations"""

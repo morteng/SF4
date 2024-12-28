@@ -121,13 +121,14 @@ def create_user(form_data, current_user_id):
         raise ValueError(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}")
 
 def update_user(user, form_data):
-    print(f"Updating user with data: {form_data}")  # Debug statement
+    logger.info(f"Attempting to update user {user.id} with data: {form_data}")
     new_username = form_data['username']
     
     # Check for duplicate username
     if new_username != user.username:
         existing_user = User.query.filter_by(username=new_username).first()
         if existing_user:
+            logger.warning(f"Username {new_username} already exists")
             raise ValueError(FlashMessages.USERNAME_ALREADY_EXISTS.value)
     
     user.username = new_username
@@ -137,11 +138,11 @@ def update_user(user, form_data):
     user.is_admin = form_data.get('is_admin', False)
     
     try:
-        db.session.commit()
+        with db_session_scope() as session:
+            session.add(user)
+        logger.info(f"Successfully updated user {user.id}")
         flash_message(FlashMessages.PROFILE_UPDATE_SUCCESS, FlashCategory.SUCCESS)
-        print(f"User {user.username} updated successfully.")  # Debug statement
     except Exception as e:
+        logger.error(f"Failed to update user {user.id}: {str(e)}")
         flash_message(FlashMessages.PROFILE_UPDATE_FAILED, FlashCategory.ERROR)
-        print(f"Failed to update user: {e}")  # Debug statement
-        db.session.rollback()
-        raise ValueError("Failed to update user.")
+        raise ValueError(f"Failed to update user: {str(e)}")

@@ -69,18 +69,24 @@ def create_app(config_name='development'):
 
 
     with app.app_context():
-        # Register blueprints
-        from app.routes.admin import register_admin_blueprints
-        register_admin_blueprints(app)  # For admin routes
+        try:
+            # Register blueprints
+            from app.routes.admin import register_admin_blueprints
+            register_admin_blueprints(app)  # For admin routes
 
-        from app.routes import register_blueprints
-        register_blueprints(app)        # Register other blueprints
-        
-        # Initialize extensions
-        init_extensions(app)
-        
-        # Create database tables
-        db.create_all()
+            from app.routes import register_blueprints
+            register_blueprints(app)        # Register other blueprints
+            
+            # Initialize extensions
+            init_extensions(app)
+            
+            # Create database tables
+            db.create_all()
+            
+            logger.info("Application initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize application: {str(e)}")
+            raise RuntimeError(f"Application initialization failed: {str(e)}")
         
         # Initialize admin user
         init_admin_user()
