@@ -75,6 +75,13 @@ def create_app(config_name='development'):
 
     with app.app_context():
         try:
+            # Initialize extensions first
+            init_extensions(app)
+            
+            # Run migrations
+            from flask_migrate import upgrade
+            upgrade()
+            
             # Register blueprints
             from app.routes.admin import register_admin_blueprints
             register_admin_blueprints(app)  # For admin routes
@@ -82,11 +89,8 @@ def create_app(config_name='development'):
             from app.routes import register_blueprints
             register_blueprints(app)        # Register other blueprints
             
-            # Initialize extensions
-            init_extensions(app)
-            
-            # Create database tables
-            db.create_all()
+            # Initialize default data
+            init_admin_user()
             
             # Configure session cleanup with better error handling
             @app.teardown_appcontext

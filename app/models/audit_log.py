@@ -32,6 +32,11 @@ class AuditLog(db.Model):
               http_method=None, endpoint=None, commit=True, notify=True):
         """Create audit log entry with enhanced error handling and logging"""
         logger = logging.getLogger(__name__)
+        
+        # Ensure audit_log table exists
+        if not db.inspect(db.engine).has_table('audit_log'):
+            logger.error("Audit log table does not exist")
+            raise RuntimeError("Audit log table not found")
         try:
             logger.info(f"Creating audit log: {action} by user {user_id}")
             # Validate required fields
