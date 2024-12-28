@@ -4,6 +4,8 @@ from flask_wtf.csrf import generate_csrf
 from app.forms.admin_forms import StipendForm
 from app.models.organization import Organization
 from app.models.tag import Tag
+from app.models.stipend import Stipend
+from app.models.audit_log import AuditLog
 from app.extensions import db
 from app.forms.fields import CustomDateTimeField
 from wtforms import Form, StringField
