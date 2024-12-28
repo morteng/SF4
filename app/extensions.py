@@ -31,7 +31,8 @@ def init_extensions(app):
         limiter.init_app(app)
         app.extensions['limiter'] = limiter
         # Add exemption for profile edit page
-        limiter.exempt('user.edit_profile')
+        from app.routes.user_routes import edit_profile
+        limiter.exempt(edit_profile)
         
         # Enable CSRF protection
         csrf.init_app(app)
