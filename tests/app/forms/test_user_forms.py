@@ -362,8 +362,26 @@ def test_profile_form_invalid_csrf_token(client, setup_database):
 
 def test_audit_log_table_exists(client):
     """Test that audit_log table exists"""
-    from app.extensions import db
-    assert db.engine.has_table('audit_log'), "audit_log table does not exist"
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    try:
+        from app.extensions import db
+        from sqlalchemy import inspect
+        
+        # Create inspector
+        inspector = inspect(db.engine)
+        
+        # Get table names
+        tables = inspector.get_table_names()
+        logger.info(f"Found tables: {tables}")
+        
+        # Verify audit_log exists
+        assert 'audit_log' in tables, "audit_log table does not exist"
+        
+    except Exception as e:
+        logger.error(f"Error checking audit_log table: {str(e)}")
+        raise
 
 def test_profile_form_rate_limiting(client, setup_database):
     """Test rate limiting on profile form submissions"""
