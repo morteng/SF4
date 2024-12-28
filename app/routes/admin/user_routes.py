@@ -48,48 +48,21 @@ def create():
     
     if form.validate_on_submit():
         try:
-            # Validate unique fields
-            if User.query.filter_by(username=form.username.data).first():
-                form.username.errors.append('Username already exists')
-                return render_template('admin/users/create.html',
-                                    form=form,
-                                    notification_count=notification_count), 400
-            
-            if User.query.filter_by(email=form.email.data).first():
-                form.email.errors.append('Email already exists')
-                return render_template('admin/users/create.html',
-                                    form=form,
-                                    notification_count=notification_count), 400
-                
-            # Validate unique fields
-            if User.query.filter_by(username=form.username.data).first():
-                flash_message("Username already exists", FlashCategory.ERROR)
-                return render_template('admin/users/create.html',
-                                    form=form,
-                                    notification_count=notification_count), 400
-            
-            if User.query.filter_by(email=form.email.data).first():
-                flash_message("Email already exists", FlashCategory.ERROR)
-                return render_template('admin/users/create.html',
-                                    form=form,
-                                    notification_count=notification_count), 400
+            # Prepare user data
+            user_data = {
+                'username': form.username.data,
+                'email': form.email.data,
+                'password': form.password.data,
+                'is_admin': form.is_admin.data if hasattr(form, 'is_admin') else False
+            }
 
-            # Create user with proper validation
-            try:
-                user = User(
-                    username=form.username.data,
-                    email=form.email.data,
-                    password_hash=generate_password_hash(form.password.data),
-                    is_admin=form.is_admin.data if hasattr(form, 'is_admin') else False
-                )
-                
-                db.session.add(user)
-                db.session.commit()
-                
-                # Verify user creation
-                if not user or not user.id:
-                    db.session.rollback()
-                    raise ValueError("Failed to create user - invalid user object returned")
+            # Create user through service layer
+            new_user = create_user(user_data, current_user.id)
+            
+            # Verify user creation
+            if not new_user or not new_user.id:
+                db.session.rollback()
+                raise ValueError("Failed to create user - invalid user object returned")
                 
                 # Create audit log with before/after state
                 AuditLog.create(
@@ -117,26 +90,20 @@ def create():
                 flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS)
                 return redirect(url_for('admin.user.index'))
                 
-            except ValueError as e:
-                db.session.rollback()
-                logging.error(f"Validation error creating user: {str(e)}")
-                flash_message(f"{FlashMessages.CREATE_USER_INVALID_DATA.value}: {str(e)}", FlashCategory.ERROR)
-                return render_template('admin/users/create.html', 
-                                    form=form,
-                                    notification_count=notification_count), 400
-            except Exception as e:
-                db.session.rollback()
-                logging.error(f"Database error creating user: {str(e)}")
-                flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR)
-                return render_template('admin/users/create.html', 
-                                    form=form,
-                                    notification_count=notification_count), 500
-
+        except ValueError as e:
+            # Handle validation errors
+            db.session.rollback()
+            logging.error(f"Validation error creating user: {str(e)}")
+            flash_message(str(e), FlashCategory.ERROR)
+            return render_template('admin/users/create.html',
+                                form=form,
+                                notification_count=notification_count), 400
         except Exception as e:
+            # Handle other errors
             db.session.rollback()
             logging.error(f"Error creating user: {str(e)}")
             flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR)
-            return render_template('admin/users/create.html', 
+            return render_template('admin/users/create.html',
                                 form=form,
                                 notification_count=notification_count), 500
 
