@@ -41,7 +41,6 @@ class AuditLog(db.Model):
             if not isinstance(action, str):
                 logger.error(f"Invalid action type: {type(action)}")
                 raise TypeError("Action must be a string")
-        """Enhanced audit logging with better error handling and validation"""
         logger = logging.getLogger(__name__)
         
         try:

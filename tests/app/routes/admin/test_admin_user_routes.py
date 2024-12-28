@@ -222,12 +222,6 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
             # Verify no invalid log was created
             invalid_logs = AuditLog.query.filter_by(user_id=test_user.id, action=None).all()
             assert len(invalid_logs) == 0
-    # Set up logging
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
-
-    # Log test start
-    logger.info("Starting user CRUD operations test")
 
     # Test audit log rollback
     with app.app_context():

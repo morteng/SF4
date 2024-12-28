@@ -123,8 +123,6 @@ def init_admin_user() -> None:
     try:
         logger.info("Initializing admin user")
         load_dotenv()  # Load environment variables from .env file
-    try:
-        load_dotenv()  # Load environment variables from .env file
         username = os.environ.get('ADMIN_USERNAME')
         password = os.environ.get('ADMIN_PASSWORD')
         email = os.environ.get('ADMIN_EMAIL')
