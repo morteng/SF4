@@ -80,6 +80,37 @@ def test_create_duplicate_stipend(authenticated_admin: FlaskClient, db_session) 
     
     assert response.status_code == 400
     assert b'Stipend with this name already exists' in response.data
+
+def test_create_stipend_with_invalid_references(authenticated_admin: FlaskClient, db_session) -> None:
+    """Test validation of invalid organization and tag references."""
+    create_response = authenticated_admin.get(url_for('admin.stipend.create'))
+    csrf_token = extract_csrf_token(create_response.data)
+    
+    # Use invalid IDs
+    invalid_data = {
+        'name': 'Invalid Ref Stipend',
+        'summary': 'Test summary',
+        'description': 'Test description',
+        'homepage_url': 'http://example.com',
+        'application_procedure': 'Apply online',
+        'eligibility_criteria': 'Open to all',
+        'application_deadline': (datetime.now(timezone.utc) + timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S'),
+        'organization_id': '999',  # Invalid org ID
+        'tags': ['999'],  # Invalid tag ID
+        'open_for_applications': True,
+        'csrf_token': csrf_token
+    }
+    
+    response = authenticated_admin.post(
+        url_for('admin.stipend.create'), 
+        data=invalid_data,
+        follow_redirects=True
+    )
+    
+    assert response.status_code == 400
+    assert b'Invalid organization' in response.data
+    assert b'Invalid tag' in response.data
+
     """Test that a stipend can be created successfully through the admin interface.
     
     Verifies:
