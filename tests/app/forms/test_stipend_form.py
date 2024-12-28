@@ -52,7 +52,8 @@ def form_data(app):
             'eligibility_criteria': 'Test criteria',
             'organization_id': org.id,
             'tags': [tag.id],  # Add the required tag
-            'open_for_applications': True
+            'open_for_applications': True,
+            'csrf_token': generate_csrf()  # Add CSRF token
         }
 
 def test_valid_date_format(app, form_data, test_db):
@@ -137,7 +138,13 @@ def test_future_date_limit(app, form_data, test_db):
     future_date = datetime.now().replace(year=datetime.now().year + 6)
     form_data['application_deadline'] = future_date.strftime('%Y-%m-%d %H:%M:%S')
     with app.test_request_context():
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+            
+        # Initialize form with choices
         form = StipendForm(data=form_data)
+        form.tags.choices = tag_choices
+            
         assert form.validate() is False
         assert 'Application deadline cannot be more than 5 years in the future' in form.errors['application_deadline']
 
