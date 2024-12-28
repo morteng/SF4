@@ -11,6 +11,7 @@ from app.models.notification import Notification
 from flask_wtf.csrf import generate_csrf
 from app.models.audit_log import AuditLog
 from app.constants import FlashMessages, FlashCategory
+from app.extensions import db  # Add this import
 
 def generate_csrf_token():
     """Generate a CSRF token for form validation."""
