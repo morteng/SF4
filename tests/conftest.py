@@ -83,12 +83,22 @@ def client(app):
     if 'limiter' in app.extensions:
         app.extensions['limiter'].enabled = False
     
-    # Create a new test client with proper context management
-    ctx = app.test_request_context()
-    ctx.push()
+    # Create a new test client
     client = app.test_client()
+    
+    # Create and push a new application context
+    app_ctx = app.app_context()
+    app_ctx.push()
+    
+    # Create and push a new request context
+    req_ctx = app.test_request_context()
+    req_ctx.push()
+    
     yield client
-    ctx.pop()
+    
+    # Clean up contexts in reverse order
+    req_ctx.pop()
+    app_ctx.pop()
 
 @pytest.fixture(scope='function')
 def admin_user(db_session, app):

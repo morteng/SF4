@@ -183,14 +183,15 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
     # Ensure limiter is disabled
     if 'limiter' in app.extensions:
         app.extensions['limiter'].enabled = False
-
-    with app.test_request_context():
-        # Push application context
-        ctx = app.app_context()
-        ctx.push()
+        
+    # Create a new application context for the test
+    with app.app_context():
         # Reset rate limiter before test
         if 'limiter' in app.extensions:
             app.extensions['limiter'].reset()
+            
+        # Create a new request context
+        with app.test_request_context():
         
         # Test audit log rollback
         try:
