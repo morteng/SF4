@@ -180,17 +180,16 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
     assert log is not None
 
 def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
-    # Ensure limiter is disabled
+    # Disable Flask-Limiter
     if 'limiter' in app.extensions:
         app.extensions['limiter'].enabled = False
-    
-    # Create a new application context for the test
+
+    # Use proper context management
     with app.app_context():
-        # Reset rate limiter before test
+        # Reset rate limiter
         if 'limiter' in app.extensions:
             app.extensions['limiter'].reset()
-        
-        # Create a new request context
+
         with app.test_request_context():
             # Set up logging
             logging.basicConfig(level=logging.INFO)
@@ -198,10 +197,9 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
             
             # Log test start
             logger.info("Starting user CRUD operations test")
-            
+
             # Test audit log rollback
             try:
-                # Force an error by creating invalid audit log
                 AuditLog.create(
                     user_id=test_user.id,
                     action=None,  # Invalid - should raise error
@@ -209,19 +207,18 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
                 )
                 assert False, "Should have raised ValueError"
             except ValueError as e:
-                # Verify no audit log was created
                 logs = AuditLog.query.filter_by(user_id=test_user.id).all()
                 assert len(logs) == 0, "Audit log should have been rolled back"
-            
+
             # Test notification error handling
             notification = Notification(
                 message="Test notification",
-                type="USER_ACTION",  # Use a valid enum value
+                type="USER_ACTION",
                 user_id=test_user.id
             )
             db_session.add(notification)
             db_session.commit()
-            
+
             # Force an error by marking invalid notification as read
             invalid_notification = Notification()
             try:
@@ -229,23 +226,25 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
                 assert False, "Should have raised ValueError"
             except ValueError as e:
                 assert str(e) == "Cannot mark unsaved notification as read"
-        
-        # Test notification error handling
-        notification = Notification(
-            message="Test notification",
-            type="USER_ACTION",  # Use a valid enum value
-            user_id=test_user.id
-        )
-        db_session.add(notification)
-        db_session.commit()
-        
-        # Force an error by marking invalid notification as read
-        invalid_notification = Notification()
-        try:
-            invalid_notification.mark_as_read()
-            assert False, "Should have raised ValueError"
-        except ValueError as e:
-            assert str(e) == "Cannot mark unsaved notification as read"
+
+        # Perform CRUD operations within the logged_in_admin context
+        with logged_in_admin.application.test_request_context():
+            with logged_in_admin:
+                # Set up session
+                with logged_in_admin.session_transaction() as session:
+                    session['_user_id'] = str(test_user.id)
+                    session['_fresh'] = True
+
+                # Initialize session with CSRF token
+                with logged_in_admin.session_transaction() as session:
+                    session['csrf_token'] = 'test-csrf-token'
+
+                # Get create form and extract CSRF token
+                try:
+                    create_response = logged_in_admin.get('/admin/users/create')
+                    assert create_response.status_code == 200
+                    csrf_token = extract_csrf_token(create_response.data)
+                    assert csrf_token is not None
     """Test full CRUD operations with audit logging and notifications"""
     
     # Create unique test data
