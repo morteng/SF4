@@ -180,7 +180,7 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
     assert log is not None
 
 from flask import current_app
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
 def extract_csrf_token(response_data):
     """Helper function to extract CSRF token from HTML response"""
@@ -192,13 +192,15 @@ def extract_csrf_token(response_data):
 def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
     # Mock Flask-Limiter to prevent interference
     with patch('flask_limiter.Limiter') as mock_limiter:
-        mock_limiter.return_value.enabled = False
+        # Create a mock limiter that won't interfere with requests
+        mock_limiter_instance = MagicMock()
+        mock_limiter_instance.enabled = False
+        mock_limiter.return_value = mock_limiter_instance
 
         # Use proper context management
         with app.app_context():
-            # Reset rate limiter
-            if 'limiter' in app.extensions:
-                app.extensions['limiter'].reset()
+            # Disable rate limiting for the test
+            app.config['RATELIMIT_ENABLED'] = False
 
             with app.test_request_context():
                 # Set up logging
@@ -250,14 +252,13 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
                     session['csrf_token'] = 'test-csrf-token'
 
                 # Get create form and extract CSRF token
-                try:
-                    create_response = logged_in_admin.get('/admin/users/create')
-                    assert create_response.status_code == 200
-                    csrf_token = extract_csrf_token(create_response.data)
-                    assert csrf_token is not None
-                except Exception as e:
-                    logging.error(f"Failed to get create form: {str(e)}")
-                    raise
+                create_response = logged_in_admin.get('/admin/users/create')
+                assert create_response.status_code == 200
+                csrf_token = extract_csrf_token(create_response.data)
+                if csrf_token is None:
+                    logging.error("CSRF token not found in response. Response content:\n%s", 
+                                create_response.data.decode('utf-8')[:1000])
+                assert csrf_token is not None, "CSRF token not found in create form response"
 
     """Test full CRUD operations with audit logging and notifications"""
     
