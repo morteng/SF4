@@ -49,7 +49,6 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @admin_required
 def create():
     """Create new stipend with audit logging and notifications"""
-    """Create new stipend with audit logging and notifications"""
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')
     
@@ -94,22 +93,6 @@ def create():
                 related_object=stipend,
                 user_id=current_user.id
             )
-            
-            # Create audit log
-            AuditLog.create(
-                user_id=current_user.id,
-                action='create_stipend',
-                object_type='Stipend',
-                object_id=stipend.id,
-                details_before=None,
-                details_after=stipend.to_dict(),
-                ip_address=request.remote_addr,
-                http_method=request.method,
-                endpoint=request.endpoint
-            )
-            
-            # Create notification
-            create_crud_notification('create', 'stipend', stipend.id, current_user.id)
             
             flash_message(FlashMessages.STIPEND_CREATE_SUCCESS, FlashCategory.SUCCESS)
             

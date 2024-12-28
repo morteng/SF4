@@ -53,8 +53,11 @@ class TagBot:
                 type=NotificationType.BOT_SUCCESS,
                 message=f"TagBot completed successfully - processed {len(untagged_stipends)} stipends",
                 related_object=self,
-                user_id=0  # System user
+                user_id=0,  # System user
+                priority='medium'
             )
+            
+            return True
             
         except Exception as e:
             self._handle_error(e)
@@ -63,9 +66,10 @@ class TagBot:
                 type=NotificationType.BOT_ERROR,
                 message=f"TagBot failed: {str(e)}",
                 related_object=self,
-                user_id=0  # System user
+                user_id=0,  # System user
+                priority='high'
             )
-            raise
+            return False
 
     def _start_bot(self):
         """Handle bot startup logic."""
