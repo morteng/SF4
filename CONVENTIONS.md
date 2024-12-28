@@ -2,8 +2,8 @@
 - All flash messages must use messages defined in app\constants.py
 - Audit logging required for all CRUD operations including:
   - User ID, Action type, Object type, Object ID
-  - Timestamp, IP address, HTTP method, Endpoint
-  - Before/after state for updates
+  - Timestamp (UTC), IP address, HTTP method, Endpoint
+  - Before/after state for updates (JSON serialized)
 - CSRF tokens must be included in all forms and HTMX requests
 - Rate limiting:
   - Admin: 200/day, 50/hour
@@ -14,6 +14,10 @@
   - Use NotificationType enum values
   - Include user_id and related_object
   - Use proper priority levels
+- Date/Time handling:
+  - Use CustomDateTimeField for all datetime inputs
+  - Store all timestamps in UTC
+  - Validate date formats and ranges
 
 ### Form Validation
 - SelectMultipleField must have valid choices defined

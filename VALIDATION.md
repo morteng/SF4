@@ -9,6 +9,15 @@
   - Future dates limited to 5 years
   - Leap year validation
   - Proper date format (YYYY-MM-DD HH:MM:SS)
+  - Timezone awareness (convert to UTC)
+
+### Audit Log Validation
+- Verify all CRUD operations create audit logs
+- Check logs contain required fields:
+  - User ID, Action type, Object type, Object ID
+  - Timestamp (UTC), IP address, HTTP method, Endpoint
+- Validate before/after state for update operations
+- Ensure JSON serialization of complex data
 
 ### Notification Validation
 - Validate NotificationType enum values
