@@ -8,10 +8,12 @@
   - Bot operations: 10/hour
   - Password resets: 5/hour
 
-### Notification Badges
-- All admin templates must include a notification badge
-- Use NotificationType enum for all notification types
-- Badge visible even when count is 0
+### Form Validation
+- SelectMultipleField must have valid choices defined
+- Date validation must handle:
+  - Past dates invalid
+  - Future dates limited to 5 years
+  - Leap year validation
 
 ### Audit Logging
 - Required for all CRUD operations and system events

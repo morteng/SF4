@@ -3,10 +3,11 @@
 ### Form Validation
 - Validate all form inputs using constants from app\constants.py
 - Ensure all required fields have validation messages
+- SelectMultipleField must have valid choices defined
 - Date validation must handle:
   - Past dates invalid
   - Future dates limited to 5 years
-  - Leap year validation (including Feb 29 in non-leap years)
+  - Leap year validation
 
 ### Audit Log Validation
 - Verify all CRUD operations create audit logs

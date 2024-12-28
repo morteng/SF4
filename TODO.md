@@ -8,4 +8,5 @@
 - [x] Implement audit logging in admin blueprint
 - [x] Add date validation constraints
 - [x] Fix rate limiting implementation
+- [x] Add SelectMultipleField choices validation
 
