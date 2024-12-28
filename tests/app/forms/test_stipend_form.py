@@ -119,13 +119,15 @@ def test_past_date(app, form_data):
 
 def test_future_date_limit(app, form_data, test_db):
     """Test future date limit (5 years)"""
+    # Import models first
+    from app.models import Tag, Organization
+
     # Clean the database before starting
     db.session.query(Tag).delete()
     db.session.query(Organization).delete()
     db.session.commit()
 
     # Create test tags and organizations
-    from app.models import Tag, Organization
     tag = Tag(name="Test Tag", category="Test Category")
     org = Organization(name="Test Org", description="Test Description", homepage_url="https://test.org")
     db.session.add(tag)
