@@ -34,6 +34,9 @@ class TestConfig(Config):
     SERVER_NAME = 'localhost'
     APPLICATION_ROOT = '/'
     PREFERRED_URL_SCHEME = 'http'
+    # Disable rate limiting in tests
+    RATELIMIT_ENABLED = False
+    RATELIMIT_STORAGE_URI = 'memory://'
 
 class DevelopmentConfig(Config):
     DEBUG = True

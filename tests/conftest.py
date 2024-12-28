@@ -281,43 +281,24 @@ def reset_rate_limiter(app):
 @pytest.fixture(scope='function')
 def logged_in_client(client, test_user, app, db_session, mock_rate_limiter):
     """Log in as a regular user."""
-    # Ensure the mock rate limiter is properly activated
-    with mock_rate_limiter:
-        with client.application.test_request_context():
-            # Ensure rate limiting is completely disabled
-            if hasattr(app, 'extensions') and 'limiter' in app.extensions:
-                limiter = app.extensions['limiter']
-                limiter.reset()
-                # Disable all rate limits for testing
-                limiter.enabled = False
-        # Ensure the test_user is bound to the current session
-        db_session.add(test_user)
-        db_session.commit()
-
-        # Get login page and extract CSRF token
-        login_response = client.get(url_for('public.login'))
-        try:
-            csrf_token = extract_csrf_token(login_response.data)
-        except ValueError as e:
-            # If rate limiting is still an issue, disable it explicitly
-            with app.test_request_context():
-                if hasattr(app, 'extensions') and 'limiter' in app.extensions:
-                    limiter = app.extensions['limiter']
-                    limiter.enabled = False
-            # Retry extracting the CSRF token
-            login_response = client.get(url_for('public.login'))
-            csrf_token = extract_csrf_token(login_response.data)
-
-        # Submit login form
-        response = client.post(url_for('public.login'), data={
-            'username': test_user.username,
-            'password': 'TestPass123!',  # Match the test user's password
-            'csrf_token': csrf_token
-        }, follow_redirects=True)
-
-        assert response.status_code == 200, f"User login failed. Response: {response.data.decode('utf-8')}"
-        with client.session_transaction() as session:
-            assert '_user_id' in session, "User session not established."
+    # Ensure the test_user is bound to the current session
+    db_session.add(test_user)
+    db_session.commit()
+    
+    # Get login page and extract CSRF token
+    login_response = client.get(url_for('public.login'))
+    csrf_token = extract_csrf_token(login_response.data)
+    
+    # Submit login form
+    response = client.post(url_for('public.login'), data={
+        'username': test_user.username,
+        'password': 'TestPass123!',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+    
+    assert response.status_code == 200, f"User login failed. Response: {response.data.decode('utf-8')}"
+    with client.session_transaction() as session:
+        assert '_user_id' in session, "User session not established."
     yield client
 
 @pytest.fixture(scope='function')
