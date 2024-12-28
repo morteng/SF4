@@ -220,8 +220,12 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
         # Verify user exists in database
         created_user = User.query.filter_by(username=user_data['username']).first()
         assert created_user is not None, "User was not created in database"
+        assert hasattr(created_user, 'id'), "Created user does not have an id attribute"
         assert created_user.email == user_data['email'], \
             f"Expected email {user_data['email']} but got {created_user.email}"
+        assert created_user.password_hash is not None, "Password hash was not set"
+        assert created_user.is_admin == user_data['is_admin'], \
+            f"Expected is_admin {user_data['is_admin']} but got {created_user.is_admin}"
             
         # Verify audit log
         audit_log = AuditLog.query.filter_by(

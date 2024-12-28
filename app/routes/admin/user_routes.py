@@ -71,6 +71,10 @@ def create():
             db.session.add(user)
             db.session.commit()
             
+            # Verify user was created
+            if not user or not hasattr(user, 'id'):
+                raise ValueError("Failed to create user - invalid user object returned")
+                
             # Create audit log
             AuditLog.create(
                 user_id=current_user.id,
