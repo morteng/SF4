@@ -2,15 +2,21 @@
 
 ### Form Validation
 - Validate all form inputs using constants from app\constants.py
-- Ensure all required fields have DataRequired and Length(min=1) validators
+- Validate required fields in both create and update operations:
+  - Name: required, max 100 chars
+  - Description: required, max 1000 chars
+  - Dates: required, valid format, proper range
+- Validate date formats and ranges:
+  - Application deadline must be in the future
+  - Created/updated dates must be in the past
+  - All dates in UTC format (YYYY-MM-DD HH:MM:SS)
+- Validate relationships (tags, organizations):
+  - At least one tag required
+  - At least one organization required
+  - Valid existing IDs for both
 - Select fields must have choices set before validation
 - SelectMultipleField must have valid choices defined
-- Date validation must handle:
-  - Past dates invalid
-  - Future dates limited to 5 years
-  - Leap year validation
-  - Proper date format (YYYY-MM-DD HH:MM:SS)
-  - Timezone awareness (convert to UTC)
+- Timezone awareness (convert to UTC)
 
 ### Audit Log Validation
 - Validate required fields: user_id, action, object_type, object_id
