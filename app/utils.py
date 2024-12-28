@@ -89,11 +89,6 @@ def admin_required(f):
                 current_app.logger.error(f"Error creating audit log: {str(e)}")
                 db.session.rollback()
         
-        return f(*args, **kwargs)
-        except Exception as e:
-            logger.error(f"Error in admin_required decorator: {str(e)}")
-            flash_message(FlashMessages.ADMIN_ACCESS_ERROR.value, FlashCategory.ERROR.value)
-            return abort(500)
             
         # Create audit log for admin access
         AuditLog.create(
