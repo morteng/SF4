@@ -30,6 +30,8 @@ limiter = Limiter(
 @limiter.limit("10 per minute")  # Matches project rate limiting specs
 @login_required
 @admin_required
+@login_required
+@admin_required
 def create():
     """Create a new user with proper validation and audit logging"""
     form = UserForm()
@@ -254,7 +256,9 @@ def edit(id):
         return redirect(url_for('admin.user.index')), 500
 
 @admin_user_bp.route('/<int:id>/delete', methods=['POST'])
-@limiter.limit("3 per minute")
+@limiter.limit("3 per minute")  # Matches project rate limiting specs
+@login_required
+@admin_required
 @login_required
 @admin_required
 def delete(id):
@@ -303,7 +307,9 @@ def delete(id):
         db.session.close()
 
 @admin_user_bp.route('/<int:id>/reset_password', methods=['POST'])
-@limiter.limit("5 per hour")
+@limiter.limit("5 per hour")  # Matches project rate limiting specs
+@login_required
+@admin_required
 @login_required
 @admin_required
 def reset_password(id):

@@ -281,8 +281,8 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
             "CSRF token not found in response. If already logged in, ensure the dashboard template includes a CSRF token"
         
             
-        # Refresh the test_user instance to ensure it's attached to the session
-        db_session.refresh(test_user)
+        # Ensure the test_user is attached to the session
+        test_user = db_session.merge(test_user)
 
         # Perform login with CSRF token
         login_response = logged_in_admin.post('/login', data={
