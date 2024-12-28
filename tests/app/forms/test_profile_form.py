@@ -10,25 +10,24 @@ import logging
 
 def test_profile_form_valid(logged_in_client, db_session, test_user):
     """Test valid profile form submission with CSRF protection"""
-    with db_session_scope() as session:
-        # First get the edit profile page to get a valid CSRF token
-        profile_response = logged_in_client.get(url_for('user.edit_profile'))
-        csrf_token = extract_csrf_token(profile_response.data)
-        
-        # Test form submission with the valid CSRF token
-        response = logged_in_client.post(url_for('user.edit_profile'), data={
-            'username': 'newusername',
-            'email': 'newemail@example.com',
-            'csrf_token': csrf_token
-        }, follow_redirects=True)
-        
-        assert response.status_code == 200
-        assert b"Profile updated successfully" in response.data
-        
-        # Verify the user was actually updated
-        updated_user = session.query(User).filter_by(id=test_user.id).first()
-        assert updated_user.username == 'newusername'
-        assert updated_user.email == 'newemail@example.com'
+    # Get CSRF token from login page
+    login_response = logged_in_client.get(url_for('public.login'))
+    csrf_token = extract_csrf_token(login_response.data)
+    
+    # Test form submission
+    response = logged_in_client.post(url_for('user.edit_profile'), data={
+        'username': 'newusername',
+        'email': 'newemail@example.com',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+    
+    assert response.status_code == 200
+    assert b"Profile updated successfully" in response.data
+    
+    # Verify the user was actually updated
+    updated_user = db_session.query(User).filter_by(id=test_user.id).first()
+    assert updated_user.username == 'newusername'
+    assert updated_user.email == 'newemail@example.com'
         assert b"Profile updated successfully" in response.data
         
         # Verify the user was actually updated
