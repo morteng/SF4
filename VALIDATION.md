@@ -33,6 +33,7 @@
   - Before/after state for updates (where applicable)
 - Ensure logs are created for both success and failure cases
 - Validate JSON serialization of complex data
+- Verify commit flag works as expected
 
 ### Notification Handling
 - notification_count must be passed to all admin templates
