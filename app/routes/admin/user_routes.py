@@ -63,6 +63,11 @@ def create():
             if not new_user or not new_user.id:
                 db.session.rollback()
                 raise ValueError("Failed to create user - invalid user object returned")
+            
+            # Verify user creation
+            if not new_user or not new_user.id:
+                db.session.rollback()
+                raise ValueError("Failed to create user - invalid user object returned")
                 
                 # Create audit log with before/after state
                 AuditLog.create(

@@ -57,7 +57,7 @@ class Notification(db.Model):
             type=type,
             message=message,
             read_status=False,
-            user_id=user_id
+            user_id=user_id if user_id is not None else 0  # Default to system user
         )
         if related_object:
             notification.related_object_type = related_object.__class__.__name__

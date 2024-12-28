@@ -105,11 +105,12 @@ def create_user(form_data, current_user_id):
             ip_address=request.remote_addr
         )
         
-        # Create notification
+        # Create notification with proper user_id
         Notification.create(
-            type='user_created',
+            type=NotificationType.CRUD_CREATE,
             message=f'User {new_user.username} was created',
-            related_object=new_user  # Pass the user object directly
+            related_object=new_user,
+            user_id=current_user_id
         )
         
         return new_user
