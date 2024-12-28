@@ -1,5 +1,9 @@
 import os  # Import the os module here
+import logging
 from flask import Flask
+
+# Configure logger
+logger = logging.getLogger(__name__)
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 

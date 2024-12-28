@@ -1,4 +1,7 @@
 import logging
+from app.utils import db_session_scope
+
+logger = logging.getLogger(__name__)
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 from flask import request
