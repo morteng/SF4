@@ -58,6 +58,7 @@ def create_app(config_name='development'):
 
     # Register blueprints before applying rate limits
     from app.routes.admin import register_admin_blueprints
+    from app.routes.admin.user_routes import admin_user_bp
     register_admin_blueprints(app)
     
     # Apply specific limits to admin routes
