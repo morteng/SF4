@@ -288,17 +288,26 @@ def get_all_tags():
 def reset_rate_limiter(app):
     """Reset the rate limiter and clear audit logs before each test."""
     with app.app_context():
-        # Reset rate limiter
-        limiter = app.extensions.get("limiter")
-        if limiter and hasattr(limiter, 'reset'):
-            limiter.reset()
+        # Reset rate limiter if it exists and is initialized
+        if 'limiter' in app.extensions:
+            limiter = app.extensions['limiter']
+            if hasattr(limiter, '_storage') and limiter._storage is not None:
+                try:
+                    limiter.reset()
+                except Exception as e:
+                    # Log but don't fail the test if reset fails
+                    app.logger.warning(f"Failed to reset rate limiter: {str(e)}")
         
         # Clear audit logs and notifications
         from app.models.audit_log import AuditLog
         from app.models.notification import Notification
-        AuditLog.query.delete()
-        Notification.query.delete()
-        db.session.commit()
+        try:
+            AuditLog.query.delete()
+            Notification.query.delete()
+            db.session.commit()
+        except Exception as e:
+            app.logger.error(f"Error clearing audit logs: {str(e)}")
+            db.session.rollback()
 
 @pytest.fixture(scope='function')
 def logged_in_client(client, test_user, app, db_session):
