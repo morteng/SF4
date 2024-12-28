@@ -73,9 +73,44 @@ def create():
                 'open_for_applications': form.open_for_applications.data,
                 'tags': form.tags.data  # Will be handled in model __init__
             }
-    """Create new stipend with audit logging and notifications"""
-    form = StipendForm()
-    is_htmx = request.headers.get('HX-Request')
+            
+            # Create stipend
+            stipend = Stipend.create(stipend_data)
+            
+            # Create audit log
+            log_audit(
+                user_id=current_user.id,
+                action='create_stipend',
+                object_type='Stipend',
+                object_id=stipend.id,
+                after=stipend.to_dict()
+            )
+            
+            # Create notification
+            create_notification(
+                type='stipend_created',
+                message=f'New stipend created: {stipend.name}',
+                related_object=stipend,
+                user_id=current_user.id
+            )
+            
+            flash_message(FlashMessages.STIPEND_CREATE_SUCCESS, FlashCategory.SUCCESS)
+            
+            if is_htmx:
+                return render_template('admin/stipends/_stipend_row.html', stipend=stipend), 200, {
+                    'HX-Trigger': 'stipendCreated'
+                }
+            return redirect(url_for('admin.stipend.index'))
+            
+        return render_template('admin/stipends/create.html', form=form)
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error creating stipend: {str(e)}")
+        flash_message(f"{FlashMessages.STIPEND_CREATE_ERROR}: {str(e)}", FlashCategory.ERROR)
+        if is_htmx:
+            return render_template('admin/stipends/_form.html', form=form), 400
+        return render_template('admin/stipends/create.html', form=form), 400
     
     # Initialize form choices
     organizations = Organization.query.order_by(Organization.name).all()
