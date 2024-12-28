@@ -39,6 +39,7 @@ class TestConfig(Config):
     RATELIMIT_STORAGE_URI = 'memory://'
     RATELIMIT_DEFAULT = "9999999 per second"  # Effectively disable rate limits
     RATELIMIT_USER_MANAGEMENT = "9999999 per second"
+    RATELIMIT_BOT_OPERATIONS = "9999999 per second"
 
 class DevelopmentConfig(Config):
     DEBUG = True
