@@ -55,4 +55,5 @@
   - HTTP method and endpoint
   - Before/after state for updates (where applicable)
   - Details field with human-readable description
+- Partial updates should be supported for update operations
 
