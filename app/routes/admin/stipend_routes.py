@@ -433,6 +433,9 @@ def edit(id):
         form.tags.choices = [(tag.id, tag.name) for tag in tags]
 
         if form.validate_on_submit():
+            # Get current state before update
+            before_state = stipend.to_dict()
+            
             # Prepare update data
             update_data = {
                 'name': form.name.data,
@@ -449,6 +452,24 @@ def edit(id):
 
             # Update stipend
             updated_stipend = stipend.update(update_data, user_id=current_user.id)
+            
+            # Create audit log
+            log_audit(
+                user_id=current_user.id,
+                action='update_stipend',
+                object_type='Stipend',
+                object_id=stipend.id,
+                before=before_state,
+                after=updated_stipend.to_dict()
+            )
+            
+            # Create notification
+            create_notification(
+                type='stipend_updated',
+                message=f'Stipend updated: {updated_stipend.name}',
+                related_object=updated_stipend,
+                user_id=current_user.id
+            )
             
             flash_message(FlashMessages.STIPEND_UPDATE_SUCCESS, FlashCategory.SUCCESS)
             

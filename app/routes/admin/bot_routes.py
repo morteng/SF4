@@ -33,40 +33,54 @@ limiter = Limiter(
 @login_required
 @admin_required
 def create():
-    """Create a new bot with audit logging"""
+    """Create a new bot with audit logging and notifications"""
     form = BotForm()
+    is_htmx = request.headers.get('HX-Request')
+    
     if form.validate_on_submit():
         try:
             bot_data = {
                 'name': form.name.data,
                 'description': form.description.data,
-                'status': form.status.data,
-                'schedule': form.schedule.data
+                'status': 'inactive',
+                'schedule': form.schedule.data,
+                'last_run': None
             }
+            
+            # Create bot
             new_bot = create_bot(bot_data)
             
-            # Create audit log and notification
-            AuditLog.create(
+            # Create audit log
+            log_audit(
                 user_id=current_user.id,
                 action='create_bot',
                 object_type='Bot',
                 object_id=new_bot.id,
-                details=f'Created bot {new_bot.name}',
-                ip_address=request.remote_addr
+                after=new_bot.to_dict()
             )
-            Notification.create(
-                type=NotificationType.CRUD_CREATE,
-                message=f"Bot {new_bot.name} created",
+            
+            # Create notification
+            create_notification(
+                type='bot_created',
+                message=f'New bot created: {new_bot.name}',
+                related_object=new_bot,
                 user_id=current_user.id
             )
             
-            flash_message(FlashMessages.CREATE_BOT_SUCCESS.value, FlashCategory.SUCCESS.value)
+            flash_message(FlashMessages.BOT_CREATE_SUCCESS, FlashCategory.SUCCESS)
+            
+            if is_htmx:
+                return render_template('admin/bots/_bot_row.html', bot=new_bot), 200, {
+                    'HX-Trigger': 'botCreated'
+                }
             return redirect(url_for('admin.bot.index'))
+            
         except Exception as e:
             db.session.rollback()
-            flash_message(f"{FlashMessages.CREATE_BOT_ERROR.value}{str(e)}", FlashCategory.ERROR.value)
-            current_app.logger.error(f"Failed to create bot: {e}")
-            return render_template('admin/bots/create.html', form=form), 400
+            current_app.logger.error(f"Error creating bot: {str(e)}")
+            flash_message(f"{FlashMessages.BOT_CREATE_ERROR}: {str(e)}", FlashCategory.ERROR)
+            if is_htmx:
+                return render_template('admin/bots/_form.html', form=form), 400
     
     return render_template('admin/bots/create.html', form=form)
 
