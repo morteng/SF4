@@ -211,6 +211,20 @@ def test_missing_required_fields(app, form_data):
         'application_deadline', 'organization_id'
     ]
     
+    # Test empty strings
+    with app.test_request_context():
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        
+        for field in required_fields:
+            if field != 'organization_id':  # Skip organization_id as it's a SelectField
+                invalid_data = form_data.copy()
+                invalid_data[field] = ''  # Set to empty string
+                
+                form = StipendForm(data=invalid_data, meta={'csrf': False})
+                form.tags.choices = tag_choices
+                assert form.validate() is False, f"Form should be invalid when {field} is empty"
+                assert field in form.errors, f"Expected error for empty {field} but got: {form.errors}"
+    
     with app.test_request_context():
         # Get tag choices from database
         tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]

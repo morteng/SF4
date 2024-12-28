@@ -50,11 +50,11 @@ class StipendForm(FlaskForm):
     ])
     application_procedure = TextAreaField('Application Procedure', validators=[
         DataRequired(message="Application procedure is required."),
-        Length(max=1000, message="Application procedure cannot exceed 1000 characters.")
+        Length(min=1, max=1000, message="Application procedure must be between 1 and 1000 characters.")
     ])
     eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[
         DataRequired(message="Eligibility criteria is required."),
-        Length(max=1000, message="Eligibility criteria cannot exceed 1000 characters.")
+        Length(min=1, max=1000, message="Eligibility criteria must be between 1 and 1000 characters.")
     ])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
