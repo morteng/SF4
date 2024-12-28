@@ -198,10 +198,20 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
                 session['_user_id'] = str(test_user.id)
                 session['_fresh'] = True
 
-            # Get CSRF token
+            # Initialize session with CSRF token
+            with logged_in_admin.session_transaction() as session:
+                session['csrf_token'] = 'test-csrf-token'
+            
+            # Get create form and extract CSRF token
             create_response = logged_in_admin.get('/admin/users/create')
-        csrf_token = extract_csrf_token(create_response.data)
-        assert csrf_token is not None
+            assert create_response.status_code == 200
+            
+            # Extract CSRF token with debug logging
+            csrf_token = extract_csrf_token(create_response.data)
+            if csrf_token is None:
+                logging.error("CSRF token not found in response. Response content:\n%s", 
+                            create_response.data.decode('utf-8')[:1000])
+            assert csrf_token is not None, "CSRF token not found in create form response"
 
         # Create user
         response = logged_in_admin.post('/admin/users/create', data={

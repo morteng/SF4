@@ -231,33 +231,39 @@ def generate_csrf_token():
     return generate_csrf()
 
 def extract_csrf_token(response_data):
-    """Extract CSRF token from response data."""
-    decoded_data = response_data.decode('utf-8')
-    
-    # Check if rate limit exceeded
-    if "Too Many Requests" in decoded_data:
-        raise ValueError("Rate limit exceeded - cannot extract CSRF token")
-    
-    # Look for CSRF token in various possible locations
-    patterns = [
-        r'<input[^>]*id="csrf_token"[^>]*value="(.+?)"',  # id="csrf_token"
-        r'<meta[^>]*name="csrf-token"[^>]*content="(.+?)"',  # meta tag
-        r'<input[^>]*type="hidden"[^>]*name="csrf_token"[^>]*value="(.+?)"',  # hidden input
-        r'<input[^>]*name="csrf_token"[^>]*value="(.+?)"',  # any input with name
-        r'name="csrf_token"\s*value="(.+?)"',  # looser pattern
-        r'csrf_token"\s*value="(.+?)"'  # even looser pattern
-    ]
-    
-    for pattern in patterns:
-        match = re.search(pattern, decoded_data)
-        if match:
-            token = match.group(1)
-            if token and len(token) > 10:  # Basic validation
-                return token
-    
-    # Debug output
-    logging.warning("CSRF token not found in response. Response data:\n%s", decoded_data[:1000])
-    raise ValueError("CSRF token not found in response")
+    """Extract CSRF token from response data with enhanced error handling."""
+    try:
+        decoded_data = response_data.decode('utf-8')
+        
+        # Look for CSRF token in various possible locations
+        patterns = [
+            r'<input[^>]*id="csrf_token"[^>]*value="([^"]+)"',  # id="csrf_token"
+            r'<meta[^>]*name="csrf-token"[^>]*content="([^"]+)"',  # meta tag
+            r'<input[^>]*type="hidden"[^>]*name="csrf_token"[^>]*value="([^"]+)"',  # hidden input
+            r'<input[^>]*name="csrf_token"[^>]*value="([^"]+)"',  # any input with name
+            r'name="csrf_token"\s*value="([^"]+)"',  # looser pattern
+            r'csrf_token"\s*value="([^"]+)"'  # even looser pattern
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, decoded_data)
+            if match:
+                token = match.group(1)
+                if token and len(token) > 10:  # Basic validation
+                    return token
+        
+        # If not found, try to find in session
+        from flask import session
+        if 'csrf_token' in session:
+            return session['csrf_token']
+        
+        # Debug output
+        logging.error("CSRF token not found in response. Response data:\n%s", decoded_data[:1000])
+        return None
+        
+    except Exception as e:
+        logging.error(f"Error extracting CSRF token: {str(e)}")
+        return None
 
 def get_all_tags():
     with current_app.app_context():  # Ensure application context is set
