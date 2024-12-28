@@ -29,7 +29,7 @@ def app():
         db.drop_all()
 
 @pytest.fixture
-def db(app):
+def test_db(app):
     return db
 
 @pytest.fixture
@@ -60,7 +60,7 @@ def form_data(app):
             'open_for_applications': True
         }
 
-def test_valid_date_format(app, form_data):
+def test_valid_date_format(app, form_data, test_db):
     """Test valid date format"""
     form_data['application_deadline'] = '2025-12-31 23:59:59'
     with app.test_request_context():
@@ -122,7 +122,7 @@ def test_past_date(app, form_data):
         assert form.validate() is False
         assert 'Application deadline must be a future date' in form.errors['application_deadline']
 
-def test_future_date_limit(app, form_data, db):
+def test_future_date_limit(app, form_data, test_db):
     """Test future date limit (5 years)"""
     # Create test tags and organizations
     from app.models import Tag, Organization
@@ -228,7 +228,7 @@ def test_leap_year_validation_simplified(app):
         assert field.validate(TestCustomDateTimeField()) is False
         assert 'Invalid date values (e.g., Feb 29 in non-leap years)' in field.errors
 
-def test_stipend_create_operation(app, form_data):
+def test_stipend_create_operation(app, form_data, test_db):
     """Test CRUD create operation"""
     with app.test_request_context():
         # Get tag choices from database
@@ -248,7 +248,7 @@ def test_stipend_create_operation(app, form_data):
             assert form.validate() is False
             assert field in form.errors
 
-def test_audit_log_on_create(app, form_data):
+def test_audit_log_on_create(app, form_data, test_db):
     """Test audit log creation on stipend create"""
     with app.test_request_context():
         # Get tag choices from database
@@ -268,7 +268,7 @@ def test_audit_log_on_create(app, form_data):
             assert log.action == 'create'
             assert log.details is not None
 
-def test_stipend_update_operation(app, form_data):
+def test_stipend_update_operation(app, form_data, test_db):
     """Test CRUD update operation"""
     with app.test_request_context():
         # Get tag choices from database
@@ -296,7 +296,7 @@ def test_stipend_update_operation(app, form_data):
         assert log.action == 'update'
         assert log.details is not None
 
-def test_stipend_delete_operation(app, form_data):
+def test_stipend_delete_operation(app, form_data, test_db):
     """Test CRUD delete operation"""
     with app.test_request_context():
         # Get tag choices from database
