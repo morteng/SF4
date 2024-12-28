@@ -66,15 +66,15 @@ def db_session(_db, app):
     with app.app_context():
         connection = _db.engine.connect()
         transaction = connection.begin()
-        # Create a new session using sessionmaker
-        session = _db.sessionmaker(bind=connection)
-        _db.session = session()
+        # Create a new session using the SQLAlchemy session directly
+        session = _db.session
+        session.bind = connection
         
-        yield session()
+        yield session
         
         transaction.rollback()
         connection.close()
-        session().close()
+        session.close()
 
 @pytest.fixture(scope='function')
 def client(app):
