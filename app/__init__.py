@@ -29,6 +29,9 @@ def create_app(config_name='development'):
     csrf = CSRFProtect(app)
     app.config['WTF_CSRF_ENABLED'] = True
     app.config['WTF_CSRF_SECRET_KEY'] = app.config.get('WTF_CSRF_SECRET_KEY', app.config['SECRET_KEY'])
+    app.config['WTF_CSRF_TIME_LIMIT'] = 3600  # 1 hour token validity
+    app.config['WTF_CSRF_HEADERS'] = ['X-CSRFToken']
+    app.config['WTF_CSRF_SSL_STRICT'] = True
 
     migrate.init_app(app, db)  # Initialize Flask-Migrate here
 

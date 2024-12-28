@@ -214,6 +214,11 @@ def test_required_packages():
     except ImportError:
         pytest.fail("Flask-Limiter is not installed")
 
+def generate_csrf_token():
+    """Generate a CSRF token for testing."""
+    from flask_wtf.csrf import generate_csrf
+    return generate_csrf()
+
 def extract_csrf_token(response_data):
     """Extract CSRF token from HTML response."""
     decoded_data = response_data.decode('utf-8')
