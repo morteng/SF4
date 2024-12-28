@@ -1,61 +1,14 @@
 ## Coding Conventions
-- **PEP 8**: Follow Python PEP 8 style
-- **Modularity**: Keep code small and focused
-- **Clear Separation**: Models, services, routes, and templates well-structured
-- **Documentation**: Docstrings, comments, and meaningful names
-- **Validation Messages**: Use constants from app\constants.py for all validation messages
-- **Form Validation**: All required fields must have proper DataRequired and Length(min=1) validators
-- **Flash Messages**: Use FlashMessages enum from app\constants.py for all flash messages
-- **CSRF Protection**: Include CSRF tokens in all forms and HTMX requests
-- **Audit Logging**: Log all CRUD operations with required fields
-  - Must include: user_id, action, ip_address, http_method, endpoint
-  - Optional: object_type, object_id, details (JSON serialized)
-  - user_id can be null for system events
-  - Timestamps in UTC (timezone-aware)
-  - Handle errors gracefully without rollback
-  - Use consistent action names (e.g., 'delete_stipend')
-- Notifications must:
-  - Use NotificationType enum values
-  - Include user_id and related_object
-  - Use proper priority levels
-- CSRF tokens must be included in all forms and HTMX requests
-- Rate limiting:
-  - Admin: 200/day, 50/hour
-  - CRUD: Create/Update (10/min;100/hour), Delete (3/min;30/hour)
-  - Bot operations: 10/hour
-  - Password resets: 5/hour
-  - Login attempts: 3/min
-- Bot implementations must:
-  - Maintain proper status tracking
-  - Create audit logs for all operations
-  - Generate notifications for success/failure
-  - Handle errors gracefully
-- Notification system must:
-  - Use NotificationType enum values
-  - Include user_id and related_object
-  - Use proper priority levels
-- Date/Time handling:
-  - Use CustomDateTimeField for all datetime inputs
-  - Store all timestamps in UTC
-  - Validate date formats and ranges
 
-### Form Validation
-- SelectMultipleField must have valid choices defined
-- Date validation must handle:
-  - Past dates invalid
-  - Future dates limited to 5 years
-  - Leap year validation
+### Notification Handling
+- Use NotificationType enum values
+- Include user_id and related_object
+- Use proper priority levels
+- Validate message length (max 255 chars)
 
 ### Audit Logging
-- Required for all CRUD operations and system events
-- Must include:
-  - User ID (0 for system events)
-  - Action type (create/update/delete/system_event)
-  - Object type and ID
-  - Timestamp (timezone-aware UTC)
-  - IP address
-  - HTTP method and endpoint
-  - Before/after state for updates (where applicable)
-  - Details field with human-readable description
-- Partial updates should be supported for update operations
+- Required for all CRUD operations
+- Must include: user_id, action, object_type, object_id
+- Timestamps must be UTC
+- Handle errors gracefully
 
