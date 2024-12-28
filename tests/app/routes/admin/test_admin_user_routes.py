@@ -31,10 +31,9 @@ def client(app):
         with app.app_context():
             with client.session_transaction() as session:
                 session['csrf_token'] = 'test-csrf-token'
-            try:
-                yield client
-            finally:
-                # Clean up any created test data
+            yield client
+            # Clean up any created test data
+            with app.app_context():
                 User.query.filter(User.username.like('testuser_%')).delete()
                 AuditLog.query.filter(AuditLog.user_id.isnot(None)).delete()
                 Notification.query.delete()
