@@ -174,11 +174,9 @@ class FlashMessages(str, Enum):
     FORM_SUBMISSION_ERROR = "Form submission failed. Please try again."
     FORM_INVALID_CSRF = "Invalid CSRF token. Please refresh the page and try again."
     FORM_DUPLICATE_USERNAME = "Username already exists. Please choose a different username."
-    FORM_DUPLICATE_EMAIL = "Email already exists. Please choose a different email address."
 
     # Profile Management
     UPDATE_PROFILE_SUCCESS = "Profile updated successfully."
-    EMAIL_ALREADY_EXISTS = "Email already exists. Please choose a different email address."
     PROFILE_UPDATE_INVALID_DATA = "Invalid data provided for profile update."
     
     # User Status Management
