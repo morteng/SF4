@@ -179,7 +179,11 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
     ).first()
     assert log is not None
 
-def test_user_crud_operations(logged_in_admin, db_session, test_user):
+def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
+    # Reset rate limiter before test
+    from flask_limiter import Limiter
+    limiter = Limiter(app=app)
+    limiter.storage.reset()
     """Test full CRUD operations with audit logging and notifications"""
     
     # Create unique test data

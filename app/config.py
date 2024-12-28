@@ -55,6 +55,15 @@ class TestConfig(Config):
     NOTIFICATION_MAX_COUNT = 1000  # Increase for testing
     NOTIFICATION_CLEANUP_INTERVAL = 0  # Disable cleanup during tests
 
+    @classmethod
+    def init_app(cls, app):
+        """Initialize the test application"""
+        super().init_app(app)
+        # Reset rate limiter storage before each test
+        from flask_limiter import Limiter
+        limiter = Limiter(app=app)
+        limiter.storage.reset()
+
 class DevelopmentConfig(Config):
     DEBUG = True
     TESTING = False
