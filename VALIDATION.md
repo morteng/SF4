@@ -56,13 +56,11 @@
 - Verify blueprint factory pattern implementation
 
 ## Rate Limiting
-- Verify rate limits are enforced consistently:
-  - Admin: 100/hour (global)
-  - Sensitive ops: 10/minute (per endpoint)
-  - CRUD Operations:
-    - Create/Update: 10/minute
-    - Delete: 3/minute
-    - View: No limit
+- Verify rate limits are enforced:
+  - Admin: 200/day, 50/hour
+  - CRUD: Create/Update (10/min), Delete (3/min)
+  - Bot operations: 10/hour
+  - Bot scheduling: 5/hour
   - Password resets: 5/hour
   - Bot operations: 10/hour
   - Bot scheduling: 5/hour

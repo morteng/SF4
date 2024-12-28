@@ -1,9 +1,12 @@
 # TODO List
 ## High Priority
-- [ ] Fix rate limiting implementation in admin routes
-- [ ] Ensure consistent timezone handling across all datetime operations
-- [ ] Verify JSON serialization of audit log details
-- [ ] Add bot scheduling functionality
+- [ ] Implement bot scheduling functionality
+- [ ] Add HTMX integration for dynamic content updates
+- [ ] Complete admin interface security checks
+
+## Completed
+- [x] Fix rate limiting implementation
+- [x] Verify JSON serialization of audit logs
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
