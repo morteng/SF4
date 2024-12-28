@@ -52,3 +52,33 @@ def test_notification_to_dict(test_notification):
     assert notification_dict['message'] == 'Test notification'
     assert notification_dict['type'] == NotificationType.SYSTEM.value
     assert notification_dict['priority'] == NotificationPriority.MEDIUM.value
+    assert 'created_at' in notification_dict
+    assert notification_dict['read_status'] is False
+
+def test_audit_log_rollback(db_session):
+    """Test audit log rollback on error"""
+    from app.models.audit_log import AuditLog
+    from sqlalchemy.exc import IntegrityError
+    
+    # Create invalid audit log (missing required action)
+    with pytest.raises(ValueError):
+        AuditLog.create(user_id=1, action=None)
+    
+    # Verify no audit log was created
+    assert db_session.query(AuditLog).count() == 0
+
+def test_audit_log_error_handling(db_session):
+    """Test audit log error handling"""
+    from app.models.audit_log import AuditLog
+    
+    # Create audit log with invalid data
+    with pytest.raises(ValueError):
+        AuditLog.create(
+            user_id=1,
+            action='test',
+            object_type='Test',
+            object_id=None  # Missing required object_id
+        )
+    
+    # Verify no audit log was created
+    assert db_session.query(AuditLog).count() == 0
