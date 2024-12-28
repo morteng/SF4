@@ -229,7 +229,7 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
             
         # Verify audit log
         audit_log = AuditLog.query.filter_by(
-            action='create_user',
+            action=FlashMessages.AUDIT_CREATE.value,
             object_type='User',
             object_id=created_user.id
         ).first()
@@ -237,6 +237,12 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
         assert audit_log.user_id == test_user.id, \
             f"Expected audit log user ID {test_user.id} but got {audit_log.user_id}"
         assert audit_log.ip_address is not None, "Audit log missing IP address"
+        assert audit_log.details_before is None, "Expected no before state for new user"
+        assert audit_log.details_after == {
+            'username': user_data['username'],
+            'email': user_data['email'],
+            'is_admin': user_data['is_admin']
+        }, "Audit log after state does not match created user"
             
         # Verify notification
         notification = Notification.query.filter_by(

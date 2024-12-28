@@ -76,42 +76,57 @@ def create():
 
             # Create user with proper validation
             try:
-                user = User(
-                    username=form.username.data,
-                    email=form.email.data,
-                    password_hash=generate_password_hash(form.password.data),
-                    is_admin=form.is_admin.data if hasattr(form, 'is_admin') else False
-                )
+                # Create user with proper validation
+                user = User()
+                user.username = form.username.data
+                user.email = form.email.data
+                user.password_hash = generate_password_hash(form.password.data)
+                user.is_admin = form.is_admin.data if hasattr(form, 'is_admin') else False
+                
                 db.session.add(user)
                 db.session.commit()
                 
                 # Verify user creation
                 if not user or not user.id:
+                    db.session.rollback()
                     raise ValueError("Failed to create user - invalid user object returned")
                 
-                # Create audit log
+                # Create audit log with before/after state
                 AuditLog.create(
                     user_id=current_user.id,
-                    action='create_user',
+                    action=FlashMessages.AUDIT_CREATE.value,
                     object_type='User',
                     object_id=user.id,
-                    details=f'Created user {user.username}',
+                    details_before=None,
+                    details_after={
+                        'username': user.username,
+                        'email': user.email,
+                        'is_admin': user.is_admin
+                    },
                     ip_address=request.remote_addr
                 )
                 
-                # Create notification
+                # Create notification with proper type and message
                 Notification.create(
                     type='user_created',
-                    message=f'User {user.username} was created',
-                    related_object=f'User:{user.id}'
+                    message=FlashMessages.USER_CREATED.value.format(username=user.username),
+                    related_object=f'User:{user.id}',
+                    user_id=current_user.id
                 )
                 
                 flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS)
                 return redirect(url_for('admin.user.index'))
                 
+            except ValueError as e:
+                db.session.rollback()
+                logging.error(f"Validation error creating user: {str(e)}")
+                flash_message(f"{FlashMessages.CREATE_USER_INVALID_DATA.value}: {str(e)}", FlashCategory.ERROR)
+                return render_template('admin/users/create.html', 
+                                    form=form,
+                                    notification_count=notification_count), 400
             except Exception as e:
                 db.session.rollback()
-                logging.error(f"Error creating user: {str(e)}")
+                logging.error(f"Database error creating user: {str(e)}")
                 flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR)
                 return render_template('admin/users/create.html', 
                                     form=form,
