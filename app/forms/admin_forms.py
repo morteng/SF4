@@ -72,23 +72,6 @@ class StipendForm(FlaskForm):
     tags = SelectMultipleField('Tags', coerce=int, validators=[
         DataRequired(message="At least one tag is required.")
     ])
-    application_deadline = CustomDateTimeField(
-        'Application Deadline',
-        validators=[DataRequired(message="Application deadline is required.")],
-        render_kw={
-            "placeholder": "YYYY-MM-DD HH:MM:SS",
-            "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
-            "title": "Please enter date in YYYY-MM-DD HH:MM:SS format."
-        },
-        error_messages={
-            'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
-            'invalid_date': 'Invalid date values (e.g., Feb 30)',
-            'invalid_time': 'Invalid time values (e.g., 25:61:61)',
-            'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
-            'required': 'Date is required',
-            'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)'
-        }
-    )
 
     def validate_application_deadline(self, field):
         # Skip validation if the field is empty or invalid (CustomDateTimeField handles this)
@@ -165,16 +148,18 @@ class StipendForm(FlaskForm):
         if field.data > max_future:
             raise ValidationError('Application deadline cannot be more than 5 years in the future')
 
-    organization_id = SelectField('Organization', validators=[DataRequired(message="Organization is required.")], coerce=int, choices=[])
-    open_for_applications = BooleanField('Open for Applications', default=False)
     submit = SubmitField('Create')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Ensure organization choices are always populated
-        self.organization_id.choices = [(org.id, org.name) for org in Organization.query.order_by(Organization.name).all()]
-        if not self.organization_id.data and self.organization_id.choices:
-            self.organization_id.data = self.organization_id.choices[0][0]
+        # Initialize organization choices
+        self.organization_id.choices = [
+            (org.id, org.name) for org in Organization.query.order_by(Organization.name).all()
+        ]
+        # Initialize tag choices
+        self.tags.choices = [
+            (tag.id, tag.name) for tag in Tag.query.order_by(Tag.name).all()
+        ]
 
 
     def validate_open_for_applications(self, field):
@@ -189,9 +174,9 @@ class StipendForm(FlaskForm):
         return None  # Explicitly return None as required by WTForms
 
     def validate_organization_id(self, field):
-        if not field.data:
+        if not field.data or field.data == '':
             raise ValidationError('Organization is required.')
-        organization = db.session.get(Organization, field.data)  # Updated to use db.session.get
+        organization = db.session.get(Organization, field.data)
         if not organization:
             raise ValidationError('Invalid organization selected.')
 
