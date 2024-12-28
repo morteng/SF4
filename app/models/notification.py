@@ -42,7 +42,6 @@ class Notification(db.Model):
             return self
         except Exception as e:
             db.session.rollback()
-            from flask import current_app
             current_app.logger.error(f"Error marking notification as read: {str(e)}")
             # Create audit log for the failed operation
             try:
