@@ -125,8 +125,22 @@ class TagBot:
         """Handle bot errors."""
         self.status = "error"
         self.logger.error(f"Failed to run TagBot: {error}")
+        
+        # Create error notification
         Notification.create(
-            type="bot_error",
-            message=f"{self.name} failed: {str(error)}"
+            type=NotificationType.BOT_ERROR,
+            message=f"{self.name} failed: {str(error)}",
+            related_object=self,
+            user_id=0  # System user
         )
-        db.session.commit()
+        
+        # Create audit log
+        AuditLog.create(
+            user_id=0,
+            action="bot_error",
+            details=f"TagBot failed with error: {str(error)}",
+            object_type="Bot"
+        )
+        
+        # Commit changes
+        self.session.commit()

@@ -43,7 +43,7 @@ def create_app(config_name='development'):
     def load_user(user_id):
         return db.session.get(User, int(user_id))  
 
-    # Initialize rate limiter with appropriate limits
+    # Initialize rate limiter with admin-specific limits
     limiter = Limiter(
         get_remote_address,
         app=app,
@@ -52,9 +52,14 @@ def create_app(config_name='development'):
             "10/minute;100/hour",  # Create/Update
             "3/minute;30/hour",    # Delete
             "10/hour",             # Bot operations
-            "5/hour"               # Password resets
+            "5/hour",              # Password resets
+            "3/minute"             # Login attempts
         ]
     )
+    
+    # Register rate limited endpoints
+    limiter.limit("10/hour")(app.view_functions['admin.bot.run'])
+    limiter.limit("10/hour")(app.view_functions['admin.bot.schedule'])
     
     # Disable rate limiting in test environment
     if app.config.get('TESTING'):
