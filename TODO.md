@@ -6,6 +6,7 @@
 - [x] Fix notification user_id handling in CRUD operations
 - [ ] Add bot scheduling functionality
 - [x] Add missing NotificationType enum values
+- [ ] Fix duplicate constant definitions
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
