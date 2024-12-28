@@ -1,8 +1,4 @@
 import pytest
-from flask_sqlalchemy import SQLAlchemy
-from app import create_app
-
-db = SQLAlchemy()
 from datetime import datetime, timedelta
 from flask_wtf.csrf import generate_csrf
 from app import create_app
@@ -20,7 +16,6 @@ def app():
     app = create_app('testing')
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db.init_app(app)
     
     with app.app_context():
         db.create_all()
