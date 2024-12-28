@@ -4,7 +4,9 @@ import pytest
 import warnings
 import re
 import logging
+import uuid
 from datetime import datetime
+from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import SAWarning
 from flask import url_for, current_app
 from app import create_app
