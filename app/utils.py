@@ -33,13 +33,13 @@ from datetime import datetime
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        try:
-            if not current_user.is_authenticated:
-                flash_message(FlashMessages.LOGIN_REQUIRED.value, FlashCategory.ERROR.value)
-                return redirect(url_for('public.login'))
-                
-            if not current_user.is_admin:
-                # Create audit log for unauthorized access attempt
+        if not current_user.is_authenticated:
+            flash_message(FlashMessages.LOGIN_REQUIRED.value, FlashCategory.ERROR.value)
+            return redirect(url_for('public.login'))
+            
+        if not current_user.is_admin:
+            # Create audit log for unauthorized access attempt
+            with current_app.app_context():
                 try:
                     audit_log = AuditLog(
                         user_id=current_user.id if current_user.is_authenticated else None,
@@ -54,8 +54,8 @@ def admin_required(f):
                     db.session.commit()
                 except Exception as e:
                     current_app.logger.error(f"Error creating audit log: {str(e)}")
+                    db.session.rollback()
                 
-                # Create notification for unauthorized access
                 try:
                     notification = Notification(
                         type='security',
@@ -66,11 +66,13 @@ def admin_required(f):
                     db.session.commit()
                 except Exception as e:
                     current_app.logger.error(f"Error creating notification: {str(e)}")
+                    db.session.rollback()
                 
-                flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
-                return abort(403)
-                
-            # Create audit log for admin access
+            flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
+            return abort(403)
+            
+        # Create audit log for admin access
+        with current_app.app_context():
             try:
                 audit_log = AuditLog(
                     user_id=current_user.id,
@@ -85,12 +87,9 @@ def admin_required(f):
                 db.session.commit()
             except Exception as e:
                 current_app.logger.error(f"Error creating audit log: {str(e)}")
-            
-            return f(*args, **kwargs)
-        except Exception as e:
-            current_app.logger.error(f"Error in admin_required decorator: {str(e)}")
-            flash_message(FlashMessages.ADMIN_ACCESS_ERROR.value, FlashCategory.ERROR.value)
-            return abort(500)
+                db.session.rollback()
+        
+        return f(*args, **kwargs)
         except Exception as e:
             logger.error(f"Error in admin_required decorator: {str(e)}")
             flash_message(FlashMessages.ADMIN_ACCESS_ERROR.value, FlashCategory.ERROR.value)
