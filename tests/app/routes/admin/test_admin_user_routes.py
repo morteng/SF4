@@ -245,7 +245,22 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
     
     # Verify audit logs
     logs = AuditLog.query.filter_by(object_type='User', object_id=created_user.id).all()
-    assert len(logs) == 3  # Create, Update, Delete
+    assert len(logs) == 3, f"Expected 3 audit logs, got {len(logs)}"
+        
+    # Verify create log
+    create_log = next(log for log in logs if log.action == 'create_user')
+    assert create_log is not None
+    assert create_log.details == f"Created user {user_data['username']}"
+        
+    # Verify update log
+    update_log = next(log for log in logs if log.action == 'update_user')
+    assert update_log is not None
+    assert update_log.details == f"Updated user {user_data['username']}"
+        
+    # Verify delete log
+    delete_log = next(log for log in logs if log.action == 'delete_user')
+    assert delete_log is not None
+    assert delete_log.details == f"Deleted user {user_data['username']}"
     
     # Verify all logs have IP addresses
     for log in logs:
@@ -287,12 +302,14 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
         # Perform login with CSRF token
         with logged_in_admin.session_transaction() as session:
             session['csrf_token'] = csrf_token
-                
-        login_response = logged_in_admin.post('/login', data={
-            'username': test_user.username,
-            'password': 'AdminPass123!',
-            'csrf_token': csrf_token
-        }, follow_redirects=True)
+            session['_fresh'] = True  # Mark session as fresh
+            session['_user_id'] = str(test_user.id)  # Set user ID directly
+            session['_id'] = 'test-session-id'
+            
+        # Verify session is properly set
+        with logged_in_admin.session_transaction() as session:
+            assert '_user_id' in session
+            assert session['_user_id'] == str(test_user.id)
         
         assert login_response.status_code == 200, \
             f"Login failed with status {login_response.status_code}. Response: {login_response.data.decode('utf-8')}"

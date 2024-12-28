@@ -28,21 +28,37 @@ from datetime import datetime
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if not current_user.is_authenticated:
-            flash_message(FlashMessages.LOGIN_REQUIRED.value, FlashCategory.ERROR.value)
-            return redirect(url_for('public.login'))
-            
-        if not current_user.is_admin:
-            # Create audit log for unauthorized access attempt
+        try:
+            if not current_user.is_authenticated:
+                flash_message(FlashMessages.LOGIN_REQUIRED.value, FlashCategory.ERROR.value)
+                return redirect(url_for('public.login'))
+                
+            if not current_user.is_admin:
+                # Create audit log for unauthorized access attempt
+                AuditLog.create(
+                    user_id=current_user.id if current_user.is_authenticated else None,
+                    action='unauthorized_access',
+                    object_type='AdminPanel',
+                    details=f'Attempted access to {request.path}',
+                    ip_address=request.remote_addr
+                )
+                flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
+                return abort(403)
+                
+            # Create audit log for admin access
             AuditLog.create(
-                user_id=current_user.id if current_user.is_authenticated else None,
-                action='unauthorized_access',
+                user_id=current_user.id,
+                action=f.__name__,
                 object_type='AdminPanel',
-                details=f'Attempted access to {request.path}',
+                details=f"Accessed admin route: {request.path}",
                 ip_address=request.remote_addr
             )
-            flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
-            return abort(403)
+            
+            return f(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"Error in admin_required decorator: {str(e)}")
+            flash_message(FlashMessages.ADMIN_ACCESS_ERROR.value, FlashCategory.ERROR.value)
+            return abort(500)
             
         # Create audit log for admin access
         AuditLog.create(
