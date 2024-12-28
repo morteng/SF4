@@ -221,12 +221,14 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
             
         # Verify audit log
         audit_log = AuditLog.query.filter_by(
-            action='create_user',
+            action='POST',
             object_type='User',
             object_id=created_user.id
         ).first()
         assert audit_log is not None
         assert audit_log.user_id == test_user.id
+        assert audit_log.ip_address is not None
+        assert audit_log.endpoint == 'admin.user.create'
             
         # Verify notification
         notification = Notification.query.filter_by(
@@ -234,6 +236,7 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
             related_object_id=created_user.id
         ).first()
         assert notification is not None
+        assert notification.message == f'User {user_data["username"]} was created'
         csrf_token = extract_csrf_token(create_response.data)
         assert csrf_token is not None
 
