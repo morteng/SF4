@@ -266,7 +266,7 @@ def mock_rate_limiter(monkeypatch):
 def reset_rate_limiter(app):
     """Reset the rate limiter before each test."""
     limiter = app.extensions.get("limiter")
-    if limiter:
+    if limiter and hasattr(limiter, 'reset'):
         limiter.reset()
 
 @pytest.fixture(scope='function')

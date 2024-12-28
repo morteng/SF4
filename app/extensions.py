@@ -35,6 +35,7 @@ def init_extensions(app):
         
         # Initialize rate limiting
         limiter.init_app(app)
+        app.extensions['limiter'] = limiter  # Explicitly register limiter
         
         # Enable CSRF protection
         csrf.init_app(app)
