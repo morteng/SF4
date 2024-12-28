@@ -37,32 +37,51 @@ def admin_required(f):
                 
             if not current_user.is_admin:
                 # Create audit log for unauthorized access attempt
-                AuditLog.create(
-                    user_id=current_user.id if current_user.is_authenticated else None,
-                    action='unauthorized_access',
-                    object_type='AdminPanel',
-                    details=f'Attempted access to {request.path}',
-                    ip_address=request.remote_addr
-                )
+                try:
+                    audit_log = AuditLog(
+                        user_id=current_user.id if current_user.is_authenticated else None,
+                        action='unauthorized_access',
+                        object_type='AdminPanel',
+                        details=f'Attempted access to {request.path}',
+                        ip_address=request.remote_addr,
+                        http_method=request.method,
+                        endpoint=request.endpoint
+                    )
+                    db.session.add(audit_log)
+                    db.session.commit()
+                except Exception as e:
+                    current_app.logger.error(f"Error creating audit log: {str(e)}")
                 
                 # Create notification for unauthorized access
-                Notification.create(
-                    type='security',
-                    message=f'Unauthorized access attempt to {request.path}',
-                    user_id=current_user.id
-                )
+                try:
+                    notification = Notification(
+                        type='security',
+                        message=f'Unauthorized access attempt to {request.path}',
+                        user_id=current_user.id
+                    )
+                    db.session.add(notification)
+                    db.session.commit()
+                except Exception as e:
+                    current_app.logger.error(f"Error creating notification: {str(e)}")
                 
                 flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
                 return abort(403)
                 
             # Create audit log for admin access
-            AuditLog.create(
-                user_id=current_user.id,
-                action=f.__name__,
-                object_type='AdminPanel',
-                details=f"Accessed admin route: {request.path}",
-                ip_address=request.remote_addr
-            )
+            try:
+                audit_log = AuditLog(
+                    user_id=current_user.id,
+                    action=f.__name__,
+                    object_type='AdminPanel',
+                    details=f"Accessed admin route: {request.path}",
+                    ip_address=request.remote_addr,
+                    http_method=request.method,
+                    endpoint=request.endpoint
+                )
+                db.session.add(audit_log)
+                db.session.commit()
+            except Exception as e:
+                current_app.logger.error(f"Error creating audit log: {str(e)}")
             
             return f(*args, **kwargs)
         except Exception as e:
