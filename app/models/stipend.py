@@ -182,6 +182,7 @@ class Stipend(db.Model):
                 object_type='Stipend',
                 object_id=stipend.id,
                 details_before=stipend.to_dict(),
+                details=f"Deleted stipend: {stipend.name} (ID: {stipend.id})",
                 ip_address=request.remote_addr if request else '127.0.0.1',
                 http_method='POST',
                 endpoint='admin.stipend.delete'
