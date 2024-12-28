@@ -2,7 +2,8 @@
 ## High Priority
 - [x] Core CRUD & security
 - [x] Implement password hashing using werkzeug.security
-- [ ] Fix remaining datetime.utcnow() deprecation warnings
+- [x] Fix remaining datetime.utcnow() deprecation warnings
+- [ ] Ensure audit log details accurately reflect changes
 - [x] Add username validation constants
 - [x] Improve test isolation with unique credentials
 - [x] Fix DetachedInstanceError in admin user tests

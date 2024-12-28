@@ -92,6 +92,7 @@
 - Verify all CRUD operations create audit logs
 - Check logs contain required fields
 - Ensure logs are created for both success and failure cases
+- Validate audit log details match actual changes
 - Validate audit log details field contains operation-specific information
 - Ensure notification_count is passed to all admin templates
 - Store audit logs in separate database table

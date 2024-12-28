@@ -41,9 +41,9 @@
   - User ID (0 for system events)
   - Action type (create/update/delete/system_event)
   - Object type and ID
-  - Timestamp (UTC)
+  - Timestamp (timezone-aware UTC)
   - IP address (required for all operations)
-  - Operation details
+  - Operation details (must reflect actual changes)
   - Before/after state for updates
 - Must create notification for audit log creation
 - Must include:
