@@ -255,7 +255,7 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
     # Verify update log
     update_log = next(log for log in logs if log.action == 'update_user')
     assert update_log is not None
-    assert update_log.details == f"Updated user {user_data['username']}"
+    assert update_log.details == f"Updated username from {user_data['username']} to updated_{unique_id}"
         
     # Verify delete log
     delete_log = next(log for log in logs if log.action == 'delete_user')

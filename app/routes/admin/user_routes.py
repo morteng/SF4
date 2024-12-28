@@ -218,15 +218,16 @@ def edit(id):
                 
             # Update user details
             try:
+                old_username = user.username
                 update_user(user, form.data)
                 
-                # Create audit log
+                # Create audit log with both old and new username
                 AuditLog.create(
                     user_id=current_user.id,
                     action='update_user',
                     object_type='User',
                     object_id=user.id,
-                    details=f'Updated user {user.username}',
+                    details=f'Updated username from {old_username} to {user.username}',
                     ip_address=request.remote_addr
                 )
                 
