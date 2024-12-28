@@ -57,10 +57,6 @@ def create_app(config_name='development'):
         ]
     )
     
-    # Register rate limited endpoints
-    limiter.limit("10/hour")(app.view_functions['admin.bot.run'])
-    limiter.limit("10/hour")(app.view_functions['admin.bot.schedule'])
-    
     # Disable rate limiting in test environment
     if app.config.get('TESTING'):
         limiter.enabled = False
@@ -132,6 +128,10 @@ def create_app(config_name='development'):
             )
             
             db.session.commit()
+
+        # Register rate limited endpoints after blueprints are registered
+        limiter.limit("10/hour")(app.view_functions['admin.bot.run'])
+        limiter.limit("10/hour")(app.view_functions['admin.bot.schedule'])
 
     # Add context processor for notification count
     from app.services.notification_service import get_notification_count
