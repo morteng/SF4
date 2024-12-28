@@ -48,6 +48,31 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @login_required
 @admin_required
 def create():
+    """Enhanced stipend creation with better error handling and logging"""
+    try:
+        form = StipendForm()
+        is_htmx = request.headers.get('HX-Request')
+        
+        # Initialize form choices
+        organizations = Organization.query.order_by(Organization.name).all()
+        tags = Tag.query.order_by(Tag.name).all()
+        form.organization_id.choices = [(org.id, org.name) for org in organizations]
+        form.tags.choices = [(tag.id, tag.name) for tag in tags]
+        
+        if form.validate_on_submit():
+            # Prepare stipend data
+            stipend_data = {
+                'name': form.name.data,
+                'summary': form.summary.data,
+                'description': form.description.data,
+                'homepage_url': form.homepage_url.data,
+                'application_procedure': form.application_procedure.data,
+                'eligibility_criteria': form.eligibility_criteria.data,
+                'application_deadline': form.application_deadline.data,
+                'organization_id': form.organization_id.data,
+                'open_for_applications': form.open_for_applications.data,
+                'tags': form.tags.data  # Will be handled in model __init__
+            }
     """Create new stipend with audit logging and notifications"""
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')

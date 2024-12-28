@@ -25,6 +25,19 @@ def notification_count(f):
 def create_admin_blueprint():
     """Factory function to create a new admin blueprint instance with security and logging"""
     admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
+    
+    # Add CRUD helper methods
+    def create_crud_notification(action, object_type, object_id, user_id):
+        """Helper to create standardized CRUD notifications"""
+        from app.models.notification import Notification
+        Notification.create(
+            type=f'{object_type.lower()}_{action}',
+            message=f'{object_type} {action}d: {object_id}',
+            related_object=f'{object_type}/{object_id}',
+            user_id=user_id
+        )
+    
+    admin_bp.create_crud_notification = create_crud_notification
 
     def log_audit(action, object_type, object_id=None, details=None, 
                  details_before=None, details_after=None):

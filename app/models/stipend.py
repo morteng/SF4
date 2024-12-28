@@ -86,9 +86,15 @@ class Stipend(db.Model):
         db.session.commit()
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        # Filter out non-model fields
+        model_fields = {k: v for k, v in kwargs.items() if hasattr(self, k)}
+        super().__init__(**model_fields)
+        
+        # Handle tags separately since they need to be Tag instances
         if 'tags' in kwargs:
-            self.tags = kwargs['tags']
+            from app.models.tag import Tag
+            self.tags = [Tag.query.get(tag_id) if isinstance(tag_id, int) else tag_id 
+                        for tag_id in kwargs['tags']]
 
     def __repr__(self):
         return f'<Stipend {self.name}>'

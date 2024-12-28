@@ -30,6 +30,21 @@ class AuditLog(db.Model):
     def create(user_id, action, details=None, object_type=None, object_id=None,
               details_before=None, details_after=None, ip_address=None,
               http_method=None, endpoint=None, commit=True, notify=True):
+        """Enhanced audit logging with better error handling and validation"""
+        try:
+            # Validate required fields
+            if not user_id or not action:
+                raise ValueError("user_id and action are required")
+                
+            # Validate object type and ID consistency
+            if object_type and not object_id:
+                raise ValueError("object_id is required when object_type is provided")
+                
+            # Serialize complex data
+            if details_before and not isinstance(details_before, (dict, str)):
+                details_before = str(details_before)
+            if details_after and not isinstance(details_after, (dict, str)):
+                details_after = str(details_after)
         """Create audit log with JSON serialization and validation"""
         if details_before and not isinstance(details_before, (dict, str)):
             raise ValueError("details_before must be dict or JSON string")
