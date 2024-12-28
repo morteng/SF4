@@ -1,6 +1,12 @@
 ## Coding Conventions
-- All flash messages must use messages defined in app\constants.py
-- Audit logging required for all CRUD operations including:
+- **PEP 8**: Follow Python PEP 8 style
+- **Modularity**: Keep code small and focused
+- **Clear Separation**: Models, services, routes, and templates well-structured
+- **Documentation**: Docstrings, comments, and meaningful names
+- **Validation Messages**: Use constants from app\constants.py for all validation messages
+- **Flash Messages**: Use FlashMessages enum from app\constants.py for all flash messages
+- **CSRF Protection**: Include CSRF tokens in all forms and HTMX requests
+- **Audit Logging**: Log all CRUD operations with user, action, and timestamp
   - User ID, Action type, Object type, Object ID
   - Timestamp (UTC), IP address, HTTP method, Endpoint
   - Before/after state for updates (JSON serialized)
