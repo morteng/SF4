@@ -26,7 +26,7 @@ def test_profile_form_valid(logged_in_client, db_session, test_user):
     }, follow_redirects=True)
 
     assert response.status_code == 200, f"Expected status code 200, got {response.status_code}. Response: {response.data.decode('utf-8')}"
-    assert b"Profile updated successfully" in response.data
+    assert FlashMessages.PROFILE_UPDATE_SUCCESS.value.encode() in response.data
     
     # Verify the user was actually updated in the database
     updated_user = db_session.query(User).filter_by(id=test_user.id).first()
