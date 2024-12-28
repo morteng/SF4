@@ -56,7 +56,7 @@
 - Verify blueprint factory pattern implementation
 
 ## Rate Limiting
-- Verify rate limits are enforced:
+- Verify rate limits are enforced consistently:
   - Admin: 100/hour (global)
   - Sensitive ops: 10/minute (per endpoint)
   - CRUD Operations:
@@ -66,6 +66,7 @@
   - Password resets: 5/hour
   - Bot operations: 10/hour
   - Bot scheduling: 5/hour
+- Ensure rate limiting middleware is properly configured
 
 ### Notification Badge Validation
 - All admin templates must include a notification badge.

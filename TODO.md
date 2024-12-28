@@ -1,12 +1,9 @@
 # TODO List
 ## High Priority
-- [x] Fix user creation context handling in admin panel
+- [ ] Fix rate limiting implementation in admin routes
 - [ ] Ensure consistent timezone handling across all datetime operations
 - [ ] Verify JSON serialization of audit log details
-- [x] Fix notification user_id handling in CRUD operations
 - [ ] Add bot scheduling functionality
-- [x] Add missing NotificationType enum values
-- [ ] Fix duplicate constant definitions
 
 ## Best Practices
 - Ensure CSRF protection matches production environment
