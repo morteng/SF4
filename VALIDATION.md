@@ -16,8 +16,10 @@
 - Check logs contain required fields:
   - User ID, Action type, Object type, Object ID
   - Timestamp (UTC), IP address, HTTP method, Endpoint
-- Validate before/after state for update operations
-- Ensure JSON serialization of complex data
+  - Before/after state for updates (where applicable)
+- Ensure logs are created for both success and failure cases
+- Validate JSON serialization of complex data
+- Verify commit flag works as expected
 
 ### Notification Validation
 - Validate NotificationType enum values
@@ -25,15 +27,12 @@
 - Validate user_id exists
 - Validate message length (max 255 chars)
 
-### Audit Log Validation
-- Verify all CRUD operations create audit logs
-- Check logs contain required fields:
-  - User ID, Action type, Object type, Object ID
-  - Timestamp (UTC), IP address, HTTP method, Endpoint
-  - Before/after state for updates (where applicable)
-- Ensure logs are created for both success and failure cases
-- Validate JSON serialization of complex data
-- Verify commit flag works as expected
+### Bot Validation
+- Verify proper status tracking (running, completed, error)
+- Check audit logs for all bot operations
+- Validate notifications for bot success/failure
+- Ensure proper error handling and logging
+- Verify rate limiting for bot operations
 
 ### Notification Handling
 - notification_count must be passed to all admin templates

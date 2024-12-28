@@ -15,6 +15,11 @@
   - Bot operations: 10/hour
   - Password resets: 5/hour
   - Login attempts: 3/min
+- Bot implementations must:
+  - Maintain proper status tracking
+  - Create audit logs for all operations
+  - Generate notifications for success/failure
+  - Handle errors gracefully
 - Notification system must:
   - Use NotificationType enum values
   - Include user_id and related_object
