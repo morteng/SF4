@@ -78,9 +78,13 @@ def create_app(config_name='development'):
             # Initialize extensions first
             init_extensions(app)
             
-            # Run migrations
-            from flask_migrate import upgrade
-            upgrade()
+            # Only run migrations and init admin user if not in test mode
+            if not app.config.get('TESTING'):
+                from flask_migrate import upgrade
+                upgrade()
+                
+                # Initialize default data
+                init_admin_user()
             
             # Register blueprints
             from app.routes.admin import register_admin_blueprints
@@ -88,9 +92,6 @@ def create_app(config_name='development'):
 
             from app.routes import register_blueprints
             register_blueprints(app)        # Register other blueprints
-            
-            # Initialize default data
-            init_admin_user()
             
             # Configure session cleanup with better error handling
             @app.teardown_appcontext

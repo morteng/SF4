@@ -31,21 +31,19 @@ def app():
     if 'limiter' in app.extensions:
         app.extensions['limiter'].enabled = False
     
-    # Register blueprints explicitly for testing
-    from app.routes import register_blueprints
-    register_blueprints(app)
-    
-    # Initialize database and login manager in app context
+    # Initialize the app with migrations
     with app.app_context():
+        # Run migrations
+        from flask_migrate import upgrade
+        upgrade()
+        
+        # Initialize database and login manager
         db.session.expire_on_commit = False
 
         @login_manager.user_loader
         def load_user(user_id):
             user = db.session.get(User, int(user_id))
             return db.session.merge(user) if user else None
-
-        # Create all database tables
-        db.create_all()
     
     yield app
     

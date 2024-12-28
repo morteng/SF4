@@ -39,6 +39,14 @@ class TestConfig(Config):
     APPLICATION_ROOT = '/'
     PREFERRED_URL_SCHEME = 'http'
     
+    # Ensure migrations run for in-memory database
+    @classmethod
+    def init_app(cls, app):
+        super().init_app(app)
+        with app.app_context():
+            from flask_migrate import upgrade
+            upgrade()
+    
     # Disable all rate limiting in tests
     RATELIMIT_ENABLED = False
     RATELIMIT_STORAGE_URI = 'memory://'
