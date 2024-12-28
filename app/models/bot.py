@@ -16,5 +16,7 @@ class Bot(db.Model):
             'id': self.id,
             'name': self.name,
             'description': self.description,
-            'status': self.status
+            'status': self.status,
+            'last_run': self.last_run.isoformat() if self.last_run else None,
+            'error_log': self.error_log
         }

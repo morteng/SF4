@@ -76,12 +76,12 @@ def create():
 
             # Create user with proper validation
             try:
-                # Create user with proper validation
-                user = User()
-                user.username = form.username.data
-                user.email = form.email.data
-                user.password_hash = generate_password_hash(form.password.data)
-                user.is_admin = form.is_admin.data if hasattr(form, 'is_admin') else False
+                user = User(
+                    username=form.username.data,
+                    email=form.email.data,
+                    password_hash=generate_password_hash(form.password.data),
+                    is_admin=form.is_admin.data if hasattr(form, 'is_admin') else False
+                )
                 
                 db.session.add(user)
                 db.session.commit()

@@ -29,7 +29,19 @@ class Notification(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return f"<Notification {self.id}: {self.message}>"
+        return f"<Notification {self.id}: {self.type} - {self.message}>"
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'type': self.type.value,
+            'message': self.message,
+            'read_status': self.read_status,
+            'created_at': self.created_at.isoformat(),
+            'related_object_type': self.related_object_type,
+            'related_object_id': self.related_object_id,
+            'user_id': self.user_id
+        }
 
     def mark_as_read(self):
         self.read_status = True
