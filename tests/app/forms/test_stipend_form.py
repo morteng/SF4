@@ -8,6 +8,7 @@ from app.models.organization import Organization
 from app.models.tag import Tag
 from app.models.stipend import Stipend
 from app.models.audit_log import AuditLog
+from app.models.notification import Notification, NotificationType
 from app.extensions import db
 from app.forms.fields import CustomDateTimeField
 from wtforms import Form, StringField

@@ -1,5 +1,6 @@
 import logging
 from functools import wraps
+from app.models.notification import NotificationType
 from flask_login import current_user
 from app.models.notification import Notification
 from app.services.notification_service import get_notification_count
