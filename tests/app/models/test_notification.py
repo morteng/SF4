@@ -1,4 +1,5 @@
 import pytest
+import uuid
 from app.models.notification import Notification
 from app.models.user import User
 from datetime import datetime
@@ -7,10 +8,12 @@ from app.constants import NotificationType, NotificationPriority
 @pytest.fixture
 def test_notification(db_session):
     """Provide a test notification"""
+    # Use unique identifiers for each test run
+    unique_id = str(uuid.uuid4())[:8]
     user = User(
-        username='testuser', 
-        email='test@example.com',
-        password_hash='testpasswordhash'  # Add required field
+        username=f'testuser_{unique_id}', 
+        email=f'test_{unique_id}@example.com',
+        password_hash='testpasswordhash'
     )
     db_session.add(user)
     db_session.commit()
@@ -24,7 +27,10 @@ def test_notification(db_session):
     db_session.add(notification)
     db_session.commit()
     yield notification
+    
+    # Clean up both notification and user
     db_session.delete(notification)
+    db_session.delete(user)
     db_session.commit()
 
 def test_notification_creation(test_notification):
