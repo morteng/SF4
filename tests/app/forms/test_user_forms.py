@@ -388,6 +388,11 @@ def test_profile_form_rate_limiting(client, setup_database):
     # Increase rate limit for testing
     current_app.config['RATELIMIT_DEFAULT'] = "20 per minute"
     
+    # Reset rate limiter storage
+    limiter = current_app.extensions.get('limiter')
+    if limiter and limiter._storage:
+        limiter.reset()
+    
     # Create test user
     password_hash = generate_password_hash("password123")
     user = User(username="testuser", email="test@example.com", password_hash=password_hash)
@@ -425,13 +430,13 @@ def test_profile_form_rate_limiting(client, setup_database):
             # Refresh CSRF token every 5 requests with error handling
             if i > 0 and i % 5 == 0:
                 # Add delay to avoid rate limiting
-                time.sleep(1)
+                time.sleep(2)
                 get_response = client.get(url_for('user.edit_profile'))
                 if get_response.status_code == 429:
                     # If rate limited, wait and try again
-                    time.sleep(1)
+                    time.sleep(2)
                     get_response = client.get(url_for('user.edit_profile'))
-                assert get_response.status_code == 200
+                assert get_response.status_code == 200, f"Failed to refresh CSRF token after {i} requests"
                 soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
                 csrf_input = soup.find('input', {'name': 'csrf_token'})
                 assert csrf_input is not None, "CSRF token input not found"
@@ -445,7 +450,7 @@ def test_profile_form_rate_limiting(client, setup_database):
             responses.append(response.status_code)
             
             # Add small delay between requests
-            time.sleep(0.1)
+            time.sleep(0.5)
     
         # Verify rate limiting response
         assert 429 in responses, "Rate limiting not triggered"
