@@ -15,7 +15,7 @@ limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"],
     storage_uri="memory://",
-    enabled=False  # Disable by default, enable in production
+    enabled=True  # Enable rate limiting
 )
 
 Session = None

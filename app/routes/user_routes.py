@@ -22,6 +22,7 @@ def profile():
 
 @user_bp.route('/profile/edit', methods=['GET', 'POST'])
 @login_required
+@limiter.limit("10 per minute")  # Add rate limiting
 def edit_profile():
     form = ProfileForm(original_username=current_user.username, original_email=current_user.email)
     
@@ -43,12 +44,18 @@ def edit_profile():
                     flash_message(FlashMessages.USERNAME_ALREADY_EXISTS, FlashCategory.ERROR)
                     return render_template('user/edit_profile.html', form=form), 400
                 
-                # Update user profile
-                current_user.username = new_username
-                current_user.email = form.email.data
-                db.session.add(current_user)
+                # Update user profile using merge to handle session properly
+                user_to_update = db.session.merge(current_user)
+                user_to_update.username = new_username
+                user_to_update.email = form.email.data
                 db.session.commit()
-                db.session.commit()
+
+                # Create audit log
+                AuditLog.create(
+                    user_id=current_user.id,
+                    action="profile_update",
+                    details=f"Updated profile: username={new_username}, email={form.email.data}"
+                )
                 logging.info(f"Profile updated successfully for user {current_user.id}")
                 flash_message(FlashMessages.PROFILE_UPDATE_SUCCESS, FlashCategory.SUCCESS)
                 return redirect(url_for('user.profile'))

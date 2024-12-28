@@ -392,6 +392,99 @@ def test_profile_form_rate_limiting(client, setup_database):
         assert csrf_token, "CSRF token not found in profile form"
 
         # Submit profile form multiple times to trigger rate limiting
+        responses = []
+        for _ in range(11):  # Assuming rate limit is 10 requests per minute
+            response = client.post(url_for('user.edit_profile'), data={
+                'username': 'testuser',
+                'email': 'test@example.com',
+                'csrf_token': csrf_token
+            })
+            responses.append(response.status_code)
+
+        # Verify rate limiting response
+        assert 429 in responses, "Rate limiting not triggered"
+        assert responses.count(200) == 10, "Expected 10 successful requests before rate limit"
+
+def test_profile_update_creates_audit_log(client, setup_database):
+    """Test that profile updates create audit logs"""
+    # Create test user
+    password_hash = generate_password_hash("password123")
+    user = User(username="testuser", email="test@example.com", password_hash=password_hash)
+    db.session.add(user)
+    db.session.commit()
+
+    with client:
+        # First make a GET request to establish session and get CSRF token
+        get_response = client.get(url_for('public.login'))
+        assert get_response.status_code == 200
+        
+        # Extract CSRF token using BeautifulSoup
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+        assert csrf_token, "CSRF token not found in form"
+
+        # Login user
+        login_response = client.post(url_for('public.login'), data={
+            'username': 'testuser',
+            'password': 'password123',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        assert login_response.status_code == 200, "Login failed"
+
+        # Get CSRF token from the profile edit page
+        get_response = client.get(url_for('user.edit_profile'))
+        assert get_response.status_code == 200, "Failed to access profile edit page"
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+        assert csrf_token, "CSRF token not found in profile form"
+
+        # Submit profile update
+        response = client.post(url_for('user.edit_profile'), data={
+            'username': 'newusername',
+            'email': 'newemail@example.com',
+            'csrf_token': csrf_token
+        })
+        assert response.status_code == 200, "Profile update failed"
+
+        # Verify audit log was created
+        audit_log = AuditLog.query.filter_by(user_id=user.id).first()
+        assert audit_log is not None, "Audit log not created"
+        assert audit_log.action == "profile_update", "Incorrect audit log action"
+        assert "newusername" in audit_log.details, "Username not in audit log details"
+        assert "newemail@example.com" in audit_log.details, "Email not in audit log details"
+    """Test rate limiting on profile form submissions"""
+    # Create test user
+    password_hash = generate_password_hash("password123")
+    user = User(username="testuser", email="test@example.com", password_hash=password_hash)
+    db.session.add(user)
+    db.session.commit()
+
+    with client:
+        # First make a GET request to establish session and get CSRF token
+        get_response = client.get(url_for('public.login'))
+        assert get_response.status_code == 200
+        
+        # Extract CSRF token using BeautifulSoup
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+        assert csrf_token, "CSRF token not found in form"
+
+        # Login user
+        login_response = client.post(url_for('public.login'), data={
+            'username': 'testuser',
+            'password': 'password123',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        assert login_response.status_code == 200, "Login failed"
+
+        # Get CSRF token from the profile edit page
+        get_response = client.get(url_for('user.edit_profile'))
+        assert get_response.status_code == 200, "Failed to access profile edit page"
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+        assert csrf_token, "CSRF token not found in profile form"
+
+        # Submit profile form multiple times to trigger rate limiting
         for _ in range(11):  # Assuming rate limit is 10 requests per minute
             response = client.post(url_for('user.edit_profile'), data={
                 'username': 'testuser',

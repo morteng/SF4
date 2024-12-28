@@ -24,6 +24,7 @@ class Config(object):
     RATELIMIT_STRATEGY = 'fixed-window'
     RATELIMIT_DEFAULT = "200 per day;50 per hour"
     RATELIMIT_USER_MANAGEMENT = "10 per minute"  # Rate limit for user management endpoints
+    RATELIMIT_ENABLED = True  # Enable rate limiting
     RATELIMIT_HEADERS_ENABLED = True
     RATELIMIT_IN_MEMORY_FALLBACK_ENABLED = True
 
