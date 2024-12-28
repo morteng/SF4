@@ -2,7 +2,6 @@ from .association_tables import stipend_tag_association, organization_stipends
 from app.extensions import db
 from .organization import Organization
 from datetime import datetime, timezone
-from pytz import utc
 
 class Stipend(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,11 +32,10 @@ class Stipend(db.Model):
             # First validate date format
             if isinstance(data['application_deadline'], str):
                 try:
-                    # Parse the datetime string
+                    # Parse the datetime string and make it timezone-aware
                     parsed_dt = datetime.strptime(
                         data['application_deadline'], '%Y-%m-%d %H:%M:%S')
-                    # Localize the parsed datetime to UTC
-                    data['application_deadline'] = utc.localize(parsed_dt)
+                    data['application_deadline'] = parsed_dt.replace(tzinfo=timezone.utc)
                 except ValueError:
                     raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS")
         
@@ -122,11 +120,10 @@ class Stipend(db.Model):
                 # Validate application deadline
                 if isinstance(data['application_deadline'], str):
                     try:
-                        # Parse the datetime string
+                        # Parse the datetime string and make it timezone-aware
                         parsed_dt = datetime.strptime(
                             data['application_deadline'], '%Y-%m-%d %H:%M:%S')
-                        # Localize the parsed datetime to UTC
-                        data['application_deadline'] = utc.localize(parsed_dt)
+                        data['application_deadline'] = parsed_dt.replace(tzinfo=timezone.utc)
                     except ValueError:
                         raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS")
                 
