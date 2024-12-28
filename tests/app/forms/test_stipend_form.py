@@ -3,16 +3,19 @@ from datetime import datetime, timedelta
 from flask_wtf.csrf import generate_csrf
 from app.forms.admin_forms import StipendForm
 from app.models.organization import Organization
+from app.models.tag import Tag
 from app.extensions import db
 from app.forms.fields import CustomDateTimeField
 from wtforms import Form, StringField
 
 @pytest.fixture
 def form_data(app):
-    # Create a test organization within application context
+    # Create a test organization and tag within application context
     with app.app_context():
         org = Organization(name="Test Org", description="Test Description", homepage_url="https://test.org")
+        tag = Tag(name="Test Tag", category="Test Category")
         db.session.add(org)
+        db.session.add(tag)
         db.session.commit()
 
         return {
@@ -22,7 +25,8 @@ def form_data(app):
             'homepage_url': 'https://example.com',
             'application_procedure': 'Test procedure',
             'eligibility_criteria': 'Test criteria',
-            'organization_id': org.id,  # Use the created organization's ID
+            'organization_id': org.id,
+            'tags': [tag.id],  # Add the required tag
             'open_for_applications': True
         }
 
