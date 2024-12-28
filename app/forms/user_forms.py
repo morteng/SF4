@@ -30,6 +30,16 @@ class ProfileForm(FlaskForm):
             if user:
                 raise ValidationError(FlashMessages.EMAIL_ALREADY_EXISTS.value)
 
+    def validate_csrf_token(self, field):
+        """Custom CSRF token validation."""
+        if not field.data:
+            raise ValidationError(FlashMessages.CSRF_INVALID.value)
+        try:
+            from flask_wtf.csrf import validate_csrf
+            validate_csrf(field.data)
+        except Exception:
+            raise ValidationError(FlashMessages.CSRF_INVALID.value)
+
     def __init__(self, original_username, original_email, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.original_username = original_username

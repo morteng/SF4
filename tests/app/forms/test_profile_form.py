@@ -26,9 +26,9 @@ def test_profile_form_valid(logged_in_client, db_session, test_user):
     assert b"Profile updated successfully" in response.data
     
     # Verify the user was actually updated
-    updated_user = db_session.query(User).filter_by(id=test_user.id).first()
-    assert updated_user.username == 'newusername'
-    assert updated_user.email == 'newemail@example.com'
+    db_session.refresh(test_user)
+    assert test_user.username == 'newusername'
+    assert test_user.email == 'newemail@example.com'
 
 def test_profile_form_invalid_csrf(logged_in_client):
     """Test form submission with invalid CSRF token"""
