@@ -55,8 +55,12 @@ def test_profile_form_invalid_email(logged_in_client, db_session, test_user):
 def test_profile_form_duplicate_username(logged_in_client, db_session, test_user):
     """Test profile form with duplicate username"""
     with logged_in_client.application.app_context():
-        # Create another user
-        other_user = User(username='existinguser', email='other@example.com')
+        # Create another user with required fields
+        other_user = User(
+            username='existinguser',
+            email='other@example.com',
+            password_hash='dummy_hash'  # Add required password hash
+        )
         db_session.add(other_user)
         db_session.commit()
         
