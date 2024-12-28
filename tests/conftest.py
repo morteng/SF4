@@ -5,6 +5,7 @@ import warnings
 import re
 import logging
 import uuid
+import contextlib
 from datetime import datetime
 from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import SAWarning
@@ -265,12 +266,22 @@ def mock_rate_limiter(monkeypatch):
             return f
         return decorator
     
-    # Mock all rate limiting functions
-    monkeypatch.setattr("flask_limiter.util.get_remote_address", lambda: "127.0.0.1")
-    monkeypatch.setattr("flask_limiter.Limiter.check", mock_check)
-    monkeypatch.setattr("flask_limiter.Limiter.limit", mock_limit)
-    monkeypatch.setattr("flask_limiter.Limiter.shared_limit", mock_limit)
-    monkeypatch.setattr("flask_limiter.Limiter.exempt", mock_limit)
+    # Create a context manager to ensure mocks are properly applied
+    @contextlib.contextmanager
+    def mock_limiter():
+        # Mock all rate limiting functions
+        monkeypatch.setattr("flask_limiter.util.get_remote_address", lambda: "127.0.0.1")
+        monkeypatch.setattr("flask_limiter.Limiter.check", mock_check)
+        monkeypatch.setattr("flask_limiter.Limiter.limit", mock_limit)
+        monkeypatch.setattr("flask_limiter.Limiter.shared_limit", mock_limit)
+        monkeypatch.setattr("flask_limiter.Limiter.exempt", mock_limit)
+        try:
+            yield
+        finally:
+            # Clean up after the test
+            monkeypatch.undo()
+    
+    return mock_limiter()
 
 @pytest.fixture(autouse=True)
 def reset_rate_limiter(app):
@@ -282,16 +293,15 @@ def reset_rate_limiter(app):
 @pytest.fixture(scope='function')
 def logged_in_client(client, test_user, app, db_session, mock_rate_limiter):
     """Log in as a regular user."""
-    # Activate the mock rate limiter
-    mock_rate_limiter
-    
-    with client.application.test_request_context():
-        # Ensure rate limiting is completely disabled
-        if hasattr(app, 'extensions') and 'limiter' in app.extensions:
-            limiter = app.extensions['limiter']
-            limiter.reset()
-            # Disable all rate limits for testing
-            limiter.enabled = False
+    # Ensure the mock rate limiter is properly activated
+    with mock_rate_limiter:
+        with client.application.test_request_context():
+            # Ensure rate limiting is completely disabled
+            if hasattr(app, 'extensions') and 'limiter' in app.extensions:
+                limiter = app.extensions['limiter']
+                limiter.reset()
+                # Disable all rate limits for testing
+                limiter.enabled = False
         # Ensure the test_user is bound to the current session
         db_session.add(test_user)
         db_session.commit()
