@@ -51,11 +51,10 @@ class Stipend(db.Model):
         
         return stipend
 
-    def update(self, data):
+    def update(self, data, user_id=None):
         """Update stipend fields with audit logging"""
         from app.models.audit_log import AuditLog
         from flask import request
-        from flask_login import current_user
         
         # Get current state before update
         before = self.to_dict()
@@ -69,7 +68,7 @@ class Stipend(db.Model):
         
         # Create audit log
         AuditLog.create(
-            user_id=current_user.id if current_user and current_user.is_authenticated else 0,
+            user_id=user_id if user_id is not None else 0,
             action='update_stipend',
             object_type='Stipend',
             object_id=self.id,

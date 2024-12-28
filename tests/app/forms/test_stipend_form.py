@@ -404,13 +404,13 @@ def test_stipend_update_operation(app, form_data, test_db):
             print("Validation errors:", update_form.errors)
         assert update_form.validate() is True
         
-        # Perform the update
+        # Perform the update with user_id
         stipend.update({
             'name': update_form.name.data,
             'summary': update_form.summary.data,
             'description': update_form.description.data,
             'tags': [Tag.query.get(tag_id) for tag_id in update_form.tags.data]
-        })
+        }, user_id=1)
             
         # Verify audit logs
         logs = AuditLog.query.filter_by(object_type='Stipend', object_id=stipend.id).order_by(AuditLog.timestamp.desc()).all()
