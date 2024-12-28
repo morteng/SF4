@@ -11,6 +11,10 @@ class NotificationType(Enum):
     CRUD_UPDATE = 'crud_update'
     CRUD_DELETE = 'crud_delete'
     AUDIT_LOG = 'audit_log'
+    USER_CREATED = 'user_created'
+    USER_UPDATED = 'user_updated'
+    USER_DELETED = 'user_deleted'
+    PASSWORD_RESET = 'password_reset'
 
 class NotificationPriority(Enum):
     LOW = 'low'

@@ -60,6 +60,13 @@ def register_admin_blueprints(app):
     from .tag_routes import admin_tag_bp
     from .dashboard_routes import admin_dashboard_bp
 
+    # Apply rate limiting to admin routes
+    admin_user_bp.before_request(lambda: limiter.limit("100/hour"))
+    admin_bot_bp.before_request(lambda: limiter.limit("100/hour"))
+    admin_org_bp.before_request(lambda: limiter.limit("100/hour"))
+    admin_stipend_bp.before_request(lambda: limiter.limit("100/hour"))
+    admin_tag_bp.before_request(lambda: limiter.limit("100/hour"))
+
     # Register sub-blueprints with unique prefixes
     admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')
     admin_bp.register_blueprint(admin_bot_bp, url_prefix='/bots')

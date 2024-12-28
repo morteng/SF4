@@ -68,9 +68,9 @@ def create():
                 ip_address=request.remote_addr
             )
 
-            # Create notification
+            # Create notification using proper enum value
             Notification.create(
-                type='user_created',
+                type=NotificationType.USER_CREATED,
                 message=f'User {new_user.username} was created',
                 related_object=new_user,
                 user_id=current_user.id
