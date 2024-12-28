@@ -31,7 +31,14 @@ def client(app):
         with app.app_context():
             with client.session_transaction() as session:
                 session['csrf_token'] = 'test-csrf-token'
-            yield client
+            try:
+                yield client
+            finally:
+                # Clean up any created test data
+                User.query.filter(User.username.like('testuser_%')).delete()
+                AuditLog.query.filter(AuditLog.user_id.isnot(None)).delete()
+                Notification.query.delete()
+                db.session.commit()
 
 import uuid
 
@@ -209,12 +216,17 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
         assert log.action == "test_action"
         
         # Test invalid audit log creation
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError) as exc_info:
             AuditLog.create(
                 user_id=test_user.id,
                 action=None,  # Invalid - should raise error
                 commit=True
             )
+        assert str(exc_info.value) == "Action is required"
+            
+        # Verify no invalid log was created
+        invalid_logs = AuditLog.query.filter_by(user_id=test_user.id, action=None).all()
+        assert len(invalid_logs) == 0
 
         # Test notification error handling
         notification = Notification(
