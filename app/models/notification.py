@@ -4,6 +4,11 @@ from datetime import datetime
 from sqlalchemy import ForeignKey
 from app.constants import NotificationType, NotificationPriority
 
+# Lazy import to avoid circular dependency
+def get_audit_log_model():
+    from app.models.audit_log import AuditLog
+    return AuditLog
+
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(255), nullable=False)
@@ -60,6 +65,8 @@ class Notification(db.Model):
             db.session.commit()
             
             # Create audit log for notification creation
+            # Create audit log using lazy import
+            AuditLog = get_audit_log_model()
             AuditLog.create(
                 user_id=user_id,
                 action='create_notification',
