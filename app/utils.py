@@ -298,6 +298,12 @@ def log_audit(user_id, action, object_type=None, object_id=None, before=None, af
     """Create an audit log entry with enhanced error handling and logging"""
     logger = logging.getLogger(__name__)
     try:
+        # Ensure audit_log table exists
+        from app.extensions import db
+        if not db.engine.has_table('audit_log'):
+            logger.error("audit_log table does not exist")
+            raise RuntimeError("audit_log table not found")
+            
         # Validate required fields
         if not user_id:
             logger.error("Missing user_id in audit log")
