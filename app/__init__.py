@@ -20,6 +20,19 @@ from app.utils import init_admin_user  # Import the init_admin_user function
 
 def create_app(config_name='development'):
     app = Flask(__name__)
+    
+    # Set up migrations directory
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    migrations_dir = os.path.join(basedir, 'migrations')
+    
+    # Ensure migrations directory exists
+    if not os.path.exists(migrations_dir):
+        os.makedirs(migrations_dir)
+        logger.info(f"Created migrations directory at {migrations_dir}")
+    
+    # Configure SQLAlchemy database URI
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', f'sqlite:///{os.path.join(basedir, "app.db")}')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # Load environment variables
     load_dotenv()
