@@ -10,6 +10,8 @@
 
 /test
 
+/run flask routes
+
 /ask what is causing the problem?
 
 /code implement the suggested changes
@@ -25,8 +27,6 @@
 /ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
-
-/run flask routes
 
 /test
 
@@ -48,6 +48,8 @@
 
 /test
 
+/run flask routes
+
 /ask what is causing the problem?
 
 /code implement the suggested changes
@@ -63,8 +65,6 @@
 /ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
-
-/run flask routes
 
 /test
 
@@ -86,6 +86,8 @@
 
 /test
 
+/run flask routes
+
 /ask what is causing the problem?
 
 /code implement the suggested changes
@@ -101,8 +103,6 @@
 /ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
-
-/run flask routes
 
 /test
 
