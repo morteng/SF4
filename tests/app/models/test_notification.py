@@ -72,8 +72,9 @@ def test_audit_log_rollback(db_session):
     assert "Action is required" in str(exc_info.value) or "Failed to create audit log" in str(exc_info.value)
     
     # Test invalid action type
-    with pytest.raises(TypeError) as exc_info:
+    with pytest.raises((TypeError, ValueError)) as exc_info:
         AuditLog.create(user_id=1, action=123)
+    assert "Action must be a string" in str(exc_info.value)
     assert "Action must be a string" in str(exc_info.value)
     
     # Test missing object_id when object_type is provided

@@ -84,7 +84,8 @@ class AuditLog(db.Model):
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error creating audit log: {str(e)}", exc_info=True)
-            raise ValueError(f"Failed to create audit log: {str(e)}") from e
+            # Preserve the original exception type
+            raise type(e)(f"Failed to create audit log: {str(e)}") from e
             
         # Validate and serialize complex data
         if details_before and not isinstance(details_before, (dict, str)):
