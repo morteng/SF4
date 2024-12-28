@@ -82,14 +82,14 @@ def db_session(_db, app):
 def client(app):
     """Provides a test client with proper session and context management."""
     with app.app_context():
-        # Initialize rate limiter storage if needed
+        # Initialize rate limiter if present
         if 'limiter' in app.extensions:
             limiter = app.extensions['limiter']
             limiter.enabled = False
             
-            # Initialize storage if not already initialized
+            # Ensure storage exists
             if not hasattr(limiter, '_storage') or limiter._storage is None:
-                limiter.storage  # Force storage initialization
+                limiter._storage = limiter._create_storage()
             
             # Reset limiter if storage is available
             if hasattr(limiter, '_storage') and limiter._storage is not None:
