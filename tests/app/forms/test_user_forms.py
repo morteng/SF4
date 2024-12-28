@@ -195,27 +195,58 @@ def test_profile_form_invalid_same_email(client, setup_database):
     # Clean up any existing test users
     User.query.filter_by(email="existing@example.com").delete()
     db.session.commit()
-
+    
     # Add a test user with a unique email
     password_hash = generate_password_hash("password123")
     user = User(username="existinguser", email="existing@example.com", password_hash=password_hash)
     db.session.add(user)
     db.session.commit()
 
-    with client.application.test_request_context():  # Added request context
-        form = ProfileForm(original_username="testuser", original_email="test@example.com")
-        form.username.data = "newusername"
-        form.email.data = "existing@example.com"
-        assert not form.validate()
-        assert FlashMessages.EMAIL_ALREADY_EXISTS in form.email.errors
+    # Create and log in as test user
+    test_user = User(
+        username="testuser", 
+        email="test@example.com", 
+        password_hash=password_hash
+    )
+    db.session.add(test_user)
+    db.session.commit()
+    
+    # Log in the user
+    with client:
+        # First make a GET request to establish session and get CSRF token
+        get_response = client.get(url_for('public.login'))
+        assert get_response.status_code == 200
+            
+        # Extract CSRF token using BeautifulSoup
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
 
-        # Test with invalid email format
-        form.email.data = "invalid-email"
-        assert not form.validate()
-        assert "Invalid email address." in form.email.errors
+        # Now make the login POST request
+        login_response = client.post(url_for('public.login'), data={
+            'username': 'testuser',
+            'password': 'password123',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        assert login_response.status_code == 200, "Login failed"
+
+        with client.application.test_request_context():
+            form = ProfileForm(
+                original_username="testuser", 
+                original_email="test@example.com"
+            )
+            form.username.data = "newusername"
+            form.email.data = "existing@example.com"
+            assert not form.validate()
+            assert FlashMessages.EMAIL_ALREADY_EXISTS.value in form.email.errors
+
+            # Test with invalid email format
+            form.email.data = "invalid-email"
+            assert not form.validate()
+            assert "Invalid email address." in form.email.errors
 
     # Clean up after the test
     User.query.filter_by(email="existing@example.com").delete()
+    db.session.delete(test_user)
     db.session.commit()
 
 def test_login_form_valid(client, setup_database):
