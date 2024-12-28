@@ -128,24 +128,22 @@ def user_data():
     }
 
 @pytest.fixture(scope='function')
-def test_user(db_session, user_data, app):
-    """Provide a test user."""
-    with app.app_context():
-        user = User(
-            username=user_data['username'],
-            email=user_data['email'],
-            is_admin=user_data['is_admin']
-        )
-        user.set_password(user_data['password'])
-        db_session.add(user)
-        db_session.commit()
+def test_user(db_session):
+    """Provide a test user with unique credentials."""
+    # Create unique username and email
+    unique_id = str(uuid.uuid4())[:8]
+    user = User(
+        username=f'testuser_{unique_id}',
+        email=f'testuser_{unique_id}@example.com',
+        password_hash=generate_password_hash('TestPass123!'),
+        is_admin=False
+    )
+    db_session.add(user)
+    db_session.commit()
     yield user
-    with app.app_context():
-        # Merge the user back into the session to ensure it's not detached
-        user = db_session.merge(user)
-        if db_session.query(User).filter_by(id=user.id).first():
-            db_session.delete(user)
-            db_session.commit()
+    # Clean up
+    db_session.delete(user)
+    db_session.commit()
 
 @pytest.fixture(scope='function')
 def stipend_data():

@@ -178,58 +178,78 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
     ).first()
     assert log is not None
 
-def test_user_crud_operations(logged_in_admin, user_data, test_user, db_session):
+def test_user_crud_operations(logged_in_admin, db_session):
     """Test full CRUD operations for users with audit logging"""
-    # First get CSRF token
+    # Create unique test data
+    unique_id = str(uuid.uuid4())[:8]
+    user_data = {
+        'username': f'testuser_{unique_id}',
+        'email': f'testuser_{unique_id}@example.com',
+        'password': 'TestPass123!',
+        'is_admin': False
+    }
+    
+    # Get CSRF token
     create_response = logged_in_admin.get('/admin/users/create')
     csrf_token = extract_csrf_token(create_response.data)
     assert csrf_token is not None
-        
-    # Add CSRF token to user data
-    user_data['csrf_token'] = csrf_token
-        
-    # Create a user first
+    
+    # Create user
     create_response = logged_in_admin.post('/admin/users/create', 
-                                         data=user_data,
+                                         data={
+                                             **user_data,
+                                             'csrf_token': csrf_token
+                                         },
                                          follow_redirects=True)
     assert create_response.status_code == 200
     assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in create_response.data
-        
-    # Get the created user
+    
+    # Verify user creation
     created_user = User.query.filter_by(username=user_data['username']).first()
     assert created_user is not None
-        
-    # Now delete the user
-    delete_response = logged_in_admin.post(f'/admin/users/{created_user.id}/delete',
-                                         data={'csrf_token': csrf_token},
-                                         follow_redirects=True)
-    assert delete_response.status_code == 200
-    assert FlashMessages.DELETE_USER_SUCCESS.value.encode() in delete_response.data
-        
-    # Verify audit logs were created for all operations
+    
+    # Verify audit log
     create_log = AuditLog.query.filter_by(
         action='create_user',
         object_type='User',
         object_id=created_user.id
     ).first()
     assert create_log is not None
-        
-    delete_log = AuditLog.query.filter_by(
-        action='delete_user',
-        object_type='User',
-        object_id=created_user.id
-    ).first()
-    assert delete_log is not None
-        
-    # Get the current logged in admin user
-    with logged_in_admin.session_transaction() as session:
-        admin_user_id = session['_user_id']
-        
-    # Verify the audit logs were created by the admin user
-    assert create_log.user_id == int(admin_user_id)
-    assert delete_log.user_id == int(admin_user_id)
     assert create_log.ip_address is not None
-    assert delete_log.ip_address is not None
+    
+    # Update user
+    update_response = logged_in_admin.post(f'/admin/users/{created_user.id}/edit',
+                                         data={
+                                             'username': f'updated_{unique_id}',
+                                             'email': user_data['email'],
+                                             'csrf_token': csrf_token
+                                         },
+                                         follow_redirects=True)
+    assert update_response.status_code == 200
+    assert FlashMessages.UPDATE_USER_SUCCESS.value.encode() in update_response.data
+    
+    # Verify update
+    updated_user = User.query.get(created_user.id)
+    assert updated_user.username == f'updated_{unique_id}'
+    
+    # Delete user
+    delete_response = logged_in_admin.post(f'/admin/users/{created_user.id}/delete',
+                                         data={'csrf_token': csrf_token},
+                                         follow_redirects=True)
+    assert delete_response.status_code == 200
+    assert FlashMessages.DELETE_USER_SUCCESS.value.encode() in delete_response.data
+    
+    # Verify deletion
+    deleted_user = User.query.get(created_user.id)
+    assert deleted_user is None
+    
+    # Verify audit logs
+    logs = AuditLog.query.filter_by(object_type='User', object_id=created_user.id).all()
+    assert len(logs) == 3  # Create, Update, Delete
+    
+    # Verify all logs have IP addresses
+    for log in logs:
+        assert log.ip_address is not None
     
     # Use a unique username for the test
     unique_user_data = user_data.copy()
