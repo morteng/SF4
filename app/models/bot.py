@@ -6,8 +6,7 @@ class Bot(db.Model):
     name = db.Column(db.String(100), nullable=False, unique=True)
     description = db.Column(db.Text, nullable=True)
     status = db.Column(db.String(50), default='inactive')
-    # Remove the last_run column temporarily
-    # last_run = db.Column(db.DateTime, nullable=True)
+    last_run = db.Column(db.DateTime, nullable=True)
     def __repr__(self):
         return f"<Bot {self.name}>"
     def to_dict(self):
@@ -16,7 +15,6 @@ class Bot(db.Model):
             'name': self.name,
             'description': self.description,
             'status': self.status,
-            # Remove last_run from to_dict
-            # 'last_run': self.last_run.isoformat() if self.last_run else None,
+            'last_run': self.last_run.isoformat() if self.last_run else None,
             'error_log': self.error_log
         }
