@@ -13,6 +13,22 @@ admin_dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 @login_required
 @admin_required
 def dashboard():
+    # Create audit log for dashboard access
+    try:
+        audit_log = AuditLog(
+            user_id=current_user.id,
+            action='view_dashboard',
+            details="Accessed admin dashboard",
+            ip_address=request.remote_addr,
+            http_method=request.method,
+            endpoint=request.endpoint
+        )
+        db.session.add(audit_log)
+        db.session.commit()
+    except Exception as e:
+        current_app.logger.error(f"Error creating audit log: {str(e)}")
+        db.session.rollback()
+
     try:
         # Get recent activity with user information
         recent_activity = db.session.query(AuditLog, User.username)\
