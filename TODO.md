@@ -3,7 +3,8 @@
 - [x] Fix user creation context handling in admin panel
 - [ ] Ensure consistent timezone handling across all datetime operations
 - [ ] Verify JSON serialization of audit log details
-- [ ] Fix notification user_id handling in CRUD operations
+- [x] Fix notification user_id handling in CRUD operations
+- [ ] Add bot scheduling functionality
 
 ## Best Practices
 - Ensure CSRF protection matches production environment

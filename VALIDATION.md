@@ -29,12 +29,11 @@
 
 ## Notification Handling
 - notification_count must be passed to all admin templates
-- notification_count should be retrieved using get_notification_count()
-- Handle notification_count errors gracefully (return 0 on error)
-- Ensure notification_count is updated in real-time
-- All notifications must have a valid user_id (0 for system notifications)
-- Notifications must be created for all CRUD operations
-- Validate notification user_id matches either current user or system (0)
+- Use get_notification_count() for count retrieval
+- Handle errors gracefully (return 0 on error)
+- Ensure real-time updates
+- Validate user_id matches current user or system (0)
+- Use NotificationType enum for all notification types
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests

@@ -30,10 +30,10 @@
 - Ensure session handling in tests with proper context management
 
 ### Notification Badges
-- All admin templates must include a notification badge.
-- The badge should display the count of unread notifications.
-- Use `get_notification_count()` to retrieve the count.
-- The badge should be visible even if the count is 0.
+- All admin templates must include a notification badge
+- Display count of unread notifications using `get_notification_count()`
+- Badge visible even when count is 0
+- Notification types must use NotificationType enum values
 
 ### Audit Logging
 - Required for all CRUD operations and system events
