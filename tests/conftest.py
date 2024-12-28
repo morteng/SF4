@@ -27,6 +27,10 @@ def app():
     app.config['WTF_CSRF_ENABLED'] = True  # Enable CSRF for testing
     app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'  # Add CSRF secret key
     
+    # Disable rate limiting for tests
+    if 'limiter' in app.extensions:
+        app.extensions['limiter'].enabled = False
+    
     # Register blueprints explicitly for testing
     from app.routes import register_blueprints
     register_blueprints(app)
