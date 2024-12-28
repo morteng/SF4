@@ -82,8 +82,8 @@ def client(app):
         app.extensions['limiter'].enabled = False
     
     # Create a new test client with proper context management
-    with app.test_client() as client:
-        with app.app_context():
+    with app.app_context():
+        with app.test_client() as client:
             yield client
 
 @pytest.fixture(scope='function')
@@ -141,31 +141,33 @@ def user_data():
     }
 
 @pytest.fixture(scope='function')
-def test_user(db_session):
+def test_user(db_session, app):
     """Provide a test user with unique credentials."""
-    # Create unique username and email
-    unique_id = str(uuid.uuid4())[:8]
-    user = User(
-        username=f'testuser_{unique_id}',
-        email=f'testuser_{unique_id}@example.com',
-        is_admin=False
-    )
-    # Set password using the proper method
-    user.set_password('TestPass123!')
-    db_session.add(user)
-    db_session.commit()
-    yield user
-    # Clean up user and related records
-    from app.models.audit_log import AuditLog
-    from app.models.notification import Notification
+    with app.app_context():
+        # Create unique username and email
+        unique_id = str(uuid.uuid4())[:8]
+        user = User(
+            username=f'testuser_{unique_id}',
+            email=f'testuser_{unique_id}@example.com',
+            is_admin=False
+        )
+        # Set password using the proper method
+        user.set_password('TestPass123!')
+        db_session.add(user)
+        db_session.commit()
+        # Yield the user within the app context
+        yield user
+        # Clean up user and related records
+        from app.models.audit_log import AuditLog
+        from app.models.notification import Notification
         
-    # Delete related audit logs and notifications
-    AuditLog.query.filter_by(user_id=user.id).delete()
-    Notification.query.filter_by(user_id=user.id).delete()
+        # Delete related audit logs and notifications
+        AuditLog.query.filter_by(user_id=user.id).delete()
+        Notification.query.filter_by(user_id=user.id).delete()
         
-    # Delete the user
-    db_session.delete(user)
-    db_session.commit()
+        # Delete the user
+        db_session.delete(user)
+        db_session.commit()
 
 @pytest.fixture(scope='function')
 def stipend_data():

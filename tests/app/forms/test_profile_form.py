@@ -29,6 +29,7 @@ def test_profile_form_valid(logged_in_client, db_session, test_user):
     assert b"Profile updated successfully" in response.data
     
     # Verify the user was actually updated
+    db_session.add(test_user)  # Ensure the user is in the session
     db_session.refresh(test_user)
     assert test_user.username == 'newusername'
     assert test_user.email == 'newemail@example.com'
