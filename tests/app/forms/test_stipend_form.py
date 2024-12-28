@@ -316,6 +316,10 @@ def test_stipend_update_operation(app, form_data, test_db):
         form = StipendForm(data=form_data, meta={'csrf': False})
         form.tags.choices = tag_choices
         
+        # Convert string date to datetime object
+        from datetime import datetime
+        deadline = datetime.strptime(form.application_deadline.data, '%Y-%m-%d %H:%M:%S')
+            
         # Create stipend using service layer
         stipend = Stipend.create({
             'name': form.name.data,
@@ -324,7 +328,7 @@ def test_stipend_update_operation(app, form_data, test_db):
             'homepage_url': form.homepage_url.data,
             'application_procedure': form.application_procedure.data,
             'eligibility_criteria': form.eligibility_criteria.data,
-            'application_deadline': form.application_deadline.data,
+            'application_deadline': deadline,
             'organization_id': form.organization_id.data,
             'open_for_applications': form.open_for_applications.data,
             'tags': [Tag.query.get(tag_id) for tag_id in form.tags.data]
