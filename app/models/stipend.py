@@ -167,9 +167,30 @@ class Stipend(db.Model):
             raise
 
     @staticmethod
-    def delete(stipend_id):
-        """Delete a stipend"""
+    def delete(stipend_id, user_id=None):
+        """Delete a stipend with audit logging"""
+        from app.models.audit_log import AuditLog
+        from flask import request, current_app
+        
         stipend = Stipend.query.get_or_404(stipend_id)
+        
+        # Create audit log before deletion
+        try:
+            AuditLog.create(
+                user_id=user_id if user_id else 0,
+                action='delete_stipend',
+                object_type='Stipend',
+                object_id=stipend.id,
+                details_before=stipend.to_dict(),
+                ip_address=request.remote_addr if request else '127.0.0.1',
+                http_method='POST',
+                endpoint='admin.stipend.delete'
+            )
+        except Exception as e:
+            current_app.logger.error(f"Error creating audit log: {str(e)}")
+            raise
+        
+        # Delete the stipend
         db.session.delete(stipend)
         db.session.commit()
 

@@ -551,9 +551,8 @@ def test_stipend_delete_operation(app, form_data, test_db):
         # Verify creation
         assert Stipend.query.count() == 1
         
-        # Delete stipend
-        test_db.session.delete(stipend)
-        test_db.session.commit()
+        # Delete stipend with audit logging
+        Stipend.delete(stipend.id, user_id=1)
         
         # Verify deletion
         assert Stipend.query.count() == 0
