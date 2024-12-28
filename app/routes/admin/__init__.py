@@ -51,7 +51,15 @@ def create_admin_blueprint():
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
+_admin_blueprints_registered = False
+
 def register_admin_blueprints(app):
+    global _admin_blueprints_registered
+    
+    # Only register blueprints once
+    if _admin_blueprints_registered:
+        return
+    
     # Create admin blueprint first
     admin_bp = create_admin_blueprint()
     
@@ -88,3 +96,6 @@ def register_admin_blueprints(app):
     
     # Register the main admin blueprint
     app.register_blueprint(admin_bp)
+    
+    # Mark blueprints as registered
+    _admin_blueprints_registered = True
