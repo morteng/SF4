@@ -311,6 +311,13 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
             assert '_user_id' in session
             assert session['_user_id'] == str(test_user.id)
         
+        # Perform login with CSRF token to get a response
+        login_response = logged_in_admin.post('/login', data={
+            'username': test_user.username,
+            'password': 'AdminPass123!',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        
         assert login_response.status_code == 200, \
             f"Login failed with status {login_response.status_code}. Response: {login_response.data.decode('utf-8')}"
         
