@@ -73,6 +73,13 @@ def create():
                 ip_address=request.remote_addr
             )
             
+            # Create notification
+            Notification.create(
+                type='user_created',
+                message=f'User {user.username} was created',
+                related_object=f'User:{user.id}'
+            )
+            
             flash_message(FlashMessages.USER_CREATED.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
         except Exception as e:
