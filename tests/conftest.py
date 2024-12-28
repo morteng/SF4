@@ -58,7 +58,8 @@ def app():
 def _db(app):
     """Provide the SQLAlchemy database session for each test function."""
     with app.app_context():
-        # Create all tables
+        # Create all tables including audit_log
+        from app.models.audit_log import AuditLog
         db.create_all()
         yield db
         # Clean up
@@ -75,6 +76,10 @@ def db_session(_db, app):
         # Create a new session using the SQLAlchemy session directly
         session = _db.session
         session.bind = connection
+        
+        # Ensure audit_log table exists
+        from app.models.audit_log import AuditLog
+        AuditLog.__table__.create(bind=connection, checkfirst=True)
         
         yield session
         
