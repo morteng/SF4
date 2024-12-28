@@ -31,10 +31,13 @@ limiter = Limiter(
 @limiter.limit("10 per minute")  # Matches project rate limiting specs
 @login_required
 @admin_required
-@login_required
-@admin_required
 def create():
     """Create a new user with proper validation and audit logging"""
+    # Safety check for current_user
+    if not hasattr(current_user, 'id'):
+        flash_message("User not properly authenticated", FlashCategory.ERROR)
+        return redirect(url_for('public.login'))
+        
     form = UserForm()
     notification_count = get_notification_count(current_user.id)
     

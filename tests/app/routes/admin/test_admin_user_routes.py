@@ -180,14 +180,21 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
 
 def test_user_crud_operations(logged_in_admin, db_session, test_user):
     """Test full CRUD operations for users with audit logging"""
-    # Create unique test data
-    unique_id = str(uuid.uuid4())[:8]
-    user_data = {
-        'username': f'testuser_{unique_id}',
-        'email': f'testuser_{unique_id}@example.com',
-        'password': 'TestPass123!',
-        'is_admin': False
-    }
+    # First, properly log in the test user
+    with logged_in_admin:
+        # Set up session
+        with logged_in_admin.session_transaction() as session:
+            session['_user_id'] = str(test_user.id)
+            session['_fresh'] = True
+            
+        # Create unique test data
+        unique_id = str(uuid.uuid4())[:8]
+        user_data = {
+            'username': f'testuser_{unique_id}',
+            'email': f'testuser_{unique_id}@example.com',
+            'password': 'TestPass123!',
+            'is_admin': False
+        }
     
     # Get CSRF token
     create_response = logged_in_admin.get('/admin/users/create')
