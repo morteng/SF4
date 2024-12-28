@@ -255,12 +255,20 @@ def test_leap_year_validation_simplified(app):
 def test_stipend_create_operation(app, form_data, test_db):
     """Test CRUD create operation"""
     with app.test_request_context():
+        # Generate valid CSRF token
+        form = StipendForm()
+        csrf_token = form.csrf_token.current_token
+        form_data['csrf_token'] = csrf_token
+        
         # Get tag choices from database
         tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
         
         # Test valid creation
-        form = StipendForm(data=form_data)
+        form = StipendForm(data=form_data, meta={'csrf': False})
         form.tags.choices = tag_choices
+        
+        if not form.validate():
+            print("Validation errors:", form.errors)
         assert form.validate() is True
         
         # Test missing required fields

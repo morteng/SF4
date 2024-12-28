@@ -148,16 +148,15 @@ class StipendForm(FlaskForm):
         super().__init__(*args, **kwargs)
         # Initialize choices for SelectMultipleFields
         from app.models import Tag, Organization
-        self.tags.choices = [(tag.id, tag.name) for tag in Tag.query.all()]
-        self.organizations.choices = [(org.id, org.name) for org in Organization.query.all()]
-        # Populate organization choices
-        self.organization_id.choices = [
-            (org.id, org.name) for org in Organization.query.order_by(Organization.name).all()
-        ]
-        # Populate tag choices
-        self.tags.choices = [
-            (tag.id, tag.name) for tag in Tag.query.order_by(Tag.name).all()
-        ]
+        with db.session.no_autoflush:
+            # Populate organization choices
+            self.organization_id.choices = [
+                (org.id, org.name) for org in Organization.query.order_by(Organization.name).all()
+            ]
+            # Populate tag choices
+            self.tags.choices = [
+                (tag.id, tag.name) for tag in Tag.query.order_by(Tag.name).all()
+            ]
 
     def validate_application_deadline(self, field):
         # Skip validation if the field is empty or invalid (CustomDateTimeField handles this)
