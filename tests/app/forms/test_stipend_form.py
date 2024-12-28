@@ -214,7 +214,7 @@ def test_missing_date(app, form_data):
         form = StipendForm(data=form_data, meta={'csrf': False})
         form.tags.choices = tag_choices  # Set the choices
         assert form.validate() is False
-        assert 'Date is required' in form.errors['application_deadline']
+        assert 'Application deadline is required.' in form.errors['application_deadline']
 
 class TestCustomDateTimeField(Form):
     test_field = CustomDateTimeField(
