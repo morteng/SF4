@@ -61,10 +61,6 @@ def edit_profile():
             logging.warning(f"Profile form validation failed for user {current_user.id}: {form.errors}")
             flash_message(FlashMessages.PROFILE_UPDATE_INVALID_DATA, FlashCategory.ERROR)
             return render_template('user/edit_profile.html', form=form), 400
-        else:
-            logging.warning(f"Profile form validation failed: {form.errors}")
-            flash_message(FlashMessages.PROFILE_UPDATE_INVALID_DATA, FlashCategory.ERROR)
-            return render_template('user/edit_profile.html', form=form), 400
     
     elif request.method == 'GET':
         form.username.data = current_user.username
