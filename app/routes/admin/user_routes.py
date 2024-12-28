@@ -119,16 +119,16 @@ def create():
 
     # Handle form validation errors
     error_messages = []
-        for field_name, errors in form.errors.items():
-            field = getattr(form, field_name)
-            for error in errors:
-                msg = format_error_message(field, error)
-                error_messages.append(msg)
-                flash_message(msg, FlashCategory.ERROR)
-                
-        return render_template('admin/users/create.html', 
-                            form=form,
-                            notification_count=notification_count), 400
+    for field_name, errors in form.errors.items():
+        field = getattr(form, field_name)
+        for error in errors:
+            msg = format_error_message(field, error)
+            error_messages.append(msg)
+            flash_message(msg, FlashCategory.ERROR)
+            
+    return render_template('admin/users/create.html', 
+                        form=form,
+                        notification_count=notification_count), 400
 
 @admin_user_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")  # Matches project rate limiting specs
