@@ -110,12 +110,12 @@ def create():
                 return redirect(url_for('admin.user.index'))
                 
             except Exception as e:
-            db.session.rollback()
-            logging.error(f"Error creating user: {str(e)}")
-            flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR)
-            return render_template('admin/users/create.html', 
-                                form=form,
-                                notification_count=notification_count), 500
+                db.session.rollback()
+                logging.error(f"Error creating user: {str(e)}")
+                flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR)
+                return render_template('admin/users/create.html', 
+                                    form=form,
+                                    notification_count=notification_count), 500
     else:
         # Handle form validation errors
         error_messages = []
