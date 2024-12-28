@@ -222,8 +222,12 @@ def generate_csrf_token():
     return generate_csrf()
 
 def extract_csrf_token(response_data):
-    """Extract CSRF token from HTML response."""
+    """Extract CSRF token from response data."""
     decoded_data = response_data.decode('utf-8')
+    
+    # Check if rate limit exceeded
+    if "Too Many Requests" in decoded_data:
+        raise ValueError("Rate limit exceeded - cannot extract CSRF token")
     
     # Look for CSRF token in various possible locations
     patterns = [
@@ -244,38 +248,50 @@ def extract_csrf_token(response_data):
     
     # Debug output
     logging.warning("CSRF token not found in response. Response data:\n%s", decoded_data[:1000])
-    return None
+    raise ValueError("CSRF token not found in response")
 
 def get_all_tags():
     with current_app.app_context():  # Ensure application context is set
         return Tag.query.all()
 
 @pytest.fixture(scope='function')
-def logged_in_client(client, test_user, app, db_session):
+def mock_rate_limiter(monkeypatch):
+    """Mock the rate limiter to always allow requests."""
+    def mock_check():
+        return True
+    monkeypatch.setattr("flask_limiter.util.get_remote_address", lambda: "127.0.0.1")
+    monkeypatch.setattr("flask_limiter.Limiter.check", mock_check)
+
+@pytest.fixture(autouse=True)
+def reset_rate_limiter(app):
+    """Reset the rate limiter before each test."""
+    limiter = app.extensions.get("limiter")
+    if limiter:
+        limiter.reset()
+
+@pytest.fixture(scope='function')
+def logged_in_client(client, test_user, app, db_session, mock_rate_limiter):
     """Log in as a regular user."""
     with client.application.test_request_context():
-        # Debug: Print test user credentials
-        logging.info(f"Test user username: {test_user.username}")
-        logging.info(f"Test user password hash: {test_user.password_hash}")
-        
         # Ensure the test_user is bound to the current session
         db_session.add(test_user)
         db_session.commit()
 
+        # Get login page and extract CSRF token
         login_response = client.get(url_for('public.login'))
-        csrf_token = extract_csrf_token(login_response.data)
+        try:
+            csrf_token = extract_csrf_token(login_response.data)
+        except ValueError as e:
+            pytest.fail(f"Failed to extract CSRF token: {e}")
 
+        # Submit login form
         response = client.post(url_for('public.login'), data={
             'username': test_user.username,
             'password': 'TestPass123!',  # Match the test user's password
             'csrf_token': csrf_token
         }, follow_redirects=True)
 
-        # Debug: Print login response
-        logging.info(f"Login response status: {response.status_code}")
-        logging.info(f"Login response data: {response.data.decode('utf-8')}")
-            
-        assert response.status_code == 200, "User login failed."
+        assert response.status_code == 200, f"User login failed. Response: {response.data.decode('utf-8')}"
         with client.session_transaction() as session:
             assert '_user_id' in session, "User session not established."
     yield client
