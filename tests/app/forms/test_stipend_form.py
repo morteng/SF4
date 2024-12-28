@@ -560,5 +560,5 @@ def test_stipend_delete_operation(app, form_data, test_db):
         # Verify audit log
         log = AuditLog.query.filter_by(object_type='Stipend', object_id=stipend.id).first()
         assert log is not None
-        assert log.action == 'delete'
+        assert log.action == 'delete_stipend'
         assert log.details is not None
