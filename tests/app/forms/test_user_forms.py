@@ -1,4 +1,5 @@
 import pytest
+import time
 from unittest.mock import patch
 from flask import session, url_for, current_app
 from flask_limiter import Limiter
@@ -394,17 +395,26 @@ def test_profile_form_rate_limiting(client, setup_database):
 
         # Submit profile form multiple times to trigger rate limiting
         responses = []
-        for _ in range(11):  # Assuming rate limit is 10 requests per minute
+        for i in range(11):  # Assuming rate limit is 10 requests per minute
+            # Refresh CSRF token every 5 requests
+            if i > 0 and i % 5 == 0:
+                get_response = client.get(url_for('user.edit_profile'))
+                soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+                csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+                
             response = client.post(url_for('user.edit_profile'), data={
                 'username': 'testuser',
                 'email': 'test@example.com',
                 'csrf_token': csrf_token
             }, follow_redirects=True)  # Follow redirects
             responses.append(response.status_code)
+                
+            # Add small delay between requests
+            time.sleep(0.1)
     
         # Verify rate limiting response
         assert 429 in responses, "Rate limiting not triggered"
-        assert responses.count(200) == 10, "Expected 10 successful requests before rate limit"
+        assert responses.count(200) == 10, f"Expected 10 successful requests before rate limit, got {responses.count(200)}. Responses: {responses}"
 
 def test_profile_update_creates_audit_log(client, setup_database):
     """Test that profile updates create audit logs"""
