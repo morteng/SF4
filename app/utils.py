@@ -294,6 +294,41 @@ def format_error_message(field: Any, error: Union[str, Exception]) -> str:
         return f"{field_label.text}: {error}"
     return f"{field.name if hasattr(field, 'name') else str(field)}: {error}"
 
+def log_audit(user_id, action, object_type, object_id, before=None, after=None):
+    """Create an audit log entry"""
+    try:
+        audit_log = AuditLog(
+            user_id=user_id,
+            action=action,
+            object_type=object_type,
+            object_id=object_id,
+            details_before=json.dumps(before) if before else None,
+            details_after=json.dumps(after) if after else None,
+            ip_address=request.remote_addr,
+            http_method=request.method,
+            endpoint=request.endpoint
+        )
+        db.session.add(audit_log)
+        db.session.commit()
+    except Exception as e:
+        logger.error(f"Failed to create audit log: {e}")
+        db.session.rollback()
+
+def create_notification(type, message, related_object=None, user_id=None):
+    """Create a notification"""
+    try:
+        notification = Notification(
+            type=type,
+            message=message,
+            related_object=related_object,
+            user_id=user_id
+        )
+        db.session.add(notification)
+        db.session.commit()
+    except Exception as e:
+        logger.error(f"Failed to create notification: {e}")
+        db.session.rollback()
+
 def flash_message(message, category):
     from flask import flash
     try:

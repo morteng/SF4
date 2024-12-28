@@ -47,6 +47,7 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @admin_required
 def create():
     """Create new stipend with audit logging and notifications"""
+    """Create new stipend with audit logging and notifications"""
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')
     
@@ -74,6 +75,23 @@ def create():
             
             # Create stipend
             stipend = Stipend.create(stipend_data)
+            
+            # Create audit log
+            log_audit(
+                user_id=current_user.id,
+                action='create_stipend',
+                object_type='Stipend',
+                object_id=stipend.id,
+                after=stipend.to_dict()
+            )
+            
+            # Create notification
+            create_notification(
+                type='stipend_created',
+                message=f'New stipend created: {stipend.name}',
+                related_object=stipend,
+                user_id=current_user.id
+            )
             
             # Create audit log
             AuditLog.create(
@@ -349,10 +367,11 @@ def create():
 
 
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")  # Add rate limiting
+@limiter.limit("10 per minute")
 @login_required
 @admin_required
 def edit(id):
+    """Edit stipend with audit logging and notifications"""
     stipend = get_stipend_by_id(id)
     if not stipend:
         flash_message(FlashMessages.STIPEND_NOT_FOUND, FlashCategory.ERROR)
@@ -377,13 +396,28 @@ def edit(id):
                     'open_for_applications': form.open_for_applications.data
                 }
                 
+                # Get current state before update
+                before_state = stipend.to_dict()
+            
                 # Update the stipend
                 updated_stipend = update_stipend(stipend, stipend_data, session=db.session)
+            
+                # Create audit log
+                log_audit(
+                    user_id=current_user.id,
+                    action='update_stipend',
+                    object_type='Stipend',
+                    object_id=stipend.id,
+                    before=before_state,
+                    after=updated_stipend.to_dict()
+                )
+            
                 # Create notification
-                Notification.create(
-                    type="stipend_updated",
-                    message=f"Stipend updated: {updated_stipend.name}",
-                    related_object=updated_stipend
+                create_notification(
+                    type='stipend_updated',
+                    message=f'Stipend updated: {updated_stipend.name}',
+                    related_object=updated_stipend,
+                    user_id=current_user.id
                 )
                 
                 flash_message(FlashMessages.STIPEND_UPDATE_SUCCESS, FlashCategory.SUCCESS)
@@ -464,6 +498,7 @@ def edit(id):
 @admin_required
 def delete(id):
     """Delete stipend with audit logging and notification"""
+    """Delete stipend with audit logging and notification"""
     stipend = get_stipend_by_id(id)
     if not stipend:
         flash_message(FlashMessages["STIPEND_NOT_FOUND"], FlashCategory.ERROR)
@@ -472,23 +507,23 @@ def delete(id):
         return redirect(url_for('admin.stipend.index'))
 
     try:
-        # Add audit logging before deletion
-        audit_log = AuditLog(
+        # Create audit log before deletion
+        log_audit(
             user_id=current_user.id,
             action='delete_stipend',
-            details=f"Attempt to delete stipend: {stipend.name}",
-            object_type="Stipend",
-            object_id=stipend.id
+            object_type='Stipend',
+            object_id=stipend.id,
+            before=stipend.to_dict()
         )
-        db.session.add(audit_log)
         
         delete_stipend(stipend.id)
         
         # Create notification
-        Notification.create(
-            type="stipend_deleted",
-            message=f"Stipend deleted: {stipend.name}",
-            related_object=stipend
+        create_notification(
+            type='stipend_deleted',
+            message=f'Stipend deleted: {stipend.name}',
+            related_object=stipend,
+            user_id=current_user.id
         )
         
         flash_message(FlashMessages.STIPEND_DELETE_SUCCESS, FlashCategory.SUCCESS)

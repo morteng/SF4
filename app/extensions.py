@@ -14,7 +14,14 @@ migrate = Migrate()
 limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"],
-    storage_uri="memory://"
+    storage_uri="memory://",
+    # Add specific rate limits for CRUD operations
+    application_limits=[
+        "10/minute;100/hour",  # Create/Update
+        "3/minute;30/hour",    # Delete
+        "10/hour",             # Bot operations
+        "5/hour"               # Password resets
+    ]
 )
 
 Session = None
