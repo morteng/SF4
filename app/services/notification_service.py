@@ -6,6 +6,17 @@ def get_notification_by_id(notification_id):
     from app import db
     return db.session.get(Notification, notification_id)
 
+def create_crud_notification(action, object_type, object_id, user_id=None):
+    """Create notification for CRUD operations"""
+    message = f"{action.capitalize()} operation performed on {object_type} {object_id}"
+    notification = Notification.create(
+        type=NotificationType.CRUD_OPERATION,
+        message=message,
+        related_object=f"{object_type}:{object_id}",
+        user_id=user_id
+    )
+    return notification
+
 def get_notification_count(user_id):
     """Get count of unread notifications for a user"""
     from app import db

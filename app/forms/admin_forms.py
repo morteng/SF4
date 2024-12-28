@@ -63,6 +63,42 @@ class StipendForm(FlaskForm):
             "placeholder": "YYYY-MM-DD HH:MM:SS",
             "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
             "title": "Please enter date in YYYY-MM-DD HH:MM:SS format."
+        }
+    )
+    organization_id = SelectField('Organization', coerce=int, validators=[
+        DataRequired(message="Organization is required.")
+    ])
+    open_for_applications = BooleanField('Open for Applications', default=False)
+    tags = SelectMultipleField('Tags', coerce=int, validators=[
+        DataRequired(message="At least one tag is required.")
+    ])
+    summary = TextAreaField('Summary', validators=[
+        DataRequired(message="Summary is required."),
+        Length(max=500, message="Summary cannot exceed 500 characters.")
+    ])
+    description = TextAreaField('Description', validators=[
+        DataRequired(message="Description is required."),
+        Length(max=2000, message="Description cannot exceed 2000 characters.")
+    ])
+    homepage_url = URLField('Homepage URL', validators=[
+        DataRequired(message="Homepage URL is required."),
+        URL(message="Please enter a valid URL starting with http:// or https://.")
+    ])
+    application_procedure = TextAreaField('Application Procedure', validators=[
+        DataRequired(message="Application procedure is required."),
+        Length(max=1000, message="Application procedure cannot exceed 1000 characters.")
+    ])
+    eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[
+        DataRequired(message="Eligibility criteria is required."),
+        Length(max=1000, message="Eligibility criteria cannot exceed 1000 characters.")
+    ])
+    application_deadline = CustomDateTimeField(
+        'Application Deadline',
+        validators=[DataRequired(message="Application deadline is required.")],
+        render_kw={
+            "placeholder": "YYYY-MM-DD HH:MM:SS",
+            "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
+            "title": "Please enter date in YYYY-MM-DD HH:MM:SS format."
         },
         error_messages={
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
