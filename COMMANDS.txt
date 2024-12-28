@@ -24,7 +24,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -39,12 +39,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -81,63 +75,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -152,12 +90,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -194,63 +126,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -265,12 +141,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -307,63 +177,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -378,12 +192,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -420,63 +228,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -491,12 +243,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -533,63 +279,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -604,12 +294,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -646,63 +330,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -717,12 +345,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -759,63 +381,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -830,12 +396,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -872,63 +432,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -943,12 +447,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -985,63 +483,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -1056,12 +498,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -1098,63 +534,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -1169,12 +549,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -1211,63 +585,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -1282,12 +600,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -1324,63 +636,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -1395,12 +651,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -1437,63 +687,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -1508,12 +702,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -1550,63 +738,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -1621,12 +753,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -1663,63 +789,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -1734,12 +804,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -1776,63 +840,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -1847,12 +855,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -1889,63 +891,7 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
-
-/architect implement the suggested changes
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/architect implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
-
-/architect implement the suggested changes
-
-/test
-
-/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
-
-
-/reset
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
-
-/test
-
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
 /code implement the suggested changes
 
@@ -1960,12 +906,6 @@
 /test
 
 /ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel?
 
 /code implement the suggested changes
 
@@ -2002,9 +942,9 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, working tests?
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
-/architect implement the suggested changes
+/code implement the suggested changes
 
 /test
 
@@ -2012,7 +952,7 @@
 
 /ask what is causing the problem?
 
-/architect implement the suggested changes
+/code implement the suggested changes
 
 /test
 
@@ -2022,9 +962,54 @@
 
 /test
 
-/ask how can we ensure the codebase reflects the project description and ensure CRUD functionality in the admin panel, good test coverage?
+/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
 
-/architect implement the suggested changes
+
+/reset
+
+
+/git add .
+
+/commit
+
+/read PROJECT.md
+/add CONVENTIONS.md
+/add VALIDATION.md
+/add TODO.md
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
+
+/code implement the suggested changes
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
 
 /test
 
@@ -2032,3 +1017,361 @@
 
 
 /reset
+
+
+/git add .
+
+/commit
+
+/read PROJECT.md
+/add CONVENTIONS.md
+/add VALIDATION.md
+/add TODO.md
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
+
+/code implement the suggested changes
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+
+
+/reset
+
+
+/git add .
+
+/commit
+
+/read PROJECT.md
+/add CONVENTIONS.md
+/add VALIDATION.md
+/add TODO.md
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
+
+/code implement the suggested changes
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+
+
+/reset
+
+
+/git add .
+
+/commit
+
+/read PROJECT.md
+/add CONVENTIONS.md
+/add VALIDATION.md
+/add TODO.md
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
+
+/code implement the suggested changes
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+
+
+/reset
+
+
+/git add .
+
+/commit
+
+/read PROJECT.md
+/add CONVENTIONS.md
+/add VALIDATION.md
+/add TODO.md
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
+
+/code implement the suggested changes
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+
+
+/reset
+
+
+/git add .
+
+/commit
+
+/read PROJECT.md
+/add CONVENTIONS.md
+/add VALIDATION.md
+/add TODO.md
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
+
+/code implement the suggested changes
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+
+
+/reset
+
+
+/git add .
+
+/commit
+
+/read PROJECT.md
+/add CONVENTIONS.md
+/add VALIDATION.md
+/add TODO.md
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
+
+/code implement the suggested changes
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+
+
+/reset
+
+
+/git add .
+
+/commit
+
+/read PROJECT.md
+/add CONVENTIONS.md
+/add VALIDATION.md
+/add TODO.md
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
+
+/code implement the suggested changes
+
+/test
+
+/run flask routes
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/ask what is causing the problem?
+
+/code implement the suggested changes
+
+/test
+
+/architect update CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+
+
+/reset
+
