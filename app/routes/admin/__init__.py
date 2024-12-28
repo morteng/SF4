@@ -1,4 +1,6 @@
+import json
 from flask import Blueprint, redirect, url_for, request, current_app
+from app.models.notification import Notification, NotificationType
 from flask_wtf.csrf import validate_csrf
 from functools import wraps
 from flask_login import current_user
@@ -24,20 +26,40 @@ def create_admin_blueprint():
     """Factory function to create a new admin blueprint instance with security and logging"""
     admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
-    def log_audit(action, object_type, object_id=None, details=None):
-        """Helper function to log admin actions"""
+    def log_audit(action, object_type, object_id=None, details=None, 
+                 details_before=None, details_after=None):
+        """Helper function to log admin actions with before/after state"""
         if current_user.is_authenticated:
             try:
+                # Serialize complex data
+                if details_before and not isinstance(details_before, str):
+                    details_before = json.dumps(details_before)
+                if details_after and not isinstance(details_after, str):
+                    details_after = json.dumps(details_after)
+                
                 audit_log = AuditLog(
                     user_id=current_user.id,
                     action=action,
                     object_type=object_type,
                     object_id=object_id,
                     details=details,
-                    ip_address=request.remote_addr
+                    details_before=details_before,
+                    details_after=details_after,
+                    ip_address=request.remote_addr,
+                    http_method=request.method,
+                    endpoint=request.endpoint
                 )
                 db.session.add(audit_log)
                 db.session.commit()
+                
+                # Create notification for significant actions
+                if action in ['create', 'update', 'delete']:
+                    Notification.create(
+                        type=NotificationType.ADMIN_ACTION,
+                        message=f"{action.capitalize()} operation on {object_type} {object_id}",
+                        related_object=audit_log,
+                        user_id=current_user.id
+                    )
             except Exception as e:
                 current_app.logger.error(f"Failed to create audit log: {str(e)}")
                 db.session.rollback()

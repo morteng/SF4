@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime, timezone
+from app.models.notification import Notification, NotificationType
 from app.models.audit_log import AuditLog
 from app.models.notification import Notification
 from app.models.stipend import Stipend
@@ -29,18 +30,41 @@ class TagBot:
                 user_id=0,  # System user
                 action='tagbot_run',
                 details='Starting TagBot execution',
-                object_type='Bot'
+                object_type='Bot',
+                ip_address='127.0.0.1',
+                http_method='POST',
+                endpoint='admin.bot.run'
             )
+            
             self._start_bot()
+            
+            # Get untagged stipends
             untagged_stipends = Stipend.query.filter(~Stipend.tags.any()).all()
             
+            # Process each stipend
             for stipend in untagged_stipends:
                 self._process_stipend(stipend)
             
             self._complete_bot()
             
+            # Create success notification
+            Notification.create(
+                type=NotificationType.BOT_SUCCESS,
+                message=f"TagBot completed successfully - processed {len(untagged_stipends)} stipends",
+                related_object=self,
+                user_id=0  # System user
+            )
+            
         except Exception as e:
             self._handle_error(e)
+            # Create error notification
+            Notification.create(
+                type=NotificationType.BOT_ERROR,
+                message=f"TagBot failed: {str(e)}",
+                related_object=self,
+                user_id=0  # System user
+            )
+            raise
 
     def _start_bot(self):
         """Handle bot startup logic."""
