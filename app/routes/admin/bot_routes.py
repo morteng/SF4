@@ -35,12 +35,17 @@ limiter = Limiter(
 def create():
     """Create a new bot with audit logging"""
     form = BotForm()
-    notification_count = get_notification_count(current_user.id)
     if form.validate_on_submit():
         try:
-            new_bot = create_bot(form.data)
+            bot_data = {
+                'name': form.name.data,
+                'description': form.description.data,
+                'status': form.status.data,
+                'schedule': form.schedule.data
+            }
+            new_bot = create_bot(bot_data)
             
-            # Create audit log
+            # Create audit log and notification
             AuditLog.create(
                 user_id=current_user.id,
                 action='create_bot',
@@ -48,6 +53,11 @@ def create():
                 object_id=new_bot.id,
                 details=f'Created bot {new_bot.name}',
                 ip_address=request.remote_addr
+            )
+            Notification.create(
+                type=NotificationType.CRUD_CREATE,
+                message=f"Bot {new_bot.name} created",
+                user_id=current_user.id
             )
             
             flash_message(FlashMessages.CREATE_BOT_SUCCESS.value, FlashCategory.SUCCESS.value)
@@ -57,15 +67,7 @@ def create():
             flash_message(f"{FlashMessages.CREATE_BOT_ERROR.value}{str(e)}", FlashCategory.ERROR.value)
             current_app.logger.error(f"Failed to create bot: {e}")
             return render_template('admin/bots/create.html', form=form), 400
-    elif request.method == 'POST':
-        # Enhanced error handling
-        for field, errors in form.errors.items():
-            for error in errors:
-                flash_message(f"{field}: {error}", FlashCategory.ERROR.value)
-                current_app.logger.error(f"Form validation error - {field}: {error}")
-        flash_message(FlashMessages.CREATE_BOT_INVALID_DATA.value, FlashCategory.ERROR.value)
-        current_app.logger.error("Invalid form data submitted for bot creation")
-        return render_template('admin/bots/create.html', form=form, flash_messages=get_flashed_messages()), 400
+    
     return render_template('admin/bots/create.html', form=form)
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])

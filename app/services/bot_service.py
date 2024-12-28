@@ -3,7 +3,13 @@ from app.extensions import db
 from app.models.notification import Notification  # Import the Notification model
 
 def create_bot(data):
-    bot = Bot(name=data['name'], description=data['description'], status=data['status'])
+    bot = Bot(
+        name=data['name'],
+        description=data['description'],
+        status=data.get('status', 'inactive'),
+        schedule=data.get('schedule'),
+        next_run=calculate_next_run(data.get('schedule')) if data.get('schedule') else None
+    )
     db.session.add(bot)
     db.session.commit()
     return bot
