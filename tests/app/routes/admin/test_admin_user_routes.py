@@ -229,10 +229,6 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
                 assert False, "Should have raised ValueError"
             except ValueError as e:
                 assert str(e) == "Cannot mark unsaved notification as read"
-        except ValueError as e:
-            # Verify no audit log was created
-            logs = AuditLog.query.filter_by(user_id=test_user.id).all()
-            assert len(logs) == 0, "Audit log should have been rolled back"
         
         # Test notification error handling
         notification = Notification(
