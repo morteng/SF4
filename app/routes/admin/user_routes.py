@@ -297,12 +297,12 @@ def delete(id):
             user_id=current_user.id
         )
             
-            # Audit log
-            logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.utcnow()}")
-            
-            flash_message(FlashMessages.DELETE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
-            return redirect(url_for('admin.user.index'))
-        except Exception as e:
+        # Audit log
+        logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.utcnow()}")
+        
+        flash_message(FlashMessages.DELETE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
+        return redirect(url_for('admin.user.index'))
+    except Exception as e:
             db.session.rollback()
             logging.error(f"Failed to delete user {id}: {e}")
             flash_message(f"{FlashMessages.DELETE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
