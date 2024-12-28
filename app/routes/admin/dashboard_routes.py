@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, current_app
+from flask import Blueprint, render_template, current_app, request
 from flask_login import current_user, login_required
 from app.utils import admin_required
 from app.extensions import db
