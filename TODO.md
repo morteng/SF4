@@ -1,6 +1,6 @@
 # TODO List
 ## High Priority
-- [ ] Fix database initialization in tests
+- [x] Fix form validation for required fields
 - [ ] Add audit log viewing interface
 - [ ] Implement proper bot scaffolding
 - [ ] Add test coverage for timezone handling

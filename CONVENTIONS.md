@@ -4,6 +4,7 @@
 - **Clear Separation**: Models, services, routes, and templates well-structured
 - **Documentation**: Docstrings, comments, and meaningful names
 - **Validation Messages**: Use constants from app\constants.py for all validation messages
+- **Form Validation**: All required fields must have proper DataRequired and Length(min=1) validators
 - **Flash Messages**: Use FlashMessages enum from app\constants.py for all flash messages
 - **CSRF Protection**: Include CSRF tokens in all forms and HTMX requests
 - **Audit Logging**: Log all CRUD operations with user, action, and timestamp

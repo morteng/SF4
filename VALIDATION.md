@@ -2,7 +2,8 @@
 
 ### Form Validation
 - Validate all form inputs using constants from app\constants.py
-- Ensure all required fields have validation messages
+- Ensure all required fields have DataRequired and Length(min=1) validators
+- Select fields must have choices set before validation
 - SelectMultipleField must have valid choices defined
 - Date validation must handle:
   - Past dates invalid
