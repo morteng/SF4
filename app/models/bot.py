@@ -2,23 +2,45 @@ from datetime import datetime, timezone
 from abc import abstractmethod
 from app.extensions import db
 
+from datetime import datetime, timezone
+from abc import abstractmethod
+from app.extensions import db
+from app.models.notification import Notification, NotificationType
+from app.models.audit_log import AuditLog
+from flask import current_app
+
 class BaseBot:
     """Base class for all bots"""
     def __init__(self):
         self.status = 'idle'
         self.last_run = None
         self.error_log = None
+        self.start_time = None
+        self.end_time = None
+        self.execution_time = None
         
     def run(self):
         """Execute the bot with proper status tracking"""
         try:
             self.status = 'running'
+            self.start_time = datetime.now(timezone.utc)
             self.execute()
             self.status = 'completed'
         except Exception as e:
             self.status = 'error'
             self.error_log = str(e)
             raise
+        finally:
+            self.end_time = datetime.now(timezone.utc)
+            self.execution_time = (self.end_time - self.start_time).total_seconds()
+            self._log_execution()
+            
+    def _log_execution(self):
+        """Log bot execution details"""
+        current_app.logger.info(
+            f"Bot {self.__class__.__name__} executed in {self.execution_time:.2f} seconds. "
+            f"Status: {self.status}"
+        )
             
     @abstractmethod
     def execute(self):

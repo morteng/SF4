@@ -122,10 +122,6 @@ def run(id):
         flash_message(FlashMessages.BOT_NOT_FOUND, FlashCategory.ERROR)
         return redirect(url_for('admin.bot.index'))
 
-    if not bot:
-        flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)
-        return redirect(url_for('admin.bot.index'))
-
     try:
         # Create audit log
         AuditLog.create(
@@ -138,38 +134,44 @@ def run(id):
         )
 
         # Run the appropriate bot based on name
+        bot_instance = None
         if bot.name == 'TagBot':
             from bots.tag_bot import TagBot
-            result = TagBot().run()
+            bot_instance = TagBot()
         elif bot.name == 'UpdateBot':
             from bots.update_bot import UpdateBot
-            result = UpdateBot().run()
+            bot_instance = UpdateBot()
         elif bot.name == 'ReviewBot':
             from bots.review_bot import ReviewBot
-            result = ReviewBot().run()
+            bot_instance = ReviewBot()
         else:
             raise ValueError("Unknown bot type")
         
+        # Run bot and handle results
+        bot_instance.run()
+        
         # Update bot status and last run time
-        bot.status = result['status']
-        bot.last_run = datetime.utcnow()
+        bot.status = bot_instance.status
+        bot.last_run = datetime.now(timezone.utc)
+        bot.error_log = bot_instance.error_log
         
         # Create appropriate notification
-        notification_type = NotificationType.BOT_SUCCESS if result['success'] else NotificationType.BOT_ERROR
+        notification_type = NotificationType.BOT_SUCCESS if bot_instance.status == 'completed' else NotificationType.BOT_ERROR
         notification = Notification(
-            message=f"Bot {bot.name} run completed: {result['message']}",
+            message=f"Bot {bot.name} run completed with status: {bot_instance.status}",
             type=notification_type,
             read_status=False
         )
         
         # Add error notification if bot failed
-        if not result['success']:
-            current_app.logger.error(f"Bot {bot.name} failed: {result['message']}")
+        if bot_instance.status == 'error':
+            current_app.logger.error(f"Bot {bot.name} failed: {bot_instance.error_log}")
         
         db.session.add(notification)
         db.session.commit()
         
-        flash_message(result['message'], FlashCategory.SUCCESS if result['success'] else FlashCategory.ERROR)
+        flash_message(f"Bot {bot.name} completed with status: {bot_instance.status}", 
+                     FlashCategory.SUCCESS if bot_instance.status == 'completed' else FlashCategory.ERROR)
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(f"Failed to run bot {bot.name}: {e}")

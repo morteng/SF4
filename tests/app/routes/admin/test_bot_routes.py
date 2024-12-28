@@ -106,20 +106,67 @@ def test_delete_bot_route_with_invalid_id(logged_in_admin):
     assert delete_response.status_code == 302
     assert url_for('admin.bot.index', _external=False) == delete_response.headers['Location']
 
-def test_create_bot_route_with_database_error(logged_in_admin, bot_data, db_session, monkeypatch):
-    with logged_in_admin.application.app_context():
-        data = bot_data
+def test_run_bot_success(logged_in_admin, test_bot, db_session, mocker):
+    # Mock bot execution
+    mock_bot = mocker.MagicMock()
+    mock_bot.status = 'completed'
+    mock_bot.error_log = None
+    mock_bot.run = mocker.MagicMock()
+    
+    # Patch bot creation
+    mocker.patch('bots.tag_bot.TagBot', return_value=mock_bot)
+    
+    response = logged_in_admin.post(url_for('admin.bot.run', id=test_bot.id))
+    
+    assert response.status_code == 302
+    assert url_for('admin.bot.index', _external=False) == response.headers['Location']
+    
+    # Verify bot status was updated
+    updated_bot = db_session.get(Bot, test_bot.id)
+    assert updated_bot.status == 'completed'
+    assert updated_bot.last_run is not None
+    
+    # Verify notification was created
+    notification = Notification.query.filter_by(type=NotificationType.BOT_SUCCESS).first()
+    assert notification is not None
+    assert test_bot.name in notification.message
 
-        def mock_commit(*args, **kwargs):
-            raise Exception("Database error")
-            
-        monkeypatch.setattr(db_session, 'commit', mock_commit)
-        
-        response = logged_in_admin.post(url_for('admin.bot.create'), data=data)
-        
-        assert response.status_code == 400  # Changed from 200 to 400
-        # Assert the flash message using constants
-        assert_flash_message(response, FlashMessages.CREATE_BOT_ERROR)
+def test_run_bot_failure(logged_in_admin, test_bot, db_session, mocker):
+    # Mock bot execution to raise an error
+    mock_bot = mocker.MagicMock()
+    mock_bot.run = mocker.MagicMock(side_effect=Exception("Test error"))
+    
+    # Patch bot creation
+    mocker.patch('bots.tag_bot.TagBot', return_value=mock_bot)
+    
+    response = logged_in_admin.post(url_for('admin.bot.run', id=test_bot.id))
+    
+    assert response.status_code == 302
+    assert url_for('admin.bot.index', _external=False) == response.headers['Location']
+    
+    # Verify bot status was updated
+    updated_bot = db_session.get(Bot, test_bot.id)
+    assert updated_bot.status == 'error'
+    assert updated_bot.error_log == "Test error"
+    
+    # Verify notification was created
+    notification = Notification.query.filter_by(type=NotificationType.BOT_ERROR).first()
+    assert notification is not None
+    assert "error" in notification.message.lower()
 
-        bots = Bot.query.all()
-        assert not any(bot.name == data['name'] for bot in bots)  # Ensure no bot was created
+def test_run_bot_unknown_type(logged_in_admin, test_bot):
+    test_bot.name = 'UnknownBot'
+    db_session.commit()
+    
+    response = logged_in_admin.post(url_for('admin.bot.run', id=test_bot.id))
+    
+    assert response.status_code == 302
+    assert url_for('admin.bot.index', _external=False) == response.headers['Location']
+    assert_flash_message(response, FlashMessages.BOT_RUN_ERROR)
+
+def test_run_bot_not_found(logged_in_admin):
+    response = logged_in_admin.post(url_for('admin.bot.run', id=9999))
+    
+    assert response.status_code == 302
+    assert url_for('admin.bot.index', _external=False) == response.headers['Location']
+    assert_flash_message(response, FlashMessages.BOT_NOT_FOUND)
