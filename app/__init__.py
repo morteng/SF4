@@ -1,5 +1,7 @@
 import os  # Import the os module here
 from flask import Flask
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 try:
     from flask_limiter import Limiter
@@ -42,8 +44,6 @@ def create_app(config_name='development'):
         return db.session.get(User, int(user_id))  
 
     # Initialize rate limiter
-    from flask_limiter import Limiter
-    from flask_limiter.util import get_remote_address
     limiter = Limiter(
         get_remote_address,
         app=app,
