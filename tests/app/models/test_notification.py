@@ -46,6 +46,13 @@ def test_mark_as_read(test_notification):
     test_notification.mark_as_read()
     assert test_notification.read_status is True
 
+def test_mark_as_read_invalid_notification(db_session):
+    """Test marking invalid notification as read"""
+    invalid_notification = Notification()
+    with pytest.raises(ValueError) as exc_info:
+        invalid_notification.mark_as_read()
+    assert str(exc_info.value) == "Cannot mark unsaved notification as read"
+
 def test_notification_to_dict(test_notification):
     """Test notification serialization"""
     notification_dict = test_notification.to_dict()

@@ -357,3 +357,28 @@ def setup_rate_limits(app):
     
     # Bot operations
     limiter.limit("10/hour")(run_bot)
+from contextlib import contextmanager
+
+@contextmanager
+def db_session_scope():
+    """Provide a transactional scope around a series of operations."""
+    try:
+        yield db.session
+        db.session.commit()
+    except:
+        db.session.rollback()
+        raise
+
+def log_operation(operation):
+    """Decorator for logging operations"""
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            try:
+                result = func(*args, **kwargs)
+                current_app.logger.info(f"{operation} completed successfully")
+                return result
+            except Exception as e:
+                current_app.logger.error(f"{operation} failed: {str(e)}")
+                raise
+        return wrapper
+    return decorator
