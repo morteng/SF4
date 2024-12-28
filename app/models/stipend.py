@@ -85,6 +85,14 @@ class Stipend(db.Model):
         before = self.to_dict()
         
         try:
+            # Validate required fields if they're being updated
+            if 'name' in data and not data['name']:
+                raise ValueError("Name is required")
+            if 'summary' in data and not data['summary']:
+                raise ValueError("Summary is required")
+            if 'description' in data and not data['description']:
+                raise ValueError("Description is required")
+            
             # Update fields if they exist in data
             if 'name' in data:
                 self.name = data['name']
