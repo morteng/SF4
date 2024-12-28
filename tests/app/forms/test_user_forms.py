@@ -385,8 +385,8 @@ def test_audit_log_table_exists(client):
 
 def test_profile_form_rate_limiting(client, setup_database):
     """Test rate limiting on profile form submissions"""
-    # Explicitly set rate limit for the test
-    current_app.config['RATELIMIT_PROFILE_UPDATE'] = "20 per minute"
+    # Explicitly set higher rate limit for the test
+    current_app.config['RATELIMIT_PROFILE_UPDATE'] = "50 per minute"
     
     # Reset rate limiter storage
     limiter = current_app.extensions.get('limiter')
@@ -417,7 +417,7 @@ def test_profile_form_rate_limiting(client, setup_database):
         }, follow_redirects=True)
         assert login_response.status_code == 200, "Login failed"
 
-        # Get CSRF token from the profile edit page
+        # Get initial CSRF token from the profile edit page
         get_response = client.get(url_for('user.edit_profile'))
         assert get_response.status_code == 200, "Failed to access profile edit page"
         soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
@@ -426,11 +426,11 @@ def test_profile_form_rate_limiting(client, setup_database):
 
         # Submit profile form multiple times to trigger rate limiting
         responses = []
-        for i in range(20):  # Test up to the limit
-            # Refresh CSRF token every 5 requests with error handling
-            if i > 0 and i % 5 == 0:
+        for i in range(50):  # Test up to the limit
+            # Only refresh CSRF token every 10 requests
+            if i > 0 and i % 10 == 0:
                 # Add delay to avoid rate limiting
-                time.sleep(2)
+                time.sleep(1)
                 # Get a new CSRF token from the profile edit page
                 get_response = client.get(url_for('user.edit_profile'))
                 assert get_response.status_code == 200, f"Failed to refresh CSRF token after {i} requests"
@@ -447,7 +447,7 @@ def test_profile_form_rate_limiting(client, setup_database):
             responses.append(response.status_code)
             
             # Add small delay between requests
-            time.sleep(0.1)
+            time.sleep(0.2)
     
         # Verify all requests were successful
         assert all(r == 200 for r in responses), "Some requests failed unexpectedly"
