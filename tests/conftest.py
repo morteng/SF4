@@ -257,10 +257,11 @@ def get_all_tags():
 @pytest.fixture(scope='function')
 def mock_rate_limiter(monkeypatch):
     """Mock the rate limiter to always allow requests."""
-    def mock_check():
+    def mock_check(*args, **kwargs):
         return True
     monkeypatch.setattr("flask_limiter.util.get_remote_address", lambda: "127.0.0.1")
     monkeypatch.setattr("flask_limiter.Limiter.check", mock_check)
+    monkeypatch.setattr("flask_limiter.Limiter.limit", lambda *args, **kwargs: lambda f: f)
 
 @pytest.fixture(autouse=True)
 def reset_rate_limiter(app):
@@ -272,10 +273,13 @@ def reset_rate_limiter(app):
 @pytest.fixture(scope='function')
 def logged_in_client(client, test_user, app, db_session, mock_rate_limiter):
     """Log in as a regular user."""
-    # Ensure mock_rate_limiter is used
+    # Activate the mock rate limiter
     mock_rate_limiter
     
     with client.application.test_request_context():
+        # Reset any existing rate limits
+        if hasattr(app, 'extensions') and 'limiter' in app.extensions:
+            app.extensions['limiter'].reset()
         # Ensure the test_user is bound to the current session
         db_session.add(test_user)
         db_session.commit()
