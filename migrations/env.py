@@ -18,10 +18,15 @@ logger = logging.getLogger('alembic.env')
 def get_engine():
     try:
         # this works with Flask-SQLAlchemy<3 and Alchemical
-        return current_app.extensions['migrate'].db.get_engine()
+        engine = current_app.extensions['migrate'].db.get_engine()
     except (TypeError, AttributeError):
         # this works with Flask-SQLAlchemy>=3
-        return current_app.extensions['migrate'].db.engine
+        engine = current_app.extensions['migrate'].db.engine
+    
+    # Verify the engine is valid
+    if engine is None:
+        raise RuntimeError("Database engine is not properly configured")
+    return engine
 
 
 def get_engine_url():
@@ -46,9 +51,12 @@ target_db = current_app.extensions['migrate'].db
 
 
 def get_metadata():
-    if hasattr(target_db, 'metadatas'):
-        return target_db.metadatas[None]
-    return target_db.metadata
+    try:
+        if hasattr(target_db, 'metadatas'):
+            return target_db.metadatas[None]
+        return target_db.metadata
+    except AttributeError as e:
+        raise RuntimeError(f"Failed to get database metadata: {str(e)}")
 
 
 def run_migrations_offline():
@@ -77,8 +85,17 @@ def run_migrations_online():
 
     In this scenario we need to create an Engine
     and associate a connection with the context.
-
     """
+    # Verify the alembic_version table exists and is valid
+    try:
+        connectable = get_engine()
+        with connectable.connect() as connection:
+            result = connection.execute("SELECT version_num FROM alembic_version")
+            current_rev = result.scalar()
+            if current_rev:
+                logger.info(f"Current database revision: {current_rev}")
+    except Exception as e:
+        logger.warning(f"Could not verify alembic_version table: {str(e)}")
 
     # this callback is used to prevent an auto-migration from being generated
     # when there are no changes to the schema
