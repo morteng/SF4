@@ -531,9 +531,16 @@ def test_stipend_delete_operation(app, form_data, test_db):
         model_data = form.data.copy()
         model_data['tags'] = [Tag.query.get(tag_id) for tag_id in form.tags.data]
             
+        # Convert string dates to datetime objects
+        from datetime import datetime
+        if 'application_deadline' in model_data:
+            model_data['application_deadline'] = datetime.strptime(
+                model_data['application_deadline'], '%Y-%m-%d %H:%M:%S'
+            )
+    
         # Filter out non-model fields
         model_data = filter_model_fields(model_data, Stipend)
-            
+    
         # Create stipend instance
         stipend = Stipend(**model_data)
         
