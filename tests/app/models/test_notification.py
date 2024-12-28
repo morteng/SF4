@@ -17,7 +17,7 @@ def test_notification(db_session):
     
     notification = Notification(
         message='Test notification',
-        type=NotificationType.INFO,
+        type=NotificationType.SYSTEM,
         user_id=user.id,
         priority=NotificationPriority.MEDIUM
     )
