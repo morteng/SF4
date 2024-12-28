@@ -27,10 +27,11 @@ limiter = Limiter(
 )
 
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")
+@limiter.limit("10 per minute")  # Matches project rate limiting specs
 @login_required
 @admin_required
 def create():
+    """Create a new user with proper validation and audit logging"""
     """Create a new user with audit logging and validation"""
     form = UserForm()
     notification_count = get_notification_count(current_user.id)
@@ -163,10 +164,11 @@ def create():
                             notification_count=notification_count), 400
 
 @admin_user_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")
+@limiter.limit("10 per minute")  # Matches project rate limiting specs
 @login_required
 @admin_required
 def edit(id):
+    """Edit user details with proper validation and audit logging"""
     """Edit user with audit logging and validation"""
     """Edit user details with proper validation and audit logging"""
     try:
@@ -257,23 +259,29 @@ def delete(id):
         return redirect(url_for('admin.user.index')), 400
         
     try:
-        delete_user(user)
-        
-        # Create audit log
-        AuditLog.create(
-            user_id=current_user.id,
-            action='delete_user',
-            object_type='User',
-            object_id=user.id,
-            details=f'Deleted user {user.username}',
-            ip_address=request.remote_addr
-        )
-        
-        # Audit log
-        logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.utcnow()}")
-        
-        flash_message(FlashMessages.DELETE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
-        return redirect(url_for('admin.user.index')), 200
+        try:
+            delete_user(user)
+            
+            # Create audit log
+            AuditLog.create(
+                user_id=current_user.id,
+                action='delete_user',
+                object_type='User',
+                object_id=user.id,
+                details=f'Deleted user {user.username}',
+                ip_address=request.remote_addr
+            )
+            
+            # Audit log
+            logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.utcnow()}")
+            
+            flash_message(FlashMessages.DELETE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
+            return redirect(url_for('admin.user.index'))
+        except Exception as e:
+            db.session.rollback()
+            logging.error(f"Failed to delete user {id}: {e}")
+            flash_message(f"{FlashMessages.DELETE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
+            return redirect(url_for('admin.user.index'))
         
     except ValueError as e:
         flash_message(str(e), FlashCategory.ERROR.value)
