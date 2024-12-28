@@ -11,6 +11,10 @@ from wtforms import (
     SubmitField, SelectField, PasswordField, SelectMultipleField,
     HiddenField
 )
+from wtforms.validators import (
+    DataRequired, Length, Optional, ValidationError, 
+    URL, Email, Regexp
+)
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -69,6 +73,33 @@ class StipendForm(FlaskForm):
             'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)'
         }
     )
+
+    def validate_application_deadline(self, field):
+        # Skip validation if the field is empty or invalid (CustomDateTimeField handles this)
+        if not field.data or field.errors:
+            print(f"Field data: {field.data}, Errors: {field.errors}")  # Debugging
+            return
+        
+        # If we somehow still have a string, convert it to datetime
+        if isinstance(field.data, str):
+            try:
+                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise ValidationError('Invalid date format')
+    
+        # Ensure datetime is timezone-aware
+        now = datetime.now(pytz.UTC)
+        if field.data.tzinfo is None:
+            field.data = pytz.UTC.localize(field.data)
+        
+        # Validate future date
+        if field.data < now:
+            raise ValidationError('Application deadline must be a future date')
+        
+        # Validate not too far in future
+        max_future = now.replace(year=now.year + 5)
+        if field.data > max_future:
+            raise ValidationError('Application deadline cannot be more than 5 years in the future')
     organization_id = SelectField('Organization', coerce=int, validators=[
         DataRequired(message="Organization is required.")
     ])
