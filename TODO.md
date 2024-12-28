@@ -13,6 +13,7 @@
   - HTMX integration
   - Rate limiting
 - [x] Fix datetime.utcnow() deprecation warnings
+- [ ] Ensure consistent timezone handling across all datetime operations
 - [x] Complete CRUD test coverage
 - [x] Add audit logging for all operations
 - [x] Fix notification.user_id constraint issues

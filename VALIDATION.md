@@ -12,10 +12,11 @@
   - User ID (0 for system events)
   - Action type (create/update/delete/system_event)
   - Object type and ID
-  - Timestamp (UTC)
+  - Timestamp (timezone-aware UTC)
   - IP address (required for all operations)
   - Operation details
   - Before/after state for updates
+- Ensure consistent timezone handling in audit logs
 - Verify audit logs create corresponding notifications
 - Check logs contain:
   - user_id, action, object_type, object_id
