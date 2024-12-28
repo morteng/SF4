@@ -419,20 +419,19 @@ def test_profile_form_rate_limiting(client, setup_database):
         # Submit profile form multiple times to verify rate limiting is disabled
         responses = []
         for i in range(20):  # Test up to the limit
-            # Only refresh CSRF token every 5 requests
-            if i > 0 and i % 5 == 0:
-                # Get a new CSRF token from the profile edit page
-                get_response = client.get(url_for('user.edit_profile'))
-                assert get_response.status_code == 200, f"Failed to refresh CSRF token after {i} requests"
-                soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
-                csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
-                
             response = client.post(url_for('user.edit_profile'), data={
                 'username': 'testuser',
                 'email': 'test@example.com',
                 'csrf_token': csrf_token
             }, follow_redirects=True)
             responses.append(response.status_code)
+            
+            # Refresh CSRF token every 5 requests
+            if i > 0 and i % 5 == 0:
+                get_response = client.get(url_for('user.edit_profile'))
+                assert get_response.status_code == 200, f"Failed to refresh CSRF token after {i} requests"
+                soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+                csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
             
             # Add small delay between requests
             time.sleep(0.1)

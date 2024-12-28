@@ -23,7 +23,7 @@ def profile():
 
 @user_bp.route('/profile/edit', methods=['GET', 'POST'])
 @login_required
-@limiter.limit("20 per minute")  # Increased rate limit
+@limiter.limit(lambda: "20 per minute" if current_app.config.get('RATELIMIT_ENABLED', True) else None)
 def edit_profile():
     form = ProfileForm(original_username=current_user.username, original_email=current_user.email)
     
