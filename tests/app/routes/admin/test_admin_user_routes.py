@@ -190,12 +190,9 @@ def extract_csrf_token(response_data):
     return csrf_input['value'] if csrf_input else None
 
 def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
-    # Mock Flask-Limiter to prevent interference
-    with patch('flask_limiter.Limiter') as mock_limiter:
-        # Create a mock limiter that won't interfere with requests
-        mock_limiter_instance = MagicMock()
-        mock_limiter_instance.enabled = False
-        mock_limiter.return_value = mock_limiter_instance
+    # Mock the rate limiter decorator
+    with patch('app.routes.admin.user_routes.limiter.limit') as mock_limit:
+        mock_limit.return_value = lambda f: f  # Bypass rate limiting
 
         # Use proper context management
         with app.app_context():

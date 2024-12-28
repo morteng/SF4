@@ -36,7 +36,7 @@ delete_limit = "3/minute"
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 @admin_required
-@limiter.limit("10/minute")  # Explicit rate limit
+@limiter.limit("10 per minute", methods=["POST"])  # Only limit POST requests
 def create():
     """Create a new user with audit logging and notifications"""
     """Create a new user with proper validation and audit logging"""
