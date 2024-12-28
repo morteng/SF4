@@ -386,12 +386,13 @@ def test_audit_log_table_exists(client):
 def test_profile_form_rate_limiting(client, setup_database):
     """Test rate limiting on profile form submissions"""
     # Explicitly set rate limit for the test
-    current_app.config['RATELIMIT_DEFAULT'] = "20 per minute"
+    current_app.config['RATELIMIT_PROFILE_UPDATE'] = "20 per minute"
     
     # Reset rate limiter storage
     limiter = current_app.extensions.get('limiter')
     if limiter and limiter._storage:
         limiter._storage.reset()
+        limiter._storage.clear()
     
     # Create test user
     password_hash = generate_password_hash("password123")
@@ -426,7 +427,7 @@ def test_profile_form_rate_limiting(client, setup_database):
 
         # Submit profile form multiple times to trigger rate limiting
         responses = []
-        for i in range(21):  # Test with higher limit
+        for i in range(20):  # Test up to the limit
             # Refresh CSRF token every 5 requests with error handling
             if i > 0 and i % 5 == 0:
                 # Add delay to avoid rate limiting
