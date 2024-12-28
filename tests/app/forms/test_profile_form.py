@@ -8,7 +8,9 @@ from app.models.user import User
 from tests.conftest import extract_csrf_token
 import logging
 
-def test_profile_form_valid(logged_in_client, db_session, test_user):
+def test_profile_form_valid(logged_in_client, db_session, test_user, app):
+    """Test valid profile form submission with CSRF protection"""
+    with app.app_context():
     """Test valid profile form submission with CSRF protection"""
     with logged_in_client.application.app_context():
         # Get CSRF token from edit profile page

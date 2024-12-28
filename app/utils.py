@@ -295,6 +295,42 @@ def format_error_message(field: Any, error: Union[str, Exception]) -> str:
     return f"{field.name if hasattr(field, 'name') else str(field)}: {error}"
 
 def log_audit(user_id, action, object_type=None, object_id=None, before=None, after=None):
+    """Create an audit log entry with enhanced error handling and logging"""
+    logger = logging.getLogger(__name__)
+    try:
+        # Validate required fields
+        if not user_id:
+            logger.error("Missing user_id in audit log")
+            raise ValueError("user_id is required")
+        if not action:
+            logger.error("Missing action in audit log")
+            raise ValueError("action is required")
+        
+        # Create audit log
+        audit_log = AuditLog(
+            user_id=user_id,
+            action=action,
+            object_type=object_type,
+            object_id=object_id,
+            details_before=json.dumps(before) if before else None,
+            details_after=json.dumps(after) if after else None,
+            ip_address=request.remote_addr if request else None,
+            http_method=request.method if request else None,
+            endpoint=request.endpoint if request else None
+        )
+        
+        # Add and commit within a transaction
+        with db_session_scope() as session:
+            session.add(audit_log)
+            session.commit()
+            
+        logger.info(f"Audit log created: {action} by user {user_id}")
+        return audit_log
+        
+    except Exception as e:
+        logger.error(f"Failed to create audit log: {str(e)}", exc_info=True)
+        db.session.rollback()
+        raise
     """Create an audit log entry with enhanced error handling"""
     try:
         # Validate required fields
