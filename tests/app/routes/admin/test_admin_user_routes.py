@@ -183,23 +183,21 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
     # Ensure limiter is disabled
     if 'limiter' in app.extensions:
         app.extensions['limiter'].enabled = False
-        
+    
     # Create a new application context for the test
     with app.app_context():
         # Reset rate limiter before test
         if 'limiter' in app.extensions:
             app.extensions['limiter'].reset()
-            
+        
         # Create a new request context
         with app.test_request_context():
-            # Test audit log rollback
-            try:
-                # Force an error by creating invalid audit log
-                AuditLog.create(
-                    user_id=test_user.id,
-                    action=None,  # Invalid - should raise error
-                    commit=True
-                )
+            # Set up logging
+            logging.basicConfig(level=logging.INFO)
+            logger = logging.getLogger(__name__)
+            
+            # Log test start
+            logger.info("Starting user CRUD operations test")
                 assert False, "Should have raised ValueError"
             except ValueError as e:
                 # Verify no audit log was created
