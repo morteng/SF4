@@ -1,6 +1,7 @@
 import pytest
 from datetime import datetime, timedelta
 from flask_wtf.csrf import generate_csrf
+from app import create_app
 from app.forms.admin_forms import StipendForm
 from app.models.organization import Organization
 from app.models.tag import Tag
@@ -9,6 +10,19 @@ from app.models.audit_log import AuditLog
 from app.extensions import db
 from app.forms.fields import CustomDateTimeField
 from wtforms import Form, StringField
+
+@pytest.fixture
+def app():
+    app = create_app('testing')
+    with app.app_context():
+        db.create_all()
+        yield app
+        db.session.remove()
+        db.drop_all()
+
+@pytest.fixture
+def db(app):
+    return db
 
 @pytest.fixture
 def form_data(app):
