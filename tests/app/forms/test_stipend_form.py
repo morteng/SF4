@@ -161,9 +161,13 @@ def test_time_component_validation(app, form_data):
     ]
     
     with app.test_request_context():
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+            
         for time in invalid_times:
             form_data['application_deadline'] = time
             form = StipendForm(data=form_data)
+            form.tags.choices = tag_choices  # Set the choices
             assert form.validate() is False
             assert 'application_deadline' in form.errors
 
