@@ -40,16 +40,52 @@ class AuditLog(db.Model):
             if object_type and not object_id:
                 raise ValueError("object_id is required when object_type is provided")
                 
-            # Serialize complex data
-            if details_before and not isinstance(details_before, (dict, str)):
-                details_before = str(details_before)
-            if details_after and not isinstance(details_after, (dict, str)):
-                details_after = str(details_after)
-        """Create audit log with JSON serialization and validation"""
-        if details_before and not isinstance(details_before, (dict, str)):
-            raise ValueError("details_before must be dict or JSON string")
-        if details_after and not isinstance(details_after, (dict, str)):
-            raise ValueError("details_after must be dict or JSON string")
+            # Validate and serialize complex data
+            if details_before:
+                if not isinstance(details_before, (dict, str)):
+                    raise ValueError("details_before must be dict or JSON string")
+                if isinstance(details_before, dict):
+                    details_before = json.dumps(details_before)
+                    
+            if details_after:
+                if not isinstance(details_after, (dict, str)):
+                    raise ValueError("details_after must be dict or JSON string")
+                if isinstance(details_after, dict):
+                    details_after = json.dumps(details_after)
+                    
+            # Create audit log
+            log = AuditLog(
+                user_id=user_id,
+                action=action,
+                details=details,
+                object_type=object_type or 'User',
+                object_id=object_id,
+                details_before=details_before,
+                details_after=details_after,
+                ip_address=ip_address,
+                http_method=http_method,
+                endpoint=endpoint,
+                timestamp=datetime.now(timezone.utc)
+            )
+            db.session.add(log)
+            if commit:
+                db.session.commit()
+            
+            # Create notification if this isn't being called from Notification.create()
+            if object_type != 'Notification':
+                Notification = get_notification_model()
+                Notification.create(
+                    type=NotificationType.AUDIT_LOG,
+                    message=f"{action.capitalize()} operation on {object_type} {object_id}",
+                    related_object=log,
+                    user_id=user_id
+                )
+            
+            return log
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error creating audit log: {str(e)}")
+            raise
         
         # Serialize dictionaries to JSON
         if isinstance(details_before, dict):
