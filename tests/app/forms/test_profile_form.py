@@ -8,55 +8,24 @@ import logging
 
 def test_profile_form_valid(logged_in_client, db_session, test_user):
     """Test valid profile form submission with CSRF protection"""
-    with logged_in_client.application.test_request_context('/user/profile/edit'):
-        # Test form submission
-        response = logged_in_client.post('/user/profile/edit', data={
-            'username': 'newusername',
-            'email': 'newemail@example.com',
-            'csrf_token': generate_csrf()
-        })
-        assert response.status_code == 302  # Should redirect
-
-        # Use a session transaction to maintain the session
-        with logged_in_client.session_transaction() as sess:
-            # Create the form with the test user's current credentials
-            form = ProfileForm(
-                original_username=test_user.username,
-                original_email=test_user.email
-            )
-
-            # Test the form with valid CSRF token
-            form.username.data = "newusername"
-            form.email.data = "newemail@example.com"
-
-            # Add comprehensive validation testing
-            if not form.validate():
-                logging.error("Form validation errors: %s", form.errors)
-                assert False, f"Form validation failed: {form.errors}"
-
-            assert form.validate() == True
-            assert form.csrf_token.validate(form) == True
-
-            # Store the form data in the session for the POST request
-            sess['form_data'] = {
-                'username': 'newusername',
-                'email': 'newemail@example.com',
-                'csrf_token': form.csrf_token.data
-            }
-
-        # Test form submission via POST using the same session
-        response = logged_in_client.post(url_for('user.edit_profile'), 
-            data=sess['form_data'],
-            follow_redirects=True)
-
-        # Add detailed error handling and debugging
-        if response.status_code != 200:
-            logging.error("Response status: %s", response.status_code)
-            logging.error("Response data: %s", response.data)
-            assert False, f"Unexpected response status: {response.status_code}"
-
-        assert response.status_code == 200
-        assert b"Profile updated successfully" in response.data
+    # Get CSRF token from login page
+    login_response = logged_in_client.get(url_for('public.login'))
+    csrf_token = extract_csrf_token(login_response.data)
+    
+    # Test form submission
+    response = logged_in_client.post(url_for('user.edit_profile'), data={
+        'username': 'newusername',
+        'email': 'newemail@example.com',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+    
+    assert response.status_code == 200
+    assert b"Profile updated successfully" in response.data
+    
+    # Verify the user was actually updated
+    updated_user = db_session.query(User).filter_by(id=test_user.id).first()
+    assert updated_user.username == 'newusername'
+    assert updated_user.email == 'newemail@example.com'
 
 def test_profile_form_invalid_csrf(logged_in_client):
     """Test profile form submission with invalid CSRF token"""
