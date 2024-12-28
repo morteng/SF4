@@ -116,9 +116,9 @@ def create():
                 return render_template('admin/users/create.html', 
                                     form=form,
                                     notification_count=notification_count), 500
-    else:
-        # Handle form validation errors
-        error_messages = []
+
+    # Handle form validation errors
+    error_messages = []
         for field_name, errors in form.errors.items():
             field = getattr(form, field_name)
             for error in errors:
