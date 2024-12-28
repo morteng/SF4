@@ -385,13 +385,13 @@ def test_audit_log_table_exists(client):
 
 def test_profile_form_rate_limiting(client, setup_database):
     """Test rate limiting on profile form submissions"""
-    # Increase rate limit for testing
+    # Explicitly set rate limit for the test
     current_app.config['RATELIMIT_DEFAULT'] = "20 per minute"
     
     # Reset rate limiter storage
     limiter = current_app.extensions.get('limiter')
     if limiter and limiter._storage:
-        limiter.reset()
+        limiter._storage.reset()
     
     # Create test user
     password_hash = generate_password_hash("password123")

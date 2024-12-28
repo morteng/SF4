@@ -21,10 +21,10 @@ class Config(object):
                 raise ValueError(f"{var} environment variable is required.")
     # Add these lines
     RATELIMIT_STORAGE_URI = 'memory://'  # For development, use Redis in production
-    RATELIMIT_STRATEGY = 'fixed-window'
+    RATELIMIT_STRATEGY = 'fixed-window-elastic-expiry'  # More forgiving strategy
     RATELIMIT_DEFAULT = "200 per day;50 per hour"
-    RATELIMIT_USER_MANAGEMENT = "10 per minute"  # Rate limit for user management endpoints
-    RATELIMIT_PROFILE_UPDATE = "10 per minute"  # Specific rate limit for profile updates
+    RATELIMIT_USER_MANAGEMENT = "20 per minute"  # Increased rate limit for user management
+    RATELIMIT_PROFILE_UPDATE = "20 per minute"  # Increased rate limit for profile updates
     RATELIMIT_ENABLED = True  # Enable rate limiting
     RATELIMIT_HEADERS_ENABLED = True
     RATELIMIT_IN_MEMORY_FALLBACK_ENABLED = True
