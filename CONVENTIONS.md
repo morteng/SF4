@@ -1,14 +1,18 @@
 ## Coding Conventions
 
-### Notification Handling
-- Use NotificationType enum values
-- Include user_id and related_object
-- Use proper priority levels
-- Validate message length (max 255 chars)
+### Error Handling
+- Use try/except blocks for database operations
+- Always rollback on errors
+- Log errors with context
+- Use specific exception types
 
-### Audit Logging
-- Required for all CRUD operations
-- Must include: user_id, action, object_type, object_id
-- Timestamps must be UTC
-- Handle errors gracefully
+### Context Management
+- Use context managers for database sessions
+- Ensure proper cleanup of Flask contexts
+- Use `with` statements for resource management
+
+### Testing
+- Test both success and error cases
+- Verify database state after operations
+- Use fixtures for test setup/teardown
 

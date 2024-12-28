@@ -1,16 +1,12 @@
 # TODO List
+
 ## High Priority
-- [ ] Improve error handling for audit logs
-- [ ] Add test coverage for audit logging rollback
-- [ ] Implement proper error handling for notification system
+- [ ] Add context manager for database operations
+- [ ] Improve test coverage for error cases
+- [ ] Add logging for critical operations
 
 ## Completed
-- [x] Fix form validation for required fields
-- [x] Add audit log viewing interface
-- [x] Implement proper bot scaffolding
-- [x] Add test coverage for timezone handling
-- [x] Update datetime handling to use timezone-aware objects
-- [x] Implement audit logging for delete operations
-- [x] Add notification system test coverage
-- [x] Fix rate limiting issues in tests
+- [x] Fix audit log error handling
+- [x] Add notification error handling
+- [x] Fix profile form test
 
