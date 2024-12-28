@@ -31,6 +31,8 @@ class AuditLog(db.Model):
               details_before=None, details_after=None, ip_address=None,
               http_method=None, endpoint=None, commit=True, notify=True):
         """Enhanced audit logging with better error handling and validation"""
+        logger = logging.getLogger(__name__)
+        
         try:
             # Validate required fields
             if not action:
@@ -50,10 +52,6 @@ class AuditLog(db.Model):
             if object_type and len(object_type) > 50:
                 raise ValueError("Object type exceeds maximum length of 50 characters")
             
-            # Ensure we're in an application context
-            from flask import current_app
-            if not current_app:
-                raise RuntimeError("Application context required")
             # Convert dictionaries to JSON strings
             if isinstance(details_before, dict):
                 details_before = json.dumps(details_before)
@@ -74,14 +72,18 @@ class AuditLog(db.Model):
                 endpoint=endpoint
             )
             
-            db.session.add(log)
-            if commit:
-                db.session.commit()
-                
+            # Use context manager for session management
+            with db.session.begin_nested():
+                db.session.add(log)
+                if commit:
+                    db.session.commit()
+                    
+            logger.info(f"Created audit log: {action} by user {user_id}")
             return log
+            
         except Exception as e:
             db.session.rollback()
-            current_app.logger.error(f"Error creating audit log: {str(e)}")
+            logger.error(f"Error creating audit log: {str(e)}", exc_info=True)
             raise ValueError("Failed to create audit log") from e
             
         # Validate and serialize complex data

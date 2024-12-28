@@ -65,14 +65,50 @@ def test_notification_to_dict(test_notification):
 def test_audit_log_rollback(db_session):
     """Test audit log rollback on error"""
     from app.models.audit_log import AuditLog
-    from sqlalchemy.exc import IntegrityError
     
-    # Create invalid audit log (missing required action)
-    with pytest.raises(ValueError):
+    # Test missing required action
+    with pytest.raises(ValueError) as exc_info:
         AuditLog.create(user_id=1, action=None)
+    assert "Action is required" in str(exc_info.value)
     
-    # Verify no audit log was created
-    assert db_session.query(AuditLog).count() == 0
+    # Test invalid action type
+    with pytest.raises(TypeError) as exc_info:
+        AuditLog.create(user_id=1, action=123)
+    assert "Action must be a string" in str(exc_info.value)
+    
+    # Test missing object_id when object_type is provided
+    with pytest.raises(ValueError) as exc_info:
+        AuditLog.create(user_id=1, action="test", object_type="Test")
+    assert "object_id is required when object_type is provided" in str(exc_info.value)
+    
+    # Test missing object_type when object_id is provided
+    with pytest.raises(ValueError) as exc_info:
+        AuditLog.create(user_id=1, action="test", object_id=1)
+    assert "object_type is required when object_id is provided" in str(exc_info.value)
+    
+    # Test action length validation
+    with pytest.raises(ValueError) as exc_info:
+        AuditLog.create(user_id=1, action="a" * 101)
+    assert "Action exceeds maximum length of 100 characters" in str(exc_info.value)
+    
+    # Test object_type length validation
+    with pytest.raises(ValueError) as exc_info:
+        AuditLog.create(user_id=1, action="test", object_type="a" * 51, object_id=1)
+    assert "Object type exceeds maximum length of 50 characters" in str(exc_info.value)
+    
+    # Test successful creation
+    log = AuditLog.create(
+        user_id=1,
+        action="test_action",
+        object_type="Test",
+        object_id=1,
+        details="Test details"
+    )
+    assert log is not None
+    assert db_session.query(AuditLog).count() == 1
+    
+    # Verify no audit logs were created from failed attempts
+    assert db_session.query(AuditLog).count() == 1
 
 def test_audit_log_error_handling(db_session):
     """Test audit log error handling"""
