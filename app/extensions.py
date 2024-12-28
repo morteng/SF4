@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_migrate import Migrate
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -9,7 +9,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 db = SQLAlchemy()
 login_manager = LoginManager()
 csrf = CSRFProtect()
-csrf_token = csrf.generate_csrf  # Make csrf_token available as a callable
+csrf_token = generate_csrf  # Use the correct function
 migrate = Migrate()
 limiter = Limiter(
     key_func=get_remote_address,
