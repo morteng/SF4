@@ -390,7 +390,7 @@ def test_stipend_update_operation(app, form_data, test_db):
             'organization_id': form.organization_id.data,
             'open_for_applications': form.open_for_applications.data,
             'tags': [Tag.query.get(tag_id) for tag_id in form.tags.data]
-        })
+        }, user_id=1)  # Provide a valid user_id for testing
         
         # Update stipend
         updated_data = form_data.copy()

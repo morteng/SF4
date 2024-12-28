@@ -21,11 +21,10 @@ class Stipend(db.Model):
     __mapper_args__ = {"confirm_deleted_rows": False}
 
     @staticmethod
-    def create(data):
+    def create(data, user_id=None):
         """Create a new stipend with validation and audit logging"""
         from app.models.audit_log import AuditLog
-        from flask import request
-        from flask_login import current_user
+        from flask import request, current_app
         
         # Create stipend
         stipend = Stipend(**data)
@@ -33,17 +32,22 @@ class Stipend(db.Model):
         db.session.commit()
         
         # Create audit log
-        AuditLog.create(
-            user_id=current_user.id if current_user and current_user.is_authenticated else 0,
-            action='create_stipend',
-            object_type='Stipend',
-            object_id=stipend.id,
-            details_before=None,
-            details_after=stipend.to_dict(),
-            ip_address=request.remote_addr if request else '127.0.0.1',
-            http_method='POST',
-            endpoint='admin.stipend.create'
-        )
+        try:
+            AuditLog.create(
+                user_id=user_id if user_id else 0,
+                action='create_stipend',
+                object_type='Stipend',
+                object_id=stipend.id,
+                details_before=None,
+                details_after=stipend.to_dict(),
+                ip_address=request.remote_addr if request else '127.0.0.1',
+                http_method='POST',
+                endpoint='admin.stipend.create'
+            )
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error creating audit log: {str(e)}")
+            raise
         
         return stipend
 
