@@ -43,6 +43,10 @@ def form_data(app):
         db.session.add(tag)
         db.session.commit()
 
+        # Generate CSRF token inside a test request context
+        with app.test_request_context():
+            csrf_token = generate_csrf()
+
         return {
             'name': 'Test Stipend',
             'summary': 'Test summary',
@@ -53,7 +57,7 @@ def form_data(app):
             'organization_id': org.id,
             'tags': [tag.id],  # Add the required tag
             'open_for_applications': True,
-            'csrf_token': generate_csrf()  # Add CSRF token
+            'csrf_token': csrf_token  # Add CSRF token
         }
 
 def test_valid_date_format(app, form_data, test_db):
