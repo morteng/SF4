@@ -1,4 +1,5 @@
 import pytest
+from app.extensions import db
 from datetime import datetime, timedelta
 from flask_wtf.csrf import generate_csrf
 from app import create_app
