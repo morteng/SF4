@@ -1,6 +1,5 @@
 import logging
-from datetime import timezone
-from datetime import datetime
+from datetime import datetime, timezone
 from app.extensions import db
 
 logger = logging.getLogger(__name__)
@@ -18,19 +17,9 @@ class AuditLog(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     @staticmethod
-    def create(user_id, action, details=None, object_type=None, object_id=None, 
+    def create(user_id, action, details=None, object_type=None, object_id=None,
               details_before=None, details_after=None, ip_address=None):
-        """Create audit log entry with before/after state tracking
-        Args:
-            user_id: ID of user performing the action
-            action: Action being performed (create/update/delete)
-            details: Description of the action
-            object_type: Type of object being acted on
-            object_id: ID of object being acted on
-            details_before: State before the action
-            details_after: State after the action
-            ip_address: IP address of the user
-        """
+        """Create audit log entry with before/after state tracking"""
         try:
             from app.models.notification import Notification, NotificationType
             
@@ -68,13 +57,13 @@ class AuditLog(db.Model):
             db.session.commit()
             return log
         except Exception as e:
-            # Log error and create notification
+            db.session.rollback()
             logger.error(f"Error creating audit log: {str(e)}")
             notification = Notification(
                 message=f"Error creating audit log: {str(e)}",
                 type="system",
                 read_status=False,
-                user_id=user_id if user_id else 0  # Use 0 for system notifications
+                user_id=user_id if user_id else 0
             )
             db.session.add(notification)
             db.session.commit()
