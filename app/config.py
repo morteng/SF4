@@ -42,6 +42,8 @@ class TestConfig(Config):
     RATELIMIT_BOT_OPERATIONS = "9999999 per second"
     RATELIMIT_LOGIN = "9999999 per second"  # Add specific login rate limit override
     RATELIMIT_GLOBAL = "9999999 per second"  # Disable global rate limits
+    RATELIMIT_HEADERS_ENABLED = False  # Disable rate limit headers
+    RATELIMIT_IN_MEMORY_FALLBACK_ENABLED = True  # Enable in-memory fallback
 
 class DevelopmentConfig(Config):
     DEBUG = True

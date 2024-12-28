@@ -269,21 +269,12 @@ def get_all_tags():
     with current_app.app_context():  # Ensure application context is set
         return Tag.query.all()
 
-@pytest.fixture(scope='function')
-def mock_rate_limiter(app):
-    """Ensure rate limiting is disabled for tests."""
-    # Disable rate limiting in the app
-    if hasattr(app, 'extensions') and 'limiter' in app.extensions:
-        limiter = app.extensions['limiter']
-        limiter.enabled = False
+@pytest.fixture(autouse=True)
+def reset_rate_limiter(app):
+    """Reset the rate limiter before each test."""
+    limiter = app.extensions.get("limiter")
+    if limiter and hasattr(limiter, 'reset'):
         limiter.reset()
-    
-    yield
-    
-    # Re-enable rate limiting after test
-    if hasattr(app, 'extensions') and 'limiter' in app.extensions:
-        limiter = app.extensions['limiter']
-        limiter.enabled = True
 
 @pytest.fixture(autouse=True)
 def reset_rate_limiter(app):
