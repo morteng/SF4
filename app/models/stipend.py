@@ -76,50 +76,79 @@ class Stipend(db.Model):
         return stipend
 
     def update(self, data, user_id=None):
-        """Update stipend fields with audit logging"""
+        """Update stipend fields with audit logging and validation"""
         from app.models.audit_log import AuditLog
-        from flask import request
+        from flask import request, current_app
         from app.models.tag import Tag
-        
-        # Validate required fields
-        required_fields = ['name', 'summary', 'description', 'homepage_url', 
-                          'application_procedure', 'eligibility_criteria',
-                          'application_deadline', 'organization_id']
-        for field in required_fields:
-            if field not in data:
-                raise ValueError(f"Missing required field: {field}")
         
         # Get current state before update
         before = self.to_dict()
         
-        # Update fields
-        for key, value in data.items():
-            if key == 'tags':
-                # Convert tag IDs to Tag instances if necessary
+        try:
+            # Update fields if they exist in data
+            if 'name' in data:
+                self.name = data['name']
+            if 'summary' in data:
+                self.summary = data['summary']
+            if 'description' in data:
+                self.description = data['description']
+            if 'homepage_url' in data:
+                self.homepage_url = data['homepage_url']
+            if 'application_procedure' in data:
+                self.application_procedure = data['application_procedure']
+            if 'eligibility_criteria' in data:
+                self.eligibility_criteria = data['eligibility_criteria']
+            if 'application_deadline' in data:
+                # Validate application deadline
+                if isinstance(data['application_deadline'], str):
+                    try:
+                        data['application_deadline'] = datetime.strptime(
+                            data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+                    except ValueError:
+                        raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS")
+                
+                now = datetime.utcnow()
+                if data['application_deadline'] < now:
+                    raise ValueError("Application deadline must be a future date")
+                if (data['application_deadline'] - now).days > 365 * 5:
+                    raise ValueError("Application deadline cannot be more than 5 years in the future")
+                
+                self.application_deadline = data['application_deadline']
+            if 'organization_id' in data:
+                org = Organization.query.get(data['organization_id'])
+                if not org:
+                    raise ValueError("Invalid organization ID")
+                self.organization_id = data['organization_id']
+            if 'open_for_applications' in data:
+                self.open_for_applications = data['open_for_applications']
+            if 'tags' in data:
                 self.tags = [
                     Tag.query.get(tag_id) if isinstance(tag_id, int) else tag_id
-                    for tag_id in value
+                    for tag_id in data['tags']
                 ]
-            else:
-                setattr(self, key, value)
-        
-        # Commit changes
-        db.session.commit()
-        
-        # Create audit log
-        AuditLog.create(
-            user_id=user_id if user_id is not None else 0,
-            action='update_stipend',
-            object_type='Stipend',
-            object_id=self.id,
-            details_before=before,
-            details_after=self.to_dict(),
-            ip_address=request.remote_addr if request else '127.0.0.1',
-            http_method='POST',
-            endpoint='admin.stipend.edit'
-        )
-        
-        return self
+            
+            # Commit changes
+            db.session.commit()
+            
+            # Create audit log
+            AuditLog.create(
+                user_id=user_id if user_id is not None else 0,
+                action='update_stipend',
+                object_type='Stipend',
+                object_id=self.id,
+                details_before=before,
+                details_after=self.to_dict(),
+                ip_address=request.remote_addr if request else '127.0.0.1',
+                http_method='POST',
+                endpoint='admin.stipend.edit'
+            )
+            
+            return self
+            
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error updating stipend {self.id}: {str(e)}")
+            raise
 
     @staticmethod
     def delete(stipend_id):
