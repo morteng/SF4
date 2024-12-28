@@ -48,6 +48,71 @@ def create():
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')
     
+    # Initialize form choices
+    organizations = Organization.query.order_by(Organization.name).all()
+    tags = Tag.query.order_by(Tag.name).all()
+    form.organization_id.choices = [(org.id, org.name) for org in organizations]
+    form.tags.choices = [(tag.id, tag.name) for tag in tags]
+    
+    if form.validate_on_submit():
+        try:
+            # Create stipend
+            stipend = Stipend(
+                name=form.name.data,
+                summary=form.summary.data,
+                description=form.description.data,
+                homepage_url=form.homepage_url.data,
+                application_procedure=form.application_procedure.data,
+                eligibility_criteria=form.eligibility_criteria.data,
+                application_deadline=form.application_deadline.data,
+                organization_id=form.organization_id.data,
+                open_for_applications=form.open_for_applications.data
+            )
+            
+            # Add tags
+            for tag_id in form.tags.data:
+                tag = Tag.query.get(tag_id)
+                if tag:
+                    stipend.tags.append(tag)
+            
+            db.session.add(stipend)
+            db.session.commit()
+            
+            # Create audit log
+            current_app.admin_bp.log_audit(
+                action='create_stipend',
+                object_type='Stipend',
+                object_id=stipend.id,
+                details=f"Created stipend: {stipend.name}"
+            )
+            
+            # Create notification
+            Notification.create(
+                type='STIPEND_CREATED',
+                message=f'New stipend created: {stipend.name}',
+                related_object=stipend
+            )
+            
+            flash_message(FlashMessages.CREATE_STIPEND_SUCCESS, FlashCategory.SUCCESS)
+            
+            if is_htmx:
+                return render_template('admin/stipends/_stipend_row.html', stipend=stipend), 200, {
+                    'HX-Trigger': 'stipendCreated'
+                }
+            return redirect(url_for('admin.stipend.index'))
+            
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error creating stipend: {str(e)}")
+            flash_message(f"{FlashMessages.CREATE_STIPEND_ERROR}: {str(e)}", FlashCategory.ERROR)
+            if is_htmx:
+                return render_template('admin/stipends/_form.html', form=form), 400
+    
+    return render_template('admin/stipends/create.html', form=form)
+    """Create new stipend with HTMX support and audit logging"""
+    form = StipendForm()
+    is_htmx = request.headers.get('HX-Request')
+    
     if form.validate_on_submit():
         try:
             # Create stipend

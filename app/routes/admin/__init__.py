@@ -24,6 +24,27 @@ def create_admin_blueprint():
     """Factory function to create a new admin blueprint instance with security and logging"""
     admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
+    def log_audit(action, object_type, object_id=None, details=None):
+        """Helper function to log admin actions"""
+        if current_user.is_authenticated:
+            try:
+                audit_log = AuditLog(
+                    user_id=current_user.id,
+                    action=action,
+                    object_type=object_type,
+                    object_id=object_id,
+                    details=details,
+                    ip_address=request.remote_addr
+                )
+                db.session.add(audit_log)
+                db.session.commit()
+            except Exception as e:
+                current_app.logger.error(f"Failed to create audit log: {str(e)}")
+                db.session.rollback()
+
+    # Make audit logging available to routes
+    admin_bp.log_audit = log_audit
+
     def log_audit(action, object_type, object_id, details=None):
         """Helper function to log admin actions"""
         if current_user.is_authenticated:
