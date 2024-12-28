@@ -1,10 +1,15 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import current_user, login_required
+from flask_wtf.csrf import CSRFError
 from app.utils import flash_message
 from app.forms.user_forms import ProfileForm
 from app.models.user import User  # Import the User model
 from app.extensions import db  # Import the db from extensions
 from app.constants import FlashMessages, FlashCategory
+
+@user_bp.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    return FlashMessages.CSRF_INVALID.value, 400
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
