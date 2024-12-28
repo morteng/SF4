@@ -133,7 +133,7 @@ def register_admin_blueprints(app):
     global _admin_blueprints_registered
     
     # Only register blueprints once
-    if _admin_blueprints_registered:
+    if _admin_blueprints_registered or 'admin' in app.blueprints:
         return
     
     # Create admin blueprint first
