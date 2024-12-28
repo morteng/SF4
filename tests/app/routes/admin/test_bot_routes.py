@@ -2,8 +2,9 @@ import pytest
 import logging
 from flask import url_for
 from app.models.bot import Bot
+from app.models.notification import Notification
+from app.constants import FlashMessages, FlashCategory, NotificationType
 from tests.conftest import extract_csrf_token
-from app.constants import FlashMessages, FlashCategory
 from tests.utils import assert_flash_message, create_bot_data
 
 @pytest.fixture(scope='function')
@@ -16,7 +17,7 @@ def test_bot(db_session, bot_data):
     """Provide a test bot."""
     bot = Bot(**bot_data)
     db_session.add(bot)
-    db_session.commit()
+    test_bot.db.session.commit()
     yield bot
     db_session.delete(bot)
     db_session.commit()
