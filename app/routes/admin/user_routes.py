@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, flash, session
 from werkzeug.security import generate_password_hash
 from app.models.user import User
-from datetime import datetime
+from datetime import datetime, timezone
 from app.models.audit_log import AuditLog
 from app.models.notification import Notification
 from app.services.notification_service import get_notification_count
@@ -34,9 +34,9 @@ update_limit = "10/minute"
 delete_limit = "3/minute"
 
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
-@limiter.limit(create_limit)
 @login_required
 @admin_required
+@limiter.limit("10/minute")  # Explicit rate limit
 def create():
     """Create a new user with audit logging and notifications"""
     """Create a new user with proper validation and audit logging"""
@@ -305,7 +305,7 @@ def delete(id):
         )
             
         # Audit log
-        logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.utcnow()}")
+        logging.info(f"User {current_user.id} deleted user {user.id} at {datetime.now(timezone.utc)}")
         
         flash_message(FlashMessages.DELETE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
         return redirect(url_for('admin.user.index'))

@@ -181,7 +181,6 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
 
 def test_user_crud_operations(logged_in_admin, db_session, test_user):
     """Test full CRUD operations with audit logging and notifications"""
-    """Test full CRUD operations for users with audit logging"""
     # Create unique test data
     unique_id = str(uuid.uuid4())[:8]
     user_data = {
@@ -192,14 +191,15 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
     }
 
     # Perform all operations within the logged_in_admin context
-    with logged_in_admin:
-        # Set up session
-        with logged_in_admin.session_transaction() as session:
-            session['_user_id'] = str(test_user.id)
-            session['_fresh'] = True
+    with logged_in_admin.application.test_request_context():
+        with logged_in_admin:
+            # Set up session
+            with logged_in_admin.session_transaction() as session:
+                session['_user_id'] = str(test_user.id)
+                session['_fresh'] = True
 
-        # Get CSRF token
-        create_response = logged_in_admin.get('/admin/users/create')
+            # Get CSRF token
+            create_response = logged_in_admin.get('/admin/users/create')
         csrf_token = extract_csrf_token(create_response.data)
         assert csrf_token is not None
 
