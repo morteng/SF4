@@ -52,9 +52,6 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 def register_admin_blueprints(app):
-    # Create a new admin blueprint instance
-    admin_bp = create_admin_blueprint()
-    
     # Initialize rate limiter
     limiter = Limiter(
         get_remote_address,
@@ -78,6 +75,9 @@ def register_admin_blueprints(app):
     admin_stipend_bp.before_request(lambda: limiter.limit("100 per hour"))
     admin_tag_bp.before_request(lambda: limiter.limit("100 per hour"))
 
+    # Create a new admin blueprint instance
+    admin_bp = create_admin_blueprint()
+    
     # Register sub-blueprints with unique prefixes
     admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')
     admin_bp.register_blueprint(admin_bot_bp, url_prefix='/bots')
