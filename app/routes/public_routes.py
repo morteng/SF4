@@ -29,8 +29,7 @@ def login():
                 AuditLog.create(
                     user_id=user.id,
                     action='login',
-                    object_type='user',
-                    object_id=user.id,
+                    details='User logged in',
                     ip_address=request.remote_addr,
                     http_method=request.method,
                     endpoint=request.endpoint
