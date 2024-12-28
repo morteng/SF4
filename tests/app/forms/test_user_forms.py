@@ -36,6 +36,7 @@ def client(app):
     return app.test_client()
 
 def test_profile_form_valid(client, setup_database):
+    """Test valid profile form submission"""
     # Increase rate limit for testing
     current_app.config['RATELIMIT_DEFAULT'] = "10 per minute"
     
@@ -319,3 +320,82 @@ def test_login_form_invalid_missing_password(client):
         form.username.data = "testuser"
         assert form.validate() == False
         assert 'This field is required.' in form.password.errors
+def test_profile_form_invalid_csrf_token(client, setup_database):
+    """Test profile form submission with invalid CSRF token"""
+    # Create test user
+    password_hash = generate_password_hash("password123")
+    user = User(username="testuser", email="test@example.com", password_hash=password_hash)
+    db.session.add(user)
+    db.session.commit()
+
+    with client:
+        # Login user
+        login_response = client.post(url_for('public.login'), data={
+            'username': 'testuser',
+            'password': 'password123',
+            'csrf_token': 'invalid_token'
+        })
+        
+        assert login_response.status_code == 400
+        assert b"CSRF token is invalid" in login_response.data
+
+def test_profile_form_rate_limiting(client, setup_database):
+    """Test rate limiting on profile form submissions"""
+    # Create test user
+    password_hash = generate_password_hash("password123")
+    user = User(username="testuser", email="test@example.com", password_hash=password_hash)
+    db.session.add(user)
+    db.session.commit()
+
+    with client:
+        # Login user
+        login_response = client.post(url_for('public.login'), data={
+            'username': 'testuser',
+            'password': 'password123',
+            'csrf_token': generate_csrf_token()
+        })
+        
+        # Submit profile form multiple times
+        for _ in range(11):
+            response = client.post(url_for('user.edit_profile'), data={
+                'username': 'newusername',
+                'email': 'newemail@example.com',
+                'csrf_token': generate_csrf_token()
+            })
+            
+        assert response.status_code == 429
+        assert b"Too Many Requests" in response.data
+
+def test_profile_form_validation_errors(client, setup_database):
+    """Test various validation errors in profile form"""
+    # Create test user
+    password_hash = generate_password_hash("password123")
+    user = User(username="testuser", email="test@example.com", password_hash=password_hash)
+    db.session.add(user)
+    db.session.commit()
+
+    with client:
+        # Login user
+        login_response = client.post(url_for('public.login'), data={
+            'username': 'testuser',
+            'password': 'password123',
+            'csrf_token': generate_csrf_token()
+        })
+        
+        # Test invalid email format
+        response = client.post(url_for('user.edit_profile'), data={
+            'username': 'testuser',
+            'email': 'invalid-email',
+            'csrf_token': generate_csrf_token()
+        })
+        assert response.status_code == 400
+        assert b"Invalid email address" in response.data
+        
+        # Test username too short
+        response = client.post(url_for('user.edit_profile'), data={
+            'username': 'ab',
+            'email': 'test@example.com',
+            'csrf_token': generate_csrf_token()
+        })
+        assert response.status_code == 400
+        assert b"Field must be between 3 and 50 characters long" in response.data

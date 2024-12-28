@@ -306,6 +306,20 @@ def log_audit(user_id, action, object_type=None, object_id=None, before=None, af
             logger.error("Missing action in audit log")
             raise ValueError("action is required")
         
+        # Validate object_type and object_id consistency
+        if object_type and not object_id:
+            raise ValueError("object_id is required when object_type is provided")
+        if object_id and not object_type:
+            raise ValueError("object_type is required when object_id is provided")
+            
+        # Validate action length
+        if len(action) > 100:
+            raise ValueError("Action exceeds maximum length of 100 characters")
+            
+        # Validate object_type length
+        if object_type and len(object_type) > 50:
+            raise ValueError("Object type exceeds maximum length of 50 characters")
+        
         # Create audit log
         audit_log = AuditLog(
             user_id=user_id,
