@@ -66,15 +66,22 @@ def db_session(_db, app):
     with app.app_context():
         connection = _db.engine.connect()
         transaction = connection.begin()
-        # Create a new session using the SQLAlchemy session directly
-        session = _db.session
-        session.bind = connection
+        
+        # Create a new scoped session
+        session = _db.create_scoped_session({
+            'bind': connection,
+            'binds': {}
+        })
+        
+        # Push the session to the app context
+        _db.session = session
         
         yield session
         
+        # Cleanup
         transaction.rollback()
         connection.close()
-        session.close()
+        session.remove()
 
 @pytest.fixture(scope='function')
 def client(app):

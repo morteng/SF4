@@ -602,13 +602,13 @@ def test_get_all_users_sorting(db_session):
     result = get_all_users()
     assert [u.username for u in result.items] == ['user3', 'user2', 'user1']
 
-def test_create_user(logged_in_admin):
+def test_create_user(logged_in_admin, db_session):
     """Test user creation"""
     # Get CSRF token
     create_response = logged_in_admin.get('/admin/users/create')
     csrf_token = extract_csrf_token(create_response.data)
     
-    # Create user
+    # Test valid user creation
     response = logged_in_admin.post('/admin/users/create', data={
         'username': 'testuser',
         'email': 'test@example.com',
@@ -617,12 +617,45 @@ def test_create_user(logged_in_admin):
     }, follow_redirects=True)
     
     assert response.status_code == 200
-    assert b'User created successfully' in response.data
+    assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data
     
     # Verify user exists
     user = User.query.filter_by(username='testuser').first()
     assert user is not None
     assert user.email == 'test@example.com'
+    
+    # Test duplicate username
+    response = logged_in_admin.post('/admin/users/create', data={
+        'username': 'testuser',  # Duplicate username
+        'email': 'test2@example.com',
+        'password': 'StrongPass123!',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+    
+    assert response.status_code == 200
+    assert FlashMessages.CREATE_USER_DUPLICATE.value.encode() in response.data
+    
+    # Test invalid email
+    response = logged_in_admin.post('/admin/users/create', data={
+        'username': 'testuser2',
+        'email': 'invalid-email',
+        'password': 'StrongPass123!',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+    
+    assert response.status_code == 200
+    assert FlashMessages.CREATE_USER_INVALID_EMAIL.value.encode() in response.data
+    
+    # Test weak password
+    response = logged_in_admin.post('/admin/users/create', data={
+        'username': 'testuser3',
+        'email': 'test3@example.com',
+        'password': 'weak',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+    
+    assert response.status_code == 200
+    assert FlashMessages.CREATE_USER_WEAK_PASSWORD.value.encode() in response.data
     # Test GET request
     create_response = logged_in_admin.get(url_for('admin.user.create'))
     assert create_response.status_code == 200
