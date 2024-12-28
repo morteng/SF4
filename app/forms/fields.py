@@ -29,7 +29,8 @@ class CustomDateTimeField(DateTimeField):
             'invalid_time': 'Invalid time values (e.g., 25:61:61)',
             'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
             'required': 'Date is required',
-            'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)'
+            'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)',
+            'past_date': 'Application deadline must be a future date'
         }
         # Update with any custom error messages passed in
         self.error_messages.update(error_messages)
@@ -173,6 +174,11 @@ class CustomDateTimeField(DateTimeField):
             # Check leap year flag
             if self._invalid_leap_year:
                 raise ValidationError(self.error_messages['invalid_leap_year'])
+                
+            # Add future date validation
+            now = datetime.now(utc)
+            if dt < now:
+                raise ValidationError(self.error_messages['past_date'])
                 
             return True
         except ValueError:
