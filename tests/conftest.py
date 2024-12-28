@@ -256,32 +256,20 @@ def get_all_tags():
         return Tag.query.all()
 
 @pytest.fixture(scope='function')
-def mock_rate_limiter(monkeypatch):
-    """Mock the rate limiter to always allow requests."""
-    def mock_check(*args, **kwargs):
-        return True
+def mock_rate_limiter(app):
+    """Ensure rate limiting is disabled for tests."""
+    # Disable rate limiting in the app
+    if hasattr(app, 'extensions') and 'limiter' in app.extensions:
+        limiter = app.extensions['limiter']
+        limiter.enabled = False
+        limiter.reset()
     
-    def mock_limit(*args, **kwargs):
-        def decorator(f):
-            return f
-        return decorator
+    yield
     
-    # Create a context manager to ensure mocks are properly applied
-    @contextlib.contextmanager
-    def mock_limiter():
-        # Mock all rate limiting functions
-        monkeypatch.setattr("flask_limiter.util.get_remote_address", lambda: "127.0.0.1")
-        monkeypatch.setattr("flask_limiter.Limiter.check", mock_check)
-        monkeypatch.setattr("flask_limiter.Limiter.limit", mock_limit)
-        monkeypatch.setattr("flask_limiter.Limiter.shared_limit", mock_limit)
-        monkeypatch.setattr("flask_limiter.Limiter.exempt", mock_limit)
-        try:
-            yield
-        finally:
-            # Clean up after the test
-            monkeypatch.undo()
-    
-    return mock_limiter()
+    # Re-enable rate limiting after test
+    if hasattr(app, 'extensions') and 'limiter' in app.extensions:
+        limiter = app.extensions['limiter']
+        limiter.enabled = True
 
 @pytest.fixture(autouse=True)
 def reset_rate_limiter(app):
