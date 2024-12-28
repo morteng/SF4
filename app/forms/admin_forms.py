@@ -79,6 +79,10 @@ class StipendForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Initialize choices for SelectMultipleFields
+        from app.models import Tag, Organization
+        self.tags.choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        self.organizations.choices = [(org.id, org.name) for org in Organization.query.all()]
         # Populate organization choices
         self.organization_id.choices = [
             (org.id, org.name) for org in Organization.query.order_by(Organization.name).all()
