@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash
 from app.models.user import User
 from datetime import datetime
 from app.models.audit_log import AuditLog
+from app.models.notification import Notification
 from app.services.notification_service import get_notification_count
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
