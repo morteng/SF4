@@ -47,6 +47,8 @@ def test_valid_date_format(app, form_data):
 
         # Validate the form
         form = StipendForm(data=form_data, meta={'csrf': False})
+        # Populate tag choices from database
+        form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.all()]
         if not form.validate():
             print("Validation errors:", form.errors)
         assert form.validate() is True
