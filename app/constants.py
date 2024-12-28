@@ -108,7 +108,6 @@ class FlashMessages(str, Enum):
     UPDATE_STIPEND_SUCCESS = "Stipend updated successfully."
     UPDATE_STIPEND_ERROR = "Failed to update stipend."
     INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-    STIPEND_NOT_FOUND = "Stipend not found."
     DELETE_STIPEND_SUCCESS = "Stipend deleted successfully."
     DELETE_STIPEND_ERROR = "Failed to delete stipend."
     INVALID_ORGANIZATION = "Invalid organization selected. Please choose a valid organization."
