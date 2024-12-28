@@ -46,6 +46,7 @@ def edit_profile():
                 # Update user profile
                 current_user.username = new_username
                 current_user.email = form.email.data
+                db.session.add(current_user)
                 db.session.commit()
                 logging.info(f"Profile updated successfully for user {current_user.id}")
                 flash_message(FlashMessages.PROFILE_UPDATE_SUCCESS, FlashCategory.SUCCESS)

@@ -20,6 +20,11 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def update_profile(self, username, email):
+        """Update user profile information"""
+        self.username = username
+        self.email = email
     
     # Flask-Login required properties and methods
     @property

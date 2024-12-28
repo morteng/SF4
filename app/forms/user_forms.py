@@ -21,13 +21,13 @@ class ProfileForm(FlaskForm):
     def validate_username(self, username):
         if username.data != self.original_username:
             user = User.query.filter_by(username=username.data).first()
-            if user:
+            if user and user.id != current_user.id:
                 raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS.value)
 
     def validate_email(self, email):
         if email.data != self.original_email:
             user = User.query.filter_by(email=email.data).first()
-            if user:
+            if user and user.id != current_user.id:
                 raise ValidationError(FlashMessages.EMAIL_ALREADY_EXISTS.value)
 
     def validate_csrf_token(self, field):
