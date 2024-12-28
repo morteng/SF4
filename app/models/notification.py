@@ -32,9 +32,16 @@ class Notification(db.Model):
         }
 
     def mark_as_read(self):
-        self.read_status = True
-        db.session.commit()
-        return self
+        """Mark notification as read with error handling"""
+        try:
+            self.read_status = True
+            db.session.commit()
+            return self
+        except Exception as e:
+            db.session.rollback()
+            from flask import current_app
+            current_app.logger.error(f"Error marking notification as read: {str(e)}")
+            raise
 
     @classmethod
     def get_unread_count(cls):

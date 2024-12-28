@@ -33,6 +33,12 @@ class AuditLog(db.Model):
         """Enhanced audit logging with better error handling and validation"""
         if not action:
             raise ValueError("Action is required")
+            
+        try:
+            # Ensure we're in an application context
+            from flask import current_app
+            if not current_app:
+                raise RuntimeError("Application context required")
         
         if object_type and not object_id:
             raise ValueError("object_id is required when object_type is provided")
