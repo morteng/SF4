@@ -354,7 +354,9 @@ def test_profile_form_invalid_csrf_token(client, setup_database):
         })
         
         assert login_response.status_code == 400
-        assert b"CSRF session token is missing" in login_response.data
+        # Handle both possible error messages from different Flask-WTF versions
+        assert (b"CSRF session token is missing" in login_response.data or 
+               b"CSRF token is missing" in login_response.data)
 
 def test_profile_form_rate_limiting(client, setup_database):
     """Test rate limiting on profile form submissions"""
