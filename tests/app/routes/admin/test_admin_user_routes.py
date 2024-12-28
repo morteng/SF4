@@ -207,7 +207,8 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, client):
                                             data={
                                                 **user_data,
                                                 'csrf_token': csrf_token,
-                                                'is_admin': False
+                                                'is_admin': False,
+                                                'password': 'StrongPass123!'  # Add valid password
                                             },
                                             follow_redirects=True)
             

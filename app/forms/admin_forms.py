@@ -179,7 +179,7 @@ class UserForm(FlaskForm):
         Length(max=255)
     ])
     password = PasswordField('Password', validators=[
-        Optional(),
+        DataRequired(message="Password is required."),
         Length(min=8, message="Password must be at least 8 characters long."),
         Regexp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
                message="Password must contain at least one uppercase, one lowercase, one number and one special character")
@@ -207,23 +207,6 @@ class UserForm(FlaskForm):
     def validate_email(self, email):
         if email.data != self.original_email:
             user = User.query.filter_by(email=email.data).first()
-            if user is not None:
-                raise ValidationError(FlashMessages.FORM_DUPLICATE_EMAIL.value)
-
-    def __init__(self, original_username=None, original_email=None, *args, **kwargs):
-        super(UserForm, self).__init__(*args, **kwargs)
-        self.original_username = original_username
-        self.original_email = original_email
-
-    def validate_username(self, username):
-        if username.data != self.original_username:
-            user = User.query.filter_by(username=username.data).first()
-            if user is not None:
-                raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS.value)
-
-    def validate_email(self, email):
-        if email.data != self.original_email:
-            user = db.session.get(User, email.data)
             if user is not None:
                 raise ValidationError(FlashMessages.FORM_DUPLICATE_EMAIL.value)
 
