@@ -48,10 +48,20 @@ def init_extensions(app):
         @app.after_request
         def log_request(response):
             if request.endpoint and request.endpoint.startswith('admin.'):
+                # Only set object_type if we have a specific object ID
+                object_type = None
+                object_id = None
+                
+                # For routes that operate on specific objects (like /admin/stipends/<id>)
+                if request.view_args and 'id' in request.view_args:
+                    object_type = request.endpoint.split('.')[-1]
+                    object_id = request.view_args['id']
+                    
                 AuditLog.create(
                     user_id=current_user.id if current_user.is_authenticated else 0,
                     action=request.method,
-                    object_type=request.endpoint.split('.')[-1],
+                    object_type=object_type,
+                    object_id=object_id,
                     ip_address=request.remote_addr,
                     http_method=request.method,
                     endpoint=request.endpoint,
