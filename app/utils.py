@@ -71,7 +71,7 @@ def admin_required(f):
             flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
             return abort(403)
             
-        # Create audit log for admin access without object_type since this is a general access
+        # Create single audit log for admin access
         with current_app.app_context():
             try:
                 audit_log = AuditLog(
@@ -87,26 +87,6 @@ def admin_required(f):
             except Exception as e:
                 current_app.logger.error(f"Error creating audit log: {str(e)}")
                 db.session.rollback()
-        
-            
-        # Create audit log for admin access without object_type
-        AuditLog.create(
-            user_id=current_user.id,
-            action=f.__name__,
-            details=f"Accessed admin route: {request.path}",
-            ip_address=request.remote_addr,
-            http_method=request.method,
-            endpoint=request.endpoint
-        )
-            
-        # Log admin access
-        AuditLog.create(
-            user_id=current_user.id,
-            action=f.__name__,
-            object_type='AdminPanel',
-            details=f"Accessed admin route: {request.path}",
-            ip_address=request.remote_addr
-        )
             
         if not current_user.is_admin:
             flash_message(FlashMessages.ADMIN_REQUIRED.value, FlashCategory.ERROR.value)
