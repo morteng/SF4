@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from flask import session, url_for
+from flask import session, url_for, current_app
 from bs4 import BeautifulSoup
 from werkzeug.security import generate_password_hash
 from bs4 import BeautifulSoup
