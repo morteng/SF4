@@ -5,6 +5,7 @@
 - [ ] Verify JSON serialization of audit log details
 - [x] Fix notification user_id handling in CRUD operations
 - [ ] Add bot scheduling functionality
+- [x] Add missing NotificationType enum values
 
 ## Best Practices
 - Ensure CSRF protection matches production environment

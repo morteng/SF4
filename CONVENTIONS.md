@@ -33,7 +33,11 @@
 - All admin templates must include a notification badge
 - Display count of unread notifications using `get_notification_count()`
 - Badge visible even when count is 0
-- Notification types must use NotificationType enum values
+- Notification types must use NotificationType enum values:
+  - BOT_SUCCESS, BOT_ERROR, USER_ACTION, SYSTEM
+  - CRUD_CREATE, CRUD_UPDATE, CRUD_DELETE
+  - USER_CREATED, USER_UPDATED, USER_DELETED
+  - PASSWORD_RESET, AUDIT_LOG
 
 ### Audit Logging
 - Required for all CRUD operations and system events
