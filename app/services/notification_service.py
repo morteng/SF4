@@ -1,6 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 from app.models.notification import Notification
+from app.constants import NotificationType
 
 def get_notification_by_id(notification_id):
     from app import db

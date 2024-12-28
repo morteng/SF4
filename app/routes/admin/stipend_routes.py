@@ -4,6 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from wtforms.validators import ValidationError
 
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string, flash
+from app.services.notification_service import create_crud_notification
 from app.models.audit_log import AuditLog
 from app.models.notification import Notification
 from app.services.notification_service import get_notification_count
