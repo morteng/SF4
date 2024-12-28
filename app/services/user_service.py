@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 from flask import request
 from app.models.user import User
+from app.models.notification import NotificationType
 from app.models.audit_log import AuditLog
 from app.models.notification import Notification
 from app.extensions import db
