@@ -8,6 +8,13 @@
   - Past dates invalid
   - Future dates limited to 5 years
   - Leap year validation
+  - Proper date format (YYYY-MM-DD HH:MM:SS)
+
+### Notification Validation
+- Validate NotificationType enum values
+- Ensure related_object exists
+- Validate user_id exists
+- Validate message length (max 255 chars)
 
 ### Audit Log Validation
 - Verify all CRUD operations create audit logs

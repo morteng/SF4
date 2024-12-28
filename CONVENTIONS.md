@@ -1,12 +1,19 @@
 ## Coding Conventions
 - All flash messages must use messages defined in app\constants.py
-- Audit logging required for all CRUD operations
+- Audit logging required for all CRUD operations including:
+  - User ID, Action type, Object type, Object ID
+  - Timestamp, IP address, HTTP method, Endpoint
+  - Before/after state for updates
 - CSRF tokens must be included in all forms and HTMX requests
 - Rate limiting:
   - Admin: 200/day, 50/hour
   - CRUD: Create/Update (10/min), Delete (3/min)
   - Bot operations: 10/hour
   - Password resets: 5/hour
+- Notification system must:
+  - Use NotificationType enum values
+  - Include user_id and related_object
+  - Use proper priority levels
 
 ### Form Validation
 - SelectMultipleField must have valid choices defined
