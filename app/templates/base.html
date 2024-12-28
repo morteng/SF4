@@ -11,9 +11,9 @@
     
     <!-- Notification Badge -->
     <div id="notification-badge" class="notification-badge">
-        {% if notification_count is defined and notification_count > 0 %}
-        <span class="badge">{{ notification_count }}</span>
-        {% endif %}
+        <span class="bg-blue-500 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">
+            {{ notification_count if notification_count is defined else 0 }}
+        </span>
     </div>
 </head>
 <body>
