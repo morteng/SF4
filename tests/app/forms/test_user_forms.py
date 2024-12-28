@@ -47,9 +47,11 @@ def test_profile_form_valid(client, setup_database):
     
     # Log in the user
     with client:
-        # Reset rate limiter before first request
-        limiter = current_app.extensions.get('limiter')
-        limiter.reset()
+        # Only reset limiter if rate limiting is enabled
+        if current_app.config.get('RATELIMIT_ENABLED', True):
+            limiter = current_app.extensions.get('limiter')
+            if limiter and limiter._storage:  # Check if limiter is properly initialized
+                limiter.reset()
         
         # First make a GET request to establish session and get CSRF token
         get_response = client.get(url_for('public.login'))
@@ -59,8 +61,11 @@ def test_profile_form_valid(client, setup_database):
         soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
         csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
     
-        # Reset rate limiter before login attempt
-        limiter.reset()
+        # Only reset limiter if rate limiting is enabled
+        if current_app.config.get('RATELIMIT_ENABLED', True):
+            limiter = current_app.extensions.get('limiter')
+            if limiter and limiter._storage:  # Check if limiter is properly initialized
+                limiter.reset()
             
         # Now make the login POST request
         login_response = client.post(url_for('public.login'), data={
@@ -73,8 +78,11 @@ def test_profile_form_valid(client, setup_database):
         assert login_response.status_code in [200, 302], \
             f"Expected 200 or 302, got {login_response.status_code}"
     
-        # Reset rate limiter before profile edit request
-        limiter.reset()
+        # Only reset limiter if rate limiting is enabled
+        if current_app.config.get('RATELIMIT_ENABLED', True):
+            limiter = current_app.extensions.get('limiter')
+            if limiter and limiter._storage:  # Check if limiter is properly initialized
+                limiter.reset()
         
         # Now access the profile edit page
         get_response = client.get(url_for('user.edit_profile'))
@@ -84,8 +92,11 @@ def test_profile_form_valid(client, setup_database):
         soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
         csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
 
-        # Reset rate limiter before profile update
-        limiter.reset()
+        # Only reset limiter if rate limiting is enabled
+        if current_app.config.get('RATELIMIT_ENABLED', True):
+            limiter = current_app.extensions.get('limiter')
+            if limiter and limiter._storage:  # Check if limiter is properly initialized
+                limiter.reset()
         
         # Test form submission via POST with valid data
         response = client.post(url_for('user.edit_profile'), data={
