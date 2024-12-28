@@ -57,9 +57,8 @@ def create_app(config_name='development'):
         storage_options={"check_interval": 1}  # Add storage options
     )
     
-    # Initialize with app and force storage creation
+    # Initialize with app (no need to force storage creation)
     limiter.init_app(app)
-    limiter._storage = limiter._create_storage()  # Force storage creation
 
     # Register blueprints before applying rate limits
     from app.routes.admin import register_admin_blueprints
