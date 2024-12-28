@@ -89,27 +89,27 @@ def create():
                 if not user or not user.id:
                     raise ValueError("Failed to create user - invalid user object returned")
                 
-            # Create audit log
-            AuditLog.create(
-                user_id=current_user.id,
-                action='create_user',
-                object_type='User',
-                object_id=user.id,
-                details=f'Created user {user.username}',
-                ip_address=request.remote_addr
-            )
-            
-            # Create notification
-            Notification.create(
-                type='user_created',
-                message=f'User {user.username} was created',
-                related_object=f'User:{user.id}'
-            )
-            
-            flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS)
-            return redirect(url_for('admin.user.index'))
-            
-        except Exception as e:
+                # Create audit log
+                AuditLog.create(
+                    user_id=current_user.id,
+                    action='create_user',
+                    object_type='User',
+                    object_id=user.id,
+                    details=f'Created user {user.username}',
+                    ip_address=request.remote_addr
+                )
+                
+                # Create notification
+                Notification.create(
+                    type='user_created',
+                    message=f'User {user.username} was created',
+                    related_object=f'User:{user.id}'
+                )
+                
+                flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS)
+                return redirect(url_for('admin.user.index'))
+                
+            except Exception as e:
             db.session.rollback()
             logging.error(f"Error creating user: {str(e)}")
             flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR)
