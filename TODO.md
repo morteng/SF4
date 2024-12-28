@@ -1,6 +1,7 @@
 # TODO List
 ## High Priority
 - [x] Implement audit logging in admin blueprint
+- [x] Add date validation constraints
 - [ ] Add HTMX integration for dynamic content updates
 - [ ] Complete admin interface security checks
 

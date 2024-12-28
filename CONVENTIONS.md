@@ -96,6 +96,7 @@
     USERNAME_LENGTH = "Username must be between 3 and 50 characters."
     USERNAME_FORMAT = "Username can only contain letters, numbers and underscores."
     FORM_FIELD_REQUIRED = "{field} is required."
+    DATE_FUTURE_LIMIT = "Date cannot be more than 5 years in the future."
 - All form fields must be required unless explicitly optional
 - Stipend forms must include at least one tag
 

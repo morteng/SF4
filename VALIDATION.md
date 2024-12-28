@@ -76,6 +76,10 @@
 - Validate all form inputs using constants from app\constants.py
 - Validate that stipend forms include at least one tag
 - Ensure all required fields have validation messages
+- Validate date constraints:
+  - Past dates invalid
+  - Future dates limited to 5 years
+  - Proper format enforcement
 - Password validation:
   - Verify passwords are hashed using werkzeug.security.generate_password_hash()
   - Test password verification using check_password_hash()
