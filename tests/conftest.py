@@ -272,6 +272,9 @@ def reset_rate_limiter(app):
 @pytest.fixture(scope='function')
 def logged_in_client(client, test_user, app, db_session, mock_rate_limiter):
     """Log in as a regular user."""
+    # Ensure mock_rate_limiter is used
+    mock_rate_limiter
+    
     with client.application.test_request_context():
         # Ensure the test_user is bound to the current session
         db_session.add(test_user)
