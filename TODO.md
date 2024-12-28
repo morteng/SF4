@@ -1,7 +1,8 @@
 # TODO List
 ## High Priority
-- [ ] Fix user creation context handling in admin panel
+- [x] Fix user creation context handling in admin panel
 - [ ] Ensure consistent timezone handling across all datetime operations
+- [ ] Verify JSON serialization of audit log details
 
 ## Best Practices
 - Ensure CSRF protection matches production environment

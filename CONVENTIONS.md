@@ -44,7 +44,7 @@
   - Timestamp (timezone-aware UTC)
   - IP address (required for all operations)
   - Operation details (must reflect actual changes)
-  - Before/after state for updates
+  - Before/after state (JSON serializable data)
   - Corresponding notification for each audit log
 - Must create notification for audit log creation
 - Must include:
