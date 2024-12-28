@@ -195,3 +195,94 @@ def test_leap_year_validation_simplified(app):
         field.process_formdata(['2023-02-29 12:00:00'])
         assert field.validate(TestCustomDateTimeField()) is False
         assert 'Invalid date values (e.g., Feb 29 in non-leap years)' in field.errors
+
+def test_stipend_create_operation(app, form_data):
+    """Test CRUD create operation"""
+    with app.test_request_context():
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        
+        # Test valid creation
+        form = StipendForm(data=form_data)
+        form.tags.choices = tag_choices
+        assert form.validate() is True
+        
+        # Test missing required fields
+        for field in ['name', 'summary', 'description']:
+            invalid_data = form_data.copy()
+            del invalid_data[field]
+            form = StipendForm(data=invalid_data)
+            form.tags.choices = tag_choices
+            assert form.validate() is False
+            assert field in form.errors
+
+def test_audit_log_on_create(app, form_data):
+    """Test audit log creation on stipend create"""
+    with app.test_request_context():
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        
+        # Create stipend
+        form = StipendForm(data=form_data)
+        form.tags.choices = tag_choices
+        if form.validate():
+            stipend = Stipend(**form.data)
+            db.session.add(stipend)
+            db.session.commit()
+            
+            # Verify audit log
+            log = AuditLog.query.filter_by(object_type='Stipend', object_id=stipend.id).first()
+            assert log is not None
+            assert log.action == 'create'
+            assert log.details is not None
+
+def test_stipend_update_operation(app, form_data):
+    """Test CRUD update operation"""
+    with app.test_request_context():
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        
+        # Create initial stipend
+        form = StipendForm(data=form_data)
+        form.tags.choices = tag_choices
+        stipend = Stipend(**form.data)
+        db.session.add(stipend)
+        db.session.commit()
+        
+        # Update stipend
+        updated_data = form_data.copy()
+        updated_data['name'] = 'Updated Stipend Name'
+        updated_data['tags'] = [tag_choices[0][0]]  # Use first tag
+        
+        update_form = StipendForm(data=updated_data)
+        update_form.tags.choices = tag_choices
+        assert update_form.validate() is True
+        
+        # Verify audit log
+        log = AuditLog.query.filter_by(object_type='Stipend', object_id=stipend.id).first()
+        assert log is not None
+        assert log.action == 'update'
+        assert log.details is not None
+
+def test_stipend_delete_operation(app, form_data):
+    """Test CRUD delete operation"""
+    with app.test_request_context():
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        
+        # Create stipend
+        form = StipendForm(data=form_data)
+        form.tags.choices = tag_choices
+        stipend = Stipend(**form.data)
+        db.session.add(stipend)
+        db.session.commit()
+        
+        # Delete stipend
+        db.session.delete(stipend)
+        db.session.commit()
+        
+        # Verify audit log
+        log = AuditLog.query.filter_by(object_type='Stipend', object_id=stipend.id).first()
+        assert log is not None
+        assert log.action == 'delete'
+        assert log.details is not None
