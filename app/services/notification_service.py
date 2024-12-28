@@ -76,3 +76,12 @@ def get_notification_count(user_id):
 def get_notification_by_id(notification_id):
     """Get a notification by its ID"""
     return db.session.get(Notification, notification_id)
+
+def create_crud_notification(action, object_type, object_id, user_id=None):
+    """Helper function to create CRUD operation notifications"""
+    message = f"{action.capitalize()} operation performed on {object_type} {object_id}"
+    return create_notification(
+        type=NotificationType.CRUD_OPERATION,
+        message=message,
+        user_id=user_id
+    )

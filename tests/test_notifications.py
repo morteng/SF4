@@ -79,3 +79,17 @@ def test_notification_type_validation(client, db_session, test_user):
             user_id=test_user.id
         )
         assert notification.type == ntype
+
+def test_crud_notification_creation(client, db_session, test_user):
+    from app.services.notification_service import create_crud_notification
+    
+    # Test CRUD notification creation
+    notification = create_crud_notification(
+        action="create",
+        object_type="TestObject",
+        object_id=123,
+        user_id=test_user.id
+    )
+    
+    assert notification.type == NotificationType.CRUD_OPERATION
+    assert "Create operation performed on TestObject 123" in notification.message

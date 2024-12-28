@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from app.services.notification_service import get_notification_count, create_crud_notification
+from app.services.notification_service import get_notification_count, create_notification
 from app.utils import log_audit
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string, get_flashed_messages, jsonify
 from flask_login import login_required, current_user
@@ -157,10 +157,10 @@ def run(id):
         
         # Create appropriate notification
         notification_type = NotificationType.BOT_SUCCESS if bot_instance.status == 'completed' else NotificationType.BOT_ERROR
-        notification = Notification(
-            message=f"Bot {bot.name} run completed with status: {bot_instance.status}",
+        notification = create_notification(
             type=notification_type,
-            read_status=False
+            message=f"Bot {bot.name} run completed with status: {bot_instance.status}",
+            user_id=current_user.id
         )
         
         # Add error notification if bot failed
