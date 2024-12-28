@@ -51,10 +51,12 @@ def test_valid_date_format(app, form_data):
         csrf_token = form.csrf_token.current_token
         form_data['csrf_token'] = csrf_token
 
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        
         # Validate the form
         form = StipendForm(data=form_data, meta={'csrf': False})
-        # Populate tag choices from database
-        form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        form.tags.choices = tag_choices  # Set the choices
         if not form.validate():
             print("Validation errors:", form.errors)
         assert form.validate() is True
@@ -73,9 +75,13 @@ def test_invalid_date_format(app, form_data):
         # Add CSRF token to form data
         form_data['csrf_token'] = generate_csrf()
         
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+            
         for date in invalid_dates:
             form_data['application_deadline'] = date
             form = StipendForm(data=form_data)
+            form.tags.choices = tag_choices  # Set the choices
             assert form.validate() is False
             assert 'application_deadline' in form.errors
 
