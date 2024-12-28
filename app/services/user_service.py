@@ -4,6 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from flask import request
 from app.models.user import User
 from app.models.audit_log import AuditLog
+from app.models.notification import Notification
 from app.extensions import db
 from app.utils import flash_message, validate_password_strength
 from app.constants import FlashMessages, FlashCategory
