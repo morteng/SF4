@@ -91,9 +91,11 @@ def create_app(config_name='development'):
             # Initialize extensions first
             init_extensions(app)
             
-            # Run migrations before any database operations
-            from flask_migrate import upgrade
-            upgrade()  # Apply migrations first
+            # Only run migrations if the env.py file exists
+            env_path = os.path.join(migrations_dir, 'env.py')
+            if os.path.exists(env_path):
+                from flask_migrate import upgrade
+                upgrade()  # Apply migrations only if env.py exists
             
             # Only initialize admin user if not in test mode
             if not app.config.get('TESTING'):
