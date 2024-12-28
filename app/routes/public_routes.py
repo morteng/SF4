@@ -22,6 +22,21 @@ def login():
         if user and user.check_password(password):
             print(f"Login success for: {user.username}")
             login_user(user)
+            
+            # Create audit log for successful login
+            try:
+                AuditLog.create(
+                    user_id=user.id,
+                    action='login',
+                    object_type='user',
+                    object_id=user.id,
+                    ip_address=request.remote_addr,
+                    http_method=request.method,
+                    endpoint=request.endpoint
+                )
+            except Exception as e:
+                current_app.logger.error(f"Error creating login audit log: {str(e)}")
+            
             flash('Login successful.', 'success')
             # Redirect to admin dashboard if user is an admin, else redirect to user profile
             if current_user.is_admin:

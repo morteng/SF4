@@ -36,9 +36,9 @@ class AuditLog(db.Model):
             if not user_id or not action:
                 raise ValueError("user_id and action are required")
                 
-            # Validate object type and ID consistency
-            if object_type and not object_id:
-                raise ValueError("object_id is required when object_type is provided")
+            # If object_type is provided but object_id is None, set object_type to None
+            if object_type and object_id is None:
+                object_type = None
                 
             # Validate and serialize complex data
             if details_before:
