@@ -367,23 +367,29 @@ def test_profile_form_rate_limiting(client, setup_database):
     db.session.commit()
 
     with client:
+        # Use a request context to generate the CSRF token
+        with client.application.test_request_context():
+            csrf_token = generate_csrf_token()
+
         # Login user
         login_response = client.post(url_for('public.login'), data={
             'username': 'testuser',
             'password': 'password123',
-            'csrf_token': generate_csrf_token()
+            'csrf_token': csrf_token
         })
-        
-        # Submit profile form multiple times
-        for _ in range(11):
+        assert login_response.status_code in [200, 302], "Login failed"
+
+        # Submit profile form multiple times to trigger rate limiting
+        for _ in range(11):  # Assuming rate limit is 10 requests per minute
             response = client.post(url_for('user.edit_profile'), data={
-                'username': 'newusername',
-                'email': 'newemail@example.com',
-                'csrf_token': generate_csrf_token()
+                'username': 'testuser',
+                'email': 'test@example.com',
+                'csrf_token': csrf_token
             })
-            
-        assert response.status_code == 429
-        assert b"Too Many Requests" in response.data
+
+        # Verify rate limiting response
+        assert response.status_code == 429, f"Expected 429, got {response.status_code}"
+        assert b"Too Many Requests" in response.data, "Rate limit error message not found"
 
 def test_profile_form_validation_errors(client, setup_database):
     """Test various validation errors in profile form"""
