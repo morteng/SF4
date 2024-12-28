@@ -180,7 +180,14 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
     assert log is not None
 
 def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
+    # Ensure limiter is disabled
+    if 'limiter' in app.extensions:
+        app.extensions['limiter'].enabled = False
+
     with app.test_request_context():
+        # Push application context
+        ctx = app.app_context()
+        ctx.push()
         # Reset rate limiter before test
         if 'limiter' in app.extensions:
             app.extensions['limiter'].reset()
@@ -239,7 +246,11 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
                 session['csrf_token'] = 'test-csrf-token'
             
             # Get create form and extract CSRF token
-            create_response = logged_in_admin.get('/admin/users/create')
+            try:
+                create_response = logged_in_admin.get('/admin/users/create')
+            finally:
+                # Clean up contexts
+                ctx.pop()
             assert create_response.status_code == 200
             
             # Extract CSRF token with debug logging

@@ -78,8 +78,13 @@ def db_session(_db, app):
 @pytest.fixture(scope='function')
 def client(app):
     """Provides a test client for the application."""
+    # Disable rate limiting for tests
+    if 'limiter' in app.extensions:
+        app.extensions['limiter'].enabled = False
+    
     # Create a new test client for each test
-    return app.test_client()
+    with app.test_client() as client:
+        yield client
 
 @pytest.fixture(scope='function')
 def admin_user(db_session, app):
