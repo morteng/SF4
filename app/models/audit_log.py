@@ -27,6 +27,11 @@ class AuditLog(db.Model):
     @staticmethod
     def create(user_id, action, details=None, object_type=None, object_id=None,
               details_before=None, details_after=None, ip_address=None):
+        """Create audit log with JSON serialization and validation"""
+        if details_before and not isinstance(details_before, (dict, str)):
+            raise ValueError("details_before must be dict or JSON string")
+        if details_after and not isinstance(details_after, (dict, str)):
+            raise ValueError("details_after must be dict or JSON string")
         """Create audit log entry with before/after state tracking"""
         try:
             # Serialize dictionaries to JSON

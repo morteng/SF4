@@ -179,7 +179,8 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
     ).first()
     assert log is not None
 
-def test_user_crud_operations(logged_in_admin, db_session, test_user, client):
+def test_user_crud_operations(logged_in_admin, db_session, test_user):
+    """Test full CRUD operations with audit logging and notifications"""
     """Test full CRUD operations for users with audit logging"""
     # Create unique test data
     unique_id = str(uuid.uuid4())[:8]
@@ -217,6 +218,22 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, client):
         # Verify user creation
         created_user = User.query.filter_by(username=user_data['username']).first()
         assert created_user is not None
+            
+        # Verify audit log
+        audit_log = AuditLog.query.filter_by(
+            action='create_user',
+            object_type='User',
+            object_id=created_user.id
+        ).first()
+        assert audit_log is not None
+        assert audit_log.user_id == test_user.id
+            
+        # Verify notification
+        notification = Notification.query.filter_by(
+            type='user_created',
+            related_object_id=created_user.id
+        ).first()
+        assert notification is not None
         csrf_token = extract_csrf_token(create_response.data)
         assert csrf_token is not None
 

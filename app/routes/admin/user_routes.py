@@ -21,17 +21,24 @@ from app.extensions import db  # Import the db object
 
 admin_user_bp = Blueprint('user', __name__, url_prefix='/users')
 
-# Initialize rate limiter
+# Initialize rate limiter with project-specific limits
 limiter = Limiter(
     key_func=get_remote_address,
-    default_limits=["200 per day", "50 per hour"]  # Default fallback values
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
 )
 
+# Apply specific rate limits per endpoint
+create_limit = "10/minute"
+update_limit = "10/minute"
+delete_limit = "3/minute"
+
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")
+@limiter.limit(create_limit)
 @login_required
 @admin_required
 def create():
+    """Create a new user with audit logging and notifications"""
     """Create a new user with proper validation and audit logging"""
     # Safety check for current_user
     if not hasattr(current_user, 'id'):
