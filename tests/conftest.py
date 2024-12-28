@@ -279,8 +279,14 @@ def reset_rate_limiter(app):
         limiter.reset()
 
 @pytest.fixture(scope='function')
-def logged_in_client(client, test_user, app, db_session, mock_rate_limiter):
+def logged_in_client(client, test_user, app, db_session):
     """Log in as a regular user."""
+    # Ensure rate limiting is disabled
+    if hasattr(app, 'extensions') and 'limiter' in app.extensions:
+        limiter = app.extensions['limiter']
+        limiter.enabled = False
+        limiter.reset()
+    
     # Ensure the test_user is bound to the current session
     db_session.add(test_user)
     db_session.commit()
@@ -299,6 +305,11 @@ def logged_in_client(client, test_user, app, db_session, mock_rate_limiter):
     assert response.status_code == 200, f"User login failed. Response: {response.data.decode('utf-8')}"
     with client.session_transaction() as session:
         assert '_user_id' in session, "User session not established."
+    
+    yield client
+    
+    # Logout after test
+    client.get(url_for('public.logout'))
     yield client
 
 @pytest.fixture(scope='function')

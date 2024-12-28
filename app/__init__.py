@@ -43,7 +43,7 @@ def create_app(config_name='development'):
     def load_user(user_id):
         return db.session.get(User, int(user_id))  
 
-    # Initialize rate limiter with admin-specific limits
+    # Initialize rate limiter with appropriate limits
     limiter = Limiter(
         get_remote_address,
         app=app,
@@ -55,6 +55,10 @@ def create_app(config_name='development'):
             "5/hour"               # Password resets
         ]
     )
+    
+    # Disable rate limiting in test environment
+    if app.config.get('TESTING'):
+        limiter.enabled = False
 
     # Blueprints will be registered in the app context below
 
