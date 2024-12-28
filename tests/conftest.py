@@ -57,20 +57,19 @@ def app():
 @pytest.fixture(scope='function')
 def _db(app):
     """Provide the SQLAlchemy database session for each test function."""
-    ctx = app.app_context()
-    ctx.push()
-    yield db
-    ctx.pop()
+    with app.app_context():
+        yield db
 
 @pytest.fixture(scope='function')
 def db_session(_db, app):
     """Provide a clean database session for each test function."""
-    connection = _db.engine.connect()
-    transaction = connection.begin()
-    _db.session.bind = connection
-
     with app.app_context():
+        connection = _db.engine.connect()
+        transaction = connection.begin()
+        _db.session.bind = connection
+        
         yield _db.session
+        
         transaction.rollback()
         connection.close()
         _db.session.remove()
@@ -83,9 +82,13 @@ def client(app):
         app.extensions['limiter'].enabled = False
     
     # Create a new test client with proper context management
-    with app.app_context():
-        with app.test_client() as client:
-            yield client
+    ctx = app.test_request_context()
+    ctx.push()
+    
+    with app.test_client() as client:
+        yield client
+    
+    ctx.pop()
 
 @pytest.fixture(scope='function')
 def admin_user(db_session, app):
