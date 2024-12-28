@@ -56,6 +56,17 @@ class FlashMessages(str, Enum):
     DELETE_USER_SUCCESS = "User deleted successfully."
     DELETE_USER_ERROR = "Failed to delete user."
     USER_NOT_FOUND = "User not found."
+    
+    # Profile Management
+    EMAIL_REQUIRED = "Email is required."
+    EMAIL_INVALID = "Invalid email address."
+    EMAIL_LENGTH = "Email cannot exceed 100 characters."
+    EMAIL_ALREADY_EXISTS = "Email already exists. Please choose a different email address."
+    USERNAME_REQUIRED = "Username is required."
+    USERNAME_LENGTH = "Username must be between 3 and 50 characters."
+    PROFILE_UPDATE_SUCCESS = "Profile updated successfully."
+    PROFILE_UPDATE_ERROR = "Failed to update profile."
+    PROFILE_UPDATE_INVALID_DATA = "Invalid data provided for profile update."
 
     # Bot Management
     CREATE_BOT_SUCCESS = "Bot created successfully."
