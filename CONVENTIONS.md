@@ -24,4 +24,5 @@
   - Timestamp (timezone-aware UTC)
   - IP address
   - Before/after state for updates
+  - HTTP method and endpoint
 

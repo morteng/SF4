@@ -18,4 +18,5 @@
 - notification_count must be passed to all admin templates
 - Handle errors gracefully (return 0 on error)
 - Validate enum values match defined types
+- Ensure notifications are marked as read when viewed
 

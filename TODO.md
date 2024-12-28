@@ -4,6 +4,7 @@
 - [ ] Add future date validation (5 year limit)
 - [ ] Implement audit logging for all CRUD operations
 - [ ] Add CSRF protection to all forms
+- [ ] Add HTTP method and endpoint to audit logs
 
 ## Completed
 - [x] Implement basic admin interface
