@@ -7,6 +7,7 @@ from app.services.user_service import get_all_users
 from flask_login import current_user
 from app.models.user import User
 from app.models.audit_log import AuditLog
+from app.models.notification import Notification
 from tests.conftest import extract_csrf_token, logged_in_admin, db_session
 from app.constants import FlashMessages, FlashCategory
 from werkzeug.security import generate_password_hash
