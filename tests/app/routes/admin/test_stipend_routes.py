@@ -593,3 +593,91 @@ def test_full_crud_workflow(authenticated_admin: FlaskClient, db_session) -> Non
     # Verify deletion
     deleted_stipend = Stipend.query.get(created_stipend.id)
     assert deleted_stipend is None
+def test_full_crud_workflow(authenticated_admin: FlaskClient, db_session) -> None:
+    """Test complete CRUD workflow for stipends."""
+    # Create organization and tags
+    organization = Organization(name='Test Org')
+    tag1 = Tag(name='Research', category='Academic')
+    tag2 = Tag(name='Scholarship', category='Funding')
+    db_session.add_all([organization, tag1, tag2])
+    db_session.commit()
+    
+    # Get create page and extract CSRF token
+    create_response = authenticated_admin.get(url_for('admin.stipend.create'))
+    assert create_response.status_code == 200
+    csrf_token = extract_csrf_token(create_response.data)
+    
+    # Test Create
+    form_data = {
+        'name': 'Test Stipend',
+        'summary': 'Test summary',
+        'description': 'Test description',
+        'homepage_url': 'http://example.com',
+        'application_procedure': 'Apply online',
+        'eligibility_criteria': 'Open to all',
+        'application_deadline': (datetime.now(timezone.utc) + timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S'),
+        'organization_id': str(organization.id),
+        'tags': [str(tag1.id), str(tag2.id)],
+        'open_for_applications': True,
+        'csrf_token': csrf_token
+    }
+    
+    create_response = authenticated_admin.post(
+        url_for('admin.stipend.create'), 
+        data=form_data, 
+        follow_redirects=True
+    )
+    assert create_response.status_code == 200
+    assert FlashMessages.CREATE_STIPEND_SUCCESS.value.encode() in create_response.data
+    
+    # Verify creation
+    created_stipend = Stipend.query.filter_by(name='Test Stipend').first()
+    assert created_stipend is not None
+    
+    # Test Read
+    index_response = authenticated_admin.get(url_for('admin.stipend.index'))
+    assert index_response.status_code == 200
+    assert b'Test Stipend' in index_response.data
+    
+    # Test Update
+    edit_response = authenticated_admin.get(url_for('admin.stipend.edit', id=created_stipend.id))
+    assert edit_response.status_code == 200
+    csrf_token = extract_csrf_token(edit_response.data)
+    
+    update_data = {
+        'name': 'Updated Stipend',
+        'summary': 'Updated summary',
+        'description': 'Updated description',
+        'homepage_url': 'http://example.com/updated',
+        'application_procedure': 'Apply online updated',
+        'eligibility_criteria': 'Open to all updated',
+        'application_deadline': (datetime.now(timezone.utc) + timedelta(days=60)).strftime('%Y-%m-%d %H:%M:%S'),
+        'organization_id': str(organization.id),
+        'tags': [str(tag1.id)],
+        'open_for_applications': False,
+        'csrf_token': csrf_token
+    }
+    
+    update_response = authenticated_admin.post(
+        url_for('admin.stipend.edit', id=created_stipend.id),
+        data=update_data,
+        follow_redirects=True
+    )
+    assert update_response.status_code == 200
+    assert FlashMessages.UPDATE_STIPEND_SUCCESS.value.encode() in update_response.data
+    
+    # Verify update
+    updated_stipend = Stipend.query.get(created_stipend.id)
+    assert updated_stipend.name == 'Updated Stipend'
+    
+    # Test Delete
+    delete_response = authenticated_admin.post(
+        url_for('admin.stipend.delete', id=created_stipend.id),
+        follow_redirects=True
+    )
+    assert delete_response.status_code == 200
+    assert FlashMessages.DELETE_STIPEND_SUCCESS.value.encode() in delete_response.data
+    
+    # Verify deletion
+    deleted_stipend = Stipend.query.get(created_stipend.id)
+    assert deleted_stipend is None

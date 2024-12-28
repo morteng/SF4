@@ -219,8 +219,8 @@ class StipendForm(FlaskForm):
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[
-        DataRequired(message="Name is required."),
-        Length(max=100, message="Name cannot exceed 100 characters.")
+        DataRequired(message=FlashMessages.NAME_REQUIRED.value),
+        Length(max=100, message=FlashMessages.NAME_LENGTH.value)
     ])
     category = StringField('Category', validators=[
         DataRequired(message="Category is required."),
