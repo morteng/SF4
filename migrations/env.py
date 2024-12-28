@@ -1,9 +1,10 @@
 import logging
+import sys
 from logging.config import fileConfig
 
 from flask import current_app
-
 from alembic import context
+from sqlalchemy.exc import OperationalError
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -48,8 +49,20 @@ def run_migrations_online():
 
     In this scenario we need to create an Engine
     and associate a connection with the context.
-
     """
+    try:
+        # Check if alembic_version table exists
+        connectable = current_app.extensions['migrate'].db.engine
+        with connectable.connect() as connection:
+            result = connection.execute("SELECT * FROM alembic_version LIMIT 1")
+            current_rev = result.scalar()
+            logger.info(f"Current database revision: {current_rev}")
+    except OperationalError as e:
+        if "no such table: alembic_version" in str(e):
+            logger.warning("alembic_version table not found. Initializing fresh migration history.")
+        else:
+            logger.error(f"Database error: {str(e)}")
+            sys.exit(1)
 
     # this callback is used to prevent an auto-migration from being generated
     # when there are no changes to the schema
