@@ -12,6 +12,12 @@ from wtforms import Form, StringField
 def form_data(app):
     # Create a test organization and tag within application context
     with app.app_context():
+        # Clean up existing test data
+        db.session.query(Tag).filter(Tag.name == "Test Tag").delete()
+        db.session.query(Organization).filter(Organization.name == "Test Org").delete()
+        db.session.commit()
+
+        # Create new test data
         org = Organization(name="Test Org", description="Test Description", homepage_url="https://test.org")
         tag = Tag(name="Test Tag", category="Test Category")
         db.session.add(org)
