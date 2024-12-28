@@ -5,6 +5,7 @@
 - Clean up test data before each test run
 - Verify proper database state for each test
 - Use db_session.merge() to handle detached instances
+- Ensure session persistence for audit log verification
 
 ## Audit Log Validation
 - Verify all CRUD operations and system events create audit logs with:

@@ -76,8 +76,8 @@
   - Ensure redirects maintain error status codes
 
 ### Date/Time Handling
-- Use `datetime.utcnow()` for timestamping (legacy support)
-- For new code, prefer timezone-aware datetimes using `datetime.now(datetime.UTC)`
+- Use timezone-aware datetimes with `datetime.now(datetime.UTC)`
+- Avoid deprecated `datetime.utcnow()`
 
 ### Form Validation Messages
 - All form validation messages must use constants from app\constants.py
