@@ -82,10 +82,16 @@ def db_session(_db, app):
 def client(app):
     """Provides a test client with proper session and context management."""
     with app.app_context():
-        # Ensure rate limiting is disabled
+        # Initialize rate limiter storage if needed
         if 'limiter' in app.extensions:
             limiter = app.extensions['limiter']
             limiter.enabled = False
+            
+            # Initialize storage if not already initialized
+            if not hasattr(limiter, '_storage') or limiter._storage is None:
+                limiter.storage  # Force storage initialization
+            
+            # Reset limiter if storage is available
             if hasattr(limiter, '_storage') and limiter._storage is not None:
                 try:
                     limiter.reset()
@@ -307,11 +313,22 @@ def reset_rate_limiter(app):
 @pytest.fixture(scope='function')
 def logged_in_client(client, test_user, app, db_session):
     """Log in as a regular user."""
-    # Ensure rate limiting is disabled
-    if hasattr(app, 'extensions') and 'limiter' in app.extensions:
-        limiter = app.extensions['limiter']
-        limiter.enabled = False
-        limiter.reset()
+    with app.app_context():
+        # Initialize rate limiter if needed
+        if 'limiter' in app.extensions:
+            limiter = app.extensions['limiter']
+            limiter.enabled = False
+            
+            # Initialize storage if not already initialized
+            if not hasattr(limiter, '_storage') or limiter._storage is None:
+                limiter.storage  # Force storage initialization
+            
+            # Reset limiter if storage is available
+            if hasattr(limiter, '_storage') and limiter._storage is not None:
+                try:
+                    limiter.reset()
+                except Exception as e:
+                    app.logger.warning(f"Failed to reset rate limiter: {str(e)}")
     
     # Ensure the test_user is bound to the current session
     db_session.add(test_user)

@@ -54,9 +54,14 @@ def create_app(config_name='development'):
         default_limits=["200 per day", "50 per hour"],
         storage_uri="memory://",
         strategy="fixed-window",  # Explicit strategy
-        enabled=not app.config.get('TESTING')  # Disable in test environment
+        enabled=not app.config.get('TESTING'),  # Disable in test environment
+        storage_options={"check_interval": 1}  # Add storage options
     )
     limiter.init_app(app)
+    
+    # Ensure storage is initialized
+    if limiter.enabled:
+        limiter.storage  # Force storage initialization
 
     # Register blueprints before applying rate limits
     from app.routes.admin import register_admin_blueprints
