@@ -22,6 +22,9 @@ def get_notification_count(user_id):
     """Get count of unread notifications for a user"""
     from app import db
     try:
+        if not user_id:
+            raise ValueError("User ID is required")
+            
         count = db.session.query(Notification).filter(
             (Notification.user_id == user_id) |
             (Notification.user_id.is_(None)),  # Include system-wide notifications

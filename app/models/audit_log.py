@@ -33,9 +33,34 @@ class AuditLog(db.Model):
         """Enhanced audit logging with better error handling and validation"""
         if not action:
             raise ValueError("Action is required")
-            
+        
         if object_type and not object_id:
             raise ValueError("object_id is required when object_type is provided")
+            
+        try:
+            # Create the audit log entry
+            log = AuditLog(
+                user_id=user_id,
+                action=action,
+                details=details,
+                object_type=object_type,
+                object_id=object_id,
+                details_before=details_before,
+                details_after=details_after,
+                ip_address=ip_address,
+                http_method=http_method,
+                endpoint=endpoint
+            )
+            
+            db.session.add(log)
+            if commit:
+                db.session.commit()
+                
+            return log
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error creating audit log: {str(e)}")
+            raise
             
         # Validate and serialize complex data
         if details_before and not isinstance(details_before, (dict, str)):
