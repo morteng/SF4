@@ -25,6 +25,28 @@ class Stipend(db.Model):
         """Create a new stipend with validation and audit logging"""
         from app.models.audit_log import AuditLog
         from flask import request, current_app
+        from datetime import datetime
+        
+        # Validate application deadline
+        if 'application_deadline' in data:
+            try:
+                if isinstance(data['application_deadline'], str):
+                    data['application_deadline'] = datetime.strptime(
+                        data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+                
+                now = datetime.utcnow()
+                if data['application_deadline'] < now:
+                    raise ValueError("Application deadline must be a future date")
+                if (data['application_deadline'] - now).days > 365 * 5:
+                    raise ValueError("Application deadline cannot be more than 5 years in the future")
+            except ValueError:
+                raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS")
+        
+        # Validate organization exists
+        if 'organization_id' in data:
+            org = Organization.query.get(data['organization_id'])
+            if not org:
+                raise ValueError("Invalid organization ID")
         
         # Create stipend
         stipend = Stipend(**data)

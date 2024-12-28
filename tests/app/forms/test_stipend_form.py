@@ -439,6 +439,41 @@ def test_stipend_update_operation(app, form_data, test_db):
         # Get tag choices from database
         tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
         
+        # Test invalid date format
+        invalid_data = form_data.copy()
+        invalid_data['application_deadline'] = 'invalid-date'
+        with pytest.raises(ValueError) as exc_info:
+            Stipend.create(invalid_data)
+        assert "Invalid date format" in str(exc_info.value)
+        
+        # Test past date validation
+        invalid_data = form_data.copy()
+        invalid_data['application_deadline'] = '2020-01-01 00:00:00'
+        with pytest.raises(ValueError) as exc_info:
+            Stipend.create(invalid_data)
+        assert "Application deadline must be a future date" in str(exc_info.value)
+        
+        # Test future date limit (5 years)
+        invalid_data = form_data.copy()
+        invalid_data['application_deadline'] = '2030-01-01 00:00:00'
+        with pytest.raises(ValueError) as exc_info:
+            Stipend.create(invalid_data)
+        assert "Application deadline cannot be more than 5 years in the future" in str(exc_info.value)
+        
+        # Test invalid time values
+        invalid_data = form_data.copy()
+        invalid_data['application_deadline'] = '2025-12-31 25:00:00'
+        with pytest.raises(ValueError) as exc_info:
+            Stipend.create(invalid_data)
+        assert "Invalid date format" in str(exc_info.value)
+        
+        # Test invalid organization ID
+        invalid_data = form_data.copy()
+        invalid_data['organization_id'] = 99999
+        with pytest.raises(ValueError) as exc_info:
+            Stipend.create(invalid_data)
+        assert "Invalid organization ID" in str(exc_info.value)
+        
         # Create initial stipend
         form = StipendForm(data=form_data)
         form.tags.choices = tag_choices
