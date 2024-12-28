@@ -8,7 +8,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 db = SQLAlchemy()
 login_manager = LoginManager()
-csrf = CSRFProtect()  # Initialize CSRF protection
+csrf = CSRFProtect()
+csrf_token = csrf.generate_csrf  # Make csrf_token available as a callable
 migrate = Migrate()
 limiter = Limiter(
     key_func=get_remote_address,

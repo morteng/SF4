@@ -13,9 +13,21 @@ class FlashMessages(str, Enum):
     GENERIC_SUCCESS = "Operation completed successfully."
     GENERIC_ERROR = "An error occurred. Please try again."
 
+    # CRUD Operations
+    CREATE_SUCCESS = "Record created successfully."
+    READ_SUCCESS = "Record retrieved successfully."
+    UPDATE_SUCCESS = "Record updated successfully."
+    DELETE_SUCCESS = "Record deleted successfully."
+    CREATE_ERROR = "Error creating record."
+    READ_ERROR = "Error retrieving record."
+    UPDATE_ERROR = "Error updating record."
+    DELETE_ERROR = "Error deleting record."
+    
     # User Management
     USER_CREATED = "User created successfully."
     CREATE_USER_SUCCESS = "User created successfully."
+    USER_UPDATED = "User updated successfully."
+    USER_DELETED = "User deleted successfully."
     USERNAME_ALREADY_EXISTS = "Username already exists. Please choose a different username."
     CREATE_USER_ERROR = "Failed to create user: "
     CREATE_USER_INVALID_DATA = "Invalid data provided for user creation."
@@ -27,6 +39,10 @@ class FlashMessages(str, Enum):
 
     # Bot Management
     CREATE_BOT_SUCCESS = "Bot created successfully."
+    BOT_RUN_STARTED = "Bot run started successfully."
+    BOT_RUN_COMPLETED = "Bot run completed successfully."
+    BOT_RUN_FAILED = "Bot run failed."
+    BOT_SCHEDULED = "Bot scheduled successfully."
     CREATE_BOT_ERROR = "Failed to create bot: "
     CREATE_BOT_INVALID_DATA = "Invalid data provided for bot creation."
     UPDATE_BOT_SUCCESS = "Bot updated successfully."
@@ -88,6 +104,12 @@ class FlashMessages(str, Enum):
     # CSRF
     CSRF_INVALID = "Invalid CSRF token. Please refresh the page and try again."
 
+    # Audit Actions
+    AUDIT_CREATE = "create"
+    AUDIT_READ = "read"
+    AUDIT_UPDATE = "update"
+    AUDIT_DELETE = "delete"
+    
     # Authentication
     USERNAME_REQUIRED = "Username is required."
     USERNAME_LENGTH = "Username must be between 3 and 50 characters."
