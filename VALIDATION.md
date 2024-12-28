@@ -34,6 +34,11 @@
 - Ensure real-time updates
 - Validate user_id matches current user or system (0)
 - Use NotificationType enum for all notification types
+- Validate enum values match defined types:
+  - BOT_SUCCESS, BOT_ERROR, USER_ACTION, SYSTEM
+  - CRUD_CREATE, CRUD_UPDATE, CRUD_DELETE
+  - USER_CREATED, USER_UPDATED, USER_DELETED
+  - PASSWORD_RESET, AUDIT_LOG
 
 ## CSRF Token Validation
 - Validate CSRF tokens in all POST requests
