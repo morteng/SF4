@@ -51,7 +51,7 @@ def app():
     
     # Clean up database after test
     with app.app_context():
-        db.session.remove()
+        db.session.close()
         db.drop_all()
 
 @pytest.fixture(scope='function')
@@ -166,8 +166,8 @@ def test_user(db_session, app):
         from app.models.notification import Notification
         
         # Delete related audit logs and notifications
-        AuditLog.query.filter_by(user_id=user.id).delete()
-        Notification.query.filter_by(user_id=user.id).delete()
+        db_session.query(AuditLog).filter_by(user_id=user.id).delete()
+        db_session.query(Notification).filter_by(user_id=user.id).delete()
         
         # Delete the user
         db_session.delete(user)
