@@ -22,11 +22,14 @@ class AuditLog(db.Model):
     details_before = db.Column(db.Text, nullable=True)
     details_after = db.Column(db.Text, nullable=True)
     ip_address = db.Column(db.String(45), nullable=True)
+    http_method = db.Column(db.String(10), nullable=True)
+    endpoint = db.Column(db.String(100), nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     @staticmethod
     def create(user_id, action, details=None, object_type=None, object_id=None,
-              details_before=None, details_after=None, ip_address=None):
+              details_before=None, details_after=None, ip_address=None,
+              http_method=None, endpoint=None):
         """Create audit log with JSON serialization and validation"""
         if details_before and not isinstance(details_before, (dict, str)):
             raise ValueError("details_before must be dict or JSON string")
@@ -50,6 +53,8 @@ class AuditLog(db.Model):
                 details_before=details_before,
                 details_after=details_after,
                 ip_address=ip_address,
+                http_method=http_method,
+                endpoint=endpoint,
                 timestamp=datetime.now(timezone.utc)
             )
             db.session.add(log)
@@ -70,18 +75,3 @@ class AuditLog(db.Model):
             db.session.rollback()
             current_app.logger.error(f"Error creating audit log: {str(e)}")
             raise
-from datetime import datetime
-from app.extensions import db
-
-class AuditLog(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
-    action_type = db.Column(db.String(50), nullable=False)
-    object_type = db.Column(db.String(50), nullable=False)
-    object_id = db.Column(db.Integer, nullable=True)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    ip_address = db.Column(db.String(50))
-    http_method = db.Column(db.String(10))
-    endpoint = db.Column(db.String(100))
-    before_state = db.Column(db.Text, nullable=True)
-    after_state = db.Column(db.Text, nullable=True)
