@@ -3,7 +3,7 @@
 - [ ] Fix database initialization in tests
 - [ ] Complete test coverage for notification system
 - [ ] Add audit log viewing interface
-- [ ] Implement rate limiting for login attempts
+- [ ] Handle rate limiting in test fixtures
 
 ## Completed
 - [x] Implement CRUD operations with audit logging
