@@ -31,55 +31,50 @@ class AuditLog(db.Model):
               details_before=None, details_after=None, ip_address=None,
               http_method=None, endpoint=None, commit=True, notify=True):
         """Enhanced audit logging with better error handling and validation"""
+        if not action:
+            raise ValueError("Action is required")
+            
+        if object_type and not object_id:
+            raise ValueError("object_id is required when object_type is provided")
+            
+        # Validate and serialize complex data
+        if details_before and not isinstance(details_before, (dict, str)):
+            raise ValueError("details_before must be dict or JSON string")
+        if details_after and not isinstance(details_after, (dict, str)):
+            raise ValueError("details_after must be dict or JSON string")
+            
         try:
-            # Validate required fields
-            if not user_id or not action:
-                raise ValueError("user_id and action are required")
-                
-            # If object_type is provided but object_id is None, set object_type to None
-            if object_type and object_id is None:
-                object_type = None
-                
-            # Validate and serialize complex data
-            if details_before:
-                if not isinstance(details_before, (dict, str)):
-                    raise ValueError("details_before must be dict or JSON string")
-                if isinstance(details_before, dict):
-                    details_before = json.dumps(details_before)
-                    
-            if details_after:
-                if not isinstance(details_after, (dict, str)):
-                    raise ValueError("details_after must be dict or JSON string")
-                if isinstance(details_after, dict):
-                    details_after = json.dumps(details_after)
-                    
             # Create audit log
             log = AuditLog(
                 user_id=user_id,
                 action=action,
                 details=details,
-                object_type=object_type or 'User',
+                object_type=object_type,
                 object_id=object_id,
-                details_before=details_before,
-                details_after=details_after,
+                details_before=json.dumps(details_before) if isinstance(details_before, dict) else details_before,
+                details_after=json.dumps(details_after) if isinstance(details_after, dict) else details_after,
                 ip_address=ip_address,
                 http_method=http_method,
                 endpoint=endpoint,
                 timestamp=datetime.now(timezone.utc)
             )
+            
             db.session.add(log)
             if commit:
                 db.session.commit()
             
-            # Create notification if this isn't being called from Notification.create()
-            if object_type != 'Notification':
-                Notification = get_notification_model()
-                Notification.create(
-                    type=NotificationType.AUDIT_LOG,
-                    message=f"{action.capitalize()} operation on {object_type} {object_id}",
-                    related_object=log,
-                    user_id=user_id
-                )
+            # Create notification if needed
+            if notify and object_type != 'Notification':
+                try:
+                    Notification = get_notification_model()
+                    Notification.create(
+                        type=NotificationType.AUDIT_LOG,
+                        message=f"{action.capitalize()} operation on {object_type} {object_id}",
+                        related_object=log,
+                        user_id=user_id
+                    )
+                except Exception as e:
+                    current_app.logger.error(f"Error creating notification for audit log: {str(e)}")
             
             return log
         except Exception as e:

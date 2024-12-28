@@ -1,8 +1,11 @@
-from flask import Blueprint, render_template
-from flask_login import current_user
-from flask_login import login_required
+from flask import Blueprint, render_template, current_app
+from flask_login import current_user, login_required
 from app.utils import admin_required
-
+from app.extensions import db
+from app.models.notification import Notification
+from app.models.audit_log import AuditLog
+from app.models.bot import Bot
+from app.models.user import User
 
 admin_dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 
@@ -10,27 +13,30 @@ admin_dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
 @login_required
 @admin_required
 def dashboard():
-    from app.models.notification import Notification
-    from app.models.audit_log import AuditLog
-    from app.models.bot import Bot
-    
-    # Get recent activity with user information
-    recent_activity = db.session.query(AuditLog, User.username)\
-        .join(User, AuditLog.user_id == User.id, isouter=True)\
-        .order_by(AuditLog.timestamp.desc())\
-        .limit(10)\
-        .all()
-    
-    # Get unread notifications
-    notification_count = Notification.query.filter_by(
-        read_status=False,
-        user_id=current_user.id
-    ).count()
-    
-    # Get bot status
-    bots = Bot.query.all()
-    
-    return render_template('admin/dashboard.html',
-                         notification_count=notification_count,
-                         recent_activity=recent_activity,
-                         bots=bots)
+    try:
+        # Get recent activity with user information
+        recent_activity = db.session.query(AuditLog, User.username)\
+            .join(User, AuditLog.user_id == User.id, isouter=True)\
+            .order_by(AuditLog.timestamp.desc())\
+            .limit(10)\
+            .all()
+        
+        # Get unread notifications
+        notification_count = Notification.query.filter_by(
+            read_status=False,
+            user_id=current_user.id
+        ).count()
+        
+        # Get bot status
+        bots = Bot.query.all()
+        
+        return render_template('admin/dashboard.html',
+                             notification_count=notification_count,
+                             recent_activity=recent_activity,
+                             bots=bots)
+    except Exception as e:
+        current_app.logger.error(f"Error in dashboard route: {str(e)}")
+        return render_template('admin/dashboard.html',
+                             notification_count=0,
+                             recent_activity=[],
+                             bots=[])
