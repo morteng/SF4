@@ -4,6 +4,7 @@
 - [ ] Add audit log viewing interface
 - [ ] Implement proper bot scaffolding
 - [ ] Add test coverage for timezone handling
+- [ ] Update datetime handling to use timezone-aware objects
 
 ## Completed
 - [x] Implement CRUD operations with audit logging

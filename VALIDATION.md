@@ -2,10 +2,12 @@
 
 ### Form Validation
 - Validate all form inputs using constants from app\constants.py
-- Validate required fields in both create and update operations:
-  - Name: required, max 100 chars
-  - Description: required, max 1000 chars
-  - Dates: required, valid format, proper range
+- Validate required fields in create operations
+- Partial updates should be supported in update operations
+- Validate fields when present in update operations:
+  - Name: max 100 chars
+  - Description: max 1000 chars
+  - Dates: valid format, proper range when present
 - Validate date formats and ranges:
   - Application deadline must be in the future
   - Created/updated dates must be in the past
