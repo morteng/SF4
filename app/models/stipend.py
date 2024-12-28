@@ -232,6 +232,6 @@ class Stipend(db.Model):
             'updated_at': self.updated_at.isoformat(),
             'is_active': self.open_for_applications and (
                 not self.application_deadline or 
-                self.application_deadline > datetime.now(timezone.utc)
+                self.application_deadline.replace(tzinfo=timezone.utc) > datetime.now(timezone.utc)
             )
         }
