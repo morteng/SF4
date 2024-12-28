@@ -15,38 +15,11 @@ fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
 
 
-def get_engine():
-    try:
-        # this works with Flask-SQLAlchemy<3 and Alchemical
-        return current_app.extensions['migrate'].db.get_engine()
-    except (TypeError, AttributeError):
-        # this works with Flask-SQLAlchemy>=3
-        return current_app.extensions['migrate'].db.engine
-
-
-def get_engine_url():
-    try:
-        return get_engine().url.render_as_string(hide_password=False).replace(
-            '%', '%%')
-    except AttributeError:
-        return str(get_engine().url).replace('%', '%%')
-
-
-def get_metadata():
-    if hasattr(target_db, 'metadatas'):
-        return target_db.metadatas[None]
-    return target_db.metadata
+# Get the target metadata from Flask-Migrate
+target_metadata = current_app.extensions['migrate'].db.metadata
 
 # Set the SQLAlchemy URL for Alembic
-config.set_main_option('sqlalchemy.url', get_engine_url())
-
-# Get the target metadata from Flask-Migrate
-target_db = current_app.extensions['migrate'].db
-target_metadata = get_metadata()
-
-# Ensure the metadata is properly configured for autogenerate
-if not target_metadata:
-    raise RuntimeError("Could not find target metadata for migrations")
+config.set_main_option('sqlalchemy.url', str(current_app.extensions['migrate'].db.engine.url).replace('%', '%%'))
 
 
 def run_migrations_offline():
@@ -88,11 +61,7 @@ def run_migrations_online():
                 directives[:] = []
                 logger.info('No changes in schema detected.')
 
-    conf_args = current_app.extensions['migrate'].configure_args
-    if conf_args.get("process_revision_directives") is None:
-        conf_args["process_revision_directives"] = process_revision_directives
-
-    connectable = get_engine()
+    connectable = current_app.extensions['migrate'].db.engine
 
     with connectable.connect() as connection:
         context.configure(
