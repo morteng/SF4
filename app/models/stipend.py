@@ -1,7 +1,7 @@
 from .association_tables import stipend_tag_association, organization_stipends
 from app.extensions import db
 from .organization import Organization
-from datetime import datetime
+from datetime import datetime, timezone
 from pytz import utc
 
 class Stipend(db.Model):
