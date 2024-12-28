@@ -207,7 +207,12 @@ def test_missing_date(app, form_data):
         # Add the key with a dummy value before deleting it
         form_data['application_deadline'] = '2025-12-31 23:59:59'
         del form_data['application_deadline']
+        
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        
         form = StipendForm(data=form_data, meta={'csrf': False})
+        form.tags.choices = tag_choices  # Set the choices
         assert form.validate() is False
         assert 'Date is required' in form.errors['application_deadline']
 
