@@ -33,6 +33,9 @@ class Notification(db.Model):
 
     def mark_as_read(self):
         """Mark notification as read with error handling"""
+        if not self.id:
+            raise ValueError("Cannot mark unsaved notification as read")
+            
         try:
             self.read_status = True
             db.session.commit()
@@ -41,7 +44,7 @@ class Notification(db.Model):
             db.session.rollback()
             from flask import current_app
             current_app.logger.error(f"Error marking notification as read: {str(e)}")
-            raise
+            raise ValueError("Failed to mark notification as read") from e
 
     @classmethod
     def get_unread_count(cls):

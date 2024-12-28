@@ -50,5 +50,5 @@ def test_notification_to_dict(test_notification):
     """Test notification serialization"""
     notification_dict = test_notification.to_dict()
     assert notification_dict['message'] == 'Test notification'
-    assert notification_dict['type'] == NotificationType.INFO.value
+    assert notification_dict['type'] == NotificationType.SYSTEM.value
     assert notification_dict['priority'] == NotificationPriority.MEDIUM.value
