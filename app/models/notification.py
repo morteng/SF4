@@ -1,13 +1,8 @@
-from flask import current_app, request
+from flask import current_app
 from app.extensions import db
 from datetime import datetime
 from sqlalchemy import ForeignKey
 from app.constants import NotificationType, NotificationPriority
-
-# Lazy import to avoid circular dependency
-def get_audit_log_model():
-    from app.models.audit_log import AuditLog
-    return AuditLog
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -18,6 +13,7 @@ class Notification(db.Model):
     related_object_type = db.Column(db.String(50))
     related_object_id = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    priority = db.Column(db.Enum(NotificationPriority), default=NotificationPriority.MEDIUM)
 
     def __repr__(self):
         return f"<Notification {self.id}: {self.type} - {self.message}>"
@@ -31,56 +27,15 @@ class Notification(db.Model):
             'created_at': self.created_at.isoformat(),
             'related_object_type': self.related_object_type,
             'related_object_id': self.related_object_id,
-            'user_id': self.user_id
+            'user_id': self.user_id,
+            'priority': self.priority.value
         }
 
     def mark_as_read(self):
         self.read_status = True
         db.session.commit()
+        return self
 
     @classmethod
     def get_unread_count(cls):
         return cls.query.filter_by(read_status=False).count()
-        
-    @classmethod
-    def create(cls, type: NotificationType, message: str, related_object=None, user_id=None, priority=NotificationPriority.MEDIUM):
-        """Create notification with type validation"""
-        if not isinstance(type, NotificationType):
-            raise ValueError("Notification type must be a NotificationType enum")
-        """Create a new notification with proper validation"""
-        try:
-            notification = cls(
-                type=type,
-                message=message,
-                read_status=False,
-                user_id=user_id if user_id is not None else 0  # Default to system user
-            )
-            
-            if related_object:
-                notification.related_object_type = related_object.__class__.__name__
-                notification.related_object_id = related_object.id
-                
-                # Set user_id from related object if not provided
-                if user_id is None and hasattr(related_object, 'user_id'):
-                    notification.user_id = related_object.user_id
-            
-            db.session.add(notification)
-            db.session.commit()
-            
-            # Only create audit log if this isn't being called from AuditLog.create()
-            AuditLog = get_audit_log_model()
-            if related_object is None or not isinstance(related_object, AuditLog):
-                AuditLog.create(
-                    user_id=user_id,
-                    action='create_notification',
-                    object_type='Notification',
-                    object_id=notification.id,
-                    details=f'Created notification for {type} operation',
-                    ip_address=request.remote_addr if request else None
-                )
-            
-            return notification
-        except Exception as e:
-            db.session.rollback()
-            current_app.logger.error(f"Error creating notification: {str(e)}")
-            raise
