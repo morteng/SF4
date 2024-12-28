@@ -1,7 +1,7 @@
 import pytest
 import time
 from unittest.mock import patch
-from flask import session, url_for, current_app
+from flask import session, url_for, current_app, request
 from flask_limiter import Limiter
 from bs4 import BeautifulSoup
 from werkzeug.security import generate_password_hash
