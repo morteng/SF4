@@ -88,18 +88,23 @@ def create_app(config_name='development'):
             # Create database tables
             db.create_all()
             
-            # Configure session cleanup
+            # Configure session cleanup with better error handling
             @app.teardown_appcontext
             def shutdown_session(exception=None):
                 try:
+                    if db.session.is_active:
+                        if exception:
+                            db.session.rollback()
+                            logger.error(f"Session teardown with exception: {exception}")
+                            logger.error("Traceback:", exc_info=exception)
+                        else:
+                            db.session.commit()
                     db.session.remove()
-                    if exception:
-                        logger.error(f"Session teardown with exception: {exception}")
-                        # Log the full traceback for debugging
-                        logger.error("Traceback:", exc_info=exception)
                 except Exception as e:
                     logger.error(f"Error during session teardown: {str(e)}")
                     logger.error("Traceback:", exc_info=e)
+                    if db.session.is_active:
+                        db.session.rollback()
             
             logger.info("Application initialized successfully")
         except Exception as e:

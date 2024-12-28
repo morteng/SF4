@@ -80,29 +80,24 @@ def db_session(_db, app):
 
 @pytest.fixture(scope='function')
 def client(app):
-    """Provides a test client for the application with proper context management."""
-    # Ensure rate limiting is disabled
-    if hasattr(app, 'extensions') and 'limiter' in app.extensions:
-        limiter = app.extensions['limiter']
-        limiter.enabled = False
-        limiter.reset()
-    
-    # Create a new test client
-    client = app.test_client()
-    
-    # Create and push a new application context
-    app_ctx = app.app_context()
-    app_ctx.push()
-    
-    # Create and push a new request context
-    req_ctx = app.test_request_context()
-    req_ctx.push()
-    
-    yield client
-    
-    # Clean up contexts in reverse order
-    req_ctx.pop()
-    app_ctx.pop()
+    """Provides a test client with proper session and context management."""
+    with app.app_context():
+        # Ensure rate limiting is disabled
+        if 'limiter' in app.extensions:
+            limiter = app.extensions['limiter']
+            limiter.enabled = False
+            if hasattr(limiter, '_storage') and limiter._storage is not None:
+                try:
+                    limiter.reset()
+                except Exception as e:
+                    app.logger.warning(f"Failed to reset rate limiter: {str(e)}")
+        
+        # Create test client within application context
+        client = app.test_client()
+        
+        # Push request context
+        with app.test_request_context():
+            yield client
 
 @pytest.fixture(scope='function')
 def admin_user(db_session, app):
