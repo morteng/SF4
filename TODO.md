@@ -1,6 +1,7 @@
 # TODO List
 ## High Priority
 - [ ] Implement bot scheduling functionality
+- [ ] Update test data for stipend form tests to include required tags
 - [ ] Add HTMX integration for dynamic content updates
 - [ ] Complete admin interface security checks
 
