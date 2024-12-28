@@ -443,9 +443,13 @@ def test_stipend_delete_operation(app, form_data, test_db):
         form = StipendForm(data=form_data)
         form.tags.choices = tag_choices
         
+        # Convert tag IDs to Tag instances
+        model_data = form.data.copy()
+        model_data['tags'] = [Tag.query.get(tag_id) for tag_id in form.tags.data]
+            
         # Filter out non-model fields
-        model_data = filter_model_fields(form.data, Stipend)
-        
+        model_data = filter_model_fields(model_data, Stipend)
+            
         # Create stipend instance
         stipend = Stipend(**model_data)
         
