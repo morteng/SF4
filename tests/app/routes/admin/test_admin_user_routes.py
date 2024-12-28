@@ -273,11 +273,8 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
                 session['csrf_token'] = 'test-csrf-token'
             
             # Get create form and extract CSRF token
-            try:
-                create_response = logged_in_admin.get('/admin/users/create')
-            finally:
-                # Clean up contexts
-                ctx.pop()
+            # Get create form and extract CSRF token
+            create_response = logged_in_admin.get('/admin/users/create')
             assert create_response.status_code == 200
             
             # Extract CSRF token with debug logging
