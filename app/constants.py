@@ -177,7 +177,6 @@ class FlashMessages(str, Enum):
 
     # Profile Management
     UPDATE_PROFILE_SUCCESS = "Profile updated successfully."
-    PROFILE_UPDATE_INVALID_DATA = "Invalid data provided for profile update."
     
     # User Status Management
     USER_ACTIVATED = "User activated successfully."
