@@ -20,7 +20,7 @@ def test_bot(db_session, bot_data):
     test_bot.db.session.commit()
     yield bot
     db_session.delete(bot)
-    db_session.commit()
+    test_bot.db.session.commit()
 
 def test_create_bot_route(logged_in_admin, bot_data):
     create_response = logged_in_admin.get(url_for('admin.bot.create'))
