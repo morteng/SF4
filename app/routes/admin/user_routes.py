@@ -61,19 +61,33 @@ def create():
                                     form=form,
                                     notification_count=notification_count), 400
                 
-            # Create user
-            user = User(
-                username=form.username.data,
-                email=form.email.data,
-                password_hash=generate_password_hash(form.password.data),
-                is_admin=form.is_admin.data if hasattr(form, 'is_admin') else False
-            )
-            db.session.add(user)
-            db.session.commit()
+            # Validate unique fields
+            if User.query.filter_by(username=form.username.data).first():
+                flash_message("Username already exists", FlashCategory.ERROR)
+                return render_template('admin/users/create.html',
+                                    form=form,
+                                    notification_count=notification_count), 400
             
-            # Verify user was created
-            if not user or not hasattr(user, 'id'):
-                raise ValueError("Failed to create user - invalid user object returned")
+            if User.query.filter_by(email=form.email.data).first():
+                flash_message("Email already exists", FlashCategory.ERROR)
+                return render_template('admin/users/create.html',
+                                    form=form,
+                                    notification_count=notification_count), 400
+
+            # Create user with proper validation
+            try:
+                user = User(
+                    username=form.username.data,
+                    email=form.email.data,
+                    password_hash=generate_password_hash(form.password.data),
+                    is_admin=form.is_admin.data if hasattr(form, 'is_admin') else False
+                )
+                db.session.add(user)
+                db.session.commit()
+                
+                # Verify user creation
+                if not user or not user.id:
+                    raise ValueError("Failed to create user - invalid user object returned")
                 
             # Create audit log
             AuditLog.create(
