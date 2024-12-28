@@ -253,6 +253,10 @@ def get_all_tags():
 def logged_in_client(client, test_user, app, db_session):
     """Log in as a regular user."""
     with client.application.test_request_context():
+        # Debug: Print test user credentials
+        logging.info(f"Test user username: {test_user.username}")
+        logging.info(f"Test user password hash: {test_user.password_hash}")
+        
         # Ensure the test_user is bound to the current session
         db_session.add(test_user)
         db_session.commit()
@@ -262,10 +266,14 @@ def logged_in_client(client, test_user, app, db_session):
 
         response = client.post(url_for('public.login'), data={
             'username': test_user.username,
-            'password': 'password123',
+            'password': 'TestPass123!',  # Match the test user's password
             'csrf_token': csrf_token
         }, follow_redirects=True)
 
+        # Debug: Print login response
+        logging.info(f"Login response status: {response.status_code}")
+        logging.info(f"Login response data: {response.data.decode('utf-8')}")
+            
         assert response.status_code == 200, "User login failed."
         with client.session_transaction() as session:
             assert '_user_id' in session, "User session not established."
