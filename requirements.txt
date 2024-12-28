@@ -5,7 +5,7 @@ pytest
 python-dotenv
 SQLAlchemy
 Flask-Login
-Flask-WTF
+Flask-WTF==1.2.1
 WTForms
 flask-migrate
 pytz
