@@ -276,19 +276,14 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
 
     # Perform all operations within the logged_in_admin context
     with logged_in_admin.application.test_request_context():
-        with logged_in_admin:
-            # Set up session
-            with logged_in_admin.session_transaction() as session:
-                session['_user_id'] = str(test_user.id)
-                session['_fresh'] = True
-
-            # Initialize session with CSRF token
-            with logged_in_admin.session_transaction() as session:
-                session['csrf_token'] = 'test-csrf-token'
-            
-            # Get create form and extract CSRF token
-            # Get create form and extract CSRF token
-            create_response = logged_in_admin.get('/admin/users/create')
+        # Set up session and CSRF token
+        with logged_in_admin.session_transaction() as session:
+            session['_user_id'] = str(test_user.id)
+            session['_fresh'] = True
+            session['csrf_token'] = 'test-csrf-token'
+        
+        # Get create form and extract CSRF token
+        create_response = logged_in_admin.get('/admin/users/create')
             assert create_response.status_code == 200
             
             # Extract CSRF token with debug logging
