@@ -377,7 +377,7 @@ def test_stipend_update_operation(app, form_data, test_db):
         })
             
         # Verify audit logs
-        logs = AuditLog.query.filter_by(object_type='Stipend', object_id=stipend.id).order_by(AuditLog.created_at.desc()).all()
+        logs = AuditLog.query.filter_by(object_type='Stipend', object_id=stipend.id).order_by(AuditLog.timestamp.desc()).all()
         assert len(logs) >= 2  # Should have create and update logs
             
         # Verify update log
