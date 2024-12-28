@@ -43,7 +43,7 @@ class Notification(db.Model):
         return cls.query.filter_by(read_status=False).count()
         
     @classmethod
-    def create(cls, type: NotificationType, message: str, related_object=None, user_id=None):
+    def create(cls, type: NotificationType, message: str, related_object=None, user_id=None, priority=NotificationPriority.MEDIUM):
         """Create notification with type validation"""
         if not isinstance(type, NotificationType):
             raise ValueError("Notification type must be a NotificationType enum")

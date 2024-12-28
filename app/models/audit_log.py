@@ -29,7 +29,7 @@ class AuditLog(db.Model):
     @staticmethod
     def create(user_id, action, details=None, object_type=None, object_id=None,
               details_before=None, details_after=None, ip_address=None,
-              http_method=None, endpoint=None, commit=True):
+              http_method=None, endpoint=None, commit=True, notify=True):
         """Create audit log with JSON serialization and validation"""
         if details_before and not isinstance(details_before, (dict, str)):
             raise ValueError("details_before must be dict or JSON string")

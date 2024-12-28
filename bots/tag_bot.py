@@ -33,7 +33,8 @@ class TagBot:
                 object_type='Bot',
                 ip_address='127.0.0.1',
                 http_method='POST',
-                endpoint='admin.bot.run'
+                endpoint='admin.bot.run',
+                notify=True
             )
             
             self._start_bot()
