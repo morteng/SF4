@@ -203,6 +203,24 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, client):
         assert csrf_token is not None
 
         # Create user
+        response = logged_in_admin.post('/admin/users/create', data={
+            'username': user_data['username'],
+            'email': user_data['email'],
+            'password': user_data['password'],
+            'is_admin': user_data['is_admin'],
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+
+        assert response.status_code == 200
+        assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in response.data
+
+        # Verify user creation
+        created_user = User.query.filter_by(username=user_data['username']).first()
+        assert created_user is not None
+        csrf_token = extract_csrf_token(create_response.data)
+        assert csrf_token is not None
+
+        # Create user
         # Create form data with proper field names
         form_data = {
             'username': user_data['username'],
