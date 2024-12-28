@@ -179,53 +179,63 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
     ).first()
     assert log is not None
 
+from flask import current_app
+from unittest.mock import patch
+
+def extract_csrf_token(response_data):
+    """Helper function to extract CSRF token from HTML response"""
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(response_data, 'html.parser')
+    csrf_input = soup.find('input', {'name': 'csrf_token'})
+    return csrf_input['value'] if csrf_input else None
+
 def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
-    # Disable Flask-Limiter
-    if 'limiter' in app.extensions:
-        app.extensions['limiter'].enabled = False
+    # Mock Flask-Limiter to prevent interference
+    with patch('flask_limiter.Limiter') as mock_limiter:
+        mock_limiter.return_value.enabled = False
 
-    # Use proper context management
-    with app.app_context():
-        # Reset rate limiter
-        if 'limiter' in app.extensions:
-            app.extensions['limiter'].reset()
+        # Use proper context management
+        with app.app_context():
+            # Reset rate limiter
+            if 'limiter' in app.extensions:
+                app.extensions['limiter'].reset()
 
-        with app.test_request_context():
-            # Set up logging
-            logging.basicConfig(level=logging.INFO)
-            logger = logging.getLogger(__name__)
-            
-            # Log test start
-            logger.info("Starting user CRUD operations test")
+            with app.test_request_context():
+                # Set up logging
+                logging.basicConfig(level=logging.INFO)
+                logger = logging.getLogger(__name__)
 
-            # Test audit log rollback
-            try:
-                AuditLog.create(
-                    user_id=test_user.id,
-                    action=None,  # Invalid - should raise error
-                    commit=True
+                # Log test start
+                logger.info("Starting user CRUD operations test")
+
+                # Test audit log rollback
+                try:
+                    AuditLog.create(
+                        user_id=test_user.id,
+                        action=None,  # Invalid - should raise error
+                        commit=True
+                    )
+                    assert False, "Should have raised ValueError"
+                except ValueError as e:
+                    logs = AuditLog.query.filter_by(user_id=test_user.id).all()
+                    assert len(logs) == 0, "Audit log should have been rolled back"
+
+                # Test notification error handling
+                notification = Notification(
+                    message="Test notification",
+                    type="USER_ACTION",
+                    user_id=test_user.id
                 )
-                assert False, "Should have raised ValueError"
-            except ValueError as e:
-                logs = AuditLog.query.filter_by(user_id=test_user.id).all()
-                assert len(logs) == 0, "Audit log should have been rolled back"
+                db_session.add(notification)
+                db_session.commit()
 
-            # Test notification error handling
-            notification = Notification(
-                message="Test notification",
-                type="USER_ACTION",
-                user_id=test_user.id
-            )
-            db_session.add(notification)
-            db_session.commit()
-
-            # Force an error by marking invalid notification as read
-            invalid_notification = Notification()
-            try:
-                invalid_notification.mark_as_read()
-                assert False, "Should have raised ValueError"
-            except ValueError as e:
-                assert str(e) == "Cannot mark unsaved notification as read"
+                # Force an error by marking invalid notification as read
+                invalid_notification = Notification()
+                try:
+                    invalid_notification.mark_as_read()
+                    assert False, "Should have raised ValueError"
+                except ValueError as e:
+                    assert str(e) == "Cannot mark unsaved notification as read"
 
         # Perform CRUD operations within the logged_in_admin context
         with logged_in_admin.application.test_request_context():
