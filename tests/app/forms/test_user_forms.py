@@ -103,6 +103,9 @@ def test_profile_form_valid(client, setup_database):
         db.session.commit()
 
 def test_profile_form_invalid_same_username(client, setup_database):
+    # Increase rate limit for testing
+    current_app.config['RATELIMIT_DEFAULT'] = "10 per minute"
+    
     # Create existing user
     password_hash = generate_password_hash("password123")
     user = User(username="existinguser", email="existing@example.com", password_hash=password_hash)
@@ -118,25 +121,37 @@ def test_profile_form_invalid_same_username(client, setup_database):
     db.session.add(test_user)
     db.session.commit()
     
-    # First make a GET request to establish session and get CSRF token
-    get_response = client.get(url_for('public.login'))
-    assert get_response.status_code == 200
+    # Log in the user
+    with client:
+        # Reset rate limiter before first request
+        limiter = current_app.extensions.get('limiter')
+        limiter.reset()
+        
+        # First make a GET request to establish session and get CSRF token
+        get_response = client.get(url_for('public.login'))
+        assert get_response.status_code == 200
             
-    # Extract CSRF token using BeautifulSoup
-    soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
-    csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+        # Extract CSRF token using BeautifulSoup
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
 
-    # Now make the login POST request
-    login_response = client.post(url_for('public.login'), data={
-        'username': 'testuser',
-        'password': 'password123',
-        'csrf_token': csrf_token
-    }, follow_redirects=True)
-    assert login_response.status_code == 200, "Login failed"
-    
-    # Get CSRF token from the profile edit page
-    get_response = client.get('/user/profile/edit')
-    assert get_response.status_code == 200, "Failed to access profile edit page"
+        # Reset rate limiter before login attempt
+        limiter.reset()
+            
+        # Now make the login POST request
+        login_response = client.post(url_for('public.login'), data={
+            'username': 'testuser',
+            'password': 'password123',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        assert login_response.status_code == 200, "Login failed"
+        
+        # Reset rate limiter before profile edit request
+        limiter.reset()
+        
+        # Get CSRF token from the profile edit page
+        get_response = client.get('/user/profile/edit')
+        assert get_response.status_code == 200, "Failed to access profile edit page"
     soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
     csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
     assert csrf_token, "CSRF token not found in form"
