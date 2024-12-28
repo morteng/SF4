@@ -195,7 +195,9 @@ def get_all_stipends():
     return Stipend.query.all()  # Return a list instead of Query object
 from app.models.stipend import Stipend
 from app.models.audit_log import AuditLog
+from app.models.tag import Tag
 from app.extensions import db
+from flask_login import current_user
 
 def create_stipend(data, user_id, ip_address):
     stipend = Stipend(**data)
