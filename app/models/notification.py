@@ -64,17 +64,17 @@ class Notification(db.Model):
             db.session.add(notification)
             db.session.commit()
             
-            # Create audit log for notification creation
-            # Create audit log using lazy import
-            AuditLog = get_audit_log_model()
-            AuditLog.create(
-                user_id=user_id,
-                action='create_notification',
-                object_type='Notification',
-                object_id=notification.id,
-                details=f'Created notification for {type} operation',
-                ip_address=request.remote_addr if request else None
-            )
+            # Only create audit log if this isn't being called from AuditLog.create()
+            if not isinstance(related_object, AuditLog):
+                AuditLog = get_audit_log_model()
+                AuditLog.create(
+                    user_id=user_id,
+                    action='create_notification',
+                    object_type='Notification',
+                    object_id=notification.id,
+                    details=f'Created notification for {type} operation',
+                    ip_address=request.remote_addr if request else None
+                )
             
             return notification
         except Exception as e:

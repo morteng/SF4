@@ -50,14 +50,15 @@ class AuditLog(db.Model):
             db.session.add(log)
             db.session.commit()
             
-            # Create notification using lazy import
-            Notification = get_notification_model()
-            Notification.create(
-                type=NotificationType.AUDIT_LOG,
-                message=f"{action.capitalize()} operation on {object_type} {object_id}",
-                related_object=log,
-                user_id=user_id
-            )
+            # Only create notification if this isn't being called from Notification.create()
+            if object_type != 'Notification':
+                Notification = get_notification_model()
+                Notification.create(
+                    type=NotificationType.AUDIT_LOG,
+                    message=f"{action.capitalize()} operation on {object_type} {object_id}",
+                    related_object=log,
+                    user_id=user_id
+                )
             
             return log
         except Exception as e:
