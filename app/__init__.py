@@ -87,6 +87,13 @@ def create_app(config_name='development'):
             # Create database tables
             db.create_all()
             
+            # Configure session cleanup
+            @app.teardown_appcontext
+            def shutdown_session(exception=None):
+                db.session.remove()
+                if exception:
+                    logger.error(f"Session teardown with exception: {exception}")
+            
             logger.info("Application initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize application: {str(e)}")

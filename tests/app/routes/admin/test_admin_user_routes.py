@@ -195,6 +195,33 @@ def extract_csrf_token(response_data):
     return csrf_input['value'] if csrf_input else None
 
 def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
+    """Test full CRUD operations with enhanced error handling"""
+    logger = logging.getLogger(__name__)
+    logger.info("Starting user CRUD operations test")
+    
+    # Test audit log creation
+    with app.app_context():
+        try:
+            # Test valid audit log
+            audit_log = AuditLog.create(
+                user_id=test_user.id,
+                action="test_action",
+                commit=True
+            )
+            assert audit_log is not None
+            
+            # Test invalid audit log
+            with pytest.raises(ValueError) as exc_info:
+                AuditLog.create(
+                    user_id=test_user.id,
+                    action=None,  # Invalid
+                    commit=True
+                )
+            assert "Action is required" in str(exc_info.value)
+            
+            # Verify no invalid log was created
+            invalid_logs = AuditLog.query.filter_by(user_id=test_user.id, action=None).all()
+            assert len(invalid_logs) == 0
     # Set up logging
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)

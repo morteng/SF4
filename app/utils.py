@@ -118,6 +118,11 @@ def init_admin_user() -> None:
     Raises:
         RuntimeError: If required environment variables are missing
     """
+    logger = logging.getLogger(__name__)
+    
+    try:
+        logger.info("Initializing admin user")
+        load_dotenv()  # Load environment variables from .env file
     try:
         load_dotenv()  # Load environment variables from .env file
         username = os.environ.get('ADMIN_USERNAME')
