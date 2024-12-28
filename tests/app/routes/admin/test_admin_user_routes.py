@@ -206,9 +206,35 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
         create_response = logged_in_admin.post('/admin/users/create',
                                             data={
                                                 **user_data,
-                                                'csrf_token': csrf_token
+                                                'csrf_token': csrf_token,
+                                                'is_admin': False
                                             },
                                             follow_redirects=True)
+            
+        # Verify user creation
+        assert create_response.status_code == 200
+        assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in create_response.data
+            
+        # Verify user exists in database
+        created_user = User.query.filter_by(username=user_data['username']).first()
+        assert created_user is not None
+        assert created_user.email == user_data['email']
+            
+        # Verify audit log
+        audit_log = AuditLog.query.filter_by(
+            action='create_user',
+            object_type='User',
+            object_id=created_user.id
+        ).first()
+        assert audit_log is not None
+        assert audit_log.user_id == test_user.id
+            
+        # Verify notification
+        notification = Notification.query.filter_by(
+            type='user_created',
+            message=f'User {user_data["username"]} was created'
+        ).first()
+        assert notification is not None
     assert create_response.status_code == 200
     assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in create_response.data
     

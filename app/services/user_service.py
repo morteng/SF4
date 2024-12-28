@@ -69,7 +69,7 @@ def search_users(query, page=1, per_page=10):
         logging.error(f"Error searching users: {str(e)}")
         raise ValueError(FlashMessages.USER_SEARCH_ERROR.value)
 
-def create_user(form_data):
+def create_user(form_data, current_user_id):
     """Create a new user with validation and audit logging"""
     try:
         # Validate unique fields
@@ -91,7 +91,7 @@ def create_user(form_data):
         
         # Create audit log
         AuditLog.create(
-            user_id=current_user.id,
+            user_id=current_user_id,
             action='create_user',
             object_type='User',
             object_id=new_user.id,
@@ -99,10 +99,18 @@ def create_user(form_data):
             ip_address=request.remote_addr
         )
         
+        # Create notification
+        Notification.create(
+            type='user_created',
+            message=f'User {new_user.username} was created',
+            related_object=f'User:{new_user.id}'
+        )
+        
         return new_user
     except Exception as e:
         db.session.rollback()
-        raise ValueError(f"Error creating user: {str(e)}")
+        logging.error(f"Error creating user: {str(e)}")
+        raise ValueError(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}")
 
 def update_user(user, form_data):
     print(f"Updating user with data: {form_data}")  # Debug statement

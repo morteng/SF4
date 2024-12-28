@@ -123,7 +123,7 @@ def create():
                 'password': form.password.data,
                 'is_admin': form.is_admin.data if hasattr(form, 'is_admin') else False
             }
-            new_user = create_user(user_data)
+            new_user = create_user(user_data, current_user.id)
             
             # Create audit log with IP address
             AuditLog.create(
