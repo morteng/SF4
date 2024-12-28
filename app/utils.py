@@ -89,13 +89,14 @@ def admin_required(f):
                 db.session.rollback()
         
             
-        # Create audit log for admin access
+        # Create audit log for admin access without object_type
         AuditLog.create(
             user_id=current_user.id,
             action=f.__name__,
-            object_type='AdminPanel',
             details=f"Accessed admin route: {request.path}",
-            ip_address=request.remote_addr
+            ip_address=request.remote_addr,
+            http_method=request.method,
+            endpoint=request.endpoint
         )
             
         # Log admin access
