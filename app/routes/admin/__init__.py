@@ -1,5 +1,7 @@
 import json
 from flask import Blueprint, redirect, url_for, request, current_app
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from app.models.notification import Notification, NotificationType
 from flask_wtf.csrf import validate_csrf
 from functools import wraps
@@ -159,7 +161,10 @@ def register_admin_blueprints(app):
     def apply_rate_limits(bp):
         @bp.before_request
         def limit_requests():
+            # Apply general rate limit
             limiter.limit("100 per hour")(lambda: None)()
+            
+            # Apply method-specific rate limits
             if request.method == 'POST':
                 limiter.limit("10 per minute")(lambda: None)()
             if request.method == 'DELETE':
@@ -167,6 +172,7 @@ def register_admin_blueprints(app):
             if request.method == 'POST' and request.path.endswith('/reset_password'):
                 limiter.limit("5 per hour", key_func=lambda: f"{get_remote_address()}_reset_password")(lambda: None)()
 
+    # Apply rate limits to all admin blueprints
     for bp in [admin_user_bp, admin_bot_bp, admin_org_bp, 
                admin_stipend_bp, admin_tag_bp]:
         apply_rate_limits(bp)
