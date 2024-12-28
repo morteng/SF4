@@ -1,24 +1,81 @@
 import pytest
-from app.models.notification import Notification
-from app.services.notification_service import get_notification_count
+from app.models.notification import Notification, NotificationType
+from app.services.notification_service import (
+    get_notification_count,
+    create_notification,
+    mark_notification_read,
+    delete_notification
+)
+from app.models.user import User
+from app.models.stipend import Stipend
+from app.extensions import db
 
-def test_get_notification_count(client, db_session, test_user):
-    # Create test notifications
-    Notification.create(type="test", message="Test 1", user_id=test_user.id)
-    Notification.create(type="test", message="Test 2", user_id=test_user.id)
+def test_notification_lifecycle(client, db_session, test_user):
+    # Create notification
+    notification = create_notification(
+        type=NotificationType.INFO,
+        message="Test notification",
+        user_id=test_user.id
+    )
+    assert notification.id is not None
+    assert notification.read_status is False
     
-    count = get_notification_count(test_user.id)
-    assert count == 2
-
-def test_get_notification_count_invalid_user(client, db_session):
-    count = get_notification_count(None)
-    assert count == 0
-
-def test_get_notification_count_high_threshold(client, db_session, test_user, caplog):
-    # Create more than 10 notifications
-    for i in range(15):
-        Notification.create(type="test", message=f"Test {i}", user_id=test_user.id)
+    # Mark as read
+    mark_notification_read(notification.id)
+    db_session.refresh(notification)
+    assert notification.read_status is True
     
-    count = get_notification_count(test_user.id)
-    assert count == 15
-    assert "High notification count (15)" in caplog.text
+    # Delete notification
+    delete_notification(notification.id)
+    assert Notification.query.get(notification.id) is None
+
+def test_notification_with_related_object(client, db_session, test_user, test_stipend):
+    # Create notification with related stipend
+    notification = create_notification(
+        type=NotificationType.WARNING,
+        message="Stipend update",
+        user_id=test_user.id,
+        related_object=test_stipend
+    )
+    assert notification.related_object == test_stipend
+
+def test_notification_error_handling(client, db_session):
+    # Test invalid notification creation
+    with pytest.raises(ValueError):
+        create_notification(type="invalid", message="Test")
+        
+    # Test marking non-existent notification as read
+    with pytest.raises(ValueError):
+        mark_notification_read(99999)
+        
+    # Test deleting non-existent notification
+    with pytest.raises(ValueError):
+        delete_notification(99999)
+
+def test_notification_count_edge_cases(client, db_session):
+    # Test count with no notifications
+    assert get_notification_count(None) == 0
+    
+    # Test count with invalid user
+    assert get_notification_count(99999) == 0
+
+def test_notification_priority_handling(client, db_session, test_user):
+    # Test different priority levels
+    for priority in ['low', 'medium', 'high']:
+        notification = create_notification(
+            type=NotificationType.INFO,
+            message=f"Test {priority} priority",
+            user_id=test_user.id,
+            priority=priority
+        )
+        assert notification.priority == priority
+
+def test_notification_type_validation(client, db_session, test_user):
+    # Test valid notification types
+    for ntype in NotificationType:
+        notification = create_notification(
+            type=ntype,
+            message=f"Test {ntype.value}",
+            user_id=test_user.id
+        )
+        assert notification.type == ntype

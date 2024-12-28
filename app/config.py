@@ -34,16 +34,25 @@ class TestConfig(Config):
     SERVER_NAME = 'localhost'
     APPLICATION_ROOT = '/'
     PREFERRED_URL_SCHEME = 'http'
-    # Completely disable rate limiting in tests
+    
+    # Disable all rate limiting in tests
     RATELIMIT_ENABLED = False
     RATELIMIT_STORAGE_URI = 'memory://'
-    RATELIMIT_DEFAULT = "9999999 per second"  # Effectively disable rate limits
+    RATELIMIT_DEFAULT = "9999999 per second"
     RATELIMIT_USER_MANAGEMENT = "9999999 per second"
     RATELIMIT_BOT_OPERATIONS = "9999999 per second"
-    RATELIMIT_LOGIN = "9999999 per second"  # Add specific login rate limit override
-    RATELIMIT_GLOBAL = "9999999 per second"  # Disable global rate limits
-    RATELIMIT_HEADERS_ENABLED = False  # Disable rate limit headers
-    RATELIMIT_IN_MEMORY_FALLBACK_ENABLED = True  # Enable in-memory fallback
+    RATELIMIT_LOGIN = "9999999 per second"
+    RATELIMIT_GLOBAL = "9999999 per second"
+    RATELIMIT_HEADERS_ENABLED = False
+    RATELIMIT_IN_MEMORY_FALLBACK_ENABLED = True
+    
+    # Enable detailed error logging for tests
+    LOGGING_LEVEL = 'DEBUG'
+    LOGGING_FORMAT = '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+    
+    # Notification settings
+    NOTIFICATION_MAX_COUNT = 1000  # Increase for testing
+    NOTIFICATION_CLEANUP_INTERVAL = 0  # Disable cleanup during tests
 
 class DevelopmentConfig(Config):
     DEBUG = True
