@@ -225,16 +225,20 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
 
     # Test audit log rollback
     with app.app_context():
-        # Test valid audit log creation
-        AuditLog.create(
-            user_id=test_user.id,
-            action="test_action",  # Valid action
-            commit=True
-        )
-        # Verify audit log was created
-        log = AuditLog.query.filter_by(user_id=test_user.id).first()
-        assert log is not None
-        assert log.action == "test_action"
+        try:
+            # Test valid audit log creation
+            AuditLog.create(
+                user_id=test_user.id,
+                action="test_action",  # Valid action
+                commit=True
+            )
+            # Verify audit log was created
+            log = AuditLog.query.filter_by(user_id=test_user.id).first()
+            assert log is not None
+            assert log.action == "test_action"
+        except Exception as e:
+            logger.error(f"Error testing audit log rollback: {str(e)}")
+            raise
         
         # Test invalid audit log creation
         with pytest.raises(ValueError) as exc_info:

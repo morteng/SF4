@@ -41,7 +41,6 @@ class AuditLog(db.Model):
             if not isinstance(action, str):
                 logger.error(f"Invalid action type: {type(action)}")
                 raise TypeError("Action must be a string")
-        logger = logging.getLogger(__name__)
         
         try:
             # Validate required fields
