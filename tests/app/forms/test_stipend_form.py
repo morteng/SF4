@@ -1,5 +1,8 @@
 import pytest
-from app.extensions import db
+from flask_sqlalchemy import SQLAlchemy
+from app import create_app
+
+db = SQLAlchemy()
 from datetime import datetime, timedelta
 from flask_wtf.csrf import generate_csrf
 from app import create_app
