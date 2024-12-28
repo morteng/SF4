@@ -45,6 +45,7 @@
   - IP address (required for all operations)
   - Operation details (must reflect actual changes)
   - Before/after state for updates
+  - Corresponding notification for each audit log
 - Must create notification for audit log creation
 - Must include:
   - Timestamp (UTC)
