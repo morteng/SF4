@@ -31,7 +31,7 @@ def test_notification_creation(test_notification):
     """Test notification creation"""
     assert test_notification.id is not None
     assert test_notification.message == 'Test notification'
-    assert test_notification.type == NotificationType.INFO
+    assert test_notification.type == NotificationType.SYSTEM
     assert test_notification.priority == NotificationPriority.MEDIUM
 
 def test_mark_as_read(test_notification):
