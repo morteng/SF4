@@ -97,6 +97,8 @@ class FlashMessages(str, Enum):
     ORGANIZATION_INVALID_DATA = "Invalid organization data provided."
 
     # Form Validation Messages
+    NAME_REQUIRED = "Name is required."
+    NAME_LENGTH = "Name cannot exceed 100 characters."
     FORM_FIELD_REQUIRED = "{field} is required."
     FORM_INVALID_URL = "{field} must be a valid URL starting with http:// or https://."
     FORM_INVALID_DATE_FORMAT = "{field} must be in the format YYYY-MM-DD HH:MM:SS."
