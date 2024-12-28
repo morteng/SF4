@@ -47,7 +47,9 @@ target_db = current_app.extensions['migrate'].db
 
 def get_metadata():
     if hasattr(target_db, 'metadatas'):
+        logger.info("Using metadatas from target_db")
         return target_db.metadatas[None]
+    logger.info("Using metadata directly from target_db")
     return target_db.metadata
 
 
@@ -91,6 +93,7 @@ def run_migrations_online():
                 logger.info('No changes in schema detected.')
 
     conf_args = current_app.extensions['migrate'].configure_args
+    logger.info(f"Migration configure_args: {conf_args}")
     if conf_args.get("process_revision_directives") is None:
         conf_args["process_revision_directives"] = process_revision_directives
 
