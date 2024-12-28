@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_user, current_user, logout_user, login_required
 from app.forms.user_forms import LoginForm, RegisterForm
 from app.models.user import User
+from app.models.audit_log import AuditLog
 from app import db
 
 public_bp = Blueprint('public', __name__)
