@@ -192,15 +192,14 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
             
         # Create a new request context
         with app.test_request_context():
-        
-        # Test audit log rollback
-        try:
-            # Force an error by creating invalid audit log
-            AuditLog.create(
-                user_id=test_user.id,
-                action=None,  # Invalid - should raise error
-                commit=True
-            )
+            # Test audit log rollback
+            try:
+                # Force an error by creating invalid audit log
+                AuditLog.create(
+                    user_id=test_user.id,
+                    action=None,  # Invalid - should raise error
+                    commit=True
+                )
             assert False, "Should have raised ValueError"
         except ValueError as e:
             # Verify no audit log was created
