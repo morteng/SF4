@@ -515,7 +515,7 @@ def test_stipend_update_operation(app, form_data, test_db):
         del invalid_data['name']
         with pytest.raises(ValueError) as exc_info:
             stipend.update(invalid_data, user_id=1)
-        assert "Missing required field: name" in str(exc_info.value)
+        assert "Name is required" in str(exc_info.value)
 
 def test_stipend_delete_operation(app, form_data, test_db):
     """Test CRUD delete operation"""

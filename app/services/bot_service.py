@@ -3,12 +3,19 @@ from app.extensions import db
 from app.models.notification import Notification  # Import the Notification model
 
 def create_bot(data):
+    """Create a new bot with validation"""
+    if not data.get('name'):
+        raise ValueError("Bot name is required")
+    if not data.get('description'):
+        raise ValueError("Bot description is required")
+        
     bot = Bot(
         name=data['name'],
         description=data['description'],
         status=data.get('status', 'inactive'),
         schedule=data.get('schedule'),
-        next_run=calculate_next_run(data.get('schedule')) if data.get('schedule') else None
+        next_run=calculate_next_run(data.get('schedule')) if data.get('schedule') else None,
+        is_active=data.get('is_active', True)
     )
     db.session.add(bot)
     db.session.commit()

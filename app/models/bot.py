@@ -14,6 +14,12 @@ class Bot(db.Model):
     def __repr__(self):
         return f"<Bot {self.name}>"
 
+    @property
+    def status_enum(self):
+        """Get status as enum value"""
+        from app.constants import BotStatus
+        return BotStatus(self.status)
+
     def to_dict(self):
         return {
             'id': self.id,
