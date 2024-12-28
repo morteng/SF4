@@ -16,7 +16,8 @@ limiter = Limiter(
     default_limits=["200 per day", "50 per hour"],
     storage_uri="memory://",
     enabled=True,  # Enable rate limiting
-    strategy="fixed-window-elastic-expiry"  # More forgiving strategy
+    strategy="fixed-window-elastic-expiry",  # More forgiving strategy
+    exempt_when=lambda: request.endpoint == 'user.edit_profile'  # Exclude profile edit page
 )
 
 Session = None
