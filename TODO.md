@@ -7,6 +7,8 @@
 
 ## Completed
 - [x] Implement CRUD operations with audit logging
+- [ ] Add test coverage for audit logging rollback
+- [ ] Implement proper error handling for notification system
 - [x] Add comprehensive date validation
 - [x] Implement notification system for CRUD events
 - [x] Add CSRF protection to all forms

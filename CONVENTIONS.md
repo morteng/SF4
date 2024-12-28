@@ -7,10 +7,11 @@
 - **Form Validation**: All required fields must have proper DataRequired and Length(min=1) validators
 - **Flash Messages**: Use FlashMessages enum from app\constants.py for all flash messages
 - **CSRF Protection**: Include CSRF tokens in all forms and HTMX requests
-- **Audit Logging**: Log all CRUD operations with user, action, and timestamp
-  - User ID, Action type, Object type, Object ID
-  - Timestamp (UTC), IP address, HTTP method, Endpoint
-  - Before/after state for updates (JSON serialized)
+- **Audit Logging**: Log all CRUD operations with required fields
+  - Must include: user_id, action, object_type, object_id
+  - Optional: details_before, details_after (JSON serialized)
+  - Timestamps in UTC, include IP address for security
+  - Rollback on audit log failure
 - Notifications must:
   - Use NotificationType enum values
   - Include user_id and related_object

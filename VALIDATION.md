@@ -13,11 +13,10 @@
   - Timezone awareness (convert to UTC)
 
 ### Audit Log Validation
-- Verify all CRUD operations create audit logs
-- Check logs contain required fields:
-  - User ID, Action type, Object type, Object ID
-  - Timestamp (UTC), IP address, HTTP method, Endpoint
-  - Before/after state for updates (where applicable)
+- Validate required fields: user_id, action, object_type, object_id
+- Verify timestamps are UTC and properly formatted
+- Check JSON serialization of before/after states
+- Ensure rollback occurs on audit log failure
   - Details field with human-readable description
 - Ensure logs are created for both success and failure cases
 - Validate JSON serialization of complex data
