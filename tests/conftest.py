@@ -66,13 +66,16 @@ def db_session(_db, app):
     with app.app_context():
         connection = _db.engine.connect()
         transaction = connection.begin()
-        _db.session.bind = connection
+        options = dict(bind=connection, binds={})
+        session = _db.create_scoped_session(options=options)
         
-        yield _db.session
+        _db.session = session
+        
+        yield session
         
         transaction.rollback()
         connection.close()
-        _db.session.remove()
+        session.remove()
 
 @pytest.fixture(scope='function')
 def client(app):

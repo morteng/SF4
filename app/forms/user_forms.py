@@ -8,13 +8,13 @@ from app.constants import FlashMessages
 
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[
-        DataRequired(message="Username is required."),
-        Length(min=3, max=50, message="Username must be between 3 and 50 characters.")
+        DataRequired(message=FlashMessages.USERNAME_REQUIRED.value),
+        Length(min=3, max=50, message=FlashMessages.USERNAME_LENGTH.value)
     ])
     email = StringField('Email', validators=[
-        DataRequired(message="Email is required."),
-        Email(message="Invalid email address."),
-        Length(max=100, message="Email cannot exceed 100 characters.")
+        DataRequired(message=FlashMessages.EMAIL_REQUIRED.value),
+        Email(message=FlashMessages.EMAIL_INVALID.value),
+        Length(max=100, message=FlashMessages.EMAIL_LENGTH.value)
     ])
     csrf_token = HiddenField('CSRF Token')
     submit = SubmitField('Save Changes')

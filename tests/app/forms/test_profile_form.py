@@ -47,14 +47,20 @@ def test_profile_form_invalid_csrf(logged_in_client):
 
 def test_profile_form_missing_fields(logged_in_client):
     """Test form submission with missing required fields"""
+    # Get CSRF token first
+    edit_profile_response = logged_in_client.get(url_for('user.edit_profile'))
+    csrf_token = extract_csrf_token(edit_profile_response.data)
+    
     response = logged_in_client.post(url_for('user.edit_profile'), data={
         'username': '',
         'email': '',
-        'csrf_token': ''
+        'csrf_token': csrf_token
     }, follow_redirects=True)
     
     assert response.status_code == 400
-    assert b"This field is required" in response.data
+    assert FlashMessages.PROFILE_UPDATE_INVALID_DATA.value.encode() in response.data
+    assert b"username: This field is required" in response.data
+    assert b"email: This field is required" in response.data
 
 def test_profile_form_invalid_csrf(logged_in_client):
     """Test profile form submission with invalid CSRF token"""

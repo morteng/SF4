@@ -48,6 +48,7 @@ def edit_profile():
                 current_user.email = form.email.data
                 db.session.add(current_user)
                 db.session.commit()
+                db.session.commit()
                 logging.info(f"Profile updated successfully for user {current_user.id}")
                 flash_message(FlashMessages.PROFILE_UPDATE_SUCCESS, FlashCategory.SUCCESS)
                 return redirect(url_for('user.profile'))
@@ -56,6 +57,10 @@ def edit_profile():
                 logging.error(f"Error updating profile for user {current_user.id}: {str(e)}", exc_info=True)
                 flash_message(FlashMessages.PROFILE_UPDATE_ERROR, FlashCategory.ERROR)
                 return render_template('user/edit_profile.html', form=form), 500
+        else:
+            logging.warning(f"Profile form validation failed for user {current_user.id}: {form.errors}")
+            flash_message(FlashMessages.PROFILE_UPDATE_INVALID_DATA, FlashCategory.ERROR)
+            return render_template('user/edit_profile.html', form=form), 400
         else:
             logging.warning(f"Profile form validation failed: {form.errors}")
             flash_message(FlashMessages.PROFILE_UPDATE_INVALID_DATA, FlashCategory.ERROR)
