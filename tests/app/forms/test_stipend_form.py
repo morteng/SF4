@@ -433,6 +433,54 @@ def filter_model_fields(data, model_class):
     """Filter out form fields that don't exist in the model"""
     return {k: v for k, v in data.items() if hasattr(model_class, k)}
 
+def test_stipend_update_operation(app, form_data, test_db):
+    """Test CRUD update operation with validation"""
+    with app.test_request_context():
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        
+        # Create initial stipend
+        form = StipendForm(data=form_data)
+        form.tags.choices = tag_choices
+        
+        # Convert application_deadline to datetime
+        from datetime import datetime
+        deadline = datetime.strptime(form.application_deadline.data, '%Y-%m-%d %H:%M:%S')
+        
+        # Create stipend
+        stipend = Stipend.create({
+            'name': form.name.data,
+            'summary': form.summary.data,
+            'description': form.description.data,
+            'homepage_url': form.homepage_url.data,
+            'application_procedure': form.application_procedure.data,
+            'eligibility_criteria': form.eligibility_criteria.data,
+            'application_deadline': deadline,
+            'organization_id': form.organization_id.data,
+            'open_for_applications': form.open_for_applications.data,
+            'tags': [Tag.query.get(tag_id) for tag_id in form.tags.data]
+        }, user_id=1)
+        
+        # Test valid update
+        updated_data = {
+            'name': 'Updated Stipend Name',
+            'summary': 'Updated summary',
+            'description': 'Updated description',
+            'tags': [tag_choices[0][0]]
+        }
+        updated_stipend = stipend.update(updated_data, user_id=1)
+        
+        assert updated_stipend.name == 'Updated Stipend Name'
+        assert updated_stipend.summary == 'Updated summary'
+        assert updated_stipend.description == 'Updated description'
+        assert len(updated_stipend.tags) == 1
+        
+        # Test invalid update with missing required field
+        invalid_data = updated_data.copy()
+        del invalid_data['name']
+        with pytest.raises(ValueError):
+            stipend.update(invalid_data, user_id=1)
+
 def test_stipend_delete_operation(app, form_data, test_db):
     """Test CRUD delete operation"""
     with app.test_request_context():

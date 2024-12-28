@@ -416,6 +416,57 @@ def create():
 @login_required
 @admin_required
 def edit(id):
+    """Edit stipend with validation, audit logging, and notifications"""
+    try:
+        stipend = get_stipend_by_id(id)
+        if not stipend:
+            flash_message(FlashMessages.STIPEND_NOT_FOUND, FlashCategory.ERROR)
+            return redirect(url_for('admin.stipend.index'))
+
+        form = StipendForm(obj=stipend)
+        is_htmx = request.headers.get('HX-Request')
+
+        # Initialize form choices
+        organizations = Organization.query.order_by(Organization.name).all()
+        tags = Tag.query.order_by(Tag.name).all()
+        form.organization_id.choices = [(org.id, org.name) for org in organizations]
+        form.tags.choices = [(tag.id, tag.name) for tag in tags]
+
+        if form.validate_on_submit():
+            # Prepare update data
+            update_data = {
+                'name': form.name.data,
+                'summary': form.summary.data,
+                'description': form.description.data,
+                'homepage_url': form.homepage_url.data,
+                'application_procedure': form.application_procedure.data,
+                'eligibility_criteria': form.eligibility_criteria.data,
+                'application_deadline': form.application_deadline.data,
+                'organization_id': form.organization_id.data,
+                'open_for_applications': form.open_for_applications.data,
+                'tags': form.tags.data
+            }
+
+            # Update stipend
+            updated_stipend = stipend.update(update_data, user_id=current_user.id)
+            
+            flash_message(FlashMessages.STIPEND_UPDATE_SUCCESS, FlashCategory.SUCCESS)
+            
+            if is_htmx:
+                return render_template('admin/stipends/_stipend_row.html', stipend=updated_stipend), 200, {
+                    'HX-Trigger': 'stipendUpdated'
+                }
+            return redirect(url_for('admin.stipend.index'))
+            
+        return render_template('admin/stipends/edit.html', form=form, stipend=stipend)
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error updating stipend: {str(e)}")
+        flash_message(f"{FlashMessages.STIPEND_UPDATE_ERROR}: {str(e)}", FlashCategory.ERROR)
+        if is_htmx:
+            return render_template('admin/stipends/_form.html', form=form, stipend=stipend), 400
+        return render_template('admin/stipends/edit.html', form=form, stipend=stipend), 400
     """Edit stipend with audit logging and notifications"""
     stipend = get_stipend_by_id(id)
     if not stipend:
@@ -542,6 +593,39 @@ def edit(id):
 @login_required
 @admin_required
 def delete(id):
+    """Delete stipend with validation, audit logging, and notifications"""
+    try:
+        stipend = get_stipend_by_id(id)
+        if not stipend:
+            flash_message(FlashMessages.STIPEND_NOT_FOUND, FlashCategory.ERROR)
+            if request.headers.get('HX-Request'):
+                return render_template('_flash_messages.html'), 404
+            return redirect(url_for('admin.stipend.index'))
+
+        # Create audit log before deletion
+        log_audit(
+            user_id=current_user.id,
+            action='delete_stipend',
+            object_type='Stipend',
+            object_id=stipend.id,
+            before=stipend.to_dict()
+        )
+
+        # Delete stipend
+        Stipend.delete(stipend.id)
+        
+        flash_message(FlashMessages.STIPEND_DELETE_SUCCESS, FlashCategory.SUCCESS)
+        if request.headers.get('HX-Request'):
+            return render_template('_flash_messages.html'), 200
+        return redirect(url_for('admin.stipend.index'))
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error deleting stipend: {str(e)}")
+        flash_message(f"{FlashMessages.STIPEND_DELETE_ERROR}: {str(e)}", FlashCategory.ERROR)
+        if request.headers.get('HX-Request'):
+            return render_template('_flash_messages.html'), 500
+        return redirect(url_for('admin.stipend.index'))
     """Delete stipend with audit logging and notification"""
     """Delete stipend with audit logging and notification"""
     stipend = get_stipend_by_id(id)
