@@ -1,4 +1,5 @@
 import logging
+import json
 from datetime import datetime, timezone
 from app.extensions import db
 
@@ -22,6 +23,12 @@ class AuditLog(db.Model):
         """Create audit log entry with before/after state tracking"""
         try:
             from app.models.notification import Notification, NotificationType
+            
+            # Serialize dictionaries to JSON
+            if isinstance(details_before, dict):
+                details_before = json.dumps(details_before)
+            if isinstance(details_after, dict):
+                details_after = json.dumps(details_after)
             
             # Create audit log
             log = AuditLog(
