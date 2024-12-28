@@ -391,8 +391,9 @@ def test_profile_form_rate_limiting(client, setup_database):
     # Reset rate limiter storage
     limiter = current_app.extensions.get('limiter')
     if limiter and limiter._storage:
-        limiter._storage.reset()
-        limiter._storage.clear()
+        # Clear all rate limits for the test
+        limiter.reset()
+        # Instead of clear(), use reset() which properly clears all keys
     
     # Create test user
     password_hash = generate_password_hash("password123")
