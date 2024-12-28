@@ -57,6 +57,32 @@ def create():
             )
             db.session.add(new_user)
             db.session.commit()
+
+            # Create audit log
+            AuditLog.create(
+                user_id=current_user.id,
+                action='create_user',
+                object_type='User',
+                object_id=new_user.id,
+                details=f'Created new user {new_user.username}',
+                ip_address=request.remote_addr
+            )
+
+            # Create notification
+            Notification.create(
+                type='user_created',
+                message=f'User {new_user.username} was created',
+                related_object=new_user,
+                user_id=current_user.id
+            )
+
+            flash_message(FlashMessages.USER_CREATED.value, FlashCategory.SUCCESS.value)
+            return redirect(url_for('admin.user.index'))
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error creating user: {str(e)}")
+            flash_message(f"Error creating user: {str(e)}", FlashCategory.ERROR.value)
+            return render_template('admin/users/create.html', form=form), 500
             
             # Verify user creation
             if not new_user or not new_user.id:

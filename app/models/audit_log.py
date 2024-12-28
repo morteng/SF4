@@ -22,8 +22,6 @@ class AuditLog(db.Model):
               details_before=None, details_after=None, ip_address=None):
         """Create audit log entry with before/after state tracking"""
         try:
-            from app.models.notification import Notification, NotificationType
-            
             # Serialize dictionaries to JSON
             if isinstance(details_before, dict):
                 details_before = json.dumps(details_before)
@@ -43,26 +41,21 @@ class AuditLog(db.Model):
                 timestamp=datetime.now(timezone.utc)
             )
             db.session.add(log)
-            
-            # Create appropriate notification based on action type
-            notification_type = {
-                'create': NotificationType.CRUD_CREATE,
-                'update': NotificationType.CRUD_UPDATE,
-                'delete': NotificationType.CRUD_DELETE
-            }.get(action.split('_')[0], NotificationType.SYSTEM)
-            
-            notification = Notification(
-                message=f"{action.capitalize()} operation on {object_type} {object_id}",
-                type=notification_type,
-                read_status=False,
-                user_id=user_id,
-                related_object_type=object_type,
-                related_object_id=object_id
-            )
-            db.session.add(notification)
-            
             db.session.commit()
+            
+            # Create notification
+            Notification.create(
+                type='audit_log',
+                message=f"{action.capitalize()} operation on {object_type} {object_id}",
+                related_object=log,
+                user_id=user_id
+            )
+            
             return log
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error creating audit log: {str(e)}")
+            raise
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error creating audit log: {str(e)}")

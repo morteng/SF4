@@ -53,17 +53,38 @@ class Notification(db.Model):
         
     @classmethod
     def create(cls, type, message, related_object=None, user_id=None):
-        notification = cls(
-            type=type,
-            message=message,
-            read_status=False,
-            user_id=user_id if user_id is not None else 0  # Default to system user
-        )
-        if related_object:
-            notification.related_object_type = related_object.__class__.__name__
-            notification.related_object_id = related_object.id
-            if user_id is None and hasattr(related_object, 'user_id'):
-                notification.user_id = related_object.user_id
-        db.session.add(notification)
-        db.session.commit()
-        return notification
+        """Create a new notification with proper validation"""
+        try:
+            notification = cls(
+                type=type,
+                message=message,
+                read_status=False,
+                user_id=user_id if user_id is not None else 0  # Default to system user
+            )
+            
+            if related_object:
+                notification.related_object_type = related_object.__class__.__name__
+                notification.related_object_id = related_object.id
+                
+                # Set user_id from related object if not provided
+                if user_id is None and hasattr(related_object, 'user_id'):
+                    notification.user_id = related_object.user_id
+            
+            db.session.add(notification)
+            db.session.commit()
+            
+            # Create audit log for notification creation
+            AuditLog.create(
+                user_id=user_id,
+                action='create_notification',
+                object_type='Notification',
+                object_id=notification.id,
+                details=f'Created notification for {type} operation',
+                ip_address=request.remote_addr if request else None
+            )
+            
+            return notification
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error creating notification: {str(e)}")
+            raise

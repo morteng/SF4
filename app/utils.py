@@ -42,6 +42,14 @@ def admin_required(f):
                     details=f'Attempted access to {request.path}',
                     ip_address=request.remote_addr
                 )
+                
+                # Create notification for unauthorized access
+                Notification.create(
+                    type='security',
+                    message=f'Unauthorized access attempt to {request.path}',
+                    user_id=current_user.id
+                )
+                
                 flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
                 return abort(403)
                 
@@ -55,6 +63,10 @@ def admin_required(f):
             )
             
             return f(*args, **kwargs)
+        except Exception as e:
+            current_app.logger.error(f"Error in admin_required decorator: {str(e)}")
+            flash_message(FlashMessages.ADMIN_ACCESS_ERROR.value, FlashCategory.ERROR.value)
+            return abort(500)
         except Exception as e:
             logger.error(f"Error in admin_required decorator: {str(e)}")
             flash_message(FlashMessages.ADMIN_ACCESS_ERROR.value, FlashCategory.ERROR.value)
