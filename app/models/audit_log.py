@@ -54,8 +54,6 @@ class AuditLog(db.Model):
             from flask import current_app
             if not current_app:
                 raise RuntimeError("Application context required")
-            
-        try:
             # Convert dictionaries to JSON strings
             if isinstance(details_before, dict):
                 details_before = json.dumps(details_before)
