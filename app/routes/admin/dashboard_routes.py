@@ -14,8 +14,12 @@ def dashboard():
     from app.models.audit_log import AuditLog
     from app.models.bot import Bot
     
-    # Get recent activity
-    recent_activity = AuditLog.query.order_by(AuditLog.timestamp.desc()).limit(10).all()
+    # Get recent activity with user information
+    recent_activity = db.session.query(AuditLog, User.username)\
+        .join(User, AuditLog.user_id == User.id, isouter=True)\
+        .order_by(AuditLog.timestamp.desc())\
+        .limit(10)\
+        .all()
     
     # Get unread notifications
     notification_count = Notification.query.filter_by(

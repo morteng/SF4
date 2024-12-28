@@ -146,7 +146,9 @@ def test_user(db_session):
     db_session.add(user)
     db_session.commit()
     yield user
-    # Clean up
+    # Clean up user and related audit logs
+    from app.models.audit_log import AuditLog
+    AuditLog.query.filter_by(user_id=user.id).delete()
     db_session.delete(user)
     db_session.commit()
 
