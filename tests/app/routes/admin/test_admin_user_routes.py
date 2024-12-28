@@ -197,44 +197,42 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
 
     # Test audit log rollback
     with app.app_context():
-        try:
+        # Test valid audit log creation
+        AuditLog.create(
+            user_id=test_user.id,
+            action="test_action",  # Valid action
+            commit=True
+        )
+        # Verify audit log was created
+        log = AuditLog.query.filter_by(user_id=test_user.id).first()
+        assert log is not None
+        assert log.action == "test_action"
+        
+        # Test invalid audit log creation
+        with pytest.raises(ValueError):
             AuditLog.create(
                 user_id=test_user.id,
-                action="test_action",  # Valid action
+                action=None,  # Invalid - should raise error
                 commit=True
             )
-            # Verify audit log was created
-            log = AuditLog.query.filter_by(user_id=test_user.id).first()
-            assert log is not None
-            assert log.action == "test_action"
-            
-            # Test invalid audit log creation
-            with pytest.raises(ValueError):
-                AuditLog.create(
-                    user_id=test_user.id,
-                    action=None,  # Invalid - should raise error
-                    commit=True
-                )
 
-                # Test notification error handling
-                notification = Notification(
-                    message="Test notification",
-                    type="USER_ACTION",
-                    user_id=test_user.id
-                )
-                db_session.add(notification)
-                db_session.commit()
+        # Test notification error handling
+        notification = Notification(
+            message="Test notification",
+            type="USER_ACTION",
+            user_id=test_user.id
+        )
+        db_session.add(notification)
+        db_session.commit()
 
-                # Force an error by marking invalid notification as read
-                invalid_notification = Notification()
-                try:
-                    invalid_notification.mark_as_read()
-                    assert False, "Should have raised ValueError"
-                except ValueError as e:
-                    assert str(e) == "Cannot mark unsaved notification as read"
+        # Force an error by marking invalid notification as read
+        invalid_notification = Notification()
+        with pytest.raises(ValueError) as exc_info:
+            invalid_notification.mark_as_read()
+        assert str(exc_info.value) == "Cannot mark unsaved notification as read"
 
-        # Perform CRUD operations within the logged_in_admin context
-        with logged_in_admin:
+    # Perform CRUD operations within the logged_in_admin context
+    with logged_in_admin:
             # Set up session
             with logged_in_admin.session_transaction() as session:
                 session['_user_id'] = str(test_user.id)
