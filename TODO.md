@@ -12,4 +12,5 @@
 - [x] Update datetime handling to use timezone-aware objects
 - [x] Implement audit logging for delete operations
 - [x] Add notification system test coverage
+- [x] Fix rate limiting issues in tests
 
