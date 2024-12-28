@@ -7,11 +7,11 @@ from app.models.user import User  # Import the User model
 from app.extensions import db  # Import the db from extensions
 from app.constants import FlashMessages, FlashCategory
 
+user_bp = Blueprint('user', __name__, url_prefix='/user')
+
 @user_bp.errorhandler(CSRFError)
 def handle_csrf_error(e):
     return FlashMessages.CSRF_INVALID.value, 400
-
-user_bp = Blueprint('user', __name__, url_prefix='/user')
 
 
 @user_bp.route('/profile', methods=['GET'])
