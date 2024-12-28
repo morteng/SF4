@@ -7,7 +7,11 @@ from app.constants import NotificationType, NotificationPriority
 @pytest.fixture
 def test_notification(db_session):
     """Provide a test notification"""
-    user = User(username='testuser', email='test@example.com')
+    user = User(
+        username='testuser', 
+        email='test@example.com',
+        password_hash='testpasswordhash'  # Add required field
+    )
     db_session.add(user)
     db_session.commit()
     
