@@ -51,20 +51,6 @@ def create_app(config_name='development'):
     from flask_wtf.csrf import CSRFError
     from app.constants import FlashMessages
 
-    @app.errorhandler(CSRFError)
-    def handle_csrf_error(e):
-        return FlashMessages.CSRF_INVALID.value, 400
-
-    # Add rate limiting for admin endpoints
-    from flask_limiter import Limiter
-    from flask_limiter.util import get_remote_address
-    
-    limiter = Limiter(
-        get_remote_address,
-        app=app,
-        default_limits=["200 per day", "50 per hour"],
-        storage_uri="memory://",
-    )
 
     with app.app_context():
         # Register blueprints
