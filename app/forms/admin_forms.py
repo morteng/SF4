@@ -33,28 +33,28 @@ class StipendForm(FlaskForm):
         Length(max=100, message="Name cannot exceed 100 characters.")
     ])
     summary = TextAreaField('Summary', validators=[
-        Optional(),
+        DataRequired(message="Summary is required."),
         Length(max=500, message="Summary cannot exceed 500 characters.")
     ])
     description = TextAreaField('Description', validators=[
-        Optional(),
+        DataRequired(message="Description is required."),
         Length(max=2000, message="Description cannot exceed 2000 characters.")
     ])
     homepage_url = URLField('Homepage URL', validators=[
-        Optional(),
+        DataRequired(message="Homepage URL is required."),
         URL(message="Please enter a valid URL starting with http:// or https://.")
     ])
     application_procedure = TextAreaField('Application Procedure', validators=[
-        Optional(),
+        DataRequired(message="Application procedure is required."),
         Length(max=1000, message="Application procedure cannot exceed 1000 characters.")
     ])
     eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[
-        Optional(),
+        DataRequired(message="Eligibility criteria is required."),
         Length(max=1000, message="Eligibility criteria cannot exceed 1000 characters.")
     ])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
-        validators=[DataRequired()],  # Changed from Optional to DataRequired
+        validators=[DataRequired(message="Application deadline is required.")],
         render_kw={
             "placeholder": "YYYY-MM-DD HH:MM:SS",
             "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
@@ -69,9 +69,24 @@ class StipendForm(FlaskForm):
             'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)'
         }
     )
-    organization_id = SelectField('Organization', coerce=int, validators=[Optional()])
+    organization_id = SelectField('Organization', coerce=int, validators=[
+        DataRequired(message="Organization is required.")
+    ])
     open_for_applications = BooleanField('Open for Applications', default=False)
-    tags = SelectMultipleField('Tags', coerce=int, validators=[Optional()])
+    tags = SelectMultipleField('Tags', coerce=int, validators=[
+        DataRequired(message="At least one tag is required.")
+    ])
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Populate organization choices
+        self.organization_id.choices = [
+            (org.id, org.name) for org in Organization.query.order_by(Organization.name).all()
+        ]
+        # Populate tag choices
+        self.tags.choices = [
+            (tag.id, tag.name) for tag in Tag.query.order_by(Tag.name).all()
+        ]
 
     def validate_application_deadline(self, field):
         # Skip validation if the field is empty or invalid (CustomDateTimeField handles this)

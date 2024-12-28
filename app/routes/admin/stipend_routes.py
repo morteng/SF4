@@ -48,21 +48,60 @@ def create():
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')
     
-    # Create audit log before operation
-    AuditLog.create(
-        user_id=current_user.id,
-        action='create_stipend',
-        details='Attempting to create new stipend',
-        object_type='Stipend',
-        ip_address=request.remote_addr
-    )
+    if form.validate_on_submit():
+        try:
+            # Create stipend
+            stipend = Stipend(
+                name=form.name.data,
+                summary=form.summary.data,
+                description=form.description.data,
+                homepage_url=form.homepage_url.data,
+                application_procedure=form.application_procedure.data,
+                eligibility_criteria=form.eligibility_criteria.data,
+                application_deadline=form.application_deadline.data,
+                organization_id=form.organization_id.data,
+                open_for_applications=form.open_for_applications.data
+            )
+            
+            # Add tags
+            for tag_id in form.tags.data:
+                tag = Tag.query.get(tag_id)
+                if tag:
+                    stipend.tags.append(tag)
+            
+            db.session.add(stipend)
+            db.session.commit()
+            
+            # Create audit log
+            AuditLog.create(
+                user_id=current_user.id,
+                action='create_stipend',
+                details=f"Created stipend: {stipend.name}",
+                object_type='Stipend',
+                object_id=stipend.id,
+                ip_address=request.remote_addr
+            )
+            
+            # Create notification
+            Notification.create(
+                type='STIPEND_CREATED',
+                message=f'New stipend created: {stipend.name}',
+                related_object=stipend
+            )
+            
+            flash('Stipend created successfully', 'success')
+            
+            if is_htmx:
+                return render_template('admin/stipends/_stipend_row.html', stipend=stipend), 200
+            return redirect(url_for('admin.stipend.index'))
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error creating stipend: {str(e)}', 'error')
+            if is_htmx:
+                return render_template('admin/stipends/_form.html', form=form), 400
     
-    # Populate organization and tag choices
-    organizations = Organization.query.order_by(Organization.name).all()
-    tags = Tag.query.order_by(Tag.name).all()
-    
-    form.organization_id.choices = [(org.id, org.name) for org in organizations]
-    form.tags.choices = [(tag.id, tag.name) for tag in tags]
+    return render_template('admin/stipends/create.html', form=form)
     """Create new stipend with HTMX support and audit logging"""
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')

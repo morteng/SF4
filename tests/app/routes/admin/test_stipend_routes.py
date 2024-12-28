@@ -44,30 +44,31 @@ def test_stipend(db_session, stipend_data):
     db_session.delete(stipend)
     db_session.commit()
 
-def test_create_stipend_route(authenticated_admin: FlaskClient, stipend_data: dict, db_session) -> None:
+def test_create_stipend_route(authenticated_admin: FlaskClient, db_session) -> None:
     """Test that a stipend can be created successfully through the admin interface."""
-    logger.info("Starting test_create_stipend_route")
-    
-    # Create organization first
+    # Create organization and tags
     organization = Organization(name='Test Org')
-    db_session.add(organization)
+    tag1 = Tag(name='Research', category='Academic')
+    tag2 = Tag(name='Scholarship', category='Funding')
+    db_session.add_all([organization, tag1, tag2])
     db_session.commit()
     
     # Get create page and extract CSRF token
     create_response = authenticated_admin.get(url_for('admin.stipend.create'))
-    assert create_response.status_code == 200, "Failed to load create stipend page"
+    assert create_response.status_code == 200
     csrf_token = extract_csrf_token(create_response.data)
     
     # Prepare form data
     form_data = {
-        'name': stipend_data['name'],
-        'summary': stipend_data['summary'],
-        'description': stipend_data['description'],
-        'homepage_url': stipend_data['homepage_url'],
-        'application_procedure': stipend_data['application_procedure'],
-        'eligibility_criteria': stipend_data['eligibility_criteria'],
-        'application_deadline': stipend_data['application_deadline'],
+        'name': 'Test Stipend',
+        'summary': 'Test summary',
+        'description': 'Test description',
+        'homepage_url': 'http://example.com',
+        'application_procedure': 'Apply online',
+        'eligibility_criteria': 'Open to all',
+        'application_deadline': (datetime.now(timezone.utc) + timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S'),
         'organization_id': str(organization.id),
+        'tags': [str(tag1.id), str(tag2.id)],
         'open_for_applications': True,
         'csrf_token': csrf_token
     }
@@ -80,18 +81,27 @@ def test_create_stipend_route(authenticated_admin: FlaskClient, stipend_data: di
     )
     
     # Verify response
-    assert response.status_code == 200, "Failed to create stipend"
+    assert response.status_code == 200
     
     # Check database for created stipend
-    created_stipend = Stipend.query.filter_by(name=stipend_data['name']).first()
-    assert created_stipend is not None, "Stipend was not created in database"
-    assert created_stipend.summary == stipend_data['summary'], "Stipend summary mismatch"
-    assert created_stipend.organization_id == organization.id, "Organization ID mismatch"
+    created_stipend = Stipend.query.filter_by(name='Test Stipend').first()
+    assert created_stipend is not None
+    assert created_stipend.summary == 'Test summary'
+    assert created_stipend.organization_id == organization.id
+    assert len(created_stipend.tags) == 2
+    
+    # Verify audit log
+    audit_log = AuditLog.query.filter_by(object_type='Stipend', object_id=created_stipend.id).first()
+    assert audit_log is not None
+    assert audit_log.action == 'create_stipend'
+    
+    # Verify notification
+    notification = Notification.query.filter_by(related_object=created_stipend).first()
+    assert notification is not None
+    assert notification.type == 'STIPEND_CREATED'
     
     # Verify flash message
-    assert FlashMessages.CREATE_STIPEND_SUCCESS.value.encode() in response.data, "Success message not found"
-    
-    logger.info("Completed test_create_stipend_route")
+    assert FlashMessages.CREATE_STIPEND_SUCCESS.value.encode() in response.data
     
     # Verify flash message
     assert FlashMessages.CREATE_STIPEND_SUCCESS.value.encode() in response.data, "Success message not found"
