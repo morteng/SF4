@@ -86,8 +86,7 @@ class AuditLog(db.Model):
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error creating audit log: {str(e)}", exc_info=True)
-            # Preserve the original exception type
-            raise type(e)(f"Failed to create audit log: {str(e)}") from e
+            raise  # Re-raise the original exception without modification
         
         try:
             # Validate required fields
