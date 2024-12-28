@@ -3,6 +3,7 @@ from flask import url_for
 from flask_wtf.csrf import generate_csrf
 from app.forms.user_forms import ProfileForm
 from app.constants import FlashMessages
+from app.models.user import User
 from tests.conftest import extract_csrf_token
 import logging
 
