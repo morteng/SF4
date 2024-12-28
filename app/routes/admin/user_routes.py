@@ -23,20 +23,16 @@ admin_user_bp = Blueprint('user', __name__, url_prefix='/users')
 
 # Initialize rate limiter with project-specific limits
 limiter = Limiter(
-    key_func=get_remote_address,
+    get_remote_address,
+    app=current_app,
     default_limits=["200 per day", "50 per hour"],
     storage_uri="memory://"
 )
 
-# Apply specific rate limits per endpoint
-create_limit = "10/minute"
-update_limit = "10/minute"
-delete_limit = "3/minute"
-
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 @admin_required
-@limiter.limit("10 per minute", methods=["POST"])  # Only limit POST requests
+@limiter.limit("10 per minute")
 def create():
     """Create a new user with audit logging and notifications"""
     """Create a new user with proper validation and audit logging"""
