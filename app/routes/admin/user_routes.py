@@ -28,7 +28,7 @@ limiter = Limiter(
 )
 
 @admin_user_bp.route('/create', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")  # Matches project rate limiting specs
+@limiter.limit("10 per minute")
 @login_required
 @admin_required
 def create():
@@ -38,61 +38,6 @@ def create():
         flash_message("User not properly authenticated", FlashCategory.ERROR)
         return redirect(url_for('public.login'))
         
-    form = UserForm()
-    notification_count = get_notification_count(current_user.id)
-    
-    # Create audit log for access
-    AuditLog.create(
-        user_id=current_user.id,
-        action='access_create_user',
-        object_type='User',
-        ip_address=request.remote_addr
-    )
-    
-    if request.method == 'GET':
-        return render_template('admin/users/create.html', 
-                            form=form,
-                            notification_count=notification_count)
-    
-    if form.validate_on_submit():
-        try:
-            # Create user with audit logging
-            # Create user with hashed password
-            user = User(
-                username=form.username.data,
-                email=form.email.data,
-                password_hash=generate_password_hash(form.password.data),
-                is_admin=form.is_admin.data
-            )
-            db.session.add(user)
-            db.session.commit()
-            
-            # Create audit log with IP address
-            AuditLog.create(
-                user_id=current_user.id,
-                action='create_user',
-                object_type='User',
-                object_id=user.id,
-                details=f'Created user {user.username}',
-                ip_address=request.remote_addr
-            )
-            
-            # Create notification
-            Notification.create(
-                type='user_created',
-                message=f'User {user.username} was created',
-                related_object=f'User:{user.id}'
-            )
-            
-            flash_message(FlashMessages.USER_CREATED.value, FlashCategory.SUCCESS.value)
-            return redirect(url_for('admin.user.index'))
-        except Exception as e:
-            db.session.rollback()
-            logging.error(f"Error creating user: {str(e)}")
-            flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
-            return render_template('admin/users/create.html', 
-                                form=form,
-                                notification_count=notification_count), 500
     form = UserForm()
     notification_count = get_notification_count(current_user.id)
     
@@ -116,57 +61,40 @@ def create():
                                     form=form,
                                     notification_count=notification_count), 400
                 
-            # Create user with audit logging
-            user_data = {
-                'username': form.username.data,
-                'email': form.email.data,
-                'password': form.password.data,
-                'is_admin': form.is_admin.data if hasattr(form, 'is_admin') else False
-            }
-            new_user = create_user(user_data, current_user.id)
-            
-            # Create audit log with IP address
-            AuditLog.create(
-                user_id=current_user.id,
-                action='create_user',
-                object_type='User',
-                object_id=new_user.id,
-                details=f'Created user {new_user.username}',
-                ip_address=request.remote_addr
+            # Create user
+            user = User(
+                username=form.username.data,
+                email=form.email.data,
+                password_hash=generate_password_hash(form.password.data),
+                is_admin=form.is_admin.data if hasattr(form, 'is_admin') else False
             )
+            db.session.add(user)
+            db.session.commit()
             
             # Create audit log
             AuditLog.create(
                 user_id=current_user.id,
                 action='create_user',
                 object_type='User',
-                object_id=new_user.id,
-                details=f'Created user {new_user.username}',
+                object_id=user.id,
+                details=f'Created user {user.username}',
                 ip_address=request.remote_addr
             )
             
-            flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
+            # Create notification
+            Notification.create(
+                type='user_created',
+                message=f'User {user.username} was created',
+                related_object=f'User:{user.id}'
+            )
+            
+            flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS)
             return redirect(url_for('admin.user.index'))
             
         except Exception as e:
             db.session.rollback()
             logging.error(f"Error creating user: {str(e)}")
-            flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
-            return render_template('admin/users/create.html', 
-                                form=form,
-                                notification_count=notification_count), 500
-            
-        except ValueError as e:
-            db.session.rollback()
-            flash_message(str(e), FlashCategory.ERROR.value)
-            return render_template('admin/users/create.html', 
-                                form=form,
-                                notification_count=notification_count), 400
-                                
-        except Exception as e:
-            db.session.rollback()
-            error_message = f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}"
-            flash_message(error_message, FlashCategory.ERROR.value)
+            flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR)
             return render_template('admin/users/create.html', 
                                 form=form,
                                 notification_count=notification_count), 500
@@ -178,7 +106,7 @@ def create():
             for error in errors:
                 msg = format_error_message(field, error)
                 error_messages.append(msg)
-                flash_message(msg, FlashCategory.ERROR.value)
+                flash_message(msg, FlashCategory.ERROR)
                 
         return render_template('admin/users/create.html', 
                             form=form,

@@ -212,13 +212,16 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
                                             follow_redirects=True)
             
         # Verify user creation
-        assert create_response.status_code == 200
-        assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in create_response.data
+        assert create_response.status_code == 200, \
+            f"Expected 200 OK but got {create_response.status_code}. Response: {create_response.data.decode('utf-8')}"
+        assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in create_response.data, \
+            f"Expected success message but got: {create_response.data.decode('utf-8')}"
             
         # Verify user exists in database
         created_user = User.query.filter_by(username=user_data['username']).first()
-        assert created_user is not None
-        assert created_user.email == user_data['email']
+        assert created_user is not None, "User was not created in database"
+        assert created_user.email == user_data['email'], \
+            f"Expected email {user_data['email']} but got {created_user.email}"
             
         # Verify audit log
         audit_log = AuditLog.query.filter_by(
@@ -226,15 +229,18 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
             object_type='User',
             object_id=created_user.id
         ).first()
-        assert audit_log is not None
-        assert audit_log.user_id == test_user.id
+        assert audit_log is not None, "No audit log entry found for user creation"
+        assert audit_log.user_id == test_user.id, \
+            f"Expected audit log user ID {test_user.id} but got {audit_log.user_id}"
+        assert audit_log.ip_address is not None, "Audit log missing IP address"
             
         # Verify notification
         notification = Notification.query.filter_by(
             type='user_created',
             message=f'User {user_data["username"]} was created'
         ).first()
-        assert notification is not None
+        assert notification is not None, "No notification created for user creation"
+        assert notification.read_status is False, "Notification should be unread"
     assert create_response.status_code == 200
     assert FlashMessages.CREATE_USER_SUCCESS.value.encode() in create_response.data
     
