@@ -1,9 +1,9 @@
 # TODO List
 ## High Priority
 - [ ] Fix database initialization in tests
-- [ ] Complete test coverage for notification system
 - [ ] Add audit log viewing interface
 - [ ] Implement proper bot scaffolding
+- [ ] Add test coverage for timezone handling
 
 ## Completed
 - [x] Implement CRUD operations with audit logging

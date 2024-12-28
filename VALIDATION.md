@@ -17,9 +17,11 @@
   - User ID, Action type, Object type, Object ID
   - Timestamp (UTC), IP address, HTTP method, Endpoint
   - Before/after state for updates (where applicable)
+  - Details field with human-readable description
 - Ensure logs are created for both success and failure cases
 - Validate JSON serialization of complex data
 - Verify commit flag works as expected
+- Check timezone handling for timestamps
 
 ### Notification Validation
 - Validate NotificationType enum values
