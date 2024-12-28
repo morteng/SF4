@@ -18,8 +18,11 @@ from wtforms import Form, StringField
 @pytest.fixture
 def app():
     app = create_app('testing')
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
+    
     with app.app_context():
-        db.init_app(app)
         db.create_all()
         yield app
         db.session.remove()
