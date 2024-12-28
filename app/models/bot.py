@@ -7,7 +7,6 @@ class Bot(db.Model):
     name = db.Column(db.String(100), nullable=False, unique=True)
     description = db.Column(db.Text, nullable=True)
     status = db.Column(db.String(50), default='inactive')
-    last_run = db.Column(db.DateTime, nullable=True)
     
 
     def __repr__(self):
@@ -19,6 +18,5 @@ class Bot(db.Model):
             'name': self.name,
             'description': self.description,
             'status': self.status,
-            'last_run': self.last_run.isoformat() if self.last_run else None,
             'error_log': self.error_log
         }
