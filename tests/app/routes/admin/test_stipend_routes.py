@@ -48,10 +48,44 @@ def test_stipend(db_session, stipend_data):
     db_session.delete(stipend)
     db_session.commit()
 
+def create_test_stipend(authenticated_admin: FlaskClient, db_session) -> dict:
+    """Helper function to create a test stipend and return form data."""
+    # Create organization and tags
+    organization = Organization(name='Test Org')
+    tag1 = Tag(name='Research', category='Academic')
+    tag2 = Tag(name='Scholarship', category='Funding')
+    db_session.add_all([organization, tag1, tag2])
+    db_session.commit()
+    
+    # Get create page and extract CSRF token
+    create_response = authenticated_admin.get(url_for('admin.stipend.create'))
+    csrf_token = extract_csrf_token(create_response.data)
+    
+    # Prepare form data
+    return {
+        'name': 'Test Stipend',
+        'summary': 'Test summary',
+        'description': 'Test description',
+        'homepage_url': 'http://example.com',
+        'application_procedure': 'Apply online',
+        'eligibility_criteria': 'Open to all',
+        'application_deadline': (datetime.now(timezone.utc) + timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S'),
+        'organization_id': str(organization.id),
+        'tags': [str(tag1.id), str(tag2.id)],
+        'open_for_applications': True,
+        'csrf_token': csrf_token
+    }
+
 def test_create_duplicate_stipend(authenticated_admin: FlaskClient, db_session) -> None:
     """Test that duplicate stipends cannot be created."""
     # First create a valid stipend
-    test_create_stipend_route(authenticated_admin, db_session)
+    form_data = create_test_stipend(authenticated_admin, db_session)
+    response = authenticated_admin.post(
+        url_for('admin.stipend.create'), 
+        data=form_data,
+        follow_redirects=True
+    )
+    assert response.status_code == 200
     
     # Try to create same stipend again
     create_response = authenticated_admin.get(url_for('admin.stipend.create'))
