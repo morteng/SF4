@@ -181,10 +181,8 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
 
 def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
     # Reset rate limiter before test
-    from flask_limiter import Limiter
-    from flask_limiter.util import get_remote_address
-    limiter = Limiter(app=app, key_func=get_remote_address)
-    limiter.storage.reset()
+    if 'limiter' in app.extensions:
+        app.extensions['limiter'].reset()
     """Test full CRUD operations with audit logging and notifications"""
     
     # Create unique test data
