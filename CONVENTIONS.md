@@ -96,6 +96,8 @@
     USERNAME_LENGTH = "Username must be between 3 and 50 characters."
     USERNAME_FORMAT = "Username can only contain letters, numbers and underscores."
     FORM_FIELD_REQUIRED = "{field} is required."
+- All form fields must be required unless explicitly optional
+- Stipend forms must include at least one tag
 
 ### Security
 - Validate all inputs, including leap year dates and invalid date combinations

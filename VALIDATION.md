@@ -73,6 +73,8 @@
 
 ## Form Validation
 - Validate all form inputs using constants from app\constants.py
+- Validate that stipend forms include at least one tag
+- Ensure all required fields have validation messages
 - Password validation:
   - Verify passwords are hashed using werkzeug.security.generate_password_hash()
   - Test password verification using check_password_hash()
