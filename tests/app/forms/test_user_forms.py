@@ -35,22 +35,26 @@ def client(app):
     return app.test_client()
 
 def test_profile_form_valid(client, setup_database):
+    # Reset rate limiter before test
+    limiter = current_app.extensions.get('limiter')
+    limiter.reset()
+        
     # Create a test user
     password_hash = generate_password_hash("password123")
     user = User(username="testuser", email="test@example.com", password_hash=password_hash)
     db.session.add(user)
     db.session.commit()
-
+    
     # Log in the user
     with client:
         # First make a GET request to establish session and get CSRF token
         get_response = client.get(url_for('public.login'))
         assert get_response.status_code == 200
-            
+    
         # Extract CSRF token using BeautifulSoup
         soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
         csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
-
+    
         # Now make the login POST request
         login_response = client.post(url_for('public.login'), data={
             'username': 'testuser',
@@ -58,7 +62,7 @@ def test_profile_form_valid(client, setup_database):
             'csrf_token': csrf_token
         }, follow_redirects=True)
         assert login_response.status_code == 200
-
+    
         # Now access the profile edit page
         get_response = client.get(url_for('user.edit_profile'))
         assert get_response.status_code == 200

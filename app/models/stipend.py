@@ -1,7 +1,7 @@
 from .association_tables import stipend_tag_association, organization_stipends
 from app.extensions import db
 from .organization import Organization
-from datetime import datetime
+from datetime import datetime, timezone
 
 class Stipend(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -38,7 +38,7 @@ class Stipend(db.Model):
                     raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS")
         
             # Then validate date range
-            now = datetime.utcnow()
+            now = datetime.now(timezone.utc)
             if data['application_deadline'] < now:
                 raise ValueError("Application deadline must be a future date")
             if (data['application_deadline'] - now).days > 365 * 5:
@@ -228,6 +228,6 @@ class Stipend(db.Model):
             'updated_at': self.updated_at.isoformat(),
             'is_active': self.open_for_applications and (
                 not self.application_deadline or 
-                self.application_deadline > datetime.utcnow()
+                self.application_deadline > datetime.now(timezone.utc)
             )
         }
