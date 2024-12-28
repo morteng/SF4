@@ -21,8 +21,8 @@ from app.utils import init_admin_user  # Import the init_admin_user function
 def create_app(config_name='development'):
     app = Flask(__name__)
     
-    # Set up migrations directory
-    basedir = os.path.abspath(os.path.dirname(__file__))
+    # Set up migrations directory in root project directory
+    basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # Go up one level
     migrations_dir = os.path.join(basedir, 'migrations')
     
     # Ensure migrations directory exists
