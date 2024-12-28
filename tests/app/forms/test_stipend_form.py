@@ -100,8 +100,16 @@ def test_past_date(app, form_data):
         assert form.validate() is False
         assert 'Application deadline must be a future date' in form.errors['application_deadline']
 
-def test_future_date_limit(app, form_data):
+def test_future_date_limit(app, form_data, db):
     """Test future date limit (5 years)"""
+    # Create test tags and organizations
+    from app.models import Tag, Organization
+    tag = Tag(name="Test Tag")
+    org = Organization(name="Test Org")
+    db.session.add(tag)
+    db.session.add(org)
+    db.session.commit()
+
     future_date = datetime.now().replace(year=datetime.now().year + 6)
     form_data['application_deadline'] = future_date.strftime('%Y-%m-%d %H:%M:%S')
     with app.test_request_context():
