@@ -1,18 +1,18 @@
 # Validation Rules
 
-### Database Operations
-- Validate inputs before DB operations
-- Handle constraints gracefully
-- Rollback on errors
-- Verify state after operations
+## Database Operations  
+- Validate inputs before DB operations  
+- Handle constraints gracefully  
+- Rollback on errors  
+- Verify state after operations  
 
-### CSRF Validation
-- Validate CSRF on all form submissions
-- Test CSRF generation/validation
-- Handle invalid CSRF gracefully
+## CSRF Validation  
+- Validate CSRF on all form submissions  
+- Test CSRF generation/validation  
+- Handle invalid CSRF gracefully  
 
-### Context Management
-- Ensure proper cleanup
-- Verify context state
-- Handle context errors
+## Context Management  
+- Ensure proper cleanup  
+- Verify context state  
+- Handle context errors  
 
