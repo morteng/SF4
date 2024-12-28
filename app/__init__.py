@@ -136,49 +136,43 @@ def create_app(config_name='development'):
             raise RuntimeError(f"Application initialization failed: {str(e)}")
         
         
-        # Initialize default bots if they don't exist
-        from app.models.bot import Bot
-        if not Bot.query.first():
-            bots = [
-                Bot(name="TagBot", description="Automatically tags stipends"),
-                Bot(name="UpdateBot", description="Updates stale stipend data"),
-                Bot(name="ReviewBot", description="Flags suspicious entries")
-            ]
-            db.session.bulk_save_objects(bots)
-            db.session.commit()
-        
-        # Initialize bots
-        from app.models.bot import Bot
-        from app.models.notification import Notification
-        from app.models.audit_log import AuditLog
-        
-        if not Bot.query.first():
-            bots = [
-                Bot(name="TagBot", description="Automatically tags stipends"),
-                Bot(name="UpdateBot", description="Updates stale stipend data"),
-                Bot(name="ReviewBot", description="Flags suspicious entries")
-            ]
-            db.session.bulk_save_objects(bots)
-            
-            # Create initial notification with system user (0)
-            notification = Notification(
-                message="System initialized successfully",
-                type="system",
-                read_status=False,
-                user_id=0  # System user
-            )
-            db.session.add(notification)
-            
-            # Create audit log for initialization
-            AuditLog.create(
-                user_id=0,  # System user
-                action="system_init",
-                details="Application initialized with default bots and admin user",
-                object_type="System",
-                object_id=0
-            )
-            
-            db.session.commit()
+            # Initialize bots only after migrations are complete
+            if os.path.exists(env_path):
+                try:
+                    from app.models.bot import Bot
+                    from app.models.notification import Notification
+                    from app.models.audit_log import AuditLog
+                    
+                    if not Bot.query.first():
+                        bots = [
+                            Bot(name="TagBot", description="Automatically tags stipends"),
+                            Bot(name="UpdateBot", description="Updates stale stipend data"),
+                            Bot(name="ReviewBot", description="Flags suspicious entries")
+                        ]
+                        db.session.bulk_save_objects(bots)
+                        
+                        # Create initial notification with system user (0)
+                        notification = Notification(
+                            message="System initialized successfully",
+                            type="system",
+                            read_status=False,
+                            user_id=0  # System user
+                        )
+                        db.session.add(notification)
+                        
+                        # Create audit log for initialization
+                        AuditLog.create(
+                            user_id=0,  # System user
+                            action="system_init",
+                            details="Application initialized with default bots and admin user",
+                            object_type="System",
+                            object_id=0
+                        )
+                        
+                        db.session.commit()
+                except Exception as e:
+                    logger.warning(f"Bot initialization failed: {str(e)}")
+                    logger.warning("This is normal during initial setup. Run 'flask db upgrade' to create the database tables.")
 
         # Register rate limited endpoints after blueprints are registered
         if 'admin.bot.run' in app.view_functions:
