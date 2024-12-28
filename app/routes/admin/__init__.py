@@ -52,6 +52,9 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 def register_admin_blueprints(app):
+    # Create admin blueprint first
+    admin_bp = create_admin_blueprint()
+    
     # Initialize rate limiter
     limiter = Limiter(
         get_remote_address,
@@ -60,7 +63,7 @@ def register_admin_blueprints(app):
         storage_uri="memory://",
     )
     
-    # Import sub-blueprints
+    # Import and configure sub-blueprints
     from .user_routes import admin_user_bp
     from .bot_routes import admin_bot_bp
     from .organization_routes import admin_org_bp
@@ -68,16 +71,13 @@ def register_admin_blueprints(app):
     from .tag_routes import admin_tag_bp
     from .dashboard_routes import admin_dashboard_bp
 
-    # Apply rate limiting to admin routes
-    admin_user_bp.before_request(lambda: limiter.limit("100 per hour"))
-    admin_bot_bp.before_request(lambda: limiter.limit("100 per hour"))
-    admin_org_bp.before_request(lambda: limiter.limit("100 per hour"))
-    admin_stipend_bp.before_request(lambda: limiter.limit("100 per hour"))
-    admin_tag_bp.before_request(lambda: limiter.limit("100 per hour"))
+    # Configure rate limits for each blueprint
+    for bp in [admin_user_bp, admin_bot_bp, admin_org_bp, 
+               admin_stipend_bp, admin_tag_bp]:
+        bp.before_request(lambda: limiter.limit("100 per hour"))
+        bp.before_request(lambda: limiter.limit("10 per minute", methods=['POST']))
+        bp.before_request(lambda: limiter.limit("3 per minute", methods=['DELETE']))
 
-    # Create a new admin blueprint instance
-    admin_bp = create_admin_blueprint()
-    
     # Register sub-blueprints with unique prefixes
     admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')
     admin_bp.register_blueprint(admin_bot_bp, url_prefix='/bots')

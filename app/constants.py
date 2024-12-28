@@ -132,6 +132,20 @@ class FlashMessages(str, Enum):
     AUDIT_UPDATE = "update"
     AUDIT_DELETE = "delete"
     
+    # Stipend Management
+    STIPEND_CREATE_SUCCESS = "Stipend created successfully."
+    STIPEND_UPDATE_SUCCESS = "Stipend updated successfully."
+    STIPEND_DELETE_SUCCESS = "Stipend deleted successfully."
+    STIPEND_CREATE_ERROR = "Failed to create stipend."
+    STIPEND_UPDATE_ERROR = "Failed to update stipend."
+    STIPEND_DELETE_ERROR = "Failed to delete stipend."
+    STIPEND_NOT_FOUND = "Stipend not found."
+    
+    # Notification Types
+    NOTIFICATION_STIPEND_CREATED = "stipend_created"
+    NOTIFICATION_STIPEND_UPDATED = "stipend_updated"
+    NOTIFICATION_STIPEND_DELETED = "stipend_deleted"
+    
     # Authentication
     ADMIN_ACCESS_ERROR = "Error accessing admin panel. Please try again."
     USERNAME_REQUIRED = "Username is required."
