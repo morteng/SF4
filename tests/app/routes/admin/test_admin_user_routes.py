@@ -198,6 +198,15 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
             
             # Log test start
             logger.info("Starting user CRUD operations test")
+            
+            # Test audit log rollback
+            try:
+                # Force an error by creating invalid audit log
+                AuditLog.create(
+                    user_id=test_user.id,
+                    action=None,  # Invalid - should raise error
+                    commit=True
+                )
                 assert False, "Should have raised ValueError"
             except ValueError as e:
                 # Verify no audit log was created
