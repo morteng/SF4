@@ -4,12 +4,17 @@
   - User ID, Action type, Object type, Object ID
   - Timestamp (UTC), IP address, HTTP method, Endpoint
   - Before/after state for updates (JSON serialized)
+- Notifications must:
+  - Use NotificationType enum values
+  - Include user_id and related_object
+  - Use proper priority levels
 - CSRF tokens must be included in all forms and HTMX requests
 - Rate limiting:
   - Admin: 200/day, 50/hour
   - CRUD: Create/Update (10/min), Delete (3/min)
   - Bot operations: 10/hour
   - Password resets: 5/hour
+  - Login attempts: 3/min
 - Notification system must:
   - Use NotificationType enum values
   - Include user_id and related_object
