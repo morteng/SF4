@@ -54,18 +54,6 @@ class AuditLog(db.Model):
             from flask import current_app
             if not current_app:
                 raise RuntimeError("Application context required")
-        
-        # Validate object type/id relationship
-        if object_type and not object_id:
-            raise ValueError("object_id is required when object_type is provided")
-        if object_id and not object_type:
-            raise ValueError("object_type is required when object_id is provided")
-            
-        # Validate string lengths
-        if action and len(action) > 100:
-            raise ValueError("Action exceeds maximum length of 100 characters")
-        if object_type and len(object_type) > 50:
-            raise ValueError("Object type exceeds maximum length of 50 characters")
             
         try:
             # Convert dictionaries to JSON strings
