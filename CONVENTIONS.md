@@ -46,6 +46,7 @@
   - Operation details (must reflect actual changes)
   - Before/after state (JSON serializable data)
   - Corresponding notification for each audit log
+- Ensure related_object is a model instance, not a string
 - Must create notification for audit log creation
 - Must include:
   - Timestamp (UTC)

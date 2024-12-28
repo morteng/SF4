@@ -16,6 +16,7 @@
   - IP address (required for all operations)
   - Operation details
   - Before/after state for updates
+- Ensure related_object is a model instance, not a string
 - Ensure consistent timezone handling in audit logs
 - Verify audit logs create corresponding notifications
 - Check logs contain:
