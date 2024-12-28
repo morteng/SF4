@@ -61,13 +61,14 @@ def create():
             db.session.add(user)
             db.session.commit()
             
-            # Create audit log
+            # Create audit log with IP address
             AuditLog.create(
                 user_id=current_user.id,
                 action='create_user',
                 object_type='User',
                 object_id=user.id,
-                details=f'Created user {user.username}'
+                details=f'Created user {user.username}',
+                ip_address=request.remote_addr
             )
             
             flash_message(FlashMessages.USER_CREATED.value, FlashCategory.SUCCESS.value)
@@ -111,7 +112,7 @@ def create():
             }
             new_user = create_user(user_data)
             
-            # Create audit log
+            # Create audit log with IP address
             AuditLog.create(
                 user_id=current_user.id,
                 action='create_user',
