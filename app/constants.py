@@ -103,6 +103,8 @@ class FlashMessages(str, Enum):
 
     # CSRF
     CSRF_INVALID = "Invalid CSRF token. Please refresh the page and try again."
+    ACCESS_DENIED = "Access denied. You don't have permission to perform this action."
+    RATE_LIMIT_EXCEEDED = "Too many requests. Please try again later."
 
     # Audit Actions
     AUDIT_CREATE = "create"
