@@ -179,10 +179,8 @@ def verify_user_crud_operations(test_client, admin_user, test_data):
     ).first()
     assert log is not None
 
-def test_user_crud_operations(logged_in_admin, db_session, test_user, reset_rate_limiter):
+def test_user_crud_operations(logged_in_admin, db_session, test_user):
     """Test full CRUD operations with audit logging and notifications"""
-    # Reset rate limiter before starting test
-    reset_rate_limiter()
     
     # Create unique test data
     unique_id = str(uuid.uuid4())[:8]

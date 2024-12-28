@@ -284,13 +284,6 @@ def reset_rate_limiter(app):
     Notification.query.delete()
     db.session.commit()
 
-@pytest.fixture(autouse=True)
-def reset_rate_limiter(app):
-    """Reset the rate limiter before each test."""
-    limiter = app.extensions.get("limiter")
-    if limiter and hasattr(limiter, 'reset'):
-        limiter.reset()
-
 @pytest.fixture(scope='function')
 def logged_in_client(client, test_user, app, db_session):
     """Log in as a regular user."""
