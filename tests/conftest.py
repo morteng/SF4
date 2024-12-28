@@ -137,9 +137,10 @@ def test_user(db_session):
     user = User(
         username=f'testuser_{unique_id}',
         email=f'testuser_{unique_id}@example.com',
-        password_hash=generate_password_hash('TestPass123!'),
         is_admin=False
     )
+    # Set password using the proper method
+    user.set_password('TestPass123!')
     db_session.add(user)
     db_session.commit()
     yield user
