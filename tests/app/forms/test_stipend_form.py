@@ -232,10 +232,13 @@ def test_missing_required_fields(app, form_data):
         for field in required_fields:
             invalid_data = form_data.copy()
             del invalid_data[field]
-            
+    
             form = StipendForm(data=invalid_data, meta={'csrf': False})
             form.tags.choices = tag_choices
-            assert form.validate() is False
+            if field == 'organization_id':
+                form.organization_id.choices = [(1, 'Test Org')]  # Add dummy choice
+            assert form.validate() is False, f"Form should be invalid when {field} is missing"
+            assert field in form.errors, f"Expected error for missing {field} but got: {form.errors}"
             assert field in form.errors
     """Test missing date validation"""
     with app.test_request_context():

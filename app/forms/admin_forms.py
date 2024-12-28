@@ -38,11 +38,11 @@ class StipendForm(FlaskForm):
     ])
     summary = TextAreaField('Summary', validators=[
         DataRequired(message="Summary is required."),
-        Length(max=500, message="Summary cannot exceed 500 characters.")
+        Length(min=1, max=500, message="Summary must be between 1 and 500 characters.")
     ])
     description = TextAreaField('Description', validators=[
         DataRequired(message="Description is required."),
-        Length(max=2000, message="Description cannot exceed 2000 characters.")
+        Length(min=1, max=2000, message="Description must be between 1 and 2000 characters.")
     ])
     homepage_url = URLField('Homepage URL', validators=[
         DataRequired(message="Homepage URL is required."),
@@ -71,26 +71,6 @@ class StipendForm(FlaskForm):
     open_for_applications = BooleanField('Open for Applications', default=False)
     tags = SelectMultipleField('Tags', coerce=int, validators=[
         DataRequired(message="At least one tag is required.")
-    ])
-    summary = TextAreaField('Summary', validators=[
-        DataRequired(message="Summary is required."),
-        Length(max=500, message="Summary cannot exceed 500 characters.")
-    ])
-    description = TextAreaField('Description', validators=[
-        DataRequired(message="Description is required."),
-        Length(max=2000, message="Description cannot exceed 2000 characters.")
-    ])
-    homepage_url = URLField('Homepage URL', validators=[
-        DataRequired(message="Homepage URL is required."),
-        URL(message="Please enter a valid URL starting with http:// or https://.")
-    ])
-    application_procedure = TextAreaField('Application Procedure', validators=[
-        DataRequired(message="Application procedure is required."),
-        Length(max=1000, message="Application procedure cannot exceed 1000 characters.")
-    ])
-    eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[
-        DataRequired(message="Eligibility criteria is required."),
-        Length(max=1000, message="Eligibility criteria cannot exceed 1000 characters.")
     ])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
