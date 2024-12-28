@@ -319,9 +319,9 @@ def logged_in_client(client, test_user, app, db_session):
             limiter = app.extensions['limiter']
             limiter.enabled = False
             
-            # Initialize storage if not already initialized
+            # Ensure limiter is properly initialized
             if not hasattr(limiter, '_storage') or limiter._storage is None:
-                limiter.storage  # Force storage initialization
+                limiter.init_app(app)  # Reinitialize if needed
             
             # Reset limiter if storage is available
             if hasattr(limiter, '_storage') and limiter._storage is not None:

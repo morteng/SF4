@@ -49,6 +49,7 @@ def create_app(config_name='development'):
 
     # Initialize rate limiter with proper storage
     limiter = Limiter(
+        app=app,  # Pass app directly to ensure proper initialization
         key_func=get_remote_address,
         default_limits=["200 per day", "50 per hour"],
         storage_uri="memory://",
@@ -56,9 +57,6 @@ def create_app(config_name='development'):
         enabled=not app.config.get('TESTING'),  # Disable in test environment
         storage_options={"check_interval": 1}  # Add storage options
     )
-    
-    # Initialize with app (no need to force storage creation)
-    limiter.init_app(app)
 
     # Register blueprints before applying rate limits
     from app.routes.admin import register_admin_blueprints
