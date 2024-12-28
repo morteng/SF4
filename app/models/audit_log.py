@@ -44,7 +44,7 @@ class AuditLog(db.Model):
                 details_before=details_before,
                 details_after=details_after,
                 ip_address=ip_address,
-                timestamp=datetime.now(timezone.UTC)
+                timestamp=datetime.now(timezone.utc)
             )
             db.session.add(log)
             
@@ -73,7 +73,8 @@ class AuditLog(db.Model):
             notification = Notification(
                 message=f"Error creating audit log: {str(e)}",
                 type="system",
-                read_status=False
+                read_status=False,
+                user_id=user_id if user_id else 0  # Use 0 for system notifications
             )
             db.session.add(notification)
             db.session.commit()
