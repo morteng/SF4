@@ -23,6 +23,8 @@ from .models.user import User
 from werkzeug.security import generate_password_hash
 from dotenv import load_dotenv  # Add this import
 from app.extensions import db  # Import the db object
+from app.models.audit_log import AuditLog  # Add this import
+from app.models.notification import Notification  # Add this import
 
 from functools import wraps
 from datetime import datetime
