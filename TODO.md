@@ -5,6 +5,7 @@
 - [ ] Implement proper bot scaffolding
 - [ ] Add test coverage for timezone handling
 - [ ] Update datetime handling to use timezone-aware objects
+- [x] Implement audit logging for delete operations
 
 ## Completed
 - [x] Implement CRUD operations with audit logging

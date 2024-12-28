@@ -10,8 +10,9 @@
 - **Audit Logging**: Log all CRUD operations with required fields
   - Must include: user_id, action, object_type, object_id
   - Optional: details_before, details_after (JSON serialized)
-  - Timestamps in UTC, include IP address for security
+  - Timestamps in UTC, include IP address and HTTP method
   - Rollback on audit log failure
+  - Use consistent action names (e.g., 'delete_stipend')
 - Notifications must:
   - Use NotificationType enum values
   - Include user_id and related_object

@@ -25,6 +25,8 @@
 - Verify timestamps are UTC and properly formatted
 - Check JSON serialization of before/after states
 - Ensure rollback occurs on audit log failure
+- Validate action names match defined patterns
+- Verify IP address and HTTP method are logged
   - Details field with human-readable description
 - Ensure logs are created for both success and failure cases
 - Validate JSON serialization of complex data
