@@ -36,10 +36,9 @@ def client(app):
     return app.test_client()
 
 def test_profile_form_valid(client, setup_database):
-    # Reset rate limiter before test
-    limiter = current_app.extensions.get('limiter')
-    limiter.reset()
-        
+    # Increase rate limit for testing
+    current_app.config['RATELIMIT_DEFAULT'] = "10 per minute"
+    
     # Create a test user
     password_hash = generate_password_hash("password123")
     user = User(username="testuser", email="test@example.com", password_hash=password_hash)
@@ -48,6 +47,10 @@ def test_profile_form_valid(client, setup_database):
     
     # Log in the user
     with client:
+        # Reset rate limiter before first request
+        limiter = current_app.extensions.get('limiter')
+        limiter.reset()
+        
         # First make a GET request to establish session and get CSRF token
         get_response = client.get(url_for('public.login'))
         assert get_response.status_code == 200
@@ -57,7 +60,6 @@ def test_profile_form_valid(client, setup_database):
         csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
     
         # Reset rate limiter before login attempt
-        limiter = current_app.extensions.get('limiter')
         limiter.reset()
             
         # Now make the login POST request
@@ -71,6 +73,9 @@ def test_profile_form_valid(client, setup_database):
         assert login_response.status_code in [200, 302], \
             f"Expected 200 or 302, got {login_response.status_code}"
     
+        # Reset rate limiter before profile edit request
+        limiter.reset()
+        
         # Now access the profile edit page
         get_response = client.get(url_for('user.edit_profile'))
         assert get_response.status_code == 200
@@ -79,6 +84,9 @@ def test_profile_form_valid(client, setup_database):
         soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
         csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
 
+        # Reset rate limiter before profile update
+        limiter.reset()
+        
         # Test form submission via POST with valid data
         response = client.post(url_for('user.edit_profile'), data={
             'username': 'newusername',
