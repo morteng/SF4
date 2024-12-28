@@ -41,6 +41,53 @@ class AuditLog(db.Model):
             if not isinstance(action, str):
                 logger.error(f"Invalid action type: {type(action)}")
                 raise TypeError("Action must be a string")
+            
+            # Validate object type/id relationship
+            if object_type and not object_id:
+                raise ValueError("object_id is required when object_type is provided")
+            if object_id and not object_type:
+                raise ValueError("object_type is required when object_id is provided")
+            
+            # Validate string lengths
+            if action and len(action) > 100:
+                raise ValueError("Action exceeds maximum length of 100 characters")
+            if object_type and len(object_type) > 50:
+                raise ValueError("Object type exceeds maximum length of 50 characters")
+            
+            # Convert dictionaries to JSON strings
+            if isinstance(details_before, dict):
+                details_before = json.dumps(details_before)
+            if isinstance(details_after, dict):
+                details_after = json.dumps(details_after)
+
+            # Create the audit log entry
+            log = AuditLog(
+                user_id=user_id,
+                action=action,
+                details=details,
+                object_type=object_type,
+                object_id=object_id,
+                details_before=details_before,
+                details_after=details_after,
+                ip_address=ip_address,
+                http_method=http_method,
+                endpoint=endpoint
+            )
+            
+            # Use context manager for session management
+            with db.session.begin_nested():
+                db.session.add(log)
+                if commit:
+                    db.session.commit()
+                    
+            logger.info(f"Created audit log: {action} by user {user_id}")
+            return log
+            
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error creating audit log: {str(e)}", exc_info=True)
+            # Preserve the original exception type
+            raise type(e)(f"Failed to create audit log: {str(e)}") from e
         
         try:
             # Validate required fields
