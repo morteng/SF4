@@ -96,3 +96,48 @@ def calculate_next_run(schedule):
         return now + timedelta(days=30)
     else:
         raise ValueError("Invalid schedule")
+from app.models import Bot, AuditLog
+from app.extensions import db
+from datetime import datetime
+
+class TagBot:
+    def run(self):
+        bot = Bot(name='TagBot', status='running', last_run=datetime.utcnow())
+        db.session.add(bot)
+        
+        try:
+            # Implement tagging logic
+            pass
+        except Exception as e:
+            bot.error_log = str(e)
+            bot.status = 'failed'
+        finally:
+            db.session.commit()
+
+class UpdateBot:
+    def run(self):
+        bot = Bot(name='UpdateBot', status='running', last_run=datetime.utcnow())
+        db.session.add(bot)
+        
+        try:
+            # Implement update logic
+            pass
+        except Exception as e:
+            bot.error_log = str(e)
+            bot.status = 'failed'
+        finally:
+            db.session.commit()
+
+class ReviewBot:
+    def run(self):
+        bot = Bot(name='ReviewBot', status='running', last_run=datetime.utcnow())
+        db.session.add(bot)
+        
+        try:
+            # Implement review logic
+            pass
+        except Exception as e:
+            bot.error_log = str(e)
+            bot.status = 'failed'
+        finally:
+            db.session.commit()

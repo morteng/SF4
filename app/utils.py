@@ -305,3 +305,21 @@ def flash_message(message, category):
             logger.warning(f"Flash Warning: {message}")
     except Exception as e:
         logger.error(f"Failed to flash message: {e}")
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"]
+)
+
+def setup_rate_limits(app):
+    limiter.init_app(app)
+    
+    # CRUD specific limits
+    limiter.limit("10/minute")(create_stipend)
+    limiter.limit("10/minute")(update_stipend)
+    limiter.limit("3/minute")(delete_stipend)
+    
+    # Bot operations
+    limiter.limit("10/hour")(run_bot)

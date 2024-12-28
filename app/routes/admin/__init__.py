@@ -129,3 +129,14 @@ def register_admin_blueprints(app):
     
     # Mark blueprints as registered
     _admin_blueprints_registered = True
+from flask import abort
+from functools import wraps
+from flask_login import current_user
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_admin:
+            abort(403)
+        return f(*args, **kwargs)
+    return decorated_function

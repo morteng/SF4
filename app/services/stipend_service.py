@@ -193,3 +193,73 @@ def get_stipend_by_id(id, session=db.session):
 
 def get_all_stipends():
     return Stipend.query.all()  # Return a list instead of Query object
+from app.models.stipend import Stipend
+from app.models.audit_log import AuditLog
+from app.extensions import db
+
+def create_stipend(data, user_id, ip_address):
+    stipend = Stipend(**data)
+    db.session.add(stipend)
+    db.session.commit()
+    
+    # Audit log
+    audit = AuditLog(
+        user_id=user_id,
+        action_type='create',
+        object_type='stipend',
+        object_id=stipend.id,
+        ip_address=ip_address,
+        http_method='POST',
+        endpoint='/admin/stipends/create'
+    )
+    db.session.add(audit)
+    db.session.commit()
+    
+    return stipend
+
+def update_stipend(stipend_id, data, user_id, ip_address):
+    stipend = Stipend.query.get_or_404(stipend_id)
+    before_state = str(stipend.__dict__)
+    
+    for key, value in data.items():
+        setattr(stipend, key, value)
+    
+    db.session.commit()
+    
+    # Audit log
+    audit = AuditLog(
+        user_id=user_id,
+        action_type='update',
+        object_type='stipend',
+        object_id=stipend.id,
+        ip_address=ip_address,
+        http_method='POST',
+        endpoint=f'/admin/stipends/{stipend_id}/edit',
+        before_state=before_state,
+        after_state=str(stipend.__dict__)
+    )
+    db.session.add(audit)
+    db.session.commit()
+    
+    return stipend
+
+def delete_stipend(stipend_id, user_id, ip_address):
+    stipend = Stipend.query.get_or_404(stipend_id)
+    before_state = str(stipend.__dict__)
+    
+    db.session.delete(stipend)
+    db.session.commit()
+    
+    # Audit log
+    audit = AuditLog(
+        user_id=user_id,
+        action_type='delete',
+        object_type='stipend',
+        object_id=stipend_id,
+        ip_address=ip_address,
+        http_method='POST',
+        endpoint=f'/admin/stipends/{stipend_id}/delete',
+        before_state=before_state
+    )
+    db.session.add(audit)
+    db.session.commit()
