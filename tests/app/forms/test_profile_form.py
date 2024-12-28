@@ -60,8 +60,8 @@ def test_profile_form_missing_fields(logged_in_client):
     assert response.status_code == 400
     
     # Check for validation error messages in the response
-    assert b"username: This field is required" in response.data
-    assert b"email: This field is required" in response.data
+    assert b"Username is required" in response.data
+    assert b"Email is required" in response.data
     
     # Check for error message in the response HTML
     assert b"Please correct the errors below" in response.data
