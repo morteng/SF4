@@ -183,6 +183,37 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
     # Reset rate limiter before test
     if 'limiter' in app.extensions:
         app.extensions['limiter'].reset()
+    
+    # Test audit log rollback
+    try:
+        # Force an error by creating invalid audit log
+        AuditLog.create(
+            user_id=test_user.id,
+            action=None,  # Invalid - should raise error
+            commit=True
+        )
+        assert False, "Should have raised ValueError"
+    except ValueError as e:
+        # Verify no audit log was created
+        logs = AuditLog.query.filter_by(user_id=test_user.id).all()
+        assert len(logs) == 0, "Audit log should have been rolled back"
+        
+    # Test notification error handling
+    notification = Notification(
+        message="Test notification",
+        type="test",
+        user_id=test_user.id
+    )
+    db_session.add(notification)
+    db_session.commit()
+    
+    # Force an error by marking invalid notification as read
+    invalid_notification = Notification()
+    try:
+        invalid_notification.mark_as_read()
+        assert False, "Should have raised ValueError"
+    except ValueError as e:
+        assert str(e) == "Cannot mark unsaved notification as read"
     """Test full CRUD operations with audit logging and notifications"""
     
     # Create unique test data

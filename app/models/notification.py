@@ -32,7 +32,7 @@ class Notification(db.Model):
         }
 
     def mark_as_read(self):
-        """Mark notification as read with error handling"""
+        """Mark notification as read with enhanced error handling"""
         if not self.id:
             raise ValueError("Cannot mark unsaved notification as read")
             
@@ -44,6 +44,20 @@ class Notification(db.Model):
             db.session.rollback()
             from flask import current_app
             current_app.logger.error(f"Error marking notification as read: {str(e)}")
+            # Create audit log for the failed operation
+            try:
+                from app.models.audit_log import AuditLog
+                AuditLog.create(
+                    user_id=self.user_id,
+                    action="notification_mark_read_failed",
+                    object_type="Notification",
+                    object_id=self.id,
+                    details=str(e),
+                    commit=True,
+                    notify=False
+                )
+            except Exception as audit_error:
+                current_app.logger.error(f"Failed to create audit log: {str(audit_error)}")
             raise ValueError("Failed to mark notification as read") from e
 
     @classmethod

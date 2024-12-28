@@ -31,11 +31,24 @@ class AuditLog(db.Model):
               details_before=None, details_after=None, ip_address=None,
               http_method=None, endpoint=None, commit=True, notify=True):
         """Enhanced audit logging with better error handling and validation"""
-        # Validate required fields
-        if not action:
-            raise ValueError("Action is required")
-        if not isinstance(action, str):
-            raise TypeError("Action must be a string")
+        try:
+            # Validate required fields
+            if not action:
+                raise ValueError("Action is required")
+            if not isinstance(action, str):
+                raise TypeError("Action must be a string")
+            
+            # Validate object type/id relationship
+            if object_type and not object_id:
+                raise ValueError("object_id is required when object_type is provided")
+            if object_id and not object_type:
+                raise ValueError("object_type is required when object_id is provided")
+            
+            # Validate string lengths
+            if action and len(action) > 100:
+                raise ValueError("Action exceeds maximum length of 100 characters")
+            if object_type and len(object_type) > 50:
+                raise ValueError("Object type exceeds maximum length of 50 characters")
             
         # Ensure we're in an application context
         from flask import current_app
