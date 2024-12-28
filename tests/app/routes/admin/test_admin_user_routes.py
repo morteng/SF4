@@ -285,6 +285,9 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user):
         test_user = db_session.merge(test_user)
 
         # Perform login with CSRF token
+        with logged_in_admin.session_transaction() as session:
+            session['csrf_token'] = csrf_token
+                
         login_response = logged_in_admin.post('/login', data={
             'username': test_user.username,
             'password': 'AdminPass123!',

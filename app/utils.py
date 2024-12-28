@@ -3,7 +3,7 @@ import os
 import logging
 import string
 import secrets
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Union
 from flask import abort, redirect, url_for, flash, request
 from flask_wtf.csrf import generate_csrf
@@ -72,7 +72,7 @@ def admin_required(f):
                 user_id=current_user.id,
                 action=f.__name__,
                 details_before=f"Accessed admin route: {request.path}",
-                timestamp=datetime.now(timezone.UTC)
+                timestamp=datetime.now(timezone.utc)
             )
             db.session.add(audit_log)
             db.session.commit()
