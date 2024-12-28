@@ -134,9 +134,11 @@ def test_profile_form_invalid_same_username(client, setup_database):
     
     # Log in the user
     with client:
-        # Reset rate limiter before first request
-        limiter = current_app.extensions.get('limiter')
-        limiter.reset()
+        # Only reset limiter if rate limiting is enabled and initialized
+        if current_app.config.get('RATELIMIT_ENABLED', True):
+            limiter = current_app.extensions.get('limiter')
+            if limiter and limiter._storage:  # Check if limiter is properly initialized
+                limiter.reset()
         
         # First make a GET request to establish session and get CSRF token
         get_response = client.get(url_for('public.login'))
@@ -146,8 +148,11 @@ def test_profile_form_invalid_same_username(client, setup_database):
         soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
         csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
 
-        # Reset rate limiter before login attempt
-        limiter.reset()
+        # Only reset limiter if rate limiting is enabled and initialized
+        if current_app.config.get('RATELIMIT_ENABLED', True):
+            limiter = current_app.extensions.get('limiter')
+            if limiter and limiter._storage:  # Check if limiter is properly initialized
+                limiter.reset()
             
         # Now make the login POST request
         login_response = client.post(url_for('public.login'), data={
@@ -157,8 +162,11 @@ def test_profile_form_invalid_same_username(client, setup_database):
         }, follow_redirects=True)
         assert login_response.status_code == 200, "Login failed"
         
-        # Reset rate limiter before profile edit request
-        limiter.reset()
+        # Only reset limiter if rate limiting is enabled and initialized
+        if current_app.config.get('RATELIMIT_ENABLED', True):
+            limiter = current_app.extensions.get('limiter')
+            if limiter and limiter._storage:  # Check if limiter is properly initialized
+                limiter.reset()
         
         # Get CSRF token from the profile edit page
         get_response = client.get('/user/profile/edit')
