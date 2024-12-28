@@ -67,9 +67,10 @@
 - Ensure rate limiting middleware is properly configured
 
 ### Notification Badge Validation
-- All admin templates must include a notification badge.
-- The badge must display the correct count of unread notifications.
-- The badge must be visible even if the count is 0.
+- All admin templates must include a notification badge
+- Badge must display correct count of unread notifications
+- Badge must be visible even if count is 0
+- Ensure real-time updates via HTMX
 
 ## Form Validation
 - Validate all form inputs using constants from app\constants.py

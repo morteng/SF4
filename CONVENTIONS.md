@@ -28,7 +28,7 @@
 - Validate CSRF tokens in all POST requests
 - Return 400 for invalid/missing CSRF tokens
 - Add CSRF token to test requests
-- Use blueprint factory pattern to prevent circular imports
+- Use blueprint factory pattern with audit logging
 - Ensure session handling in tests with proper context management
 
 ### Notification Badges
