@@ -121,8 +121,8 @@ def test_future_date_limit(app, form_data, test_db):
     """Test future date limit (5 years)"""
     # Create test tags and organizations
     from app.models import Tag, Organization
-    tag = Tag(name="Test Tag")
-    org = Organization(name="Test Org")
+    tag = Tag(name="Test Tag", category="Test Category")
+    org = Organization(name="Test Org", description="Test Description", homepage_url="https://test.org")
     db.session.add(tag)
     db.session.add(org)
     db.session.commit()
