@@ -17,6 +17,33 @@
      validators=[InputRequired(message=MISSING_REQUIRED_FIELD)]
      ```
 
+### Testing
+- Test edge cases thoroughly, especially for date/time validation.
+- Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+- Verify installation with `pip show freezegun` before running tests.
+
+### Example Implementation
+```python
+from wtforms import Field
+from wtforms.validators import InputRequired
+
+class CustomDateTimeField(Field):
+    def __init__(self, label=None, validators=None, **kwargs):
+        if validators is None:
+            validators = [InputRequired()]  # Default validator
+        super().__init__(label=label, validators=validators, **kwargs)
+```
+
+### Date/Time Validation Best Practices
+1. **Data Type Awareness**:
+   - Always verify the data type of form field inputs before applying validation logic.
+2. **Timezone Handling**:
+   - Ensure all `datetime` objects are timezone-aware.
+3. **Future/Past Date Validation**:
+   - Validate that dates are within acceptable ranges (e.g., future dates for deadlines).
+4. **Error Messages**:
+   - Use centralized error messages from `app/constants.py` for consistency.
+
 ### Date/Time Validation
 1. **Data Type Awareness**:
    - Always verify the data type of form field inputs before applying validation logic.
