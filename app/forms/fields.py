@@ -54,7 +54,16 @@ class CustomDateTimeField(DateTimeField):
         try:
             parsed_dt = datetime.strptime(date_str, self._format)
             
-            # Validate time components
+            # Add leap year validation
+            if parsed_dt.month == 2 and parsed_dt.day == 29:
+                try:
+                    datetime(parsed_dt.year, 2, 29)
+                except ValueError:
+                    self.errors.append(self.error_messages['invalid_leap_year'])
+                    self.data = None
+                    return
+                    
+            # Enhanced time component validation
             if not (0 <= parsed_dt.hour <= 23 and 
                     0 <= parsed_dt.minute <= 59 and 
                     0 <= parsed_dt.second <= 59):
