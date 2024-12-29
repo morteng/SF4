@@ -4,12 +4,8 @@
 # Console commands for Step 3.
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
-### PENDING CONSOLE COMMANDS ###
-# Example commands:
-# /run echo "Hello from Step 3!"
-# /run python some_script.py
-
 ### COMMANDS START ###
+/run pytest tests/test_admin_stipends.py -v
 ### COMMANDS END ###
 
 # Once finished, jump to Step 4.
