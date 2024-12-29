@@ -14,6 +14,9 @@
 - [x] Consolidate leap year validation logic in `CustomDateTimeField`.
 
 ## Next Session
+- [x] Fix `ModuleNotFoundError: No module named 'pytest'`
+- [x] Fix `TypeError: CustomDateTimeField.__init__() got an unexpected keyword argument 'validators'`
+- [x] Verify all dependencies are installed
 - [ ] Refactor shared functionality into `app/common/base_service.py` to avoid circular imports.
 - [ ] Add a pre-test dependency verification script to ensure all required packages are installed.
 - [ ] Verify that all properties are correctly implemented with `@property` and `@<property>.setter`.

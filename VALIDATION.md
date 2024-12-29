@@ -6,16 +6,19 @@
    - Use specific error messages for different validation failures
    - Handle edge cases like February 29th in non-leap years
    - Validate time components (hours, minutes, seconds) together
+   - Ensure custom datetime fields properly handle validators and initialization
 
 2. **Error Handling**:
    - Always use error messages from `app/constants.py`
    - Provide clear, user-friendly error messages
    - Log validation errors with context
+   - Handle TypeError exceptions in custom field initialization
 
 3. **Testing**:
    - Test all error message variations
    - Verify edge cases in date/time validation
    - Ensure consistent handling of empty/missing values
+   - Test custom field initialization with different validator configurations
 
 ### General Validation Best Practices
 1. **Validation Logic**:
