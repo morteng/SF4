@@ -2,6 +2,10 @@
 1. Fix tests
 2. Update this list with new actionable items
 
+### **Next Steps**
+1. **Add Missing Constants**:
+   - Verify all constants used in forms and controllers are defined in `app/constants.py`.
+
 ### **Things to Remember for Next Coding Session**
 1. **Error Handling**:
    - Always include proper error handling for `try` blocks to avoid syntax errors.
