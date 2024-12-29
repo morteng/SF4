@@ -1,14 +1,11 @@
 # Updated TODO List
 
 ## Completed
-- [x] Fix error message handling in `CustomDateTimeField`
-- [x] Add time validation logic to `CustomDateTimeField`
-- [x] Standardize validation error messages
-- [x] Remove hardcoded error messages
-- [x] Implement proper error message mapping
-- [x] Fix `TypeError` in `CustomDateTimeField` caused by incorrect `self.format` usage.
-- [x] Consolidate leap year validation logic in `CustomDateTimeField`.
-- [x] Add tests for edge cases in `CustomDateTimeField`.
+- [x] Fix leap year validation in `CustomDateTimeField`
+- [x] Add time validation logic
+- [x] Standardize error messages
+- [x] Fix `TypeError` in `CustomDateTimeField`
+- [x] Add tests for edge cases
 - [x] Add time validation logic to `CustomDateTimeField`
 - [x] Standardize validation error messages
 - [x] Remove hardcoded error messages
@@ -18,9 +15,14 @@
 - [x] Add tests for edge cases in `CustomDateTimeField`.
 
 ## Next Session
-- [ ] Add more test cases for edge cases in `CustomDateTimeField`.
-- [ ] Document new validation patterns in `CONVENTIONS.md`.
-- [ ] Review test coverage for `CustomDateTimeField` and `StipendForm`.
+- [ ] Optimize validation performance
+- [ ] Add validation benchmarks
+- [ ] Document new validation patterns
+
+## Long Term
+- [ ] Refactor validation logic into reusable components
+- [ ] Improve test coverage for all form fields
+- [ ] Add integration tests for form validation
 
 ## Medium Priority
 - [ ] Optimize validation performance in `CustomDateTimeField`.

@@ -1,5 +1,27 @@
 # Updated Validation Rules
 
+## Updated Validation Patterns
+
+### Date/Time Validation
+1. **Validation Order**:
+   - Required → Format → Components → Full parsing
+   - Validate time components before full date parsing
+
+2. **Error Messages**:
+   - Use specific messages for different validation failures
+   - Centralize messages in `app/constants.py`
+   - Provide clear, user-friendly messages
+
+3. **Edge Cases**:
+   - Handle invalid leap year dates
+   - Validate time component ranges
+   - Handle malformed datetime strings
+
+### Testing Validation
+- Test all error message variations
+- Verify edge cases in date/time validation
+- Ensure consistent handling of empty/missing values
+
 ## Updated Time Validation
 
 ### Best Practices

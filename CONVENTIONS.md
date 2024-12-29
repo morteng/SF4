@@ -62,6 +62,24 @@
    - Avoid passing the same parameter multiple times during field initialization.
    - Use consistent patterns for initializing custom fields.
 
+## Updated Validation Best Practices
+
+1. **Date/Time Validation**:
+   - Validate date and time components separately before full parsing
+   - Use specific error messages for different validation failures
+   - Handle edge cases like February 29th in non-leap years
+   - Validate time components (hours, minutes, seconds) together
+
+2. **Error Handling**:
+   - Always use error messages from `app/constants.py`
+   - Provide clear, user-friendly error messages
+   - Log validation errors with context
+
+3. **Testing**:
+   - Test all error message variations
+   - Verify edge cases in date/time validation
+   - Ensure consistent handling of empty/missing values
+
 ## Testing
 - Test both success and error cases
 - Verify error messages in validation tests
