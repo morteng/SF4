@@ -118,6 +118,9 @@ def create_app(config_name='development'):
             # Initialize extensions first
             init_extensions(app)
             
+            # Lazy import to avoid circular dependencies
+            from app.common.utils import init_admin_user
+            
             # Only run migrations if the env.py file exists
             env_path = os.path.join(migrations_dir, 'env.py')
             if os.path.exists(env_path):
