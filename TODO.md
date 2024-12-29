@@ -14,6 +14,10 @@
 - [x] Consolidate leap year validation logic in `CustomDateTimeField`.
 
 ## Next Session
+- [ ] Add comprehensive tests for property getters and setters
+- [ ] Verify that all dependencies listed in `requirements.txt` are installed during test execution
+- [ ] Add a pre-test dependency verification script to ensure all required packages are installed
+- [ ] Resolve circular imports by refactoring shared functionality into a separate module
 - [x] Refactor other shared functionality into `app/common`.
 - [x] Add comprehensive tests for `BaseService` properties.
 - [x] Verify time-based tests with `freezegun`.

@@ -1,5 +1,22 @@
 ## Property Validation Best Practices
 
+### Date/Time Validation
+1. **Best Practices**:
+   - Validate date and time components separately before full parsing
+   - Use specific error messages for different validation failures
+   - Handle edge cases like February 29th in non-leap years
+   - Validate time components (hours, minutes, seconds) together
+
+2. **Error Handling**:
+   - Always use error messages from `app/constants.py`
+   - Provide clear, user-friendly error messages
+   - Log validation errors with context
+
+3. **Testing**:
+   - Test all error message variations
+   - Verify edge cases in date/time validation
+   - Ensure consistent handling of empty/missing values
+
 1. **Define Properties Correctly**:
    - Always define a property (`@property`) before using a setter (`@<property>.setter`).
    - Example:

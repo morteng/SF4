@@ -379,6 +379,23 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 
 ## Coding Practices
 
+### Dependency Management
+1. **Pre-Test Verification**:
+   - Add pre-test verification of dependencies
+   - Use try-except blocks to handle missing dependencies gracefully
+   - Example test:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+
+2. **Graceful Handling**:
+   - Use try-except blocks to handle missing dependencies in test files.
+   - Skip tests that require missing packages instead of failing the entire suite.
+
 ### Property Implementation
 1. **Define Properties Correctly**:
    - Always define a property (`@property`) before using a setter (`@<property>.setter`).
