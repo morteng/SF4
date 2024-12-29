@@ -91,7 +91,7 @@ def create():
                 user_id=current_user.id
             )
 
-            flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
+            flash_message(FlashMessages.USER_CREATED.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
         except Exception as e:
             db.session.rollback()
