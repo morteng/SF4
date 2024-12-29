@@ -185,6 +185,12 @@ def register_admin_blueprints(app):
     admin_bp.register_blueprint(admin_tag_bp, url_prefix='/tags')
     admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
     
+    # Ensure all routes are properly registered
+    current_app.logger.debug("Registered admin blueprints:")
+    for rule in app.url_map.iter_rules():
+        if rule.endpoint.startswith('admin.'):
+            current_app.logger.debug(f"Route: {rule}")
+    
     # Register the main admin blueprint
     app.register_blueprint(admin_bp)
     

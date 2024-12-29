@@ -101,8 +101,8 @@ class AuditLog(db.Model):
                     Notification.create(
                         type=NotificationType.AUDIT_LOG,
                         message=f"{action.capitalize()} operation on {object_type} {object_id}",
-                        related_object=log,
-                        user_id=user_id
+                        user_id=user_id,
+                        related_object=log
                     )
                 except Exception as e:
                     current_app.logger.error(f"Error creating notification for audit log: {str(e)}")

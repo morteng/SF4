@@ -64,10 +64,18 @@ class Notification(db.Model):
         return cls.query.filter_by(read_status=False).count()
 
     @classmethod
-    def create(cls, **kwargs):
+    def create(cls, type, message, user_id=None, related_object=None, **kwargs):
         """Create a new notification with error handling"""
         try:
-            notification = cls(**kwargs)
+            notification = cls(
+                type=type,
+                message=message,
+                user_id=user_id,
+                **kwargs
+            )
+            if related_object:
+                notification.related_object_type = related_object.__class__.__name__
+                notification.related_object_id = related_object.id
             db.session.add(notification)
             db.session.commit()
             return notification
