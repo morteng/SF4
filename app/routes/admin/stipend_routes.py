@@ -1,7 +1,10 @@
+import logging
 from flask import (
     Blueprint, request, redirect, url_for, 
     render_template, current_app, render_template_string
 )
+
+logger = logging.getLogger(__name__)
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
 from wtforms import ValidationError
@@ -72,7 +75,13 @@ stipend_controller = StipendController()
 @login_required
 @admin_required
 def create():
-    return stipend_controller.create()
+    logger.debug("Processing stipend creation request")
+    try:
+        return stipend_controller.create()
+    except Exception as e:
+        logger.error(f"Error creating stipend: {str(e)}")
+        current_app.logger.error(f"Stipend creation failed: {str(e)}")
+        raise
 
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")

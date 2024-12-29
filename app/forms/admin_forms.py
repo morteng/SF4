@@ -121,11 +121,25 @@ class StipendForm(FlaskForm):
         print(f"Organization validation successful: {organization.name}")
 
     def validate(self):
-        print("\nStarting form validation")
+        logger.debug("Validating StipendForm")
         result = super().validate()
+        
         if not result:
-            print("Form validation failed with errors:", self.errors)
-        return result
+            logger.warning(f"Form validation failed with errors: {self.errors}")
+            return False
+            
+        # Additional validation
+        if not self.organization_id.data:
+            logger.warning("Organization ID is required")
+            self.organization_id.errors.append("Organization is required")
+            return False
+            
+        if not self.application_deadline.data:
+            logger.warning("Application deadline is required")
+            self.application_deadline.errors.append("Application deadline is required")
+            return False
+            
+        return True
 
 
 class TagForm(FlaskForm):

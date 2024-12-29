@@ -68,21 +68,28 @@ class StipendService(BaseService):
 
     def _validate_create_data(self, data):
         """Validate stipend data before creation"""
+        logger.debug("Validating stipend creation data")
+        
         if not data.get('name'):
+            logger.error("Name is required")
             raise ValueError(FlashMessages.REQUIRED_FIELD.format(field='name'))
             
         # Validate organization
         if 'organization_id' not in data or not data['organization_id']:
+            logger.error("Organization is required")
             raise ValueError('Organization is required.')
+            
         org = db.session.get(Organization, data['organization_id'])
         if not org:
+            logger.error(f"Invalid organization ID: {data['organization_id']}")
             raise ValueError('Invalid organization selected')
 
         # Validate application deadline
         if 'application_deadline' in data and data['application_deadline']:
             try:
                 datetime.strptime(data['application_deadline'], '%Y-%m-%d %H:%M:%S')
-            except ValueError:
+            except ValueError as e:
+                logger.error(f"Invalid date format: {data['application_deadline']}")
                 raise ValueError(FlashMessages.INVALID_DATE_FORMAT)
 
     def _validate_update_data(self, data):
