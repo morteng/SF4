@@ -59,6 +59,36 @@
    pip show freezegun
    ```
 
+### 5. Property Implementation Best Practices
+1. **Define Properties Correctly**:
+   - Always define a property (`@property`) before using a setter (`@<property>.setter`)
+   - Include validation in setters
+   - Use private attributes for storage
+   - Include docstrings explaining their purpose
+   - Example from BaseService implementation with validation:
+     ```python
+     class BaseService:
+         def __init__(self):
+             self._create_limit = None
+
+         @property
+         def create_limit(self):
+             """Getter for create_limit."""
+             return self._create_limit
+
+         @create_limit.setter
+         def create_limit(self, value):
+             """Setter for create_limit."""
+             self._create_limit = value
+     ```
+
+2. **Avoid Direct Attribute Access**:
+   - Use properties to encapsulate attribute access and modification.
+   - This ensures consistent behavior and validation.
+
+3. **Document Properties**:
+   - Add docstrings to properties and setters to clarify their purpose and behavior.
+
 ## Custom Field Implementation
 
 ### CustomDateTimeField Implementation

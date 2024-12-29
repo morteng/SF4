@@ -10,6 +10,7 @@
 - [x] Centralize error messages in `app/constants.py` for date/time validation.
 - [x] Implement proper property handling in `BaseService` with getters and setters.
 - [x] Add comprehensive tests for edge cases in date/time validation.
+- [x] Document property implementation best practices in `CONVENTIONS.md`.
 
 ## Next Session
 - [ ] Optimize validation performance in `CustomDateTimeField`.
@@ -24,6 +25,7 @@
 - [ ] Refactor other shared functionality into `app/common`.
 - [ ] Document property implementation patterns across the codebase.
 - [ ] Add performance benchmarks for validation logic.
+- [ ] Create a developer onboarding guide with setup instructions.
 - [x] Fix `CustomDateTimeField` initialization to handle `validators` argument with default `InputRequired()`:
   - Added default validator when none provided
   - Updated form implementations to avoid duplicate validators
