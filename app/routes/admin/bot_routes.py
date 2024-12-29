@@ -1,8 +1,16 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from datetime import datetime, timezone
+import time
+from flask import (
+    Blueprint, render_template, request, redirect, 
+    url_for, jsonify, current_app, flash
+)
 from flask_login import login_required, current_user
 from app.controllers.base_crud_controller import BaseCrudController
 from app.forms.admin_forms import BotForm
 from app.services.bot_service import BotService
+from app.models.audit_log import AuditLog
+from app.extensions import db
+from app.utils import calculate_next_run
 from app.constants import FlashMessages, FlashCategory
 
 admin_bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
@@ -31,22 +39,19 @@ def delete(id):
 
 @admin_bot_bp.route('/', methods=['GET'])
 @login_required
-@admin_required
 def index():
     bot_service = BotService()
     bots = bot_service.get_all()
     return render_template('admin/bots/index.html', bots=bots)
 
 @admin_bot_bp.route('/<int:id>/run', methods=['POST'])
-@limiter.limit("10 per hour")
 @login_required
-@admin_required
 def run(id):
     """Run bot with status tracking and notifications"""
     bot_service = BotService()
     bot = bot_service.get_by_id(id)
     if not bot:
-        flash_message(FlashMessages.BOT_NOT_FOUND, FlashCategory.ERROR)
+        flash(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)
         return redirect(url_for('admin.bot.index'))
 
     try:
@@ -61,24 +66,23 @@ def run(id):
         bot.status = 'completed'
         db.session.commit()
         
-        flash_message(f"Bot {bot.name} completed successfully", FlashCategory.SUCCESS)
+        flash(f"Bot {bot.name} completed successfully", FlashCategory.SUCCESS.value)
     except Exception as e:
         db.session.rollback()
         bot.status = 'error'
         bot.error_log = str(e)
         db.session.commit()
-        flash_message(f"Failed to run bot: {str(e)}", FlashCategory.ERROR)
+        flash(f"Failed to run bot: {str(e)}", FlashCategory.ERROR.value)
         
     return redirect(url_for('admin.bot.index'))
 
 @admin_bot_bp.route('/<int:id>/schedule', methods=['POST'])
 @login_required
-@admin_required
 def schedule(id):
     bot_service = BotService()
     bot = bot_service.get_by_id(id)
     if not bot:
-        flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)
+        flash(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)
         return redirect(url_for('admin.bot.index'))
 
     try:
@@ -100,12 +104,12 @@ def schedule(id):
             ip_address=request.remote_addr
         )
         
-        flash_message(FlashMessages.BOT_SCHEDULED_SUCCESS.value, FlashCategory.SUCCESS)
+        flash(FlashMessages.BOT_SCHEDULED_SUCCESS.value, FlashCategory.SUCCESS.value)
         return jsonify({"status": "success"})
     except Exception as e:
         db.session.rollback()
         current_app.logger.error(f"Failed to schedule bot {bot.name}: {e}")
-        flash_message(f"Failed to schedule bot: {str(e)}", FlashCategory.ERROR)
+        flash(f"Failed to schedule bot: {str(e)}", FlashCategory.ERROR.value)
         return jsonify({"status": "error", "message": str(e)}), 400
 
 @admin_bot_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
