@@ -20,6 +20,24 @@
 5. **Removed Redundant Dependency Check**:
    - Deleted the `verify_dependencies()` function from `tests/conftest.py` as it was redundant and causing issues.
 
+### **Recent Changes**
+1. **Fixed Module Name Conflicts**:
+   - Deleted redundant `tests/test_forms.py` to resolve import conflicts.
+   - Renamed `tests/app/forms/test_forms.py` to `tests/app/forms/test_organization_forms.py` for unique module names.
+
+2. **Cleared Pycache**:
+   - Removed stale compiled files from `__pycache__` directories to prevent test collection issues.
+
+3. **Improved Test Organization**:
+   - Consolidated all stipend form tests into `tests/test_main_forms.py`.
+   - Organized organization form tests in `tests/app/forms/test_organization_forms.py`.
+
+4. **Fixed Flask Routes Error**:
+   - Resolved `UnboundLocalError` in `app/__init__.py` by properly initializing the `limiter` variable.
+
+5. **Removed Redundant Dependency Check**:
+   - Deleted the `verify_dependencies()` function from `tests/conftest.py` as it was redundant and causing issues.
+
 ### **Key Takeaways**
 1. **Test File Naming**:
    - Always use unique names for test files to avoid import conflicts.
