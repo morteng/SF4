@@ -16,3 +16,4 @@ setuptools
 redis
 bleach
 flask_testing
+croniter>=1.4.0
