@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 from flask import url_for
 from app import create_app, db
 from app.models.user import User
