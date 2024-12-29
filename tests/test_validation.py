@@ -28,6 +28,7 @@ def test_invalid_time_validation():
         datetime.strptime("23:59:60", "%H:%M:%S")
 import pytest
 from freezegun import freeze_time
+from wtforms import ValidationError
 from app.forms.fields import CustomDateTimeField
 from app import constants
 
