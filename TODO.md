@@ -1,34 +1,6 @@
-### **Final Changes & Findings**
-1. **Fixed Duplicate Constants in `app/constants.py`**:
-   - Removed duplicate definitions of `INVALID_LEAP_YEAR`, `INVALID_DATETIME_FORMAT`, and `INVALID_DATE_RANGE`.
-   - Added the missing constant `MISSING_REQUIRED_FIELD`.
-
-2. **Cleaned Up Virtual Environment**:
-   - Removed invalid distributions (e.g., `~ytest`) by reinstalling the virtual environment.
-
-3. **Testing Improvements**:
-   - Updated `tests/conftest.py` to ensure proper initialization of the test environment.
-   - Added error handling for dependency verification in the test setup.
-
----
-
-### **Important Info**
-1. **Key Dependency Versions**:
-   - `Flask==2.3.2`
-   - `Werkzeug==2.3.7`
-   - `Flask-Login==0.6.3`
-   - `pytest==7.4.3`
-   - `freezegun==1.2.2`
-
-2. **Constants Location**:
-   - All error messages and validation strings are centralized in `app/constants.py`.
-   - Ensure all required constants are defined before running the application or tests.
-
-3. **Testing**:
-   - Run tests using `pytest`.
-   - Use `freezegun` for deterministic time-based testing.
-
----
+# Todo
+1. fix tests
+2. update this list with new actionable items
 
 ### **Things to Remember for Next Coding Session**
 1. **Error Handling**:
@@ -51,50 +23,6 @@
    - Keep validation logic modular and reusable.
    - Avoid hardcoding strings; use constants instead.
 
----
-
-### **Setup Instructions**
-1. **Create Virtual Environment**:
-   bash
-   python -m venv .venv
-   
-
-2. **Activate Virtual Environment**:
-   - macOS/Linux: `source .venv/bin/activate`
-   - Windows: `.venv\Scripts\activate`
-
-3. **Install Dependencies**:
-   bash
-   pip install -r requirements.txt
-   
-
-4. **Verify Installation**:
-   bash
-   pip show flask pytest
-   
-
-5. **Run the Application**:
-   bash
-   flask routes
-   
-
-6. **Run Tests**:
-   bash
-   pytest
-   
-
-7. **Run Environment Check**:
-   bash
-   python scripts/check_env.py
-   
-
-8. **Troubleshooting**:
-   - Ensure virtual environment is activated
-   - Check Python version (requires 3.8+)
-   - Review installation logs for errors
-   - Run `python scripts/check_env.py` to diagnose issues
-
----
 
 ### **Lessons Learned**
 1. **Proper Error Handling**:
@@ -108,23 +36,4 @@
 
 4. **Testing Edge Cases**:
    - Pay special attention to edge cases for date/time validation, such as leap years and invalid time components.
-
----
-
-### **Files to Add (if Needed)**
-If further issues arise, we may need to review:
-1. **`app/config.py`**: To verify the configuration settings.
-2. **`app/models/__init__.py`**: To ensure all models are properly imported.
-
----
-
-### **Updated CMD_TESTS.md**
-#### **Pending Console Commands**
-- No pending commands. All commands have been executed.
-
-#### **New Console Commands for Next Session**
-bash
-pip install -r requirements.txt
-pytest
-flask routes
 
