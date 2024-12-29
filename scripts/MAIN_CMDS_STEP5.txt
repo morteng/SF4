@@ -4,9 +4,10 @@
 # Step 5: Final Documentation Updates
 
 # Step 5 workflow
-/ask Code Cycle Step 5 (Final Docs) - Please finalize documentation. 
-# For example: update TODO.txt or any notes with final changes and insights.
-/architect update TODO.txt with final changes & findings
+/add DEVLOG.txt
+/architect Code Cycle Step 5 (Final Docs) - Please finalize documentation. Update TODO.txt with final changes, insights & findings. Update DEVLOG.txt with a short summary of this code cycle and whatever you think is fitting to put in there. If you have any additional comments, questions, or concerns, please add them to DEVLOG.txt as well. 
+/drop DEVLOG.txt
+ 
 
 /test
 
