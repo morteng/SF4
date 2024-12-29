@@ -8,25 +8,29 @@ from flask import Blueprint, current_app
 
 logger = logging.getLogger(__name__)
 
-def validate_blueprint(bp):
-    """Validate blueprint parameters with more detailed checks."""
-    if not isinstance(bp, Blueprint):
-        raise ValueError("Invalid blueprint instance")
-    if not bp.name:
-        raise ValueError("Blueprint must have a name")
-    if '.' in bp.name:
-        raise ValueError("Blueprint name cannot contain dots")
-    if not bp.url_prefix:
-        raise ValueError("Blueprint must have a URL prefix")
-    if not bp.import_name:
-        raise ValueError("Blueprint must have an import name")
-    
-    # Validate endpoint names
-    for endpoint in bp.view_functions.keys():
-        if not isinstance(endpoint, str):
-            raise ValueError(f"Invalid endpoint name: {endpoint}")
-        if not endpoint.startswith(bp.name + '.'):
-            raise ValueError(f"Endpoint {endpoint} must start with blueprint name {bp.name}")
+class BaseBlueprint(Blueprint):
+    """Base blueprint class with built-in validation."""
+    def __init__(self, name, import_name, **kwargs):
+        self.validate_name(name)
+        super().__init__(name, import_name, **kwargs)
+        self.validate_endpoints()
+
+    def validate_name(self, name):
+        """Validate blueprint name."""
+        if not name:
+            raise ValueError("Blueprint must have a name")
+        if '.' in name:
+            raise ValueError("Blueprint name cannot contain dots")
+        if not name.islower():
+            raise ValueError("Blueprint name must be lowercase")
+
+    def validate_endpoints(self):
+        """Validate endpoint names."""
+        for endpoint in self.view_functions.keys():
+            if not isinstance(endpoint, str):
+                raise ValueError(f"Invalid endpoint name: {endpoint}")
+            if not endpoint.startswith(self.name + '.'):
+                raise ValueError(f"Endpoint {endpoint} must start with blueprint name {self.name}")
 
 def validate_blueprint_routes(app, required_routes):
     """Validate that all required routes are registered."""
@@ -42,16 +46,19 @@ def validate_blueprint_routes(app, required_routes):
             blueprint_info = []
             for name, bp in app.blueprints.items():
                 blueprint_info.append(f"{name}: {list(bp.view_functions.keys())}")
-            
+    
             app.logger.error("Route Validation Error:")
             app.logger.error(f"Registered routes: {registered_routes}")
             app.logger.error(f"Missing routes: {missing_routes}")
             app.logger.error(f"Current blueprints: {blueprint_info}")
-            
+    
             # Provide more detailed error message
             error_msg = (
                 f"Missing routes: {', '.join(missing_routes)}.\n"
-                "Check blueprint names and route endpoints.\n"
+                "Possible causes:\n"
+                "1. Blueprint not registered\n"
+                "2. Route endpoint name mismatch\n"
+                "3. URL prefix incorrect\n"
                 f"Registered blueprints: {blueprint_info}\n"
                 f"Registered routes: {registered_routes}"
             )
