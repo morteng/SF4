@@ -1,8 +1,8 @@
-import unittest
+from .base_test_case import BaseTestCase
 from datetime import datetime
 from app.forms.fields import CustomDateTimeField
 
-class TestCustomDateTimeField(unittest.TestCase):
+class TestCustomDateTimeField(BaseTestCase):
     
     def test_empty_date(self):
         field = CustomDateTimeField()
