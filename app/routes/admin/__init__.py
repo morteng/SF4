@@ -1,7 +1,7 @@
 import json
 import logging
 from flask import Blueprint, redirect, url_for, request, current_app
-from app.common.utils import validate_blueprint, validate_blueprint_routes
+from app.common.utils import BaseBlueprint, validate_blueprint_routes
 
 logger = logging.getLogger(__name__)
 from flask_limiter import Limiter
@@ -30,7 +30,7 @@ def notification_count(f):
 
 def create_admin_blueprint():
     """Factory function to create a new admin blueprint instance with security and logging"""
-    admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
+    admin_bp = BaseBlueprint('admin', __name__, url_prefix='/admin')
     
     # Add CRUD helper methods
     def create_crud_notification(action, object_type, object_id, user_id):

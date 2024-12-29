@@ -486,6 +486,10 @@ class AdminStipendTestCase(unittest.TestCase):
         with patch('app.routes.admin.__init__.register_admin_blueprints') as mock_register:
             self.app = create_app('testing')
             mock_register.assert_called_once_with(self.app)
+        """Test that admin blueprints are registered correctly."""
+        with patch('app.routes.admin.__init__.register_admin_blueprints') as mock_register:
+            self.app = create_app('testing')
+            mock_register.assert_called_once_with(self.app)
         
         # Verify base blueprint validation
         from app.common.utils import BaseBlueprint
