@@ -1,11 +1,34 @@
 from flask import Blueprint, request, redirect, url_for, render_template, flash
 from app.extensions import limiter
+from app.services.organization_service import OrganizationService
+from app.utils import clean
+import logging
 
 # Define rate limits
 ORG_RATE_LIMITS = {
     'delete': "5/minute",
     'update': "10/minute"
 }
+
+logger = logging.getLogger(__name__)
+
+# Helper functions
+def get_organization_by_id(org_id):
+    return OrganizationService().get_by_id(org_id)
+
+def delete_organization(organization):
+    OrganizationService().delete(organization.id)
+
+def update_organization(organization, data):
+    return OrganizationService().update(organization.id, data)
+
+def notification_count(func):
+    """Decorator to inject notification count"""
+    from functools import wraps
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from app.controllers.base_route_controller import BaseRouteController
