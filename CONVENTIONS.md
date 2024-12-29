@@ -531,6 +531,47 @@ If time-based tests are failing:
 
 ## Best Practices
 
+### Custom Field Implementation
+1. **Handle All Arguments**:
+   - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+2. **Default Validators**:
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
+
+### Circular Import Prevention
+1. **Refactor Shared Functionality**:
+   - Move shared code to a separate module (e.g., `app/common/utils.py`).
+2. **Use Lazy Imports**:
+   - Import dependencies at the function level when necessary:
+     ```python
+     def some_function():
+         from app.services.bot_service import BotService  # Lazy import
+         bot_service = BotService()
+     ```
+
+### Dependency Verification
+1. **Pre-Test Check**:
+   - Add a test to verify all dependencies are installed before running the test suite:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+2. **Graceful Handling**:
+   - Use try-except blocks to handle missing dependencies in test files.
+   - Skip tests that require missing packages instead of failing the entire suite.
+
+### Error Message Centralization
+1. **Constants File**:
+   - Store all error messages in `app/constants.py`.
+2. **Consistency**:
+   - Use constants instead of hardcoded strings for error messages.
+
 ### Dependency Management
 1. **Pre-Test Verification**:
    - Add a test to verify all dependencies are installed before running the test suite:
