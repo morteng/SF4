@@ -1,11 +1,12 @@
 # Validation Rules
 
 ## Database Operations
-- Pre-op validation
-- Flexible date handling
-- Error rollback
-- Post-op verification
-- Context managers
+- Pre-op validation in services
+- Flexible date handling in models
+- Error rollback in BaseService
+- Post-op verification in tests
+- Context managers for transactions
+- Consistent validation patterns across all entities
 
 ## CSRF Validation  
 - Validate CSRF on all form submissions  

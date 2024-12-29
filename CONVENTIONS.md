@@ -1,11 +1,12 @@
 # Coding Conventions
 
 ## Service Layer
-- BaseService handles CRUD
-- Child services add domain logic
-- Standard method names
+- BaseService handles CRUD operations
+- Child services implement domain-specific logic
+- Standard method names across all services
 - Audit logging via user_id
-- Custom validation hooks
+- Custom validation hooks in child services
+- Consistent error handling patterns
 
 ## Stipend Handling
 - Only stipend name is required when creating stipends

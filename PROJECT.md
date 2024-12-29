@@ -80,6 +80,11 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 **Database Initialization**:  
 - `app.py` sets up the database, runs migrations, creates default admin user.
 
+**Core Architecture**:
+- BaseRouteController handles common CRUD operations for all admin routes
+- BaseService provides common CRUD operations for all services
+- BaseCRUDTest provides common test cases for all services
+
 **User-Facing Pages (Public Routes)**:  
 - Homepage: Popular stipends, tag filters  
 - Stipend Search: HTMX-powered filtering and keyword search  
