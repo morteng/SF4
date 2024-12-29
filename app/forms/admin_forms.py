@@ -82,16 +82,9 @@ class StipendForm(FlaskForm):
             return
 
         # Handle missing or empty values
-        if not field.data or field.data.strip() == '':
+        if not field.data:  # datetime objects don't need .strip()
             raise ValidationError('Application deadline is required.')
             return
-
-        # Handle invalid date formats
-        if isinstance(field.data, str):
-            try:
-                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-            except ValueError:
-                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
 
         # Handle timezone and future date validation
         if field.data and field.data.tzinfo is None:
