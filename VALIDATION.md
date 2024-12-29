@@ -178,12 +178,32 @@
    - Use `freezegun` for deterministic time-based testing.
 3. **Isolation**:
    - Ensure database fixtures are properly reset between tests to avoid side effects.
+4. **Comprehensive Coverage**:
+   - Test all validation scenarios including invalid formats, missing fields, and edge cases.
 
-### Date/Time Validation
-1. **Best Practices**:
-   - Validate date and time components separately before full parsing.
-   - Use specific error messages for different validation failures (e.g., invalid format, invalid time, invalid leap year).
-   - Handle edge cases like February 29th in non-leap years.
+### Error Handling
+1. **Centralized Error Messages**:
+   - Store all error messages in `app/constants.py`.
+2. **Consistency**:
+   - Use constants instead of hardcoded strings for error messages.
+3. **User-Friendly Messages**:
+   - Provide clear, actionable error messages for validation failures.
+
+### Code Organization
+1. **Modularity**:
+   - Keep validation logic modular and reusable.
+2. **Avoid Duplication**:
+   - Use base classes and utilities to avoid code duplication.
+3. **Documentation**:
+   - Document validation rules and error messages for maintainability.
+
+### Property Implementation
+1. **Validation in Setters**:
+   - Include validation logic in property setters to ensure data integrity.
+2. **Private Attributes**:
+   - Use private attributes (e.g., `_property_name`) for internal storage.
+3. **Consistent Patterns**:
+   - Maintain consistent property patterns across the codebase.
 
 2. **Error Handling**:
    - Provide specific error messages for:
