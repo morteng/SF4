@@ -113,7 +113,16 @@ class BaseService:
         return self.model.query
 
     @handle_errors
-    @limiter.limit(lambda self: self.rate_limits['create'])
+    @property
+    def create_limit(self):
+        return self.rate_limits['create']
+    
+    @create_limit.setter
+    def create_limit(self, value):
+        self.rate_limits['create'] = value
+        
+    @handle_errors
+    @Limiter.limit(lambda self: self.rate_limits['create'])
     def create(self, data, user_id=None):
         """Create a new entity with validation and audit logging"""
         try:
@@ -221,7 +230,16 @@ class BaseService:
         self.validate(data)
 
     @handle_errors 
-    @limiter.limit(lambda self: self.rate_limits['update'])
+    @property
+    def update_limit(self):
+        return self.rate_limits['update']
+    
+    @update_limit.setter
+    def update_limit(self, value):
+        self.rate_limits['update'] = value
+        
+    @handle_errors 
+    @Limiter.limit(lambda self: self.rate_limits['update'])
     def update(self, id, data, user_id=None):
         """Update an existing entity with validation and audit logging"""
         entity = self.get_by_id(id)
@@ -238,7 +256,16 @@ class BaseService:
         return entity
 
     @handle_errors
-    @limiter.limit(lambda self: self.rate_limits['delete']) 
+    @property
+    def delete_limit(self):
+        return self.rate_limits['delete']
+    
+    @delete_limit.setter
+    def delete_limit(self, value):
+        self.rate_limits['delete'] = value
+        
+    @handle_errors
+    @Limiter.limit(lambda self: self.rate_limits['delete']) 
     def delete(self, id, user_id=None):
         """Enhanced delete with soft delete support"""
         entity = self.get_by_id(id)
