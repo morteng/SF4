@@ -26,3 +26,28 @@ def test_invalid_time_validation():
     # Test invalid second
     with pytest.raises(ValueError):
         datetime.strptime("23:59:60", "%H:%M:%S")
+import pytest
+from freezegun import freeze_time
+from app.forms.fields import CustomDateTimeField
+from app import constants
+
+def test_custom_datetime_field_validation():
+    field = CustomDateTimeField()
+    
+    # Test valid datetime
+    field.validate("2023-01-01 12:00:00")
+    
+    # Test invalid format
+    with pytest.raises(ValidationError) as e:
+        field.validate("01-01-2023")
+    assert str(e.value) == constants.INVALID_DATETIME_FORMAT
+    
+    # Test leap year
+    with pytest.raises(ValidationError) as e:
+        field.validate("2023-02-29")
+    assert str(e.value) == constants.INVALID_LEAP_YEAR_DATE
+
+@freeze_time("2023-01-01")
+def test_time_based_validation():
+    field = CustomDateTimeField()
+    field.validate("2023-01-01 00:00:00")

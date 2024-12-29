@@ -235,3 +235,30 @@ class CustomDateTimeField(DateTimeField):
         if self.data:
             return self.data.strftime(self.format)
         return ""
+from datetime import datetime
+from wtforms import ValidationError
+from app import constants
+
+class CustomDateTimeField:
+    def __init__(self, format="%Y-%m-%d %H:%M:%S"):
+        self.format = format
+
+    def validate(self, value):
+        if not value:
+            raise ValidationError(constants.MISSING_REQUIRED_FIELD)
+        
+        try:
+            datetime.strptime(value, self.format)
+        except ValueError:
+            raise ValidationError(constants.INVALID_DATETIME_FORMAT)
+        
+        # Additional validation for leap years
+        if self.format == "%Y-%m-%d":
+            year = int(value[:4])
+            month = int(value[5:7])
+            day = int(value[8:10])
+            if month == 2 and day == 29 and not self._is_leap_year(year):
+                raise ValidationError(constants.INVALID_LEAP_YEAR_DATE)
+
+    def _is_leap_year(self, year):
+        return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)

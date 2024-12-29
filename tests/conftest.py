@@ -561,3 +561,25 @@ def verify_dependencies():
             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
         except subprocess.CalledProcessError:
             pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
+import pytest
+import importlib
+import subprocess
+
+def verify_dependencies():
+    missing_deps = []
+    for dep in ["pytest", "freezegun", "Flask"]:
+        try:
+            importlib.import_module(dep)
+        except ImportError:
+            missing_deps.append(dep)
+    
+    if missing_deps:
+        print(f"Attempting to install missing dependencies: {', '.join(missing_deps)}")
+        try:
+            subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+        except subprocess.CalledProcessError:
+            pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
+
+# Add this to pytest setup
+def pytest_configure():
+    verify_dependencies()

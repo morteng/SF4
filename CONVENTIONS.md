@@ -1007,3 +1007,16 @@ If time-based tests are failing:
 - Always use centralized error messages from `app/constants.py`.
 - Log validation errors with context for easier debugging.
 
+## Property Implementation
+- Always define properties with `@property` and `@<property>.setter`
+- Include validation in setters
+- Use private attributes for storage
+
+## Dependency Management
+- Add pre-test verification of dependencies
+- Skip tests gracefully if dependencies are missing
+
+## Date/Time Validation
+- Validate date and time components separately
+- Handle edge cases like leap years
+- Use centralized error messages from `app/constants.py`
