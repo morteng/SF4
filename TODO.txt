@@ -10,6 +10,7 @@
 2. **Updated Constants Usage**:
    - Standardized usage of `INVALID_LEAP_YEAR_DATE` across all files.
    - Removed references to non-existent `INVALID_LEAP_YEAR` constant.
+   - Fixed duplicate `UPDATE_ERROR` definition in `app/constants.py`.
 
 3. **Improved Test Organization**:
    - Moved form-related tests to `tests/app/forms/test_forms.py` for better structure.
@@ -19,6 +20,9 @@
    - Refactored imports in `app/__init__.py` to use lazy imports.
    - Moved shared utilities to `app/common/utils.py` to reduce dependencies.
 
+5. **Improved Rate Limiter Configuration**:
+   - Added Redis as the storage backend for Flask-Limiter in production.
+
 ### **Key Takeaways for Next Coding Session**
 1. **Test File Naming**:
    - Ensure all test files have unique names to avoid import conflicts.
@@ -27,6 +31,7 @@
 2. **Constants Management**:
    - Always use constants from `app/constants.py` instead of hardcoded strings.
    - Verify that all constants referenced in the code exist in `app/constants.py`.
+   - Avoid duplicate constant definitions in `Enum` classes.
 
 3. **Test Organization**:
    - Keep tests organized by module/package structure for better maintainability.
@@ -39,6 +44,22 @@
 5. **Code Quality**:
    - Regularly clear `__pycache__` directories to avoid stale compiled files.
    - Use consistent naming conventions across the codebase.
+
+6. **Validation Logic**:
+   - Confirm data types before applying validation.
+   - Centralize error messages, stay consistent.
+
+7. **Testing**:
+   - More edge-case coverage.
+   - Keep a good variety of unit, integration, and E2E tests.
+
+8. **Error Handling & Logging**:
+   - Don't just "print" stuff—log it with context.
+   - Make error messages user-friendly (or at least developer-friendly).
+
+9. **Code Organization**:
+   - Keep modules small and logical.
+   - Use base classes and utilities to avoid duplication.
 
 ### **Key Takeaways for Next Coding Session**
 1. **Validation Logic**:
