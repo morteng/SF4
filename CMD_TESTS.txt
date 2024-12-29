@@ -7,7 +7,7 @@
 /add VALIDATION.md
 /add TODO.md
 
-/ask how can we best work on the issues outlined in the TODO list, adhering strictly to the project descripotion, coding conventions and vallidation conventions, and ensuring that we achieve successful tests?
+/ask how can we best work on the issues outlined in the TODO list, adhering to the project descripotion, coding conventions and vallidation conventions, and ensuring that we achieve successful tests?
 
 /architect implement the suggested changes
 
@@ -21,7 +21,9 @@
 
 /test
 
-/architect fix that
+/ask is there a need to re-evaluate some of the code? what code, why and how?
+
+/architect implement the suggested changes
 
 /test
 
@@ -39,7 +41,7 @@
 
 /test
 
-/architect update PROJECT.md, CONVENTIONS.md, TODO.md and VALIDATION.md if, and only if, needed. Keep them as compact as possible without losing important information.
+/architect update PROJECT.md, CONVENTIONS.md, TODO.md and VALIDATION.md with what we have learned. Make sure to include the changes made to the codebase and the results of the tests. Also, include any additional insights or observations that may be relevant to the project. Keep them as compact as possible without losing important information.
 
 
 /reset
