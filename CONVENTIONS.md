@@ -2,45 +2,36 @@
 
 ## Setup Instructions
 
-1. Create a virtual environment:
+1. **Create and Activate Virtual Environment**:
    ```bash
    python -m venv .venv
+   source .venv/bin/activate  # On macOS/Linux
+   .venv\Scripts\activate     # On Windows
    ```
 
-2. Activate the virtual environment:
-   - On Windows:
-     ```bash
-     .venv\Scripts\activate
-     ```
-   - On macOS/Linux:
-     ```bash
-     source .venv/bin/activate
-     ```
-
-3. Install dependencies:
+2. **Install Dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Verify critical dependencies:
+3. **Verify Installation**:
+   Check if critical dependencies are installed:
    ```bash
-   pip show freezegun pytest Flask
+   pip show freezegun Flask
    ```
 
-5. Run tests:
+4. **Run Tests**:
    ```bash
    pytest
    ```
 
-6. If tests fail due to missing dependencies:
-   - Reinstall all dependencies:
-     ```bash
-     pip install -r requirements.txt
-     ```
-   - Verify installation:
-     ```bash
-     pip show freezegun
-     ```
+### Troubleshooting
+
+#### Missing Dependencies
+If tests fail with `ModuleNotFoundError`:
+1. Ensure the virtual environment is activated.
+2. Run `pip install -r requirements.txt`.
+3. Verify installation with `pip show <package_name>`.
 
 ## Troubleshooting
 

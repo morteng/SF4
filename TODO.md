@@ -30,7 +30,7 @@
 - [ ] Implement rate limiting for API endpoints.
 - [ ] Implement session expiration.
 - [ ] Add audit logging for admin actions.
-- [ ] Implement dependency verification during test execution to ensure all required packages are installed.
+- [ ] Automate dependency verification during test execution to ensure all required packages are installed.
 
 ## Long Term
 - [ ] Automate dependency verification during test execution.

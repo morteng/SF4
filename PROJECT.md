@@ -79,12 +79,14 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 ## Lessons Learned
 
 ### Dependency Management
-- **Issue**: Tests failed because `freezegun` was listed in `requirements.txt` but not installed.
+- **Issue**: Tests failed because `freezegun` and `Flask` were listed in `requirements.txt` but not installed.
 - **Solution**: Always verify dependencies are installed by running:
   ```bash
   pip install -r requirements.txt
   ```
-- **Best Practice**: Add a pre-test check to ensure all dependencies are installed before running tests.
+- **Best Practice**:
+  - Add a pre-test check to ensure all required dependencies are installed.
+  - Document the setup process to avoid similar issues in the future.
 
 ### Testing Improvements
 - Added graceful handling of missing dependencies in test files.

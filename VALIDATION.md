@@ -2,27 +2,29 @@
 
 ### Best Practices
 1. **Pre-Test Verification**:
-   - Add a test to verify all dependencies are installed before running the test suite.
-   - Example:
-     ```python
-     def test_dependencies():
-         try:
-             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-         except subprocess.CalledProcessError:
-             pytest.fail("Failed to install dependencies")
-     ```
+   Add a test to verify all dependencies are installed before running the test suite.
+   Example:
+   ```python
+   def test_dependencies():
+       try:
+           subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+       except subprocess.CalledProcessError:
+           pytest.fail("Failed to install dependencies")
+   ```
 
 2. **Graceful Handling**:
-   - Use try-except blocks to handle missing dependencies in test files.
-   - Skip tests that require missing packages instead of failing the entire suite.
+   Use try-except blocks to handle missing dependencies in test files.
+   Skip tests that require missing packages instead of failing the entire suite.
 
 ### Lessons Learned
-- **Issue**: Tests failed because `freezegun` was listed in `requirements.txt` but not installed.
+- **Issue**: Tests failed because `freezegun` and `Flask` were listed in `requirements.txt` but not installed.
 - **Solution**: Always verify dependencies are installed by running:
   ```bash
   pip install -r requirements.txt
   ```
-- **Best Practice**: Add a pre-test check to ensure all dependencies are installed before running tests.
+- **Best Practice**:
+  - Add a pre-test check to ensure all required dependencies are installed.
+  - Document the setup process to avoid similar issues in the future.
 
 ### Testing Setup
 1. **Dependencies**:
