@@ -91,3 +91,6 @@ def init_admin_user():
     """Initialize the admin user"""
     # Implementation will be moved here
     pass
+def init_admin_user():
+    # Implementation
+    pass
