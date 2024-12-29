@@ -6,7 +6,7 @@
 
 ### COMMANDS START ###
 flask routes
-pytest tests/test_admin_stipends.py -v --cov=app --cov-report=term-missing
+pytest tests/test_admin_stipends.py -v --log-cli-level=DEBUG
 ### COMMANDS END ###
 
 # Once finished, jump to Step 4.
