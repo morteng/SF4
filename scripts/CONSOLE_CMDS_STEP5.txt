@@ -4,14 +4,9 @@
 # Console commands for Step 5.
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
-### PENDING CONSOLE COMMANDS ###
-# Example commands:
-# /run echo "Hello from Step 5!"
-# /run python finalize.py
-
 ### COMMANDS START ###
 ### COMMANDS END ###
 
-# After finishing Step 5, we start againg with Step 1 of the Coding Cycle.
+# After finishing Step 5, we start again with Step 1 of the Coding Cycle.
 /reset
 /load scripts/MAIN_CMDS_STEP1.txt
