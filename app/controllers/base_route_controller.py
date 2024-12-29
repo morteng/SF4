@@ -38,6 +38,31 @@ class BaseRouteController:
             return '', 204, {'HX-Redirect': url_for(f'admin.{self.entity_name}.index')}
         return redirect(url_for(f'admin.{self.entity_name}.index'))
 
+    def _handle_audit_logging(self, action, entity, user_id=None, before=None, after=None):
+        """Handle audit logging for CRUD operations"""
+        if hasattr(self.service, 'audit_logger'):
+            self.service.audit_logger.log(
+                action=action,
+                object_type=self.entity_name,
+                object_id=entity.id if entity else None,
+                user_id=user_id,
+                before=before,
+                after=after
+            )
+
+    def _handle_form_validation(self, form):
+        """Handle common form validation patterns"""
+        if hasattr(self.service, 'validate_form_data'):
+            return self.service.validate_form_data(form.data)
+        return True
+
+    def _handle_htmx_flash(self, message, category):
+        """Handle flash messages for HTMX requests"""
+        if request.headers.get('HX-Request'):
+            return render_template('_flash_messages.html'), 200
+        flash_message(message, category)
+        return None
+
     def index(self):
         """Handle index/list view"""
         page = request.args.get('page', 1, type=int)

@@ -79,12 +79,25 @@ class BaseService:
         db.session.delete(entity)
         db.session.commit()
         
-        if self.audit_logger:
-            self.audit_logger.log(
-                action='delete',
-                object_type=self.model.__name__,
-                object_id=id,
-                user_id=user_id,
-                before=entity.to_dict()
-            )
+        self._log_audit('delete', entity, user_id=user_id, before=entity.to_dict())
         return entity
+
+    def soft_delete(self, id, user_id=None):
+        """Soft delete implementation"""
+        entity = self.get_by_id(id)
+        if hasattr(entity, 'is_deleted'):
+            setattr(entity, 'is_deleted', True)
+            db.session.commit()
+            self._log_audit('soft_delete', entity, user_id=user_id)
+            return entity
+        raise ValueError("Model does not support soft delete")
+
+    def restore(self, id, user_id=None):
+        """Restore soft deleted entity"""
+        entity = self.get_by_id(id)
+        if hasattr(entity, 'is_deleted'):
+            setattr(entity, 'is_deleted', False)
+            db.session.commit()
+            self._log_audit('restore', entity, user_id=user_id)
+            return entity
+        raise ValueError("Model does not support restore")
