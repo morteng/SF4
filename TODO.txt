@@ -3,6 +3,29 @@
 2. Review all constants in `app/constants.py` to ensure consistency and completeness
 
 ### **Recent Changes**
+1. **Fixed SQLAlchemy Initialization**:
+   - Ensured `db.init_app(app)` is called only once in `app/__init__.py`.
+
+2. **Deleted Redundant Test File**:
+   - Removed `tests/test_forms.py` to resolve test file naming conflicts.
+
+3. **Cleared Pycache**:
+   - Removed stale compiled files from `__pycache__` directories.
+
+### **Key Takeaways**
+1. **Test File Naming**:
+   - Ensure all test files have unique names to avoid import conflicts.
+
+2. **Extension Initialization**:
+   - Avoid reinitializing extensions like `SQLAlchemy` multiple times.
+
+3. **Constants Management**:
+   - Verify that all constants referenced in the code exist in `app/constants.py`.
+
+4. **Code Cleanup**:
+   - Regularly remove redundant files and clear `__pycache__` directories.
+
+### **Recent Changes**
 1. **Fixed `GENERIC_ERROR` AttributeError**:
    - Added `GENERIC_ERROR` to `FlashMessages` enum in `app/constants.py`.
 

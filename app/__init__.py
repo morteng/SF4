@@ -55,15 +55,17 @@ def create_app(config_name='development'):
     return app
 
 def init_extensions(app):
-    db.init_app(app)
+    # Initialize extensions only if they haven't been initialized yet
+    if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
+        db.init_app(app)
+    # Initialize other extensions
     login_manager.init_app(app)
     migrate.init_app(app, db)
-    
     # Initialize Redis for rate limiting
     from flask_limiter import Limiter
     from flask_limiter.util import get_remote_address
     from redis import Redis
-    
+
     redis = Redis.from_url(app.config.get('REDIS_URL', 'redis://localhost:6379/0'))
     limiter = Limiter(
         key_func=get_remote_address,
@@ -71,7 +73,6 @@ def init_extensions(app):
         storage_uri="redis://localhost:6379/0",  # Use Redis for storage
         default_limits=["200 per day", "50 per hour"]
     )
-
     # Initialize CSRF protection
     csrf = CSRFProtect(app)
     app.config['WTF_CSRF_ENABLED'] = True
@@ -79,8 +80,6 @@ def init_extensions(app):
     app.config['WTF_CSRF_TIME_LIMIT'] = 3600  # 1 hour token validity
     app.config['WTF_CSRF_HEADERS'] = ['X-CSRFToken']
     app.config['WTF_CSRF_SSL_STRICT'] = True
-
-    migrate.init_app(app, db)  # Initialize Flask-Migrate here
 
     from app.models.user import User  # Import the User model
 
