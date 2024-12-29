@@ -11,7 +11,8 @@
 
 ### Date/Time Validation
 - Always verify the data type of form field inputs before applying validation logic.
-- Use `freezegun` to mock the current date/time for deterministic testing.
+- Use `freezegun` to mock the current date/time for deterministic testing
+- Verify `freezegun` installation with `pip show freezegun` before running tests
 - Handle edge cases like February 29th in non-leap years.
 - Validate time components (hours, minutes, seconds) together.
 

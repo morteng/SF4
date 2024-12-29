@@ -42,6 +42,7 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 
 **Testing**:  
 - `pytest`, `pytest-cov`, `freezegun`  
+- Verify installation with `pip show freezegun`
 - Unit, integration, end-to-end tests
 
 **Security**:  
