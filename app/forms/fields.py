@@ -166,17 +166,20 @@ class CustomDateTimeField(DateTimeField):
             return False
 
     def validate(self, form, extra_validators=()):
-        # Convert errors to list if it's a tuple
-        if isinstance(self.errors, tuple):
-            self.errors = list(self.errors)
-            
+        # Initialize errors as list if needed
+        if not hasattr(self, 'errors') or isinstance(self.errors, tuple):
+            self.errors = []
+    
         # If we already have errors from process_formdata, return False
         if self.errors:
             return False
-            
+    
         # Validate the format first
         if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', str(self.data)):
-            self.errors.append(self.error_messages['invalid_format'])
+            self.errors.append(self.error_messages.get(
+                'invalid_format', 
+                'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
+            ))
             return False
             
         # Validate date components
@@ -187,36 +190,54 @@ class CustomDateTimeField(DateTimeField):
             if not (0 <= dt.hour <= 23 and 
                     0 <= dt.minute <= 59 and 
                     0 <= dt.second <= 59):
-                self.errors.append(self.error_messages['invalid_time'])
+                self.errors.append(self.error_messages.get(
+                    'invalid_time',
+                    'Invalid time values (e.g., 25:61:61)'
+                ))
                 return False
                 
             # Validate date components
             try:
                 datetime(dt.year, dt.month, dt.day)
             except ValueError:
-                self.errors.append(self.error_messages['invalid_date'])
+                self.errors.append(self.error_messages.get(
+                    'invalid_date',
+                    'Invalid date values (e.g., Feb 30)'
+                ))
                 return False
                 
             # Check for leap year
             if dt.month == 2 and dt.day == 29:
                 if not (dt.year % 4 == 0 and (dt.year % 100 != 0 or dt.year % 400 == 0)):
-                    self.errors.append(self.error_messages['invalid_leap_year'])
+                    self.errors.append(self.error_messages.get(
+                        'invalid_leap_year',
+                        'Invalid date values (e.g., Feb 29 in non-leap years)'
+                    ))
                     return False
                     
             # Validate future date
             now = datetime.now()
             if dt < now:
-                self.errors.append(self.error_messages['past_date'])
+                self.errors.append(self.error_messages.get(
+                    'past_date',
+                    'Application deadline must be a future date'
+                ))
                 return False
                 
             # Validate future date limit (5 years)
             max_future = now.replace(year=now.year + 5)
             if dt > max_future:
-                self.errors.append(self.error_messages['future_date'])
+                self.errors.append(self.error_messages.get(
+                    'future_date',
+                    'Application deadline cannot be more than 5 years in the future'
+                ))
                 return False
                 
         except ValueError:
-            self.errors.append(self.error_messages['invalid_date'])
+            self.errors.append(self.error_messages.get(
+                'invalid_date',
+                'Invalid date values'
+            ))
             return False
             
         return True
