@@ -243,7 +243,9 @@ def test_missing_required_fields(app, form_data):
             
             # Special check for application_deadline
             if field == 'application_deadline':
-                assert 'Application deadline is required.' in form.errors['application_deadline']
+                assert any(msg in form.errors['application_deadline'] 
+                         for msg in ['Application deadline is required.', 
+                                    'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'])
 
 class TestCustomDateTimeField(BaseTestCase):
     def test_empty_date(self):

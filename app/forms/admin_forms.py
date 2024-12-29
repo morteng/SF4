@@ -68,9 +68,15 @@ class StipendForm(FlaskForm):
         # Check if the field is missing or empty
         if not field.data or field.data.strip() == '':
             raise ValidationError('Application deadline is required.')
+            return
             
         # Skip validation if field already has errors
         if field.errors:
+            return
+            
+        # If the field is None, it's missing
+        if field.data is None:
+            raise ValidationError('Application deadline is required.')
             return
             
         # Handle flexible deadline formats
