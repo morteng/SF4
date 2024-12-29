@@ -5,20 +5,23 @@
 
 from datetime import datetime, timedelta
 import pytest
-from tests.conftest import FREEZEGUN_INSTALLED
 
-# Mark all time-dependent tests with the freezegun marker
-pytestmark = pytest.mark.freezegun
-
-# Only import freezegun if it's installed
-if FREEZEGUN_INSTALLED:
+# Add fallback mechanism for freezegun
+try:
     from freezegun import freeze_time
-else:
-    # Create a dummy freeze_time decorator if freezegun is not installed
+    FREEZEGUN_INSTALLED = True
+except ImportError:
+    FREEZEGUN_INSTALLED = False
     def freeze_time(*args, **kwargs):
         def decorator(f):
             return f
         return decorator
+
+# Mark all time-dependent tests with the freezegun marker
+pytestmark = pytest.mark.skipif(
+    not FREEZEGUN_INSTALLED,
+    reason="freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies."
+)
 from flask_wtf.csrf import generate_csrf
 from app.models import Organization, Tag, Stipend, AuditLog
 from app.forms.admin_forms import StipendForm

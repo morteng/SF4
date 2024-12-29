@@ -24,6 +24,15 @@ def pytest_configure(config):
         "markers",
         "freezegun: mark tests that require freezegun package"
     )
+    
+    # Check for freezegun installation
+    try:
+        import freezegun
+    except ImportError:
+        logging.warning(
+            "freezegun is not installed. Some tests may be skipped. "
+            "Run `pip install -r requirements.txt` to install dependencies."
+        )
     """Configure pytest options."""
     pass
 from datetime import datetime
