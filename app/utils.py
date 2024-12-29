@@ -6,7 +6,7 @@ import secrets
 import json
 from datetime import datetime, timezone
 from typing import Any, Union
-from flask import abort, redirect, url_for, flash, request, current_app
+from flask import abort, redirect, url_for, flash, request, current_app, render_template
 from app.models.notification import Notification
 from flask_wtf.csrf import generate_csrf
 from app.models.audit_log import AuditLog
