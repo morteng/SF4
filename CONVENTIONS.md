@@ -62,11 +62,26 @@ def verify_dependencies():
 ```
 
 ### Dependency Verification
-Before running tests, ensure all dependencies are installed:
+1. Install required dependencies:
+```bash
+pip install pytest freezegun Flask
+```
+
+2. Verify installation:
+```bash
+pip show pytest freezegun Flask
+```
+
+3. Run tests:
+```bash
+pytest
+```
+
+4. If tests fail due to missing dependencies:
 ```bash
 pip install -r requirements.txt
+pytest
 ```
-If any dependencies are missing, the test suite will skip affected tests instead of failing.
 
 ### Circular Import Prevention
 To avoid circular dependencies:

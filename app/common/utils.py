@@ -22,3 +22,7 @@ def init_admin_user():
 def init_admin_user():
     """Initialize the admin user."""
     # Implementation here
+def init_admin_user():
+    """Initialize the admin user with default credentials."""
+    # Implementation of admin user initialization
+    pass

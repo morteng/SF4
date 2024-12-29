@@ -77,3 +77,10 @@ def test_create_limit_property():
         
     with pytest.raises(ValueError): 
         service.create_limit = "invalid"
+from app.services.base_service import BaseService
+
+def test_create_limit_property():
+    """Test the create_limit property getter and setter."""
+    service = BaseService()
+    service.create_limit = 10
+    assert service.create_limit == 10
