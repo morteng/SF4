@@ -116,7 +116,8 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 1. **Small, Frequent Commits** with descriptive messages  
 2. **Test-Driven Development** where possible  
 3. **Error Handling & Logging**: Don’t just `print` stack traces  
-4. **Code Reviews**: Peer review before merging
+4. **Code Reviews**: Peer review before merging  
+5. **DRY Principle**: Reuse code through base classes and utilities
 
 ---
 

@@ -4,6 +4,7 @@
 - BaseService handles CRUD operations
 - Child services implement domain-specific logic
 - Standard method names across all services
+- Use base classes for common functionality
 - Audit logging via user_id
 - Custom validation hooks in child services
 - Consistent error handling patterns

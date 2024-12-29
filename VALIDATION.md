@@ -4,6 +4,7 @@
 - Pre-op validation in services
 - Flexible date handling in models
 - Error rollback in BaseService
+- Consistent validation patterns across all entities
 - Post-op verification in tests
 - Context managers for transactions
 - Consistent validation patterns across all entities

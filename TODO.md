@@ -18,6 +18,7 @@
 - Fix failing tests
 - Finish bot UI
 - Improve scheduling
+- Refactor common form patterns
 
 ## Medium Priority
 1. Add bot status monitoring
