@@ -69,10 +69,24 @@ class CustomDateTimeField(Field):
         super().__init__(label=label, validators=validators, **kwargs)
 from wtforms import Field
 from wtforms.validators import InputRequired
-from app.constants import MISSING_REQUIRED_FIELD
+from datetime import datetime
+from wtforms import ValidationError
+from app.constants import MISSING_REQUIRED_FIELD, INVALID_DATETIME_FORMAT
 
 class CustomDateTimeField(Field):
-    def __init__(self, label=None, validators=None, **kwargs):
+    def __init__(self, label=None, validators=None, format="%Y-%m-%d %H:%M:%S", **kwargs):
         if validators is None:
             validators = [InputRequired(message=MISSING_REQUIRED_FIELD)]
+        self.format = format
         super().__init__(label=label, validators=validators, **kwargs)
+
+    def process_formdata(self, valuelist):
+        if not valuelist or not valuelist[0].strip():
+            self.data = None
+            return
+            
+        date_str = valuelist[0]
+        try:
+            self.data = datetime.strptime(date_str, self.format)
+        except ValueError:
+            raise ValidationError(INVALID_DATETIME_FORMAT)
