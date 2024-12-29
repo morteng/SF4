@@ -1,3 +1,7 @@
 ## todo
-- work on fixing failing tests. This is your first and main priority, do not focus on features or refactoring until we have testing under control.
-- update the todo list as needed
+1. Fix failing tests - top priority
+   - Need details about which tests are failing:
+     * Test file names and test case names
+     * Error messages/failures
+     * Relevant code being tested
+2. Update todo list as needed
