@@ -994,6 +994,15 @@ user.profile                 GET        /user/profile
 
 ## Lessons Learned
 
+### Dependency Management
+- **Issue**: Tests failed because `pytest` was not installed in the virtual environment.
+- **Solution**: Installed `pytest` and verified the installation:
+  ```bash
+  pip install pytest
+  pip show pytest
+  ```
+- **Best Practice**: Always verify dependencies are installed before running tests or the application.
+
 ### CustomDateTimeField Initialization
 - **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
 - **Solution**: Updated the `__init__` method to properly handle the `validators` argument:
@@ -1005,15 +1014,6 @@ user.profile                 GET        /user/profile
           super().__init__(label=label, validators=validators, **kwargs)
   ```
 - **Best Practice**: Ensure custom fields properly handle all arguments passed to them.
-
-### Dependency Management
-- **Issue**: Tests failed because `pytest` was not installed in the virtual environment.
-- **Solution**: Installed `pytest` and verified the installation:
-  ```bash
-  pip install pytest
-  pip show pytest
-  ```
-- **Best Practice**: Always verify dependencies are installed before running tests or the application.
 
 ### Circular Imports
 - **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
