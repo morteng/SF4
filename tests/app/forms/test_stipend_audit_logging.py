@@ -5,6 +5,7 @@ from app.models.audit_log import AuditLog
 from app.models.organization import Organization
 from app.models.tag import Tag
 from app.extensions import db
+from app.forms.admin_forms import StipendForm
 
 def test_audit_log_on_create(app, form_data, test_db):
     """Test audit log creation on stipend create"""

@@ -4,6 +4,7 @@ from app.models.stipend import Stipend
 from app.models.organization import Organization
 from app.models.tag import Tag
 from app.extensions import db
+from app.forms.admin_forms import StipendForm
 
 def test_stipend_create_operation(app, form_data, test_db):
     """Test CRUD create operation"""
