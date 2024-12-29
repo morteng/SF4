@@ -4,16 +4,8 @@
 # Console commands for Step 1.
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
-### PENDING CONSOLE COMMANDS ###
-# Example commands:
-# /run echo "Hello from Step 1!"
-# /run python manage.py migrate
-
 ### COMMANDS START ###
-/run flask db migrate -m "Add Notification.create method and fix routes"
-/run flask db upgrade
-/run pytest --cov=app tests/test_admin_stipends.py -v
-/run flask routes
+/run pytest tests/test_admin_stipends.py -v
 ### COMMANDS END ###
 
 # Once we're done, jump to Step 2.
