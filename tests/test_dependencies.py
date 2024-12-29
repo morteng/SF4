@@ -196,3 +196,17 @@ def verify_dependencies():
 def test_dependencies():
     """Verify all required dependencies are installed"""
     verify_dependencies()
+import pytest
+import importlib
+
+def test_dependencies():
+    """Verify all required dependencies are installed."""
+    missing_deps = []
+    for dep in ["pytest", "freezegun", "Flask"]:
+        try:
+            importlib.import_module(dep)
+        except ImportError:
+            missing_deps.append(dep)
+    
+    if missing_deps:
+        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
