@@ -1,24 +1,35 @@
 # Updated Validation Best Practices
 
-## Date/Time Validation Best Practices
+## Key Takeaways
+
+### Validation Logic
 1. **Data Type Awareness**:
    - Always verify the data type of form field inputs before applying validation logic.
+   - Use `isinstance()` to check for `datetime` objects when working with date/time fields.
+
 2. **Timezone Handling**:
    - Ensure all `datetime` objects are timezone-aware.
+   - Use `pytz.UTC.localize()` to add a timezone to naive `datetime` objects.
+
 3. **Future/Past Date Validation**:
    - Validate that dates are within acceptable ranges (e.g., future dates for deadlines).
+   - Use `datetime.now(pytz.UTC)` for consistent timezone-aware comparisons.
+
 4. **Error Messages**:
    - Use centralized error messages from `app/constants.py` for consistency.
+   - Provide clear, user-friendly error messages for validation failures.
 
-## Error Handling
-1. **Centralized Error Messages**:
-   - Store all error messages in `app/constants.py`.
-2. **Consistency**:
-   - Use constants instead of hardcoded strings for error messages.
-3. **Logging**:
-   - Log validation errors with context for easier debugging.
+### Custom Field Implementation
+1. **Handle All Arguments**:
+   - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+2. **Default Validators**:
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
 
-## Testing
+### Testing
 1. **Edge Cases**:
    - Test edge cases thoroughly, especially for date/time validation.
 2. **Mocking**:

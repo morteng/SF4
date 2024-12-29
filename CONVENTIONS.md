@@ -1,10 +1,10 @@
 # Updated Coding Conventions
 
-## Best Practices
+## Testing Setup
 
-### Dependency Management
-1. **Pre-Test Verification**:
-   - Add a pre-test check to ensure all required dependencies are installed:
+### Dependency Verification
+1. **Pre-Test Check**:
+   - Add a test to verify all dependencies are installed before running the test suite:
      ```python
      def test_dependencies():
          try:
@@ -12,6 +12,7 @@
          except subprocess.CalledProcessError:
              pytest.fail("Failed to install dependencies")
      ```
+
 2. **Graceful Handling**:
    - Use try-except blocks to handle missing dependencies in test files.
    - Skip tests that require missing packages instead of failing the entire suite.
@@ -33,8 +34,11 @@
          def my_property(self, value):
              self._my_property = value
      ```
+
 2. **Avoid Direct Attribute Access**:
    - Use properties to encapsulate attribute access and modification.
+   - This ensures consistent behavior and validation.
+
 3. **Document Properties**:
    - Add docstrings to properties and setters to clarify their purpose and behavior.
 
