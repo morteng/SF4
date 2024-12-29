@@ -203,23 +203,68 @@ All service properties must:
 
 #### Missing Dependencies
 If tests fail with `ModuleNotFoundError`:
-1. Ensure the virtual environment is activated:
+
+1. **Activate the Virtual Environment**:
+   - **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+2. **Install `pytest`**:
    ```bash
-   source .venv/bin/activate  # On macOS/Linux
-   .venv\Scripts\activate     # On Windows
+   pip install pytest
    ```
-2. Install dependencies:
+
+3. **Verify Installation**:
+   ```bash
+   pip show pytest
+   ```
+
+4. **Run Tests**:
+   ```bash
+   pytest
+   ```
+
+5. **Add `pytest` to `requirements.txt` (Optional)**:
+   ```bash
+   echo "pytest" >> requirements.txt
+   ```
+
+6. **Install All Dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
-3. Verify critical packages:
+
+7. **Verify Virtual Environment**:
+   - Check Python path:
+     ```bash
+     which python  # macOS/Linux
+     where python  # Windows
+     ```
+   - This should point to the Python executable inside your `.venv` directory.
+
+8. **Recreate Virtual Environment (Optional)**:
    ```bash
-   pip show freezegun Flask
+   deactivate
+   rm -rf .venv
+   python -m venv .venv
+   source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+   pip install -r requirements.txt
    ```
-4. Run dependency verification test:
+
+9. **Verify Critical Packages**:
    ```bash
-   pytest tests/test_dependencies.py
+   pip show freezegun Flask pytest
    ```
+
+10. **Run Dependency Verification Test**:
+    ```bash
+    pytest tests/test_dependencies.py
+    ```
 
 ## Troubleshooting
 
