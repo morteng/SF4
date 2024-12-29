@@ -119,8 +119,8 @@ class CustomDateTimeField(Field):
         super().__init__(label=label, validators=validators, **kwargs)
 ```
 
-### 1. Install `pytest`
-1. Activate your virtual environment:
+### **1. Install and Verify `pytest`**
+1. **Activate the Virtual Environment**:
    - **Windows**:
      ```bash
      .venv\Scripts\activate
@@ -130,25 +130,51 @@ class CustomDateTimeField(Field):
      source .venv/bin/activate
      ```
 
-2. Install `pytest`:
+2. **Install `pytest`**:
    ```bash
    pip install pytest
    ```
 
-3. Verify the installation:
+3. **Verify Installation**:
    ```bash
    pip show pytest
    ```
+   - This should display details about the `pytest` package if installed correctly.
 
-4. Add `pytest` to `requirements.txt`:
+4. **Add `pytest` to `requirements.txt`**:
    ```bash
    echo "pytest" >> requirements.txt
    ```
 
-### 2. Fix `CustomDateTimeField` Initialization
-1. Locate the `CustomDateTimeField` class. It's likely in `app/forms/admin_forms.py` or a similar file.
+5. **Run Tests**:
+   ```bash
+   pytest
+   ```
 
-2. Replace the existing implementation with the corrected version:
+6. **Optional: Install All Dependencies**:
+   If other dependencies are missing:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+7. **Recreate Virtual Environment (if needed)**:
+   If issues persist:
+   ```bash
+   deactivate
+   rm -rf .venv
+   python -m venv .venv
+   source .venv/bin/activate  # macOS/Linux
+   .venv\Scripts\activate     # Windows
+   pip install -r requirements.txt
+   pytest
+   ```
+
+### **2. Fix `CustomDateTimeField` Initialization**
+1. **Locate the `CustomDateTimeField` Class**:
+   - Open the file where `CustomDateTimeField` is defined (likely `app/forms/admin_forms.py`).
+
+2. **Replace the Existing Implementation**:
+   Update the class to handle the `validators` argument correctly:
    ```python
    from wtforms import Field
    from wtforms.validators import InputRequired
@@ -160,10 +186,15 @@ class CustomDateTimeField(Field):
            super().__init__(label=label, validators=validators, **kwargs)
    ```
 
-3. Update any form using `CustomDateTimeField` to avoid passing the `validators` argument explicitly unless necessary. For example:
-   ```python
-   application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
-   ```
+3. **Update Forms Using `CustomDateTimeField`**:
+   - Ensure that forms using `CustomDateTimeField` do not pass the `validators` argument explicitly unless necessary. For example:
+     ```python
+     application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
+     ```
+
+4. **Testing**:
+   - Add tests to verify the field initialization and validation behavior.
+   - Test edge cases like empty values, invalid formats, and timezone handling.
 
 ### 3. Run Tests
 1. Activate your virtual environment (if not already activated):
@@ -626,22 +657,28 @@ def test_dependencies():
    application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
    ```
 
-### **5. Add Pre-Test Dependency Verification**
-1. Create a test file (e.g., `tests/test_dependencies.py`) with the following content:
-   ```python
-   import subprocess
-   import pytest
+### **3. Add Dependency Verification**
+1. **Create a Test File**:
+   - Create `tests/test_dependencies.py` with:
+     ```python
+     import subprocess
+     import pytest
 
-   def test_dependencies():
-       try:
-           subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-       except subprocess.CalledProcessError:
-           pytest.fail("Failed to install dependencies")
-   ```
-2. Run the test to verify dependencies:
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+
+2. **Run the Dependency Test**:
    ```bash
    pytest tests/test_dependencies.py
    ```
+
+3. **Graceful Handling**:
+   - If dependencies are missing, the test will fail with a clear message.
+   - Consider adding this test to your CI/CD pipeline to catch dependency issues early.
 
 2. **Graceful Handling**:
    - Use try-except blocks to handle missing dependencies in test files.
