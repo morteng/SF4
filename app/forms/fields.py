@@ -210,14 +210,14 @@ class CustomDateTimeField(DateTimeField):
             if not (0 <= dt.hour <= 23 and 
                     0 <= dt.minute <= 59 and 
                     0 <= dt.second <= 59):
-                self.errors.append('Invalid time values')
+                self.errors.append(self.error_messages.get('invalid_time', 'Invalid time values'))
                 return False
                 
             # Validate date components
             try:
                 datetime(dt.year, dt.month, dt.day)
             except ValueError:
-                self.errors.append('Invalid date values')
+                self.errors.append(self.error_messages.get('invalid_date', 'Invalid date values'))
                 return False
                 
         except ValueError:
