@@ -5,11 +5,7 @@ from wtforms import ValidationError
 from app.constants import MISSING_REQUIRED_FIELD, INVALID_DATETIME_FORMAT
 
 class CustomDateTimeField(Field):
-    """Custom datetime field that validates and parses datetime strings.
-    
-    Attributes:
-        format (str): The datetime format string (default: '%Y-%m-%d %H:%M:%S')
-    """
+    """Custom datetime field that validates and parses datetime strings."""
     
     def __init__(self, label=None, validators=None, format="%Y-%m-%d %H:%M:%S", **kwargs):
         """Initialize the datetime field."""
