@@ -78,18 +78,4 @@
 6. **Rate Limiter Configuration**:
    - Added validation for rate limit values in `app/services/base_service.py` to ensure they are valid strings.
 
-### **Recent Changes**
-1. **Added Missing Constants**:
-   - Added `MISSING_FIELD_ERROR`, `USERNAME_REQUIRED`, `USERNAME_LENGTH`, and `USERNAME_FORMAT` to `app/constants.py`.
-
-2. **Refactored Validation Logic**:
-   - Moved reusable validation logic (e.g., `validate_application_deadline`) to `app/common/utils.py`.
-
-3. **Improved Tests**:
-   - Added edge case tests in `tests/test_base_crud_controller.py` for invalid form submissions and missing fields.
-
-4. **Updated `requirements.txt`**:
-   - Added `beautifulsoup4` for HTML parsing in tests.
-
-
 
