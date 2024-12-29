@@ -10,7 +10,6 @@
 # /run python finalize.py
 
 ### COMMANDS START ###
-/run echo "Running console commands for Step 5"
 ### COMMANDS END ###
 
 # After finishing Step 5, we start againg with Step 1 of the Coding Cycle.
