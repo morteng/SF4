@@ -30,3 +30,9 @@ def validate_application_deadline(field):
         if not (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)):
             raise ValidationError(FlashMessages.INVALID_LEAP_YEAR_DATE)
 
+    # Validate time components
+    if not (0 <= field.data.hour <= 23 and 
+            0 <= field.data.minute <= 59 and 
+            0 <= field.data.second <= 59):
+        raise ValidationError(FlashMessages.INVALID_TIME_COMPONENTS)
+

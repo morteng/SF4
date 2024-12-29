@@ -83,7 +83,7 @@ def create_app(config_name='development'):
     # Initialize extensions
     init_extensions(app)
     
-    # Register blueprints
+    # Lazy import to avoid circular dependencies
     from app.routes.admin import register_admin_blueprints
     from app.routes import register_blueprints
     register_admin_blueprints(app)
