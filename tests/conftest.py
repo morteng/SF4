@@ -38,13 +38,13 @@ def pytest_collection_modifyitems(config, items):
 
 def verify_dependencies():
     missing_deps = []
-    for dep in ["Flask", "Flask-Login", "Werkzeug", "pytest", "freezegun"]:
+    for dep in ["flask", "pytest", "freezegun", "flask_login", "werkzeug"]:
         try:
             __import__(dep)
         except ImportError:
             missing_deps.append(dep)
     if missing_deps:
-        pytest.fail(f"Missing dependencies: {', '.join(missing_deps)}")
+        raise RuntimeError(f"Missing dependencies: {', '.join(missing_deps)}. Run 'pip install -r requirements.txt' to install them.")
 
 def pytest_sessionstart(session):
     """Verify dependencies at the start of the test session."""

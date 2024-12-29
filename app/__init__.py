@@ -5,11 +5,15 @@ from flask import Flask
 logger = logging.getLogger(__name__)
 
 def check_dependencies():
-    try:
-        import flask_login
-        import werkzeug
-    except ImportError as e:
-        raise RuntimeError(f"Missing or incompatible dependency: {str(e)}") from e
+    required_deps = ["flask", "flask_login", "werkzeug", "flask_sqlalchemy", "flask_migrate"]
+    missing_deps = []
+    for dep in required_deps:
+        try:
+            __import__(dep)
+        except ImportError:
+            missing_deps.append(dep)
+    if missing_deps:
+        raise RuntimeError(f"Missing dependencies: {', '.join(missing_deps)}. Run 'pip install -r requirements.txt' to install them.")
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 

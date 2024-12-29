@@ -9,6 +9,13 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY')
     if not SECRET_KEY:
         raise ValueError("SECRET_KEY environment variable is required.")
+        
+    @classmethod
+    def validate_config(cls):
+        required_vars = ["SECRET_KEY", "SQLALCHEMY_DATABASE_URI"]
+        for var in required_vars:
+            if not getattr(cls, var):
+                raise ValueError(f"{var} environment variable is required.")
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = True  # Ensure CSRF protection is enabled
