@@ -57,7 +57,7 @@ class StipendForm(FlaskForm):
         DataRequired(message="Eligibility criteria is required."),
         Length(max=2000, message="Eligibility criteria cannot exceed 2000 characters.")
     ])
-    application_deadline = CustomDateTimeField('Application Deadline', validators=[Optional()])
+    application_deadline = CustomDateTimeField('Application Deadline', validators=[DataRequired(message="Application deadline is required.")])
     organization_id = SelectField('Organization', coerce=int, validators=[
         DataRequired(message="Organization is required.")
     ])

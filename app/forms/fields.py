@@ -69,17 +69,14 @@ class CustomDateTimeField(DateTimeField):
             self.error_messages.update(getattr(self, 'error_messages', {}))
 
     def process_formdata(self, valuelist):
-        if not valuelist or not valuelist[0]:
+        # First check if value is missing or empty
+        if not valuelist or not valuelist[0] or not valuelist[0].strip():
             self.errors.append(self.error_messages['required'])
             self.data = None
             return
             
         date_str = valuelist[0].strip()
-        if not date_str:
-            self.errors.append(self.error_messages['required'])
-            self.data = None
-            return
-            
+        
         # Validate format first
         if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
             self.errors.append(self.error_messages['invalid_format'])
