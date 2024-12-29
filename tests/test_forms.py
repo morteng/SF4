@@ -38,7 +38,7 @@ from app.forms import StipendForm
 from app.constants import FlashMessages
 
 @pytest.mark.parametrize("date_str,expected_error", [
-    ("2023-02-29", FlashMessages.INVALID_LEAP_YEAR),  # Invalid leap year
+    ("2023-02-29", FlashMessages.INVALID_LEAP_YEAR_DATE),  # Invalid leap year
     ("2023-13-01", FlashMessages.INVALID_DATE_FORMAT), # Invalid month
     ("2023-00-01", FlashMessages.INVALID_DATE_FORMAT), # Invalid month
     ("2023-01-32", FlashMessages.INVALID_DATE_FORMAT), # Invalid day
