@@ -360,3 +360,24 @@ class StipendForm(FlaskForm):
         format="%Y-%m-%d %H:%M:%S",
         validators=[InputRequired()]  # Explicitly pass validators
     )
+from flask_wtf import FlaskForm
+from app.forms.custom_fields import CustomDateTimeField
+from app.constants import MISSING_FIELD_ERROR
+import logging
+
+logger = logging.getLogger(__name__)
+
+class StipendForm(FlaskForm):
+    application_deadline = CustomDateTimeField(
+        "Application Deadline",
+        format="%Y-%m-%d %H:%M:%S",
+        validators=[InputRequired(message=MISSING_FIELD_ERROR)]
+    )
+
+    def validate(self):
+        if not super().validate():
+            for field, errors in self.errors.items():
+                for error in errors:
+                    logger.error(f"Validation error in {field}: {error}")
+            return False
+        return True

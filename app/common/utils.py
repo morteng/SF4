@@ -94,3 +94,6 @@ def init_admin_user():
 def init_admin_user():
     # Implementation
     pass
+def init_admin_user():
+    # Implementation
+    pass

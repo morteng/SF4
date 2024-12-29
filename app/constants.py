@@ -260,3 +260,5 @@ INVALID_FUTURE_DATE = "Date must be in the future"
 # General Validation
 REQUIRED_FIELD = "This field is required"
 INVALID_INPUT = "Invalid input"
+DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+MISSING_FIELD_ERROR = "This field is required."
