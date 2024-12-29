@@ -358,7 +358,16 @@ class StipendForm(FlaskForm):
     application_deadline = CustomDateTimeField(
         "Application Deadline",
         format="%Y-%m-%d %H:%M:%S",
-        validators=[InputRequired()]  # Explicitly pass validators
+        validators=[InputRequired(message=FlashMessages.MISSING_FIELD_ERROR)],
+        error_messages={
+            'required': FlashMessages.MISSING_FIELD_ERROR,
+            'invalid_format': FlashMessages.INVALID_DATE_FORMAT,
+            'invalid_date': FlashMessages.INVALID_DATE_VALUES,
+            'invalid_time': FlashMessages.INVALID_TIME_COMPONENTS,
+            'past_date': FlashMessages.FUTURE_DATE_REQUIRED,
+            'future_date': 'Application deadline cannot be more than 5 years in the future',
+            'invalid_leap_year': FlashMessages.INVALID_LEAP_YEAR
+        }
     )
 from flask_wtf import FlaskForm
 from app.forms.custom_fields import CustomDateTimeField
