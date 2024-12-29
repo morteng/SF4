@@ -12,6 +12,7 @@
 - [x] Centralize error messages in `app/constants.py` for date/time validation.
 - [x] Implement proper property handling in `BaseService` with getters and setters.
 - [x] Add comprehensive tests for edge cases in date/time validation.
+- [x] Document property implementation best practices in `CONVENTIONS.md`.
 
 ## Next Session
 - [ ] Optimize validation performance in `CustomDateTimeField`.
