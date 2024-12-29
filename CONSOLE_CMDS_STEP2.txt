@@ -1,0 +1,17 @@
+# --------------------------------------
+# CONSOLE_CMDS_STEP2.txt
+# --------------------------------------
+# Console commands for Step 2.
+# ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
+
+### PENDING CONSOLE COMMANDS ###
+# Example commands:
+# /run echo "Hello from Step 2!"
+# /run pytest --maxfail=1
+
+### COMMANDS START ###
+/run echo "Running console commands for Step 2"
+### COMMANDS END ###
+
+# Once finished, jump to Step 3.
+/load MAIN_CMDS_STEP3.txt
