@@ -78,7 +78,33 @@ class BaseService:
    ```
 
 3. **Dependency Verification**:
-   Add pre-test check to ensure all required dependencies are installed.
+   Add pre-test check to ensure all required dependencies are installed:
+   ```python
+   import subprocess
+   import pytest
+
+   def test_dependencies():
+       try:
+           subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+       except subprocess.CalledProcessError:
+           pytest.fail("Failed to install dependencies")
+   ```
+
+4. **Virtual Environment Setup**:
+   - Create and activate virtual environment:
+     ```bash
+     python -m venv .venv
+     source .venv/bin/activate  # macOS/Linux
+     .venv\Scripts\activate     # Windows
+     ```
+   - Install dependencies:
+     ```bash
+     pip install -r requirements.txt
+     ```
+   - Verify critical packages:
+     ```bash
+     pip show pytest freezegun Flask
+     ```
 
 ## Testing Setup
 1. **Install `pytest`**:

@@ -5,6 +5,8 @@
 - [x] Install `pytest` and verify installation with `pip show pytest`.
 - [x] Add `pytest` to `requirements.txt` for future environments.
 - [x] Add pre-test dependency verification in `tests/test_dependencies.py`.
+- [x] Document pytest installation and verification steps in CONVENTIONS.md.
+- [x] Add virtual environment setup instructions to CONVENTIONS.md.
 - [x] Refactor shared functionality into `app/common/utils.py` to avoid circular imports.
 - [x] Add pre-test dependency verification in `tests/test_dependencies.py`.
 - [x] Install `pytest` and verify installation with `pip show pytest`.
