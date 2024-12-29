@@ -62,3 +62,16 @@ class Notification(db.Model):
     @classmethod
     def get_unread_count(cls):
         return cls.query.filter_by(read_status=False).count()
+
+    @classmethod
+    def create(cls, **kwargs):
+        """Create a new notification with error handling"""
+        try:
+            notification = cls(**kwargs)
+            db.session.add(notification)
+            db.session.commit()
+            return notification
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error creating notification: {str(e)}")
+            raise ValueError(f"Failed to create notification: {str(e)}")

@@ -10,21 +10,22 @@ public_bp = Blueprint('public', __name__)
 @public_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        # Redirect to admin dashboard if user is an admin, else redirect to user profile
+        # Redirect based on user role
         if current_user.is_admin:
-            return redirect(url_for('admin.dashboard.dashboard'))  
-        else:
-            return redirect(url_for('user.profile'))
+            try:
+                return redirect(url_for('admin.dashboard.dashboard'))
+            except BuildError:
+                current_app.logger.error("Admin dashboard route not found")
+                return redirect(url_for('public.index'))
+        return redirect(url_for('user.profile'))
     
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        password = form.password.data
-        if user and user.check_password(password):
-            print(f"Login success for: {user.username}")
+        if user and user.check_password(form.password.data):
             login_user(user)
             
-            # Create audit log for successful login
+            # Create audit log
             try:
                 AuditLog.create(
                     user_id=user.id,
@@ -38,15 +39,17 @@ def login():
                 current_app.logger.error(f"Error creating login audit log: {str(e)}")
             
             flash('Login successful.', 'success')
-            # Redirect to admin dashboard if user is an admin, else redirect to user profile
-            if current_user.is_admin:
-                flash('Admin logged in.', 'success')
-                return redirect(url_for('admin.dashboard.dashboard'))  
-            else:
+            
+            # Handle redirect after login
+            try:
+                if user.is_admin:
+                    return redirect(url_for('admin.dashboard.dashboard'))
                 return redirect(url_for('user.profile'))
-        else:
-            print("Login failed.")
-            flash('Invalid username or password.', 'danger')
+            except BuildError:
+                current_app.logger.error("Dashboard route not found")
+                return redirect(url_for('public.index'))
+                
+        flash('Invalid username or password.', 'danger')
     return render_template('login.html', form=form)
 
 from app.models.tag import Tag
