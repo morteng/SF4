@@ -273,10 +273,17 @@ class TestCustomDateTimeField(BaseTestCase):
         )
 
     def test_invalid_date_format(self):
-        field = CustomDateTimeField()
+        class TestForm(Form):
+            test_field = CustomDateTimeField(
+                error_messages={
+                    'invalid_format': 'Invalid date values'
+                }
+            )
+        
+        form = TestForm()
         self.assertFormInvalid(
-            field, {'': '2023-13-01 00:00:00'},  # Invalid month
-            {'': ['Invalid date values']}
+            form, {'test_field': '2023-13-01 00:00:00'},
+            {'test_field': ['Invalid date values']}
         )
 
     def test_invalid_time_values(self):

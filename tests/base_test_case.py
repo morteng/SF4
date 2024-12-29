@@ -49,7 +49,7 @@ class BaseTestCase(TestCase):
                 homepage_url='https://example.com/stipend1',
                 application_procedure='Apply online',
                 eligibility_criteria='Open to all students',
-                application_deadline=datetime.utcnow() + timedelta(days=30),
+                application_deadline=datetime.now(timezone.utc) + timedelta(days=30),
                 open_for_applications=True,
                 organization=org,
                 tags=[tags[0]]
@@ -61,7 +61,7 @@ class BaseTestCase(TestCase):
                 homepage_url='https://example.com/stipend2',
                 application_procedure='Email application',
                 eligibility_criteria='Graduate students only',
-                application_deadline=datetime.utcnow() + timedelta(days=60),
+                application_deadline=datetime.now(timezone.utc) + timedelta(days=60),
                 open_for_applications=True,
                 organization=org,
                 tags=[tags[1]]
