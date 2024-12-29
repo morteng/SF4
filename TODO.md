@@ -1,8 +1,9 @@
 # Updated TODO List
 
 ## Completed
-- [x] Fix `CustomDateTimeField` initialization to handle `validators` argument.
-- [x] Install `pytest` and verify dependencies.
+- [x] Fix `CustomDateTimeField` initialization to handle `validators` argument with default InputRequired().
+- [x] Install `pytest` and verify installation with `pip show pytest`.
+- [x] Add `pytest` to `requirements.txt` for future environments.
 - [x] Refactor shared functionality into `app/common/utils.py` to avoid circular imports.
 
 ## Next Session

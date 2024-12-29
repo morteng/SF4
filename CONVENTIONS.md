@@ -1,5 +1,31 @@
 # Updated Coding Conventions
 
+### Testing Setup
+1. **Activate Virtual Environment**:
+   - **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+2. **Install `pytest`**:
+   ```bash
+   pip install pytest
+   ```
+
+3. **Verify Installation**:
+   ```bash
+   pip show pytest
+   ```
+
+4. **Add to requirements.txt**:
+   ```bash
+   echo "pytest" >> requirements.txt
+   ```
+
 ### Property Implementation
 1. **Define Properties Correctly**:
    - Always define a property (`@property`) before using a setter (`@<property>.setter`).
