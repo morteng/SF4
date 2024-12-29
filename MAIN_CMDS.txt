@@ -29,10 +29,10 @@
 # Step 3: Refine & Summarize
 /ask Should we revisit or refactor any code? Summarize the current status.
 /architect implement improvements
-/test
 
 # Step 4: Optional Additional Checks
 /run flask routes
+/test
 /ask If there's a new issue, what is it?
 
 # Step 5: Final Documentation Updates
