@@ -1,24 +1,29 @@
 # Updated Validation Rules
 
-## Date & Time Validation
+## Updated Time Validation
 
-### General Principles
-- Validate format before content.
-- Use fallback error messages.
-- Check for required fields first.
-- Clear error messages before new validation.
-- Use consistent error message format.
-- Handle specific `ValueError` cases explicitly.
-- Ensure date format strings are properly initialized.
-- Remove duplicate validation code.
+### Best Practices
+- Validate time components together (hours, minutes, seconds)
+- Use specific error messages for different validation failures
+- Handle edge cases in time validation (e.g., 25:00:00)
+- Provide clear, user-friendly error messages
+- Validate time values before full datetime parsing
 
-### Component Validation
-- Validate date and time components separately
-- Specific validation for:
-  - Hours (0-23)
-  - Minutes (0-59)
-  - Seconds (0-59)
-  - Leap years (February 29th)
+### Error Handling
+- Provide specific error messages for:
+  - Invalid time formats
+  - Out-of-range values
+  - Missing required fields
+  - Time values outside valid ranges
+  - Malformed datetime strings
+- Use configurable error messages
+- Log validation errors with context
+
+### Testing
+- Test all error message variations
+- Verify error message fallbacks
+- Test edge cases in time validation
+- Ensure consistent handling of empty/missing values
 
 ### Error Handling
 - Provide specific error messages for:

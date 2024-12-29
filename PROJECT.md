@@ -237,14 +237,14 @@ user.profile                 GET        /user/profile
 
 ## Key Updates
 - **Validation Improvements**:
-  - Enhanced validation for the `application_deadline` field in the `StipendForm`.
-  - Added custom error messages for required fields in `CustomDateTimeField`.
-  - Improved test coverage for form validation scenarios.
+  - Enhanced time validation in `CustomDateTimeField`
+  - Standardized error messages for date/time fields
+  - Improved test coverage for form validation scenarios
 
 ## Technical Updates
-- Fixed failing tests for date validation in `StipendForm`.
-- Reduced code duplication in admin routes.
-- Improved test coverage for form validation.
+- Fixed failing tests for time validation
+- Reduced code duplication in form validation
+- Improved error message consistency
 
 ## System Components
 - **Forms**:

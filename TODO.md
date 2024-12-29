@@ -1,16 +1,17 @@
 # Updated TODO List
 
-## High Priority
-- [x] Fix error message handling in `CustomDateTimeField`.
-- [x] Add time validation logic to `CustomDateTimeField`.
-- [x] Standardize validation error messages.
-- [x] Remove hardcoded error messages.
-- [x] Address `datetime.utcnow()` deprecation warnings.
-- [x] Implement proper error message mapping.
-- [x] Add pre-parsing time component validation.
-- [x] Improve error handling for invalid time values.
-- [x] Fix required field validation in `CustomDateTimeField`.
-- [ ] Update remaining routes to use new error handling.
+## Completed
+- [x] Fix error message handling in `CustomDateTimeField`
+- [x] Add time validation logic to `CustomDateTimeField`
+- [x] Standardize validation error messages
+- [x] Remove hardcoded error messages
+- [x] Implement proper error message mapping
+
+## Next Session
+- [ ] Add more test cases for edge cases
+- [ ] Document new validation patterns
+- [ ] Review test coverage for new code
+- [ ] Add tests for bound/unbound field scenarios
 
 ## Medium Priority
 - [ ] Add more test cases for edge cases
