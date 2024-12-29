@@ -40,13 +40,17 @@ class BaseTestCase(TestCase):
         ]
         db.session.add_all(tags)
 
-        # Create test stipends
+        # Create test stipends with all required fields
         stipends = [
             Stipend(
                 name='Test Stipend 1',
                 summary='Test Summary 1',
                 description='Test Description 1',
+                homepage_url='https://example.com/stipend1',
+                application_procedure='Apply online',
+                eligibility_criteria='Open to all students',
                 application_deadline=datetime.utcnow() + timedelta(days=30),
+                open_for_applications=True,
                 organization=org,
                 tags=[tags[0]]
             ),
@@ -54,7 +58,11 @@ class BaseTestCase(TestCase):
                 name='Test Stipend 2',
                 summary='Test Summary 2',
                 description='Test Description 2',
+                homepage_url='https://example.com/stipend2',
+                application_procedure='Email application',
+                eligibility_criteria='Graduate students only',
                 application_deadline=datetime.utcnow() + timedelta(days=60),
+                open_for_applications=True,
                 organization=org,
                 tags=[tags[1]]
             )
