@@ -7,6 +7,31 @@ from app.constants import FlashMessages, FlashCategory
 class StipendService(BaseService):
     def __init__(self):
         super().__init__(Stipend)
+        # Add pre/post hooks for audit logging
+        self.add_pre_update_hook(self._log_pre_update)
+        self.add_post_update_hook(self._log_post_update)
+        self.add_pre_delete_hook(self._log_pre_delete)
+        self.add_post_delete_hook(self._log_post_delete)
+
+    def _log_pre_update(self, data):
+        """Log state before update"""
+        entity = self.get_by_id(data.get('id'))
+        self._log_audit('pre_update', entity, before=entity.to_dict())
+        return data
+
+    def _log_post_update(self, entity):
+        """Log state after update"""
+        self._log_audit('post_update', entity, after=entity.to_dict())
+
+    def _log_pre_delete(self, data):
+        """Log state before deletion"""
+        entity = self.get_by_id(data.get('id'))
+        self._log_audit('pre_delete', entity, before=entity.to_dict())
+        return data
+
+    def _log_post_delete(self, entity):
+        """Log state after deletion"""
+        self._log_audit('post_delete', entity)
         
     def get_form_choices(self):
         organizations = Organization.query.order_by(Organization.name).all()

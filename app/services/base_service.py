@@ -200,7 +200,8 @@ class BaseService:
         raise ValueError("Model does not support restore")
 
     def _log_audit(self, action, entity, user_id=None, before=None, after=None):
-        """Centralized audit logging"""
+        """Enhanced audit logging with IP and endpoint tracking"""
+        from flask import request
         if self.audit_logger:
             self.audit_logger.log(
                 action=action,
@@ -208,5 +209,7 @@ class BaseService:
                 object_id=entity.id,
                 user_id=user_id,
                 before=before,
-                after=after or entity.to_dict()
+                after=after or entity.to_dict(),
+                ip_address=request.remote_addr if request else '127.0.0.1',
+                endpoint=request.endpoint if request else 'unknown'
             )
