@@ -207,6 +207,14 @@ class CustomDateTimeField(DateTimeField):
         if self.errors:
             return False
             
+        # Validate the format first
+        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', str(self.data)):
+            self.errors.append(self.error_messages.get(
+                'invalid_format', 
+                'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
+            ))
+            return False
+            
         # Validate date components
         try:
             dt = datetime.strptime(str(self.data), '%Y-%m-%d %H:%M:%S')
@@ -224,13 +232,8 @@ class CustomDateTimeField(DateTimeField):
             except ValueError:
                 self.errors.append(self.error_messages.get('invalid_date', 'Invalid date values'))
                 return False
-    
-        # Validate the format first
-        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', str(self.data)):
-            self.errors.append(self.error_messages.get(
-                'invalid_format', 
-                'Invalid date format. Please use YYYY-MM-DD HH:MM:SS'
-            ))
+        except ValueError:
+            self.errors.append(self.error_messages.get('invalid_date', 'Invalid date values'))
             return False
             
         # Validate date components
