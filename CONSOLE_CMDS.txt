@@ -1,0 +1,22 @@
+# --------------------------------------
+# CONSOLE_CMDS.txt
+# --------------------------------------
+# Place your console commands here.
+# Prepend all commands with /run 
+# The rule: ONLY EDIT THIS FILE to add/remove console commands. only edit the section between # COMMANDS START ### and # COMMANDS END ###, leave the rest of this file as it is.
+
+### PENDING CONSOLE COMMANDS ###
+# Example:
+# /run echo "Hello from the console!"
+# /run python my_script.py
+# /run pip install some-package
+
+# COMMANDS START ###
+
+/run echo "Hello from the console!"
+
+# COMMANDS END ###
+
+# When done, jump back to MAIN_CMDS.txt 
+/reset
+/load MAIN_CMDS.txt
