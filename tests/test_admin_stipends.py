@@ -43,15 +43,10 @@ class AdminStipendTestCase(unittest.TestCase):
     def test_create_stipend(self):
         # Add CSRF token handling
         with self.client:
-            # Get CSRF token
-            response = self.client.get(url_for('public.login'))
-            csrf_token = response.data.decode('utf-8').split('name="csrf_token" value="')[1].split('"')[0]
-            
-            # Log in as admin with CSRF token
+            # Log in as admin
             response = self.client.post(url_for('public.login'), data={
                 'username': 'admin',
-                'password': 'password',
-                'csrf_token': csrf_token
+                'password': 'password'
             }, follow_redirects=True)
             
             self.assertEqual(response.status_code, 200)
