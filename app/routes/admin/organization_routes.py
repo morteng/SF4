@@ -66,49 +66,6 @@ def edit(id):
 def delete(id):
     return org_controller.delete(id)
     
-    if request.method == 'POST' and form.validate():
-        try:
-            # Create organization with cleaned data
-            organization = Organization(
-                name=clean(form.name.data.strip(), tags=[], attributes={}),
-                description=clean(form.description.data.strip(), tags=['p', 'br', 'strong', 'em'], attributes={}),
-                homepage_url=clean(form.homepage_url.data.strip(), tags=[], attributes={}) if form.homepage_url.data else None
-            )
-            
-            # Check for duplicate name
-            if Organization.query.filter_by(name=organization.name).first():
-                flash_message(FlashMessages.ORGANIZATION_DUPLICATE_NAME, FlashCategory.ERROR)
-                return render_template('admin/organizations/form.html', form=form), 400
-            
-            db.session.add(organization)
-            db.session.commit()
-            
-            # Create audit log
-            AuditLog.create(
-                user_id=current_user.id,
-                action='create',
-                object_type='Organization',
-                object_id=organization.id,
-                details=f'Created organization {organization.name}',
-                ip_address=request.remote_addr
-            )
-            
-            flash_message(FlashMessages.ORGANIZATION_CREATE_SUCCESS, FlashCategory.SUCCESS)
-            return redirect(url_for('admin.organization.index'))
-            
-        except IntegrityError as e:
-            db.session.rollback()
-            logger.error(f"Integrity error creating organization: {str(e)}")
-            flash_message(FlashMessages.ORGANIZATION_DUPLICATE_NAME, FlashCategory.ERROR)
-            return render_template('admin/organizations/form.html', form=form), 400
-            
-        except SQLAlchemyError as e:
-            db.session.rollback()
-            logger.error(f"Database error creating organization: {str(e)}")
-            flash_message(FlashMessages.GENERIC_ERROR, FlashCategory.ERROR)
-            return render_template('admin/organizations/form.html', form=form), 500
-            
-    return render_template('admin/organizations/form.html', form=form)
     """Create new organization with audit logging and notifications"""
     form = OrganizationForm()
     
