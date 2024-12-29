@@ -14,7 +14,7 @@ from wtforms import (
 )
 from wtforms.validators import (
     DataRequired, Length, Optional, ValidationError, 
-    URL, Email, Regexp
+    URL, Email, Regexp, InputRequired
 )
 
 # Configure logging
