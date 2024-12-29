@@ -4,3 +4,6 @@ def shared_function():
 def shared_function():
     # Shared logic here
     pass
+def shared_function():
+    # Shared logic here
+    pass

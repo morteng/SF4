@@ -2,6 +2,33 @@
 
 ## Setup Instructions
 
+1. Create and activate a virtual environment:
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # On macOS/Linux
+   .venv\Scripts\activate     # On Windows
+   ```
+
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Verify critical dependencies:
+   ```bash
+   pip show freezegun Flask
+   ```
+
+4. Run tests:
+   ```bash
+   pytest
+   ```
+
+5. Verify all dependencies are installed:
+   ```bash
+   pytest tests/test_dependencies.py
+   ```
+
 ### Pre-Test Verification
 Before running tests, the system will automatically verify that all required dependencies are installed. If any dependencies are missing, the test session will abort with a clear error message.
 
