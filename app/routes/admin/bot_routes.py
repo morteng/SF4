@@ -31,7 +31,6 @@ limiter = Limiter(
 @login_required
 @admin_required
 def create():
-    """Create a new bot with audit logging and notifications"""
     form = BotForm()
     is_htmx = request.headers.get('HX-Request')
     
@@ -45,26 +44,8 @@ def create():
                 'last_run': None
             }
             
-            # Create bot
             bot_service = BotService()
-            new_bot = bot_service.create(bot_data)
-            
-            # Create audit log
-            log_audit(
-                user_id=current_user.id,
-                action='create_bot',
-                object_type='Bot',
-                object_id=new_bot.id,
-                after=new_bot.to_dict()
-            )
-            
-            # Create notification
-            create_notification(
-                type='crud',
-                message=f'Bot {new_bot.name} created',
-                related_object=new_bot,
-                user_id=current_user.id
-            )
+            new_bot = bot_service.create(bot_data, user_id=current_user.id)
             
             flash_message(FlashMessages.BOT_CREATE_SUCCESS, FlashCategory.SUCCESS)
             

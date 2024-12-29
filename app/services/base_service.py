@@ -162,3 +162,15 @@ class BaseService:
             self._log_audit('restore', entity, user_id=user_id)
             return entity
         raise ValueError("Model does not support restore")
+
+    def _log_audit(self, action, entity, user_id=None, before=None, after=None):
+        """Centralized audit logging"""
+        if self.audit_logger:
+            self.audit_logger.log(
+                action=action,
+                object_type=self.model.__name__,
+                object_id=entity.id,
+                user_id=user_id,
+                before=before,
+                after=after or entity.to_dict()
+            )

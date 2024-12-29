@@ -45,7 +45,22 @@ def edit(id):
 @login_required
 @admin_required
 def delete(id):
-    return tag_controller.delete(id)
+    try:
+        tag = tag_controller.service.get_by_id(id)
+        if not tag:
+            flash_message(FlashMessages.TAG_NOT_FOUND, FlashCategory.ERROR)
+            return redirect(url_for('admin.tag.index'))
+
+        tag_controller.service.delete(tag.id, user_id=current_user.id)
+        
+        flash_message(FlashMessages.TAG_DELETE_SUCCESS, FlashCategory.SUCCESS)
+        return redirect(url_for('admin.tag.index'))
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error deleting tag: {str(e)}")
+        flash_message(f"{FlashMessages.TAG_DELETE_ERROR}: {str(e)}", FlashCategory.ERROR)
+        return redirect(url_for('admin.tag.index'))
 
 @admin_tag_bp.route('/', methods=['GET'])
 @login_required
