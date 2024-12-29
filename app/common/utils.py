@@ -37,21 +37,21 @@ def validate_blueprint_routes(app, required_routes):
     with app.app_context():
         registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
         missing_routes = [route for route in required_routes if route not in registered_routes]
-        
+
         logger.debug(f"Registered routes: {registered_routes}")
         logger.debug(f"Required routes: {required_routes}")
-        
+
         if missing_routes:
             # Get detailed blueprint info
             blueprint_info = []
             for name, bp in app.blueprints.items():
                 blueprint_info.append(f"{name}: {list(bp.view_functions.keys())}")
-    
+
             app.logger.error("Route Validation Error:")
             app.logger.error(f"Registered routes: {registered_routes}")
             app.logger.error(f"Missing routes: {missing_routes}")
             app.logger.error(f"Current blueprints: {blueprint_info}")
-    
+
             # Provide more detailed error message
             error_msg = (
                 f"Missing routes: {', '.join(missing_routes)}.\n"

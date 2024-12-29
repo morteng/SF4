@@ -38,7 +38,7 @@ def create_app(config_name='development'):
             
             # Validate critical routes
             required_routes = [
-                'admin.stipend.create',
+                'admin.admin_stipend.create',  # Updated to match registered route
                 'admin.dashboard.dashboard'
             ]
             from app.common.utils import validate_blueprint_routes
