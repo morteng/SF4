@@ -2,8 +2,6 @@ import re
 from wtforms.fields import DateTimeField, SelectField
 from wtforms.validators import ValidationError
 from datetime import datetime
-import pytz
-from pytz import timezone, utc
 
 class CustomDateTimeField(DateTimeField):
     """Custom DateTimeField with timezone support and enhanced validation."""
@@ -145,10 +143,8 @@ class CustomDateTimeField(DateTimeField):
                 if not self._validate_date_components(parsed_dt):
                     return
 
-                # If all validations pass, proceed with timezone handling
-                local_tz = timezone(self.timezone_str)
-                local_dt = local_tz.localize(parsed_dt, is_dst=None)
-                self.data = local_dt.astimezone(utc)
+                # If all validations pass, store the datetime
+                self.data = parsed_dt
                 self.raw_value = date_str
 
             except ValueError as e:
@@ -163,8 +159,16 @@ class CustomDateTimeField(DateTimeField):
                     self.errors.append(self.error_messages['invalid_time'])
                 else:
                     self.errors.append(self.error_messages['invalid_date'])
-            except pytz.UnknownTimeZoneError:
-                self.errors.append(self.error_messages['invalid_timezone'])
+            except ValueError as e:
+                error_str = str(e)
+                if 'does not match format' in error_str:
+                    self.errors.append(self.error_messages['invalid_format'])
+                elif 'day is out of range' in error_str or 'month is out of range' in error_str:
+                    self.errors.append(self.error_messages['invalid_date'])
+                elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
+                    self.errors.append(self.error_messages['invalid_time'])
+                else:
+                    self.errors.append(self.error_messages['invalid_date'])
 
     def _validate_time_components(self, dt):
         try:
