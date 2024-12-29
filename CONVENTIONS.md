@@ -44,35 +44,31 @@ class BaseService:
              pytest.fail("Failed to install dependencies")
      ```
 
-### Property Implementation
-1. **Define Properties Correctly**:
-   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
-   
-### Dependency Management
-1. **Pre-Test Verification**:
-   - Add a test to verify all dependencies are installed before running the test suite.
-   - Example:
+### Circular Imports
+1. **Refactor Shared Functionality**:
+   - Move shared code to a separate module (e.g., `app/common/utils.py`).
+2. **Use Lazy Imports**:
+   - Import dependencies at the function level when necessary:
      ```python
-     def test_dependencies():
-         try:
-             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-         except subprocess.CalledProcessError:
-             pytest.fail("Failed to install dependencies")
+     def some_function():
+         from app.services.bot_service import run_bot  # Lazy import
+         run_bot()
      ```
-   - Example:
-     ```python
-     class MyClass:
-         def __init__(self):
-             self._my_property = None
 
-         @property
-         def my_property(self):
-             return self._my_property
+### Testing Setup
+1. **Install `pytest`**:
+   ```bash
+   pip install pytest
+   echo "pytest" >> requirements.txt
+   ```
 
-         @my_property.setter
-         def my_property(self, value):
-             self._my_property = value
-     ```
+2. **Run Tests**:
+   ```bash
+   pytest
+   ```
+
+3. **Dependency Verification**:
+   Add pre-test check to ensure all required dependencies are installed.
 
 ## Testing Setup
 1. **Install `pytest`**:

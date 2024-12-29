@@ -1017,14 +1017,56 @@ user.profile                 GET        /user/profile
 
 ## Key Updates
 - **Validation Improvements**:
-  - Enhanced time validation in `CustomDateTimeField`
-  - Standardized error messages for date/time fields
-  - Improved test coverage for form validation scenarios
+  - Fixed `CustomDateTimeField` initialization to handle the `validators` argument correctly with a default `InputRequired()` validator.
+  - Centralized error messages in `app/constants.py` for consistency.
+  - Added pre-test dependency verification.
+  - Standardized error messages for date/time fields using `app/constants.py`.
+  - Added comprehensive tests for edge cases in date/time validation.
 
-## Technical Updates
-- Fixed failing tests for time validation
-- Reduced code duplication in form validation
-- Improved error message consistency
+- **Testing Setup**:
+  - Added `pytest` to `requirements.txt` and verified installation.
+  - Improved dependency verification with a pre-test check.
+
+- **Code Refactoring**:
+  - Refactored shared functionality into `app/common/utils.py` to avoid circular imports.
+  - Updated `create_limit` to be a proper property with getter/setter.
+
+## Lessons Learned
+1. **Custom Field Implementation**:
+   - Always ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
+
+2. **Dependency Management**:
+   - Always verify dependencies are installed before running tests or the application.
+   - Add a pre-test check to ensure all required dependencies are installed.
+
+3. **Circular Imports**:
+   - Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+
+4. **Property Implementation**:
+   - Always define properties with `@property` and `@<property>.setter`.
+   - Include validation in setters and use private attributes for storage.
+
+## Key Takeaways for Next Coding Session
+1. **Validation Logic**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Use centralized error messages from `app/constants.py` for consistency.
+
+2. **Testing**:
+   - Test edge cases thoroughly, especially for date/time validation.
+   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+
+3. **Error Handling**:
+   - Log validation errors with context for easier debugging.
+   - Provide clear, user-friendly error messages for validation failures.
+
+4. **Code Organization**:
+   - Keep validation logic modular and reusable.
+   - Avoid code duplication by using base classes and utilities.
 
 ## Lessons Learned
 
