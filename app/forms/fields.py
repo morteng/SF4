@@ -5,20 +5,6 @@ from datetime import datetime
 from app.constants import FlashMessages
 
 class CustomDateTimeField(DateTimeField):
-    def __init__(self, label=None, validators=None, **kwargs):
-        # Initialize with default format
-        self._format = kwargs.pop('format', '%Y-%m-%d %H:%M:%S')
-        
-        # Initialize error messages from constants
-        self.error_messages = {
-            'required': str(FlashMessages.DATE_REQUIRED),
-            'invalid_format': str(FlashMessages.INVALID_DATETIME_FORMAT),
-            'invalid_time': str(FlashMessages.INVALID_TIME_COMPONENTS),
-            'invalid_leap_year': str(FlashMessages.INVALID_LEAP_YEAR_DATE),
-        }
-        
-        super().__init__(label=label, validators=validators, **kwargs)
-        self.render_kw = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
 
     def process_formdata(self, valuelist):
         try:

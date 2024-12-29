@@ -65,7 +65,10 @@ class BaseCrudController:
                         'ip': request.remote_addr,
                         'method': request.method,
                         'endpoint': request.endpoint,
-                        'success': True
+                        'success': True,
+                        'data': kwargs.get('data', {}),  # Include form data
+                        'referrer': request.referrer,
+                        'user_agent': request.user_agent.string
                     }
                     
                     self.audit_logger.log(
@@ -74,7 +77,8 @@ class BaseCrudController:
                         object_type=self.entity_name,
                         object_id=object_id,
                         details=details,
-                        ip_address=request.remote_addr
+                        ip_address=request.remote_addr,
+                        timestamp=datetime.utcnow()
                     )
                     
                 except Exception as e:
