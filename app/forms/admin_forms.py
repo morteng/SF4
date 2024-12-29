@@ -36,21 +36,18 @@ class StipendForm(FlaskForm):
         DataRequired(message=FlashMessages.NAME_REQUIRED.value),
         Length(max=100, message=FlashMessages.NAME_LENGTH.value)
     ])
-    summary = TextAreaField('Summary')
-    description = TextAreaField('Description')
+    summary = TextAreaField('Summary', validators=[Optional()])
+    description = TextAreaField('Description', validators=[Optional()])
     homepage_url = URLField('Homepage URL', validators=[
+        Optional(),
         URL(message="Please enter a valid URL starting with http:// or https://.")
     ])
-    application_procedure = TextAreaField('Application Procedure')
-    eligibility_criteria = TextAreaField('Eligibility Criteria')
-    application_deadline = CustomDateTimeField('Application Deadline')  # Now optional
-    organization_id = SelectField('Organization', coerce=int, validators=[
-        DataRequired(message="Organization is required.")
-    ])
+    application_procedure = TextAreaField('Application Procedure', validators=[Optional()])
+    eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[Optional()])
+    application_deadline = CustomDateTimeField('Application Deadline', validators=[Optional()])
+    organization_id = SelectField('Organization', coerce=int, validators=[Optional()])
     open_for_applications = BooleanField('Open for Applications', default=False)
-    tags = SelectMultipleField('Tags', coerce=int, validators=[
-        DataRequired(message="At least one tag is required.")
-    ])
+    tags = SelectMultipleField('Tags', coerce=int, validators=[Optional()])
 
     def validate_application_deadline(self, field):
         # Skip validation if the field is empty or invalid (CustomDateTimeField handles this)
@@ -78,13 +75,6 @@ class StipendForm(FlaskForm):
         max_future = now.replace(year=now.year + 5)
         if field.data > max_future:
             raise ValidationError('Application deadline cannot be more than 5 years in the future')
-    organization_id = SelectField('Organization', coerce=int, validators=[
-        DataRequired(message="Organization is required.")
-    ])
-    open_for_applications = BooleanField('Open for Applications', default=False)
-    tags = SelectMultipleField('Tags', coerce=int, validators=[
-        DataRequired(message="At least one tag is required.")
-    ])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
