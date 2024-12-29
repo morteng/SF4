@@ -13,9 +13,9 @@
 
 ### COMMANDS START ###
 
+/run pytest tests/test_validation.py -v
 /run pytest tests/test_forms.py -v
 /run pytest tests/test_datetime_validation.py -v
-/run flask routes
 
 ### COMMANDS END ###
 
