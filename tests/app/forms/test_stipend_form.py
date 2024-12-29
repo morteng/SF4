@@ -24,6 +24,27 @@ pytestmark = pytest.mark.skipif(
     not FREEZEGUN_INSTALLED,
     reason="freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies."
 )
+
+# Handle freezegun import with fallback
+try:
+    from freezegun import freeze_time
+    FREEZEGUN_INSTALLED = True
+except ImportError:
+    FREEZEGUN_INSTALLED = False
+    def freeze_time(*args, **kwargs):
+        def decorator(f):
+            return f
+        return decorator
+    logging.warning(
+        "freezegun is not installed. Some tests may be skipped. "
+        "Run `pip install -r requirements.txt` to install dependencies."
+    )
+
+# Skip time-dependent tests if freezegun is not installed
+pytestmark = pytest.mark.skipif(
+    not FREEZEGUN_INSTALLED,
+    reason="freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies."
+)
 def test_custom_date_time_field_validation():
     field = CustomDateTimeField()
     assert field.validate_format("2023-01-01 12:00:00") is True

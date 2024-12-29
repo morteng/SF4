@@ -1,5 +1,37 @@
 # Updated Coding Conventions
 
+## Setup Instructions
+
+1. Create a virtual environment:
+   ```bash
+   python -m venv .venv
+   ```
+
+2. Activate the virtual environment:
+   - On Windows:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - On macOS/Linux:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Run tests:
+   ```bash
+   pytest
+   ```
+
+5. If tests fail due to missing dependencies, run:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
 ## Service Layer
 - BaseService handles CRUD
 - Child services implement domain logic
