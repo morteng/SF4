@@ -435,6 +435,19 @@ def setup_rate_limits(app):
     # Bot operations
     limiter.limit("10/hour")(run_bot)
 from contextlib import contextmanager
+from datetime import datetime, timedelta
+from croniter import croniter
+
+def calculate_next_run(schedule):
+    """Calculate the next run time based on a cron-like schedule."""
+    if not schedule:
+        return None
+    try:
+        now = datetime.now()
+        cron = croniter(schedule, now)
+        return cron.get_next(datetime)
+    except Exception as e:
+        raise ValueError(f"Invalid schedule format: {str(e)}")
 
 @contextmanager
 def db_session_scope():

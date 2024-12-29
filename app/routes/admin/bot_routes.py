@@ -1,33 +1,13 @@
 from datetime import datetime, timezone
-from app.services.notification_service import get_notification_count, create_notification, create_crud_notification
-from app.utils import log_audit
-from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string, get_flashed_messages, jsonify
+import time
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify
 from flask_login import login_required, current_user
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-from app.models.audit_log import AuditLog
-from app.models.notification import Notification, NotificationType
-from app.forms.admin_forms import BotForm
-from app.services.bot_service import (
-    get_bot_by_id, 
-    run_bot, 
-    get_all_bots, 
-    create_bot, 
-    update_bot, 
-    delete_bot,
-    calculate_next_run
-)
-from app.extensions import db 
-from app.utils import admin_required, flash_message, format_error_message
+from app.models.bot import Bot
+from app.extensions import db
+from app.utils import admin_required, flash_message, calculate_next_run
 from app.constants import FlashMessages, FlashCategory
 
 admin_bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
-
-# Initialize rate limiter
-limiter = Limiter(
-    key_func=get_remote_address,
-    default_limits=["100 per hour", "10 per minute"]
-)
 
 @admin_bot_bp.route('/create', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")
