@@ -6,7 +6,7 @@
 
 ### COMMANDS START ###
 flask routes
-pytest tests/test_admin_stipends.py -v
+pytest tests/test_admin_stipends.py -v --log-cli-level=DEBUG
 ### COMMANDS END ###
 
 # Once finished, jump to Step 3.
