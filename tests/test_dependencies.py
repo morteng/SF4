@@ -31,6 +31,11 @@ def test_flask_limiter_installed():
     flask_limiter = importlib.import_module("flask_limiter")
     assert flask_limiter is not None
 
+def test_flask_limiter_installed():
+    """Verify flask-limiter is installed and importable"""
+    flask_limiter = importlib.import_module("flask_limiter")
+    assert flask_limiter is not None
+
 def test_freezegun_installed():
     """Verify freezegun is installed and importable"""
     try:

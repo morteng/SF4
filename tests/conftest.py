@@ -91,6 +91,9 @@ warnings.filterwarnings("ignore", category=SAWarning)
 def app():
     """Create and configure a new app instance for the test session."""
     app = create_app('testing')
+    # Add rate limiter config
+    app.config['RATELIMIT_ENABLED'] = True
+    app.config['RATELIMIT_STORAGE_URL'] = 'memory://'
     app.config['WTF_CSRF_ENABLED'] = True  # Enable CSRF for testing
     app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'  # Add CSRF secret key
     

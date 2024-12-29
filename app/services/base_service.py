@@ -5,6 +5,8 @@ from app.extensions import db
 import logging
 from datetime import datetime
 from app.constants import FlashMessages, FlashCategory
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +50,16 @@ class BaseService:
     def __init__(self, model, audit_logger=None):
         self.model = model
         self.audit_logger = audit_logger
+        # Add rate limiter
+        self.limiter = Limiter(
+            key_func=get_remote_address,
+            default_limits=["200 per day", "50 per hour"]
+        )
+        self.rate_limits = {
+            'create': "10 per minute",
+            'update': "10 per minute", 
+            'delete': "5 per minute"
+        }
         self.soft_delete_enabled = hasattr(model, 'is_deleted')
         self.validation_rules = {}
         self.pre_create_hooks = []
@@ -101,6 +113,7 @@ class BaseService:
         return self.model.query
 
     @handle_errors
+    @limiter.limit(lambda self: self.rate_limits['create'])
     def create(self, data, user_id=None):
         """Create a new entity with validation and audit logging"""
         try:
@@ -207,7 +220,8 @@ class BaseService:
             raise ValidationError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors="No data provided"))
         self.validate(data)
 
-    @handle_errors
+    @handle_errors 
+    @limiter.limit(lambda self: self.rate_limits['update'])
     def update(self, id, data, user_id=None):
         """Update an existing entity with validation and audit logging"""
         entity = self.get_by_id(id)
@@ -224,6 +238,7 @@ class BaseService:
         return entity
 
     @handle_errors
+    @limiter.limit(lambda self: self.rate_limits['delete']) 
     def delete(self, id, user_id=None):
         """Enhanced delete with soft delete support"""
         entity = self.get_by_id(id)
