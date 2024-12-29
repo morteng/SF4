@@ -1,5 +1,6 @@
 from functools import wraps
 from sqlalchemy.exc import SQLAlchemyError
+from wtforms import ValidationError
 from app.extensions import db
 import logging
 from app.constants import FlashMessages, FlashCategory

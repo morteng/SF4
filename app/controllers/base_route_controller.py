@@ -1,9 +1,12 @@
-from flask import redirect, url_for, render_template, request
+from flask import redirect, url_for, render_template, request, jsonify, flash
+import logging
 from flask_login import current_user
 from sqlalchemy.exc import SQLAlchemyError
 from app.utils import flash_message
 from app.constants import FlashMessages, FlashCategory
 from app.extensions import db
+
+logger = logging.getLogger(__name__)
 
 class BaseRouteController:
     def __init__(self, service, entity_name, form_class, template_dir):
