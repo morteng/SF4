@@ -73,7 +73,7 @@ def create():
 @admin_required
 def delete(id):
     """Delete tag with audit logging"""
-    tag = get_tag_by_id(id)
+    tag = tag_service.get_by_id(id)
     if tag:
         try:
             tag_service.delete(tag)
@@ -105,7 +105,7 @@ def paginate():
 @login_required
 @admin_required
 def edit(id):
-    tag = get_tag_by_id(id)
+    tag = tag_service.get_by_id(id)
     if not tag:
         flash_message(FlashMessages.GENERIC_ERROR, FlashCategory.ERROR)
         return redirect(url_for('tag.index'))
