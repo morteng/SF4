@@ -133,9 +133,23 @@ All service properties must:
 
 #### Missing Dependencies
 If tests fail with `ModuleNotFoundError`:
-1. Ensure the virtual environment is activated.
-2. Run `pip install -r requirements.txt`.
-3. Verify installation with `pip show <package_name>`.
+1. Ensure the virtual environment is activated:
+   ```bash
+   source .venv/bin/activate  # On macOS/Linux
+   .venv\Scripts\activate     # On Windows
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Verify critical packages:
+   ```bash
+   pip show freezegun Flask
+   ```
+4. Run dependency verification test:
+   ```bash
+   pytest tests/test_dependencies.py
+   ```
 
 ## Troubleshooting
 
