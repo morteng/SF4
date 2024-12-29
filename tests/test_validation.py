@@ -79,19 +79,19 @@ def test_custom_date_time_field():
 import pytest
 from freezegun import freeze_time
 from app.forms.admin_forms import StipendForm
-from app.constants import MISSING_REQUIRED_FIELD, INVALID_DATE_FORMAT
+from app.constants import FlashMessages
 
 def test_custom_date_time_field_required():
     form = StipendForm()
     assert not form.validate()
-    assert MISSING_REQUIRED_FIELD in form.application_deadline.errors
+    assert FlashMessages.MISSING_FIELD_ERROR in form.application_deadline.errors
 
 from app.constants import FlashMessages
 
 def test_custom_date_time_field_invalid_format():
     form = StipendForm(application_deadline="invalid-date")
     assert not form.validate()
-    assert FlashMessages.INVALID_DATE_FORMAT in form.application_deadline.errors
+    assert FlashMessages.INVALID_DATETIME_FORMAT in form.application_deadline.errors
 
 @freeze_time("2024-01-01")
 def test_custom_date_time_field_valid():

@@ -2,7 +2,7 @@ from flask import current_app
 from app.extensions import db
 from datetime import datetime
 from sqlalchemy import ForeignKey
-from app.constants import NotificationType, NotificationPriority
+from app.common.enums import NotificationType, NotificationPriority
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
