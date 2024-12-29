@@ -136,6 +136,7 @@ from app.forms.admin_forms import OrganizationForm
 from app.config import TestConfig
 from app.extensions import db
 from app.constants import FlashMessages
+from app.constants import FlashMessages
 
 @pytest.fixture
 def app():
