@@ -1,19 +1,21 @@
 ## Property Validation Best Practices
 1. **Define Properties Correctly**:
    - Always define a property (`@property`) before using a setter (`@<property>.setter`).
-   - Example:
+   - Example from BaseService implementation:
      ```python
-     class MyClass:
+     class BaseService:
          def __init__(self):
-             self._my_property = None
+             self._create_limit = None
 
          @property
-         def my_property(self):
-             return self._my_property
+         def create_limit(self):
+             """Getter for create_limit."""
+             return self._create_limit
 
-         @my_property.setter
-         def my_property(self, value):
-             self._my_property = value
+         @create_limit.setter
+         def create_limit(self, value):
+             """Setter for create_limit."""
+             self._create_limit = value
      ```
 
 2. **Avoid Direct Attribute Access**:
