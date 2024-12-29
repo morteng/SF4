@@ -1,28 +1,33 @@
 from app.models.bot import Bot
+from app.services.base_service import BaseService
 from app.extensions import db
-from app.models.notification import Notification  # Import the Notification model
+from app.models.notification import Notification
 
-def create_bot(data):
-    """Create a new bot with validation"""
-    if not data.get('name'):
-        raise ValueError("Bot name is required")
-    if not data.get('description'):
-        raise ValueError("Bot description is required")
-        
-    bot = Bot(
-        name=data['name'],
-        description=data['description'],
-        status=data.get('status', 'inactive'),
-        schedule=data.get('schedule'),
-        next_run=calculate_next_run(data.get('schedule')) if data.get('schedule') else None,
-        is_active=data.get('is_active', True)
-    )
-    db.session.add(bot)
-    db.session.commit()
-    return bot
+class BotService(BaseService):
+    def __init__(self):
+        super().__init__(Bot)
 
-def get_bot_by_id(bot_id):
-    return db.session.get(Bot, bot_id)
+    def create(self, data, user_id=None):
+        """Create a new bot with validation"""
+        if not data.get('name'):
+            raise ValueError("Bot name is required")
+        if not data.get('description'):
+            raise ValueError("Bot description is required")
+            
+        bot = Bot(
+            name=data['name'],
+            description=data['description'],
+            status=data.get('status', 'inactive'),
+            schedule=data.get('schedule'),
+            next_run=calculate_next_run(data.get('schedule')) if data.get('schedule') else None,
+            is_active=data.get('is_active', True)
+        )
+        db.session.add(bot)
+        db.session.commit()
+        return bot
+
+    def get_by_id(self, bot_id):
+        return db.session.get(Bot, bot_id)
 
 from datetime import datetime
 from flask import request
