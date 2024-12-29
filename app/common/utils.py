@@ -129,3 +129,9 @@ def init_admin_user():
     """Initialize the admin user with default permissions"""
     # Implementation will be added here
     pass
+# Shared utilities to avoid circular imports
+
+def init_admin_user():
+    """Initialize the admin user"""
+    # Implementation goes here
+    pass
