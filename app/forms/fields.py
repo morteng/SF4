@@ -29,7 +29,11 @@ class CustomDateTimeField(DateTimeField):
     def format(self):
         """Getter for format that ensures it's always a string"""
         return self._format
-        
+
+    @format.setter
+    def format(self, value):
+        """Setter for format that ensures it's always a string"""
+        self._format = value if isinstance(value, str) else '%Y-%m-%d %H:%M:%S'
     def _is_empty_value(self, value):
         """Check if the value is empty or whitespace only."""
         if value is None:

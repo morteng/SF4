@@ -67,7 +67,14 @@ def form_data(app):
 
 def test_valid_date_format(app, form_data, test_db):
     """Test valid date format"""
-    form_data['application_deadline'] = '2025-12-31 23:59:59'
+    valid_dates = [
+        '2025-12-31 23:59:59',  # Standard valid date
+        '2024-02-29 12:00:00',  # Leap year date
+        '2025-01-01 00:00:00',  # Start of year
+        '2025-12-31 00:00:00',  # End of year
+        '2025-06-15 12:30:45'   # Mid-year with specific time
+    ]
+    
     with app.test_request_context():
         # Create a test organization
         org = Organization(name="Test Org", description="Test Description", homepage_url="https://test.org")
@@ -83,12 +90,14 @@ def test_valid_date_format(app, form_data, test_db):
         # Get tag choices from database
         tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
         
-        # Validate the form
-        form = StipendForm(data=form_data, meta={'csrf': False})
-        form.tags.choices = tag_choices  # Set the choices
-        if not form.validate():
-            print("Validation errors:", form.errors)
-        assert form.validate() is True
+        # Test each valid date format
+        for date in valid_dates:
+            form_data['application_deadline'] = date
+            form = StipendForm(data=form_data, meta={'csrf': False})
+            form.tags.choices = tag_choices  # Set the choices
+            if not form.validate():
+                print(f"Validation errors for {date}:", form.errors)
+            assert form.validate() is True, f"Failed validation for date: {date}"
 
 def test_invalid_date_format(app, form_data):
     """Test invalid date formats"""
