@@ -18,6 +18,6 @@
 
 ## Questions/Concerns:
 1. Should we add a validation function for blueprint names? 
-YES!
+ANSWER: YES!
 2. Should we create a base blueprint class with built-in validation? 
-YES!
+ANSWER: YES!
