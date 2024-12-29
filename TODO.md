@@ -10,6 +10,18 @@
 - [x] Install missing dependencies (`freezegun`, `Flask`).
 - [x] Refactor `verify_dependencies()` to skip tests instead of failing the suite.
 - [x] Consolidate leap year validation logic in `CustomDateTimeField`.
+
+## Next Session
+- [ ] Refactor other shared functionality into `app/common`.
+- [ ] Optimize validation performance in `CustomDateTimeField`.
+- [ ] Add more comprehensive tests for timezone handling in date/time fields.
+- [ ] Add comprehensive tests for `BaseService` properties.
+- [ ] Verify time-based tests with `freezegun`.
+
+## Long Term
+- [ ] Automate dependency verification during test execution.
+- [ ] Improve test coverage for all form fields.
+- [ ] Add integration tests for form validation.
 - [x] Add tests for edge cases in date/time validation.
 - [x] Standardize error messages using constants from `app/constants.py`.
 - [x] Improve validation error reporting for better debugging.

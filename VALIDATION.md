@@ -190,6 +190,16 @@
 3. **Best Practice**:
    - Add a pre-test check to ensure all required dependencies are installed.
    - Document the setup process to avoid similar issues in the future.
+     ```bash
+     pip install -r requirements.txt
+     ```
+   - Verify installation with:
+     ```bash
+     pip show <package_name>
+     ```
+3. **Best Practice**:
+   - Add a pre-test check to ensure all required dependencies are installed.
+   - Document the setup process to avoid similar issues in the future.
 
 ## Date/Time Validation
 1. **Best Practices**:
