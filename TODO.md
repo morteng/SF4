@@ -1,6 +1,15 @@
 ## **TODO.md**
 
 ### **Final Changes & Findings**
+1. **Duplicate Constants**:
+   - Removed duplicate `MISSING_REQUIRED_FIELD` from `app/constants.py`.
+   - Ensured all constants are unique and centralized.
+
+2. **Dependency Conflicts**:
+   - Downgraded `Flask` to `2.3.2` to resolve conflicts with `Werkzeug 2.3.7`.
+
+3. **Error Handling**:
+   - Enhanced error handling in `app/__init__.py` to catch and log initialization issues.
 1. **Dependency Conflicts**:
    - **Issue**: `Flask-Login 0.6.3` is incompatible with `Werkzeug 3.0.1` due to the removal of `url_decode` in `Werkzeug 3.x`.
    - **Fix**: Downgraded `Werkzeug` to `2.3.7` to maintain compatibility with `Flask-Login 0.6.3`.

@@ -27,8 +27,9 @@ from app.common.utils import init_admin_user  # Import the init_admin_user funct
 def create_app(config_name='development'):
     app = Flask(__name__)
     
-    # Check dependencies before proceeding
-    check_dependencies()
+    try:
+        # Check dependencies before proceeding
+        check_dependencies()
     
     # Set up migrations directory in root project directory
     basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # Go up one level
@@ -197,4 +198,7 @@ def create_app(config_name='development'):
             return {'notification_count': get_notification_count(current_user.id)}
         return {}
 
-    return app
+        return app
+    except Exception as e:
+        logger.error(f"Failed to initialize application: {str(e)}")
+        raise RuntimeError(f"Application initialization failed: {str(e)}")
