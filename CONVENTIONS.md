@@ -2,24 +2,61 @@
 
 ## Testing Setup
 
-1. **Install pytest**:
+### 1. Install pytest
+1. Activate your virtual environment:
+   - **Windows**: `.venv\Scripts\activate`
+   - **macOS/Linux**: `source .venv/bin/activate`
+2. Install `pytest`:
    ```bash
    pip install pytest
    ```
-
-2. **Verify Installation**:
+3. Verify the installation:
    ```bash
    pip show pytest
    ```
-
-3. **Add to requirements.txt**:
+4. Add `pytest` to `requirements.txt`:
    ```bash
    echo "pytest" >> requirements.txt
    ```
 
-4. **Run Tests**:
+### 2. Run Tests
+1. Run all tests:
    ```bash
    pytest
+   ```
+2. If tests fail due to missing dependencies, install them and re-run the tests:
+   ```bash
+   pip install -r requirements.txt
+   pytest
+   ```
+
+### 3. Dependency Verification
+1. Add a pre-test check to ensure all required dependencies are installed:
+   ```python
+   def test_dependencies():
+       try:
+           subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+       except subprocess.CalledProcessError:
+           pytest.fail("Failed to install dependencies")
+   ```
+
+### 4. Using freezegun for Time-based Testing
+1. Install freezegun:
+   ```bash
+   pip install freezegun
+   ```
+2. Use in tests to mock datetime:
+   ```python
+   from freezegun import freeze_time
+
+   @freeze_time("2024-01-01")
+   def test_something():
+       # Test code that depends on current time
+       pass
+   ```
+3. Verify installation:
+   ```bash
+   pip show freezegun
    ```
 
 ## Custom Field Implementation
