@@ -83,11 +83,16 @@ def create_app(config_name='development'):
     # Initialize extensions
     init_extensions(app)
     
-    # Lazy import to avoid circular dependencies
-    from app.routes.admin import register_admin_blueprints
-    from app.routes import register_blueprints
-    register_admin_blueprints(app)
+    # Register blueprints
     register_blueprints(app)
+    
+    # Configure rate limiter
+    limiter = Limiter(
+        key_func=get_remote_address,
+        storage_uri="redis://localhost:6379",  # Use Redis for production
+        default_limits=["100 per hour"]
+    )
+    limiter.init_app(app)
     
     return app
 
