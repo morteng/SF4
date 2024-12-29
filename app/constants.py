@@ -188,7 +188,6 @@ class FlashMessages(str, Enum):
     # New Validation Messages
     INVALID_DATE_RANGE = "Date must be between {min_date} and {max_date}."
     INVALID_TIME_RANGE = "Time must be between {start_time} and {end_time}."
-    MISSING_REQUIRED_FIELD = "This field is required."
     INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS."
     INVALID_TIME_COMPONENTS = "Invalid time values. Hours must be 0-23, minutes and seconds 0-59."
     INVALID_LEAP_YEAR_DATE = "Invalid date for February in non-leap years."
