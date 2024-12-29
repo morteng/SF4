@@ -1,103 +1,248 @@
-# Project Specification: Stipend Discovery Website
+Sir, below is a comprehensive, one-stop project description to get any developer up and running with the **Stipend Discovery Website**. It consolidates all major points—architecture, features, database schema, routes, coding conventions, testing specifics, lessons learned, and more. If this doesn’t get the dev started, nothing will.
 
-## Key Updates
-- **Validation Improvements**:
-  - Fixed `CustomDateTimeField` initialization to handle the `validators` argument correctly with a default `InputRequired()` validator.
-  - Added `pytest` testing framework and dependency verification.
-  - Refactored circular imports into `app/common/utils.py`.
-  - Centralized error messages in `app/constants.py` for consistency.
-  - Added pre-test dependency verification.
-  - Standardized error messages for date/time fields using `app/constants.py`.
-  - Added comprehensive tests for edge cases in date/time validation.
+---
 
-- **Testing Setup**:
-  - Added `pytest` to `requirements.txt` and verified installation.
-  - Improved dependency verification with a pre-test check.
+# Stipend Discovery Website: **Complete Project Specification**
 
-- **Code Refactoring**:
-  - Refactored shared functionality into `app/common/utils.py` to avoid circular imports.
-  - Updated `create_limit` to be a proper property with getter/setter.
+## 1. Overview
+The **Stipend Discovery Website** is a Flask-based web application that helps users discover and filter stipends in real time. It features:
 
-## Lessons Learned
-1. **Custom Field Implementation**:
-   - Always ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
-   - Provide default validators if none are passed:
-     ```python
-     if validators is None:
-         validators = [InputRequired()]
-     ```
+- A **user-facing interface** for searching and applying filters via HTMX (no full-page reloads).
+- An **admin portal** for secure CRUD operations on stipends, tags, organizations, users, and automated bots.
+- **Automated bots** that handle scraping, data updates, tagging, and content validation (keeping everything neat and fresh).
+- Thorough **testing** from the ground up with `pytest` and a built-in dependency verification to make sure the environment is (mostly) foolproof.
 
-2. **Dependency Management**:
-   - Always verify dependencies are installed before running tests or the application.
-   - Add a pre-test check to ensure all required dependencies are installed.
+---
 
-3. **Circular Imports**:
-   - Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+## 2. Key Features
+1. **User-Facing Discovery**  
+   - Search and filter stipends dynamically (HTMX for partial page updates).  
+   - Mobile-first, responsive templates.
 
-4. **Property Implementation**:
-   - Always define properties with `@property` and `@<property>.setter`.
-   - Include validation in setters and use private attributes for storage.
-- **Validation Improvements**:
-  - Fixed `CustomDateTimeField` initialization to handle `validators` argument correctly with default `InputRequired()`.
-  - Standardized error messages for date/time fields using `app/constants.py`.
-  - Added comprehensive tests for edge cases in date/time validation.
-  - Added pre-test dependency verification to ensure all required packages are installed.
+2. **Admin Interface**  
+   - Secure routes requiring auth.  
+   - CRUD functionality for stipends, tags, organizations, users, and bots.  
+   - Scheduling and running bots directly from the dashboard.
 
-- **Testing Setup**:
-  - Added `pytest` to `requirements.txt` and verified installation.
-  - Improved dependency verification with a pre-test check.
+3. **Automated Bots**  
+   - **TagBot**: Applies consistent tagging.  
+   - **UpdateBot**: Checks for new or updated stipend info.  
+   - **ReviewBot**: Flags questionable or outdated entries.  
+   - Admin-scheduled runs with logs and error reporting.
 
-- **Code Refactoring**:
-  - Refactored shared functionality into `app/common/utils.py` to avoid circular imports.
-  - Updated `create_limit` to be a proper property with getter/setter.
-- **Validation Improvements**:
-  - Fixed `CustomDateTimeField` initialization to handle `validators` argument correctly with default `InputRequired()`.
-  - Standardized error messages for date/time fields using `app/constants.py`.
-  - Added comprehensive tests for edge cases in date/time validation.
+4. **Testing & Quality Checks**  
+   - Tests run on startup to ensure dependencies are installed and code is up to snuff.  
+   - Comprehensive coverage for date/time validations, user flows, and database interactions.
 
-- **Testing Setup**:
-  - Added `pytest` to `requirements.txt` and verified installation.
-  - Improved dependency verification with a pre-test check.
+5. **Dynamic Content Updates**  
+   - Leveraging HTMX so users can see new filters, updated lists, etc., without a full-page reload.
 
-- **Code Refactoring**:
-  - Refactored shared functionality into `app/common/utils.py` to avoid circular imports.
-  - Updated `create_limit` to be a proper property with getter/setter.
+---
 
-## Lessons Learned
+## 3. Technical Stack
 
-### Dependency Management
-- **Issue**: Tests failed because `pytest` was not installed in the virtual environment.
-- **Solution**: Installed `pytest` and added it to `requirements.txt`.
-- **Best Practice**: Always verify dependencies are installed before running tests or the application.
+| Component    | Tech                 | Notes                                                   |
+|--------------|----------------------|---------------------------------------------------------|
+| **Backend**  | **Flask** (Python)   | Central server logic, routes, forms, etc.              |
+| **Database** | SQLite (dev) / PostgreSQL (prod) | Alembic for migrations                              |
+| **Frontend** | HTML, CSS, JS, HTMX  | HTMX for partial page updates, responsive layout        |
+| **Testing**  | `pytest`, `pytest-cov`, `freezegun` | High coverage, mocking for date/time consistency |
+| **Other**    | Python-dotenv        | Loads environment variables; distinct configs per env   |
 
-### CustomDateTimeField Initialization
-- **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument
-- **Solution**: Updated the `__init__` method to properly handle the `validators` argument:
+### Environment & Configuration
+- Use `.env.example` to generate a local `.env`.
+- Key environment variables:
+  - `SECRET_KEY`, `DATABASE_URL`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_EMAIL`, `FLASK_CONFIG`
+- Switch out SQLite for PostgreSQL in production.
+- Admin user is created automatically if the corresponding env variables are present.
+
+---
+
+## 4. Project Architecture
+
+1. **Core Structure**  
+   - `app/__init__.py` (initializes Flask app, DB connections, etc.)  
+   - `app/models/`: SQLAlchemy models.  
+   - `app/services/`: Common business logic (e.g., `BaseService`, specialized services).  
+   - `app/routes/`: All route controllers (public vs. admin).  
+   - `app/common/utils.py`: Shared utility functions (to avoid circular imports).  
+   - `app/constants.py`: Central repository for error messages and magic strings.  
+
+2. **Bots**  
+   - Implemented in `app/services/bot_service.py` (and friends).  
+   - Schedules, logs, and error reporting are all accessible via the admin dashboard.
+
+3. **Startup Quality Checks**  
+   - Test suite is triggered automatically (or can be triggered with `pytest`).  
+   - Dependencies verified with a pre-test script (`verify_dependencies()` in `tests/conftest.py`).
+
+---
+
+## 5. Database Schema
+
+### Stipends
+```
+id (PK)
+name
+summary
+description
+homepage_url
+application_procedure
+eligibility_criteria
+application_deadline (DateTime)
+open_for_applications (Boolean)
+created_at (DateTime)
+updated_at (DateTime)
+```
+- Many-to-Many with **Tags** and **Organizations**.
+
+### Organizations
+```
+id (PK)
+name
+description
+homepage_url
+created_at (DateTime)
+updated_at (DateTime)
+```
+- Many-to-Many with **Stipends**.
+
+### Tags
+```
+id (PK)
+name
+category
+```
+- Many-to-Many with **Stipends**.
+
+### Users
+```
+id (PK)
+username
+password_hash
+email
+is_admin (Boolean)
+created_at (DateTime)
+updated_at (DateTime)
+```
+- Basic authentication for admin interface.
+
+### Bots
+```
+id (PK)
+name
+description
+status
+last_run (DateTime)
+error_log (Text)
+```
+
+### Notifications
+```
+id (PK)
+message
+type
+read_status (Boolean)
+created_at (DateTime)
+```
+- Used for alerting admin about flagged stipends, errors, etc.
+
+---
+
+## 6. Routes
+
+Below is a partial list for clarity. `public` routes are accessible to all, while `admin` routes require authentication.
+
+### Public Routes
+| Endpoint           | Methods       | URL                  | Notes                                          |
+|--------------------|--------------|----------------------|------------------------------------------------|
+| `public.index`     | GET          | `/`                  | Homepage, highlights popular stipends          |
+| `public.filter_stipends` | POST   | `/filter`            | HTMX filtering, returns partial updates        |
+| `public.login`     | GET, POST    | `/login`             | Basic login form                               |
+| `public.logout`    | GET          | `/logout`            | Log out, obviously                             |
+| `public.register`  | GET, POST    | `/register`          | User registration form                         |
+
+### Admin Routes
+| Endpoint                    | Methods       | URL                                       | Notes                                      |
+|----------------------------|--------------|-------------------------------------------|--------------------------------------------|
+| `admin.dashboard.dashboard`| GET          | `/admin/dashboard/`                       | Admin home page                            |
+| `admin.stipend.index`      | GET          | `/admin/stipends/`                        | List all stipends                          |
+| `admin.stipend.create`     | GET, POST    | `/admin/stipends/<int:id>/edit`           | Create or edit stipend                    |
+| `admin.stipend.delete`     | POST         | `/admin/stipends/<int:id>/delete`         | Delete a stipend                          |
+| `admin.tag.index`          | GET          | `/admin/tags/`                            | List tags                                  |
+| `admin.tag.create`         | GET, POST    | `/admin/tags/create`                      | Create new tag                             |
+| `admin.tag.delete`         | POST         | `/admin/tags/<int:id>/delete`             | Delete a tag                               |
+| `admin.bot.index`          | GET          | `/admin/bots/`                            | List bots (tagging, scraping, etc.)        |
+| `admin.bot.create`         | GET, POST    | `/admin/bots/create`                      | Create new bot                             |
+| `admin.bot.run`            | POST         | `/admin/bots/<int:id>/run`                | Run a bot immediately                     |
+| `admin.bot.schedule`       | POST         | `/admin/bots/<int:id>/schedule`           | Schedule a bot to run later               |
+| `admin.user.index`         | GET          | `/admin/users/`                           | List all users                             |
+| `admin.user.create`        | GET, POST    | `/admin/users/create`                     | Create a user                              |
+| ...                        | ...          | ...                                       | ...                                        |
+
+(Additional endpoints exist for organizations and advanced tasks, but you get the idea, sir.)
+
+---
+
+## 7. Testing
+
+### Framework & Tools
+- **`pytest`**: Main test runner.  
+- **`pytest-cov`**: Coverage reports. Aim for 80%+ coverage.  
+- **`freezegun`**: For mocking date/time in tests—because we can’t rely on your system clock.  
+
+### Strategy
+1. **Unit Tests**: Small, isolated tests for services, models, and utilities.  
+2. **Integration Tests**: Check routes and DB interactions (in-memory DB or test DB).  
+3. **End-to-End Tests**: Full user flows, ensuring forms and HTMX partial updates behave.  
+4. **Dependency Verification**: A pre-test script that checks if `pytest` and other packages are installed.
+
+### Coverage
+- Focus heavily on date/time validations, leap years, invalid formats, etc.  
+- Stipend creation, editing, and deletion (both success and failure scenarios).  
+- Admin flows, e.g., creating bots, running them, scheduling them.  
+- Don’t forget negative tests: what if the user tries to pass a string instead of a date?
+
+---
+
+## 8. Recent Key Updates
+
+1. **Validation Improvements**  
+   - **CustomDateTimeField** now defaults to `InputRequired()` if no validators are passed.  
+   - Centralized error messages in `app/constants.py`.  
+   - Comprehensive date/time edge-case tests (leap years, invalid hours, etc.).
+
+2. **Dependency Management**  
+   - `pytest` added to `requirements.txt`.  
+   - Pre-test check to ensure everything is installed before the test suite runs.
+
+3. **Code Refactoring**  
+   - Moved shared logic to `app/common/utils.py` to fix circular-import nightmares.  
+   - `create_limit` property in `BaseService` now properly defined with getter/setter methods.
+
+4. **Lessons Learned**  
+   - Avoid hardcoding error messages all over the place; keep them in `app/constants.py`.  
+   - Always define a property with `@property` before using `@<property>.setter`.  
+   - Thorough testing of date/time validation is essential—particularly with user-submitted data.
+
+---
+
+## 9. Implementation Details
+
+### Key Classes & Functions
+
+- **`CustomDateTimeField`**  
   ```python
   class CustomDateTimeField(Field):
       def __init__(self, label=None, validators=None, **kwargs):
           if validators is None:
               validators = [InputRequired()]  # Default validator
           super().__init__(label=label, validators=validators, **kwargs)
+          # Additional date/time parsing logic...
   ```
-- **Best Practices**:
-  - Ensure custom fields properly handle all arguments passed to them
-  - Provide default validators when none are specified
-  - Avoid passing duplicate validators in form implementations
+  - Ensures any form field based on this class has at least one validator by default.
 
-### Circular Imports
-- **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
-- **Solution**: Refactored shared functionality into a separate module (e.g., `app/common/utils.py`) and used lazy imports where necessary.
-- **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
-
-### Testing Setup
-- **Issue**: Missing dependencies caused test failures instead of graceful skips.
-- **Solution**: Refactored `verify_dependencies()` in `tests/conftest.py` to skip tests instead of failing the suite.
-- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
-
-### Property Implementation
-- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
-- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
+- **`BaseService`**  
   ```python
   class BaseService:
       def __init__(self):
@@ -109,1021 +254,112 @@
 
       @create_limit.setter
       def create_limit(self, value):
+          # Insert any validation or logging if needed
           self._create_limit = value
   ```
-- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
+  - Common parent for various specialized services (StipendService, TagService, etc.).
 
-### Testing Improvements
-- Added comprehensive test coverage for date/time validation
-- Verified edge cases in date/time validation (e.g., leap years, invalid time components)
-- Improved test isolation and reliability
-
-#### **Lessons Learned**
-1. **Custom Field Implementation**:
-   - Always ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
-   - Provide default validators if none are passed:
-     ```python
-     if validators is None:
-         validators = [InputRequired()]
-     ```
-
-2. **Dependency Management**:
-   - Always verify dependencies are installed before running tests or the application.
-   - Add a pre-test check to ensure all required dependencies are installed.
-
-3. **Circular Imports**:
-   - Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
-- **Validation Improvements**:
-  - Fixed `CustomDateTimeField` initialization to handle `validators` argument correctly with default InputRequired().
-  - Added comprehensive testing setup with `pytest` installation and verification steps.
-  - Added centralized error messages in app/constants.py for date/time validation.
-  - Added comprehensive tests for edge cases including leap years and invalid times.
-  - Standardized error messages for date/time fields using `app/constants.py`.
-  - Added comprehensive tests for edge cases in date/time validation.
-  - Refactored shared functionality into `app/common/utils.py`.
-  - Updated `create_limit` to be a proper property with getter/setter.
-
-## Lessons Learned
-
-### Dependency Management
-- **Issue**: Tests failed because `pytest` was not installed in the virtual environment.
-- **Solution**: Installed `pytest` and verified dependencies:
-  ```bash
-  pip install pytest
-  pip show pytest
-  ```
-- **Best Practice**: Always verify dependencies are installed before running tests or the application.
-
-### CustomDateTimeField Implementation
-- **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
-- **Solution**: Updated the `__init__` method to properly handle the `validators` argument with a default `InputRequired()` validator:
-  ```python
-  class CustomDateTimeField(Field):
-      def __init__(self, label=None, validators=None, **kwargs):
-          if validators is None:
-              validators = [InputRequired()]  # Default validator
-          super().__init__(label=label, validators=validators, **kwargs)
-  ```
-- **Best Practices**:
-  - Use centralized error messages from `app/constants.py`
-  - Avoid passing `validators` explicitly in forms unless needed
-  - Example form usage:
-    ```python
-    application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
-    ```
-- **Best Practice**: Ensure custom fields properly handle all arguments passed to them.
+- **`app/common/utils.py`**  
+  - Shared methods that multiple modules need, e.g., `init_admin_user()`, date/time helpers, or wrapper functions to reduce code duplication.
 
 ### Circular Imports
-- **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
-- **Solution**: Refactored shared functionality into a separate module (e.g., `app/common/utils.py`) and used lazy imports where necessary.
-- **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
-
-### Testing Setup
-- **Issue**: Missing dependencies caused test failures instead of graceful skips.
-- **Solution**: Refactored `verify_dependencies()` in `tests/conftest.py` to skip tests instead of failing the suite.
-- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
-
-### Recent Issues and Fixes
-1. **`CustomDateTimeField` Initialization**:
-   - **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
-   - **Solution**: Updated the `__init__` method to properly handle the `validators` argument:
-     ```python
-     class CustomDateTimeField(Field):
-         def __init__(self, label=None, validators=None, **kwargs):
-             if validators is None:
-                 validators = [InputRequired()]  # Default validator
-             super().__init__(label=label, validators=validators, **kwargs)
-     ```
-   - **Best Practice**: Ensure custom fields properly handle all arguments passed to them.
-
-2. **Dependency Management**:
-   - **Issue**: Tests failed because `pytest` was not installed in the virtual environment.
-   - **Solution**: Installed `pytest` and verified dependencies:
-     ```bash
-     pip install pytest
-     pip show pytest
-     ```
-   - **Best Practice**: Always verify dependencies are installed before running tests or the application.
-
-3. **Circular Imports**:
-   - **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
-   - **Solution**: Refactored shared functionality into a separate module (e.g., `app/common/utils.py`) and used lazy imports where necessary.
-   - **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
-
-### Key Takeaways for Next Coding Session
-1. **Validation Logic**:
-   - Always verify the data type of form field inputs before applying validation logic.
-   - Use centralized error messages from `app/constants.py` for consistency.
-
-2. **Testing**:
-   - Test edge cases thoroughly, especially for date/time validation.
-   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
-
-3. **Error Handling**:
-   - Log validation errors with context for easier debugging.
-   - Provide clear, user-friendly error messages for validation failures.
-
-4. **Code Organization**:
-   - Keep validation logic modular and reusable.
-   - Avoid code duplication by using base classes and utilities.
-
-### Dependency Management
-- **Issue**: Tests failed because `pytest` and other dependencies were not installed.
-- **Solution**: Always verify dependencies are installed by running:
-  ```bash
-  pip install -r requirements.txt
-  ```
-- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
-
-### Property Implementation
-- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
-- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
-  ```python
-  class BaseService:
-      def __init__(self):
-          self._create_limit = None
-
-      @property
-      def create_limit(self):
-          return self._create_limit
-
-      @create_limit.setter
-      def create_limit(self, value):
-          self._create_limit = value
-  ```
-- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
-
-### Circular Imports
-- **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
-- **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
-- **Dependency Management**:
-  - Always verify dependencies are installed before running tests or the application.
-- **Property Implementation**:
-  - Always define properties correctly with `@property` and `@<property>.setter`.
-- **Circular Imports**:
-  - Refactor shared functionality into separate modules and use lazy imports to avoid circular dependencies.
-
-## Lessons Learned
-
-### CustomDateTimeField Initialization
-- **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
-- **Solution**: Updated the `__init__` method to properly handle the `validators` argument:
-  ```python
-  class CustomDateTimeField(Field):
-      def __init__(self, label=None, validators=None, **kwargs):
-          if validators is None:
-              validators = [InputRequired()]  # Default validator
-          super().__init__(label=label, validators=validators, **kwargs)
-  ```
-- **Best Practice**: Ensure custom fields properly handle all arguments passed to them.
-
-### Dependency Management
-- **Issue**: Tests failed because `pytest` was not installed in the virtual environment.
-- **Solution**: Installed `pytest` and added it to `requirements.txt`.
-- **Best Practice**: Always verify dependencies are installed before running tests or the application.
-
-### Circular Imports
-- **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
-- **Solution**: Refactored shared functionality into a separate module (e.g., `app/common/utils.py`) and used lazy imports where necessary.
-- **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
-
-### Testing Setup
-- **Issue**: Missing dependencies caused test failures instead of graceful skips.
-- **Solution**: Refactored `verify_dependencies()` in `tests/conftest.py` to skip tests instead of failing the suite.
-- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
-
-### Key Takeaways for Next Coding Session
-1. **Validation Logic**:
-   - Always verify the data type of form field inputs before applying validation logic.
-   - Use centralized error messages from `app/constants.py` for consistency.
-
-2. **Testing**:
-   - Test edge cases thoroughly, especially for date/time validation.
-   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
-
-3. **Error Handling**:
-   - Log validation errors with context for easier debugging.
-   - Provide clear, user-friendly error messages for validation failures.
-
-4. **Code Organization**:
-   - Keep validation logic modular and reusable.
-   - Avoid code duplication by using base classes and utilities.
-
-### Dependency Management
-- **Issue**: Tests failed because `pytest` and other dependencies were not installed.
-- **Solution**: Always verify dependencies are installed by running:
-  ```bash
-  pip install -r requirements.txt
-  ```
-- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
-
-### Property Implementation
-- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
-- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
-  ```python
-  class BaseService:
-      def __init__(self):
-          self._create_limit = None
-
-      @property
-      def create_limit(self):
-          return self._create_limit
-
-      @create_limit.setter
-      def create_limit(self, value):
-          self._create_limit = value
-  ```
-- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
-
-### Circular Imports
-- **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
-- **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
-
-### CustomDateTimeField Initialization
-- **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
-- **Solution**: Updated the `__init__` method to properly handle the `validators` argument:
-  ```python
-  class CustomDateTimeField(Field):
-      def __init__(self, label=None, validators=None, **kwargs):
-          if validators is None:
-              validators = [InputRequired()]  # Default validator
-          super().__init__(label=label, validators=validators, **kwargs)
-  ```
-- **Best Practice**: Ensure custom fields properly handle all arguments passed to them.
-
-### Key Takeaways for Next Coding Session
-1. **Validation Logic**:
-   - Always verify the data type of form field inputs before applying validation logic.
-   - Ensure compatibility with parent classes when overriding attributes or methods.
-   - Use centralized error messages from `app/constants.py` for consistency.
-
-2. **Testing**:
-   - Test edge cases thoroughly, especially for date/time validation.
-   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
-
-3. **Error Handling**:
-   - Log validation errors with context for easier debugging.
-   - Provide clear, user-friendly error messages for validation failures.
-
-4. **Code Organization**:
-   - Keep validation logic modular and reusable.
-   - Avoid code duplication by using base classes and utilities.
-
-## Project Overview
-
-The **Stipend Discovery Website** is a Flask-based web application that helps users discover and filter stipends in real-time. It employs HTMX for dynamic interactions and offers a mobile-first, responsive design. The admin interface supports secure CRUD operations on stipends, tags, organizations, and users. Bots handle scraping, tagging, updates, and validation, streamlining data maintenance.
+- To avoid circular references (e.g., `app/__init__.py` importing a service that also imports `app`):
+  - Put widely used functions in `app/common/utils.py`.
+  - Use lazy imports inside functions that only need certain dependencies at runtime.
 
 ---
 
-## Key Features
-
-- **User-Facing Discovery**: Filter stipends by tags in real time using HTMX.  
-- **Admin Interface**: Secure admin portal for CRUD operations on stipends, tags, organizations, users, and bot configuration.  
-- **Automated Bots**: Handles scraping, tagging, data updates, and validation.  
-- **Dynamic Content Updates**: Seamless, AJAX-like interactions without full-page reloads.  
-- **Startup Quality Checks**: Automated tests run on startup to ensure code health.
-
----
-
-## Technical Stack
-
-**Backend**:  
-- Flask (Python)  
-- SQLite (dev) / PostgreSQL (prod)  
-- Alembic for migrations  
-- HTMX for dynamic interaction
-
-## Bots
-- Core CRUD and scheduling implemented
-- Admin interface for bot management
-- Basic scheduling operational
-
-**Frontend**:  
-- HTML Templates  
-- CSS (mobile-first, responsive)  
-- JavaScript + HTMX
-
-**Testing**:  
-- `pytest`, `pytest-cov`, `freezegun`  
-- Verify installation with `pip show freezegun`
-- Unit, integration, end-to-end tests
-
-**Security**:  
-- Basic auth for admin  
-- Data integrity checks (flagging invalid data instead of deletion)  
-- Conservative rate limiting for scraping
+## 10. Security Considerations
+- **Admin Routes**: Basic auth or token-based. Only logged-in, authorized users can access `/admin/...` endpoints.  
+- **Password Hashing**: Use salted hashes (e.g., `bcrypt`). No plain-text nonsense, sir.  
+- **Input Validation**: All forms should sanitize user input to prevent injection attacks.  
+- **Rate Limiting**: For scraping and repeated requests.  
+- **Regular Updates**: Keep dependencies updated to patch vulnerabilities.
 
 ---
 
-## Database Schema
+## 11. System Flow
 
-**Stipends**:  
-- `id`, `name`, `summary`, `description`, `homepage_url`, `application_procedure`, `eligibility_criteria`, `application_deadline`, `open_for_applications`, `created_at`, `updated_at`  
-- M2M with `Tags` and `Organizations`
-
-**Organizations**:  
-- `id`, `name`, `description`, `homepage_url`, `created_at`, `updated_at`
-
-**Tags**:  
-- `id`, `name`, `category`  
-- M2M with `Stipends`
-
-**Users**:  
-- `id`, `username`, `password_hash`, `email`, `is_admin`, `created_at`, `updated_at`
-
-**Bots**:  
-- `id`, `name`, `description`, `status`, `last_run`, `error_log`
-
-**Notifications**:  
-- `id`, `message`, `type`, `read_status`, `created_at`
+1. **Bots** scrape or update stipends in the background.  
+2. **Users** visit the site, apply filters via HTMX for real-time updates.  
+3. **Admins** log in, manage stipends, tags, organizations, users, and handle flagged data.  
+4. **Notifications** alert admins about any errors or flagged entries.  
+5. **Tests** run (preferably in CI) to confirm everything is in tip-top shape.
 
 ---
 
-## Lessons Learned
-
-### Dependency Management
-- **Issue**: Tests failed because `pytest` and other dependencies were not installed.
-- **Solution**: Always verify dependencies are installed by running:
-  ```bash
-  pip install -r requirements.txt
-  ```
-- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
-
-### Property Implementation
-- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
-- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
-  ```python
-  class BaseService:
-      def __init__(self):
-          self._create_limit = None
-
-      @property
-      def create_limit(self):
-          return self._create_limit
-
-      @create_limit.setter
-      def create_limit(self, value):
-          self._create_limit = value
-  ```
-- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
-
-### Circular Imports
-- **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
-- **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
-
-### CustomDateTimeField Initialization
-- **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
-- **Solution**: Updated the `__init__` method to properly handle the `validators` argument:
-  ```python
-  class CustomDateTimeField(Field):
-      def __init__(self, label=None, validators=None, **kwargs):
-          if validators is None:
-              validators = [InputRequired()]  # Default validator
-          super().__init__(label=label, validators=validators, **kwargs)
-  ```
-- **Best Practice**: Ensure custom fields properly handle all arguments passed to them.
-
-### Key Takeaways for Next Coding Session
-1. **Validation Logic**:
-   - Always verify the data type of form field inputs before applying validation logic.
-   - Ensure compatibility with parent classes when overriding attributes or methods.
-   - Use centralized error messages from `app/constants.py` for consistency.
-
-2. **Testing**:
-   - Test edge cases thoroughly, especially for date/time validation.
-   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
-
-3. **Error Handling**:
-   - Log validation errors with context for easier debugging.
-   - Provide clear, user-friendly error messages for validation failures.
-
-4. **Code Organization**:
-   - Keep validation logic modular and reusable.
-   - Avoid code duplication by using base classes and utilities.
-
-### Testing Improvements
-- Added comprehensive test coverage for date/time validation.
-- Verified edge cases in date/time validation (e.g., leap years, invalid time components).
-- Improved test isolation and reliability.
-
-### Key Takeaways for Next Coding Session
-1. **Circular Imports**:
-   - Refactor shared functionality into separate modules and use lazy imports to avoid circular dependencies.
-
-2. **Dependency Management**:
-   - Always verify dependencies are installed before running tests or the application.
-
-3. **Property Implementation**:
-   - Always define properties correctly with `@property` and `@<property>.setter`.
-
-4. **Validation Logic**:
-   - Consolidate and test validation logic for edge cases, especially for date/time fields.
-
-5. **Testing**:
-   - Add comprehensive tests for all critical functionality, including edge cases.
-- **Issue**: Circular imports caused startup errors (e.g., `ModuleNotFoundError`).
-- **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
-- **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
-
-### Property Implementation
-- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
-- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
-  ```python
-  class BaseService:
-      def __init__(self):
-          self._create_limit = None
-
-      @property
-      def create_limit(self):
-          return self._create_limit
-
-      @create_limit.setter
-      def create_limit(self, value):
-          self._create_limit = value
-  ```
-- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
-
-### Dependency Management
-- **Issue**: Tests failed because `pytest` and other dependencies were not installed.
-- **Solution**: Always verify dependencies are installed by running:
-  ```bash
-  pip install -r requirements.txt
-  ```
-- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
-
-### Dependency Management
-- **Issue**: Tests failed because `freezegun` and `Flask` were listed in `requirements.txt` but not installed.
-- **Solution**: Always verify dependencies are installed by running:
-  ```bash
-  pip install -r requirements.txt
-  ```
-- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
-
-### Package Structure
-- **Issue**: The `app/forms` directory was not recognized as a package because it lacked an `__init__.py` file.
-- **Solution**: Added `__init__.py` to `app/forms`:
-  ```bash
-  touch app/forms/__init__.py
-  ```
-- **Best Practice**: Always include `__init__.py` in Python package directories, even if empty.
-
-### Circular Imports
-- **Issue**: Circular imports caused startup errors (e.g., `ModuleNotFoundError`).
-- **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
-
-### Package Structure
-- **Issue**: Directories like `app/common` and `app/forms` were not recognized as packages.
-- **Solution**: Add `__init__.py` files to make directories recognizable as Python packages:
-  ```bash
-  touch app/common/__init__.py
-  touch app/forms/__init__.py
-  ```
-- **Best Practice**: Always include `__init__.py` in Python package directories, even if empty.
-
-### Testing Improvements
-- **Issue**: Missing dependencies caused test failures instead of graceful skips.
-- **Solution**: Refactor `verify_dependencies()` in `tests/conftest.py` to skip tests instead of failing the suite.
-- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
-  ```python
-  class BaseService:
-      def __init__(self):
-          self._create_limit = None  # Initialize the private attribute
-
-      @property
-      def create_limit(self):
-          """Getter for create_limit."""
-          return self._create_limit
-
-      @create_limit.setter
-      def create_limit(self, value):
-          """Setter for create_limit."""
-          self._create_limit = value
-  ```
-- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
-
-### Circular Imports
-- **Issue**: Circular dependencies were identified in the import chain (`app/__init__.py` → `app/utils.py` → `app/services/bot_service.py` → `app/services/base_service.py`).
-- **Solution**: 
-  1. Refactor shared functionality into a separate module (e.g., `app/common/utils.py`)
-  2. Use lazy imports where necessary
-  3. Example refactoring:
-     ```python
-     # Move shared code to app/common/utils.py
-     def init_admin_user():
-         # Implementation
-         pass
-     ```
-  4. Example lazy import:
-     ```python
-     def some_function():
-         from app.services.bot_service import run_bot  # Lazy import
-         run_bot()
-     ```
-
-### Dependency Management
-- **Issue**: Tests failed because `freezegun` was listed in `requirements.txt` but not installed.
-- **Solution**: Always verify dependencies are installed by running:
-  ```bash
-  pip install -r requirements.txt
-  ```
-- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
-
-1. **Property Implementation**:
-   - The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
-   - **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
-     ```python
-     class BaseService:
-         def __init__(self):
-             self._create_limit = None  # Initialize the private attribute
-
-         @property
-         def create_limit(self):
-             """Getter for create_limit."""
-             return self._create_limit
-
-         @create_limit.setter
-         def create_limit(self, value):
-             """Setter for create_limit."""
-             self._create_limit = value
-     ```
-   - **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
-
-2. **Dependency Management**:
-   - Tests failed because `freezegun` was listed in `requirements.txt` but not installed.
-   - **Solution**: Always verify dependencies are installed by running:
-     ```bash
-     pip install -r requirements.txt
-     ```
-   - **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
-
-3. **Circular Imports**:
-   - Circular dependencies were identified in the import chain (`app/utils.py` → `app/services/bot_service.py` → `app/services/base_service.py`).
-   - **Solution**: Refactor shared functionality into a separate module (e.g., `app/common/utils.py`) and use lazy imports where necessary.
-- **Solution**: Refactor `create_limit` into a proper property with a getter and setter:
-  ```python
-  class BaseService:
-      def __init__(self):
-          self._create_limit = None  # Initialize the private attribute
-
-      @property
-      def create_limit(self):
-          """Getter for create_limit."""
-          return self._create_limit
-
-      @create_limit.setter
-      def create_limit(self, value):
-          """Setter for create_limit."""
-          self._create_limit = value
-  ```
-- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
-
-### Dependency Management
-- **Issue**: Tests failed because `freezegun` was listed in `requirements.txt` but not installed.
-- **Solution**: Always verify dependencies are installed by running:
-  ```bash
-  pip install -r requirements.txt
-  ```
-- **Best Practice**:
-  - Add a pre-test check to ensure all required dependencies are installed.
-  - Document the setup process to avoid similar issues in the future.
-
-### Property Implementation
-- **Issue**: The `create_limit` function in `BaseService` was incorrectly used as a setter without being defined as a property.
-- **Solution**: Refactor `create_limit` into a proper property with a getter and setter:
-  ```python
-  class BaseService:
-      def __init__(self):
-          self._create_limit = None  # Initialize the private attribute
-
-      @property
-      def create_limit(self):
-          """Getter for create_limit."""
-          return self._create_limit
-
-      @create_limit.setter
-      def create_limit(self, value):
-          """Setter for create_limit."""
-          self._create_limit = value
-  ```
-- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
-
-### Testing Improvements
-- Added graceful handling of missing dependencies in test files.
-- Improved error messages for missing packages.
-- Added a dependency verification test (`test_dependencies.py`) to catch missing packages early.
-
-### Code Refactoring
-- Refactored test files to handle missing dependencies without failing the entire test suite.
-- Centralized error messages in `app/constants.py` for consistency.
-
-### Error Handling
-- Ensure all error messages are centralized in `app/constants.py` and used consistently across the codebase.
-- Improved validation error reporting for better debugging.
-
-### Key Takeaways
-1. **Validation Logic**:
-   - Always verify the data type of form field inputs before applying validation logic.
-   - Ensure compatibility with parent classes when overriding attributes or methods.
-   - Use centralized error messages from `app/constants.py` for consistency.
-
-2. **Testing**:
-   - Test edge cases thoroughly, especially for date/time validation.
-   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
-
-3. **Error Handling**:
-   - Log validation errors with context for easier debugging.
-   - Provide clear, user-friendly error messages for validation failures.
-
-4. **Code Organization**:
-   - Keep validation logic modular and reusable.
-   - Avoid code duplication by using base classes and utilities.
-1. **Validation Logic**:
-   - Always verify the data type of form field inputs before applying validation logic.
-   - Ensure compatibility with parent classes when overriding attributes or methods.
-   - Use centralized error messages from `app/constants.py` for consistency.
-
-2. **Testing**:
-   - Test edge cases thoroughly, especially for date/time validation.
-   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
-
-3. **Error Handling**:
-   - Log validation errors with context for easier debugging.
-   - Provide clear, user-friendly error messages for validation failures.
-
-4. **Code Organization**:
-   - Keep validation logic modular and reusable.
-   - Avoid code duplication by using base classes and utilities.
-
-## System Components
-
-**Database Initialization**:  
-- `app.py` sets up the database, runs migrations, creates default admin user.
-
-**Core Architecture**:
-- BaseRouteController handles common CRUD operations for all admin routes
-- BaseService provides common CRUD operations for all services
-- BaseCRUDTest provides common test cases for all services
-
-**User-Facing Pages (Public Routes)**:  
-- Homepage: Popular stipends, tag filters  
-- Stipend Search: HTMX-powered filtering and keyword search  
-- Details Page: Full stipend info, eligibility, related orgs
-
-**Admin Section**:  
-
-- Basic auth login  
-- CRUD routes for stipends, tags, organizations, users, bots  
-- Bot management dashboard, notifications for flagged entries
-
-**Automated Bots**:  
-- `TagBot`, `UpdateBot`, `ReviewBot`  
-- Admin-scheduled runs, logs, error reporting
+## 12. Coding Conventions
+1. **PEP 8** for Python code style.  
+2. **Docstrings** and meaningful variable names.  
+3. **DRY Principle**: Consolidate repeated logic in `BaseService` or `app/common/utils.py`.  
+4. **Log Errors**: No silent pass statements, sir—if something breaks, log it.  
+5. **Test-Driven Development (TDD)** (if time and sanity permit).
 
 ---
 
-## Coding Conventions
-
-- **PEP 8**: Follow Python PEP 8 style  
-- **Modularity**: Keep code small and focused  
-- **Clear Separation**: Models, services, routes, and templates well-structured  
-- **Documentation**: Docstrings, comments, and meaningful names
-
----
-
-## Coding Practices
-
-### Dependency Management
-1. **Pre-Test Verification**:
-   - Add pre-test verification of dependencies
-   - Use try-except blocks to handle missing dependencies gracefully
-   - Example test:
-     ```python
-     def test_dependencies():
-         try:
-             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-         except subprocess.CalledProcessError:
-             pytest.fail("Failed to install dependencies")
-     ```
-
-2. **Graceful Handling**:
-   - Use try-except blocks to handle missing dependencies in test files.
-   - Skip tests that require missing packages instead of failing the entire suite.
-
-### Property Implementation
-1. **Define Properties Correctly**:
-   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
-   - Example:
-     ```python
-     class MyClass:
-         def __init__(self):
-             self._my_property = None
-
-         @property
-         def my_property(self):
-             return self._my_property
-
-         @my_property.setter
-         def my_property(self, value):
-             self._my_property = value
-     ```
-
-2. **Avoid Direct Attribute Access**:
-   - Use properties to encapsulate attribute access and modification.
-   - This ensures consistent behavior and validation.
-
-3. **Document Properties**:
-   - Add docstrings to properties and setters to clarify their purpose and behavior.
-
-### Dependency Management
-1. **Pre-Test Verification**:
-   - Add a test to verify all dependencies are installed before running the test suite.
-   - Example:
-     ```python
-     def test_dependencies():
-         try:
-             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-         except subprocess.CalledProcessError:
-             pytest.fail("Failed to install dependencies")
-     ```
-
-2. **Graceful Handling**:
-   - Use try-except blocks to handle missing dependencies in test files.
-   - Skip tests that require missing packages instead of failing the entire suite.
-
-### Property Implementation
-1. **Define Properties Correctly**:
-   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
-   - Example:
-     ```python
-     class MyClass:
-         def __init__(self):
-             self._my_property = None
-
-         @property
-         def my_property(self):
-             return self._my_property
-
-         @my_property.setter
-         def my_property(self, value):
-             self._my_property = value
-     ```
-
-2. **Avoid Direct Attribute Access**:
-   - Use properties to encapsulate attribute access and modification.
-   - This ensures consistent behavior and validation.
-
-3. **Document Properties**:
-   - Add docstrings to properties and setters to clarify their purpose and behavior.
-
-### Dependency Management
-1. **Pre-Test Verification**:
-   - Add a test to verify all dependencies are installed before running the test suite.
-   - Example:
-     ```python
-     def test_dependencies():
-         try:
-             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-         except subprocess.CalledProcessError:
-             pytest.fail("Failed to install dependencies")
-     ```
-
-2. **Graceful Handling**:
-   - Use try-except blocks to handle missing dependencies in test files.
-   - Skip tests that require missing packages instead of failing the entire suite.
-
-### Circular Imports
-- Avoid circular dependencies by refactoring shared functionality into separate modules.
-- Use lazy imports or dependency injection where necessary.
-
-1. **Small, Frequent Commits** with descriptive messages  
-2. **Test-Driven Development** where possible  
-3. **Error Handling & Logging**: Don't just `print` stack traces  
-4. **Code Reviews**: Peer review before merging  
-5. **DRY Principle**: Reuse code through base classes and utilities  
-6. **Shared Test Utilities**: Use common test helpers and base classes  
-7. **Service Layer Consistency**: Follow base service patterns
+## 13. Deployment
+- **Docker** is recommended for containerizing.  
+- **PostgreSQL** for production DB.  
+- **Alembic** for DB migrations.  
+- Consider a platform service (Heroku, AWS, etc.) for easy scaling.  
+- Set up scheduled tasks (cron/worker) to run bots periodically.
 
 ---
 
-## Testing Specification
-
-- `pytest` and `pytest-cov` for test execution and coverage  
-- Aim for **80%+** coverage  
-- Test hierarchy: unit > integration > end-to-end  
-- Mirror app structure in `tests/`
-- All flash messages must use messages defined in app\constants.py - create new additions here when needed. All tests should evaluate the constant used, not the string itself.
-
-Use fixtures, in-memory DB, and the Flask test client for isolation.
+## 14. Collaboration Guidelines
+- **Feature Branches**: Keep main branches stable.  
+- **Pull Requests**: Code reviews are mandatory.  
+- **Commit Messages**: Descriptive (“Fix X bug in date/time validation”), not “Fix stuff.”  
+- **Documentation**: Keep `README.md` up to date, including environment setup steps.
 
 ---
 
-## Environment and Configuration
+## 15. Lessons Learned & Best Practices
 
-- `.env.example` template for environment variables  
-- Load vars with `python-dotenv`  
-- Use distinct configs for dev, test, production  
-- Initialize default admin user from env vars
+1. **Custom Field Implementation**  
+   - Default validators for less chance of forgetting.  
+   - Keep your constructor flexible to avoid TypeErrors.
 
-Variables like `SECRET_KEY`, `DATABASE_URL`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_EMAIL`, and `FLASK_CONFIG` should be set in `.env`.
+2. **Dependency Management**  
+   - Test for missing packages before you run your main test suite (a single missing `pytest` can ruin your day).  
+   - Document installation steps thoroughly.
 
----
+3. **Circular Imports**  
+   - Create dedicated modules for utilities, or use lazy imports.  
+   - If you’re messing with your import statements too often, refactor.
 
-## Security Considerations
+4. **Property Implementation**  
+   - `@property` first, then `@<property>.setter`.  
+   - Validate in the setter if needed; store in a private attribute.
 
-- Auth-check all admin routes  
-- Validate & sanitize inputs  
-- Keep dependencies up-to-date  
-- Store passwords as salted hashes (no plain-text nonsense, sir)
+5. **Error Handling**  
+   - Keep all messages in `app/constants.py`. Avoid the dreaded “string mismatch” in tests.  
+   - Provide enough context in logs to debug quickly.
 
----
-
-## System Flow
-
-1. **Bots Update Data**: Populate and refine stipend data  
-2. **Users Interact**: Filter and view stipends in real-time via HTMX  
-3. **Admins Manage**: Add/edit stipends, handle flagged data, schedule bots
-
----
-
-## Collaboration Guidelines
-
-- **Branching**: Feature branches for new functionality  
-- **Pull Requests**: Required code reviews  
-- **Commit Messages**: Descriptive, small increments
+6. **Testing**  
+   - Edge cases for date/time (lookin’ at you, leap years).  
+   - Use mocking (like `freezegun`) for deterministic time-based tests.
 
 ---
 
-## Documentation
+## 16. Key Takeaways for the Next Coding Session
 
-- **README.md**: Overview, setup steps, dependency list  
-- **CONVENTIONS.md**: Coding standards  
-- **Docstrings & Comments**: For complex logic
+1. **Validation Logic**  
+   - Confirm data types before applying validation.  
+   - Centralize error messages, stay consistent.
 
----
+2. **Testing**  
+   - More edge-case coverage.  
+   - Keep a good variety of unit, integration, and E2E tests.
 
-## routes
-Endpoint                     Methods    Rule
----------------------------  ---------  ------------------------------------
-admin.bot.create             GET, POST  /admin/bots/create
-admin.bot.delete             POST       /admin/bots/<int:id>/delete
-admin.bot.edit               GET, POST  /admin/bots/<int:id>/edit
-admin.bot.index              GET        /admin/bots/
-admin.bot.run                POST       /admin/bots/<int:id>/run
-admin.bot.schedule           POST       /admin/bots/<int:id>/schedule       
-admin.dashboard.dashboard    GET        /admin/dashboard/
-admin.organization.create    GET, POST  /admin/organizations/create
-admin.organization.delete    POST       /admin/organizations/<int:id>/delete
-admin.organization.edit      GET, POST  /admin/organizations/<int:id>/edit  
-admin.organization.index     GET        /admin/organizations/
-admin.organization.paginate  GET        /admin/organizations/paginate       
-admin.organization.view      GET        /admin/organizations/<int:id>       
-admin.stipend.create         GET, POST  /admin/stipends/<int:id>/edit       
-admin.stipend.delete         POST       /admin/stipends/<int:id>/delete     
-admin.stipend.edit           GET, POST  /admin/stipends/<int:id>/edit
-admin.stipend.index          GET        /admin/stipends/
-admin.stipend.paginate       GET        /admin/stipends/paginate
-admin.tag.create             GET, POST  /admin/tags/create
-admin.tag.delete             POST       /admin/tags/<int:id>/delete
-admin.tag.edit               GET, POST  /admin/tags/<int:id>/edit
-admin.tag.index              GET        /admin/tags/
-admin.tag.paginate           GET        /admin/tags/paginate
-admin.user.create            GET, POST  /admin/users/create
-admin.user.delete            POST       /admin/users/<int:id>/delete
-admin.user.edit              GET, POST  /admin/users/<int:id>/edit
-admin.user.edit_profile      GET, POST  /admin/users/edit_profile
-admin.user.index             GET        /admin/users/
-admin.user.reset_password    POST       /admin/users/<int:id>/reset_password
-admin.user.toggle_active     POST       /admin/users/<int:id>/toggle_active
-public.filter_stipends       POST       /filter
-public.index                 GET        /
-public.login                 GET, POST  /login
-public.logout                GET        /logout
-public.register              GET, POST  /register
-static                       GET        /static/<path:filename>
-user.edit_profile            GET, POST  /user/profile/edit
-user.profile                 GET        /user/profile
+3. **Error Handling & Logging**  
+   - Don’t just “print” stuff—log it with context.  
+   - Make error messages user-friendly (or at least developer-friendly).
+
+4. **Code Organization**  
+   - Keep modules small and logical.  
+   - Use base classes and utilities to avoid duplication.
 
 ---
 
-## Additional Components
-
-- **Logging & Monitoring**: Use Python’s `logging`. Consider log rotation.  
-- **Deployment**: Docker or Platform services. Use PostgreSQL in production.  
-- **Backups & Recovery**: Regular DB backups.  
-- **Performance**: Index DB columns, minify CSS/JS, etc.  
-- **Migrations**: Alembic-managed, committed to version control.
-
-
-
-# Project Specification: Stipend Discovery Website
-
-## Key Updates
-- **Validation Improvements**:
-  - Fixed `CustomDateTimeField` initialization to handle the `validators` argument correctly with a default `InputRequired()` validator.
-  - Centralized error messages in `app/constants.py` for consistency.
-  - Added pre-test dependency verification.
-  - Standardized error messages for date/time fields using `app/constants.py`.
-  - Added comprehensive tests for edge cases in date/time validation.
-
-- **Testing Setup**:
-  - Added `pytest` to `requirements.txt` and verified installation.
-  - Improved dependency verification with a pre-test check.
-
-- **Code Refactoring**:
-  - Refactored shared functionality into `app/common/utils.py` to avoid circular imports.
-  - Updated `create_limit` to be a proper property with getter/setter.
-
-## Lessons Learned
-1. **Custom Field Implementation**:
-   - Always ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
-   - Provide default validators if none are passed:
-     ```python
-     if validators is None:
-         validators = [InputRequired()]
-     ```
-
-2. **Dependency Management**:
-   - Always verify dependencies are installed before running tests or the application.
-   - Add a pre-test check to ensure all required dependencies are installed.
-
-3. **Circular Imports**:
-   - Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
-
-4. **Property Implementation**:
-   - Always define properties with `@property` and `@<property>.setter`.
-   - Include validation in setters and use private attributes for storage.
-
-5. **Error Handling**:
-   - Centralize error messages in `app/constants.py` for consistency.
-   - Avoid hardcoding error messages in validation logic.
-
-6. **Testing**:
-   - Test edge cases thoroughly, especially for date/time validation.
-   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
-
-## Lessons Learned
-1. **Custom Field Implementation**:
-   - Always ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
-   - Provide default validators if none are passed:
-     ```python
-     if validators is None:
-         validators = [InputRequired()]
-     ```
-
-2. **Dependency Management**:
-   - Always verify dependencies are installed before running tests or the application.
-   - Add a pre-test check to ensure all required dependencies are installed.
-
-3. **Circular Imports**:
-   - Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
-
-4. **Property Implementation**:
-   - Always define properties with `@property` and `@<property>.setter`.
-   - Include validation in setters and use private attributes for storage.
-
-## Key Takeaways for Next Coding Session
-1. **Validation Logic**:
-   - Always verify the data type of form field inputs before applying validation logic.
-   - Use centralized error messages from `app/constants.py` for consistency.
-
-2. **Testing**:
-   - Test edge cases thoroughly, especially for date/time validation.
-   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
-
-3. **Error Handling**:
-   - Log validation errors with context for easier debugging.
-   - Provide clear, user-friendly error messages for validation failures.
-
-4. **Code Organization**:
-   - Keep validation logic modular and reusable.
-   - Avoid code duplication by using base classes and utilities.
-
-## Lessons Learned
-
-### CustomDateTimeField Initialization
-- **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
-- **Solution**: Updated the `__init__` method to properly handle the `validators` argument with a default `InputRequired()` validator.
-- **Best Practice**: Always ensure custom fields properly handle all arguments passed to them.
-
-### Dependency Management
-- **Issue**: Tests failed because `pytest` was not installed in the virtual environment.
-- **Solution**: Installed `pytest` and added it to `requirements.txt`.
-- **Best Practice**: Always verify dependencies are installed before running tests or the application.
-
-### Circular Imports
-- **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
-- **Solution**: Refactored shared functionality into a separate module (`app/common/utils.py`) and used lazy imports where necessary.
-- **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
-
-### Property Implementation
-- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
-- **Solution**: Refactored `create_limit` into a proper property with a getter and setter.
-- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
-
-### Testing Improvements
-- Added comprehensive test coverage for date/time validation.
-- Verified edge cases in date/time validation (e.g., leap years, invalid time components).
-- Improved test isolation and reliability.
-
-
-
+**End of Document**
