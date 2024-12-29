@@ -49,3 +49,4 @@ def test_bot_error_handling(app):
         # Test bot execution with invalid data
         # Add specific bot error handling tests
         pass
+# This file has been removed - use tests/app/test_error_handling.py instead
