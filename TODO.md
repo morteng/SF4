@@ -11,6 +11,8 @@
 - [x] Add comprehensive test coverage for date/time validation.
 
 ## Next Session
+- [ ] Add a script to verify all dependencies listed in `requirements.txt` are installed.
+- [ ] Document the process for setting up the development environment, including dependency installation.
 - [ ] Optimize validation performance in `CustomDateTimeField`.
 - [ ] Add more comprehensive tests for timezone handling in date/time fields.
 - [ ] Add validation benchmarks for date/time fields.
@@ -20,6 +22,7 @@
 - [ ] Refactor validation logic in other forms to ensure consistency with `StipendForm`.
 
 ## Long Term
+- [ ] Automate dependency verification during test execution.
 - [ ] Refactor validation logic into reusable components.
 - [ ] Improve test coverage for all form fields.
 - [ ] Add integration tests for form validation.

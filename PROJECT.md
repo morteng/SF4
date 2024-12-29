@@ -79,6 +79,15 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 ## Lessons Learned
 
 ### Dependency Management
+- **Key Issue**: The `freezegun` package was listed in `requirements.txt` but not installed in the environment, causing test failures.
+- **Solution**: Always verify that all dependencies are installed by running:
+  ```bash
+  pip install -r requirements.txt
+  ```
+- **Best Practice**: After installing dependencies, verify their installation with:
+  ```bash
+  pip show <package_name>
+  ```
 - Ensure all dependencies listed in `requirements.txt` are installed in the environment.
 - Use `pip install -r requirements.txt` to install all dependencies at once.
 - Verify that tests run successfully after installing dependencies.
