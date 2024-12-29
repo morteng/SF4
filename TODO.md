@@ -16,7 +16,5 @@
 
 ## Security Priority
 - Implement rate limiting for API endpoints
-- Add password complexity requirements
-- Set up security headers middleware
 - Implement session expiration
 - Add audit logging for admin actions

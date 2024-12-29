@@ -1,31 +1,34 @@
-# Step 0: Initialize & Verify
-/git status
-/ask Are there any untracked files or changes that need to be addressed before proceeding?
+/git add .
+/commit
+
+/add PROJECT.md
+/add CONVENTIONS.md
+/add VALIDATION.md
+/add TODO.md
 
 # Step 1: Identify & Plan
-/ask Based on TODO.md, PROJECT.md, and VALIDATION.md, what are the highest-priority tasks?
-/architect Propose a detailed plan for implementing the changes, including validation and error handling.
+/ask Based on TODO.md (and other docs), how do we address the issues?
+/architect implement the suggested changes
 
-# Step 2: Implement & Validate
-/code Implement the planned changes, ensuring they follow CONVENTIONS.md and VALIDATION.md.
-/test Run tests to verify the changes, focusing on edge cases and error handling.
-
-# Step 3: Debug & Refine
-/ask If tests fail, what is the root cause? Are there any validation or error handling issues?
-/code Fix the issues, ensuring proper error messages and rollback mechanisms are in place.
-/test Re-run tests to confirm the fixes.
-
-# Step 4: Review & Document
-/ask Should any code be refactored for better maintainability or performance?
-/architect Update PROJECT.md, CONVENTIONS.md, and VALIDATION.md with any new patterns or findings.
-/commit Commit the changes with a descriptive message.
-
-# Step 5: Final Checks
+# Step 2: Test & Debug
 /run flask routes
-/ask Are there any new issues or unexpected behavior in the routes?
-/test Run a final round of tests to ensure everything is working as expected.
+/test
+/ask If tests fail, what's causing the issue?
+/code implement fixes
+/test
 
-# Step 6: Prepare for Next Steps
+# Step 3: Refine & Summarize
+/ask Should we revisit or refactor any code? Summarize the current status.
+/architect implement improvements
+/test
+
+# Step 4: Optional Additional Checks
+/run flask routes
+/ask If there's a new issue, what is it?
+
+# Step 5: Final Documentation Updates
+/architect update PROJECT.md, CONVENTIONS.md, TODO.md, and VALIDATION.md with final changes & findings.
+
+# Step 6: Reset or Next
 /reset
 /load CMD_TESTS.txt
-/ask What are the next priorities based on TODO.md and PROJECT.md?
