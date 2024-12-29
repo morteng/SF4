@@ -323,19 +323,51 @@ If time-based tests are failing:
 
 ## Best Practices
 
+### Circular Imports
+1. **Refactor Shared Functionality**:
+   - Move shared code to a separate module (e.g., `app/common/utils.py`).
+2. **Use Lazy Imports**:
+   - Import dependencies at the function level when necessary:
+     ```python
+     def some_function():
+         from app.services.bot_service import BotService  # Lazy import
+         bot_service = BotService()
+     ```
+
+### Property Implementation
+1. **Define Properties Correctly**:
+   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
+   - Example:
+     ```python
+     class MyClass:
+         def __init__(self):
+             self._my_property = None
+
+         @property
+         def my_property(self):
+             return self._my_property
+
+         @my_property.setter
+         def my_property(self, value):
+             self._my_property = value
+     ```
+2. **Avoid Direct Attribute Access**:
+   - Use properties to encapsulate attribute access and modification.
+3. **Document Properties**:
+   - Add docstrings to properties and setters to clarify their purpose and behavior.
+
 ### Dependency Management
-1. **Install Dependencies**:
-   Always install dependencies from `requirements.txt`:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. **Verify Installation**:
-   Verify critical dependencies are installed:
-   ```bash
-   pip show freezegun Flask
-   ```
-3. **Pre-Test Check**:
-   Add a pre-test check to ensure all required dependencies are installed.
+1. **Pre-Test Verification**:
+   - Add a test to verify all dependencies are installed before running the test suite:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+2. **Graceful Handling**:
+   - Skip tests that require missing packages instead of failing the entire suite.
 
 ### Property Implementation
 1. **Define Properties Correctly**:
