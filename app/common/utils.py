@@ -3,6 +3,13 @@ import pytz
 from app.constants import FlashMessages
 from wtforms.validators import ValidationError
 
+def validate_blueprint_routes(app, required_routes):
+    """Validate that all required routes are registered."""
+    registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
+    missing_routes = [route for route in required_routes if route not in registered_routes]
+    if missing_routes:
+        raise RuntimeError(f"Missing routes: {', '.join(missing_routes)}")
+
 def validate_application_deadline(field):
     """Validate that the application deadline is a future date."""
     if not isinstance(field.data, (str, datetime)):

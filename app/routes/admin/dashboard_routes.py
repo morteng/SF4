@@ -7,7 +7,7 @@ from app.models.audit_log import AuditLog
 from app.models.bot import Bot
 from app.models.user import User
 
-admin_dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/dashboard')
+admin_dashboard_bp = Blueprint('admin_dashboard', __name__, url_prefix='/admin/dashboard')
 
 @admin_dashboard_bp.route('/')
 @login_required

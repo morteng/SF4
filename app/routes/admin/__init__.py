@@ -109,106 +109,37 @@ _admin_blueprints_registered = False
 def register_admin_blueprints(app):
     global _admin_blueprints_registered
     
-    # Only register blueprints once
     if _admin_blueprints_registered:
         return
     
-    # Create admin blueprint first
     admin_bp = create_admin_blueprint()
     
-    # Ensure all required blueprints are imported
     try:
         from .stipend_routes import admin_stipend_bp
+        from .dashboard_routes import admin_dashboard_bp
         from .user_routes import admin_user_bp
         from .bot_routes import admin_bot_bp
         from .organization_routes import admin_org_bp
         from .tag_routes import admin_tag_bp
-        from .dashboard_routes import admin_dashboard_bp
     except ImportError as e:
         current_app.logger.error(f"Failed to import blueprints: {str(e)}")
         raise
     
-    # Initialize rate limiter
-    limiter = Limiter(
-        get_remote_address,
-        app=app,
-        default_limits=["100 per hour"],
-        storage_uri="memory://",
-    )
-    
-    # Import and configure sub-blueprints
-    from .user_routes import admin_user_bp
-    from .bot_routes import admin_bot_bp
-    from .organization_routes import admin_org_bp
-    from .stipend_routes import admin_stipend_bp
-    from .tag_routes import admin_tag_bp
-    from .dashboard_routes import admin_dashboard_bp
-
-    # Configure rate limits for each blueprint
-    def apply_rate_limits(bp):
-        @bp.before_request
-        def limit_requests():
-            # Apply general rate limit
-            limiter.limit("100 per hour")(lambda: None)()
-            
-            # Apply method-specific rate limits
-            if request.method == 'POST':
-                limiter.limit("10 per minute")(lambda: None)()
-            if request.method == 'DELETE':
-                limiter.limit("3 per minute")(lambda: None)()
-            if request.method == 'POST' and request.path.endswith('/reset_password'):
-                limiter.limit("5 per hour", key_func=lambda: f"{get_remote_address()}_reset_password")(lambda: None)()
-
-    # Apply rate limits to all admin blueprints
-    for bp in [admin_user_bp, admin_bot_bp, admin_org_bp, 
-               admin_stipend_bp, admin_tag_bp]:
-        apply_rate_limits(bp)
-
-    # Register sub-blueprints with unique prefixes
+    # Register blueprints
+    admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
+    admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
     admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')
     admin_bp.register_blueprint(admin_bot_bp, url_prefix='/bots')
     admin_bp.register_blueprint(admin_org_bp, url_prefix='/organizations')
-    admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
     admin_bp.register_blueprint(admin_tag_bp, url_prefix='/tags')
-    admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
-
-    # Debug logging for route registration
-    with app.app_context():
-        current_app.logger.debug("Registered admin blueprints:")
-        for rule in app.url_map.iter_rules():
-            if rule.endpoint.startswith('admin.'):
-                current_app.logger.debug(f"Route: {rule}")
-
-    # Debug logging for route registration
-    with app.app_context():
-        current_app.logger.debug("Registered admin blueprints:")
-        for rule in app.url_map.iter_rules():
-            if rule.endpoint.startswith('admin.'):
-                current_app.logger.debug(f"Route: {rule}")
     
-    # Ensure all routes are properly registered
-    with app.app_context():  # Add application context here
-        current_app.logger.debug("Registered admin blueprints:")
-        for rule in app.url_map.iter_rules():
-            if rule.endpoint.startswith('admin.'):
-                current_app.logger.debug(f"Route: {rule}")
-    
-    # Register the main admin blueprint
-    app.register_blueprint(admin_bp)
-    
-    # Verify all required routes are registered
+    # Validate routes
     required_routes = [
-        'admin_stipend.create',
+        'stipend.create',
         'admin_dashboard.dashboard'
     ]
+    validate_blueprint_routes(app, required_routes)
     
-    registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
-    missing_routes = [route for route in required_routes if route not in registered_routes]
-    
-    if missing_routes:
-        raise RuntimeError(f"Missing routes: {', '.join(missing_routes)}")
-    
-    # Mark blueprints as registered
     _admin_blueprints_registered = True
 from flask import abort
 from functools import wraps

@@ -41,10 +41,11 @@ class AdminStipendTestCase(unittest.TestCase):
         }, follow_redirects=True)
 
     def test_create_stipend(self):
-        with self.client:
-            # Get CSRF token from login page
-            response = self.client.get(url_for('public.login'))
-            self.assertEqual(response.status_code, 200)
+        try:
+            with self.client:
+                # Get CSRF token from login page
+                response = self.client.get(url_for('public.login'))
+                self.assertEqual(response.status_code, 200)
             
             # Extract CSRF token from hidden form field with error handling
             try:
