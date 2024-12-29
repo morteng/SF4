@@ -284,12 +284,25 @@
      pip install -r requirements.txt
      ```
 
-## Testing
-- Test both success and error cases
-- Verify error messages in validation tests
-- Use consistent test patterns for form validation
-- Verify database state
-- Use fixtures & base classes
-- Test edge cases
-- Keep tests isolated
+## Testing Best Practices
+
+### Dependency Verification
+1. **Pre-Test Check**:
+   - Add a test to verify all dependencies are installed before running the test suite.
+   - Example:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+
+2. **Graceful Handling**:
+   - Use try-except blocks to handle missing dependencies in test files.
+   - Skip tests that require missing packages instead of failing the entire suite.
+
+### Error Handling
+- Always use centralized error messages from `app/constants.py`.
+- Log validation errors with context for easier debugging.
 

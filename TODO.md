@@ -2,13 +2,14 @@
 
 ## Completed
 - [x] Fix `TypeError` in `CustomDateTimeField` caused by incorrect `format` usage.
-- [x] Install `freezegun` for time-based testing
-- [x] Add installation verification steps to documentation
+- [x] Install `freezegun` for time-based testing.
+- [x] Add installation verification steps to documentation.
 - [x] Consolidate leap year validation logic in `CustomDateTimeField`.
 - [x] Add tests for edge cases in date/time validation.
 - [x] Standardize error messages using constants from `app/constants.py`.
 - [x] Improve validation error reporting for better debugging.
 - [x] Add comprehensive test coverage for date/time validation.
+- [x] Add a script to verify all dependencies listed in `requirements.txt` are installed.
 
 ## Next Session
 - [ ] Add a script to verify all dependencies listed in `requirements.txt` are installed.

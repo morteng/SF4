@@ -79,20 +79,21 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 ## Lessons Learned
 
 ### Dependency Management
-- **Issue**: The `freezegun` package was listed in `requirements.txt` but not installed, causing test failures.
-- **Solution**: Always verify that all dependencies are installed by running:
+- **Issue**: Tests failed because `freezegun` was listed in `requirements.txt` but not installed.
+- **Solution**: Always verify dependencies are installed by running:
   ```bash
   pip install -r requirements.txt
   ```
-- **Best Practice**: After installing dependencies, verify their installation with:
-  ```bash
-  pip show <package_name>
-  ```
+- **Best Practice**: Add a pre-test check to ensure all dependencies are installed before running tests.
 
-### Testing
-- Use `freezegun` for deterministic time-based testing.
-- Test edge cases thoroughly, especially for date/time validation.
-- Ensure database fixtures are properly reset between tests to avoid side effects.
+### Testing Improvements
+- Added graceful handling of missing dependencies in test files.
+- Improved error messages for missing packages.
+- Added a dependency verification test (`test_dependencies.py`) to catch missing packages early.
+
+### Code Refactoring
+- Refactored test files to handle missing dependencies without failing the entire test suite.
+- Centralized error messages in `app/constants.py` for consistency.
 
 ### Error Handling
 - Ensure all error messages are centralized in `app/constants.py` and used consistently across the codebase.
