@@ -64,5 +64,3 @@ class TestCustomDateTimeField(BaseTestCase):
         self.assertFalse(field.validate(None))
         self.assertIn('Application deadline must be a future date', field.errors[0])
 
-if __name__ == '__main__':
-    unittest.main()
