@@ -49,26 +49,6 @@
 4. **Updated `requirements.txt`**:
    - Added `beautifulsoup4` for HTML parsing in tests.
 
-### **Next Steps**
-1. **Add Edge Case Tests**:
-   - Add more edge case tests for form validation and database interactions.
-
-2. **Refactor Shared Logic**:
-   - Move more shared logic to `app/common/utils.py` to avoid duplication.
-
-3. **Documentation**:
-   - Update `README.md` with setup instructions and testing guidelines.
-
----
-
-### **Pending Console Commands**
-```bash
-pip install -r requirements.txt
-pytest
-flask routes
-```
-
----
 
 ### **End of Document**
 
