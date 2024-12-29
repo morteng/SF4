@@ -2,23 +2,6 @@
 
 ## Key Takeaways
 
-### Validation Logic
-1. **Data Type Awareness**:
-   - Always verify the data type of form field inputs before applying validation logic.
-   - Use `isinstance()` to check for `datetime` objects when working with date/time fields.
-
-2. **Timezone Handling**:
-   - Ensure all `datetime` objects are timezone-aware.
-   - Use `pytz.UTC.localize()` to add a timezone to naive `datetime` objects.
-
-3. **Future/Past Date Validation**:
-   - Validate that dates are within acceptable ranges (e.g., future dates for deadlines).
-   - Use `datetime.now(pytz.UTC)` for consistent timezone-aware comparisons.
-
-4. **Error Messages**:
-   - Use centralized error messages from `app/constants.py` for consistency.
-   - Provide clear, user-friendly error messages for validation failures.
-
 ### Custom Field Implementation
 1. **Handle All Arguments**:
    - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
@@ -29,13 +12,30 @@
          validators = [InputRequired()]
      ```
 
-### Testing
-1. **Edge Cases**:
+### Date/Time Validation
+1. **Data Type Awareness**:
+   - Always verify the data type of form field inputs before applying validation logic.
+2. **Timezone Handling**:
+   - Ensure all `datetime` objects are timezone-aware.
+3. **Future/Past Date Validation**:
+   - Validate that dates are within acceptable ranges (e.g., future dates for deadlines).
+4. **Error Messages**:
+   - Use centralized error messages from `app/constants.py` for consistency.
+
+### General Validation
+1. **Validation Logic**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Ensure compatibility with parent classes when overriding attributes or methods.
+   - Use centralized error messages from `app/constants.py` for consistency.
+2. **Testing**:
    - Test edge cases thoroughly, especially for date/time validation.
-2. **Mocking**:
-   - Use `freezegun` for deterministic time-based testing.
-3. **Isolation**:
-   - Ensure database fixtures are properly reset between tests to avoid side effects.
+   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+3. **Error Handling**:
+   - Log validation errors with context for easier debugging.
+   - Provide clear, user-friendly error messages for validation failures.
+4. **Code Organization**:
+   - Keep validation logic modular and reusable.
+   - Avoid code duplication by using base classes and utilities.
 
 ### Date/Time Validation
 1. **Best Practices**:
