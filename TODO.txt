@@ -4,35 +4,32 @@
 
 ### **Recent Changes**
 1. **Fixed Test File Conflicts**:
-   - Renamed `tests/test_forms.py` to `tests/test_main_forms.py` to avoid import conflicts.
-   - Ensured all test files have unique names to prevent module collisions.
+   - Deleted `tests/test_forms.py` to resolve import conflicts.
+   - Consolidated all stipend form tests into `tests/test_main_forms.py`.
+   - Organized organization form tests in `tests/app/forms/test_forms.py`.
 
-2. **Updated Constants Usage**:
-   - Standardized usage of `INVALID_LEAP_YEAR_DATE` across all files.
-   - Removed references to non-existent `INVALID_LEAP_YEAR` constant.
-   - Fixed duplicate `UPDATE_ERROR` and `FORM_VALIDATION_ERROR` definitions in `app/constants.py`.
-   - Added missing `NOT_FOUND` constant.
+2. **Improved Test Organization**:
+   - Moved stipend form tests to `tests/test_main_forms.py`.
+   - Kept organization form tests in `tests/app/forms/test_forms.py`.
+   - Ensured all test files have unique module names to avoid conflicts.
 
-3. **Improved Test Organization**:
-   - Moved form-related tests to `tests/app/forms/test_forms.py` for better structure.
-   - Added comprehensive date/time validation tests in `tests/test_datetime_validation.py`.
-   - Consolidated overlapping tests into single files to avoid redundancy.
+3. **Cleared Pycache**:
+   - Removed stale compiled files from `__pycache__` directories to prevent test collection issues.
 
-4. **Fixed Circular Imports**:
-   - Refactored imports in `app/__init__.py` to use lazy imports.
-   - Moved shared utilities to `app/common/utils.py` to reduce dependencies.
+4. **Fixed Flask Routes Error**:
+   - Resolved `UnboundLocalError` in `app/__init__.py` by properly initializing the `limiter` variable.
 
-5. **Improved Rate Limiter Configuration**:
-   - Added Redis as the storage backend for Flask-Limiter in production.
+5. **Removed Redundant Dependency Check**:
+   - Deleted the `verify_dependencies()` function from `tests/conftest.py` as it was redundant and causing issues.
 
 ### **Key Takeaways**
 1. **Test File Naming**:
    - Always use unique names for test files to avoid import conflicts.
    - Follow a consistent naming convention (e.g., `test_<module>_<feature>.py`).
 
-2. **Constants Management**:
-   - Avoid duplicate constant definitions in `Enum` classes.
-   - Use a single source of truth for constants in `app/constants.py`.
+2. **Test Organization**:
+   - Keep tests organized by module/package structure for better maintainability.
+   - Consolidate overlapping tests to avoid redundancy.
 
 3. **Circular Imports**:
    - Use lazy imports or refactor shared logic into utility modules to avoid circular dependencies.
@@ -42,26 +39,23 @@
    - Always validate data types before applying validation logic.
    - Use constants from `app/constants.py` for error messages.
 
-5. **Testing Best Practices**:
-   - Use `freezegun` for deterministic time-based tests.
-   - Add edge-case tests for date/time validation (e.g., leap years, invalid time components).
-
-### **Lessons Learned**
-1. **Duplicate Constants**:
-   - Duplicate constant definitions can cause `TypeError` in `Enum` classes.
-   - Ensure each constant is defined only once in `app/constants.py`.
-
-2. **Test Organization**:
-   - Keep tests organized by module/package structure for better maintainability.
-   - Use `tests/app/` for application-specific tests and `tests/` for general tests.
-
-3. **Error Handling**:
+5. **Error Handling**:
    - Proper error handling in property setters is crucial for maintaining data integrity.
    - Log errors with context for easier debugging.
 
-4. **Code Quality**:
-   - Regularly clear `__pycache__` directories to avoid stale compiled files.
-   - Use consistent naming conventions across the codebase.
+### **Lessons Learned**
+1. **Duplicate Module Names**:
+   - Avoid using the same module name for different test files, as it causes `import file mismatch` errors.
+   - Delete redundant test files to prevent conflicts.
+
+2. **Stale Pycache Files**:
+   - Regularly clear `__pycache__` directories to avoid issues with stale compiled files.
+
+3. **Redundant Code**:
+   - Remove redundant functions like `verify_dependencies()` to simplify the codebase and prevent issues.
+
+4. **Initialization Order**:
+   - Ensure all variables (e.g., `limiter`) are properly initialized before use to avoid `UnboundLocalError`.
 
 ### **Next Steps**
 1. **Validation Logic**:
