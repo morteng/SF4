@@ -51,7 +51,22 @@ class CustomDateTimeField(DateTimeField):
         
         # First check if value is missing or empty
         if not valuelist or self._is_empty_value(valuelist[0]):
-            self.errors.append(self.error_messages.get('required', 'This field is required'))
+            self.errors.append('Application deadline is required.')
+            self.data = None
+            return
+            
+        # Continue with format validation if value exists
+        date_str = valuelist[0].strip()
+        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
+            self.errors.append('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+            self.data = None
+            return
+            
+        # Validate date components
+        try:
+            datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            self.errors.append('Invalid date values')
             self.data = None
             return
             
@@ -172,12 +187,30 @@ class CustomDateTimeField(DateTimeField):
             
         # If data is empty, return required error
         if not self.data:
-            self.errors.append(self.error_messages.get('required', 'This field is required'))
+            self.errors.append('Application deadline is required.')
             return False
     
         # If we already have errors from process_formdata, return False
         if self.errors:
             return False
+            
+        # Validate date components
+        try:
+            dt = datetime.strptime(str(self.data), '%Y-%m-%d %H:%M:%S')
+            
+            # Validate time components
+            if not (0 <= dt.hour <= 23 and 
+                    0 <= dt.minute <= 59 and 
+                    0 <= dt.second <= 59):
+                self.errors.append('Invalid time values')
+                return False
+                
+            # Validate date components
+            try:
+                datetime(dt.year, dt.month, dt.day)
+            except ValueError:
+                self.errors.append('Invalid date values')
+                return False
             
         # Validate the format first
         if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', str(self.data)):
