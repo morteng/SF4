@@ -56,6 +56,9 @@ def create_app(config_name='development'):
     except Exception as e:
         logger.error(f"Failed to initialize application configuration: {str(e)}")
         raise RuntimeError(f"Application configuration failed: {str(e)}")
+    except Exception as e:
+        logger.error(f"Failed to initialize application configuration: {str(e)}")
+        raise RuntimeError(f"Application configuration failed: {str(e)}")
 
     # Initialize extensions
     db.init_app(app)
