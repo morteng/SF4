@@ -1,5 +1,6 @@
 import pytest
 import re  # Import the re module to use regex for extracting CSRF token
+from wtforms.validators import ValidationError
 from app.models.stipend import Stipend
 from app.models.organization import Organization
 from app.services.stipend_service import create_stipend, update_stipend, delete_stipend, get_stipend_by_id, get_all_stipends
