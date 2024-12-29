@@ -42,6 +42,19 @@ To avoid circular dependencies:
 1. Move shared functionality to `app/common/utils.py`
 2. Use lazy imports for dependencies that cannot be refactored
 3. Keep imports at the function level when necessary
+4. Example refactoring:
+   ```python
+   # Move shared code to app/common/utils.py
+   def init_admin_user():
+       # Implementation
+       pass
+   ```
+5. Example lazy import:
+   ```python
+   def some_function():
+       from app.services.bot_service import run_bot  # Lazy import
+       run_bot()
+   ```
 
 Example of lazy import:
 ```python

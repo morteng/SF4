@@ -139,8 +139,21 @@
    - Add docstrings to properties and setters to clarify their purpose and behavior.
 
 ### Circular Imports
-- Avoid circular dependencies by refactoring shared functionality into separate modules.
+- Avoid circular dependencies by refactoring shared functionality into separate modules (e.g., `app/common/utils.py`).
 - Use lazy imports or dependency injection where necessary.
+- Example of refactoring:
+  ```python
+  # Move shared code to app/common/utils.py
+  def init_admin_user():
+      # Implementation
+      pass
+  ```
+- Example of lazy import:
+  ```python
+  def some_function():
+      from app.services.bot_service import run_bot  # Lazy import
+      run_bot()
+  ```
 1. **Validate Property Values**:
    - Use setters to validate property values before assignment.
    - Example:

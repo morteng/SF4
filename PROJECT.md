@@ -100,7 +100,22 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 
 ### Circular Imports
 - **Issue**: Circular dependencies were identified in the import chain (`app/__init__.py` → `app/utils.py` → `app/services/bot_service.py` → `app/services/base_service.py`).
-- **Solution**: Refactor shared functionality into a separate module (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+- **Solution**: 
+  1. Refactor shared functionality into a separate module (e.g., `app/common/utils.py`)
+  2. Use lazy imports where necessary
+  3. Example refactoring:
+     ```python
+     # Move shared code to app/common/utils.py
+     def init_admin_user():
+         # Implementation
+         pass
+     ```
+  4. Example lazy import:
+     ```python
+     def some_function():
+         from app.services.bot_service import run_bot  # Lazy import
+         run_bot()
+     ```
 
 ### Dependency Management
 - **Issue**: Tests failed because `freezegun` was listed in `requirements.txt` but not installed.
