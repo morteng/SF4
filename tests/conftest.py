@@ -371,6 +371,45 @@ def logged_in_client(client, test_user, app, db_session):
     # Logout after test
     client.get(url_for('public.logout'))
 
+class BaseCRUDTest:
+    """Base class for CRUD operation tests."""
+    service_class = None
+    model_class = None
+
+    def test_create(self, test_data, db_session, app):
+        """Test creating a new entity."""
+        with app.app_context():
+            service = self.service_class()
+            entity = service.create(test_data)
+            assert entity.id is not None
+            assert isinstance(entity, self.model_class)
+
+    def test_get_by_id(self, test_data, db_session, app):
+        """Test retrieving an entity by ID."""
+        with app.app_context():
+            service = self.service_class()
+            entity = service.create(test_data)
+            retrieved_entity = service.get_by_id(entity.id)
+            assert retrieved_entity.id == entity.id
+
+    def test_update(self, test_data, db_session, app):
+        """Test updating an entity."""
+        with app.app_context():
+            service = self.service_class()
+            entity = service.create(test_data)
+            updated_data = {**test_data, 'name': 'Updated Name'}
+            updated_entity = service.update(entity.id, updated_data)
+            assert updated_entity.name == 'Updated Name'
+
+    def test_delete(self, test_data, db_session, app):
+        """Test deleting an entity."""
+        with app.app_context():
+            service = self.service_class()
+            entity = service.create(test_data)
+            service.delete(entity.id)
+            deleted_entity = service.get_by_id(entity.id)
+            assert deleted_entity is None
+
 @pytest.fixture(scope='function')
 def test_tag(db_session, app):
     """Provide a test tag."""
