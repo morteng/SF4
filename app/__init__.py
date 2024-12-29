@@ -57,12 +57,29 @@ from dotenv import load_dotenv
 
 def register_blueprints(app):
     """Register all blueprints with the Flask app."""
-    # Lazy imports to avoid circular dependencies
     from app.routes.admin import register_admin_blueprints
     from app.routes import register_blueprints as register_public_blueprints
     
     register_admin_blueprints(app)
     register_public_blueprints(app)
+
+def create_app(config_name='development'):
+    app = Flask(__name__)
+    
+    # Load environment variables
+    load_dotenv()
+    
+    # Configure SQLAlchemy database URI
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///app.db')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # Initialize extensions
+    init_extensions(app)
+    
+    # Register blueprints
+    register_blueprints(app)  # Now this will work
+    
+    return app
 
 def init_extensions(app):
     db.init_app(app)

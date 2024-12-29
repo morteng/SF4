@@ -19,6 +19,11 @@ from app.constants import FlashMessages
     ("2023-01-01 12:00:00+14:00", None),  # Valid extreme timezone
     ("2023-01-01 12:00:00-12:00", None),  # Valid extreme timezone
     ("2023-01-01 12:00:00+99:99", FlashMessages.INVALID_DATETIME_FORMAT),  # Invalid timezone
+    ("2023-01-01 12:00:00+14:01", FlashMessages.INVALID_DATETIME_FORMAT),  # Invalid timezone offset
+    ("2023-01-01 12:00:00-12:01", FlashMessages.INVALID_DATETIME_FORMAT),  # Invalid timezone offset
+    ("2023-01-01 24:00:00", FlashMessages.INVALID_TIME_COMPONENTS),  # Invalid hour
+    ("2023-01-01 12:60:00", FlashMessages.INVALID_TIME_COMPONENTS),  # Invalid minute
+    ("2023-01-01 12:00:60", FlashMessages.INVALID_TIME_COMPONENTS),  # Invalid second
 ])
 def test_datetime_validation(date_str, expected_error):
     field = CustomDateTimeField()
