@@ -49,7 +49,7 @@ def _validate_blueprint_params(name: str, import_name: str) -> None:
 # Create blueprint with enhanced error handling
 try:
     _validate_blueprint_params('admin_stipend', __name__)
-    admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
+    admin_stipend_bp = Blueprint('admin.stipend', __name__, url_prefix='/admin/stipends')
 except Exception as e:
     logger.error(f"Failed to create stipend blueprint: {str(e)}")
     raise

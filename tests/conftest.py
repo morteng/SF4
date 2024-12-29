@@ -521,5 +521,22 @@ def app():
         db.drop_all()
 
 @pytest.fixture
+def test_blueprint_registration(app):
+    """Test blueprint registration"""
+    with app.app_context():
+        from app.routes.admin import register_admin_blueprints
+        register_admin_blueprints(app)
+        
+        # Verify blueprints are registered
+        assert 'admin' in app.blueprints
+        assert 'admin.stipend' in app.blueprints
+        assert 'admin.dashboard' in app.blueprints
+        
+        # Verify routes are registered
+        registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
+        assert 'admin.stipend.create' in registered_routes
+        assert 'admin.dashboard.dashboard' in registered_routes
+
+@pytest.fixture
 def client(app):
     return app.test_client()

@@ -19,13 +19,21 @@ def validate_blueprint_routes(app, required_routes):
     with app.app_context():
         registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
         missing_routes = [route for route in required_routes if route not in registered_routes]
+        
         if missing_routes:
+            app.logger.error("Route Validation Error:")
             app.logger.error(f"Registered routes: {registered_routes}")
             app.logger.error(f"Missing routes: {missing_routes}")
-            raise RuntimeError(
-                f"Missing routes: {', '.join(missing_routes)}. "
-                "Check blueprint names and route endpoints."
+            app.logger.error(f"Current blueprints: {list(app.blueprints.keys())}")
+            
+            # Provide more detailed error message
+            error_msg = (
+                f"Missing routes: {', '.join(missing_routes)}.\n"
+                "Check blueprint names and route endpoints.\n"
+                f"Registered blueprints: {list(app.blueprints.keys())}\n"
+                f"Registered routes: {registered_routes}"
             )
+            raise RuntimeError(error_msg)
 
 def validate_application_deadline(field):
     """Validate that the application deadline is a future date."""
