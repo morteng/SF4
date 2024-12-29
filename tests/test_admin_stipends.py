@@ -3,6 +3,7 @@ from flask import url_for
 from app import create_app, db
 from app.models.user import User
 from app.models.stipend import Stipend
+from app.models.organization import Organization
 from datetime import datetime  # Import datetime module
 
 class AdminStipendTestCase(unittest.TestCase):
