@@ -7,7 +7,6 @@
 /commit
 
 
-/add TODO.txt
 
 /run flask routes
 /test
