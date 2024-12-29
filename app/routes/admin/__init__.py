@@ -128,14 +128,6 @@ def register_admin_blueprints(app):
         from .organization_routes import admin_org_bp
         from .tag_routes import admin_tag_bp
         
-        # Validate blueprints before registration
-        validate_blueprint(admin_stipend_bp)
-        validate_blueprint(admin_dashboard_bp)
-        validate_blueprint(admin_user_bp)
-        validate_blueprint(admin_bot_bp)
-        validate_blueprint(admin_org_bp)
-        validate_blueprint(admin_tag_bp)
-        
         # Register blueprints with debug logging
         admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
         logger.debug(f"Registered stipend blueprint: {admin_stipend_bp.name}")
