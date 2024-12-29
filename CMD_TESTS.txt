@@ -14,7 +14,7 @@
 /run flask routes
 /test
 /ask If tests fail, what's causing the issue?
-/code implement fixes
+/architect implement fixes
 /test
 
 # Step 3: Refine & Summarize
