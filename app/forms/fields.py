@@ -35,7 +35,8 @@ class CustomDateTimeField(DateTimeField):
         # Merge custom error messages with defaults
         custom_messages = kwargs.pop('error_messages', {})
         self.error_messages = {**self.error_messages, **custom_messages}
-        kwargs['format'] = '%Y-%m-%d %H:%M:%S'
+        self.format = '%Y-%m-%d %H:%M:%S'  # Set format as instance attribute
+        kwargs['format'] = self.format  # Pass to parent
         kwargs['render_kw'] = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
         super().__init__(*args, **kwargs)
         
