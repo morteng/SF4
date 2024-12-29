@@ -11,20 +11,43 @@
      source .venv/bin/activate
      ```
 
-2. **Install `pytest`**:
+2. **Install Dependencies**:
    ```bash
-   pip install pytest
+   pip install -r requirements.txt
+   pip install pytest freezegun
    ```
 
 3. **Verify Installation**:
    ```bash
-   pip show pytest
+   pip show pytest freezegun Flask
    ```
 
 4. **Add to requirements.txt**:
    ```bash
    echo "pytest" >> requirements.txt
+   echo "freezegun" >> requirements.txt
    ```
+
+5. **Run Tests**:
+   ```bash
+   pytest
+   ```
+
+6. **Troubleshooting**:
+   - If tests fail due to missing dependencies:
+     ```bash
+     pip install -r requirements.txt
+     pytest
+     ```
+   - Recreate virtual environment if needed:
+     ```bash
+     deactivate
+     rm -rf .venv
+     python -m venv .venv
+     source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+     pip install -r requirements.txt
+     pytest
+     ```
 
 ### Property Implementation
 1. **Define Properties Correctly**:
