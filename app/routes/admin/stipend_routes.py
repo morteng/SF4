@@ -39,15 +39,43 @@ def delete_stipend(id):
     db.session.delete(stipend)
     db.session.commit()
 
-admin_stipend_bp = Blueprint('admin.stipend', __name__, url_prefix='/admin/stipends')
+def _validate_blueprint_params(name: str, import_name: str) -> None:
+    """Validate blueprint creation parameters"""
+    if not isinstance(import_name, str) or not import_name:
+        raise ValueError("Invalid import name for blueprint")
+    if not isinstance(name, str) or not name:
+        raise ValueError("Invalid blueprint name")
 
-def register_stipend_routes(app):
-    """Register stipend routes with the application"""
-    app.register_blueprint(admin_stipend_bp)
-    app.logger.debug("Registered stipend routes:")
-    for rule in app.url_map.iter_rules():
-        if rule.endpoint.startswith('admin.stipend'):
-            app.logger.debug(f"Route: {rule}")
+# Create blueprint with enhanced error handling
+try:
+    _validate_blueprint_params('admin.stipend', __name__)
+    admin_stipend_bp = Blueprint('admin.stipend', __name__, url_prefix='/admin/stipends')
+except Exception as e:
+    logger.error(f"Failed to create stipend blueprint: {str(e)}")
+    raise
+
+def register_stipend_routes(app) -> None:
+    """Register stipend routes with the application
+    
+    Args:
+        app: Flask application instance
+        
+    Raises:
+        ValueError: If app is not a valid Flask application
+        RuntimeError: If route registration fails
+    """
+    if not hasattr(app, 'register_blueprint'):
+        raise ValueError("Invalid Flask application instance")
+        
+    try:
+        app.register_blueprint(admin_stipend_bp)
+        logger.info("Successfully registered stipend routes")
+        for rule in app.url_map.iter_rules():
+            if rule.endpoint.startswith('admin.stipend'):
+                logger.debug(f"Route: {rule}")
+    except Exception as e:
+        logger.error(f"Failed to register stipend routes: {str(e)}")
+        raise RuntimeError(f"Route registration failed: {str(e)}")
 
 class StipendController(BaseCrudController):
     def __init__(self):
