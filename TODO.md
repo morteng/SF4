@@ -6,6 +6,8 @@
 - [x] Add `pytest` to `requirements.txt` for future environments.
 - [x] Refactor shared functionality into `app/common/utils.py` to avoid circular imports.
 - [x] Centralized error messages in `app/constants.py` for date/time validation.
+- [x] Add pre-test dependency verification
+- [x] Document setup process in CONVENTIONS.md
 
 ## Next Session
 - [ ] Add comprehensive tests for edge cases in date/time validation.

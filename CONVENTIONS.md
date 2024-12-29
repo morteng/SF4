@@ -3,24 +3,50 @@
 ## Testing Setup
 
 ### Installation and Verification
-1. Install `pytest`:
+1. Activate your virtual environment:
+   - **Windows**: `.venv\Scripts\activate`
+   - **macOS/Linux**: `source .venv/bin/activate`
+
+2. Install `pytest`:
    ```bash
    pip install pytest
    pip show pytest
    ```
 
-2. Install all dependencies:
+3. Add `pytest` to `requirements.txt`:
+   ```bash
+   echo "pytest" >> requirements.txt
+   ```
+
+4. Install all dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Verify critical packages:
+5. Verify critical packages:
    ```bash
    pip show pytest freezegun Flask
    ```
 
-4. Run tests:
+6. Run tests:
    ```bash
+   pytest
+   ```
+
+7. If tests fail due to missing dependencies:
+   ```bash
+   pip install -r requirements.txt
+   pytest
+   ```
+
+8. Recreate virtual environment (if needed):
+   ```bash
+   deactivate
+   rm -rf .venv
+   python -m venv .venv
+   source .venv/bin/activate  # macOS/Linux
+   .venv\Scripts\activate     # Windows
+   pip install -r requirements.txt
    pytest
    ```
 
