@@ -30,17 +30,6 @@ class CustomDateTimeField(DateTimeField):
         if not self.data:
             return True
             
-        # Initialize default error messages
-        self.error_messages = {
-            'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
-            'invalid_date': 'Invalid date values (e.g., Feb 30)',
-            'invalid_time': 'Invalid time values (e.g., 25:61:61)',
-            'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
-            'required': 'Date is required',
-            'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)',
-            'past_date': 'Application deadline must be a future date'
-        }
-
         # Check if the date string matches the expected format
         if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', str(self.data)):
             self.errors.append(self.error_messages['invalid_format'])
@@ -54,19 +43,6 @@ class CustomDateTimeField(DateTimeField):
             return False
             
         return True
-        # Initialize default error messages
-        self.error_messages = {
-            'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
-            'invalid_date': 'Invalid date values (e.g., Feb 30)',
-            'invalid_time': 'Invalid time values (e.g., 25:61:61)',
-            'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
-            'required': 'Date is required',
-            'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)',
-            'past_date': 'Application deadline must be a future date'
-        }
-        # Update with any custom error messages from kwargs
-        if hasattr(self, 'error_messages'):
-            self.error_messages.update(getattr(self, 'error_messages', {}))
 
     def process_formdata(self, valuelist):
         # First check if value is missing or empty
