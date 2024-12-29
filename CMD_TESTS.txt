@@ -1,5 +1,5 @@
 # --------------------------------------
-# SINGLE_FILE_CMDS.txt
+# CMD_TESTS.txt
 # --------------------------------------
 # This file orchestrates your coding session and any console commands
 # you need to run, all in one place. IMPORTANT! you are only allowed to edit the console commands section of this document - NEVER alter any other part of the loop.
