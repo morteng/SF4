@@ -262,3 +262,13 @@ REQUIRED_FIELD = "This field is required"
 INVALID_INPUT = "Invalid input"
 DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
 MISSING_FIELD_ERROR = "This field is required."
+# Date/Time Validation Messages
+DATE_TIME_VALIDATION_MESSAGES = {
+    "required": "This field is required",
+    "invalid_format": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS",
+    "invalid_date": "Invalid date",
+    "invalid_time": "Invalid time",
+    "future_date_required": "Date must be in the future",
+    "leap_year": "Invalid date: February 29th on non-leap year",
+    "time_out_of_range": "Time must be between 00:00:00 and 23:59:59",
+}
