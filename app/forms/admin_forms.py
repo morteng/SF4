@@ -57,7 +57,12 @@ class StipendForm(FlaskForm):
         DataRequired(message="Eligibility criteria is required."),
         Length(max=2000, message="Eligibility criteria cannot exceed 2000 characters.")
     ])
-    application_deadline = CustomDateTimeField('Application Deadline', validators=[DataRequired(message="Application deadline is required.")])
+    application_deadline = CustomDateTimeField(
+        'Application Deadline',
+        validators=[
+            DataRequired(message="Application deadline is required.")  # Explicitly require the field
+        ]
+    )
     organization_id = SelectField('Organization', coerce=int, validators=[
         DataRequired(message="Organization is required.")
     ])
@@ -65,57 +70,31 @@ class StipendForm(FlaskForm):
     tags = SelectMultipleField('Tags', coerce=int, validators=[Optional()])
 
     def validate_application_deadline(self, field):
-        # Check if the field is missing or empty
-        if not field.data or field.data.strip() == '':
-            raise ValidationError('Application deadline is required.')
-            return
-            
         # Skip validation if field already has errors
         if field.errors:
             return
-            
-        # If the field is None, it's missing
-        if field.data is None:
+
+        # Handle missing or empty values
+        if not field.data or field.data.strip() == '':
             raise ValidationError('Application deadline is required.')
             return
-            
-        # Handle flexible deadline formats
+
+        # Handle invalid date formats
         if isinstance(field.data, str):
-                
             try:
-                # Try full datetime format first
-                try:
-                    field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-                except ValueError:
-                    # Try month/year format
-                    try:
-                        field.data = datetime.strptime(field.data, '%B %Y')
-                    except ValueError:
-                        # Try year only format
-                        try:
-                            field.data = datetime.strptime(field.data, '%Y')
-                        except ValueError:
-                            # Try vague descriptions like "in August"
-                            if field.data.lower().startswith('in '):
-                                month = field.data[3:].strip()
-                                try:
-                                    field.data = datetime.strptime(f'{month} {datetime.now().year}', '%B %Y')
-                                except ValueError:
-                                    raise ValidationError('Invalid date format. Use YYYY-MM-DD HH:MM:SS, Month YYYY, YYYY, or "in Month"')
-                            else:
-                                raise ValidationError('Invalid date format. Use YYYY-MM-DD HH:MM:SS, Month YYYY, YYYY, or "in Month"')
-            except ValueError as e:
-                raise ValidationError(str(e))
-                
+                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+
+        # Handle timezone and future date validation
         if field.data and field.data.tzinfo is None:
             field.data = pytz.UTC.localize(field.data)
-            
-        # Only validate future date if provided
+
         if field.data:
             now = datetime.now(pytz.UTC)
             if field.data < now:
                 raise ValidationError('Application deadline must be a future date')
-            
+
             max_future = now.replace(year=now.year + 5)
             if field.data > max_future:
                 raise ValidationError('Application deadline cannot be more than 5 years in the future')
