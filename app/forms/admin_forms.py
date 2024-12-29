@@ -112,11 +112,13 @@ class StipendForm(FlaskForm):
         return None  # Explicitly return None as required by WTForms
 
     def validate_organization_id(self, field):
+        print(f"\nValidating organization_id: {field.data}")
         if not field.data:
             raise ValidationError('Organization is required.')
         try:
             organization = db.session.get(Organization, field.data)
             if not organization:
+                print(f"Organization with ID {field.data} not found")
                 raise ValidationError('Invalid organization selected.')
         except Exception as e:
             logger.error(f"Error validating organization: {str(e)}")
