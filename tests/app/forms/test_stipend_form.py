@@ -68,6 +68,7 @@ def form_data(app):
 from freezegun import freeze_time
 
 @freeze_time("2024-01-01 00:00:00")  # Mock the current date/time
+@freeze_time("2024-01-01 00:00:00")  # Mock the current date/time
 def test_valid_date_format(app, form_data, test_db):
     """Test valid date format"""
     valid_dates = [
