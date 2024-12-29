@@ -531,17 +531,6 @@ If time-based tests are failing:
 
 ## Best Practices
 
-### Circular Import Prevention
-1. **Refactor Shared Functionality**:
-   - Move shared code to a separate module (e.g., `app/common/base_service.py`).
-2. **Use Lazy Imports**:
-   - Import dependencies at the function level when necessary:
-     ```python
-     def some_function():
-         from app.services.bot_service import BotService  # Lazy import
-         bot_service = BotService()
-     ```
-
 ### Dependency Management
 1. **Pre-Test Verification**:
    - Add a test to verify all dependencies are installed before running the test suite:
@@ -560,6 +549,44 @@ If time-based tests are failing:
 1. **Define Properties Correctly**:
    - Always define a property (`@property`) before using a setter (`@<property>.setter`).
    - Example:
+     ```python
+     class MyClass:
+         def __init__(self):
+             self._my_property = None
+
+         @property
+         def my_property(self):
+             return self._my_property
+
+         @my_property.setter
+         def my_property(self, value):
+             self._my_property = value
+     ```
+2. **Avoid Direct Attribute Access**:
+   - Use properties to encapsulate attribute access and modification.
+3. **Document Properties**:
+   - Add docstrings to properties and setters to clarify their purpose and behavior.
+
+### Circular Imports
+1. **Refactor Shared Functionality**:
+   - Move shared code to a separate module (e.g., `app/common/utils.py`).
+2. **Use Lazy Imports**:
+   - Import dependencies at the function level when necessary:
+     ```python
+     def some_function():
+         from app.services.bot_service import BotService  # Lazy import
+         bot_service = BotService()
+     ```
+
+### Custom Field Implementation
+1. **Handle All Arguments**:
+   - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+2. **Default Validators**:
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
      ```python
      class MyClass:
          def __init__(self):
