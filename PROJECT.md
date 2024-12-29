@@ -30,11 +30,8 @@
 
 ### Dependency Management
 - **Issue**: Tests failed because `pytest` was not installed in the virtual environment.
-- **Solution**: Always verify dependencies are installed by running:
-  ```bash
-  pip install -r requirements.txt
-  ```
-- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
+- **Solution**: Installed `pytest` and added it to `requirements.txt`.
+- **Best Practice**: Always verify dependencies are installed before running tests or the application.
 
 ### CustomDateTimeField Initialization
 - **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
@@ -50,26 +47,13 @@
 
 ### Circular Imports
 - **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
-- **Solution**: Refactor shared functionality into a separate module (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+- **Solution**: Refactored shared functionality into a separate module (e.g., `app/common/utils.py`) and used lazy imports where necessary.
 - **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
 
-### Property Implementation
-- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
-- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
-  ```python
-  class BaseService:
-      def __init__(self):
-          self._create_limit = None
-
-      @property
-      def create_limit(self):
-          return self._create_limit
-
-      @create_limit.setter
-      def create_limit(self, value):
-          self._create_limit = value
-  ```
-- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
+### Testing Setup
+- **Issue**: Missing dependencies caused test failures instead of graceful skips.
+- **Solution**: Refactored `verify_dependencies()` in `tests/conftest.py` to skip tests instead of failing the suite.
+- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
 
 #### **Lessons Learned**
 1. **Custom Field Implementation**:
