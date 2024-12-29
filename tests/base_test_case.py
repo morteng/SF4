@@ -78,3 +78,31 @@ class BaseTestCase(TestCase):
                 if isinstance(model_value, datetime):
                     model_value = model_value.isoformat()
                 self.assertEqual(model_value, value)
+
+    def assertServiceCreates(self, service, valid_data, invalid_data=None):
+        """Test service create operation"""
+        # Test valid creation
+        entity = service.create(valid_data)
+        self.assertIsNotNone(entity.id)
+        self.assertModelEqual(entity, valid_data)
+        
+        # Test invalid data
+        if invalid_data:
+            with self.assertRaises(ValidationError):
+                service.create(invalid_data)
+
+    def assertServiceUpdates(self, service, entity, valid_data, invalid_data=None):
+        """Test service update operation"""
+        # Test valid update
+        updated = service.update(entity, valid_data)
+        self.assertModelEqual(updated, valid_data)
+        
+        # Test invalid data
+        if invalid_data:
+            with self.assertRaises(ValidationError):
+                service.update(entity, invalid_data)
+
+    def assertServiceDeletes(self, service, entity):
+        """Test service delete operation"""
+        service.delete(entity)
+        self.assertIsNone(self.model.query.get(entity.id))
