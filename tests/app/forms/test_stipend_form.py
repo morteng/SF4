@@ -362,7 +362,7 @@ class TestCustomDateTimeField(BaseTestCase):
         class TestForm(Form):
             test_field = CustomDateTimeField(
                 error_messages={
-                    'invalid_date': 'Invalid date values (e.g., Feb 29 in non-leap years)'
+                    'invalid_leap_year': FlashMessages.INVALID_LEAP_YEAR
                 }
             )
         
@@ -370,7 +370,7 @@ class TestCustomDateTimeField(BaseTestCase):
         form = TestForm()
         form.test_field.process_formdata(['2023-02-29 00:00:00'])
         assert form.validate() is False
-        assert 'Invalid date values (e.g., Feb 29 in non-leap years)' in form.test_field.errors
+        assert FlashMessages.INVALID_LEAP_YEAR in form.test_field.errors
         
         # Test valid leap year date
         form = TestForm()

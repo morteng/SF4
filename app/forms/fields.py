@@ -12,6 +12,9 @@ class CustomDateTimeField(DateTimeField):
         if not isinstance(format, str):
             format = '%Y-%m-%d %H:%M:%S'
             
+        # Store format as a private variable to prevent modification
+        self._format = format
+        
         # Initialize error messages
         self.error_messages = {
             'required': str(FlashMessages.DATE_REQUIRED),
@@ -21,8 +24,13 @@ class CustomDateTimeField(DateTimeField):
             **kwargs.pop('error_messages', {})
         }
         
-        super().__init__(label=label, validators=validators, format=format, **kwargs)
+        super().__init__(label=label, validators=validators, format=self._format, **kwargs)
         self.render_kw = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
+
+    @property
+    def format(self):
+        """Getter for format that ensures it's always a string"""
+        return self._format
         
     def _is_empty_value(self, value):
         """Check if the value is empty or whitespace only."""
@@ -65,7 +73,11 @@ class CustomDateTimeField(DateTimeField):
         
         # Validate date and leap year
         try:
-            parsed_dt = datetime.strptime(date_str, self.format)
+            # Ensure format is a string before parsing
+            if not isinstance(self._format, str):
+                raise ValueError("Invalid format type")
+                
+            parsed_dt = datetime.strptime(date_str, self._format)
             
             # Leap year validation
             if parsed_dt.month == 2 and parsed_dt.day == 29:
