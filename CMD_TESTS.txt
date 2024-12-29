@@ -45,7 +45,7 @@
 /add CMD_TESTS.md
 
 # Step 5: Final Documentation Updates
-/architect update TODO.md with final changes & findings, important info and things we've learned that would be good to remember next coding session. Remove the console commands that were run from the Pending console commands section of CMD_TESTS.md file (this document). Add any new console commands to be run at start of next coding session, if needed. DO NOT CHANGE ANY OTHER SECTIONS.
+/architect update TODO.md with final changes & findings, important info and things we've learned that would be good to remember next coding session. Remove the console commands that were run from the Pending console commands section of CMD_TESTS.txt file (this document). Add any new console commands to be run at start of next coding session, if needed. DO NOT CHANGE ANY OTHER SECTIONS.
 
 
 # End of main coding session
