@@ -10,6 +10,8 @@
 # /run python some_script.py
 
 ### COMMANDS START ###
+/run pytest tests/test_admin_stipends.py -v --capture=no
+/run flask shell
 ### COMMANDS END ###
 
 # Once finished, jump to Step 4.
