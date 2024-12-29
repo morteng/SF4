@@ -26,11 +26,6 @@ class User(db.Model):
         self.username = username
         self.email = email
         return self
-
-    def update_profile(self, username, email):
-        """Update user profile information"""
-        self.username = username
-        self.email = email
     
     # Flask-Login required properties and methods
     @property
