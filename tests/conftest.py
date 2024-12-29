@@ -135,34 +135,34 @@ def admin_user(db_session, app):
 @pytest.fixture(scope='function')
 def logged_in_admin(client, admin_user, db_session):
     """Log in as the admin user."""
-    # Ensure admin_user is bound to the current session
     with client.application.app_context():
-        # Refresh and merge the user into the current session
+        # Ensure admin_user is bound to the current session
         admin_user = db_session.merge(admin_user)
         db_session.refresh(admin_user)
         db_session.add(admin_user)  # Explicitly add to session
         db_session.commit()  # Commit to ensure user is persisted
     
-    # Get CSRF token
-    login_response = client.get(url_for('public.login'))
-    csrf_token = extract_csrf_token(login_response.data)
-    
-    # Perform login
-    response = client.post(url_for('public.login'), data={
-        'username': admin_user.username,
-        'password': 'password123',
-        'csrf_token': csrf_token
-    }, follow_redirects=True)
-    
-    assert response.status_code == 200, "Admin login failed."
-    with client.session_transaction() as session:
-        assert '_user_id' in session, "Admin session not established."
-        assert session['_user_id'] == str(admin_user.id)
+        # Get CSRF token
+        login_response = client.get(url_for('public.login'))
+        csrf_token = extract_csrf_token(login_response.data)
+        
+        # Perform login within the same app context
+        response = client.post(url_for('public.login'), data={
+            'username': admin_user.username,
+            'password': 'password123',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        
+        assert response.status_code == 200, "Admin login failed."
+        with client.session_transaction() as session:
+            assert '_user_id' in session, "Admin session not established."
+            assert session['_user_id'] == str(admin_user.id)
     
     yield client
     
     # Logout after test
-    client.get(url_for('public.logout'))
+    with client.application.app_context():
+        client.get(url_for('public.logout'))
 
 @pytest.fixture(scope='function')
 def user_data():
