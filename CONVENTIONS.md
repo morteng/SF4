@@ -16,6 +16,41 @@
    - Use try-except blocks to handle missing dependencies in test files.
    - Skip tests that require missing packages instead of failing the entire suite.
 
+### Installation and Verification
+1. Activate your virtual environment:
+   - **Windows**: `.venv\Scripts\activate`
+   - **macOS/Linux**: `source .venv/bin/activate`
+2. Install `pytest`:
+   ```bash
+   pip install pytest
+   ```
+3. Verify the installation:
+   ```bash
+   pip show pytest
+   ```
+4. Add `pytest` to `requirements.txt`:
+   ```bash
+   echo "pytest" >> requirements.txt
+   ```
+5. Run tests:
+   ```bash
+   pytest
+   ```
+
+### Dependency Verification
+1. **Pre-Test Check**:
+   - Add a test to verify all dependencies are installed before running the test suite:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+2. **Graceful Handling**:
+   - Use try-except blocks to handle missing dependencies in test files.
+   - Skip tests that require missing packages instead of failing the entire suite.
+
 ### Custom Field Implementation
 1. **Handle All Arguments**:
    - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
