@@ -6,6 +6,11 @@ from wtforms.validators import ValidationError
 class TagService(BaseService):
     def __init__(self):
         super().__init__(Tag)
+        
+    def get_form_choices(self):
+        return {
+            'category': [('general', 'General'), ('specific', 'Specific')]
+        }
 
     def create(self, data):
         """Create a new tag with validation"""

@@ -7,6 +7,12 @@ from datetime import datetime
 class BotService(BaseService):
     def __init__(self):
         super().__init__(Bot)
+        
+    def get_form_choices(self):
+        return {
+            'status': [(status.value, status.name) for status in BotStatus],
+            'schedule': [('daily', 'Daily'), ('weekly', 'Weekly'), ('monthly', 'Monthly')]
+        }
 
     def create(self, data, user_id=None):
         """Create a new bot with validation"""

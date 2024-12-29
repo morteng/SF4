@@ -11,6 +11,32 @@ class BaseRouteController:
         self.entity_name = entity_name
         self.form_class = form_class
         self.template_dir = template_dir
+        self.flash_messages = {
+            'create_success': FlashMessages.CREATE_SUCCESS,
+            'update_success': FlashMessages.UPDATE_SUCCESS,
+            'delete_success': FlashMessages.DELETE_SUCCESS,
+            'not_found': FlashMessages.NOT_FOUND
+        }
+
+    def _handle_form_choices(self, form):
+        """Handle common form choices setup"""
+        if hasattr(self.service, 'get_form_choices'):
+            choices = self.service.get_form_choices()
+            for field, options in choices.items():
+                if hasattr(form, field):
+                    getattr(form, field).choices = options
+
+    def _handle_htmx_response(self, template, **kwargs):
+        """Handle HTMX response formatting"""
+        if request.headers.get('HX-Request'):
+            return render_template(f'{self.template_dir}/{template}', **kwargs)
+        return render_template(f'{self.template_dir}/full_{template}', **kwargs)
+
+    def _handle_redirect(self):
+        """Handle redirect after successful operation"""
+        if request.headers.get('HX-Request'):
+            return '', 204, {'HX-Redirect': url_for(f'admin.{self.entity_name}.index')}
+        return redirect(url_for(f'admin.{self.entity_name}.index'))
 
     def index(self):
         """Handle index/list view"""

@@ -7,6 +7,14 @@ from app.constants import FlashMessages, FlashCategory
 class StipendService(BaseService):
     def __init__(self):
         super().__init__(Stipend)
+        
+    def get_form_choices(self):
+        organizations = Organization.query.order_by(Organization.name).all()
+        tags = Tag.query.order_by(Tag.name).all()
+        return {
+            'organization_id': [(org.id, org.name) for org in organizations],
+            'tags': [(tag.id, tag.name) for tag in tags]
+        }
 
     def create(self, data, user_id=None):
         """Create a new stipend with validation"""
