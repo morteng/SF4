@@ -18,7 +18,11 @@ class CustomDateTimeField(DateTimeField):
         if not self.data:
             return True
             
-        # Rest of the validation logic...
+        # Check if the date string matches the expected format
+        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', str(self.data)):
+            self.errors.append(self.error_messages['invalid_format'])
+            return False
+            
         # Initialize default error messages
         self.error_messages = {
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
@@ -45,12 +49,9 @@ class CustomDateTimeField(DateTimeField):
 
     def process_formdata(self, valuelist):
         if not valuelist or not valuelist[0]:
-            self.errors = []  # Clear any existing errors
-            # Use our custom error message instead of the default
-            self.errors.append(self.error_messages.get('required', 'Date is required.'))
+            self.errors.append(self.error_messages['required'])
             self.data = None
-            self._invalid_leap_year = False
-            return False  # Explicitly return False to prevent further validation
+            return
             
         date_str = valuelist[0].strip()
         if not date_str:
@@ -58,7 +59,12 @@ class CustomDateTimeField(DateTimeField):
             self.data = None
             return
             
-        date_str = valuelist[0]
+        # Validate format first
+        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
+            self.errors.append(self.error_messages['invalid_format'])
+            self.data = None
+            return
+            
         self._invalid_leap_year = False  # Reset leap year flag
             
         # First check for leap year dates
