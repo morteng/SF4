@@ -16,40 +16,13 @@ limiter = Limiter(key_func=get_remote_address)
 
 logger = logging.getLogger(__name__)
 
-def check_dependencies():
-    required_deps = ["flask", "flask_login", "werkzeug", "flask_sqlalchemy", "flask_migrate"]
-    missing_deps = []
-    for dep in required_deps:
-        try:
-            __import__(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    if missing_deps:
-        raise RuntimeError(f"Missing dependencies: {', '.join(missing_deps)}. Run 'pip install -r requirements.txt' to install them.")
-
-def get_limiter():
-    """Lazy import for Limiter to avoid circular imports"""
-    from flask_limiter import Limiter
-    from flask_limiter.util import get_remote_address
-    return Limiter, get_remote_address
-
-def get_limiter():
-    """Lazy import for Limiter to avoid circular imports"""
-    from flask_limiter import Limiter
-    from flask_limiter.util import get_remote_address
-    return Limiter, get_remote_address
-
-try:
-    Limiter, get_remote_address = get_limiter()
-    limiter = Limiter(
-        key_func=get_remote_address,
-        storage_uri="redis://localhost:6379",  # Use Redis for production
-        default_limits=["100 per hour"]
-    )
-except ImportError:
-    raise ImportError(
-        "Flask-Limiter is required. Please install it using 'pip install Flask-Limiter==3.5.0'"
-    )
+def register_blueprints(app):
+    """Register all blueprints with the Flask app."""
+    from app.routes.admin import register_admin_blueprints
+    from app.routes import register_blueprints as register_public_blueprints
+    
+    register_admin_blueprints(app)
+    register_public_blueprints(app)
 from app.extensions import db, login_manager, migrate, init_extensions  # Add 'migrate' and 'init_extensions' here
 from flask_wtf import CSRFProtect
 from dotenv import load_dotenv
@@ -77,7 +50,7 @@ def create_app(config_name='development'):
     init_extensions(app)
     
     # Register blueprints
-    register_blueprints(app)  # Now this will work
+    register_blueprints(app)
     
     return app
 
@@ -86,32 +59,6 @@ def init_extensions(app):
     login_manager.init_app(app)
     migrate.init_app(app, db)
     limiter.init_app(app)
-
-def create_app(config_name='development'):
-    app = Flask(__name__)
-    
-    # Load environment variables
-    load_dotenv()
-    
-    # Configure SQLAlchemy database URI
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///app.db')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
-    # Initialize extensions
-    init_extensions(app)
-    
-    # Register blueprints
-    register_blueprints(app)
-    
-    # Configure rate limiter
-    limiter = Limiter(
-        key_func=get_remote_address,
-        storage_uri="redis://localhost:6379",  # Use Redis for production
-        default_limits=["100 per hour"]
-    )
-    limiter.init_app(app)
-    
-    return app
 
     # Initialize extensions
     db.init_app(app)
