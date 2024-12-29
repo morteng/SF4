@@ -16,7 +16,7 @@ class BaseRouteController:
             'create_success': FlashMessages.CREATE_SUCCESS,
             'update_success': FlashMessages.UPDATE_SUCCESS,
             'delete_success': FlashMessages.DELETE_SUCCESS,
-            'validation_error': FlashMessages.VALIDATION_ERROR,
+            'validation_error': FlashMessages.FORM_VALIDATION_ERROR,
             'not_found': FlashMessages.NOT_FOUND
         }
 
