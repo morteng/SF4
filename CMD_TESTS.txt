@@ -17,9 +17,8 @@
 
 /test
 
-/ask what is causing the problem?
 
-/code implement the suggested changes
+/architect implement the suggested changes
 
 /test
 

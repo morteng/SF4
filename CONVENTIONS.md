@@ -8,6 +8,9 @@ Deadlines should be flexible to handle various formats:
 - Vague descriptions like "in August" should be converted to "August 2023"
 The system must be flexible in handling stipend info, not strict.
 
+TODO.md should be focused on tasks you have todo in the future, to remember doing them next coding session. Use this file to plan ahead and keep track of tasks that need to be completed. This can include refactoring, adding new features, or fixing bugs. It's a good practice to add a brief description of each task and any relevant context or dependencies.
+
+
 ## Error Handling
 - Use specific exceptions in try/except blocks
 - Always rollback database transactions on errors
