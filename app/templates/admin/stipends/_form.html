@@ -1,12 +1,11 @@
 <div id="stipend-form">
     <form method="POST" 
           hx-post="{{ url_for('admin.stipend.create') }}"
-          hx-target="#main-content"
-          hx-swap="innerHTML"
-          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-target="#stipend-form"
+          hx-swap="outerHTML"
           class="space-y-4">
         
-        {{ form.hidden_tag() }}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         
         <div class="form-group">
             {{ form.name.label(class="block text-sm font-medium text-gray-700") }}

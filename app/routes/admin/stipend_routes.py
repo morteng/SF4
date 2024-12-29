@@ -59,9 +59,8 @@ def create():
     form.organization_id.choices = [(org.id, org.name) for org in organizations]
     form.tags.choices = [(tag.id, tag.name) for tag in tags]
     
-    # Add CSRF token for HTMX requests
-    if is_htmx:
-        form.csrf_token.data = request.headers.get('X-CSRFToken')
+    # Generate CSRF token for the template
+    csrf_token_value = generate_csrf()
     
     if form.validate_on_submit():
         try:
@@ -112,7 +111,7 @@ def create():
             current_app.logger.error(f"Validation error creating stipend: {str(e)}")
             flash_message(f"Validation error: {str(e)}", FlashCategory.ERROR)
             if is_htmx:
-                return render_template('admin/stipends/_form.html', form=form), 400
+                return render_template('admin/stipends/_form.html', form=form, csrf_token=csrf_token_value), 400
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Error creating stipend: {str(e)}")
