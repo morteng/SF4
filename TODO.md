@@ -2,7 +2,9 @@
 
 ## Completed
 - [x] Fix property implementation in `BaseService` to use proper getters/setters.
-- [x] Fix `TypeError` in `CustomDateTimeField` caused by incorrect `format` usage.
+- [x] Install `freezegun` for time-based testing.
+- [x] Add installation verification steps to documentation.
+- [x] Add a script to verify all dependencies listed in `requirements.txt` are installed.
 - [x] Install `freezegun` for time-based testing.
 - [x] Add installation verification steps to documentation.
 - [x] Consolidate leap year validation logic in `CustomDateTimeField`.

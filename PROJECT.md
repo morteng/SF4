@@ -78,8 +78,37 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 
 ## Lessons Learned
 
-### Property Implementation
-- **Issue**: The `create_limit` function in `BaseService` was incorrectly used as a setter without being defined as a property.
+1. **Property Implementation**:
+   - The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
+   - **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
+     ```python
+     class BaseService:
+         def __init__(self):
+             self._create_limit = None  # Initialize the private attribute
+
+         @property
+         def create_limit(self):
+             """Getter for create_limit."""
+             return self._create_limit
+
+         @create_limit.setter
+         def create_limit(self, value):
+             """Setter for create_limit."""
+             self._create_limit = value
+     ```
+   - **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
+
+2. **Dependency Management**:
+   - Tests failed because `freezegun` was listed in `requirements.txt` but not installed.
+   - **Solution**: Always verify dependencies are installed by running:
+     ```bash
+     pip install -r requirements.txt
+     ```
+   - **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
+
+3. **Circular Imports**:
+   - Circular dependencies were identified in the import chain (`app/utils.py` → `app/services/bot_service.py` → `app/services/base_service.py`).
+   - **Solution**: Refactor shared functionality into a separate module (e.g., `app/common/utils.py`) and use lazy imports where necessary.
 - **Solution**: Refactor `create_limit` into a proper property with a getter and setter:
   ```python
   class BaseService:
