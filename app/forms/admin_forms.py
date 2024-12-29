@@ -65,11 +65,16 @@ class StipendForm(FlaskForm):
     tags = SelectMultipleField('Tags', coerce=int, validators=[Optional()])
 
     def validate_application_deadline(self, field):
+        # Skip validation if field is empty or already has errors
         if not field.data or field.errors:
             return
             
         # Handle flexible deadline formats
         if isinstance(field.data, str):
+            # If empty string, skip validation
+            if not field.data.strip():
+                return
+                
             try:
                 # Try full datetime format first
                 try:
@@ -80,11 +85,22 @@ class StipendForm(FlaskForm):
                         field.data = datetime.strptime(field.data, '%B %Y')
                     except ValueError:
                         # Try year only format
-                        field.data = datetime.strptime(field.data, '%Y')
-            except ValueError:
-                raise ValidationError('Invalid date format. Use YYYY-MM-DD HH:MM:SS, Month YYYY, or YYYY')
+                        try:
+                            field.data = datetime.strptime(field.data, '%Y')
+                        except ValueError:
+                            # Try vague descriptions like "in August"
+                            if field.data.lower().startswith('in '):
+                                month = field.data[3:].strip()
+                                try:
+                                    field.data = datetime.strptime(f'{month} {datetime.now().year}', '%B %Y')
+                                except ValueError:
+                                    raise ValidationError('Invalid date format. Use YYYY-MM-DD HH:MM:SS, Month YYYY, YYYY, or "in Month"')
+                            else:
+                                raise ValidationError('Invalid date format. Use YYYY-MM-DD HH:MM:SS, Month YYYY, YYYY, or "in Month"')
+            except ValueError as e:
+                raise ValidationError(str(e))
                 
-        if field.data.tzinfo is None:
+        if field.data and field.data.tzinfo is None:
             field.data = pytz.UTC.localize(field.data)
             
         # Only validate future date if provided
