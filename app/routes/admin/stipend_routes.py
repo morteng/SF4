@@ -44,7 +44,7 @@ stipend_controller = BaseRouteController(
     'admin/stipends'
 )
 
-class StipendController(BaseRouteController):
+class StipendController(BaseCrudController):
     def __init__(self):
         super().__init__(
             service=StipendService(),
@@ -65,6 +65,12 @@ class StipendController(BaseRouteController):
             'open_for_applications': form.open_for_applications.data
         }
 
+    def _prepare_update_data(self, form):
+        data = self._prepare_create_data(form)
+        data['organization_id'] = form.organization_id.data
+        data['tags'] = form.tags.data
+        return data
+
 stipend_controller = StipendController()
 
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])
@@ -72,51 +78,7 @@ stipend_controller = StipendController()
 @login_required
 @admin_required
 def create():
-    form = StipendForm()
-    if form.validate_on_submit():
-        try:
-            data = {
-                'name': form.name.data,
-                'summary': form.summary.data,
-                'description': form.description.data,
-                'homepage_url': form.homepage_url.data,
-                'application_procedure': form.application_procedure.data,
-                'eligibility_criteria': form.eligibility_criteria.data,
-                'application_deadline': form.application_deadline.data,
-                'open_for_applications': form.open_for_applications.data
-            }
-            
-            stipend = stipend_controller.create(data)
-            
-            if request.headers.get('HX-Request'):
-                return render_template(
-                    'admin/stipends/_stipend_row.html',
-                    stipend=stipend
-                ), 200, {
-                    'HX-Trigger': 'stipendCreated'
-                }
-                
-            flash_message(FlashMessages.STIPEND_CREATE_SUCCESS, FlashCategory.SUCCESS)
-            return redirect(url_for('admin.stipend.index'))
-            
-        except ValidationError as e:
-            flash_message(f"{FlashMessages.VALIDATION_ERROR}: {str(e)}", FlashCategory.ERROR)
-            if request.headers.get('HX-Request'):
-                return render_template(
-                    'admin/stipends/_form.html',
-                    form=form,
-                    error_messages=[str(e)]
-                ), 400
-        except Exception as e:
-            flash_message(f"{FlashMessages.STIPEND_CREATE_ERROR}: {str(e)}", FlashCategory.ERROR)
-            if request.headers.get('HX-Request'):
-                return render_template(
-                    'admin/stipends/_form.html',
-                    form=form,
-                    error_messages=[str(e)]
-                ), 400
-                
-    return render_template('admin/stipends/create.html', form=form)
+    return stipend_controller.create()
 
 
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
