@@ -57,14 +57,30 @@ class TestBaseCrudController(BaseTestCase):
         # Test missing username
         form = UserForm(username="")
         assert form.validate() is False
-        assert FlashMessages.USERNAME_REQUIRED.value in form.username.errors
+        assert FlashMessages.USERNAME_REQUIRED in form.username.errors
 
         # Test username too short
         form = UserForm(username="ab")
         assert form.validate() is False
-        assert FlashMessages.USERNAME_LENGTH.value in form.username.errors
+        assert FlashMessages.USERNAME_LENGTH in form.username.errors
 
         # Test invalid characters in username
         form = UserForm(username="invalid@user")
         assert form.validate() is False
-        assert FlashMessages.USERNAME_FORMAT.value in form.username.errors
+        assert FlashMessages.USERNAME_FORMAT in form.username.errors
+
+    def test_stipend_form_validation(self):
+        # Test missing name
+        form = StipendForm(name="")
+        assert form.validate() is False
+        assert FlashMessages.NAME_REQUIRED in form.name.errors
+
+        # Test name too long
+        form = StipendForm(name="a" * 101)
+        assert form.validate() is False
+        assert FlashMessages.NAME_LENGTH in form.name.errors
+
+        # Test invalid URL
+        form = StipendForm(homepage_url="invalid-url")
+        assert form.validate() is False
+        assert FlashMessages.INVALID_URL in form.homepage_url.errors

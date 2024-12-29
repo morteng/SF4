@@ -34,8 +34,8 @@ from app.extensions import db
 class StipendForm(FlaskForm):
     csrf_token = HiddenField('CSRF Token')
     name = StringField('Name', validators=[
-        DataRequired(message=FlashMessages.NAME_REQUIRED.value),
-        Length(max=100, message=FlashMessages.NAME_LENGTH.value)
+        DataRequired(message=FlashMessages.NAME_REQUIRED),
+        Length(max=100, message=FlashMessages.NAME_LENGTH)
     ])
     summary = TextAreaField('Summary', validators=[
         DataRequired(message="Summary is required."),
@@ -46,8 +46,8 @@ class StipendForm(FlaskForm):
         Length(max=2000, message="Description cannot exceed 2000 characters.")
     ])
     homepage_url = URLField('Homepage URL', validators=[
-        DataRequired(message="Homepage URL is required."),
-        URL(message="Please enter a valid URL starting with http:// or https://.")
+        DataRequired(message=FlashMessages.MISSING_FIELD_ERROR),
+        URL(message=FlashMessages.INVALID_URL)
     ])
     application_procedure = TextAreaField('Application Procedure', validators=[
         DataRequired(message="Application procedure is required."),
@@ -59,15 +59,15 @@ class StipendForm(FlaskForm):
     ])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
-        validators=[InputRequired(message="Application deadline is required.")],
+        validators=[InputRequired(message=FlashMessages.MISSING_FIELD_ERROR)],
         error_messages={
-            'required': 'Application deadline is required.',
-            'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
+            'required': FlashMessages.MISSING_FIELD_ERROR,
+            'invalid_format': FlashMessages.INVALID_DATE_FORMAT,
             'invalid_date': 'Invalid application deadline date',
             'invalid_time': 'Invalid application deadline time',
-            'past_date': 'Application deadline must be a future date',
+            'past_date': FlashMessages.FUTURE_DATE_REQUIRED,
             'future_date': 'Application deadline cannot be more than 5 years in the future',
-            'invalid_leap_year': 'Invalid application deadline date (e.g., Feb 29 in non-leap years)'
+            'invalid_leap_year': FlashMessages.INVALID_LEAP_YEAR
         }
     )
     organization_id = SelectField('Organization', coerce=int, validators=[
