@@ -114,3 +114,6 @@ def some_function():
 def shared_function():
     """Example shared function to demonstrate refactoring."""
     pass
+def shared_function():
+    # Implementation
+    pass
