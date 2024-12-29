@@ -1,6 +1,7 @@
 # Updated TODO List
 
 ## Completed
+- [x] Fix property implementation in `BaseService` to use proper getters/setters.
 - [x] Fix `TypeError` in `CustomDateTimeField` caused by incorrect `format` usage.
 - [x] Install `freezegun` for time-based testing.
 - [x] Add installation verification steps to documentation.
