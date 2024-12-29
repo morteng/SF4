@@ -55,6 +55,14 @@
   - Watch for leap-year shenanigans.  
   - Use `freezegun` to test predictable moments in time.  
 - **Error Messages**: Centralize in `app/constants.py` so you don’t sprinkle random strings all over.
+- **CSRF Tokens**:
+  - Always include CSRF tokens in test requests
+  - Use `client.get('/')` to fetch CSRF token before POST requests
+  - Validate CSRF tokens in all form submissions
+- **Route Registration**:
+  - Register admin routes before public routes
+  - Use debug logging to verify route registration order
+  - Test route accessibility after registration
 
 ## 7. Error Handling & Organization
 - **Centralized Errors**: Single source of truth for messages, making your logs (and your sanity) that much better.
