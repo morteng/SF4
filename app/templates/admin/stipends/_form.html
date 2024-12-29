@@ -1,0 +1,49 @@
+<div id="stipend-form">
+    <form method="POST" 
+          hx-post="{{ url_for('admin.stipend.create') }}"
+          hx-target="#stipend-form"
+          hx-swap="outerHTML"
+          class="space-y-4">
+        
+        {{ form.hidden_tag() }}
+        
+        <div class="form-group">
+            {{ form.name.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.name(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+            {% if form.name.errors %}
+                <div class="text-red-500 text-sm mt-1">{{ form.name.errors[0] }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.summary.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.summary(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+            {% if form.summary.errors %}
+                <div class="text-red-500 text-sm mt-1">{{ form.summary.errors[0] }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.description.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.description(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+            {% if form.description.errors %}
+                <div class="text-red-500 text-sm mt-1">{{ form.description.errors[0] }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.application_deadline.label(class="block text-sm font-medium text-gray-700") }}
+            {{ form.application_deadline(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+            {% if form.application_deadline.errors %}
+                <div class="text-red-500 text-sm mt-1">{{ form.application_deadline.errors[0] }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <button type="submit" 
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Create Stipend
+            </button>
+        </div>
+    </form>
+</div>

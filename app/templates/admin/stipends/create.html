@@ -1,4 +1,11 @@
-{% extends "admin/layout.html" %}
+{% extends 'base.html' %}
+
 {% block content %}
-    <form method="POST">
-        {{ form.hidden_tag() }}
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Create New Stipend</h1>
+    
+    <div id="stipend-form-container">
+        {% include 'admin/stipends/_form.html' %}
+    </div>
+</div>
+{% endblock %}
