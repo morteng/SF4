@@ -61,3 +61,19 @@ class TestBaseService(BaseTestCase):
         
         results = self.service.get_all().all()
         self.assertEqual(len(results), 2)
+import pytest
+from app.services.base_service import BaseService
+
+def test_create_limit_property():
+    service = BaseService()
+    
+    # Test valid values
+    service.create_limit = 10
+    assert service.create_limit == 10
+    
+    # Test invalid values
+    with pytest.raises(ValueError):
+        service.create_limit = -1
+        
+    with pytest.raises(ValueError): 
+        service.create_limit = "invalid"

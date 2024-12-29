@@ -351,3 +351,18 @@ class BaseService:
                 http_method=request.method if request else 'UNKNOWN',
                 user_agent=request.headers.get('User-Agent') if request else None
             )
+class BaseService:
+    def __init__(self):
+        self._create_limit = None  # Initialize private attribute
+
+    @property
+    def create_limit(self):
+        """Getter for create_limit property"""
+        return self._create_limit
+
+    @create_limit.setter 
+    def create_limit(self, value):
+        """Setter for create_limit property with validation"""
+        if not isinstance(value, int) or value < 0:
+            raise ValueError("Create limit must be a positive integer")
+        self._create_limit = value

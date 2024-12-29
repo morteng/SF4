@@ -2,6 +2,22 @@
 
 ## Setup Instructions
 
+### Pre-Test Verification
+Before running tests, the system will automatically verify that all required dependencies are installed. If any dependencies are missing, the test session will abort with a clear error message.
+
+To manually verify dependencies:
+```bash
+pytest tests/test_dependencies.py
+```
+
+### Property Implementation
+All service properties must:
+1. Be defined with @property decorator
+2. Have a corresponding setter with validation
+3. Use private attributes for storage
+4. Include docstrings explaining their purpose
+
+### Environment Setup
 1. Create and activate a virtual environment:
    ```bash
    python -m venv .venv

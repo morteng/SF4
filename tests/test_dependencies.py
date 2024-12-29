@@ -110,3 +110,21 @@ def test_dependencies():
         subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
     except subprocess.CalledProcessError:
         pytest.fail("Failed to install dependencies")
+import subprocess
+import pytest
+
+def test_dependencies_installed():
+    """Verify all required dependencies are installed"""
+    try:
+        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+    except subprocess.CalledProcessError:
+        pytest.fail("Failed to install dependencies")
+
+def test_critical_packages():
+    """Verify critical packages are installed"""
+    required = ["Flask", "freezegun", "pytest"]
+    for package in required:
+        try:
+            subprocess.check_call(["pip", "show", package])
+        except subprocess.CalledProcessError:
+            pytest.fail(f"Required package {package} is not installed")
