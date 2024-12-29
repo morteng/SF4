@@ -10,7 +10,6 @@
 # /run python manage.py migrate
 
 ### COMMANDS START ###
-/run find . -type d -name "__pycache__" -exec rm -r {} +
 ### COMMANDS END ###
 
 # Once we're done, jump to Step 2.
