@@ -269,7 +269,7 @@ class TestCustomDateTimeField(BaseTestCase):
         form = TestForm()
         self.assertFormInvalid(
             form, {'test_field': ''},
-            {'test_field': ['Date is required']}
+            {'test_field': ['Application deadline is required.']}
         )
 
     def test_invalid_date_format(self):
