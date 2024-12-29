@@ -34,6 +34,8 @@ class BaseCrudController:
             flash(success_message.format(self.entity_name), FlashCategory.SUCCESS.value)
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_success}'))
         except Exception as e:
+            import logging
+            logging.error(f"Error in {operation.__name__}: {str(e)}", exc_info=True)
             flash(error_message.format(self.entity_name), FlashCategory.ERROR.value)
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
 

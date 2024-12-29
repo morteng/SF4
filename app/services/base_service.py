@@ -31,9 +31,13 @@ class BaseService:
             entity = self.model(**data)
             db.session.add(entity)
             db.session.commit()
+            if self.audit_logger:
+                self._log_operation('create', entity.id, 'Entity created')
             return entity
         except SQLAlchemyError as e:
             db.session.rollback()
+            import logging
+            logging.error(f"Error creating entity: {str(e)}", exc_info=True)
             raise ValidationError(f"Error creating entity: {str(e)}")
 
     def update(self, entity, data):

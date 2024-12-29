@@ -256,8 +256,6 @@ def test_organization(db_session, organization_data, app):
     """Provide a test organization using BaseTest."""
     base_test = BaseTest()
     yield from base_test.test_entity(db_session, app, Organization, organization_data)
-            db_session.delete(organization)
-            db_session.commit()
 
 @pytest.fixture(scope='function')
 def tag_data():
