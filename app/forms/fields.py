@@ -16,7 +16,7 @@ class CustomDateTimeField(DateTimeField):
     - Custom error messages
     """
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, format='%Y-%m-%d %H:%M:%S', **kwargs):
         self.timezone = kwargs.pop('timezone', None)
         # Merge custom error messages with defaults
         custom_messages = kwargs.pop('error_messages', {})
@@ -30,10 +30,10 @@ class CustomDateTimeField(DateTimeField):
             'future_date': 'Date cannot be more than 5 years in the future',
             **custom_messages  # Allow overriding defaults
         }
-        self.format = '%Y-%m-%d %H:%M:%S'  # Set format as instance attribute
+        self.format = format  # Set format as instance attribute
         kwargs['format'] = self.format  # Pass to parent
         kwargs['render_kw'] = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
-        super().__init__(*args, **kwargs)
+        super().__init__(**kwargs)
         
     def _is_empty_value(self, value):
         """Check if the value is empty or whitespace only."""
@@ -56,46 +56,41 @@ class CustomDateTimeField(DateTimeField):
             self.data = None
             return
 
-        # Validate format
         date_str = valuelist[0].strip()
+        
+        # Validate format
         if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
-            self.errors.append(self.error_messages.get('invalid_format', 'Invalid date format'))
+            self.errors.append(self.error_messages['invalid_format'])
             self.data = None
             return
 
-        # Validate date portion
-        date_part = date_str.split(' ')[0]
         try:
-            parsed_date = datetime.strptime(date_part, '%Y-%m-%d')
-        except ValueError:
-            self.errors.append(self.error_messages.get('invalid_date', 'Invalid date values'))
-            self.data = None
-            return
-
-        # Validate time components
-        time_part = date_str.split(' ')[1]
-        try:
-            hours, minutes, seconds = map(int, time_part.split(':'))
-            if not (0 <= hours <= 23) or not (0 <= minutes <= 59) or not (0 <= seconds <= 59):
-                self.errors.append(self.error_messages.get('invalid_time', 'Invalid time values'))
-                self.data = None
-                return
-        except ValueError:
-            self.errors.append(self.error_messages.get('invalid_time', 'Invalid time values'))
-            self.data = None
-            return
-
-        # Validate leap year for February 29th
-        if parsed_date.month == 2 and parsed_date.day == 29:
-            year = parsed_date.year
-            is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
-            if not is_leap:
-                self.errors.append(self.error_messages.get('invalid_leap_year', 'Invalid date values (e.g., Feb 29 in non-leap years)'))
+            # Parse the full datetime using self.format
+            parsed_dt = datetime.strptime(date_str, self.format)
+            
+            # Validate time components
+            if not (0 <= parsed_dt.hour <= 23) or \
+               not (0 <= parsed_dt.minute <= 59) or \
+               not (0 <= parsed_dt.second <= 59):
+                self.errors.append(self.error_messages['invalid_time'])
                 self.data = None
                 return
 
-        # If all validations pass, store the datetime
-        self.data = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+            # Validate leap year for February 29th
+            if parsed_dt.month == 2 and parsed_dt.day == 29:
+                year = parsed_dt.year
+                is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
+                if not is_leap:
+                    self.errors.append(self.error_messages['invalid_leap_year'])
+                    self.data = None
+                    return
+
+            # If all validations pass, store the datetime
+            self.data = parsed_dt
+
+        except ValueError as e:
+            self.errors.append(self.error_messages['invalid_date'])
+            self.data = None
             
         # First check for leap year dates
         if '02-29' in date_str:
