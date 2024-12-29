@@ -274,3 +274,6 @@ DATE_TIME_VALIDATION_MESSAGES = {
 }
 DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
 MISSING_FIELD_ERROR = "This field is required."
+# Validation Error Messages
+INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+MISSING_REQUIRED_FIELD = "This field is required."

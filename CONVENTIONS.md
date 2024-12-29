@@ -2,6 +2,66 @@
 
 ## Testing Setup
 
+### 1. Install pytest
+1. Activate virtual environment:
+   - Windows: `.venv\Scripts\activate`
+   - macOS/Linux: `source .venv/bin/activate`
+2. Install pytest:
+   ```bash
+   pip install pytest
+   ```
+3. Verify installation:
+   ```bash
+   pip show pytest
+   ```
+4. Add to requirements.txt:
+   ```bash
+   echo "pytest" >> requirements.txt
+   ```
+
+### 2. Fix CustomDateTimeField
+Update initialization to handle validators correctly:
+```python
+class CustomDateTimeField(Field):
+    def __init__(self, label=None, validators=None, **kwargs):
+        if validators is None:
+            validators = [InputRequired()]
+        super().__init__(label=label, validators=validators, **kwargs)
+```
+
+### 3. Resolve Circular Imports
+1. Create shared utils module:
+   ```bash
+   mkdir -p app/common
+   touch app/common/utils.py
+   ```
+2. Move shared code to app/common/utils.py
+3. Use lazy imports where needed:
+   ```python
+   def some_function():
+       from app.services.bot_service import run_bot
+       run_bot()
+   ```
+
+### 4. Dependency Verification
+Add pre-test check:
+```python
+def test_dependencies():
+    try:
+        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+    except subprocess.CalledProcessError:
+        pytest.fail("Failed to install dependencies")
+```
+
+### 5. Centralize Error Messages
+Define messages in app/constants.py:
+```python
+INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+MISSING_REQUIRED_FIELD = "This field is required."
+```
+
+## Testing Setup
+
 #### 1. Fix `pytest` Installation
 1. Activate your virtual environment:
    - **Windows**: `.venv\Scripts\activate`
