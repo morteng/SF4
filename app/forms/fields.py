@@ -7,14 +7,9 @@ from app.constants import FlashMessages
 class CustomDateTimeField(DateTimeField):
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
         # Ensure format is always a string
-        if 'format' in kwargs:
-            format = kwargs.pop('format')
         if not isinstance(format, str):
             format = '%Y-%m-%d %H:%M:%S'
             
-        # Store format as a private variable to prevent modification
-        self._format = format
-        
         # Initialize error messages
         self.error_messages = {
             'required': str(FlashMessages.DATE_REQUIRED),
@@ -24,7 +19,7 @@ class CustomDateTimeField(DateTimeField):
             **kwargs.pop('error_messages', {})
         }
         
-        super().__init__(label=label, validators=validators, format=self._format, **kwargs)
+        super().__init__(label=label, validators=validators, format=format, **kwargs)
         self.render_kw = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
 
     @property
@@ -42,54 +37,20 @@ class CustomDateTimeField(DateTimeField):
 
 
     def process_formdata(self, valuelist):
-        self.errors = []
-        
-        # Check for empty value
         if not valuelist or not valuelist[0].strip():
-            self.errors.append(self.error_messages['required'])
             self.data = None
             return
-
-        date_str = valuelist[0].strip()
-        
-        # Validate format
-        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
-            self.errors.append(self.error_messages['invalid_format'])
-            self.data = None
-            return
-        
-        # Validate time components
-        try:
-            time_part = date_str.split()[1]
-            hours, minutes, seconds = map(int, time_part.split(':'))
-            if not (0 <= hours <= 23) or not (0 <= minutes <= 59) or not (0 <= seconds <= 59):
-                self.errors.append(self.error_messages['invalid_time'])
-                self.data = None
-                return
-        except (IndexError, ValueError):
-            self.errors.append(self.error_messages['invalid_time'])
-            self.data = None
-            return
-        
-        # Validate date and leap year
-        try:
-            # Ensure format is a string before parsing
-            if not isinstance(self._format, str):
-                raise ValueError("Invalid format type")
-                
-            parsed_dt = datetime.strptime(date_str, self._format)
             
-            # Leap year validation
-            if parsed_dt.month == 2 and parsed_dt.day == 29:
-                year = parsed_dt.year
-                if not (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)):
-                    self.errors.append(self.error_messages['invalid_leap_year'])
-                    self.data = None
-                    return
-                    
-            self.data = parsed_dt
-        except ValueError:
-            self.errors.append(self.error_messages['invalid_date'])
+        try:
+            super().process_formdata(valuelist)
+        except ValueError as e:
+            error_str = str(e)
+            if 'does not match format' in error_str:
+                self.errors.append(self.error_messages.get('invalid_format', 'Invalid date format'))
+            elif 'day is out of range' in error_str:
+                self.errors.append(self.error_messages.get('invalid_date', 'Invalid date values (e.g., Feb 29 in non-leap years)'))
+            elif 'time data' in error_str:
+                self.errors.append(self.error_messages.get('invalid_time', 'Invalid time values'))
             self.data = None
             
         # First check for leap year dates
