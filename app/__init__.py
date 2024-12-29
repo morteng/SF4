@@ -21,9 +21,17 @@ def create_app(config_name='development'):
     from app.extensions import init_extensions
     init_extensions(app)
     
-    # Register blueprints
+    # Register blueprints with proper order
     from app.routes import register_blueprints
-    register_blueprints(app)
+    try:
+        register_blueprints(app)
+        # Verify all routes are registered
+        with app.app_context():
+            registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
+            app.logger.debug(f"Registered routes: {registered_routes}")
+    except Exception as e:
+        app.logger.error(f"Failed to register blueprints: {str(e)}")
+        raise
     
     # Setup logging
     logging.basicConfig(
