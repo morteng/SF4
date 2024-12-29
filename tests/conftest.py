@@ -7,6 +7,21 @@ import logging
 import uuid
 import contextlib
 
+def verify_dependencies():
+    """Verify that all required dependencies are installed."""
+    missing_deps = []
+    try:
+        import freezegun
+    except ImportError:
+        missing_deps.append("freezegun")
+
+    if missing_deps:
+        missing_deps_str = ", ".join(missing_deps)
+        raise ImportError(
+            f"The following dependencies are missing: {missing_deps_str}. "
+            f"Run `pip install -r requirements.txt` to install them."
+        )
+
 # Add a flag to track if freezegun is available
 try:
     import freezegun
@@ -15,21 +30,22 @@ except ImportError:
     FREEZEGUN_INSTALLED = False
     logging.warning(
         "freezegun is not installed. Some tests may be skipped. "
-        "Run `pip install -r requirements.txt` to install dependencies."
+        "Run `pip install freezegun` to install it."
     )
     warnings.warn(
         "freezegun is not installed. Some tests may be skipped. "
-        "Run `pip install -r requirements.txt` to install dependencies.",
+        "Run `pip install freezegun` to install it.",
         RuntimeWarning
     )
 
 def pytest_sessionstart(session):
+    verify_dependencies()
     try:
         import freezegun
     except ImportError:
         logging.warning(
             "freezegun is not installed. Some tests may be skipped. "
-            "Run `pip install -r requirements.txt` to install dependencies."
+            "Run `pip install freezegun` to install it."
         )
 
 # Add a pytest marker for freezegun-dependent tests
