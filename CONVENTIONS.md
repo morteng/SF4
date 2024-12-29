@@ -22,25 +22,14 @@
   (Skips tests gracefully if something’s missing—no meltdown required.)
 
 ## 2. Testing Setup
-- **pytest**: The go-to test runner.
-  bash
-  pip install pytest
-  pytest
-  
-- **freezegun**: For controlling date/time in tests without rewriting the space-time continuum, sir.
+- **pytest**   
+- **freezegun**: For controlling date/time in tests.
 
-- **Virtual Environment Recreation** (optional, if your environment spontaneously combusts):
-  bash
-  deactivate
-  rm -rf .venv
-  python -m venv .venv
-  # reactivate and reinstall
-  
 
 ## 3. Custom Field Implementation
 - **Handle All Arguments**: If you create a `CustomDateTimeField`, accept all typical field arguments.
 - **Default Validators**: If `validators` is `None`, default to `[InputRequired()]`.
-  python
+  
   if validators is None:
       validators = [InputRequired()]
   
@@ -48,7 +37,7 @@
 
 ## 4. Property Implementation
 - **@property** before `@<property>.setter`:  
-  python
+  
   @property
   def create_limit(self):
       return self._create_limit
@@ -59,7 +48,7 @@
   
 - **No Direct `_attribute` Access**: Keep logic consistent (and your code less feral).
 
-- **Docstrings**: Because future you will forget what that property was for, sir.
+- **Docstrings**: Because future you will forget what that property was for.
 
 ## 5. Circular Imports
 - **Refactor Shared Logic**: Dump it into `common/utils.py` or something equally central.  
@@ -78,5 +67,5 @@
 - **Graceful Fails**: If a package is missing, skip the test. Don’t throw the entire test suite off the cliff.  
 - **Modular Code**: Minimal duplication, maximum reusability. Keep your code as neat as your desk (or neater, sir).
 
----
+
 

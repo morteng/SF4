@@ -1,3 +1,3 @@
 ## todo
-- work on fixing failing tests (your first priority!)
-- update the todo list
+- work on fixing failing tests. This is your first and main priority, do not focus on features or refactoring until we have testing under control.
+- update the todo list as needed

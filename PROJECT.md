@@ -1,7 +1,3 @@
-Sir, below is a comprehensive, one-stop project description to get any developer up and running with the **Stipend Discovery Website**. It consolidates all major points—architecture, features, database schema, routes, coding conventions, testing specifics, lessons learned, and more. If this doesn’t get the dev started, nothing will.
-
----
-
 # Stipend Discovery Website: **Complete Project Specification**
 
 ## 1. Overview

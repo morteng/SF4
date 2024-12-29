@@ -1,9 +1,9 @@
 /git add .
 /commit
 
-/add PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
+/read PROJECT.md
+/read CONVENTIONS.md
+/read VALIDATION.md
 /add TODO.md
 
 # Step 1: Identify & Plan
@@ -27,7 +27,7 @@
 /ask If there's a new issue, what is it?
 
 # Step 5: Final Documentation Updates
-/architect update PROJECT.md, CONVENTIONS.md, TODO.md, and VALIDATION.md with final changes & findings, important info and things we've learned that would be good to remember next coding session.
+/architect update TODO.md with final changes & findings, important info and things we've learned that would be good to remember next coding session.
 
 # Step 6: Rince and repeat
 /reset
