@@ -34,12 +34,6 @@ limiter = Limiter(
 @admin_required
 def create():
     """Create a new user with audit logging and notifications"""
-    """Create a new user with proper validation and audit logging"""
-    # Safety check for current_user
-    if not hasattr(current_user, 'id'):
-        flash_message("User not properly authenticated", FlashCategory.ERROR)
-        return redirect(url_for('public.login'))
-        
     form = UserForm()
     notification_count = get_notification_count(current_user.id)
     
@@ -91,39 +85,22 @@ def create():
                 user_id=current_user.id
             )
 
+            # Flash success message and redirect
             flash_message(FlashMessages.USER_CREATED.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
+            
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Error creating user: {str(e)}")
             flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
             return render_template('admin/users/create.html', form=form), 500
-                
-        except ValueError as e:
-            # Handle validation errors
-            db.session.rollback()
-            logging.error(f"Validation error creating user: {str(e)}")
-            flash_message(str(e), FlashCategory.ERROR)
-            return render_template('admin/users/create.html',
-                                form=form,
-                                notification_count=notification_count), 400
-        except Exception as e:
-            # Handle other errors
-            db.session.rollback()
-            logging.error(f"Error creating user: {str(e)}")
-            flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR)
-            return render_template('admin/users/create.html',
-                                form=form,
-                                notification_count=notification_count), 500
 
     # Handle form validation errors
-    error_messages = []
     for field_name, errors in form.errors.items():
         field = getattr(form, field_name)
         for error in errors:
             msg = format_error_message(field, error)
-            error_messages.append(msg)
-            flash_message(msg, FlashCategory.ERROR)
+            flash_message(msg, FlashCategory.ERROR.value)
             
     return render_template('admin/users/create.html', 
                         form=form,
