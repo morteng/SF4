@@ -446,7 +446,14 @@ def test_profile_update_creates_audit_log(client, setup_database):
             # Follow the redirect
             get_response = client.get(get_response.location)
         
-        assert get_response.status_code == 200
+        # If we're still getting a redirect, try logging out first
+        if get_response.status_code == 302:
+            client.get(url_for('public.logout'))
+            get_response = client.get(url_for('public.login'))
+            if get_response.status_code == 302:
+                get_response = client.get(get_response.location)
+        
+        assert get_response.status_code == 200, f"Expected 200, got {get_response.status_code}"
 
         # Extract CSRF token using BeautifulSoup
         soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
