@@ -1,5 +1,6 @@
 from flask import Blueprint, request, redirect, url_for, render_template, current_app
 from flask_login import login_required, current_user
+from app.extensions import limiter
 from sqlalchemy.exc import IntegrityError
 from app.controllers.base_route_controller import BaseRouteController
 from app.services.stipend_service import StipendService
