@@ -257,32 +257,43 @@ If time-based tests are failing:
 
 ## Testing Setup
 
-1. **Dependencies**:
-   - Ensure all testing dependencies (e.g., `freezegun`, `pytest`) are installed and up-to-date.
-   - Verify installation with `pip show <package_name>`.
-   - Install all dependencies:
-     ```bash
-     pip install -r requirements.txt
+### Dependency Verification
+1. **Pre-Test Check**:
+   - Add a test to verify all dependencies are installed before running the test suite.
+   - Example:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
      ```
 
-2. **Virtual Environment**:
-   - Always activate the virtual environment before running tests or installing dependencies.
-   - Use `source .venv/bin/activate` (Linux/Mac) or `.venv\Scripts\activate` (Windows).
+2. **Graceful Handling**:
+   - Use try-except blocks to handle missing dependencies in test files.
+   - Skip tests that require missing packages instead of failing the entire suite.
 
-3. **Test Execution**:
-   - Run tests with `pytest` after ensuring all dependencies are installed.
-   - If tests fail due to missing dependencies, install them and re-run the tests.
-   - Tests requiring `freezegun` will be skipped if it's not installed, with a clear message.
+### Error Handling
+- Always use centralized error messages from `app/constants.py`.
+- Log validation errors with context for easier debugging.
 
-4. **Dependency Verification**:
-   - Check if `freezegun` is installed:
-     ```bash
-     pip show freezegun
-     ```
-   - If missing, install it:
-     ```bash
-     pip install -r requirements.txt
-     ```
+### Key Takeaways
+1. **Validation Logic**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Ensure compatibility with parent classes when overriding attributes or methods.
+   - Use centralized error messages from `app/constants.py` for consistency.
+
+2. **Testing**:
+   - Test edge cases thoroughly, especially for date/time validation.
+   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+
+3. **Error Handling**:
+   - Log validation errors with context for easier debugging.
+   - Provide clear, user-friendly error messages for validation failures.
+
+4. **Code Organization**:
+   - Keep validation logic modular and reusable.
+   - Avoid code duplication by using base classes and utilities.
 
 ## Testing Setup
 
