@@ -2,6 +2,48 @@
 
 ## Testing Setup
 
+### Installation and Verification
+1. Install pytest:
+   ```bash
+   pip install pytest
+   pip show pytest
+   ```
+
+2. Install all dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Verify critical packages:
+   ```bash
+   pip show pytest freezegun Flask
+   ```
+
+4. Run tests:
+   ```bash
+   pytest
+   ```
+
+### CustomDateTimeField Implementation
+The `CustomDateTimeField` class must handle the `validators` argument correctly:
+```python
+class CustomDateTimeField(Field):
+    def __init__(self, label=None, validators=None, **kwargs):
+        if validators is None:
+            validators = [InputRequired()]  # Default validator
+        super().__init__(label=label, validators=validators, **kwargs)
+```
+
+### Circular Import Prevention
+To avoid circular dependencies:
+1. Move shared functionality to `app/common/utils.py`
+2. Use lazy imports where necessary:
+   ```python
+   def some_function():
+       from app.services.bot_service import run_bot  # Lazy import
+       run_bot()
+   ```
+
 ### Dependency Verification
 1. **Pre-Test Check**:
    - Add a test to verify all dependencies are installed before running the test suite:
