@@ -1,5 +1,8 @@
+import logging
 from datetime import datetime
 from flask import redirect, url_for, flash, request, render_template
+
+logger = logging.getLogger(__name__)
 from flask_login import current_user
 from wtforms import ValidationError
 from app.models.audit_log import AuditLog
