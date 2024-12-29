@@ -26,6 +26,9 @@
   - Out-of-range values
   - Missing required fields
   - Invalid leap year dates
+  - Invalid time components (hours, minutes, seconds)
+  - Time values outside valid ranges
+  - Malformed datetime strings
 - Use configurable error messages
 - Log validation errors with context
 
