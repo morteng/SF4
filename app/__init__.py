@@ -31,11 +31,11 @@ def create_app(config_name='development'):
         # Check dependencies before proceeding
         check_dependencies()
     
-    # Set up migrations directory in root project directory
-    basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # Go up one level
-    migrations_dir = os.path.join(basedir, 'migrations')
+        # Set up migrations directory in root project directory
+        basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # Go up one level
+        migrations_dir = os.path.join(basedir, 'migrations')
     
-    # Ensure migrations directory exists
+        # Ensure migrations directory exists
     if not os.path.exists(migrations_dir):
         os.makedirs(migrations_dir)
         logger.info(f"Created migrations directory at {migrations_dir}")
@@ -197,8 +197,6 @@ def create_app(config_name='development'):
         if current_user.is_authenticated:
             return {'notification_count': get_notification_count(current_user.id)}
         return {}
-
-        return app
     except Exception as e:
         logger.error(f"Failed to initialize application: {str(e)}")
         raise RuntimeError(f"Application initialization failed: {str(e)}")
