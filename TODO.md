@@ -1,7 +1,10 @@
 # Updated TODO List
 
 ## Completed
-- [x] Fix property implementation in `BaseService` to use proper getters/setters.
+- [x] Fix circular imports by refactoring shared functionality into `app/common/utils.py`.
+- [x] Fix property implementation in `BaseService`.
+- [x] Install missing dependencies (`freezegun`).
+- [x] Ensure `app/common` is recognized as a package by adding `__init__.py`.
 - [x] Install `freezegun` for time-based testing.
 - [x] Add installation verification steps to documentation.
 - [x] Add a script to verify all dependencies listed in `requirements.txt` are installed.
@@ -16,7 +19,9 @@
 - [x] Add a script to verify all dependencies listed in `requirements.txt` are installed.
 
 ## Next Session
-- [x] Refactor `BaseService` to ensure all properties are implemented correctly.
+- [ ] Add comprehensive tests for `BaseService` properties.
+- [ ] Verify time-based tests with `freezegun`.
+- [ ] Refactor other shared functionality into `app/common`.
 - [x] Add comprehensive tests for property getters and setters.
 - [x] Verify that all dependencies listed in `requirements.txt` are installed during test execution.
 - [x] Add a pre-test dependency verification script to ensure all required packages are installed.
@@ -35,6 +40,8 @@
 
 ## Long Term
 - [ ] Automate dependency verification during test execution.
+- [ ] Improve test coverage for all form fields.
+- [ ] Add integration tests for form validation.
 - [ ] Refactor validation logic into reusable components.
 - [ ] Improve test coverage for all form fields.
 - [ ] Add integration tests for form validation.

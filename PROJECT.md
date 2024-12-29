@@ -78,8 +78,34 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 
 ## Lessons Learned
 
-### Property Implementation
-- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
+1. **Circular Imports**:
+   - Circular imports can cause the application to fail at startup.
+   - **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+
+2. **Property Implementation**:
+   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
+   - **Example**:
+     ```python
+     class BaseService:
+         def __init__(self):
+             self._create_limit = None
+
+         @property
+         def create_limit(self):
+             return self._create_limit
+
+         @create_limit.setter
+         def create_limit(self, value):
+             self._create_limit = value
+     ```
+
+3. **Missing Dependencies**:
+   - Ensure all dependencies listed in `requirements.txt` are installed before running tests.
+   - **Solution**: Run `pip install -r requirements.txt` and verify installation with `pip show <package_name>`.
+
+4. **Package Structure**:
+   - Ensure directories are recognized as packages by including an `__init__.py` file.
+   - **Example**: Add `app/common/__init__.py` to make `app/common` a package.
 - **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
   ```python
   class BaseService:

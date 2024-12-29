@@ -41,6 +41,28 @@ pytest tests/test_dependencies.py
 To avoid circular dependencies:
 1. Move shared functionality to `app/common/utils.py`
 2. Use lazy imports for dependencies that cannot be refactored
+3. Example:
+   ```python
+   def some_function():
+       from app.services.bot_service import run_bot  # Lazy import
+       run_bot()
+   ```
+
+### Property Implementation
+1. Always define a property (`@property`) before using a setter (`@<property>.setter`)
+2. Include validation in setters and use private attributes for storage
+
+### Dependency Management
+1. Add a pre-test check to ensure all required dependencies are installed
+2. Example:
+   ```python
+   def test_dependencies():
+       try:
+           subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+       except subprocess.CalledProcessError:
+           pytest.fail("Failed to install dependencies")
+   ```
+2. Use lazy imports for dependencies that cannot be refactored
 3. Keep imports at the function level when necessary
 4. Example refactoring:
    ```python
