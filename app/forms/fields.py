@@ -171,6 +171,10 @@ class CustomDateTimeField(DateTimeField):
             return False
 
     def validate(self, form, extra_validators=()):
+        # Convert errors to list if it's a tuple
+        if isinstance(self.errors, tuple):
+            self.errors = list(self.errors)
+            
         # If we already have errors from process_formdata, return False
         if self.errors:
             return False
