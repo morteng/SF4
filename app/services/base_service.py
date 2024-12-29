@@ -115,17 +115,15 @@ class BaseService:
 
     @property
     def create_limit(self):
-        """Getter for create_limit."""
-        return self._create_limit
+        return self.rate_limits['create']
 
     @create_limit.setter
+    @handle_errors
     def create_limit(self, value):
-        """Setter for create_limit with validation."""
         if not isinstance(value, str):
             raise ValueError("Create limit must be a string (e.g., '10 per minute')")
         if not any(x in value for x in ['per second', 'per minute', 'per hour', 'per day']):
             raise ValueError("Rate limit must include time unit (e.g., 'per minute')")
-        self._create_limit = value
         self.rate_limits['create'] = value
         
     @handle_errors
@@ -238,13 +236,11 @@ class BaseService:
 
     @property
     def update_limit(self):
-        """Getter for update_limit."""
         return self.rate_limits['update']
 
     @update_limit.setter
     @handle_errors
     def update_limit(self, value):
-        """Setter for update_limit with validation."""
         if not isinstance(value, str):
             raise ValueError("Update limit must be a string (e.g., '10 per minute')")
         if not any(x in value for x in ['per second', 'per minute', 'per hour', 'per day']):
@@ -268,12 +264,12 @@ class BaseService:
         self._log_audit('update', entity, user_id=user_id, before=before, after=entity.to_dict())
         return entity
 
-    @handle_errors
     @property
     def delete_limit(self):
         return self.rate_limits['delete']
-    
+
     @delete_limit.setter
+    @handle_errors
     def delete_limit(self, value):
         if not isinstance(value, str):
             raise ValueError("Delete limit must be a string (e.g., '5 per minute')")
