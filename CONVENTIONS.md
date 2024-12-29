@@ -17,22 +17,22 @@
 - Preserve exception types
 
 ## Validation
-- Always use configurable error messages via error_messages
-- Never use hardcoded error messages in validation logic
-- Initialize error messages with defaults
-- Use defensive programming in validation logic
-- Clear existing errors before new validation
-- Use consistent error message format across all fields
-- Validate date and time components separately
-- Add specific validation for time values (hours, minutes, seconds)
-- Map error message keys consistently
-- Validate time components before full datetime parsing
-- Use specific error messages for each validation failure
-- Handle edge cases in time validation (e.g., 25:00:00)
-- Ensure validation order: required → format → components → full parsing
-- Always check for required fields first
-- Handle empty/missing values consistently
-- Return appropriate error messages for missing required fields
+- Always use configurable error messages via `error_messages`.
+- Never use hardcoded error messages in validation logic.
+- Initialize error messages with defaults.
+- Use defensive programming in validation logic.
+- Clear existing errors before new validation.
+- Use consistent error message format across all fields.
+- Validate date and time components separately.
+- Add specific validation for time values (hours, minutes, seconds).
+- Map error message keys consistently.
+- Validate time components before full datetime parsing.
+- Use specific error messages for each validation failure.
+- Handle edge cases in time validation (e.g., 25:00:00).
+- Ensure validation order: required → format → components → full parsing.
+- Always check for required fields first.
+- Handle empty/missing values consistently.
+- Return appropriate error messages for missing required fields.
 
 ## Testing
 - Test both success and error cases

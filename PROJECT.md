@@ -236,19 +236,24 @@ user.profile                 GET        /user/profile
 # Project Specification: Stipend Discovery Website
 
 ## Key Updates
-- Fixed error message handling in CustomDateTimeField
-- Added specific time validation logic for datetime fields
-- Standardized validation error messages across all form fields
-- Removed hardcoded error messages in favor of configurable ones
-- Improved test coverage for form validation
-- Addressed datetime.utcnow() deprecation warnings
-- Implemented proper error message mapping for time validation
-- Enhanced time component validation with separate checks for hours, minutes, seconds
-- Added pre-parsing time validation to catch invalid values early
-- Improved error message consistency for invalid time values
-- Fixed required field validation in CustomDateTimeField
-- Added proper handling of missing/empty fields
-- Improved validation order (required → format → content)
+- **Validation Improvements**:
+  - Enhanced validation for the `application_deadline` field in the `StipendForm`.
+  - Added custom error messages for required fields in `CustomDateTimeField`.
+  - Improved test coverage for form validation scenarios.
+
+## Technical Updates
+- Fixed failing tests for date validation in `StipendForm`.
+- Reduced code duplication in admin routes.
+- Improved test coverage for form validation.
+
+## System Components
+- **Forms**:
+  - Updated `CustomDateTimeField` to support custom error messages.
+  - Added `DataRequired` validator to `application_deadline` in `StipendForm`.
+
+## Testing Specification
+- Added more test cases for edge cases in form validation.
+- Verified error message fallbacks for required fields.
 
 ## Technical Updates
 - Fixed failing tests for date validation
