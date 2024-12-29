@@ -19,6 +19,11 @@
 - [x] Add comprehensive tests for property getters and setters.
 - [x] Verify that all dependencies listed in `requirements.txt` are installed during test execution.
 - [x] Add a pre-test dependency verification script to ensure all required packages are installed.
+- [ ] Resolve circular imports by refactoring shared functionality into a separate module.
+- [ ] Install missing dependencies (e.g., `freezegun`) and verify their installation.
+- [x] Add comprehensive tests for property getters and setters.
+- [x] Verify that all dependencies listed in `requirements.txt` are installed during test execution.
+- [x] Add a pre-test dependency verification script to ensure all required packages are installed.
 - [ ] Optimize validation performance in `CustomDateTimeField`.
 - [ ] Add more comprehensive tests for timezone handling in date/time fields.
 - [ ] Add validation benchmarks for date/time fields.
