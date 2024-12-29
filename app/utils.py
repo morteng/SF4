@@ -232,13 +232,28 @@ def generate_temp_password(length: int = 12) -> str:
     return ''.join(secrets.choice(chars) for _ in range(length))
 
 def validate_url(url: str) -> bool:
-    """Validate URL format.
+    """
+    Validate URL format according to RFC standards.
     
     Args:
         url: URL string to validate
         
     Returns:
         bool: True if URL is valid, False otherwise
+        
+    Raises:
+        ValueError: If URL parsing fails
+        
+    Validation Rules:
+        - Must start with http:// or https://
+        - Must have valid scheme and netloc
+        - Must be properly formatted according to URL standards
+        
+    Example:
+        >>> validate_url("https://example.com")
+        True
+        >>> validate_url("invalid_url")
+        False
     """
     try:
         if not url:
