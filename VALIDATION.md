@@ -7,7 +7,7 @@
 - Consistent validation patterns across all entities
 - Post-op verification in tests
 - Context managers for transactions
-- Consistent validation patterns across all entities
+- Shared validation utilities
 
 ## CSRF Validation  
 - Validate CSRF on all form submissions  

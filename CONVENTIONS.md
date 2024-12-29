@@ -28,7 +28,9 @@
 ## Testing
 - Test both success and error cases
 - Verify database state after operations
-- Use fixtures for setup/teardown
+- Use fixtures and base test classes for setup/teardown
 - Test edge cases and validation
 - Keep tests isolated and independent
+- Use shared test utilities for common assertions
+- Follow consistent test naming conventions
 

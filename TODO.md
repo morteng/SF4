@@ -19,6 +19,8 @@
 - Finish bot UI
 - Improve scheduling
 - Refactor common form patterns
+- Consolidate test utilities
+- Improve service layer consistency
 
 ## Medium Priority
 1. Add bot status monitoring
