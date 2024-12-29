@@ -97,7 +97,7 @@ def create():
             flash_message(FlashMessages.STIPEND_CREATE_SUCCESS, FlashCategory.SUCCESS)
             
             if is_htmx:
-                return redirect(url_for('admin.stipend.index'))
+                return '', 204, {'HX-Redirect': url_for('admin.stipend.index')}
             return redirect(url_for('admin.stipend.index'))
             
         except ValueError as e:
