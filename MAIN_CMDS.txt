@@ -6,7 +6,11 @@
 /git add .
 /commit
 
-
+/read PROJECT.md
+/read CONVENTIONS.md
+/read VALIDATION.md
+/read MAIN_CMDS.txt
+/add TODO.txt
 
 /run flask routes
 /test
