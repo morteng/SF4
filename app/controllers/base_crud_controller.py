@@ -122,15 +122,41 @@ class BaseCrudController:
             flash(error_message.format(self.entity_name, str(e)), FlashCategory.ERROR.value)
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
 
-    def create(self, data):
-        return self._handle_operation(
-            operation=self.service.create,
-            success_message=FlashMessages.CREATE_SUCCESS.value,
-            error_message=FlashMessages.CREATE_ERROR.value,
-            redirect_success='index',
-            redirect_error='create',
-            data=data
-        )
+    def create(self, data=None):
+        """Handle both GET and POST requests for creation.
+        
+        Args:
+            data: Form data for POST requests, None for GET requests
+            
+        Returns:
+            Response: Rendered template or redirect
+        """
+        if data is None:
+            # Handle GET request - return form template
+            return render_template(
+                f'{self.template_dir}/create.html',
+                form=self.form_class()
+            )
+        else:
+            # Handle POST request - process form data
+            form = self.form_class(data=data)
+            if form.validate():
+                try:
+                    result = self.service.create(form.data)
+                    if result.success:
+                        flash(self.flash_messages['create_success'], 'success')
+                        return redirect(url_for(f'admin.{self.entity_name}.index'))
+                    else:
+                        flash(result.message, 'error')
+                except Exception as e:
+                    logger.error(f"Error creating {self.entity_name}: {str(e)}")
+                    flash(f"Error creating {self.entity_name}: {str(e)}", 'error')
+            else:
+                flash('Invalid form data', 'error')
+            return render_template(
+                f'{self.template_dir}/create.html',
+                form=form
+            )
 
     def edit(self, id, data):
         def update_operation(**kwargs):

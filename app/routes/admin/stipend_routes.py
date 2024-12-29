@@ -133,17 +133,22 @@ stipend_controller = StipendController()
 @login_required
 @admin_required
 def create():
+    """Handle stipend creation requests.
+    
+    GET: Display creation form
+    POST: Process form submission
+    """
     logger.debug("Processing stipend creation request")
     try:
         if request.method == 'POST':
             form_data = request.form.to_dict()
             return stipend_controller.create(form_data)
-        else:
-            return stipend_controller.create()
+        return stipend_controller.create()
     except Exception as e:
         logger.error(f"Error creating stipend: {str(e)}")
         current_app.logger.error(f"Stipend creation failed: {str(e)}")
-        raise
+        flash("An error occurred while creating the stipend", 'error')
+        return redirect(url_for('admin.admin_stipend.index'))
 
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")
