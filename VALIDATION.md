@@ -1,5 +1,14 @@
 # Updated Validation Best Practices
 
+### Error Message Centralization
+- Define all error messages in `app/constants.py`.
+- Use constants instead of hardcoded strings for error messages.
+  Example:
+  ```python
+  from app.constants import MISSING_REQUIRED_FIELD
+  validators=[InputRequired(message=MISSING_REQUIRED_FIELD)]
+  ```
+
 ## Key Takeaways
 
 ### Custom Field Implementation

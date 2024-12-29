@@ -1,5 +1,13 @@
 # Updated Coding Conventions
 
+### CustomDateTimeField Implementation
+- Always handle the `validators` argument in `__init__`.
+- Provide default validators if none are passed:
+  ```python
+  if validators is None:
+      validators = [InputRequired()]
+  ```
+
 ## Testing Setup
 
 ### 1. Install pytest
