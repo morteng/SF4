@@ -39,82 +39,61 @@ def client(app):
 
 def test_profile_form_valid(client, setup_database):
     """Test valid profile form submission"""
-    # Increase rate limit for testing
-    current_app.config['RATELIMIT_DEFAULT'] = "10 per minute"
-    
     # Create a test user
     password_hash = generate_password_hash("password123")
     user = User(username="testuser", email="test@example.com", password_hash=password_hash)
     db.session.add(user)
     db.session.commit()
     
-    # Log in the user
     with client:
-        # Only reset limiter if rate limiting is enabled
-        if current_app.config.get('RATELIMIT_ENABLED', True):
-            limiter = current_app.extensions.get('limiter')
-            if limiter and limiter._storage:  # Check if limiter is properly initialized
-                limiter.reset()
+        # Get login page to establish session
+        login_page = client.get(url_for('public.login'))
+        assert login_page.status_code == 200
         
-        # First make a GET request to establish session and get CSRF token
-        get_response = client.get(url_for('public.login'))
-        assert get_response.status_code == 200
-    
-        # Extract CSRF token using BeautifulSoup
-        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        # Extract CSRF token from login form
+        soup = BeautifulSoup(login_page.data.decode(), 'html.parser')
         csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
-    
-        # Only reset limiter if rate limiting is enabled
-        if current_app.config.get('RATELIMIT_ENABLED', True):
-            limiter = current_app.extensions.get('limiter')
-            if limiter and limiter._storage:  # Check if limiter is properly initialized
-                limiter.reset()
-            
-        # Now make the login POST request
+        assert csrf_token, "CSRF token not found in login form"
+        
+        # Login the user
         login_response = client.post(url_for('public.login'), data={
             'username': 'testuser',
             'password': 'password123',
             'csrf_token': csrf_token
         }, follow_redirects=True)
-            
-        # Check for both possible success status codes
-        assert login_response.status_code in [200, 302], \
-            f"Expected 200 or 302, got {login_response.status_code}"
-    
-        # Only reset limiter if rate limiting is enabled
-        if current_app.config.get('RATELIMIT_ENABLED', True):
-            limiter = current_app.extensions.get('limiter')
-            if limiter and limiter._storage:  # Check if limiter is properly initialized
-                limiter.reset()
+        assert login_response.status_code == 200, "Login failed"
         
-        # Now access the profile edit page
-        get_response = client.get(url_for('user.edit_profile'))
-        assert get_response.status_code == 200
+        # Get profile edit page
+        profile_page = client.get(url_for('user.edit_profile'))
+        assert profile_page.status_code == 200
         
-        # Extract CSRF token using BeautifulSoup
-        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        # Extract CSRF token from profile form
+        soup = BeautifulSoup(profile_page.data.decode(), 'html.parser')
         csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
-
-        # Only reset limiter if rate limiting is enabled
-        if current_app.config.get('RATELIMIT_ENABLED', True):
-            limiter = current_app.extensions.get('limiter')
-            if limiter and limiter._storage:  # Check if limiter is properly initialized
-                limiter.reset()
+        assert csrf_token, "CSRF token not found in profile form"
         
-        # Test form submission via POST with valid data
+        # Submit profile update
         response = client.post(url_for('user.edit_profile'), data={
             'username': 'newusername',
             'email': 'newemail@example.com',
             'csrf_token': csrf_token
         }, follow_redirects=True)
-
-        # Verify the response
+        
+        # Verify response
         assert response.status_code == 200
-        assert b"Profile updated successfully" in response.data
-
-        # Clean up
-        db.session.delete(user)
-        db.session.commit()
+        assert FlashMessages.PROFILE_UPDATE_SUCCESS.value.encode() in response.data
+        
+        # Verify user was updated
+        updated_user = User.query.get(user.id)
+        assert updated_user.username == 'newusername'
+        assert updated_user.email == 'newemail@example.com'
+        
+        # Verify audit log was created
+        audit_log = AuditLog.query.filter_by(user_id=user.id).first()
+        assert audit_log is not None
+        assert audit_log.action == "profile_update"
+        assert "newusername" in audit_log.details
+        assert "newemail@example.com" in audit_log.details
 
 def test_profile_form_invalid_same_username(client, setup_database):
     # Increase rate limit for testing
