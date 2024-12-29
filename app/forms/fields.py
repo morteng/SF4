@@ -79,20 +79,18 @@ class CustomDateTimeField(DateTimeField):
 
 
     def process_formdata(self, valuelist):
-        if not valuelist or not valuelist[0].strip():
-            self.data = None
-            return
-            
-        date_str = valuelist[0].strip()
-        
-        # Validate format using cached pattern
-        if not self._date_pattern.match(date_str):
-            self.errors.append(self.error_messages['invalid_format'])
-            self.data = None
-            return
-
-        try:
-            parsed_dt = datetime.strptime(date_str, self._format)
+        if valuelist:
+            date_str = valuelist[0]
+            if date_str.strip():  # Skip empty strings
+                try:
+                    # Parse the string into a datetime object
+                    self.data = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+                except ValueError:
+                    # Raise a validation error for invalid formats
+                    self.errors.append(self.error_messages['invalid_format'])
+                    self.data = None
+            else:
+                self.data = None
             
             # Add leap year validation
             if parsed_dt.month == 2 and parsed_dt.day == 29:

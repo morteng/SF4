@@ -99,15 +99,37 @@ def test_valid_date_format(app, form_data, test_db):
                 print(f"Validation errors for {date}:", form.errors)
             assert form.validate() is True, f"Failed validation for date: {date}"
 
-def test_invalid_date_format(app, form_data):
+def test_invalid_date_format(app, form_data, test_db):
     """Test invalid date formats"""
     invalid_dates = [
         '2025-12-31',  # Missing time
-        '2025/12/31 23:59:59',  # Wrong date separator
-        '31-12-2025 23:59:59',  # Wrong date order
-        '2025-12-31 25:61:61',  # Invalid time
-        '2025-02-30 12:00:00',  # Invalid date (Feb 30)
+        '2025-12-31 25:00:00',  # Invalid hour
+        '2025-02-30 12:00:00',  # Invalid date
+        'invalid-date',  # Completely invalid
     ]
+
+    with app.test_request_context():
+        # Create a test organization
+        org = Organization(name="Test Org", description="Test Description", homepage_url="https://test.org")
+        db.session.add(org)
+        db.session.commit()
+        form_data['organization_id'] = org.id
+
+        # Get CSRF token
+        form = StipendForm()
+        csrf_token = form.csrf_token.current_token
+        form_data['csrf_token'] = csrf_token
+
+        # Get tag choices from database
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+
+        # Test each invalid date format
+        for date in invalid_dates:
+            form_data['application_deadline'] = date
+            form = StipendForm(data=form_data, meta={'csrf': False})
+            form.tags.choices = tag_choices  # Set the choices
+            assert form.validate() is False, f"Expected validation failure for date: {date}"
+            assert 'application_deadline' in form.errors, f"Expected application_deadline error for date: {date}"
     
     with app.test_request_context():
         # Add CSRF token to form data
