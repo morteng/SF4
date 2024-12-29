@@ -85,7 +85,7 @@ def test_delete_tag_with_integrity_error(logged_in_admin, tag_data, db_session, 
 def test_index_route(logged_in_admin, tag_data, db_session):
     with logged_in_admin.application.app_context():
         # Create a tag to list
-        new_tag = create_tag(tag_data)
+        new_tag = tag_service.create(tag_data)
         db_session.commit()
 
         response = logged_in_admin.get(url_for('admin.tag.index'))
@@ -95,7 +95,7 @@ def test_index_route(logged_in_admin, tag_data, db_session):
 def test_update_tag_get_request(logged_in_admin, tag_data, db_session):
     with logged_in_admin.application.app_context():
         # Create a tag to update
-        new_tag = create_tag(tag_data)
+        new_tag = tag_service.create(tag_data)
         db_session.commit()
 
         response = logged_in_admin.get(url_for('admin.tag.edit', id=new_tag.id))
@@ -105,7 +105,7 @@ def test_update_tag_get_request(logged_in_admin, tag_data, db_session):
 def test_update_tag_with_valid_data(logged_in_admin, tag_data, db_session):
     with logged_in_admin.application.app_context():
         # Create a tag to update
-        new_tag = create_tag(tag_data)
+        new_tag = tag_service.create(tag_data)
         db_session.commit()
 
         update_response = logged_in_admin.get(url_for('admin.tag.edit', id=new_tag.id))
@@ -131,7 +131,7 @@ def test_update_tag_with_valid_data(logged_in_admin, tag_data, db_session):
 def test_update_tag_with_invalid_form_data(logged_in_admin, tag_data, db_session):
     with logged_in_admin.application.app_context():
         # Create a tag to update
-        new_tag = create_tag(tag_data)
+        new_tag = tag_service.create(tag_data)
         db_session.commit()
 
         updated_data = {
@@ -150,7 +150,7 @@ def test_update_tag_with_invalid_form_data(logged_in_admin, tag_data, db_session
 def test_update_tag_with_integrity_error(logged_in_admin, tag_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
         # Create a tag to update
-        new_tag = create_tag(tag_data)
+        new_tag = tag_service.create(tag_data)
         db_session.commit()
 
         def mock_commit(*args, **kwargs):
