@@ -120,7 +120,6 @@ def index():
 @admin_required
 def run(id):
     """Run bot with status tracking and notifications"""
-    import time
     bot = get_bot_by_id(id)
     if not bot:
         flash_message(FlashMessages.BOT_NOT_FOUND, FlashCategory.ERROR)
