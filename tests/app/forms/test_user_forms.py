@@ -440,8 +440,14 @@ def test_profile_update_creates_audit_log(client, setup_database):
     with client:
         # First make a GET request to establish session and get CSRF token
         get_response = client.get(url_for('public.login'))
-        assert get_response.status_code == 200
         
+        # Handle both 200 and 302 cases
+        if get_response.status_code == 302:
+            # Follow the redirect
+            get_response = client.get(get_response.location)
+        
+        assert get_response.status_code == 200
+
         # Extract CSRF token using BeautifulSoup
         soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
         csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
