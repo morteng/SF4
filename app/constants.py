@@ -37,6 +37,11 @@ class FlashMessages(str, Enum):
     INVALID_TIME = "Invalid time. Hours must be 0-23, minutes 0-59, seconds 0-59"
     FUTURE_DATE_REQUIRED = "Date must be in the future"
     PAST_DATE_REQUIRED = "Date must be in the past"
+    INVALID_DATE_RANGE = "Date must be between {min_date} and {max_date}."
+    INVALID_TIME_RANGE = "Time must be between {start_time} and {end_time}."
+    INVALID_TIME_COMPONENTS = "Invalid time values. Hours must be 0-23, minutes and seconds 0-59."
+    INVALID_LEAP_YEAR_DATE = "Invalid date for February in non-leap years."
+    INVALID_DATE_VALUES = "Invalid date values. Please check the day, month, and year."
     
     # CSRF
     CSRF_ERROR = "Invalid CSRF token. Please refresh the page and try again."
