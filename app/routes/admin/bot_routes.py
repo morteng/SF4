@@ -6,7 +6,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from app.models.bot import Bot
 from app.models.audit_log import AuditLog
-from app.forms import BotForm
+from app.forms.admin_forms import BotForm
 from app.extensions import db
 from app.utils import (
     admin_required, 
@@ -16,13 +16,7 @@ from app.utils import (
     create_crud_notification
 )
 from app.constants import FlashMessages, FlashCategory
-from app.services.bot_service import (
-    get_bot_by_id,
-    get_all_bots,
-    create_bot,
-    update_bot,
-    delete_bot
-)
+from app.services.bot_service import BotService
 
 admin_bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
 
@@ -52,7 +46,8 @@ def create():
             }
             
             # Create bot
-            new_bot = create_bot(bot_data)
+            bot_service = BotService()
+            new_bot = bot_service.create(bot_data)
             
             # Create audit log
             log_audit(
@@ -92,10 +87,11 @@ def create():
 @login_required
 @admin_required
 def delete(id):
-    bot = get_bot_by_id(id)
+    bot_service = BotService()
+    bot = bot_service.get_by_id(id)
     if bot:
         try:
-            delete_bot(bot)
+            bot_service.delete(bot)
             flash_message(FlashMessages.DELETE_BOT_SUCCESS.value, FlashCategory.SUCCESS.value)
             current_app.logger.info(f"Flash message set: {FlashMessages.DELETE_BOT_SUCCESS.value}")
         except Exception as e:
@@ -111,7 +107,8 @@ def delete(id):
 @login_required
 @admin_required
 def index():
-    bots = get_all_bots()
+    bot_service = BotService()
+    bots = bot_service.get_all()
     return render_template('admin/bots/index.html', bots=bots)
 
 @admin_bot_bp.route('/<int:id>/run', methods=['POST'])
@@ -120,7 +117,8 @@ def index():
 @admin_required
 def run(id):
     """Run bot with status tracking and notifications"""
-    bot = get_bot_by_id(id)
+    bot_service = BotService()
+    bot = bot_service.get_by_id(id)
     if not bot:
         flash_message(FlashMessages.BOT_NOT_FOUND, FlashCategory.ERROR)
         return redirect(url_for('admin.bot.index'))
@@ -151,7 +149,8 @@ def run(id):
 @login_required
 @admin_required
 def schedule(id):
-    bot = get_bot_by_id(id)
+    bot_service = BotService()
+    bot = bot_service.get_by_id(id)
     if not bot:
         flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)
         return redirect(url_for('admin.bot.index'))
@@ -197,7 +196,8 @@ def edit(id):
     if request.method == 'POST':
         if form.validate_on_submit():
             try:
-                update_bot(bot, form.data)
+                bot_service = BotService()
+                bot_service.update(bot, form.data)
                 flash_message(FlashMessages.UPDATE_BOT_SUCCESS.value, FlashCategory.SUCCESS.value)
                 current_app.logger.info(f"Flash message set: {FlashMessages.UPDATE_BOT_SUCCESS.value}")
                 return redirect(url_for('admin.bot.index'))
