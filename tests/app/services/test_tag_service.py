@@ -1,45 +1,61 @@
 import pytest
 from app.models.tag import Tag
 from app.services.tag_service import tag_service
-from sqlalchemy.exc import SQLAlchemyError
-from wtforms.validators import ValidationError
 from app.extensions import db
-from flask import Flask
-import logging
-from unittest.mock import patch
+from app.constants import FlashMessages
+from wtforms.validators import ValidationError
 
-def test_create_tag_with_empty_name(self, db_session):
-        invalid_tag_data = {
-            'name': '',
-            'category': 'TestCategory'
-        }
-        with pytest.raises(ValidationError) as excinfo:
-            self.service.create(invalid_tag_data)
-        assert "Name cannot be empty." in str(excinfo.value)
+class TestTagService(BaseCRUDTest):
+    service_class = tag_service.__class__
+    model_class = Tag
 
-def test_create_tag_with_empty_category(self, db_session):
-        invalid_tag_data = {
+    @pytest.fixture
+    def test_data(self):
+        return {
             'name': 'Test Tag',
-            'category': ''
+            'category': 'Test Category'
         }
-        with pytest.raises(ValidationError) as excinfo:
-            self.service.create(invalid_tag_data)
-        assert "Category cannot be empty." in str(excinfo.value)
 
-def test_update_tag_with_empty_name(self, db_session, test_entity):
-        updated_data = {
-            'name': '',
-            'category': 'UpdatedCategory'
-        }
-        with pytest.raises(ValidationError) as excinfo:
-            self.service.update(test_entity, updated_data)
-        assert "Name cannot be empty." in str(excinfo.value)
+    def test_create_tag_with_empty_name(self, test_data, db_session, app):
+        with app.app_context():
+            invalid_data = test_data.copy()
+            invalid_data['name'] = ''
+            
+            with pytest.raises(ValidationError) as exc_info:
+                tag_service.create(invalid_data)
+            assert FlashMessages.REQUIRED_FIELD.format(field='name') in str(exc_info.value)
 
-def test_update_tag_with_empty_category(self, db_session, test_entity):
-        updated_data = {
-            'name': 'Updated Tag Name',
-            'category': ''
-        }
-        with pytest.raises(ValidationError) as excinfo:
-            self.service.update(test_entity, updated_data)
-        assert "Category cannot be empty." in str(excinfo.value)
+    def test_create_tag_with_empty_category(self, test_data, db_session, app):
+        with app.app_context():
+            invalid_data = test_data.copy()
+            invalid_data['category'] = ''
+            
+            with pytest.raises(ValidationError) as exc_info:
+                tag_service.create(invalid_data)
+            assert FlashMessages.REQUIRED_FIELD.format(field='category') in str(exc_info.value)
+
+    def test_update_tag_with_empty_name(self, test_data, db_session, app):
+        with app.app_context():
+            # Create initial tag
+            tag = tag_service.create(test_data)
+            
+            # Try to update with empty name
+            invalid_data = test_data.copy()
+            invalid_data['name'] = ''
+            
+            with pytest.raises(ValidationError) as exc_info:
+                tag_service.update(tag.id, invalid_data)
+            assert FlashMessages.REQUIRED_FIELD.format(field='name') in str(exc_info.value)
+
+    def test_update_tag_with_empty_category(self, test_data, db_session, app):
+        with app.app_context():
+            # Create initial tag
+            tag = tag_service.create(test_data)
+            
+            # Try to update with empty category
+            invalid_data = test_data.copy()
+            invalid_data['category'] = ''
+            
+            with pytest.raises(ValidationError) as exc_info:
+                tag_service.update(tag.id, invalid_data)
+            assert FlashMessages.REQUIRED_FIELD.format(field='category') in str(exc_info.value)

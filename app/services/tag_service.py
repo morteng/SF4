@@ -1,6 +1,6 @@
 from app.models.tag import Tag
 from app.services.base_service import BaseService
-from sqlalchemy.exc import SQLAlchemyError
+from app.constants import FlashMessages
 from wtforms.validators import ValidationError
 
 class TagService(BaseService):
@@ -12,22 +12,20 @@ class TagService(BaseService):
             'category': [('general', 'General'), ('specific', 'Specific')]
         }
 
-    def create(self, data):
-        """Create a new tag with validation"""
+    def _validate_create_data(self, data):
+        """Validate tag data before creation"""
         self._validate_tag_data(data)
-        return super().create(data)
 
-    def update(self, tag, data):
-        """Update tag with validation"""
+    def _validate_update_data(self, data):
+        """Validate tag data before update"""
         self._validate_tag_data(data)
-        return super().update(tag, data)
 
     def _validate_tag_data(self, data):
-        """Validate tag data"""
+        """Common tag data validation"""
         if not data.get('name'):
-            raise ValidationError('Name cannot be empty.')
+            raise ValidationError(FlashMessages.REQUIRED_FIELD.format(field='name'))
         if not data.get('category'):
-            raise ValidationError('Category cannot be empty.')
+            raise ValidationError(FlashMessages.REQUIRED_FIELD.format(field='category'))
 
 # Create service instance for use in controllers
 tag_service = TagService()
