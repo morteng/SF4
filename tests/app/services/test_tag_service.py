@@ -1,16 +1,16 @@
 import pytest
 from app.models.tag import Tag
-from app.services.tag_service import get_all_tags, delete_tag, create_tag, get_tag_by_id, update_tag
+from app.services.tag_service import tag_service
 from sqlalchemy.exc import SQLAlchemyError
 from wtforms.validators import ValidationError
-from app.extensions import db  # Import the db object from extensions
-from flask import Flask  # Import Flask to create an application context
-import logging  # Import logging to check for error logs
+from app.extensions import db
+from flask import Flask
+import logging
 from unittest.mock import patch
 
 # Create a test Flask app instance
 app = Flask(__name__)
-app.secret_key = 'test_secret_key'  # Add this line to set the secret key
+app.secret_key = 'test_secret_key'
 
 @pytest.fixture(scope='function')
 def tag_data():
@@ -43,18 +43,18 @@ def test_tag(db_session, tag_data):
             db_session.rollback()
 
 def test_get_all_tags(db_session, test_tag):
-    tags = get_all_tags()
+    tags = tag_service.get_all()
     assert len(tags) >= 1
     assert test_tag in tags
 
 def test_delete_tag(db_session, test_tag):
-    delete_tag(test_tag)
+    tag_service.delete(test_tag)
     db_session.expire_all()
     tag = db_session.get(Tag, test_tag.id)
     assert tag is None
 
 def test_create_tag(db_session, tag_data):
-    new_tag = create_tag(tag_data)
+    new_tag = tag_service.create(tag_data)
     assert new_tag.name == tag_data['name']
     assert new_tag.category == tag_data['category']
 
@@ -65,7 +65,7 @@ def test_create_tag(db_session, tag_data):
     assert saved_tag.category == tag_data['category']
 
 def test_get_tag_by_id(db_session, test_tag):
-    tag = get_tag_by_id(test_tag.id)
+    tag = tag_service.get_by_id(test_tag.id)
     assert tag is not None
     assert tag.name == test_tag.name
     assert tag.category == test_tag.category
@@ -75,7 +75,7 @@ def test_update_tag(db_session, test_tag, tag_data):
         'name': 'Updated Tag',
         'category': 'UpdatedCategory'
     }
-    update_tag(test_tag, updated_data)
+    tag_service.update(test_tag, updated_data)
     
     db_session.expire_all()
     tag = db_session.get(Tag, test_tag.id)
@@ -84,7 +84,7 @@ def test_update_tag(db_session, test_tag, tag_data):
 
 def test_get_tag_by_id_not_found(db_session):
     non_existent_tag_id = 9999
-    tag = get_tag_by_id(non_existent_tag_id)
+    tag = tag_service.get_by_id(non_existent_tag_id)
     assert tag is None
 
 def test_create_tag_with_error(monkeypatch, db_session, tag_data):
@@ -94,7 +94,7 @@ def test_create_tag_with_error(monkeypatch, db_session, tag_data):
     monkeypatch.setattr(db_session, 'add', mock_add)
 
     with pytest.raises(SQLAlchemyError) as excinfo:
-        create_tag(tag_data)
+        tag_service.create(tag_data)
     assert "Database error" in str(excinfo.value)
 
 def test_delete_tag_with_error(monkeypatch, db_session, test_tag):
@@ -104,7 +104,7 @@ def test_delete_tag_with_error(monkeypatch, db_session, test_tag):
     monkeypatch.setattr(db_session, 'delete', mock_delete)
 
     with pytest.raises(SQLAlchemyError) as excinfo:
-        delete_tag(test_tag)
+        tag_service.delete(test_tag)
     assert "Database error" in str(excinfo.value)
 
 def test_update_tag_with_error(monkeypatch, db_session, test_tag, tag_data):
@@ -115,7 +115,7 @@ def test_update_tag_with_error(monkeypatch, db_session, test_tag, tag_data):
 
     with app.test_request_context():  # Use app.test_request_context() instead of app.app_context()
         with pytest.raises(SQLAlchemyError) as excinfo:
-            update_tag(test_tag, tag_data)
+            tag_service.update(test_tag, tag_data)
     assert "Database error" in str(excinfo.value)
 
 # Additional tests for edge cases
@@ -128,7 +128,7 @@ def test_create_tag_duplicate_name(db_session, test_tag, tag_data):
         'category': 'AnotherCategory'
     }
     with pytest.raises(SQLAlchemyError) as excinfo:
-        create_tag(duplicate_tag_data)
+        tag_service.create(duplicate_tag_data)
     assert "UNIQUE constraint failed" in str(excinfo.value)
 
 def test_update_tag_duplicate_name(db_session, test_tag, another_test_tag):
@@ -139,7 +139,7 @@ def test_update_tag_duplicate_name(db_session, test_tag, another_test_tag):
         'category': 'UpdatedCategory'
     }
     with pytest.raises(SQLAlchemyError) as excinfo:
-        update_tag(test_tag, updated_data)
+        tag_service.update(test_tag, updated_data)
     assert "UNIQUE constraint failed" in str(excinfo.value)
 
 @pytest.fixture(scope='function')
@@ -174,7 +174,7 @@ def test_update_tag_with_empty_name(db_session, test_tag):
     with pytest.raises(ValidationError) as excinfo:
         # Create an application context
         with app.test_request_context():
-            update_tag(test_tag, updated_data)
+            tag_service.update(test_tag, updated_data)
     assert "Name cannot be empty." in str(excinfo.value)
 
 def test_update_tag_with_empty_category(db_session, test_tag):
@@ -185,7 +185,7 @@ def test_update_tag_with_empty_category(db_session, test_tag):
     with pytest.raises(ValidationError) as excinfo:
         # Create an application context
         with app.test_request_context():
-            update_tag(test_tag, updated_data)
+            tag_service.update(test_tag, updated_data)
     assert "Category cannot be empty." in str(excinfo.value)
 
 def test_create_tag_with_empty_name(db_session):
@@ -198,7 +198,7 @@ def test_create_tag_with_empty_name(db_session):
     with pytest.raises(ValidationError) as excinfo:
         # Create an application context
         with app.test_request_context():
-            create_tag(invalid_tag_data)
+            tag_service.create(invalid_tag_data)
     assert "Name cannot be empty." in str(excinfo.value)
 
 def test_create_tag_with_empty_category(db_session):
@@ -211,7 +211,7 @@ def test_create_tag_with_empty_category(db_session):
     with pytest.raises(ValidationError) as excinfo:
         # Create an application context
         with app.test_request_context():
-            create_tag(invalid_tag_data)
+            tag_service.create(invalid_tag_data)
     assert "Category cannot be empty." in str(excinfo.value)
 
 # Add a test to check for logging errors
@@ -225,7 +225,7 @@ def test_create_tag_duplicate_name_logging(db_session, test_tag, tag_data):
     }
     with patch('app.services.tag_service.logging.error') as mock_logging_error:
         with pytest.raises(SQLAlchemyError) as excinfo:
-            create_tag(duplicate_tag_data)
+            tag_service.create(duplicate_tag_data)
         assert "UNIQUE constraint failed" in str(excinfo.value)
         # Adjust the expected logging message to match the actual one
         expected_message = f"Failed to create tag: (sqlite3.IntegrityError) UNIQUE constraint failed: tag.name\n[SQL: INSERT INTO tag (name, category, description) VALUES (?, ?, ?)]\n[parameters: ('{test_tag.name}', 'AnotherCategory', None)]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)."
