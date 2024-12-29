@@ -29,14 +29,6 @@ class FlashCategory(str, Enum):
     INFO = "info"
     WARNING = "warning"
 
-class FlashMessages(str, Enum):
-    # Date/Time Validation
-    MISSING_REQUIRED_FIELD = "This field is required"
-    INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
-    INVALID_LEAP_YEAR = "Invalid date: February 29th is only valid in leap years"
-    INVALID_TIME = "Invalid time. Hours must be 0-23, minutes 0-59, seconds 0-59"
-    FUTURE_DATE_REQUIRED = "Date must be in the future"
-    PAST_DATE_REQUIRED = "Date must be in the past"
     INVALID_DATE_RANGE = "Date must be between {min_date} and {max_date}."
     INVALID_TIME_RANGE = "Time must be between {start_time} and {end_time}."
     INVALID_TIME_COMPONENTS = "Invalid time values. Hours must be 0-23, minutes and seconds 0-59."

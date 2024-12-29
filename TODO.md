@@ -1,16 +1,12 @@
 ### **Final Changes & Findings**
-1. **Fixed SyntaxError in `app/__init__.py`**:
-   - Added proper error handling for the `try` block to ensure the application initializes correctly.
-   - Resolved the `SyntaxError: expected 'except' or 'finally' block` issue.
+1. **Fixed Duplicate Constants in `app/constants.py`**:
+   - Removed duplicate definitions of `INVALID_LEAP_YEAR`, `INVALID_DATETIME_FORMAT`, and `INVALID_DATE_RANGE`.
+   - Added the missing constant `MISSING_REQUIRED_FIELD`.
 
-2. **Added Missing Constants to `app/constants.py`**:
-   - Added `MISSING_REQUIRED_FIELD` and `INVALID_DATETIME_FORMAT` to resolve the `ImportError` in `app/forms/custom_fields.py`.
+2. **Cleaned Up Virtual Environment**:
+   - Removed invalid distributions (e.g., `~ytest`) by reinstalling the virtual environment.
 
-3. **Dependency Management**:
-   - Verified and installed all dependencies from `requirements.txt` to ensure compatibility.
-   - Resolved issues with `pytest` and `Flask` installations.
-
-4. **Testing Improvements**:
+3. **Testing Improvements**:
    - Updated `tests/conftest.py` to ensure proper initialization of the test environment.
    - Added error handling for dependency verification in the test setup.
 
@@ -94,3 +90,16 @@
 If further issues arise, we may need to review:
 1. **`app/config.py`**: To verify the configuration settings.
 2. **`app/models/__init__.py`**: To ensure all models are properly imported.
+
+---
+
+### **Updated CMD_TESTS.md**
+#### **Pending Console Commands**
+- No pending commands. All commands have been executed.
+
+#### **New Console Commands for Next Session**
+```bash
+pip install -r requirements.txt
+pytest
+flask routes
+```
