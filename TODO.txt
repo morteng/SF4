@@ -1,18 +1,19 @@
 # Todo - Next Code Cycle
 
-1. **Route Monitoring**:
-   - Add a health check endpoint for route monitoring
-   - Create a dashboard to visualize route accessibility
+1. **Route Monitoring & Health Checks**:
+   - Add health check endpoint (/health)
+   - Implement route accessibility monitoring
    - Add automated alerts for missing routes
 
 2. **Enum Validation**:
-   - Add validation for enum values in `app/common/enums.py`
-   - Implement enum value validation decorator
-   - Add tests for enum validation
+   - Add validation decorator for enum values
+   - Implement tests for enum validation
+   - Update validation documentation
 
-3. **Documentation**:
-   - Update API documentation with new route names
-   - Add route monitoring documentation to VALIDATION.md
+3. **Code Quality**:
+   - Review and consolidate error handling
+   - Standardize logging across modules
+   - Update API documentation
 
 ### **Key Insights**
 1. **Application Context**:
