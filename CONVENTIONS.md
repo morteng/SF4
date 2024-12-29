@@ -86,7 +86,7 @@
 ## 9. About This Environment
 
 - **Virtual Environment**:  
-  You are currently running inside an activated venv with all dependencies from requirements.txt already installed.
+  You are currently running on a windows machine inside an activated venv with all dependencies from requirements.txt already installed.
 
 - **TODO.txt**:  
   A file to keep track of tasks, ideas, or anything that needs to be addressed later. It's a simple text file where you can jot down notes, reminders, or to-dos. You can use it to capture ideas, brainstorm, or plan your work. It's a flexible tool that allows you to organize your thoughts and keep track of your tasks in a simple and accessible format. Periodically review and compress this file if it gets too big.
