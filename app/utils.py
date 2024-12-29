@@ -446,8 +446,12 @@ def calculate_next_run(schedule):
         now = datetime.now()
         cron = croniter(schedule, now)
         return cron.get_next(datetime)
+    except ImportError as e:
+        logger.error("croniter package not installed. Run 'pip install croniter'")
+        raise RuntimeError("Required package 'croniter' not installed. Please install it first.")
     except Exception as e:
-        raise ValueError(f"Invalid schedule format: {str(e)}")
+        logger.error(f"Error calculating next run time: {str(e)}")
+        raise ValueError(f"Invalid schedule format: {str(e)}. Expected cron format like '0 0 * * *'")
 
 @contextmanager
 def db_session_scope():
