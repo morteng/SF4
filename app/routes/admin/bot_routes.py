@@ -13,7 +13,7 @@ from app.utils import (
     flash_message, 
     calculate_next_run,
     log_audit,
-    create_crud_notification
+    create_notification
 )
 from app.constants import FlashMessages, FlashCategory
 from app.services.bot_service import BotService
@@ -58,11 +58,11 @@ def create():
                 after=new_bot.to_dict()
             )
             
-            # Create CRUD notification
-            create_crud_notification(
-                action='create',
-                object_type='Bot',
-                object_id=new_bot.id,
+            # Create notification
+            create_notification(
+                type='crud',
+                message=f'Bot {new_bot.name} created',
+                related_object=new_bot,
                 user_id=current_user.id
             )
             
