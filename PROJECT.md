@@ -78,11 +78,6 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 
 ## Lessons Learned
 
-### Circular Imports
-- **Issue**: Circular imports caused startup errors (e.g., `NameError: name 'BaseService' is not defined`).
-- **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/base_service.py`) and use lazy imports where necessary.
-- **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
-
 ### Dependency Management
 - **Issue**: Tests failed because `pytest` and other dependencies were not installed.
 - **Solution**: Always verify dependencies are installed by running:
@@ -108,6 +103,27 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
           self._create_limit = value
   ```
 - **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
+
+### Circular Imports
+- **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
+- **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+
+### CustomDateTimeField Initialization
+- **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
+- **Solution**: Updated the `__init__` method to properly handle the `validators` argument:
+  ```python
+  class CustomDateTimeField(Field):
+      def __init__(self, label=None, validators=None, **kwargs):
+          if validators is None:
+              validators = [InputRequired()]  # Default validator
+          super().__init__(label=label, validators=validators, **kwargs)
+  ```
+- **Best Practice**: Ensure custom fields properly handle all arguments passed to them.
+
+### Testing Improvements
+- Added comprehensive test coverage for date/time validation.
+- Verified edge cases in date/time validation (e.g., leap years, invalid time components).
+- Improved test isolation and reliability.
 
 ### Key Takeaways for Next Coding Session
 1. **Circular Imports**:

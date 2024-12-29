@@ -1,24 +1,31 @@
-## Property Validation Best Practices
+## Best Practices
 
 ### Date/Time Validation
-1. **Best Practices**:
-   - Validate date and time components separately before full parsing
-   - Use specific error messages for different validation failures
-   - Handle edge cases like February 29th in non-leap years
-   - Validate time components (hours, minutes, seconds) together
-   - Ensure custom datetime fields properly handle validators and initialization
+1. **Data Type Awareness**:
+   - Always verify the data type of form field inputs before applying validation logic.
+2. **Timezone Handling**:
+   - Ensure all `datetime` objects are timezone-aware.
+3. **Future/Past Date Validation**:
+   - Validate that dates are within acceptable ranges (e.g., future dates for deadlines).
+4. **Error Messages**:
+   - Use centralized error messages from `app/constants.py` for consistency.
 
-2. **Error Handling**:
-   - Always use error messages from `app/constants.py`
-   - Provide clear, user-friendly error messages
-   - Log validation errors with context
-   - Handle TypeError exceptions in custom field initialization
+### Custom Field Implementation
+1. **Handle All Arguments**:
+   - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+2. **Default Validators**:
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
 
-3. **Testing**:
-   - Test all error message variations
-   - Verify edge cases in date/time validation
-   - Ensure consistent handling of empty/missing values
-   - Test custom field initialization with different validator configurations
+### Testing
+1. **Edge Cases**:
+   - Test all error message variations for date/time fields.
+   - Verify edge cases in date/time validation (e.g., 25:00:00, February 29th).
+2. **Isolation**:
+   - Ensure database fixtures are properly reset between tests to avoid side effects.
 
 ### General Validation Best Practices
 1. **Validation Logic**:
