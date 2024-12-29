@@ -483,13 +483,16 @@ def test_profile_update_creates_audit_log(client, setup_database):
         csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
         assert csrf_token, "CSRF token not found in profile form"
 
-        # Submit profile update
+        # Submit profile update and follow redirect
         response = client.post(url_for('user.edit_profile'), data={
             'username': 'newusername',
             'email': 'newemail@example.com',
             'csrf_token': csrf_token
-        })
+        }, follow_redirects=True)  # Add follow_redirects=True
+        
+        # Verify successful update
         assert response.status_code == 200, "Profile update failed"
+        assert b"Profile updated successfully" in response.data
 
         # Verify audit log was created
         audit_log = AuditLog.query.filter_by(user_id=user.id).first()
