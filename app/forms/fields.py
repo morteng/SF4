@@ -179,10 +179,33 @@ class CustomDateTimeField(DateTimeField):
         # Initialize errors as list if needed
         if not hasattr(self, 'errors') or isinstance(self.errors, tuple):
             self.errors = []
+            
+        # If data is empty, return required error
+        if not self.data:
+            self.errors.append(self.error_messages.get('required', 'This field is required'))
+            return False
     
         # If we already have errors from process_formdata, return False
         if self.errors:
             return False
+            
+        # Validate date components
+        try:
+            dt = datetime.strptime(str(self.data), '%Y-%m-%d %H:%M:%S')
+            
+            # Validate time components
+            if not (0 <= dt.hour <= 23 and 
+                    0 <= dt.minute <= 59 and 
+                    0 <= dt.second <= 59):
+                self.errors.append(self.error_messages.get('invalid_time', 'Invalid time values'))
+                return False
+                
+            # Validate date components
+            try:
+                datetime(dt.year, dt.month, dt.day)
+            except ValueError:
+                self.errors.append(self.error_messages.get('invalid_date', 'Invalid date values'))
+                return False
     
         # Validate the format first
         if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', str(self.data)):
