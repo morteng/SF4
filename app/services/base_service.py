@@ -60,6 +60,7 @@ class BaseService:
             'update': "10 per minute", 
             'delete': "5 per minute"
         }
+        self._create_limit = self.rate_limits['create']
         self.soft_delete_enabled = hasattr(model, 'is_deleted')
         self.validation_rules = {}
         self.pre_create_hooks = []
@@ -98,6 +99,17 @@ class BaseService:
         
     def add_post_delete_hook(self, hook):
         self.post_delete_hooks.append(hook)
+
+    @property
+    def create_limit(self):
+        """Getter for create_limit."""
+        return self._create_limit
+
+    @create_limit.setter
+    def create_limit(self, value):
+        """Setter for create_limit."""
+        self._create_limit = value
+        self.rate_limits['create'] = value
 
     @handle_errors
     def get_by_id(self, id):
