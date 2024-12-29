@@ -16,7 +16,7 @@ except ImportError:
 from app.extensions import db, login_manager, migrate, init_extensions  # Add 'migrate' and 'init_extensions' here
 from flask_wtf import CSRFProtect
 from dotenv import load_dotenv
-from app.utils import init_admin_user  # Import the init_admin_user function
+from app.common.utils import init_admin_user  # Import the init_admin_user function
 
 def create_app(config_name='development'):
     app = Flask(__name__)
