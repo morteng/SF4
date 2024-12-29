@@ -118,7 +118,7 @@ def create_admin_blueprint():
         
         # Check admin access
         if not current_user.is_authenticated or not current_user.is_admin:
-            flash_message(FlashMessages.ADMIN_ACCESS_DENIED.value, FlashCategory.ERROR.value)
+            flash_message(FlashMessages.ADMIN_ACCESS_ERROR.value, FlashCategory.ERROR.value)
             return redirect(url_for('public.login'))
     
     # Make the decorator available to routes

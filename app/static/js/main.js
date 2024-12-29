@@ -12,10 +12,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // HTMX indicator
     document.body.addEventListener('htmx:beforeRequest', () => {
-        document.getElementById('htmx-indicator').style.display = 'block';
+        const indicator = document.getElementById('htmx-indicator');
+        if (indicator) {
+            indicator.style.display = 'block';
+        }
     });
     document.body.addEventListener('htmx:afterRequest', () => {
-        document.getElementById('htmx-indicator').style.display = 'none';
+        const indicator = document.getElementById('htmx-indicator');
+        if (indicator) {
+            indicator.style.display = 'none';
+        }
     });
 
    
