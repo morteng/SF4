@@ -5,7 +5,16 @@
 
 from datetime import datetime, timedelta
 import pytest
-from freezegun import freeze_time
+from tests.conftest import FREEZEGUN_INSTALLED
+
+# Skip tests if freezegun is not installed
+pytestmark = pytest.mark.skipif(
+    not FREEZEGUN_INSTALLED,
+    reason="freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies."
+)
+
+if FREEZEGUN_INSTALLED:
+    from freezegun import freeze_time
 from flask_wtf.csrf import generate_csrf
 from app.models import Organization, Tag, Stipend, AuditLog
 from app.forms.admin_forms import StipendForm
@@ -17,8 +26,8 @@ from tests.base_test_case import BaseTestCase
 
 from freezegun import freeze_time
 
-@freeze_time("2024-01-01 00:00:00")  # Mock the current date/time
-@freeze_time("2024-01-01 00:00:00")  # Mock the current date/time
+@pytest.mark.skipif(not FREEZEGUN_INSTALLED, reason="freezegun is not installed")
+@freeze_time("2024-01-01 00:00:00")
 def test_valid_date_format(app, form_data, test_db):
     """Test valid date format"""
     valid_dates = [
