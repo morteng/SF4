@@ -70,7 +70,7 @@ def create_admin_blueprint():
                 # Create notification for significant actions
                 if action in ['create', 'update', 'delete']:
                     Notification.create(
-                        type=NotificationType.ADMIN_ACTION,
+                        type=NotificationType.ADMIN_ACTION,  # Changed from AUDIT_LOG to ADMIN_ACTION
                         message=f"{action.capitalize()} operation on {object_type} {object_id}",
                         related_object=audit_log,
                         user_id=current_user.id
