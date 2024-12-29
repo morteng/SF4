@@ -413,7 +413,6 @@ def flash_message(message, category):
         logger.error(f"Failed to flash message: {e}")
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from app.services.stipend_service import create_stipend, update_stipend, delete_stipend
 from app.services.bot_service import run_bot
 
 limiter = Limiter(
@@ -424,10 +423,14 @@ limiter = Limiter(
 def setup_rate_limits(app):
     limiter.init_app(app)
     
+    # Import services locally to avoid circular imports
+    from app.services.stipend_service import StipendService
+    stipend_service = StipendService()
+    
     # CRUD specific limits
-    limiter.limit("10/minute")(create_stipend)
-    limiter.limit("10/minute")(update_stipend)
-    limiter.limit("3/minute")(delete_stipend)
+    limiter.limit("10/minute")(stipend_service.create_stipend)
+    limiter.limit("10/minute")(stipend_service.update_stipend)
+    limiter.limit("3/minute")(stipend_service.delete_stipend)
     
     # Bot operations
     limiter.limit("10/hour")(run_bot)
