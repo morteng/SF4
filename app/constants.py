@@ -151,6 +151,7 @@ class FlashMessages(str, Enum):
     AUDIT_UPDATE = "update"
     AUDIT_DELETE = "delete"
     AUDIT_LOG_SUCCESS = "Action logged successfully."
+    AUDIT_LOG_ERROR = "Action was successful but audit logging failed. Please check system logs."
     
     # Stipend Management
     STIPEND_CREATE_SUCCESS = "Stipend created successfully."

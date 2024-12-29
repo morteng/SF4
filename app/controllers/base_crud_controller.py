@@ -42,30 +42,86 @@ class BaseCrudController:
                         redirect_success, redirect_error, **kwargs):
         try:
             result = operation(**kwargs)
-            if self.audit_logger and hasattr(result, 'id'):
+            
+            # Enhanced audit logging
+            if self.audit_logger:
                 try:
+                    operation_name = operation.__name__
+                    object_id = result.id if hasattr(result, 'id') else kwargs.get('id')
+                    
+                    # Log additional context
+                    details = {
+                        'operation': operation_name,
+                        'entity': self.entity_name,
+                        'user': current_user.username if current_user.is_authenticated else 'anonymous',
+                        'ip': request.remote_addr,
+                        'method': request.method,
+                        'endpoint': request.endpoint,
+                        'success': True
+                    }
+                    
                     self.audit_logger.log(
-                        operation.__name__,
-                        self.entity_name,
-                        result.id,
-                        f"Operation {operation.__name__} on {self.entity_name}",
                         user_id=current_user.id if current_user.is_authenticated else None,
-                        ip_address=request.remote_addr,
-                        http_method=request.method,
-                        endpoint=request.endpoint
+                        action=operation_name,
+                        object_type=self.entity_name,
+                        object_id=object_id,
+                        details=details,
+                        ip_address=request.remote_addr
                     )
-                    flash(FlashMessages.AUDIT_LOG_SUCCESS.value, FlashCategory.SUCCESS.value)
+                    
                 except Exception as e:
                     import logging
                     logging.error(f"Audit log error: {str(e)}", exc_info=True)
+                    # Don't fail the operation if audit logging fails
+                    flash(FlashMessages.AUDIT_LOG_ERROR.value, FlashCategory.WARNING.value)
                     
             flash(success_message.format(self.entity_name), FlashCategory.SUCCESS.value)
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_success}'))
+            
         except ValidationError as e:
+            # Log validation errors
+            if self.audit_logger:
+                try:
+                    details = {
+                        'operation': operation.__name__,
+                        'entity': self.entity_name,
+                        'errors': str(e),
+                        'success': False
+                    }
+                    self.audit_logger.log(
+                        user_id=current_user.id if current_user.is_authenticated else None,
+                        action=operation.__name__,
+                        object_type=self.entity_name,
+                        details=details,
+                        ip_address=request.remote_addr
+                    )
+                except Exception:
+                    pass  # Don't fail the operation if audit logging fails
+                    
             flash(self.flash_messages['validation_error'].format(
                 self.entity_name, str(e)), FlashCategory.ERROR.value)
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
+            
         except Exception as e:
+            # Log operation errors
+            if self.audit_logger:
+                try:
+                    details = {
+                        'operation': operation.__name__,
+                        'entity': self.entity_name,
+                        'error': str(e),
+                        'success': False
+                    }
+                    self.audit_logger.log(
+                        user_id=current_user.id if current_user.is_authenticated else None,
+                        action=operation.__name__,
+                        object_type=self.entity_name,
+                        details=details,
+                        ip_address=request.remote_addr
+                    )
+                except Exception:
+                    pass  # Don't fail the operation if audit logging fails
+                    
             import logging
             logging.error(f"Error in {operation.__name__}: {str(e)}", exc_info=True)
             flash(error_message.format(self.entity_name, str(e)), FlashCategory.ERROR.value)
