@@ -6,6 +6,7 @@ alembic==1.11.1
 python-dotenv==1.0.0
 SQLAlchemy==2.0.20
 Flask-Login==0.6.3
+Werkzeug==2.3.7
 Flask-WTF==1.2.1
 WTForms==3.0.1
 flask-migrate==4.0.5

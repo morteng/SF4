@@ -1,9 +1,15 @@
-import os  # Import the os module here
+import os
 import logging
 from flask import Flask
 
-# Configure logger
 logger = logging.getLogger(__name__)
+
+def check_dependencies():
+    try:
+        import flask_login
+        import werkzeug
+    except ImportError as e:
+        raise RuntimeError(f"Missing or incompatible dependency: {str(e)}") from e
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
@@ -20,6 +26,9 @@ from app.common.utils import init_admin_user  # Import the init_admin_user funct
 
 def create_app(config_name='development'):
     app = Flask(__name__)
+    
+    # Check dependencies before proceeding
+    check_dependencies()
     
     # Set up migrations directory in root project directory
     basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # Go up one level

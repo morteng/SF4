@@ -37,23 +37,14 @@ def pytest_collection_modifyitems(config, items):
                 item.add_marker(skip_freezegun)
 
 def verify_dependencies():
-    """Verify that all required dependencies are installed."""
     missing_deps = []
-    required_deps = ["freezegun", "pytest", "Flask", "flask_limiter"]  # Add other critical dependencies here
-
-    for dep in required_deps:
+    for dep in ["Flask", "Flask-Login", "Werkzeug"]:
         try:
             __import__(dep)
         except ImportError:
             missing_deps.append(dep)
-
     if missing_deps:
-        missing_deps_str = ", ".join(missing_deps)
-        logging.error(
-            f"The following dependencies are missing: {missing_deps_str}. "
-            f"Run `pip install -r requirements.txt` to install them."
-        )
-        pytest.fail(f"Missing dependencies: {missing_deps_str}")
+        pytest.fail(f"Missing dependencies: {', '.join(missing_deps)}")
 
 def pytest_sessionstart(session):
     """Verify dependencies at the start of the test session."""

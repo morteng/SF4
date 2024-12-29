@@ -1,5 +1,12 @@
+try:
+    from flask_login import LoginManager
+except ImportError as e:
+    raise ImportError(
+        "Flask-Login is not installed or is incompatible. "
+        "Run 'pip install Flask-Login==0.6.3' to fix this."
+    ) from e
+
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_migrate import Migrate
 from flask_limiter import Limiter
