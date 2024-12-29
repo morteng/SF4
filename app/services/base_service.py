@@ -12,18 +12,22 @@ def handle_errors(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
+        except ValidationError as e:
+            db.session.rollback()
+            logger.error(f"Validation error in {func.__name__}: {str(e)}")
+            raise ValueError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors=e.messages))
         except SQLAlchemyError as e:
             db.session.rollback()
             logger.error(f"Database error in {func.__name__}: {str(e)}")
             raise ValueError(FlashMessages.DATABASE_ERROR)
-        except ValidationError as e:
+        except ValueError as e:
             db.session.rollback()
-            logger.error(f"Validation error in {func.__name__}: {str(e)}")
-            raise ValueError(str(e))
+            logger.error(f"Value error in {func.__name__}: {str(e)}")
+            raise
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error in {func.__name__}: {str(e)}")
-            raise ValueError(FlashMessages.GENERIC_ERROR)
+            raise ValueError(FlashMessages.CRUD_OPERATION_ERROR.format(error=str(e)))
     return wrapper
 
 class BaseService:
@@ -98,31 +102,55 @@ class BaseService:
 
     def validate(self, data):
         """Enhanced validation with hooks"""
+        errors = {}
+        
         # Run pre-validation hooks
         for hook in self.pre_validation_hooks:
-            data = hook(data)
+            try:
+                data = hook(data)
+            except ValidationError as e:
+                errors.update({field: str(e) for field in e.messages})
             
         # Core validation
         for field, rules in self.validation_rules.items():
-            if rules.get('required') and not data.get(field):
-                raise ValidationError(f"{field} is required")
-            if rules.get('max_length') and len(str(data.get(field))) > rules['max_length']:
-                raise ValidationError(f"{field} exceeds maximum length of {rules['max_length']}")
-            if rules.get('choices') and data.get(field) not in rules['choices']:
-                raise ValidationError(f"{field} must be one of {rules['choices']}")
-            if rules.get('type') and not isinstance(data.get(field), rules['type']):
-                raise ValidationError(f"{field} must be of type {rules['type'].__name__}")
+            try:
+                value = data.get(field)
                 
+                if rules.get('required') and not value:
+                    raise ValidationError(FlashMessages.MISSING_REQUIRED_FIELD.format(field=field))
+                    
+                if rules.get('max_length') and len(str(value)) > rules['max_length']:
+                    raise ValidationError(FlashMessages.NAME_LENGTH)
+                    
+                if rules.get('choices') and value not in rules['choices']:
+                    raise ValidationError(f"{field} must be one of {rules['choices']}")
+                    
+                if rules.get('type') and not isinstance(value, rules['type']):
+                    raise ValidationError(f"{field} must be of type {rules['type'].__name__}")
+                    
+            except ValidationError as e:
+                errors[field] = str(e)
+            
         # Run post-validation hooks
         for hook in self.post_validation_hooks:
-            hook(data)
+            try:
+                hook(data)
+            except ValidationError as e:
+                errors.update({field: str(e) for field in e.messages})
+            
+        if errors:
+            raise ValidationError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors=errors))
 
     def validate_create(self, data):
         """Validate data before creation"""
+        if not data:
+            raise ValidationError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors="No data provided"))
         self.validate(data)
         
     def validate_update(self, data):
         """Validate data before update"""
+        if not data:
+            raise ValidationError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors="No data provided"))
         self.validate(data)
 
     @handle_errors
