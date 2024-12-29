@@ -1,6 +1,6 @@
 # Todo
-1. fix tests
-2. update this list with new actionable items
+1. Fix tests
+2. Update this list with new actionable items
 
 ### **Things to Remember for Next Coding Session**
 1. **Error Handling**:
@@ -23,7 +23,6 @@
    - Keep validation logic modular and reusable.
    - Avoid hardcoding strings; use constants instead.
 
-
 ### **Lessons Learned**
 1. **Proper Error Handling**:
    - Always include `except` or `finally` blocks for `try` statements to avoid syntax errors.
@@ -36,4 +35,40 @@
 
 4. **Testing Edge Cases**:
    - Pay special attention to edge cases for date/time validation, such as leap years and invalid time components.
+
+### **Recent Changes**
+1. **Added Missing Constants**:
+   - Added `MISSING_FIELD_ERROR`, `USERNAME_REQUIRED`, `USERNAME_LENGTH`, and `USERNAME_FORMAT` to `app/constants.py`.
+
+2. **Refactored Validation Logic**:
+   - Moved reusable validation logic (e.g., `validate_application_deadline`) to `app/common/utils.py`.
+
+3. **Improved Tests**:
+   - Added edge case tests in `tests/test_base_crud_controller.py` for invalid form submissions and missing fields.
+
+4. **Updated `requirements.txt`**:
+   - Added `beautifulsoup4` for HTML parsing in tests.
+
+### **Next Steps**
+1. **Add Edge Case Tests**:
+   - Add more edge case tests for form validation and database interactions.
+
+2. **Refactor Shared Logic**:
+   - Move more shared logic to `app/common/utils.py` to avoid duplication.
+
+3. **Documentation**:
+   - Update `README.md` with setup instructions and testing guidelines.
+
+---
+
+### **Pending Console Commands**
+```bash
+pip install -r requirements.txt
+pytest
+flask routes
+```
+
+---
+
+### **End of Document**
 
