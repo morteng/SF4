@@ -36,19 +36,8 @@ def pytest_collection_modifyitems(config, items):
             if "freezegun" in item.keywords:
                 item.add_marker(skip_freezegun)
 
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["flask", "pytest", "freezegun", "flask_login", "werkzeug"]:
-        try:
-            __import__(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    if missing_deps:
-        raise RuntimeError(f"Missing dependencies: {', '.join(missing_deps)}. Run 'pip install -r requirements.txt' to install them.")
-
 def pytest_sessionstart(session):
     """Verify dependencies at the start of the test session."""
-    verify_dependencies()
     if not FREEZEGUN_INSTALLED:
         logging.warning(
             "freezegun is not installed. Some tests may be skipped. "
@@ -519,41 +508,6 @@ def test_tag(db_session, app):
         if db_session.query(Tag).filter_by(id=tag.id).first():
             db_session.delete(tag)
             db_session.commit()
-import subprocess
-import pytest
-import importlib
-
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    
-    if missing_deps:
-        print(f"Attempting to install missing dependencies: {', '.join(missing_deps)}")
-        try:
-            subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-        except subprocess.CalledProcessError:
-            pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
-import pytest
-import importlib
-import subprocess
-
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["Flask", "Flask-Login", "Werkzeug"]:
-        try:
-            __import__(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
-
-# Add this to pytest setup
-def pytest_configure():
-    verify_dependencies()
 import pytest
 from app import create_app
 from app.extensions import db

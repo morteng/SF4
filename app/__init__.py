@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 db = SQLAlchemy()
 login_manager = LoginManager()
 migrate = Migrate()
-limiter = Limiter(key_func=get_remote_address)
+limiter = Limiter(key_func=get_remote_address)  # Initialize limiter here
 
 logger = logging.getLogger(__name__)
 
