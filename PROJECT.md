@@ -97,6 +97,7 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
   touch app/common/__init__.py
   touch app/forms/__init__.py
   ```
+- **Best Practice**: Always include `__init__.py` in Python package directories, even if empty.
 
 ### Testing Improvements
 - **Issue**: Missing dependencies caused test failures instead of graceful skips.

@@ -34,6 +34,8 @@ Before running tests, the system will automatically verify that all required dep
 
 To manually verify dependencies:
 ```bash
+pip install -r requirements.txt
+pip show freezegun Flask
 pytest tests/test_dependencies.py
 ```
 
