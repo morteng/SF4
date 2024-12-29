@@ -37,16 +37,30 @@ class StipendForm(FlaskForm):
         DataRequired(message=FlashMessages.NAME_REQUIRED.value),
         Length(max=100, message=FlashMessages.NAME_LENGTH.value)
     ])
-    summary = TextAreaField('Summary', validators=[Optional()])
-    description = TextAreaField('Description', validators=[Optional()])
+    summary = TextAreaField('Summary', validators=[
+        DataRequired(message="Summary is required."),
+        Length(max=500, message="Summary cannot exceed 500 characters.")
+    ])
+    description = TextAreaField('Description', validators=[
+        DataRequired(message="Description is required."),
+        Length(max=2000, message="Description cannot exceed 2000 characters.")
+    ])
     homepage_url = URLField('Homepage URL', validators=[
-        Optional(),
+        DataRequired(message="Homepage URL is required."),
         URL(message="Please enter a valid URL starting with http:// or https://.")
     ])
-    application_procedure = TextAreaField('Application Procedure', validators=[Optional()])
-    eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[Optional()])
+    application_procedure = TextAreaField('Application Procedure', validators=[
+        DataRequired(message="Application procedure is required."),
+        Length(max=2000, message="Application procedure cannot exceed 2000 characters.")
+    ])
+    eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[
+        DataRequired(message="Eligibility criteria is required."),
+        Length(max=2000, message="Eligibility criteria cannot exceed 2000 characters.")
+    ])
     application_deadline = CustomDateTimeField('Application Deadline', validators=[Optional()])
-    organization_id = SelectField('Organization', coerce=int, validators=[Optional()])
+    organization_id = SelectField('Organization', coerce=int, validators=[
+        DataRequired(message="Organization is required.")
+    ])
     open_for_applications = BooleanField('Open for Applications', default=False)
     tags = SelectMultipleField('Tags', coerce=int, validators=[Optional()])
 
