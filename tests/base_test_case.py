@@ -2,7 +2,7 @@ from flask_testing import TestCase
 from app import create_app, db
 from app.models import User, Stipend, Tag, Organization
 from app.constants import FlashMessages
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from wtforms.validators import ValidationError
 
 class BaseTestCase(TestCase):
