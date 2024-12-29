@@ -67,79 +67,12 @@ class StipendController(BaseRouteController):
 
 stipend_controller = StipendController()
 
-@admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
+@admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")
 @login_required
 @admin_required
 def create():
     return stipend_controller.create()
-    form = StipendForm()
-    is_htmx = request.headers.get('HX-Request')
-    
-    # Initialize form choices
-    organizations = Organization.query.order_by(Organization.name).all()
-    tags = Tag.query.order_by(Tag.name).all()
-    form.organization_id.choices = [(org.id, org.name) for org in organizations]
-    form.tags.choices = [(tag.id, tag.name) for tag in tags]
-    
-    if form.validate_on_submit():
-        try:
-            # Prepare stipend data
-            stipend_data = {
-                'name': form.name.data,
-                'summary': form.summary.data if form.summary.data else None,
-                'description': form.description.data if form.description.data else None,
-                'homepage_url': form.homepage_url.data if form.homepage_url.data else None,
-                'application_procedure': form.application_procedure.data if form.application_procedure.data else None,
-                'eligibility_criteria': form.eligibility_criteria.data if form.eligibility_criteria.data else None,
-                'application_deadline': form.application_deadline.data if form.application_deadline.data else None,
-                'organization_id': form.organization_id.data if form.organization_id.data else None,
-                'open_for_applications': form.open_for_applications.data,
-                'tags': [Tag.query.get(tag_id) for tag_id in form.tags.data] if form.tags.data else []
-            }
-            
-            # Create stipend
-            stipend = Stipend.create(stipend_data, user_id=current_user.id)
-            
-            # Create audit log
-            log_audit(
-                user_id=current_user.id,
-                action='create_stipend',
-                object_type='Stipend',
-                object_id=stipend.id,
-                after=stipend.to_dict()
-            )
-            
-            # Create notification
-            create_notification(
-                type='stipend_created',
-                message=f'New stipend created: {stipend.name}',
-                related_object=stipend,
-                user_id=current_user.id
-            )
-            
-            flash_message(FlashMessages.STIPEND_CREATE_SUCCESS, FlashCategory.SUCCESS)
-            
-            if is_htmx:
-                return '', 204, {'HX-Redirect': url_for('admin.stipend.index')}
-            return redirect(url_for('admin.stipend.index'))
-            
-        except ValueError as e:
-            db.session.rollback()
-            current_app.logger.error(f"Validation error creating stipend: {str(e)}")
-            flash_message(f"Validation error: {str(e)}", FlashCategory.ERROR)
-            if is_htmx:
-                return render_template('admin/stipends/_form.html', form=form)
-        except Exception as e:
-            db.session.rollback()
-            current_app.logger.error(f"Error creating stipend: {str(e)}")
-            flash_message(f"{FlashMessages.STIPEND_CREATE_ERROR}: {str(e)}", FlashCategory.ERROR)
-            if is_htmx:
-                return render_template('admin/stipends/_form.html', form=form)
-    
-    if is_htmx:
-        return render_template('admin/stipends/_form.html', form=form)
-    return render_template('admin/stipends/create.html', form=form)
 
 
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])

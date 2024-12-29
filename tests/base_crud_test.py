@@ -64,3 +64,22 @@ class BaseCRUDTest:
         # Verify audit log was created
         log = AuditLog.query.filter_by(object_type=self.model.__name__, object_id=instance.id, action='update').first()
         assert log is not None
+
+    def test_htmx_create_success(self):
+        """Test successful creation via HTMX"""
+        headers = {'HX-Request': 'true'}
+        response = self.client.post(self.create_url, 
+                                  data=self.valid_data,
+                                  headers=headers)
+        assert response.status_code == 204
+        assert 'HX-Redirect' in response.headers
+        assert self.model.query.filter_by(**self.valid_data).first() is not None
+
+    def test_htmx_create_validation_error(self):
+        """Test creation with invalid data via HTMX"""
+        headers = {'HX-Request': 'true'}
+        response = self.client.post(self.create_url, 
+                                  data=self.invalid_data,
+                                  headers=headers)
+        assert response.status_code == 400
+        assert b"ValidationError" in response.data
