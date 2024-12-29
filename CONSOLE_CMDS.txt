@@ -13,7 +13,8 @@
 
 ### COMMANDS START ###
 
-/run echo "Hello from the console!"
+/run pytest
+/run flask routes
 
 ### COMMANDS END ###
 
