@@ -133,10 +133,16 @@ def register_admin_blueprints(app):
     admin_bp.register_blueprint(admin_org_bp, url_prefix='/organizations')
     admin_bp.register_blueprint(admin_tag_bp, url_prefix='/tags')
     
+    # Debug logging
+    with app.app_context():
+        current_app.logger.debug("Registered routes:")
+        for rule in app.url_map.iter_rules():
+            current_app.logger.debug(f"Route: {rule.endpoint}")
+    
     # Validate routes
     required_routes = [
-        'stipend.create',
-        'admin_dashboard.dashboard'
+        'admin_stipend.create',
+        'dashboard.dashboard'
     ]
     validate_blueprint_routes(app, required_routes)
     

@@ -46,6 +46,7 @@ class AdminStipendTestCase(unittest.TestCase):
                 # Get CSRF token from login page
                 response = self.client.get(url_for('public.login'))
                 self.assertEqual(response.status_code, 200)
+                current_app.logger.debug("CSRF token page loaded successfully")
             
             # Extract CSRF token from hidden form field with error handling
             try:
