@@ -69,19 +69,24 @@ class CustomDateTimeField(DateTimeField):
             self.data = None
             return
             
-        # Validate time components separately
-            
+        # Validate time components separately before parsing
         try:
-            # Parse the full datetime - ensure format is a string
-            parsed_dt = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+            time_part = date_str.split(' ')[1]
+            hours, minutes, seconds = map(int, time_part.split(':'))
             
-            # Validate time components
-            if not (0 <= parsed_dt.hour <= 23 and 
-                    0 <= parsed_dt.minute <= 59 and 
-                    0 <= parsed_dt.second <= 59):
-                self.errors.append(self.error_messages.get('invalid_time', 'Invalid time values'))
+            if not (0 <= hours <= 23):
+                self.errors.append(self.error_messages.get('invalid_hour', 'Invalid hour value'))
+            if not (0 <= minutes <= 59):
+                self.errors.append(self.error_messages.get('invalid_minute', 'Invalid minute value'))
+            if not (0 <= seconds <= 59):
+                self.errors.append(self.error_messages.get('invalid_second', 'Invalid second value'))
+                
+            if self.errors:
                 self.data = None
                 return
+                
+            # Parse the full datetime if time components are valid
+            parsed_dt = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
                 
             # Check for leap year if February 29th
             if parsed_dt.month == 2 and parsed_dt.day == 29:
@@ -200,7 +205,7 @@ class CustomDateTimeField(DateTimeField):
             
         # If data is empty, return required error
         if not self.data:
-            self.errors.append('Application deadline is required.')
+            self.errors.append(self.error_messages.get('required', 'Date is required'))
             return False
     
         # If we already have errors from process_formdata, return False
@@ -218,13 +223,6 @@ class CustomDateTimeField(DateTimeField):
         # Validate date components
         try:
             dt = datetime.strptime(str(self.data), '%Y-%m-%d %H:%M:%S')
-            
-            # Validate time components
-            if not (0 <= dt.hour <= 23 and 
-                    0 <= dt.minute <= 59 and 
-                    0 <= dt.second <= 59):
-                self.errors.append(self.error_messages.get('invalid_time', 'Invalid time values'))
-                return False
                 
             # Validate date components
             try:
