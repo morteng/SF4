@@ -190,7 +190,6 @@ class FlashCategory(str, Enum):
     PASSWORD_WEAK = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
 
     # Form Validation
-    FORM_VALIDATION_ERROR = "Form validation failed. Please check your input."
     FORM_SUBMISSION_ERROR = "Form submission failed. Please try again."
     FORM_INVALID_CSRF = "Invalid CSRF token. Please refresh the page and try again."
     FORM_DUPLICATE_USERNAME = "Username already exists. Please choose a different username."
