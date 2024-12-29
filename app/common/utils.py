@@ -168,3 +168,4 @@ def shared_function():
 def init_admin_user():
     # Shared functionality for initializing admin user
     pass
+# Shared utility functions to avoid circular imports
