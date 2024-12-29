@@ -43,16 +43,22 @@ class BaseCrudController:
         try:
             result = operation(**kwargs)
             if self.audit_logger and hasattr(result, 'id'):
-                self.audit_logger.log(
-                    operation.__name__,
-                    self.entity_name,
-                    result.id,
-                    f"Operation {operation.__name__} on {self.entity_name}",
-                    user_id=current_user.id if current_user.is_authenticated else None,
-                    ip_address=request.remote_addr,
-                    http_method=request.method,
-                    endpoint=request.endpoint
-                )
+                try:
+                    self.audit_logger.log(
+                        operation.__name__,
+                        self.entity_name,
+                        result.id,
+                        f"Operation {operation.__name__} on {self.entity_name}",
+                        user_id=current_user.id if current_user.is_authenticated else None,
+                        ip_address=request.remote_addr,
+                        http_method=request.method,
+                        endpoint=request.endpoint
+                    )
+                    flash(FlashMessages.AUDIT_LOG_SUCCESS.value, FlashCategory.SUCCESS.value)
+                except Exception as e:
+                    import logging
+                    logging.error(f"Audit log error: {str(e)}", exc_info=True)
+                    
             flash(success_message.format(self.entity_name), FlashCategory.SUCCESS.value)
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_success}'))
         except ValidationError as e:

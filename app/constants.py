@@ -150,6 +150,7 @@ class FlashMessages(str, Enum):
     AUDIT_READ = "read"
     AUDIT_UPDATE = "update"
     AUDIT_DELETE = "delete"
+    AUDIT_LOG_SUCCESS = "Action logged successfully."
     
     # Stipend Management
     STIPEND_CREATE_SUCCESS = "Stipend created successfully."

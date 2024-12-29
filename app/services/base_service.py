@@ -211,5 +211,7 @@ class BaseService:
                 before=before,
                 after=after or entity.to_dict(),
                 ip_address=request.remote_addr if request else '127.0.0.1',
-                endpoint=request.endpoint if request else 'unknown'
+                endpoint=request.endpoint if request else 'unknown',
+                http_method=request.method if request else 'UNKNOWN',
+                user_agent=request.headers.get('User-Agent') if request else None
             )
