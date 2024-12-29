@@ -79,7 +79,7 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 ## Lessons Learned
 
 ### Dependency Management
-- **Issue**: Tests failed because `freezegun` and `Flask` were listed in `requirements.txt` but not installed.
+- **Issue**: Tests failed because `freezegun` was listed in `requirements.txt` but not installed.
 - **Solution**: Always verify dependencies are installed by running:
   ```bash
   pip install -r requirements.txt
@@ -87,6 +87,26 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 - **Best Practice**:
   - Add a pre-test check to ensure all required dependencies are installed.
   - Document the setup process to avoid similar issues in the future.
+
+### Property Implementation
+- **Issue**: The `create_limit` function in `BaseService` was incorrectly used as a setter without being defined as a property.
+- **Solution**: Refactor `create_limit` into a proper property with a getter and setter:
+  ```python
+  class BaseService:
+      def __init__(self):
+          self._create_limit = None  # Initialize the private attribute
+
+      @property
+      def create_limit(self):
+          """Getter for create_limit."""
+          return self._create_limit
+
+      @create_limit.setter
+      def create_limit(self, value):
+          """Setter for create_limit."""
+          self._create_limit = value
+  ```
+- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
 
 ### Testing Improvements
 - Added graceful handling of missing dependencies in test files.

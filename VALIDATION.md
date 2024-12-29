@@ -1,3 +1,25 @@
+## Property Validation
+
+### Best Practices
+1. **Validate Property Values**:
+   - Use setters to validate property values before assignment.
+   - Example:
+     ```python
+     @my_property.setter
+     def my_property(self, value):
+         if not isinstance(value, int):
+             raise ValueError("Value must be an integer")
+         self._my_property = value
+     ```
+
+2. **Centralized Error Messages**:
+   - Use error messages from `app/constants.py` for consistency.
+   - Avoid hardcoding error messages in property setters.
+
+3. **Testing Property Validation**:
+   - Add tests to verify that property setters validate values correctly.
+   - Test edge cases and invalid inputs to ensure robust validation.
+
 ## Dependency Validation
 
 ### Best Practices
