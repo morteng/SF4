@@ -18,6 +18,13 @@
 
 ### COMMANDS END ###
 
+# Additional Checks
+/run flask routes
+/test
+/ask If there's a new issue, what is it?
+/architect implement improvements, fix problems
+
+
 # When done, jump back to MAIN_CMDS.txt to start new coding session
 /reset
 /load MAIN_CMDS.txt
