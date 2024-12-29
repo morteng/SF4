@@ -26,6 +26,7 @@ def check_dependencies():
             missing_deps.append(dep)
     if missing_deps:
         raise RuntimeError(f"Missing dependencies: {', '.join(missing_deps)}. Run 'pip install -r requirements.txt' to install them.")
+
 def get_limiter():
     """Lazy import for Limiter to avoid circular imports"""
     from flask_limiter import Limiter
@@ -34,6 +35,11 @@ def get_limiter():
 
 try:
     Limiter, get_remote_address = get_limiter()
+    limiter = Limiter(
+        key_func=get_remote_address,
+        storage_uri="redis://localhost:6379",
+        default_limits=["100 per hour"]
+    )
 except ImportError:
     raise ImportError(
         "Flask-Limiter is required. Please install it using 'pip install Flask-Limiter==3.5.0'"

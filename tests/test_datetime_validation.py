@@ -2,7 +2,6 @@ import pytest
 from freezegun import freeze_time
 from app.forms.custom_fields import CustomDateTimeField
 from app.constants import FlashMessages
-from app.constants import FlashMessages
 
 @pytest.mark.parametrize("date_str, expected_error", [
     ("2023-02-29 12:00:00", FlashMessages.INVALID_LEAP_YEAR_DATE),
@@ -17,7 +16,10 @@ from app.constants import FlashMessages
 def test_datetime_validation(date_str, expected_error):
     field = CustomDateTimeField()
     field.process_formdata([date_str])
-    assert str(expected_error) in field.errors
+    if expected_error:
+        assert str(expected_error) in field.errors
+    else:
+        assert not field.errors
 
 @freeze_time("2023-01-01")
 def test_past_date_validation():
