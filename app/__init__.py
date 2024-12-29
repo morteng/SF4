@@ -92,6 +92,11 @@ def create_app(config_name='development'):
     if app.config.get('TESTING'):
         limiter.enabled = False
         app.config['RATELIMIT_ENABLED'] = False
+    
+    # Ensure limiter is fully disabled in test environment
+    if app.config.get('TESTING'):
+        limiter.enabled = False
+        app.config['RATELIMIT_ENABLED'] = False
 
     # Register blueprints before applying rate limits
     from app.routes.admin import register_admin_blueprints

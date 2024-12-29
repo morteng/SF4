@@ -1,4 +1,5 @@
 from app.models.bot import Bot, BotStatus
+from app.services.base_service import BaseService
 # Lazy imports will be used within functions
 from app.extensions import db
 

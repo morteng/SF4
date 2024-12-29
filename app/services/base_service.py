@@ -249,8 +249,8 @@ class BaseService:
             raise ValueError("Rate limit must include time unit (e.g., 'per minute')")
         self.rate_limits['update'] = value
         
-    @handle_errors 
-    @Limiter.limit(lambda self: self.rate_limits['update'])
+    @handle_errors
+    @limiter.limit(lambda self: self.rate_limits['update'])
     def update(self, id, data, user_id=None):
         """Update an existing entity with validation and audit logging"""
         entity = self.get_by_id(id)
@@ -280,7 +280,7 @@ class BaseService:
         self.rate_limits['delete'] = value
         
     @handle_errors
-    @Limiter.limit(lambda self: self.rate_limits['delete']) 
+    @limiter.limit(lambda self: self.rate_limits['delete'])
     def delete(self, id, user_id=None):
         """Enhanced delete with soft delete support"""
         entity = self.get_by_id(id)
