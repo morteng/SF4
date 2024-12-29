@@ -65,3 +65,11 @@ def init_admin_user():
 def shared_function():
     """Placeholder for shared functionality to avoid circular imports."""
     pass
+def init_admin_user():
+    # Implementation
+    pass
+
+# Example lazy import in a function
+def some_function():
+    from app.services.bot_service import run_bot  # Lazy import
+    run_bot()
