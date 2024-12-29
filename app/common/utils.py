@@ -109,3 +109,8 @@ def shared_function():
 def some_function():
     from app.services.bot_service import run_bot  # Lazy import
     run_bot()
+# Shared utilities to avoid circular imports
+
+def shared_function():
+    """Example shared function to demonstrate refactoring."""
+    pass
