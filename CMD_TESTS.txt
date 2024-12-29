@@ -6,29 +6,29 @@
 /add VALIDATION.md
 /add TODO.md
 
-### Address the TODO list
-/ask Based on TODO.md, how should we proceed to fix these issues while adhering to PROJECT and VALIDATION conventions?
+# Step 1: Identify & Plan
+/ask Based on TODO.md (and other docs), how do we address the issues?
 /architect implement the suggested changes
+
+# Step 2: Test & Debug
+/run flask routes
+/test
+/ask If tests fail, what's causing the issue?
+/code implement fixes
 /test
 
-### Refine & Debug
-/ask We encountered some issues in the test results. What’s causing the problem?
-/code implement the suggested changes
+# Step 3: Refine & Summarize
+/ask Should we revisit or refactor any code? Summarize the current status.
+/architect implement improvements
 /test
 
-### Potential Review & Re-Evaluation
-/ask Is the code structured well? Should we refactor or reorganize anything for clarity, maintainability, or performance?
-/architect implement the suggested changes
-/test
+# Step 4: Optional Additional Checks
+/run flask routes
+/ask If there's a new issue, what is it?
 
-### Duplicate Code Check
-/ask Is there duplicate code we can refactor? How can we make the code better?
-/architect implement the suggested changes
-/test
+# Step 5: Final Documentation Updates
+/architect update PROJECT.md, CONVENTIONS.md, TODO.md, and VALIDATION.md with final changes & findings.
 
-### Update Documentation
-/architect Update PROJECT.md, CONVENTIONS.md, TODO.md, and VALIDATION.md with all recent changes, test results, and insights.
-
-### Reset & Load
+# Step 6: Reset or Next
 /reset
 /load CMD_TESTS.txt
