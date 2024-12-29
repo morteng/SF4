@@ -58,22 +58,80 @@ class CustomDateTimeField(Field):
         super().__init__(label=label, validators=validators, **kwargs)
 ```
 
-### 1. Install pytest
+### 1. Install `pytest`
 1. Activate your virtual environment:
-   - **Windows**: `.venv\Scripts\activate`
-   - **macOS/Linux**: `source .venv/bin/activate`
+   - **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
 2. Install `pytest`:
    ```bash
    pip install pytest
    ```
+
 3. Verify the installation:
    ```bash
    pip show pytest
    ```
+
 4. Add `pytest` to `requirements.txt`:
    ```bash
    echo "pytest" >> requirements.txt
    ```
+
+### 2. Fix `CustomDateTimeField` Initialization
+1. Locate the `CustomDateTimeField` class. It's likely in `app/forms/admin_forms.py` or a similar file.
+
+2. Replace the existing implementation with the corrected version:
+   ```python
+   from wtforms import Field
+   from wtforms.validators import InputRequired
+
+   class CustomDateTimeField(Field):
+       def __init__(self, label=None, validators=None, **kwargs):
+           if validators is None:
+               validators = [InputRequired()]  # Default validator
+           super().__init__(label=label, validators=validators, **kwargs)
+   ```
+
+3. Update any form using `CustomDateTimeField` to avoid passing the `validators` argument explicitly unless necessary. For example:
+   ```python
+   application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
+   ```
+
+### 3. Run Tests
+1. Activate your virtual environment (if not already activated):
+   - **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+2. Run the tests:
+   ```bash
+   pytest
+   ```
+
+### 4. Optional: Add Dependency Verification
+To avoid missing dependencies in the future, add a pre-test check in a file like `tests/test_dependencies.py`:
+```python
+import subprocess
+import pytest
+
+def test_dependencies():
+    try:
+        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+    except subprocess.CalledProcessError:
+        pytest.fail("Failed to install dependencies")
+```
 5. Run tests:
    ```bash
    pytest
