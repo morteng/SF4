@@ -17,8 +17,8 @@
 - [x] Add a script to verify all dependencies listed in `requirements.txt` are installed.
 
 ## Next Session
-- [ ] Add comprehensive tests for `BaseService` properties.
-- [ ] Verify time-based tests with `freezegun`.
+- [x] Add comprehensive tests for `BaseService` properties.
+- [x] Verify time-based tests with `freezegun`.
 - [ ] Refactor other shared functionality into `app/common`.
 - [ ] Optimize validation performance in `CustomDateTimeField`.
 - [ ] Add more comprehensive tests for timezone handling in date/time fields.
@@ -28,8 +28,8 @@
 - [x] Add comprehensive tests for property getters and setters.
 - [x] Verify that all dependencies listed in `requirements.txt` are installed during test execution.
 - [x] Add a pre-test dependency verification script to ensure all required packages are installed.
-- [ ] Resolve circular imports by refactoring shared functionality into a separate module.
-- [ ] Install missing dependencies (e.g., `freezegun`) and verify their installation.
+- [x] Resolve circular imports by refactoring shared functionality into a separate module.
+- [x] Install missing dependencies (e.g., `freezegun`) and verify their installation.
 - [x] Add comprehensive tests for property getters and setters.
 - [x] Verify that all dependencies listed in `requirements.txt` are installed during test execution.
 - [x] Add a pre-test dependency verification script to ensure all required packages are installed.
