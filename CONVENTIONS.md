@@ -10,6 +10,19 @@ To manually verify dependencies:
 pytest tests/test_dependencies.py
 ```
 
+### Circular Import Prevention
+To avoid circular dependencies:
+1. Move shared functionality to `app/common/utils.py`
+2. Use lazy imports for dependencies that cannot be refactored
+3. Keep imports at the function level when necessary
+
+Example of lazy import:
+```python
+def some_function():
+    from app.services.bot_service import run_bot  # Lazy import
+    run_bot()
+```
+
 ### Property Implementation
 All service properties must:
 1. Be defined with @property decorator

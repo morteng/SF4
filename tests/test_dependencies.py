@@ -128,3 +128,12 @@ def test_critical_packages():
             subprocess.check_call(["pip", "show", package])
         except subprocess.CalledProcessError:
             pytest.fail(f"Required package {package} is not installed")
+import subprocess
+import pytest
+
+def test_dependencies():
+    """Verify all dependencies are installed."""
+    try:
+        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+    except subprocess.CalledProcessError:
+        pytest.fail("Failed to install dependencies")
