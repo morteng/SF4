@@ -4,24 +4,24 @@
 
 ### Date/Time Validation
 1. **Validation Order**:
-   - Required → Format → Components → Full parsing
-   - Validate time components before full date parsing
+   - Required → Format → Components → Full parsing.
+   - Validate time components before full date parsing.
 
 2. **Error Messages**:
-   - Use specific messages for different validation failures
-   - Centralize messages in `app/constants.py`
-   - Provide clear, user-friendly messages
+   - Use specific messages for different validation failures.
+   - Centralize messages in `app/constants.py`.
+   - Provide clear, user-friendly messages.
 
 3. **Edge Cases**:
-   - Handle invalid leap year dates
-   - Validate time component ranges
-   - Handle malformed datetime strings
+   - Handle invalid leap year dates.
+   - Validate time component ranges.
+   - Handle malformed datetime strings.
 
 ### Key Learnings
-- Always ensure parameters are not passed multiple times during field initialization
-- Use centralized error messages from `app/constants.py` for consistency
-- Test edge cases thoroughly, especially for date/time validation
-- Keep validation logic modular and reusable
+- Always ensure parameters are not passed multiple times during field initialization.
+- Use centralized error messages from `app/constants.py` for consistency.
+- Test edge cases thoroughly, especially for date/time validation.
+- Keep validation logic modular and reusable.
 
 ### Testing Validation
 - Test all error message variations
