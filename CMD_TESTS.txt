@@ -7,7 +7,7 @@
 /add VALIDATION.md
 /add TODO.md
 
-/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
+/ask how can we best work on the issues outlined in the TODO list, adhering strictly to the project descripotion, coding conventions and vallidation conventions, and ensuring that we achieve successful tests?
 
 /architect implement the suggested changes
 
