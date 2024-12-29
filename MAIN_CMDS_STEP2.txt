@@ -1,7 +1,7 @@
 # --------------------------------------
-# MAIN_CMDS.txt
+# MAIN_CMDS_STEP2.txt
 # --------------------------------------
-# This file orchestrates your main coding session. You follow these steps each coding session. I'm showing it to you so you can understand the flow of your work cycle, and how you can run console commands near the end of each session.
+# This file orchestrates the second part of your coding session. You follow these steps each coding session.
 
 
 
