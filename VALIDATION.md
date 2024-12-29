@@ -1,10 +1,16 @@
 # Updated Validation Rules
 
-## Date Validation
+## Date & Time Validation
 - Validate format before content
 - Use fallback error messages
 - Check for required fields first
-- Validate time components separately
+- Validate date and time components separately
+- Specific validation for:
+  - Hours (0-23)
+  - Minutes (0-59)
+  - Seconds (0-59)
+- Clear error messages before new validation
+- Use consistent error message format
 
 ## Error Handling
 - Centralize common error responses

@@ -2,9 +2,11 @@
 
 ## High Priority
 - [x] Fix error message handling in CustomDateTimeField
+- [x] Add time validation logic to CustomDateTimeField
 - [x] Standardize validation error messages
 - [x] Remove hardcoded error messages
 - [x] Address datetime.utcnow() deprecation warnings
+- [x] Implement proper error message mapping
 - [ ] Update remaining routes to use new error handling
 
 ## Medium Priority

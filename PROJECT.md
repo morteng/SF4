@@ -237,10 +237,12 @@ user.profile                 GET        /user/profile
 
 ## Key Updates
 - Fixed error message handling in CustomDateTimeField
+- Added specific time validation logic for datetime fields
 - Standardized validation error messages across all form fields
 - Removed hardcoded error messages in favor of configurable ones
 - Improved test coverage for form validation
 - Addressed datetime.utcnow() deprecation warnings
+- Implemented proper error message mapping for time validation
 
 ## Technical Updates
 - Fixed failing tests for date validation

@@ -24,6 +24,9 @@
 - Validate format before content
 - Clear existing errors before new validation
 - Use consistent error message format across all fields
+- Validate date and time components separately
+- Add specific validation for time values (hours, minutes, seconds)
+- Map error message keys consistently
 
 ## Testing
 - Test both success and error cases
