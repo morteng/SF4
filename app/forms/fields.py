@@ -21,6 +21,13 @@ class CustomDateTimeField(DateTimeField):
         self.render_kw = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
         self._format = format
 
+    def _validate_time_components(self, dt):
+        """Validate time components (hours, minutes, seconds)"""
+        if not (0 <= dt.hour <= 23 and 
+                0 <= dt.minute <= 59 and 
+                0 <= dt.second <= 59):
+            raise ValidationError(self.error_messages['invalid_time'])
+
     def process_formdata(self, valuelist):
         if not valuelist or not valuelist[0].strip():
             self.data = None
@@ -34,48 +41,36 @@ class CustomDateTimeField(DateTimeField):
             try:
                 datetime(parsed_dt.year, parsed_dt.month, parsed_dt.day)
             except ValueError:
-                self.errors.append(self.error_messages['invalid_date'])
-                self.data = None
-                return
+                raise ValidationError(self.error_messages['invalid_date'])
                 
             # Validate time components
-            if not (0 <= parsed_dt.hour <= 23 and 
-                    0 <= parsed_dt.minute <= 59 and 
-                    0 <= parsed_dt.second <= 59):
-                self.errors.append(self.error_messages['invalid_time'])
-                self.data = None
-                return
+            self._validate_time_components(parsed_dt)
                 
             # Leap year validation
             if parsed_dt.month == 2 and parsed_dt.day == 29:
                 try:
                     datetime(parsed_dt.year, 2, 29)
                 except ValueError:
-                    self.errors.append(self.error_messages['invalid_leap_year'])
-                    self.data = None
-                    return
+                    raise ValidationError(self.error_messages['invalid_leap_year'])
                     
             # Future date validation
             now = datetime.now()
             if parsed_dt < now:
-                self.errors.append(self.error_messages['past_date'])
-                self.data = None
-                return
+                raise ValidationError(self.error_messages['past_date'])
                 
             self.data = parsed_dt
             self.raw_value = date_str
             
+        except ValidationError:
+            raise
         except ValueError as e:
             error_str = str(e)
             if 'does not match format' in error_str:
-                self.errors.append(self.error_messages['invalid_format'])
+                raise ValidationError(self.error_messages['invalid_format'])
             elif 'day is out of range' in error_str or 'month is out of range' in error_str:
-                self.errors.append(self.error_messages['invalid_date'])
-            elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
-                self.errors.append(self.error_messages['invalid_time'])
+                raise ValidationError(self.error_messages['invalid_date'])
             else:
-                self.errors.append(self.error_messages['invalid_date'])
-            self.data = None
+                raise ValidationError(self.error_messages['invalid_date'])
 
     @classmethod
     def benchmark_validation(cls, iterations=1000):
