@@ -53,6 +53,28 @@ def test_dependencies():
         pytest.fail("Failed to install dependencies")
 ```
 
+### 5. Property Implementation
+When implementing properties in Python:
+1. Always define a property (`@property`) before using a setter (`@<property>.setter`)
+2. Include validation in setters
+3. Use private attributes for storage
+4. Example:
+```python
+class BaseService:
+    def __init__(self):
+        self._create_limit = None
+
+    @property
+    def create_limit(self):
+        """Getter for create_limit."""
+        return self._create_limit
+
+    @create_limit.setter
+    def create_limit(self, value):
+        """Setter for create_limit."""
+        self._create_limit = value
+```
+
 ### 5. Centralize Error Messages
 Define messages in app/constants.py:
 ```python

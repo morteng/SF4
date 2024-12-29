@@ -59,6 +59,24 @@
 - **Solution**: Refactored `verify_dependencies()` in `tests/conftest.py` to skip tests instead of failing the suite.
 - **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
 
+### Property Implementation
+- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
+- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
+  ```python
+  class BaseService:
+      def __init__(self):
+          self._create_limit = None
+
+      @property
+      def create_limit(self):
+          return self._create_limit
+
+      @create_limit.setter
+      def create_limit(self, value):
+          self._create_limit = value
+  ```
+- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
+
 #### **Lessons Learned**
 1. **Custom Field Implementation**:
    - Always ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
