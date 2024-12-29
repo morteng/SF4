@@ -213,8 +213,6 @@ class FlashCategory(str, Enum):
     USER_SEARCH_ERROR = "Failed to search users."
 class FlashMessages(str, Enum):
     CREATE_ERROR = "Error creating record."
-    DELETE_SUCCESS = "Record deleted successfully."
-    MISSING_FIELD_ERROR = "This field is required."
     EMAIL_REQUIRED = "Email is required."
     EMAIL_INVALID = "Invalid email address."
     EMAIL_LENGTH = "Email cannot exceed 100 characters."
@@ -229,9 +227,6 @@ class FlashMessages(str, Enum):
     FUTURE_DATE_REQUIRED = "Date must be in the future."
     PAST_DATE_REQUIRED = "Date must be in the past."
     INVALID_LEAP_YEAR = "Invalid date for February in non-leap years."
-    CREATE_SUCCESS = "Record created successfully."
-    UPDATE_SUCCESS = "Record updated successfully."
-    DELETE_SUCCESS = "Record deleted successfully."
     INVALID_LEAP_YEAR_DATE = "Invalid date for February in non-leap years."
     INVALID_DATE_VALUES = "Invalid date values. Please check the day, month, and year."
     INVALID_TIME_COMPONENTS = "Invalid time values. Hours must be 0-23, minutes and seconds 0-59."

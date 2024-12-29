@@ -86,8 +86,8 @@
    - Use lazy imports or refactor shared logic into utility modules to reduce import complexity.
 
 ### **Recent Changes**
-1. **Added Missing Constants**:
-   - Added `MISSING_FIELD_ERROR`, `USERNAME_REQUIRED`, `USERNAME_LENGTH`, `USERNAME_FORMAT`, and `EMAIL_REQUIRED` to `app/constants.py`.
+1. **Fixed Duplicate Constants**:
+   - Removed duplicate constants (`CREATE_SUCCESS`, `UPDATE_SUCCESS`, `DELETE_SUCCESS`, `MISSING_FIELD_ERROR`) from `FlashMessages` class in `app/constants.py`.
 
 2. **Refactored Validation Logic**:
    - Moved reusable validation logic (e.g., `validate_application_deadline`) to `app/common/utils.py`.
