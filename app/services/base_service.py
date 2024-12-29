@@ -54,14 +54,7 @@ class BaseService:
         db.session.add(entity)
         db.session.commit()
         
-        if self.audit_logger:
-            self.audit_logger.log(
-                action='create',
-                object_type=self.model.__name__,
-                object_id=entity.id,
-                user_id=user_id,
-                after=entity.to_dict()
-            )
+        self._log_audit('create', entity, user_id=user_id, after=entity.to_dict())
         return entity
 
     def validate(self, data):
@@ -95,7 +88,7 @@ class BaseService:
             setattr(entity, key, value)
         db.session.commit()
         
-        self._log_audit('update', entity, user_id=user_id, before=before)
+        self._log_audit('update', entity, user_id=user_id, before=before, after=entity.to_dict())
         return entity
 
     @handle_errors
@@ -108,6 +101,7 @@ class BaseService:
             
         db.session.delete(entity)
         db.session.commit()
+        
         self._log_audit('delete', entity, user_id=user_id, before=entity.to_dict())
         return entity
 

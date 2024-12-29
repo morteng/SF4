@@ -9,6 +9,15 @@ class BaseCrudController:
         self.entity_name = entity_name
         self.form_class = form_class
         self.audit_logger = audit_logger
+        self.flash_messages = {
+            'create_success': FlashMessages.CREATE_SUCCESS,
+            'update_success': FlashMessages.UPDATE_SUCCESS,
+            'delete_success': FlashMessages.DELETE_SUCCESS,
+            'create_error': FlashMessages.CREATE_ERROR,
+            'update_error': FlashMessages.UPDATE_ERROR,
+            'delete_error': FlashMessages.DELETE_ERROR,
+            'not_found': FlashMessages.NOT_FOUND
+        }
 
     def _handle_operation(self, operation, success_message, error_message, 
                         redirect_success, redirect_error, **kwargs):

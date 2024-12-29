@@ -33,7 +33,7 @@ class BotService(BaseService):
         return errors
 
     def create(self, data, user_id=None):
-        """Create a new bot with validation"""
+        """Create a new bot with validation and audit logging"""
         errors = self.validate_form_data(data)
         if errors:
             raise ValueError("\n".join(errors.values()))
@@ -52,6 +52,15 @@ class BotService(BaseService):
             
         db.session.add(bot)
         db.session.commit()
+        
+        if self.audit_logger:
+            self.audit_logger.log(
+                action='create',
+                object_type='Bot',
+                object_id=bot.id,
+                user_id=user_id,
+                after=bot.to_dict()
+            )
         return bot
 
     def get_by_id(self, bot_id):
