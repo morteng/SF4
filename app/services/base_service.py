@@ -43,7 +43,9 @@ class BaseService:
             raise
 
     def get_by_id(self, id):
+        """Get entity by ID"""
         return self.model.query.get(id)
 
     def get_all(self):
-        return self.model.query
+        """Get all entities"""
+        return self.model.query.all()
