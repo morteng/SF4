@@ -2,6 +2,10 @@
 
 from enum import Enum
 
+# Form validation messages
+MISSING_REQUIRED_FIELD = "This field is required"
+INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
+
 class NotificationType(Enum):
     """Enum representing different types of system notifications."""
     BOT_SUCCESS = 'bot_success'
