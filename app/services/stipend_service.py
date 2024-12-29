@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from app.models.stipend import Stipend
 from app.models.organization import Organization
@@ -5,6 +6,8 @@ from app.models.tag import Tag
 from app.services.base_service import BaseService
 from app.extensions import db
 from app.constants import FlashMessages, FlashCategory
+
+logger = logging.getLogger(__name__)
 
 class StipendService(BaseService):
     def __init__(self):
