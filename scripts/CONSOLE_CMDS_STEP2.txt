@@ -5,6 +5,8 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
+flask routes
+pytest tests/test_admin_stipends.py::AdminStipendTestCase::test_create_stipend
 ### COMMANDS END ###
 
 # Once finished, jump to Step 3.
