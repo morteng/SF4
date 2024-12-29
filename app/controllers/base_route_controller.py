@@ -12,13 +12,13 @@ class BaseRouteController:
         self.form_class = form_class
         self.template_dir = template_dir
         self.supports_htmx = True
-        self.supports_htmx = True
         self.flash_messages = {
             'create_success': FlashMessages.CREATE_SUCCESS,
             'update_success': FlashMessages.UPDATE_SUCCESS,
             'delete_success': FlashMessages.DELETE_SUCCESS,
             'validation_error': FlashMessages.FORM_VALIDATION_ERROR,
-            'not_found': FlashMessages.NOT_FOUND
+            'not_found': FlashMessages.NOT_FOUND,
+            'error': FlashMessages.ERROR
         }
 
     def _handle_form_choices(self, form):
@@ -48,17 +48,29 @@ class BaseRouteController:
         flash_message(message, category)
         return None
 
-    def _handle_form_errors(self, form):
+    def handle_form_errors(self, form):
         """Handle form validation errors consistently"""
-        error_messages = []
-        for field, errors in form.errors.items():
-            for error in errors:
-                error_messages.append(f"{getattr(form, field).label.text}: {error}")
+        errors = {field: errors[0] for field, errors in form.errors.items()}
         if self.supports_htmx and request.headers.get('HX-Request'):
-            return render_template(f'{self.template_dir}/partials/_form.html', 
-                                 form=form, error_messages=error_messages), 400
+            return jsonify({'success': False, 'errors': errors}), 400
+        error_messages = [f"{getattr(form, field).label.text}: {error}" 
+                         for field, error in errors.items()]
         return render_template(f'{self.template_dir}/create.html', 
                              form=form, error_messages=error_messages)
+
+    def handle_htmx_response(self, template, context=None):
+        """Handle HTMX-specific responses"""
+        if context is None:
+            context = {}
+        if self.supports_htmx:
+            return render_template(f"{self.template_dir}/{template}.htmx.html", **context)
+        return render_template(f"{self.template_dir}/{template}.html", **context)
+
+    def handle_service_error(self, error):
+        """Handle service layer errors consistently"""
+        logger.error(f"Error in {self.entity_name} controller: {str(error)}")
+        flash(self.flash_messages['error'], 'error')
+        return redirect(request.referrer or url_for('admin.dashboard.dashboard'))
                              
     def _handle_audit_logging(self, action, entity, user_id=None, before=None, after=None):
         """Enhanced audit logging with HTMX support"""

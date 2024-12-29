@@ -26,6 +26,7 @@ class BaseService:
         self.model = model
         self.audit_logger = audit_logger
         self.soft_delete_enabled = hasattr(model, 'is_deleted')
+        self.validation_rules = {}
 
     @handle_errors
     def get_by_id(self, id):
@@ -58,13 +59,23 @@ class BaseService:
             )
         return entity
 
+    def validate(self, data):
+        """Validate data against defined rules"""
+        for field, rules in self.validation_rules.items():
+            if rules.get('required') and not data.get(field):
+                raise ValidationError(f"{field} is required")
+            if rules.get('max_length') and len(str(data.get(field))) > rules['max_length']:
+                raise ValidationError(f"{field} exceeds maximum length")
+            if rules.get('choices') and data.get(field) not in rules['choices']:
+                raise ValidationError(f"{field} must be one of {rules['choices']}")
+
     def validate_create(self, data):
-        """Hook for create validation - override in child classes"""
-        pass
+        """Validate data before creation"""
+        self.validate(data)
         
     def validate_update(self, data):
-        """Hook for update validation - override in child classes"""
-        pass
+        """Validate data before update"""
+        self.validate(data)
 
     @handle_errors
     def update(self, id, data, user_id=None):
