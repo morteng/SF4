@@ -65,15 +65,16 @@ class StipendForm(FlaskForm):
     tags = SelectMultipleField('Tags', coerce=int, validators=[Optional()])
 
     def validate_application_deadline(self, field):
-        # Skip validation if field is empty or already has errors
-        if not field.data or field.errors:
+        # Check if the field is missing or empty
+        if not field.data or field.data.strip() == '':
+            raise ValidationError('Application deadline is required.')
+            
+        # Skip validation if field already has errors
+        if field.errors:
             return
             
         # Handle flexible deadline formats
         if isinstance(field.data, str):
-            # If empty string, skip validation
-            if not field.data.strip():
-                return
                 
             try:
                 # Try full datetime format first
