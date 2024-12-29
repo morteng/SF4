@@ -5,7 +5,7 @@
 ### **Recent Changes**
 1. **Fixed Module Name Conflicts**:
    - Deleted redundant `tests/test_forms.py` to resolve import conflicts.
-   - Renamed `tests/app/forms/test_forms.py` to `tests/app/forms/test_organization_forms.py` for unique module names.
+   - Deleted redundant `tests/app/forms/test_forms.py` since its contents were moved to `tests/app/forms/test_organization_forms.py`.
 
 2. **Cleared Pycache**:
    - Removed stale compiled files from `__pycache__` directories to prevent test collection issues.
