@@ -159,6 +159,13 @@ def register_admin_blueprints(app):
     admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
     admin_bp.register_blueprint(admin_tag_bp, url_prefix='/tags')
     admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
+
+    # Debug logging for route registration
+    with app.app_context():
+        current_app.logger.debug("Registered admin blueprints:")
+        for rule in app.url_map.iter_rules():
+            if rule.endpoint.startswith('admin.'):
+                current_app.logger.debug(f"Route: {rule}")
     
     # Ensure all routes are properly registered
     with app.app_context():  # Add application context here
