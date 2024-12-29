@@ -11,6 +11,7 @@ class BaseRouteController:
         self.entity_name = entity_name
         self.form_class = form_class
         self.template_dir = template_dir
+        self.supports_htmx = True
         self.flash_messages = {
             'create_success': FlashMessages.CREATE_SUCCESS,
             'update_success': FlashMessages.UPDATE_SUCCESS,
@@ -27,10 +28,31 @@ class BaseRouteController:
                     getattr(form, field).choices = options
 
     def _handle_htmx_response(self, template, **kwargs):
-        """Handle HTMX response formatting"""
-        if request.headers.get('HX-Request'):
-            return render_template(f'{self.template_dir}/{template}', **kwargs)
-        return render_template(f'{self.template_dir}/full_{template}', **kwargs)
+        """Enhanced HTMX response handling"""
+        if self.supports_htmx and request.headers.get('HX-Request'):
+            return render_template(f'{self.template_dir}/partials/{template}', **kwargs)
+        return render_template(f'{self.template_dir}/full/{template}', **kwargs)
+
+    def _handle_form_errors(self, form):
+        """Improved form error handling"""
+        if self.supports_htmx and request.headers.get('HX-Request'):
+            return render_template(f'{self.template_dir}/partials/_form.html', 
+                                 form=form), 400
+        return render_template(f'{self.template_dir}/create.html', form=form)
+
+    def _handle_audit_logging(self, action, entity, user_id=None, before=None, after=None):
+        """Enhanced audit logging with HTMX support"""
+        if hasattr(self.service, 'audit_logger'):
+            details = {
+                'action': action,
+                'object_type': self.entity_name,
+                'object_id': entity.id if entity else None,
+                'user_id': user_id,
+                'before': before,
+                'after': after,
+                'is_htmx': bool(request.headers.get('HX-Request'))
+            }
+            self.service.audit_logger.log(**details)
 
     def _handle_redirect(self):
         """Handle redirect after successful operation"""

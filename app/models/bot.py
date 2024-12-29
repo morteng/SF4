@@ -31,6 +31,32 @@ class Bot(db.Model):
     run_count = db.Column(db.Integer, default=0)
     success_count = db.Column(db.Integer, default=0)
     failure_count = db.Column(db.Integer, default=0)
+    average_runtime = db.Column(db.Float, nullable=True)
+    last_successful_run = db.Column(db.DateTime, nullable=True)
+    consecutive_failures = db.Column(db.Integer, default=0)
+    max_runtime = db.Column(db.Float, nullable=True)
+    min_runtime = db.Column(db.Float, nullable=True)
+
+    def update_performance_metrics(self, runtime):
+        """Update bot performance metrics"""
+        if not self.average_runtime:
+            self.average_runtime = runtime
+        else:
+            self.average_runtime = (self.average_runtime + runtime) / 2
+            
+        if not self.max_runtime or runtime > self.max_runtime:
+            self.max_runtime = runtime
+            
+        if not self.min_runtime or runtime < self.min_runtime:
+            self.min_runtime = runtime
+            
+        if self.status == BotStatus.COMPLETED:
+            self.last_successful_run = datetime.utcnow()
+            self.consecutive_failures = 0
+        else:
+            self.consecutive_failures += 1
+            
+        db.session.commit()
 
     def __repr__(self):
         return f"<Bot {self.name}>"
