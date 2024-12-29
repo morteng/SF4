@@ -393,3 +393,11 @@ def verify_dependencies():
 
 def test_dependencies():
     verify_dependencies()
+import subprocess
+import pytest
+
+def test_dependencies():
+    try:
+        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+    except subprocess.CalledProcessError:
+        pytest.fail("Failed to install dependencies")

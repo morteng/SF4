@@ -272,3 +272,5 @@ DATE_TIME_VALIDATION_MESSAGES = {
     "leap_year": "Invalid date: February 29th on non-leap year",
     "time_out_of_range": "Time must be between 00:00:00 and 23:59:59",
 }
+DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+MISSING_FIELD_ERROR = "This field is required."

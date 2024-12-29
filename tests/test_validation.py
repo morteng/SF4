@@ -65,3 +65,14 @@ def test_invalid_time_validation():
     """Test validation of invalid time values"""
     form = StipendForm(application_deadline="2023-02-29 25:00:00")  # Invalid date and time
     assert form.validate() is False
+import pytest
+from datetime import datetime
+from app.forms.admin_forms import CustomDateTimeField
+
+def test_custom_date_time_field():
+    field = CustomDateTimeField()
+    assert field.validators is not None  # Ensure validators are set
+
+    # Test edge cases
+    with pytest.raises(ValueError):
+        field.process_formdata(["invalid_date"])
