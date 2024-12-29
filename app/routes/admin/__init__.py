@@ -125,6 +125,15 @@ def register_admin_blueprints(app):
         current_app.logger.error(f"Failed to import blueprints: {str(e)}")
         raise
     
+    # Validate blueprints
+    from app.common.utils import validate_blueprint
+    validate_blueprint(admin_stipend_bp)
+    validate_blueprint(admin_dashboard_bp)
+    validate_blueprint(admin_user_bp)
+    validate_blueprint(admin_bot_bp)
+    validate_blueprint(admin_org_bp)
+    validate_blueprint(admin_tag_bp)
+    
     # Register blueprints
     admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
     admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')

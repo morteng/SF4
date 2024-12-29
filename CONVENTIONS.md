@@ -69,6 +69,17 @@
 - **Graceful Fails**: If a package is missing, skip the test. Don’t throw the entire test suite off the cliff.  
 - **Modular Code**: Minimal duplication, maximum reusability. Keep your code as neat as your desk (or neater, sir).
 
+## Route Naming Conventions
+
+1. **Blueprint Names**:
+   - Use lowercase with underscores (e.g., `admin_stipend_bp`).
+
+2. **Endpoint Names**:
+   - Use lowercase with dots (e.g., `admin_stipend.create`).
+
+3. **URL Prefixes**:
+   - Use consistent prefixes for related routes (e.g., `/admin/stipends`).
+
 ## 8. use newest versions of all moduels and libraries
 - **Up-to-date**: Keep your modules and libraries up-to-date to ensure you're using the latest features and security patches. Ensure requirements.txt reflects the latest versions of all dependencies.
 

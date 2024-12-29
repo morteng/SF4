@@ -147,6 +147,24 @@
   - Continuous or rolling  
 - Implement flexible logic to handle multiple deadline scenarios, including “no strict deadline,” while still providing meaningful validation feedback where possible.
 
+## Blueprint Validation
+
+1. **Blueprint Naming**:
+   - Use consistent naming conventions for blueprints and endpoints.
+   - Example: `admin_stipend_bp` for the blueprint and `admin_stipend.create` for the endpoint.
+
+2. **Route Validation**:
+   - Use `validate_blueprint_routes` to ensure all required routes are registered.
+   - Example:
+     ```python
+     required_routes = ['admin_stipend.create', 'dashboard.dashboard']
+     validate_blueprint_routes(app, required_routes)
+     ```
+
+3. **Error Handling**:
+   - Log errors during blueprint registration.
+   - Raise `RuntimeError` for missing routes.
+
 ## 9. Key Takeaways
 
 1. **Validation Logic**  
