@@ -70,3 +70,6 @@
 
 ## 8. use newest versions of all moduels and libraries
 - **Up-to-date**: Keep your modules and libraries up-to-date to ensure you're using the latest features and security patches. Ensure requirements.txt reflects the latest versions of all dependencies.
+
+## 9. About This environment
+- **Virtual Environment**: You are currently running inside an activated venv with all dependencies from requirements.txt already installed. 
