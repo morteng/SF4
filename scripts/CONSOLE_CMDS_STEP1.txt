@@ -5,8 +5,6 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
-pytest tests/test_admin_stipends.py -v --log-cli-level=DEBUG
-flask routes
 ### COMMANDS END ###
 
 # Once we're done, jump to Step 2.
