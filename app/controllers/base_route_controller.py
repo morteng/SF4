@@ -12,6 +12,7 @@ class BaseRouteController:
         self.form_class = form_class
         self.template_dir = template_dir
         self.supports_htmx = True
+        self.supports_htmx = True
         self.flash_messages = {
             'create_success': FlashMessages.CREATE_SUCCESS,
             'update_success': FlashMessages.UPDATE_SUCCESS,
@@ -27,12 +28,25 @@ class BaseRouteController:
             for field, options in choices.items():
                 if hasattr(form, field):
                     getattr(form, field).choices = options
+                    
+    def _handle_form_validation(self, form):
+        """Handle common form validation patterns"""
+        if hasattr(self.service, 'validate_form_data'):
+            return self.service.validate_form_data(form.data)
+        return True
 
     def _handle_htmx_response(self, template, **kwargs):
-        """Enhanced HTMX response handling"""
+        """Handle HTMX responses appropriately"""
         if self.supports_htmx and request.headers.get('HX-Request'):
             return render_template(f'{self.template_dir}/partials/{template}', **kwargs)
         return render_template(f'{self.template_dir}/full/{template}', **kwargs)
+        
+    def _handle_htmx_flash(self, message, category):
+        """Handle flash messages for HTMX requests"""
+        if request.headers.get('HX-Request'):
+            return render_template('_flash_messages.html', message=message, category=category), 200
+        flash_message(message, category)
+        return None
 
     def _handle_form_errors(self, form):
         """Handle form validation errors consistently"""
@@ -45,6 +59,20 @@ class BaseRouteController:
                                  form=form, error_messages=error_messages), 400
         return render_template(f'{self.template_dir}/create.html', 
                              form=form, error_messages=error_messages)
+                             
+    def _handle_audit_logging(self, action, entity, user_id=None, before=None, after=None):
+        """Enhanced audit logging with HTMX support"""
+        if hasattr(self.service, 'audit_logger'):
+            details = {
+                'action': action,
+                'object_type': self.entity_name,
+                'object_id': entity.id if entity else None,
+                'user_id': user_id,
+                'before': before,
+                'after': after,
+                'is_htmx': bool(request.headers.get('HX-Request'))
+            }
+            self.service.audit_logger.log(**details)
 
     def _handle_audit_logging(self, action, entity, user_id=None, before=None, after=None):
         """Enhanced audit logging with HTMX support"""
