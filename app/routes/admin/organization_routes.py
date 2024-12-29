@@ -198,15 +198,12 @@ def delete(id):
 @admin_org_bp.route('/paginate/<int:page>', methods=['GET'])
 @login_required
 @admin_required
-@notification_count
 def index(page=1):
     """List organizations with pagination"""
     per_page = 20  # Items per page
     organizations = get_all_organizations().paginate(page=page, per_page=per_page)
-    notification_count = get_notification_count(current_user.id)
     return render_template('admin/organizations/index.html',
-                         organizations=organizations,
-                         notification_count=notification_count)
+                         organizations=organizations)
 
 @admin_org_bp.route('/<int:id>', methods=['GET'])
 @login_required
