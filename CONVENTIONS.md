@@ -894,6 +894,46 @@ If time-based tests are failing:
    - Use try-except blocks to handle missing dependencies in test files.
    - Skip tests that require missing packages instead of failing the entire suite.
 
+### Troubleshooting pytest Issues
+1. **Activate Virtual Environment**:
+   - Windows: `.venv\Scripts\activate`
+   - macOS/Linux: `source .venv/bin/activate`
+
+2. **Install pytest**:
+   ```bash
+   pip install pytest
+   ```
+
+3. **Verify Installation**:
+   ```bash
+   pip show pytest
+   ```
+
+4. **Run Tests**:
+   ```bash
+   pytest
+   ```
+
+5. **Optional: Install All Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+6. **Recreate Virtual Environment (if needed)**:
+   ```bash
+   deactivate
+   rm -rf .venv
+   python -m venv .venv
+   source .venv/bin/activate  # macOS/Linux
+   .venv\Scripts\activate     # Windows
+   pip install -r requirements.txt
+   ```
+
+7. **Run Tests Again**:
+   ```bash
+   pytest
+   ```
+
 ### Error Handling
 - Always use centralized error messages from `app/constants.py`.
 - Log validation errors with context for easier debugging.

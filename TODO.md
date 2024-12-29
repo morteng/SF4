@@ -58,6 +58,7 @@
 - [ ] Refactor other shared functionality into `app/common`.
 - [ ] Optimize validation performance in `CustomDateTimeField`.
 - [ ] Add more comprehensive tests for timezone handling in date/time fields.
+- [x] Document pytest troubleshooting steps in CONVENTIONS.md
 - [ ] Add comprehensive tests for `BaseService` properties.
 - [ ] Verify time-based tests with `freezegun`.
 - [ ] Refactor other shared functionality into `app/common`.
