@@ -7,13 +7,7 @@ from app.models.audit_log import AuditLog
 from app.constants import FlashMessages, FlashCategory
 from app.forms.admin_forms import TagForm
 from app.utils import format_error_message
-from app.services.tag_service import (
-    get_tag_by_id,
-    delete_tag,
-    get_all_tags,
-    create_tag,
-    update_tag
-)
+from app.services.tag_service import tag_service
 from app.extensions import db  # Ensure this matches how db is defined or imported
 from sqlalchemy.exc import IntegrityError  # Import IntegrityError
 from app.utils import admin_required, flash_message
@@ -33,7 +27,7 @@ def create():
     form = TagForm()
     if form.validate_on_submit():
         try:
-            new_tag = create_tag(form.data)
+            new_tag = tag_service.create(form.data)
             if new_tag is None:
                 flash_message(FlashMessages.CREATE_TAG_ERROR, FlashCategory.ERROR)
                 return render_template('admin/tags/create.html', form=form)
@@ -82,7 +76,7 @@ def delete(id):
     tag = get_tag_by_id(id)
     if tag:
         try:
-            delete_tag(tag)
+            tag_service.delete(tag)
             flash_message(FlashMessages.DELETE_TAG_SUCCESS, FlashCategory.SUCCESS)
         except Exception as e:
             db.session.rollback()
@@ -96,7 +90,7 @@ def delete(id):
 @admin_required
 def index():
     page = request.args.get('page', 1, type=int)
-    tags = Tag.query.paginate(page=page, per_page=10, error_out=False)
+    tags = tag_service.get_all().paginate(page=page, per_page=10, error_out=False)
     return render_template('admin/tags/index.html', tags=tags)
 
 @admin_tag_bp.route('/paginate', methods=['GET'])
@@ -104,7 +98,7 @@ def index():
 @admin_required
 def paginate():
     page = request.args.get('page', 1, type=int)
-    tags = Tag.query.paginate(page=page, per_page=10, error_out=False)
+    tags = tag_service.get_all().paginate(page=page, per_page=10, error_out=False)
     return render_template('admin/tags/_tags_table.html', tags=tags)
 
 @admin_tag_bp.route('/<int:id>/edit', methods=['GET', 'POST'])  # Updated from .update to .edit
@@ -120,7 +114,7 @@ def edit(id):
     
     if form.validate_on_submit():
         try:
-            update_tag(tag, form.data)
+            tag_service.update(tag, form.data)
             flash_message(FlashMessages.UPDATE_TAG_SUCCESS, FlashCategory.SUCCESS)
             return redirect(url_for('tag.index'))
         except IntegrityError as e:

@@ -1,55 +1,28 @@
 from app.models.tag import Tag
+from app.services.base_service import BaseService
 from sqlalchemy.exc import SQLAlchemyError
-from app.extensions import db
-import logging  # Import logging to log errors
-from wtforms.validators import ValidationError  # Import ValidationError
+from wtforms.validators import ValidationError
 
-# Configure logging
-logging.basicConfig(level=logging.ERROR)
+class TagService(BaseService):
+    def __init__(self):
+        super().__init__(Tag)
 
-def update_tag(tag, data):
-    if not data['name']:
-        raise ValidationError('Name cannot be empty.')
-    if not data['category']:
-        raise ValidationError('Category cannot be empty.')
+    def create(self, data):
+        """Create a new tag with validation"""
+        self._validate_tag_data(data)
+        return super().create(data)
 
-    tag.name = data['name']
-    tag.category = data['category']
-    try:
-        db.session.commit()
-    except SQLAlchemyError as e:
-        # Log the error
-        logging.error(f"Failed to update tag: {str(e)}.")
-        db.session.rollback()
-        raise  # Re-raise the exception if needed for further handling
+    def update(self, tag, data):
+        """Update tag with validation"""
+        self._validate_tag_data(data)
+        return super().update(tag, data)
 
-def get_all_tags():
-    return Tag.query.all()
+    def _validate_tag_data(self, data):
+        """Validate tag data"""
+        if not data.get('name'):
+            raise ValidationError('Name cannot be empty.')
+        if not data.get('category'):
+            raise ValidationError('Category cannot be empty.')
 
-def get_tag_by_id(tag_id):
-    return db.session.get(Tag, tag_id)
-
-def create_tag(data):
-    if not data.get('name'):
-        raise ValidationError('Name cannot be empty.')
-    if not data.get('category'):
-        raise ValidationError('Category cannot be empty.')
-
-    tag = Tag(name=data['name'], category=data['category'])
-    db.session.add(tag)
-    try:
-        db.session.commit()
-        return tag
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        logging.error(f"Failed to create tag: {str(e)}.")
-        raise
-
-def delete_tag(tag):
-    db.session.delete(tag)
-    try:
-        db.session.commit()
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        logging.error(f"Failed to delete tag: {str(e)}.")
-        raise
+# Create service instance for use in controllers
+tag_service = TagService()
