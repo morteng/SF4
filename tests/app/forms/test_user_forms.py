@@ -505,18 +505,35 @@ def test_profile_form_validation_errors(client, setup_database):
     db.session.commit()
 
     with client:
+        # First make a GET request to establish session and get CSRF token
+        get_response = client.get(url_for('public.login'))
+        assert get_response.status_code == 200
+        
+        # Extract CSRF token using BeautifulSoup
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+        assert csrf_token, "CSRF token not found in form"
+
         # Login user
         login_response = client.post(url_for('public.login'), data={
             'username': 'testuser',
             'password': 'password123',
-            'csrf_token': generate_csrf_token()
-        })
-        
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        assert login_response.status_code == 200, "Login failed"
+
+        # Get CSRF token from the profile edit page
+        get_response = client.get(url_for('user.edit_profile'))
+        assert get_response.status_code == 200, "Failed to access profile edit page"
+        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
+        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
+        assert csrf_token, "CSRF token not found in profile form"
+
         # Test invalid email format
         response = client.post(url_for('user.edit_profile'), data={
             'username': 'testuser',
             'email': 'invalid-email',
-            'csrf_token': generate_csrf_token()
+            'csrf_token': csrf_token
         })
         assert response.status_code == 400
         assert b"Invalid email address" in response.data
@@ -525,7 +542,7 @@ def test_profile_form_validation_errors(client, setup_database):
         response = client.post(url_for('user.edit_profile'), data={
             'username': 'ab',
             'email': 'test@example.com',
-            'csrf_token': generate_csrf_token()
+            'csrf_token': csrf_token
         })
         assert response.status_code == 400
         assert b"Field must be between 3 and 50 characters long" in response.data
