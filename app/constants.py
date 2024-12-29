@@ -290,3 +290,6 @@ INVALID_LEAP_YEAR = "Invalid date. February 29th is not valid for this year."
 # Error messages
 MISSING_REQUIRED_FIELD = "This field is required."
 INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+# Centralized error messages
+MISSING_REQUIRED_FIELD = "This field is required."
+INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
