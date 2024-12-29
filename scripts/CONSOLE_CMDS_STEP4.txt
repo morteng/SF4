@@ -1,0 +1,17 @@
+# --------------------------------------
+# CONSOLE_CMDS_STEP4.txt
+# --------------------------------------
+# Console commands for Step 4.
+# ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
+
+### PENDING CONSOLE COMMANDS ###
+# Example commands:
+# /run echo "Hello from Step 4!"
+# /run coverage run -m pytest
+
+### COMMANDS START ###
+/run echo "Running console commands for Step 4"
+### COMMANDS END ###
+
+# Once finished, jump to Step 5.
+/load MAIN_CMDS_STEP5.txt

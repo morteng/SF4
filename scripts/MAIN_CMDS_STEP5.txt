@@ -1,0 +1,22 @@
+# --------------------------------------
+# MAIN_CMDS_STEP5.txt
+# --------------------------------------
+# Step 5: Final Documentation Updates
+
+# Step 5 workflow
+/ask Code Cycle Step 5 (Final Docs) - Please finalize documentation. 
+# For example: update TODO.txt or any notes with final changes and insights.
+/architect update TODO.txt with final changes & findings
+
+/test
+
+# Prompt about console commands
+/ask Do we need to run any console commands for Step 5?
+# If so, we will add them to CONSOLE_CMDS_STEP5.txt. If not, ensure it’s empty or remove old commands.
+
+/add CONSOLE_CMDS_STEP5.txt
+/code Remove any previously executed console commands from CONSOLE_CMDS_STEP5.txt, and add new ones if needed.
+/drop CONSOLE_CMDS_STEP5.txt
+
+# Now load the console commands for Step 5.
+/load CONSOLE_CMDS_STEP5.txt

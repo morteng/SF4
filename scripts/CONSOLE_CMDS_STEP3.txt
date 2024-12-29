@@ -1,0 +1,17 @@
+# --------------------------------------
+# CONSOLE_CMDS_STEP3.txt
+# --------------------------------------
+# Console commands for Step 3.
+# ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
+
+### PENDING CONSOLE COMMANDS ###
+# Example commands:
+# /run echo "Hello from Step 3!"
+# /run python some_script.py
+
+### COMMANDS START ###
+/run echo "Running console commands for Step 3"
+### COMMANDS END ###
+
+# Once finished, jump to Step 4.
+/load MAIN_CMDS_STEP4.txt

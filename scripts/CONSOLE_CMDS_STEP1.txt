@@ -1,0 +1,17 @@
+# --------------------------------------
+# CONSOLE_CMDS_STEP1.txt
+# --------------------------------------
+# Console commands for Step 1.
+# ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
+
+### PENDING CONSOLE COMMANDS ###
+# Example commands:
+# /run echo "Hello from Step 1!"
+# /run python manage.py migrate
+
+### COMMANDS START ###
+/run echo "Running console commands for Step 1"
+### COMMANDS END ###
+
+# Once we're done, jump to Step 2.
+/load MAIN_CMDS_STEP2.txt
