@@ -5,10 +5,11 @@ from app.models.audit_log import AuditLog
 from app.constants import FlashMessages, FlashCategory
 
 class BaseCrudController:
-    def __init__(self, service, entity_name, form_class, audit_logger=None):
+    def __init__(self, service, entity_name, form_class, template_dir=None, audit_logger=None):
         self.service = service
         self.entity_name = entity_name
         self.form_class = form_class
+        self.template_dir = template_dir
         self.audit_logger = audit_logger
         self.flash_messages = {
             'create_success': FlashMessages.CREATE_SUCCESS,
