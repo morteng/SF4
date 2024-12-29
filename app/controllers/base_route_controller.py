@@ -3,6 +3,7 @@ from flask_login import current_user
 from sqlalchemy.exc import SQLAlchemyError
 from app.utils import flash_message
 from app.constants import FlashMessages, FlashCategory
+from app.extensions import db
 
 class BaseRouteController:
     def __init__(self, service, entity_name, form_class, template_dir):
