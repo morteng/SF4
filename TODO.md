@@ -28,10 +28,9 @@ Refactor Plan:
  • Inherit from the base class and add entity-specific tests.
 
 ## High Priority
-1. Implement bot scaffolding (basic CRUD and scheduling)
-2. Add bot management UI
-3. Implement bot scheduling functionality
-4. fix all failing tests
+- Fix failing tests
+- Finish bot UI
+- Improve scheduling
 
 ## Medium Priority
 1. Add bot status monitoring

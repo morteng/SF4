@@ -1,11 +1,11 @@
 # Coding Conventions
 
 ## Service Layer
-- All CRUD operations implemented in BaseService
-- Child services only add domain-specific methods
-- Use consistent method naming:
-  - get_by_id, get_all, create, update, delete
-- Always include user_id for audit logging
+- BaseService handles CRUD
+- Child services add domain logic
+- Standard method names
+- Audit logging via user_id
+- Custom validation hooks
 
 ## Stipend Handling
 - Only stipend name is required when creating stipends

@@ -31,10 +31,9 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 - HTMX for dynamic interaction
 
 ## Bots
-- **Bot Scaffolding**: Basic CRUD operations and scheduling implemented
-- **Bot Management**: Admin interface for starting/stopping bots
-- **Scheduling**: Basic scheduling functionality available
-- **Placeholder Implementation**: Actual bot functionality not yet implemented
+- Core CRUD and scheduling implemented
+- Admin interface for bot management
+- Basic scheduling operational
 
 **Frontend**:  
 - HTML Templates  

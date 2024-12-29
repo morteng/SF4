@@ -1,15 +1,11 @@
 # Validation Rules
 
-## Database Operations  
-- Validate inputs before DB operations
-- Handle flexible deadline formats:
-  * Full datetime (YYYY-MM-DD HH:MM:SS)
-  * Month/year (Month YYYY) 
-  * Year only (YYYY)
-- Handle constraints gracefully  
-- Rollback on errors  
-- Verify state after operations  
-- Use context managers for transactions  
+## Database Operations
+- Pre-op validation
+- Flexible date handling
+- Error rollback
+- Post-op verification
+- Context managers
 
 ## CSRF Validation  
 - Validate CSRF on all form submissions  
