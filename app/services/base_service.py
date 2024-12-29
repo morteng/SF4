@@ -123,6 +123,8 @@ class BaseService:
         """Setter for create_limit with validation."""
         if not isinstance(value, str):
             raise ValueError("Create limit must be a string (e.g., '10 per minute')")
+        if not any(x in value for x in ['per second', 'per minute', 'per hour', 'per day']):
+            raise ValueError("Rate limit must include time unit (e.g., 'per minute')")
         self._create_limit = value
         self.rate_limits['create'] = value
         
@@ -241,6 +243,10 @@ class BaseService:
     
     @update_limit.setter
     def update_limit(self, value):
+        if not isinstance(value, str):
+            raise ValueError("Update limit must be a string (e.g., '10 per minute')")
+        if not any(x in value for x in ['per second', 'per minute', 'per hour', 'per day']):
+            raise ValueError("Rate limit must include time unit (e.g., 'per minute')")
         self.rate_limits['update'] = value
         
     @handle_errors 
@@ -267,6 +273,10 @@ class BaseService:
     
     @delete_limit.setter
     def delete_limit(self, value):
+        if not isinstance(value, str):
+            raise ValueError("Delete limit must be a string (e.g., '5 per minute')")
+        if not any(x in value for x in ['per second', 'per minute', 'per hour', 'per day']):
+            raise ValueError("Rate limit must include time unit (e.g., 'per minute')")
         self.rate_limits['delete'] = value
         
     @handle_errors
