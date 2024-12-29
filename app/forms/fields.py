@@ -55,9 +55,27 @@ class CustomDateTimeField(DateTimeField):
         return True
 
     def process_formdata(self, valuelist):
+        # Clear any existing errors
+        self.errors = []
+        
         # First check if value is missing or empty
         if not valuelist or self._is_empty_value(valuelist[0]):
-            self.errors.append(self.error_messages['required'])
+            self.errors.append(self.error_messages.get('required', 'This field is required'))
+            self.data = None
+            return
+            
+        # Continue with format validation if value exists
+        date_str = valuelist[0].strip()
+        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
+            self.errors.append(self.error_messages.get('invalid_format', 'Invalid date format'))
+            self.data = None
+            return
+            
+        # Validate date components
+        try:
+            datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            self.errors.append(self.error_messages.get('invalid_date', 'Invalid date values'))
             self.data = None
             return
             
