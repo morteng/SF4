@@ -18,7 +18,7 @@
 
 ## Questions/Concerns:
 1. Should we implement a more sophisticated route monitoring system? yeah the routes could be better implemented.
-2. Would you like to prioritize any specific area for the next code cycle? Work on fixing tests please
+2. Would you like to prioritize any specific area for the next code cycle? Work on fixing tests please.
 
 ## Next Steps:
 1. Address NotificationType enum validation error
