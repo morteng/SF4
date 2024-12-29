@@ -9,6 +9,12 @@
 
 ## Validation Best Practices
 
+### Date/Time Validation
+- Always verify the data type of form field inputs before applying validation logic.
+- Use `freezegun` to mock the current date/time for deterministic testing.
+- Handle edge cases like February 29th in non-leap years.
+- Validate time components (hours, minutes, seconds) together.
+
 1. **Date/Time Validation**:
    - Validate date and time components separately before full parsing.
    - Use specific error messages for different validation failures (e.g., invalid format, invalid time, invalid leap year).

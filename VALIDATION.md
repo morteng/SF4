@@ -18,6 +18,22 @@
 3. **Testing**:
    - Test all error message variations for date/time fields.
    - Verify edge cases in date/time validation (e.g., 25:00:00, February 29th).
+   - Validate date and time components separately before full parsing.
+   - Use specific error messages for different validation failures (e.g., invalid format, invalid time, invalid leap year).
+   - Handle edge cases like February 29th in non-leap years.
+
+2. **Error Handling**:
+   - Provide specific error messages for:
+     - Invalid date formats.
+     - Out-of-range values.
+     - Missing required fields.
+     - Invalid leap year dates.
+     - Invalid time components (hours, minutes, seconds).
+   - Use configurable error messages from `app/constants.py`.
+
+3. **Testing**:
+   - Test all error message variations for date/time fields.
+   - Verify edge cases in date/time validation (e.g., 25:00:00, February 29th).
 
 ### Error Handling
 - **Centralized Error Messages**:

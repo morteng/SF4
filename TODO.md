@@ -2,6 +2,7 @@
 
 ## Completed
 - [x] Fix `TypeError` in `CustomDateTimeField` caused by incorrect `format` usage.
+- [x] Install `freezegun` for time-based testing.
 - [x] Consolidate leap year validation logic in `CustomDateTimeField`.
 - [x] Add tests for edge cases in date/time validation.
 - [x] Standardize error messages using constants from `app/constants.py`.
@@ -10,6 +11,7 @@
 
 ## Next Session
 - [ ] Optimize validation performance in `CustomDateTimeField`.
+- [ ] Add more comprehensive tests for timezone handling in date/time fields.
 - [ ] Add validation benchmarks for date/time fields.
 - [ ] Expand test coverage for `BaseCrudController` and `BaseRouteController`.
 - [ ] Add more comprehensive tests for date/time validation in `StipendForm`.

@@ -41,7 +41,7 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 - JavaScript + HTMX
 
 **Testing**:  
-- `pytest`, `pytest-cov`  
+- `pytest`, `pytest-cov`, `freezegun`  
 - Unit, integration, end-to-end tests
 
 **Security**:  
@@ -76,6 +76,16 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 ---
 
 ## Lessons Learned
+
+### Dependency Management
+- Ensure all dependencies listed in `requirements.txt` are installed in the environment.
+- Use `pip install -r requirements.txt` to install all dependencies at once.
+- Verify that tests run successfully after installing dependencies.
+
+### Testing
+- Use `freezegun` for deterministic time-based testing.
+- Test edge cases thoroughly, especially for date/time validation.
+- Ensure database fixtures are properly reset between tests to avoid side effects.
 
 ### Date/Time Validation
 - Fixed `TypeError` in `CustomDateTimeField` caused by incorrect `format` parameter handling.
