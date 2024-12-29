@@ -47,3 +47,23 @@ class TestBaseCrudController(BaseTestCase):
             self.login()
             response = self.controller.edit(999, {'name': 'Test', 'category': 'TestCategory'})
             self.assertEqual(response.status_code, 302)
+
+    def test_user_form_validation(self):
+        # Test valid username
+        form = UserForm(username="valid_user123")
+        assert form.validate() is True
+
+        # Test missing username
+        form = UserForm(username="")
+        assert form.validate() is False
+        assert FlashMessages.USERNAME_REQUIRED.value in form.username.errors
+
+        # Test username too short
+        form = UserForm(username="ab")
+        assert form.validate() is False
+        assert FlashMessages.USERNAME_LENGTH.value in form.username.errors
+
+        # Test invalid characters in username
+        form = UserForm(username="invalid@user")
+        assert form.validate() is False
+        assert FlashMessages.USERNAME_FORMAT.value in form.username.errors
