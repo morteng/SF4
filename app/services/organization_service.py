@@ -15,8 +15,8 @@ class OrganizationService(BaseService):
         try:
             return Organization.query.order_by(func.lower(Organization.name)).all()
         except SQLAlchemyError as e:
-        logger.error(f"Error getting all organizations: {str(e)}")
-        return []
+            logger.error(f"Error getting all organizations: {str(e)}")
+            return []
 
 def get_organization_by_id(organization_id):
     """Get organization by ID."""
