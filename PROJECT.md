@@ -2,6 +2,34 @@
 
 ## Key Updates
 - **Validation Improvements**:
+  - Fixed `CustomDateTimeField` initialization to handle `validators` argument correctly with default `InputRequired()`.
+  - Standardized error messages for date/time fields using `app/constants.py`.
+  - Added comprehensive tests for edge cases in date/time validation.
+
+- **Testing Setup**:
+  - Added `pytest` to `requirements.txt` and verified installation.
+  - Improved dependency verification with a pre-test check.
+
+- **Code Refactoring**:
+  - Refactored shared functionality into `app/common/utils.py` to avoid circular imports.
+  - Updated `create_limit` to be a proper property with getter/setter.
+
+#### **Lessons Learned**
+1. **Custom Field Implementation**:
+   - Always ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
+
+2. **Dependency Management**:
+   - Always verify dependencies are installed before running tests or the application.
+   - Add a pre-test check to ensure all required dependencies are installed.
+
+3. **Circular Imports**:
+   - Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+- **Validation Improvements**:
   - Fixed `CustomDateTimeField` initialization to handle `validators` argument correctly with default InputRequired().
   - Added comprehensive testing setup with `pytest` installation and verification steps.
   - Added centralized error messages in app/constants.py for date/time validation.

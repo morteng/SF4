@@ -14,6 +14,81 @@
 2. **Install Dependencies**:
    ```bash
    pip install -r requirements.txt
+   ```
+
+3. **Verify Installation**:
+   ```bash
+   pip show pytest freezegun Flask
+   ```
+
+4. **Run Tests**:
+   ```bash
+   pytest
+   ```
+
+5. **Troubleshooting**:
+   - If tests fail due to missing dependencies:
+     ```bash
+     pip install -r requirements.txt
+     pytest
+     ```
+   - Recreate virtual environment if needed:
+     ```bash
+     deactivate
+     rm -rf .venv
+     python -m venv .venv
+     source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+     pip install -r requirements.txt
+     pytest
+     ```
+
+#### **Property Implementation**
+1. **Define Properties Correctly**:
+   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
+   - Example:
+     ```python
+     class BaseService:
+         def __init__(self):
+             self._create_limit = None
+
+         @property
+         def create_limit(self):
+             return self._create_limit
+
+         @create_limit.setter
+         def create_limit(self, value):
+             self._create_limit = value
+     ```
+
+2. **Avoid Direct Attribute Access**:
+   - Use properties to encapsulate attribute access and modification.
+
+3. **Document Properties**:
+   - Add docstrings to properties and setters to clarify their purpose and behavior.
+
+#### **Circular Imports**
+1. **Refactor Shared Functionality**:
+   - Move shared code to a separate module (e.g., `app/common/utils.py`).
+2. **Use Lazy Imports**:
+   - Import dependencies at the function level when necessary:
+     ```python
+     def some_function():
+         from app.services.bot_service import run_bot  # Lazy import
+         run_bot()
+     ```
+1. **Activate Virtual Environment**:
+   - **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+2. **Install Dependencies**:
+   ```bash
+   pip install -r requirements.txt
    pip install pytest freezegun
    ```
 
