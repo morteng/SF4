@@ -10,7 +10,7 @@ from app.constants import FlashMessages
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[
         DataRequired(message=FlashMessages.USERNAME_REQUIRED.value),
-        Length(min=3, max=50, message=FlashMessages.USERNAME_LENGTH.value)
+        Length(min=3, max=50, message="Field must be between 3 and 50 characters long")
     ])
     email = StringField('Email', validators=[
         DataRequired(message=FlashMessages.EMAIL_REQUIRED.value),
