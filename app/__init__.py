@@ -1,6 +1,18 @@
 import os
 import logging
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from flask_migrate import Migrate
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from dotenv import load_dotenv
+
+# Initialize extensions
+db = SQLAlchemy()
+login_manager = LoginManager()
+migrate = Migrate()
+limiter = Limiter(key_func=get_remote_address)
 
 logger = logging.getLogger(__name__)
 
@@ -44,38 +56,20 @@ def init_extensions(app):
 def create_app(config_name='development'):
     app = Flask(__name__)
     
-    try:
-        # Check dependencies before proceeding
-        check_dependencies()
-        
-        # Initialize extensions
-        init_extensions(app)
-        
-        # Register blueprints
-        register_blueprints(app)
-
-        # Set up migrations directory in root project directory
-        basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # Go up one level
-        migrations_dir = os.path.join(basedir, 'migrations')
-
-        # Ensure migrations directory exists
-        if not os.path.exists(migrations_dir):
-            os.makedirs(migrations_dir)
-            logger.info(f"Created migrations directory at {migrations_dir}")
-
-        # Configure SQLAlchemy database URI
-        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', f'sqlite:///{os.path.join(basedir, "app.db")}')
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-        # Load environment variables
-        try:
-            load_dotenv()
-        except Exception as e:
-            logger.error(f"Failed to load environment variables: {str(e)}")
-            raise RuntimeError(f"Environment variable loading failed: {str(e)}")
-
-        from app.config import config_by_name
-        app.config.from_object(config_by_name[config_name])
+    # Load environment variables
+    load_dotenv()
+    
+    # Configure SQLAlchemy database URI
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///app.db')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # Initialize extensions
+    init_extensions(app)
+    
+    # Register blueprints
+    register_blueprints(app)
+    
+    return app
     except Exception as e:
         logger.error(f"Failed to initialize application configuration: {str(e)}")
         raise RuntimeError(f"Application configuration failed: {str(e)}")
