@@ -9,13 +9,14 @@
 /read PROJECT.md
 /read CONVENTIONS.md
 /read VALIDATION.md
+/read DEVLOG.txt
 /add TODO.txt
 
 /run flask routes
 /test
 
 # Step 1 Prompt
-/ask Code Cycle Step 1 (Identify & Plan) - Based on TODO.txt and other docs, how do we address the issues?
+/ask Code Cycle Step 1 (Identify & Plan) - Based on TODO.txt and the other docs, how do we address the issues? If I have answered any questions since last time in DEVLOG.txt, incorporate your new knowledge and my desicions into the project files as necessary.
 /architect implement the suggested changes
 
 # Prompt about console commands
