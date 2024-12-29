@@ -17,3 +17,16 @@ def test_stipend_form_validation():
     # Test missing required field
     form.application_deadline.data = None
     assert not form.validate()
+import pytest
+from freezegun import freeze_time
+from app.forms.admin_forms import StipendForm
+
+def test_valid_date_time():
+    """Test valid date/time format"""
+    form = StipendForm(application_deadline="2023-10-31 23:59:59")
+    assert form.validate() is True
+
+def test_invalid_date_time():
+    """Test invalid date/time format"""
+    form = StipendForm(application_deadline="2023-02-30 25:00:00")
+    assert form.validate() is False

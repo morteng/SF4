@@ -238,3 +238,6 @@ INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM
 MISSING_REQUIRED_FIELD = "This field is required"
 INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
 MISSING_REQUIRED_FIELD = "This field is required"
+# Date/Time Validation Messages
+DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+TIME_FORMAT_ERROR = "Invalid time format. Please use HH:MM:SS."
