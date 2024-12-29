@@ -46,9 +46,14 @@ class AdminStipendTestCase(unittest.TestCase):
             response = self.client.get(url_for('public.login'))
             self.assertEqual(response.status_code, 200)
             
-            # Extract CSRF token from form
-            csrf_token = response.data.decode('utf-8').split(
-                'name="csrf_token" value="')[1].split('"')[0]
+            # Extract CSRF token from hidden form field with error handling
+            try:
+                csrf_token = response.data.decode('utf-8').split(
+                    'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+                if not csrf_token:
+                    raise ValueError("CSRF token is empty")
+            except (IndexError, ValueError) as e:
+                self.fail(f"Failed to extract CSRF token: {str(e)}")
             
             # Log in as admin with CSRF token
             response = self.client.post(url_for('public.login'), data={
@@ -63,8 +68,13 @@ class AdminStipendTestCase(unittest.TestCase):
             # Get CSRF token for stipend creation form
             response = self.client.get(url_for('admin.stipend.create'))
             self.assertEqual(response.status_code, 200)
-            csrf_token = response.data.decode('utf-8').split(
-                'name="csrf_token" value="')[1].split('"')[0]
+            try:
+                csrf_token = response.data.decode('utf-8').split(
+                    'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+                if not csrf_token:
+                    raise ValueError("CSRF token is empty")
+            except (IndexError, ValueError) as e:
+                self.fail(f"Failed to extract CSRF token: {str(e)}")
             
             # Create stipend with CSRF token
             form_data = {
