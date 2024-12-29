@@ -1,10 +1,11 @@
 # Project Specification: Stipend Discovery Website
 
 ## Key Updates
-- Improved error handling in CustomDateTimeField
-- Refactored admin route decorators for better maintainability
-- Added centralized error handling utilities
-- Enhanced validation logic with fallback error messages
+- Fixed error message handling in CustomDateTimeField
+- Standardized validation error messages across all form fields
+- Removed hardcoded error messages in favor of configurable ones
+- Improved test coverage for form validation
+- Addressed datetime.utcnow() deprecation warnings
 
 ## Technical Updates
 - Fixed failing tests for date validation

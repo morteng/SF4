@@ -9,7 +9,11 @@
 ## Error Handling
 - Centralize common error responses
 - Use consistent error message format
+- Always use configurable error messages
+- Never hardcode error messages
 - Log errors before returning responses
+- Clear existing errors before new validation
+- Use error_messages dictionary for all validation errors
 
 ## Testing
 - Test all error message variations

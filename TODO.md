@@ -1,8 +1,10 @@
 # Updated TODO List
 
 ## High Priority
-- [x] Fix date validation in CustomDateTimeField
-- [x] Refactor admin route decorators
+- [x] Fix error message handling in CustomDateTimeField
+- [x] Standardize validation error messages
+- [x] Remove hardcoded error messages
+- [x] Address datetime.utcnow() deprecation warnings
 - [ ] Update remaining routes to use new error handling
 
 ## Medium Priority

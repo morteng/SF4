@@ -17,9 +17,13 @@
 - Preserve exception types
 
 ## Validation
+- Always use configurable error messages via error_messages
+- Never use hardcoded error messages in validation logic
 - Initialize error messages with defaults
 - Use defensive programming in validation logic
 - Validate format before content
+- Clear existing errors before new validation
+- Use consistent error message format across all fields
 
 ## Testing
 - Test both success and error cases
