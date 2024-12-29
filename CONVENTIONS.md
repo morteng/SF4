@@ -1051,46 +1051,62 @@ If time-based tests are failing:
    - Ensure consistent handling of empty/missing values
 
 ### Testing Setup
-1. **Dependencies**:
-   - Ensure all testing dependencies (e.g., `freezegun`, `pytest`) are installed and up-to-date.
-   - Install pytest with:
+
+#### 1. Activate the Virtual Environment
+   - **Windows**:
      ```bash
-     # Activate virtual environment
-     # Windows:
      .venv\Scripts\activate
-     # macOS/Linux:
+     ```
+   - **macOS/Linux**:
+     ```bash
      source .venv/bin/activate
-     
-     # Install pytest
-     pip install pytest
-     
-     # Verify installation
-     pip show pytest
-     ```
-   - Verify installation with `pip show <package_name>`.
-   - Install all dependencies:
-     ```bash
-     pip install -r requirements.txt
      ```
 
-2. **Virtual Environment**:
-   - Always activate the virtual environment before running tests or installing dependencies.
-   - Use `source .venv/bin/activate` (Linux/Mac) or `.venv\Scripts\activate` (Windows).
+#### 2. Install `pytest`
+   Run this command to install `pytest`:
+   ```bash
+   pip install pytest
+   ```
 
-3. **Test Execution**:
-   - Run tests with `pytest` after ensuring all dependencies are installed.
-   - If tests fail due to missing dependencies, install them and re-run the tests.
-   - Tests requiring `freezegun` will be skipped if it's not installed, with a clear message.
+#### 3. Verify Installation
+   Confirm `pytest` is installed by running:
+   ```bash
+   pip show pytest
+   ```
+   If installed correctly, you'll see details about the `pytest` package.
 
-4. **Dependency Verification**:
-   - Check if `freezegun` is installed:
-     ```bash
-     pip show freezegun
-     ```
-   - If missing, install it:
-     ```bash
-     pip install -r requirements.txt
-     ```
+#### 4. Add `pytest` to `requirements.txt`
+   Add `pytest` to your `requirements.txt` file to ensure it's installed in the future:
+   ```bash
+   echo "pytest" >> requirements.txt
+   ```
+
+#### 5. Run Tests
+   After installing `pytest`, run the tests:
+   ```bash
+   pytest
+   ```
+
+#### 6. Optional: Install All Dependencies
+   If other dependencies are missing, install them using:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+#### 7. Recreate Virtual Environment (if needed)
+   If the issue persists, recreate the virtual environment:
+   ```bash
+   deactivate
+   rm -rf .venv
+   python -m venv .venv
+   source .venv/bin/activate  # macOS/Linux
+   .venv\Scripts\activate     # Windows
+   pip install -r requirements.txt
+   pytest
+   ```
+
+#### Expected Outcome:
+After following these steps, the `pytest` command should work without errors, and your tests should run successfully.
 
 ## Testing Setup
 

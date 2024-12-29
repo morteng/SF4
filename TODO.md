@@ -2,6 +2,7 @@
 
 ## Completed
 - [x] Fix circular imports by refactoring shared functionality into `app/common/utils.py`.
+- [x] Add comprehensive pytest installation and verification steps to documentation.
 - [x] Add `__init__.py` to `app/forms` to make it a valid package.
 - [x] Refactor `create_limit` into a proper property with a getter and setter.
 - [x] Add a pre-test dependency verification script.
