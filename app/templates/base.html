@@ -5,108 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <!-- HTMX and CSRF Protection -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/2.0.4/htmx.min.js"></script>
+    <!-- CSRF Protection -->
     <meta name="csrf-token" content="{{ csrf_token }}">
-    
-    <!-- Notification Badge -->
-    <div id="notification-badge" class="notification-badge">
-        <span class="bg-blue-500 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full">
-            {{ notification_count if notification_count is defined else 0 }}
-        </span>
-    </div>
 </head>
 <body>
-    <script>
-        document.body.addEventListener('htmx:configRequest', function(evt) {
-            let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-            evt.detail.headers['X-CSRFToken'] = csrfToken;
-        });
-    </script>
     <header>
         {% include '_nav.html' %}
     </header>
 
-    {% from "_macros.html" import htmx_loading_indicator, flash_messages %}
+    {% from "_macros.html" import flash_messages %}
     
-    {{ htmx_loading_indicator() }}
     <div class="container mx-auto px-4">
         {{ flash_messages() }}
     </div>
 
-    <main id="main-content" class="p-4">
+    <main class="p-4">
         {% block content %}{% endblock %}
     </main>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script>
-        // Real-time status updates
-        function updateStatus() {
-            fetch('/api/status')
-                .then(response => response.json())
-                .then(data => {
-                    document.querySelectorAll('.status-indicator').forEach(el => {
-                        el.textContent = data.status;
-                        el.className = `status-indicator ${data.status}`;
-                    });
-                });
-        }
-        
-        // Initialize real-time updates
-        setInterval(updateStatus, 10000);
-        updateStatus();
-    </script>
-    <script>
         function toggleMobileMenu() {
             const menu = document.getElementById('nav-menu');
             menu.classList.toggle('hidden');
         }
-
-        const themeToggle = document.getElementById('theme-toggle');
-        themeToggle.addEventListener('change', () => {
-            document.documentElement.classList.toggle('dark');
-        });
-
-        // Enhanced HTMX error handling
-        document.body.addEventListener('htmx:afterRequest', function(evt) {
-            const target = document.querySelector(evt.detail.elt.getAttribute('hx-target'));
-            
-            if (evt.detail.failed) {
-                // Handle server errors
-                if (evt.detail.xhr.status >= 500) {
-                    const errorMessage = 'Server error occurred. Please try again later.';
-                    const flashContainer = document.getElementById('flash-messages');
-                    if (flashContainer) {
-                        flashContainer.innerHTML = `
-                            <div class="flash error p-3 rounded mb-2">
-                                ${errorMessage}
-                            </div>
-                        `;
-                    }
-                }
-                
-                // Handle validation errors
-                const form = evt.detail.elt.closest('form');
-                if (form) {
-                    const errorFields = form.querySelectorAll('.is-invalid');
-                    errorFields.forEach(field => {
-                        field.classList.add('border-red-500');
-                        const feedback = field.nextElementSibling;
-                        if (feedback && feedback.classList.contains('invalid-feedback')) {
-                            feedback.classList.remove('hidden');
-                        }
-                    });
-                }
-            }
-            
-            // Focus on first error field
-            if (target) {
-                const firstError = target.querySelector('.is-invalid');
-                if (firstError) {
-                    firstError.focus();
-                }
-            }
-        });
     </script>
 </body>
 </html>
