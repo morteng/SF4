@@ -13,13 +13,8 @@ class StipendService(BaseService):
         self._validate_stipend_data(data)
         return super().create(data, user_id)
 
-    def update(self, id, data, user_id=None):
-        """Update an existing stipend with validation"""
-        self._validate_stipend_data(data)
-        return super().update(id, data, user_id)
-
-    def _validate_stipend_data(self, data):
-        """Validate stipend data"""
+    def _validate_update_data(self, data):
+        """Stipend-specific update validation"""
         if not data.get('name'):
             raise ValueError(FlashMessages.REQUIRED_FIELD.format(field='name'))
         if 'application_deadline' in data and data['application_deadline']:

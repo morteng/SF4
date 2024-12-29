@@ -58,20 +58,18 @@ class BaseService:
 
     @handle_errors
     def update(self, id, data, user_id=None):
-        """Update an existing entity"""
+        """Update an existing entity with validation and audit logging"""
         entity = self.get_by_id(id)
+        
+        if hasattr(self, '_validate_update_data'):
+            self._validate_update_data(data)
+            
+        before = entity.to_dict()
         for key, value in data.items():
             setattr(entity, key, value)
         db.session.commit()
         
-        if self.audit_logger:
-            self.audit_logger.log(
-                action='update',
-                object_type=self.model.__name__,
-                object_id=entity.id,
-                user_id=user_id,
-                after=entity.to_dict()
-            )
+        self._log_audit('update', entity, user_id=user_id, before=before)
         return entity
 
     @handle_errors
