@@ -24,6 +24,14 @@ class CustomDateTimeField(DateTimeField):
         kwargs['format'] = '%Y-%m-%d %H:%M:%S'
         kwargs['render_kw'] = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
         super().__init__(*args, **kwargs)
+        
+    def _is_empty_value(self, value):
+        """Check if the value is empty or whitespace only."""
+        if value is None:
+            return True
+        if isinstance(value, str) and not value.strip():
+            return True
+        return False
 
     def validate(self, form, extra_validators=()):
         # Skip validation if the field is empty
@@ -46,7 +54,7 @@ class CustomDateTimeField(DateTimeField):
 
     def process_formdata(self, valuelist):
         # First check if value is missing or empty
-        if not valuelist or not valuelist[0] or (isinstance(valuelist[0], str) and not valuelist[0].strip()):
+        if not valuelist or self._is_empty_value(valuelist[0]):
             self.errors.append(self.error_messages['required'])
             self.data = None
             return
