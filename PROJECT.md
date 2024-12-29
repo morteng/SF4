@@ -5,6 +5,16 @@
   - Fixed `CustomDateTimeField` initialization to handle `validators` argument correctly.
   - Standardized error messages for date/time fields using `app/constants.py`.
   - Added comprehensive tests for edge cases in date/time validation.
+  - Refactored shared functionality into `app/common/utils.py`.
+  - Updated `create_limit` to be a proper property with getter/setter.
+
+## Lessons Learned
+- **Dependency Management**:
+  - Always verify dependencies are installed before running tests or the application.
+- **Property Implementation**:
+  - Always define properties correctly with `@property` and `@<property>.setter`.
+- **Circular Imports**:
+  - Refactor shared functionality into separate modules and use lazy imports to avoid circular dependencies.
 
 ## Lessons Learned
 

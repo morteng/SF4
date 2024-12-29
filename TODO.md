@@ -9,6 +9,8 @@
 - [x] Add pytest installation instructions to documentation.
 - [x] Refactor `verify_dependencies()` to skip tests instead of failing the suite.
 - [x] Fix `CustomDateTimeField` initialization to handle `validators` argument.
+- [x] Install `pytest` and verify dependencies.
+- [x] Refactor shared functionality into `app/common/utils.py`.
 
 ## Next Session
 - [ ] Ensure all error messages are centralized in `app/constants.py` and used consistently.
