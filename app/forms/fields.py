@@ -20,7 +20,9 @@ class CustomDateTimeField(DateTimeField):
     
     def __init__(self, *args, **kwargs):
         self.timezone = kwargs.pop('timezone', None)
-        self.error_messages = kwargs.pop('error_messages', {})
+        # Merge custom error messages with defaults
+        custom_messages = kwargs.pop('error_messages', {})
+        self.error_messages = {**self.error_messages, **custom_messages}
         kwargs['format'] = '%Y-%m-%d %H:%M:%S'
         kwargs['render_kw'] = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
         super().__init__(*args, **kwargs)
