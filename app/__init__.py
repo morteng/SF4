@@ -30,16 +30,16 @@ def create_app(config_name='development'):
     try:
         # Check dependencies before proceeding
         check_dependencies()
-    
+
         # Set up migrations directory in root project directory
         basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # Go up one level
         migrations_dir = os.path.join(basedir, 'migrations')
-    
+
         # Ensure migrations directory exists
         if not os.path.exists(migrations_dir):
             os.makedirs(migrations_dir)
             logger.info(f"Created migrations directory at {migrations_dir}")
-    
+
         # Configure SQLAlchemy database URI
         app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', f'sqlite:///{os.path.join(basedir, "app.db")}')
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -52,7 +52,10 @@ def create_app(config_name='development'):
             raise RuntimeError(f"Environment variable loading failed: {str(e)}")
 
         from app.config import config_by_name
-    app.config.from_object(config_by_name[config_name])
+        app.config.from_object(config_by_name[config_name])
+    except Exception as e:
+        logger.error(f"Failed to initialize application configuration: {str(e)}")
+        raise RuntimeError(f"Application configuration failed: {str(e)}")
 
     # Initialize extensions
     db.init_app(app)
@@ -201,6 +204,3 @@ def create_app(config_name='development'):
         if current_user.is_authenticated:
             return {'notification_count': get_notification_count(current_user.id)}
         return {}
-    except Exception as e:
-        logger.error(f"Failed to initialize application: {str(e)}")
-        raise RuntimeError(f"Application initialization failed: {str(e)}")
