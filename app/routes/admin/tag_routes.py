@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, current_app
+from app.models.tag import Tag
 from flask_login import login_required, current_user
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
