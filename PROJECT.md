@@ -79,7 +79,7 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 ## Lessons Learned
 
 ### Circular Imports
-- **Issue**: Circular imports caused startup errors (e.g., `ModuleNotFoundError`).
+- **Issue**: Circular imports caused startup errors (e.g., `NameError: name 'BaseService' is not defined`).
 - **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/base_service.py`) and use lazy imports where necessary.
 - **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
 
