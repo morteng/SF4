@@ -1,10 +1,72 @@
 # Project Specification: Stipend Discovery Website
 
-## Introduction
+## Key Updates
+- **Validation Improvements**:
+  - Fixed `CustomDateTimeField` initialization to handle `validators` argument correctly.
+  - Standardized error messages for date/time fields using `app/constants.py`.
+  - Added comprehensive tests for edge cases in date/time validation.
 
-This document provides a comprehensive guide for developing the **Stipend Discovery Website**. It consolidates project requirements, coding conventions, architecture, testing, and more. The goal is to ensure a crystal-clear blueprint for all team members.
+## Lessons Learned
 
----
+### Dependency Management
+- **Issue**: Tests failed because `pytest` and other dependencies were not installed.
+- **Solution**: Always verify dependencies are installed by running:
+  ```bash
+  pip install -r requirements.txt
+  ```
+- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
+
+### Property Implementation
+- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
+- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
+  ```python
+  class BaseService:
+      def __init__(self):
+          self._create_limit = None
+
+      @property
+      def create_limit(self):
+          return self._create_limit
+
+      @create_limit.setter
+      def create_limit(self, value):
+          self._create_limit = value
+  ```
+- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
+
+### Circular Imports
+- **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
+- **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+
+### CustomDateTimeField Initialization
+- **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
+- **Solution**: Updated the `__init__` method to properly handle the `validators` argument:
+  ```python
+  class CustomDateTimeField(Field):
+      def __init__(self, label=None, validators=None, **kwargs):
+          if validators is None:
+              validators = [InputRequired()]  # Default validator
+          super().__init__(label=label, validators=validators, **kwargs)
+  ```
+- **Best Practice**: Ensure custom fields properly handle all arguments passed to them.
+
+### Key Takeaways for Next Coding Session
+1. **Validation Logic**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Ensure compatibility with parent classes when overriding attributes or methods.
+   - Use centralized error messages from `app/constants.py` for consistency.
+
+2. **Testing**:
+   - Test edge cases thoroughly, especially for date/time validation.
+   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+
+3. **Error Handling**:
+   - Log validation errors with context for easier debugging.
+   - Provide clear, user-friendly error messages for validation failures.
+
+4. **Code Organization**:
+   - Keep validation logic modular and reusable.
+   - Avoid code duplication by using base classes and utilities.
 
 ## Project Overview
 
