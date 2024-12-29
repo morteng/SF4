@@ -54,3 +54,9 @@ If time-based tests are failing:
    ```bash
    pip install freezegun>=1.2.2
    ```
+
+#### Dependency Verification
+To verify all dependencies are installed:
+```bash
+pytest tests/test_dependencies.py
+```

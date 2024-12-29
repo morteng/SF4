@@ -8,14 +8,9 @@ except ImportError:
     RequirementsParser = None
 
 def get_requirements() -> List[str]:
-    """Get list of package names from requirements.txt"""
-    if RequirementsParser is None:
-        pytest.skip("requirements-parser not installed")
-        
+    """Get list of package names from requirements.txt."""
     with open("requirements.txt") as f:
-        parser = RequirementsParser()
-        requirements = parser.parse(f)
-        return [req.name for req in requirements]
+        return [line.strip().split("==")[0] for line in f if line.strip() and not line.startswith("#")]
 
 def test_all_dependencies_installed():
     """Verify all packages in requirements.txt are installed."""

@@ -13,10 +13,28 @@ try:
     FREEZEGUN_INSTALLED = True
 except ImportError:
     FREEZEGUN_INSTALLED = False
-    pytest.skip(
-        "freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies.",
-        allow_module_level=True
+    warnings.warn(
+        "freezegun is not installed. Time-based tests will be skipped. "
+        "Run `pip install -r requirements.txt` to install dependencies."
     )
+    logging.warning("freezegun is not installed. Time-based tests will be skipped.")
+
+# Add a pytest marker for freezegun-dependent tests
+def pytest_configure(config):
+    """Configure pytest options."""
+    config.addinivalue_line(
+        "markers",
+        "freezegun: mark tests that require freezegun package"
+    )
+
+# Skip freezegun-dependent tests if freezegun is not installed
+def pytest_collection_modifyitems(config, items):
+    """Skip tests marked with 'freezegun' if freezegun is not installed."""
+    if not FREEZEGUN_INSTALLED:
+        skip_freezegun = pytest.mark.skip(reason="freezegun is not installed")
+        for item in items:
+            if "freezegun" in item.keywords:
+                item.add_marker(skip_freezegun)
 
 def verify_dependencies():
     """Verify that all required dependencies are installed."""
