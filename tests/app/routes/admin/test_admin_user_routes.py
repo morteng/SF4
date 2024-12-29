@@ -27,17 +27,42 @@ def user_data():
 
 @pytest.fixture
 def client(app):
-    with app.test_client() as client:
-        with app.app_context():
+    """Provides a test client with proper session and context management."""
+    with app.app_context():
+        # Initialize rate limiter if present
+        if 'limiter' in app.extensions:
+            limiter = app.extensions['limiter']
+            limiter.enabled = False
+            
+            # Initialize storage if needed
+            if not hasattr(limiter, '_storage') or limiter._storage is None:
+                limiter.init_app(app)
+            
+            # Reset limiter if storage is available
+            if hasattr(limiter, '_storage') and limiter._storage is not None:
+                try:
+                    limiter.reset()
+                except Exception as e:
+                    app.logger.warning(f"Failed to reset rate limiter: {str(e)}")
+        
+        # Create test client within application context
+        client = app.test_client()
+        
+        # Push request context
+        with app.test_request_context():
             with client.session_transaction() as session:
                 session['csrf_token'] = 'test-csrf-token'
             yield client
-            # Clean up any created test data
-            with app.app_context():
-                User.query.filter(User.username.like('testuser_%')).delete()
-                AuditLog.query.filter(AuditLog.user_id.isnot(None)).delete()
-                Notification.query.delete()
-                db.session.commit()
+            
+        # Ensure proper cleanup
+        try:
+            User.query.filter(User.username.like('testuser_%')).delete()
+            AuditLog.query.filter(AuditLog.user_id.isnot(None)).delete()
+            Notification.query.delete()
+            db.session.commit()
+            db.session.remove()
+        except:
+            pass
 
 import uuid
 

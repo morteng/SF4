@@ -59,10 +59,13 @@ def _db(app):
         # Create all tables including audit_log
         from app.models.audit_log import AuditLog
         db.create_all()
-        yield db
-        # Clean up
-        db.session.remove()
-        db.drop_all()
+        
+        try:
+            yield db
+        finally:
+            # Clean up
+            db.session.remove()
+            db.drop_all()
 
 @pytest.fixture(scope='function')
 def db_session(_db, app):
@@ -134,8 +137,11 @@ def logged_in_admin(client, admin_user, db_session):
     """Log in as the admin user."""
     # Ensure admin_user is bound to the current session
     with client.application.app_context():
+        # Refresh and merge the user into the current session
         admin_user = db_session.merge(admin_user)
         db_session.refresh(admin_user)
+        db_session.add(admin_user)  # Explicitly add to session
+        db_session.commit()  # Commit to ensure user is persisted
     
     # Get CSRF token
     login_response = client.get(url_for('public.login'))
