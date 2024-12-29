@@ -11,12 +11,6 @@
 /read VALIDATION.md
 /add TODO.txt
 
-/read scripts\MAIN_CMDS_STEP1.txt
-/read scripts\MAIN_CMDS_STEP2.txt
-/read scripts\MAIN_CMDS_STEP3.txt
-/read scripts\MAIN_CMDS_STEP4.txt
-/read scripts\MAIN_CMDS_STEP5.txt
-
 /run flask routes
 /test
 

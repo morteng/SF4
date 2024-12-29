@@ -73,7 +73,7 @@
   A file to keep track of tasks, ideas, or anything that needs to be addressed later. It's a simple text file where you can jot down notes, reminders, or to-dos. You can use it to capture ideas, brainstorm, or plan your work. It's a flexible tool that allows you to organize your thoughts and keep track of your tasks in a simple and accessible format. Periodically review and compress this file if it gets too big.
 
 - **autocoder**:  
-  You are running in a coding cycle that looks like this (plan and act accordingly):
+  You are running in a coding cycle that looks like this (plan and act accordingly, don't do too much in one go, you can always come back to it and continue next cycle):
 
   **Step 1: Identify & Plan**  
   - Read your project details (TODOs, conventions, validations).  
