@@ -1,7 +1,7 @@
 # --------------------------------------
 # MAIN_CMDS.txt
 # --------------------------------------
-# This file orchestrates your main coding session.
+# This file orchestrates your main coding session. You follow these steps each coding session. I'm showing it to you so you can understand the flow of your work cycle, and how you can run console commands at the end of each session.
 
 /git add .
 /commit
@@ -9,6 +9,7 @@
 /read PROJECT.md
 /read CONVENTIONS.md
 /read VALIDATION.md
+/read MAIN_CMDS.txt
 /add TODO.txt
 
 /run flask routes
@@ -35,11 +36,11 @@
 /ask If there's a new issue, what is it?
 
 # Step 5: Final Documentation Updates
-/code update TODO.txt with final changes & findings, important info and things we've learned that would be good to remember next coding session.
+/code Update TODO.txt with final changes & findings, important info and things we've learned that would be good to remember next coding session.
 
 # Step 6: Remove previous console commands from CONSOLE_CMDS.txt and add any new ones that will be run next. 
 /add CONSOLE_CMDS.txt
-/code Remove any previous console commands from CONSOLE_CMDS.txt, add new ones that will be run next if needed.
+/code Remove any previously executes console commands from previos coding session from CONSOLE_CMDS.txt, add new ones that will be run next if needed.
 
 # Step 7: Load & Run Console Commands
 /load CONSOLE_CMDS.txt

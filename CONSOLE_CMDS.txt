@@ -13,11 +13,10 @@
 
 ### COMMANDS START ###
 
-/run pytest
-/run flask routes
+/run echo "Hello from the console!"
 
 ### COMMANDS END ###
 
 # When done, jump back to MAIN_CMDS.txt to start new coding session
-#/reset
-#/load MAIN_CMDS.txt
+/reset
+/load MAIN_CMDS.txt
