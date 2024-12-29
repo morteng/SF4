@@ -68,4 +68,5 @@
 - **Modular Code**: Minimal duplication, maximum reusability. Keep your code as neat as your desk (or neater, sir).
 
 
-
+## 8. use newest versions of all moduels and libraries
+- **Up-to-date**: Keep your modules and libraries up-to-date to ensure you're using the latest features and security patches. Ensure requirements.txt reflects the latest versions of all dependencies.

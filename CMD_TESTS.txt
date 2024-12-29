@@ -6,6 +6,9 @@
 /read VALIDATION.md
 /add TODO.md
 
+/run flask routes
+/test
+
 # Step 1: Identify & Plan
 /ask Based on TODO.md (and other docs), how do we address the issues?
 /architect implement the suggested changes
