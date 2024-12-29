@@ -77,6 +77,46 @@ def pytest_configure(config):
             "freezegun is not installed. Some tests may be skipped. "
             "Run `pip install -r requirements.txt` to install dependencies."
         )
+def pytest_sessionstart(session):
+    verify_dependencies()
+    try:
+        import freezegun
+    except ImportError:
+        logging.warning(
+            "freezegun is not installed. Some tests may be skipped. "
+            "Run `pip install freezegun` to install it."
+        )
+
+# Add a pytest marker for freezegun-dependent tests
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers",
+        "freezegun: mark tests that require freezegun package"
+    )
+    
+    # Check for freezegun installation
+    try:
+        import freezegun
+    except ImportError:
+        logging.warning(
+            "freezegun is not installed. Some tests may be skipped. "
+            "Run `pip install -r requirements.txt` to install dependencies."
+        )
+    config.addinivalue_line(
+        "markers",
+        "freezegun: mark tests that require freezegun package"
+    )
+    """Configure pytest options."""
+    if not FREEZEGUN_INSTALLED:
+        config.addinivalue_line(
+            "markers",
+            "freezegun: mark tests that require freezegun package"
+        )
+        logging.warning(
+            "freezegun is not installed. Some tests may be skipped. "
+            "Run `pip install -r requirements.txt` to install dependencies."
+        )
+
 from datetime import datetime
 from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import SAWarning
