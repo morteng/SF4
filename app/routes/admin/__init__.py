@@ -118,8 +118,7 @@ def register_admin_blueprints(app):
     try:
         admin_bp = create_admin_blueprint()
         logger.debug("Created admin blueprint")
-    
-    try:
+        
         from .stipend_routes import admin_stipend_bp
         from .dashboard_routes import admin_dashboard_bp
         from .user_routes import admin_user_bp
@@ -128,6 +127,9 @@ def register_admin_blueprints(app):
         from .tag_routes import admin_tag_bp
     except ImportError as e:
         current_app.logger.error(f"Failed to import blueprints: {str(e)}")
+        raise
+    except Exception as e:
+        logger.error(f"Error during blueprint creation: {str(e)}")
         raise
     
     # Validate blueprints

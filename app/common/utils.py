@@ -1,9 +1,12 @@
 from datetime import datetime
 import pytz
+import logging
 from app.constants import FlashMessages
 from wtforms.validators import ValidationError
 
 from flask import Blueprint, current_app
+
+logger = logging.getLogger(__name__)
 
 def validate_blueprint(bp):
     """Validate blueprint parameters with more detailed checks."""
