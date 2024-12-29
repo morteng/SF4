@@ -30,6 +30,14 @@ class FlashCategory(str, Enum):
     WARNING = "warning"
 
 class FlashMessages(str, Enum):
+    # Date/Time Validation
+    MISSING_REQUIRED_FIELD = "This field is required"
+    INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
+    INVALID_LEAP_YEAR = "Invalid date: February 29th is only valid in leap years"
+    INVALID_TIME = "Invalid time. Hours must be 0-23, minutes 0-59, seconds 0-59"
+    FUTURE_DATE_REQUIRED = "Date must be in the future"
+    PAST_DATE_REQUIRED = "Date must be in the past"
+    
     # CSRF
     CSRF_ERROR = "Invalid CSRF token. Please refresh the page and try again."
     
