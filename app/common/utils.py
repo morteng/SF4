@@ -101,3 +101,11 @@ def init_admin_user():
     """Initialize the admin user."""
     # Implementation for initializing admin user
     pass
+def shared_function():
+    # Implementation
+    pass
+
+# Example lazy import
+def some_function():
+    from app.services.bot_service import run_bot  # Lazy import
+    run_bot()
