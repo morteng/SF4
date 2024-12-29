@@ -39,16 +39,11 @@ def test_delete_organization(db_session, test_organization):
     assert organization is None
 
 def test_create_organization(db_session, organization_data):
-    success, error_message = create_organization(organization_data)
-    assert success == True
-    assert error_message is None
-
-    # Verify the organization was created in the database
-    new_organization = db_session.query(Organization).filter_by(name=organization_data['name']).first()
-    assert new_organization is not None
-    assert new_organization.name == organization_data['name']
-    assert new_organization.description == organization_data['description']
-    assert new_organization.homepage_url == organization_data['homepage_url']
+    organization = org_service.create(organization_data)
+    assert organization is not None
+    assert organization.name == organization_data['name']
+    assert organization.description == organization_data['description']
+    assert organization.homepage_url == organization_data['homepage_url']
 
 def test_get_organization_by_id(db_session, test_organization):
     organization = get_organization_by_id(test_organization.id)
@@ -63,13 +58,8 @@ def test_update_organization(db_session, test_organization):
         'description': 'This is an updated organization.',
         'homepage_url': 'http://example.com/updated-organization'
     }
-    success, error_message = update_organization(test_organization, updated_data)
-    assert success == True
-    assert error_message is None
-
-    # Verify the organization was updated in the database
-    db_session.expire_all()
-    updated_organization = db_session.get(Organization, test_organization.id)
+    updated_organization = org_service.update(test_organization, updated_data)
+    assert updated_organization is not None
     assert updated_organization.name == updated_data['name']
     assert updated_organization.description == updated_data['description']
     assert updated_organization.homepage_url == updated_data['homepage_url']
@@ -84,7 +74,7 @@ def test_update_organization_with_invalid_id(db_session):
     organization = db_session.get(Organization, non_existent_id)
     assert organization is None
 
-    success, error_message = update_organization(organization, updated_data)
-    assert success == False
-    assert "Organization not found." in error_message
+    with pytest.raises(ValueError) as exc_info:
+        org_service.update(organization, updated_data)
+    assert "Organization not found" in str(exc_info.value)
 
