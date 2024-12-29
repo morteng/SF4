@@ -10,6 +10,14 @@ def test_flask_limiter_installed():
     flask_limiter = importlib.import_module("flask_limiter")
     assert flask_limiter is not None
 
+def test_freezegun_installed():
+    """Verify freezegun is installed and importable"""
+    try:
+        freezegun = importlib.import_module("freezegun")
+        assert freezegun is not None
+    except ImportError:
+        pytest.fail("freezegun is not installed - required for time-based testing")
+
 def test_all_requirements_installed():
     """Verify all packages in requirements.txt are installed"""
     if RequirementsParser is None:
