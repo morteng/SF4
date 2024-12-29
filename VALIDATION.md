@@ -22,6 +22,16 @@
 4. **Error Messages**:
    - Use centralized error messages from `app/constants.py` for consistency.
 
+### Property Implementation
+1. **Proper Property Definition**:
+   - Always define properties with `@property` and `@<property>.setter`
+   - Include validation in setters
+   - Use private attributes for storage
+2. **Best Practices**:
+   - Document properties with clear docstrings
+   - Avoid direct attribute access outside the class
+   - Ensure consistent property patterns across the codebase
+
 ### General Validation
 1. **Validation Logic**:
    - Always verify the data type of form field inputs before applying validation logic.
