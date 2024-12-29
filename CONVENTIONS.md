@@ -314,53 +314,15 @@ After following these steps, the `pytest` command should work without errors, an
          from app.services.bot_service import run_bot  # Lazy import
          run_bot()
      ```
-1. **Activate Virtual Environment**:
-   - **Windows**:
-     ```bash
-     .venv\Scripts\activate
-     ```
-   - **macOS/Linux**:
-     ```bash
-     source .venv/bin/activate
-     ```
+### **6. Run the Tests**
+After implementing the fixes, run the tests again:
+```bash
+pytest
+```
 
-2. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   pip install pytest freezegun
-   ```
-
-3. **Verify Installation**:
-   ```bash
-   pip show pytest freezegun Flask
-   ```
-
-4. **Add to requirements.txt**:
-   ```bash
-   echo "pytest" >> requirements.txt
-   echo "freezegun" >> requirements.txt
-   ```
-
-5. **Run Tests**:
-   ```bash
-   pytest
-   ```
-
-6. **Troubleshooting**:
-   - If tests fail due to missing dependencies:
-     ```bash
-     pip install -r requirements.txt
-     pytest
-     ```
-   - Recreate virtual environment if needed:
-     ```bash
-     deactivate
-     rm -rf .venv
-     python -m venv .venv
-     source .venv/bin/activate  # or .venv\Scripts\activate on Windows
-     pip install -r requirements.txt
-     pytest
-     ```
+### **Expected Outcome**
+- The `pytest` command should execute without errors.
+- All tests should pass, and the `flask routes` command should work correctly.
 
 ### Property Implementation
 1. **Define Properties Correctly**:
