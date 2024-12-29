@@ -84,67 +84,63 @@ class CustomDateTimeField(DateTimeField):
             if date_str.strip():  # Skip empty strings
                 try:
                     # Parse the string into a datetime object
-                    self.data = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
-                except ValueError:
-                    # Raise a validation error for invalid formats
-                    self.errors.append(self.error_messages['invalid_format'])
-                    self.data = None
-            else:
-                self.data = None
-            
-            # Add leap year validation
-            if parsed_dt.month == 2 and parsed_dt.day == 29:
-                try:
-                    datetime(parsed_dt.year, 2, 29)
-                except ValueError:
-                    self.errors.append(self.error_messages['invalid_leap_year'])
-                    self.data = None
-                    return
+                    parsed_dt = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
                     
-            # Enhanced time component validation
-            if not (0 <= parsed_dt.hour <= 23 and 
-                    0 <= parsed_dt.minute <= 59 and 
-                    0 <= parsed_dt.second <= 59):
-                self.errors.append(self.error_messages['invalid_time'])
-                self.data = None
-                return
+                    # Add leap year validation
+                    if parsed_dt.month == 2 and parsed_dt.day == 29:
+                        try:
+                            datetime(parsed_dt.year, 2, 29)
+                        except ValueError:
+                            self.errors.append(self.error_messages['invalid_leap_year'])
+                            self.data = None
+                            return
+                            
+                    # Enhanced time component validation
+                    if not (0 <= parsed_dt.hour <= 23 and 
+                            0 <= parsed_dt.minute <= 59 and 
+                            0 <= parsed_dt.second <= 59):
+                        self.errors.append(self.error_messages['invalid_time'])
+                        self.data = None
+                        return
 
-            # Validate date components
-            try:
-                datetime(parsed_dt.year, parsed_dt.month, parsed_dt.day)
-            except ValueError:
-                self.errors.append(self.error_messages['invalid_date'])
-                self.data = None
-                return
+                    # Validate date components
+                    try:
+                        datetime(parsed_dt.year, parsed_dt.month, parsed_dt.day)
+                    except ValueError:
+                        self.errors.append(self.error_messages['invalid_date'])
+                        self.data = None
+                        return
 
-            # Validate future date
-            now = datetime.now()
-            if parsed_dt < now:
-                self.errors.append(self.error_messages['past_date'])
-                self.data = None
-                return
+                    # Validate future date
+                    now = datetime.now()
+                    if parsed_dt < now:
+                        self.errors.append(self.error_messages['past_date'])
+                        self.data = None
+                        return
 
-            # Validate future date limit (5 years)
-            max_future = now.replace(year=now.year + 5)
-            if parsed_dt > max_future:
-                self.errors.append(self.error_messages['future_date'])
-                self.data = None
-                return
+                    # Validate future date limit (5 years)
+                    max_future = now.replace(year=now.year + 5)
+                    if parsed_dt > max_future:
+                        self.errors.append(self.error_messages['future_date'])
+                        self.data = None
+                        return
 
-            self.data = parsed_dt
-            self.raw_value = date_str
+                    self.data = parsed_dt
+                    self.raw_value = date_str
 
-        except ValueError as e:
-            error_str = str(e)
-            if 'does not match format' in error_str:
-                self.errors.append(self.error_messages['invalid_format'])
-            elif 'day is out of range' in error_str or 'month is out of range' in error_str:
-                self.errors.append(self.error_messages['invalid_date'])
-            elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
-                self.errors.append(self.error_messages['invalid_time'])
+                except ValueError as e:
+                    error_str = str(e)
+                    if 'does not match format' in error_str:
+                        self.errors.append(self.error_messages['invalid_format'])
+                    elif 'day is out of range' in error_str or 'month is out of range' in error_str:
+                        self.errors.append(self.error_messages['invalid_date'])
+                    elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
+                        self.errors.append(self.error_messages['invalid_time'])
+                    else:
+                        self.errors.append(self.error_messages['invalid_date'])
+                    self.data = None
             else:
-                self.errors.append(self.error_messages['invalid_date'])
-            self.data = None
+                self.data = None
 
 
     def _value(self):
