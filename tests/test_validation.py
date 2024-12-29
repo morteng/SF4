@@ -13,6 +13,11 @@ def test_leap_year_validation():
     with pytest.raises(ValueError):
         datetime.strptime("2021-02-29", "%Y-%m-%d")
 
+    # Test form validation for leap year
+    form = StipendForm(application_deadline="2023-02-29 12:00:00")  # Invalid non-leap year
+    assert not form.validate()
+    assert FlashMessages.INVALID_LEAP_YEAR in form.application_deadline.errors
+
 def test_invalid_time_validation():
     """Test invalid time components."""
     # Test invalid hour
