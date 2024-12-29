@@ -10,8 +10,8 @@
 2. **Updated Constants Usage**:
    - Standardized usage of `INVALID_LEAP_YEAR_DATE` across all files.
    - Removed references to non-existent `INVALID_LEAP_YEAR` constant.
-   - Fixed duplicate `UPDATE_ERROR` definition in `app/constants.py`.
-   - Added missing `NOT_FOUND` and `FORM_VALIDATION_ERROR` constants.
+   - Fixed duplicate `UPDATE_ERROR` and `FORM_VALIDATION_ERROR` definitions in `app/constants.py`.
+   - Added missing `NOT_FOUND` constant.
 
 3. **Improved Test Organization**:
    - Moved form-related tests to `tests/app/forms/test_forms.py` for better structure.
@@ -24,6 +24,61 @@
 
 5. **Improved Rate Limiter Configuration**:
    - Added Redis as the storage backend for Flask-Limiter in production.
+
+### **Key Takeaways**
+1. **Test File Naming**:
+   - Always use unique names for test files to avoid import conflicts.
+   - Follow a consistent naming convention (e.g., `test_<module>_<feature>.py`).
+
+2. **Constants Management**:
+   - Avoid duplicate constant definitions in `Enum` classes.
+   - Use a single source of truth for constants in `app/constants.py`.
+
+3. **Circular Imports**:
+   - Use lazy imports or refactor shared logic into utility modules to avoid circular dependencies.
+   - Keep imports minimal in `app/__init__.py`.
+
+4. **Validation Logic**:
+   - Always validate data types before applying validation logic.
+   - Use constants from `app/constants.py` for error messages.
+
+5. **Testing Best Practices**:
+   - Use `freezegun` for deterministic time-based tests.
+   - Add edge-case tests for date/time validation (e.g., leap years, invalid time components).
+
+### **Lessons Learned**
+1. **Duplicate Constants**:
+   - Duplicate constant definitions can cause `TypeError` in `Enum` classes.
+   - Ensure each constant is defined only once in `app/constants.py`.
+
+2. **Test Organization**:
+   - Keep tests organized by module/package structure for better maintainability.
+   - Use `tests/app/` for application-specific tests and `tests/` for general tests.
+
+3. **Error Handling**:
+   - Proper error handling in property setters is crucial for maintaining data integrity.
+   - Log errors with context for easier debugging.
+
+4. **Code Quality**:
+   - Regularly clear `__pycache__` directories to avoid stale compiled files.
+   - Use consistent naming conventions across the codebase.
+
+### **Next Steps**
+1. **Validation Logic**:
+   - Confirm data types before applying validation.
+   - Centralize error messages, stay consistent.
+
+2. **Testing**:
+   - More edge-case coverage.
+   - Keep a good variety of unit, integration, and E2E tests.
+
+3. **Error Handling & Logging**:
+   - Don't just "print" stuff—log it with context.
+   - Make error messages user-friendly (or at least developer-friendly).
+
+4. **Code Organization**:
+   - Keep modules small and logical.
+   - Use base classes and utilities to avoid duplication.
 
 ### **Key Takeaways for Next Coding Session**
 1. **Test File Naming**:
