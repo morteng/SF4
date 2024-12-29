@@ -74,6 +74,24 @@
    pytest
    ```
 
+### Fixing CustomDateTimeField Initialization
+1. Locate the `CustomDateTimeField` class (likely in `app/forms/admin_forms.py` or similar)
+2. Replace with:
+   ```python
+   from wtforms import Field
+   from wtforms.validators import InputRequired
+
+   class CustomDateTimeField(Field):
+       def __init__(self, label=None, validators=None, **kwargs):
+           if validators is None:
+               validators = [InputRequired()]  # Default validator
+           super().__init__(label=label, validators=validators, **kwargs)
+   ```
+3. Update forms using `CustomDateTimeField` to avoid passing `validators` explicitly unless needed:
+   ```python
+   application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
+   ```
+
 ### **5. Add Pre-Test Dependency Verification**
 1. Create a test file (e.g., `tests/test_dependencies.py`) with the following content:
    ```python

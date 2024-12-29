@@ -34,7 +34,7 @@
 - **Best Practice**: Always verify dependencies are installed before running tests or the application.
 
 ### CustomDateTimeField Initialization
-- **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
+- **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument
 - **Solution**: Updated the `__init__` method to properly handle the `validators` argument:
   ```python
   class CustomDateTimeField(Field):
@@ -43,7 +43,10 @@
               validators = [InputRequired()]  # Default validator
           super().__init__(label=label, validators=validators, **kwargs)
   ```
-- **Best Practice**: Ensure custom fields properly handle all arguments passed to them.
+- **Best Practices**:
+  - Ensure custom fields properly handle all arguments passed to them
+  - Provide default validators when none are specified
+  - Avoid passing duplicate validators in form implementations
 
 ### Circular Imports
 - **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
