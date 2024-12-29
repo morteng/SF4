@@ -6,6 +6,7 @@
 from datetime import datetime, timedelta
 import pytest
 from freezegun import freeze_time
+from flask_wtf.csrf import generate_csrf
 from app.models import Organization, Tag, Stipend, AuditLog
 from app.forms.admin_forms import StipendForm
 from app.forms.fields import CustomDateTimeField
