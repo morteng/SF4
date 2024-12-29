@@ -24,11 +24,3 @@ def validate_application_deadline(field):
     if field.data < now:
         raise ValidationError(FlashMessages.FUTURE_DATE_REQUIRED)
 
-def init_admin_user():
-    """Initialize the admin user with default credentials."""
-    # Implementation goes here
-    pass
-
-def shared_function():
-    """Shared functionality to avoid circular imports."""
-    pass

@@ -2,6 +2,7 @@ import pytest
 from freezegun import freeze_time
 from app.forms.custom_fields import CustomDateTimeField
 from app.constants import FlashMessages
+from app.constants import FlashMessages
 
 @pytest.mark.parametrize("date_str, expected_error", [
     ("2023-02-29 12:00:00", FlashMessages.INVALID_LEAP_YEAR_DATE),
@@ -30,3 +31,13 @@ def test_valid_datetime():
     field = CustomDateTimeField()
     field.process_formdata(["2023-01-01 12:00:00"])
     assert not field.errors
+
+def test_timezone_aware_validation():
+    field = CustomDateTimeField()
+    field.process_formdata(["2023-01-01 12:00:00+00:00"])
+    assert not field.errors
+
+def test_invalid_timezone():
+    field = CustomDateTimeField()
+    field.process_formdata(["2023-01-01 12:00:00+99:99"])
+    assert str(FlashMessages.INVALID_DATETIME_FORMAT) in field.errors

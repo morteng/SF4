@@ -1,4 +1,6 @@
-# Make forms directory a Python package
+from .admin_forms import StipendForm
+
+__all__ = ['StipendForm']
 # Package initialization
 # Package initialization
 # Package initialization

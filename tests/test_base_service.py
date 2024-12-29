@@ -74,3 +74,14 @@ class TestBaseService(BaseTestCase):
 
         with pytest.raises(ValueError):
             self.service.create_limit = -1
+
+        # Test edge cases
+        with pytest.raises(ValueError):
+            self.service.create_limit = "10 per invalid_unit"
+
+        with pytest.raises(ValueError):
+            self.service.create_limit = "0 per minute"
+
+        # Test valid complex rate limits
+        self.service.create_limit = "100 per hour"
+        assert self.service.create_limit == "100 per hour"
