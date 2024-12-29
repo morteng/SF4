@@ -10,9 +10,6 @@
 # /run coverage run -m pytest
 
 ### COMMANDS START ###
-/run pytest tests/test_admin_stipends.py -v --capture=no
-/run flask shell
-/run sqlite3 instance/test.db
 ### COMMANDS END ###
 
 # Once finished, jump to Step 5.
