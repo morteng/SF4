@@ -7,9 +7,13 @@
 /add VALIDATION.md
 /add TODO.md
 
-/test
+/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
+
+/architect implement the suggested changes
 
 /run flask routes
+
+/test
 
 /ask what is causing the problem?
 
@@ -17,14 +21,13 @@
 
 /test
 
-
 /architect fix that
 
 /test
 
 /ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
 
-/code implement the suggested changes
+/architect implement the suggested changes
 
 /test
 
@@ -38,7 +41,7 @@
 
 /ask is there duplicate code in the project? If so, how can we refactor it to improve the maintainability and readability of the code?
 
-/code implement the suggested changes
+/architect implement the suggested changes
 
 /test
 
