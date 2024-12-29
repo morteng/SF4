@@ -25,13 +25,13 @@ def test_organization(db_session, organization_data):
     db_session.delete(organization)
     db_session.commit()
 
-def test_get_all_organizations(db_session, test_organization):
-    organizations = get_all_organizations()
+def test_get_all_organizations(db_session, test_organization, org_service):
+    organizations = org_service.get_all()
     assert len(organizations) >= 1
     assert test_organization in organizations
 
-def test_delete_organization(db_session, test_organization):
-    delete_organization(test_organization)
+def test_delete_organization(db_session, test_organization, org_service):
+    org_service.delete(test_organization)
     db_session.expire_all()
     organization = db_session.get(Organization, test_organization.id)
     assert organization is None
@@ -43,8 +43,8 @@ def test_create_organization(db_session, organization_data, org_service):
     assert organization.description == organization_data['description']
     assert organization.homepage_url == organization_data['homepage_url']
 
-def test_get_organization_by_id(db_session, test_organization):
-    organization = get_organization_by_id(test_organization.id)
+def test_get_organization_by_id(db_session, test_organization, org_service):
+    organization = org_service.get_by_id(test_organization.id)
     assert organization is not None
     assert organization.name == test_organization.name
     assert organization.description == test_organization.description
