@@ -18,7 +18,7 @@ class BaseCrudController:
             'update_error': FlashMessages.UPDATE_ERROR,
             'delete_error': FlashMessages.DELETE_ERROR,
             'not_found': FlashMessages.NOT_FOUND,
-            'validation_error': FlashMessages.VALIDATION_ERROR
+            'validation_error': FlashMessages.FORM_VALIDATION_ERROR
         }
         self.supports_htmx = True
         self.htmx_headers = {
