@@ -1,20 +1,20 @@
- # Todo
- 1. Fix `BuildError` for endpoint `admin.stipend.create`:
-    - Verify route registration in `app/routes/admin/__init__.py`.
-    - Ensure `admin_stipend_bp` blueprint is correctly defined in `app/routes/admin/stipend_routes.py`.
+# Todo - Next Code Cycle
 
- 2. Add `AUDIT_LOG` to `NotificationType` enum in `app/common/enums.py`.
+1. **Route Registration Verification:**
+   - Add automated tests for all route registrations
+   - Verify URL prefix consistency across all blueprints
 
- 3. Improve error handling for missing or invalid constants:
-    - Centralize error messages in `app/constants.py`.
-    - Add proper validation for enum values.
+2. **Error Handling Improvements:**
+   - Add validation for enum values in `app/common/enums.py`
+   - Add more detailed error logging for route registration
 
- 4. Add comprehensive test coverage for edge cases:
-    - Focus on date/time validation and route accessibility.
+3. **Test Coverage Expansion:**
+   - Add tests for edge cases in route accessibility
+   - Add negative tests for invalid route names
 
- 5. Refactor shared logic into utility modules:
-    - Move reusable validation logic to `app/common/utils.py`.
-    - Avoid circular imports by using lazy imports where necessary.
+4. **Documentation Updates:**
+   - Add route registration best practices to VALIDATION.md
+   - Update API documentation with new route names
 
  ### **Key Takeaways**
  1. **Route Registration**:
