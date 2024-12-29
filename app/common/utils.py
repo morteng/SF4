@@ -40,3 +40,6 @@ def shared_function():
 def init_admin_user():
     # Implementation
     pass
+def init_admin_user():
+    """Initialize the admin user."""
+    pass
