@@ -1,11 +1,15 @@
 # Project Specification: Stipend Discovery Website
 
-## Key Features
-- User-Facing Discovery: HTMX-powered stipend filtering
-- Admin Interface: Secure CRUD operations
-- Automated Bots: Scraping, tagging, validation
-- Dynamic Content: AJAX-like interactions
-- Quality Checks: Automated startup tests
+## Key Updates
+- Improved error handling in CustomDateTimeField
+- Refactored admin route decorators for better maintainability
+- Added centralized error handling utilities
+- Enhanced validation logic with fallback error messages
+
+## Technical Updates
+- Fixed failing tests for date validation
+- Reduced code duplication in admin routes
+- Improved test coverage for form validation
 
 ## Technical Stack
 - Backend: Flask, SQLite/PostgreSQL, Alembic, HTMX
