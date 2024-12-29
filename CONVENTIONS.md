@@ -64,6 +64,35 @@
 ## 8. use newest versions of all moduels and libraries
 - **Up-to-date**: Keep your modules and libraries up-to-date to ensure you're using the latest features and security patches. Ensure requirements.txt reflects the latest versions of all dependencies.
 
-## 9. About This environment
-- **Virtual Environment**: You are currently running inside an activated venv with all dependencies from requirements.txt already installed. 
-- **TODO.txt**: A file to keep track of tasks, ideas, or anything that needs to be addressed later. It's a simple text file where you can jot down notes, reminders, or to-dos. You can use it to capture ideas, brainstorm, or plan your work. It's a flexible tool that allows you to organize your thoughts and keep track of your tasks in a simple and accessible format. periodically review and compress this file if it gets too big.
+## 9. About This Environment
+
+- **Virtual Environment**:  
+  You are currently running inside an activated venv with all dependencies from requirements.txt already installed.
+
+- **TODO.txt**:  
+  A file to keep track of tasks, ideas, or anything that needs to be addressed later. It's a simple text file where you can jot down notes, reminders, or to-dos. You can use it to capture ideas, brainstorm, or plan your work. It's a flexible tool that allows you to organize your thoughts and keep track of your tasks in a simple and accessible format. Periodically review and compress this file if it gets too big.
+
+- **autocoder**:  
+  You are running in a coding cycle that looks like this (plan and act accordingly):
+
+  **Step 1: Identify & Plan**  
+  - Read your project details (TODOs, conventions, validations).  
+  - Decide what to tackle and how.  
+  - Potentially run any step-specific console commands (like migrations) before moving on.
+
+  **Step 2: Test & Debug**  
+  - Run your tests to see what breaks.  
+  - Fix those issues based on the test feedback.  
+  - If you need extra console commands to help debug, run them here.
+
+  **Step 3: Refine & Summarize**  
+  - Do some final polishing (refactoring, reorganizing, etc.).  
+  - Summarize the current state of the code so you know exactly where you stand.
+
+  **Step 4: Optional Additional Checks**  
+  - Perform housekeeping: extra tests, coverage checks, or final quality gates.  
+  - If new issues pop up, fix them here. Run console commands if needed.
+
+  **Step 5: Final Documentation Updates**  
+  - Update TODO.txt or any project docs with what you changed, how you fixed it, and why.  
+  - Then either wrap up or reset to start the next cycle.
