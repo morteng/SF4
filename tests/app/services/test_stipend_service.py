@@ -12,78 +12,21 @@ from app.constants import FlashMessages, FlashCategory
 from flask import get_flashed_messages
 import logging
 
-@pytest.fixture
-def test_data(db_session):
-    # Create an organization first
-    org = Organization(name="Test Org")
-    db_session.add(org)
-    db_session.commit()
-    
-    return {
-        'name': "Test Stipend",
-        'summary': 'This is a test stipend.',
-        'description': 'Detailed description of the test stipend.',
-        'homepage_url': 'http://example.com/stipend',
-        'application_procedure': 'Apply online at example.com',
-        'eligibility_criteria': 'Open to all students',
-        'application_deadline': datetime.strptime('2023-12-31 23:59:59', '%Y-%m-%d %H:%M:%S'),
-        'open_for_applications': True,
-        'organization_id': org.id  # Add this required field
-    }
+    def test_create_stipend_with_invalid_date_format(self, db_session):
+        invalid_data = {
+            'name': "Test Stipend",
+            'application_deadline': 'invalid-format'
+        }
+        with pytest.raises(ValidationError):
+            self.service.create(invalid_data)
 
-@pytest.fixture
-def admin_user(db_session):
-    user = User(username='adminuser', email='admin@example.com', password_hash='hashedpassword')
-    user.is_admin = True
-    db_session.add(user)
-    db_session.commit()
-    return user
-
-def extract_csrf_token(response_data):
-    csrf_regex = r'<input[^>]+name="csrf_token"[^>]+value="([^"]+)"'
-    match = re.search(csrf_regex, response_data.decode('utf-8'))
-    if match:
-        return match.group(1)
-    return None
-
-def test_create_stipend(test_data, db_session, app, admin_user):
-    # Create an organization first
-    org = Organization(name="Test Org")
-    db_session.add(org)
-    db_session.commit()
-    test_data['organization_id'] = org.id
-
-    # Convert datetime object to string for form submission
-    test_data['application_deadline'] = test_data['application_deadline'].strftime('%Y-%m-%d %H:%M:%S')
-
-    with app.app_context(), app.test_client() as client:
-        with app.test_request_context():
-            login_user(admin_user)
-        
-        # Create a form instance and validate it
-        form = StipendForm(data=test_data)
-        assert form.validate(), f"Form validation failed: {form.errors}"
-        
-        response = client.post('/admin/stipends/create', data=form.data, follow_redirects=True)
-
-    # Query the stipend from the session to ensure it's bound
-    new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
-
-    # Check if the stipend was created successfully
-    assert new_stipend is not None
-    assert new_stipend.name == test_data['name']
-    assert new_stipend.summary == test_data['summary']
-    assert new_stipend.description == test_data['description']
-    assert new_stipend.homepage_url == test_data['homepage_url']
-    assert new_stipend.application_procedure == test_data['application_procedure']
-    assert new_stipend.eligibility_criteria == test_data['eligibility_criteria']
-    assert new_stipend.application_deadline.strftime('%Y-%m-%d %H:%M:%S') == '2023-12-31 23:59:59'
-    assert new_stipend.open_for_applications is True
-    assert new_stipend.organization_id == org.id  # Verify organization association
-    
-    # Check if the correct flash message was set
-    with app.test_request_context():
-        assert FlashMessages.CREATE_STIPEND_SUCCESS.encode() in response.data
+    def test_update_stipend_with_invalid_date_format(self, db_session, test_entity):
+        invalid_data = {
+            'name': "Test Stipend",
+            'application_deadline': 'invalid-format'
+        }
+        with pytest.raises(ValidationError):
+            self.service.update(test_entity, invalid_data)
 
 def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     # Modify test data with an invalid application_deadline format
