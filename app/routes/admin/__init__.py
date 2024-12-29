@@ -144,9 +144,9 @@ def register_admin_blueprints(app):
     
     # Debug logging
     with app.app_context():
-        current_app.logger.debug("Registered routes:")
+        app.logger.debug("Registered routes:")
         for rule in app.url_map.iter_rules():
-            current_app.logger.debug(f"Route: {rule.endpoint}")
+            app.logger.debug(f"Route: {rule.endpoint}")
     
     # Validate routes
     required_routes = [

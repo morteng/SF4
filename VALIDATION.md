@@ -165,6 +165,23 @@
    - Log errors during blueprint registration.
    - Raise `RuntimeError` for missing routes.
 
+## Application Context
+
+1. **Context Management**:
+   - Use `with app.app_context()` when accessing `current_app` or other context-dependent features.
+   - Example:
+     ```python
+     with app.app_context():
+         app.logger.debug("Debug message")
+     ```
+
+2. **Logging**:
+   - Use `app.logger` instead of `current_app.logger` when `app` is explicitly available.
+   - Example:
+     ```python
+     app.logger.error("Error message")
+     ```
+
 ## 9. Key Takeaways
 
 1. **Validation Logic**  
