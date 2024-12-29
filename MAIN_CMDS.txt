@@ -40,7 +40,7 @@
 
 # Step 6: Remove previous console commands from CONSOLE_CMDS.txt and add any new ones that will be run next. 
 /add CONSOLE_CMDS.txt
-/code Remove any previously executes console commands from previos coding session from CONSOLE_CMDS.txt, add new ones that will be run next if needed.
+/code Remove any previously executed console commands from previos coding session from CONSOLE_CMDS.txt, add new ones that will be run next if needed.
 
 # Step 7: Load & Run Console Commands
 /load CONSOLE_CMDS.txt
