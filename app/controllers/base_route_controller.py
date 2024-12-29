@@ -16,6 +16,7 @@ class BaseRouteController:
             'create_success': FlashMessages.CREATE_SUCCESS,
             'update_success': FlashMessages.UPDATE_SUCCESS,
             'delete_success': FlashMessages.DELETE_SUCCESS,
+            'validation_error': FlashMessages.VALIDATION_ERROR,
             'not_found': FlashMessages.NOT_FOUND
         }
 
@@ -34,11 +35,16 @@ class BaseRouteController:
         return render_template(f'{self.template_dir}/full/{template}', **kwargs)
 
     def _handle_form_errors(self, form):
-        """Improved form error handling"""
+        """Handle form validation errors consistently"""
+        error_messages = []
+        for field, errors in form.errors.items():
+            for error in errors:
+                error_messages.append(f"{getattr(form, field).label.text}: {error}")
         if self.supports_htmx and request.headers.get('HX-Request'):
             return render_template(f'{self.template_dir}/partials/_form.html', 
-                                 form=form), 400
-        return render_template(f'{self.template_dir}/create.html', form=form)
+                                 form=form, error_messages=error_messages), 400
+        return render_template(f'{self.template_dir}/create.html', 
+                             form=form, error_messages=error_messages)
 
     def _handle_audit_logging(self, action, entity, user_id=None, before=None, after=None):
         """Enhanced audit logging with HTMX support"""

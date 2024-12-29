@@ -25,7 +25,7 @@ class BaseService:
     def __init__(self, model, audit_logger=None):
         self.model = model
         self.audit_logger = audit_logger
-        self.soft_delete_enabled = hasattr(model, 'is_deleted')
+        self.soft_delete = hasattr(model, 'is_deleted')
 
     @handle_errors
     def get_by_id(self, id):
@@ -42,7 +42,8 @@ class BaseService:
 
     @handle_errors
     def create(self, data, user_id=None):
-        """Create a new entity"""
+        """Create a new entity with validation and audit logging"""
+        self.validate_create(data)
         entity = self.model(**data)
         db.session.add(entity)
         db.session.commit()
@@ -56,6 +57,14 @@ class BaseService:
                 after=entity.to_dict()
             )
         return entity
+
+    def validate_create(self, data):
+        """Hook for create validation - override in child classes"""
+        pass
+        
+    def validate_update(self, data):
+        """Hook for update validation - override in child classes"""
+        pass
 
     @handle_errors
     def update(self, id, data, user_id=None):
