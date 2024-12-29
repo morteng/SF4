@@ -1,0 +1,24 @@
+<div class="overflow-x-auto mt-6">
+    <table class="w-full border-collapse bg-white text-left text-sm">
+        <thead>
+            <tr class="bg-gray-50">
+                <th class="px-4 py-2">ID</th>
+                <th class="px-4 py-2">Name</th>
+                <th class="px-4 py-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tag in tags %}
+            <tr class="border-b border-gray-200">
+                <td class="px-4 py-2">{{ tag.id }}</td>
+                <td class="px-4 py-2">{{ tag.name }}</td>
+                <td class="px-4 py-2">
+                    {% from "_macros.html" import edit_button, delete_button %}
+                    {{ edit_button(url_for('admin.tag.edit', id=tag.id), '#main-content') }}
+                    {{ delete_button(url_for('admin.tag.delete', id=tag.id), 'closest tr') }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

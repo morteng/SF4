@@ -94,8 +94,17 @@ def delete(id):
 @login_required
 @admin_required
 def index():
-    tags = get_all_tags()
+    page = request.args.get('page', 1, type=int)
+    tags = Tag.query.paginate(page=page, per_page=10, error_out=False)
     return render_template('admin/tags/index.html', tags=tags)
+
+@admin_tag_bp.route('/paginate', methods=['GET'])
+@login_required
+@admin_required
+def paginate():
+    page = request.args.get('page', 1, type=int)
+    tags = Tag.query.paginate(page=page, per_page=10, error_out=False)
+    return render_template('admin/tags/_tags_table.html', tags=tags)
 
 @admin_tag_bp.route('/<int:id>/edit', methods=['GET', 'POST'])  # Updated from .update to .edit
 @login_required
