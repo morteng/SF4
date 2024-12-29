@@ -41,6 +41,6 @@
 /add CONSOLE_CMDS.txt
 /architect remove previous console commands, add new ones that will be run next if needed.
 
-# Step 6: Load Console Commands
+# Step 7: Load & Run Console Commands
 /load CONSOLE_CMDS.txt
 

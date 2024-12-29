@@ -1,9 +1,0 @@
-
-/git add .
-
-/commit
-
-/read PROJECT.md
-/add CONVENTIONS.md
-/add VALIDATION.md
-/add TODO.md
