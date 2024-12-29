@@ -226,8 +226,8 @@ def test_missing_required_fields(app, form_data):
                 assert form.validate() is False, f"Form should be invalid when {field} is empty"
                 assert field in form.errors, f"Expected error for empty {field} but got: {form.errors}"
     
+    # Test missing fields
     with app.test_request_context():
-        # Get tag choices from database
         tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
         
         for field in required_fields:
@@ -240,20 +240,10 @@ def test_missing_required_fields(app, form_data):
                 form.organization_id.choices = [(1, 'Test Org')]  # Add dummy choice
             assert form.validate() is False, f"Form should be invalid when {field} is missing"
             assert field in form.errors, f"Expected error for missing {field} but got: {form.errors}"
-            assert field in form.errors
-    """Test missing date validation"""
-    with app.test_request_context():
-        # Add the key with a dummy value before deleting it
-        form_data['application_deadline'] = '2025-12-31 23:59:59'
-        del form_data['application_deadline']
-        
-        # Get tag choices from database
-        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
-        
-        form = StipendForm(data=form_data, meta={'csrf': False})
-        form.tags.choices = tag_choices  # Set the choices
-        assert form.validate() is False
-        assert 'Application deadline is required.' in form.errors['application_deadline']
+            
+            # Special check for application_deadline
+            if field == 'application_deadline':
+                assert 'Application deadline is required.' in form.errors['application_deadline']
 
 class TestCustomDateTimeField(BaseTestCase):
     def test_empty_date(self):
