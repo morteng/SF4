@@ -10,9 +10,9 @@
 # /run coverage run -m pytest
 
 ### COMMANDS START ###
-/run mv tests/app/routes/admin/test_stipend_validation.py tests/app/routes/admin/test_admin_stipend_validation.py
-/run find . -type d -name "__pycache__" -exec rm -r {} +
-/run pytest
+/run pytest tests/test_admin_stipends.py -v --capture=no
+/run flask shell
+/run sqlite3 instance/test.db
 ### COMMANDS END ###
 
 # Once finished, jump to Step 5.
