@@ -236,13 +236,15 @@ class BaseService:
             raise ValidationError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors="No data provided"))
         self.validate(data)
 
-    @handle_errors 
     @property
     def update_limit(self):
+        """Getter for update_limit."""
         return self.rate_limits['update']
-    
+
     @update_limit.setter
+    @handle_errors
     def update_limit(self, value):
+        """Setter for update_limit with validation."""
         if not isinstance(value, str):
             raise ValueError("Update limit must be a string (e.g., '10 per minute')")
         if not any(x in value for x in ['per second', 'per minute', 'per hour', 'per day']):
