@@ -68,7 +68,7 @@ class StipendForm(FlaskForm):
             'invalid_time': FlashMessages.INVALID_TIME_COMPONENTS,
             'past_date': FlashMessages.FUTURE_DATE_REQUIRED,
             'future_date': 'Application deadline cannot be more than 5 years in the future',
-            'invalid_leap_year': FlashMessages.INVALID_LEAP_YEAR
+            'invalid_leap_year': FlashMessages.INVALID_LEAP_YEAR_DATE
         }
     )
     organization_id = SelectField('Organization', coerce=int, validators=[

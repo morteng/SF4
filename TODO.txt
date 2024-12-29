@@ -6,6 +6,7 @@
 1. **Fixed Duplicate Constants**:
    - Removed duplicate definitions of `INVALID_DATE_FORMAT` in `app/constants.py`.
    - Ensured all constants are defined only once in the `FlashMessages` class.
+   - Replaced `INVALID_LEAP_YEAR` with `INVALID_LEAP_YEAR_DATE` for consistency.
 
 2. **Improved Form Validation**:
    - Updated form validation messages to use centralized constants from `app/constants.py`.
