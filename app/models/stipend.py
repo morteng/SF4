@@ -27,8 +27,12 @@ class Stipend(db.Model):
         from flask import request, current_app
         from datetime import datetime
         
-        # Validate application deadline
-        if 'application_deadline' in data:
+        # Validate required field
+        if 'name' not in data or not data['name']:
+            raise ValueError("Name is required")
+        
+        # Validate application deadline if provided
+        if 'application_deadline' in data and data['application_deadline']:
             # First validate date format
             if isinstance(data['application_deadline'], str):
                 try:
@@ -38,7 +42,7 @@ class Stipend(db.Model):
                     data['application_deadline'] = parsed_dt.replace(tzinfo=timezone.utc)
                 except ValueError:
                     raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS")
-        
+            
             # Then validate date range
             now = datetime.now(timezone.utc)
             if data['application_deadline'] < now:
@@ -46,8 +50,8 @@ class Stipend(db.Model):
             if (data['application_deadline'] - now).days > 365 * 5:
                 raise ValueError("Application deadline cannot be more than 5 years in the future")
         
-        # Validate organization exists
-        if 'organization_id' in data:
+        # Validate organization exists if provided
+        if 'organization_id' in data and data['organization_id']:
             org = Organization.query.get(data['organization_id'])
             if not org:
                 raise ValueError("Invalid organization ID")
