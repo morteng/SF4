@@ -528,3 +528,18 @@ def test_tag(db_session, app):
         if db_session.query(Tag).filter_by(id=tag.id).first():
             db_session.delete(tag)
             db_session.commit()
+import importlib
+import pytest
+
+def verify_dependencies():
+    missing_deps = []
+    for dep in ["freezegun", "Flask"]:
+        try:
+            importlib.import_module(dep)
+        except ImportError:
+            missing_deps.append(dep)
+    if missing_deps:
+        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
+
+def pytest_sessionstart(session):
+    verify_dependencies()

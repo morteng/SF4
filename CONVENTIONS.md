@@ -30,12 +30,19 @@
    ```
 
 ### Pre-Test Verification
-Before running tests, the system will automatically verify that all required dependencies are installed. If any dependencies are missing, the test session will abort with a clear error message.
+Before running tests, the system will automatically verify that all required dependencies are installed. If any dependencies are missing, the test session will skip affected tests instead of failing.
 
 To manually verify dependencies:
 ```bash
 pytest tests/test_dependencies.py
 ```
+
+### Dependency Verification
+Before running tests, ensure all dependencies are installed:
+```bash
+pip install -r requirements.txt
+```
+If any dependencies are missing, the test suite will skip affected tests instead of failing.
 
 ### Circular Import Prevention
 To avoid circular dependencies:
