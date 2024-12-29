@@ -22,14 +22,43 @@
    pip install -r requirements.txt
    ```
 
-4. Run tests:
+4. Verify critical dependencies:
+   ```bash
+   pip show freezegun pytest Flask
+   ```
+
+5. Run tests:
    ```bash
    pytest
    ```
 
-5. If tests fail due to missing dependencies, run:
+6. If tests fail due to missing dependencies:
+   - Reinstall all dependencies:
+     ```bash
+     pip install -r requirements.txt
+     ```
+   - Verify installation:
+     ```bash
+     pip show freezegun
+     ```
+
+## Troubleshooting
+
+### Missing Dependencies
+If tests fail with `ModuleNotFoundError`:
+1. Ensure the virtual environment is activated
+2. Run `pip install -r requirements.txt`
+3. Verify installation with `pip show <package_name>`
+
+### Freezegun Issues
+If time-based tests are failing:
+1. Ensure freezegun is installed:
    ```bash
-   pip install -r requirements.txt
+   pip show freezegun
+   ```
+2. If not installed:
+   ```bash
+   pip install freezegun>=1.2.2
    ```
 
 ## Service Layer

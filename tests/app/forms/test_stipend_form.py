@@ -1,44 +1,15 @@
-import logging
 import pytest
 from datetime import datetime, timedelta
 from app.forms.admin_forms import StipendForm, CustomDateTimeField
 from app.constants import FlashMessages
 
-# Handle freezegun import with fallback
+# Check for freezegun and skip all tests if not installed
 try:
     from freezegun import freeze_time
     FREEZEGUN_INSTALLED = True
 except ImportError:
     FREEZEGUN_INSTALLED = False
-    def freeze_time(*args, **kwargs):
-        def decorator(f):
-            return f
-        return decorator
-    logging.warning(
-        "freezegun is not installed. Some tests may be skipped. "
-        "Run `pip install -r requirements.txt` to install dependencies."
-    )
-
-# Skip time-dependent tests if freezegun is not installed
-pytestmark = pytest.mark.skipif(
-    not FREEZEGUN_INSTALLED,
-    reason="freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies."
-)
-
-# Handle freezegun import with fallback
-try:
-    from freezegun import freeze_time
-    FREEZEGUN_INSTALLED = True
-except ImportError:
-    FREEZEGUN_INSTALLED = False
-    def freeze_time(*args, **kwargs):
-        def decorator(f):
-            return f
-        return decorator
-    logging.warning(
-        "freezegun is not installed. Some tests may be skipped. "
-        "Run `pip install -r requirements.txt` to install dependencies."
-    )
+    pytest.skip("freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies.", allow_module_level=True)
 
 # Skip time-dependent tests if freezegun is not installed
 pytestmark = pytest.mark.skipif(
