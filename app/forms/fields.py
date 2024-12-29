@@ -7,6 +7,8 @@ from app.constants import FlashMessages
 class CustomDateTimeField(DateTimeField):
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
         # Ensure format is always a string
+        if 'format' in kwargs:
+            format = kwargs.pop('format')
         if not isinstance(format, str):
             format = '%Y-%m-%d %H:%M:%S'
             
