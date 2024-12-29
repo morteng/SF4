@@ -23,6 +23,15 @@ except ImportError:
         RuntimeWarning
     )
 
+def pytest_sessionstart(session):
+    try:
+        import freezegun
+    except ImportError:
+        logging.warning(
+            "freezegun is not installed. Some tests may be skipped. "
+            "Run `pip install -r requirements.txt` to install dependencies."
+        )
+
 # Add a pytest marker for freezegun-dependent tests
 def pytest_configure(config):
     config.addinivalue_line(
