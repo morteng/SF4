@@ -31,6 +31,10 @@ def parse_flexible_date(date_str):
             dt = parse(date_str)
             dt = dt + relativedelta(month=12, day=31)
             
+        # Validate the parsed date
+        if dt.year < 1900 or dt.year > 2100:
+            return None
+            
         return dt.replace(tzinfo=timezone.utc)
     except ValueError:
         return None

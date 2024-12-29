@@ -6,24 +6,22 @@ from app.constants import FlashMessages
 
 class CustomDateTimeField(DateTimeField):
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
-        # Initialize error messages once
-        error_messages = {
+        # Initialize error messages
+        self.error_messages = {
             'required': str(FlashMessages.DATE_REQUIRED),
-            'invalid_format': str(FlashMessages.INVALID_DATETIME_FORMAT),
-            'invalid_time': str(FlashMessages.INVALID_TIME_COMPONENTS),
-            'invalid_leap_year': str(FlashMessages.INVALID_LEAP_YEAR_DATE),
+            'invalid_format': str(FlashMessages.INVALID_DATE_FORMAT),
+            'invalid_time': str(FlashMessages.INVALID_TIME_VALUES),
+            'invalid_leap_year': str(FlashMessages.INVALID_LEAP_YEAR),
             'invalid_date': str(FlashMessages.INVALID_DATE_VALUES),
             'past_date': str(FlashMessages.PAST_DATE),
             'future_date': str(FlashMessages.FUTURE_DATE),
+            **kwargs.pop('error_messages', {})
         }
         
-        # Merge with any custom error messages
-        kwargs['error_messages'] = {**error_messages, **kwargs.get('error_messages', {})}
-        
-        # Call parent __init__ with all parameters
-        super().__init__(label=label, validators=validators, format=format, **kwargs)
+        # Call parent __init__ without passing format
+        super().__init__(label=label, validators=validators, **kwargs)
         self.render_kw = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
-        self._format = format
+        self._format = format if isinstance(format, str) else '%Y-%m-%d %H:%M:%S'
 
     def _validate_time_components(self, dt):
         """Validate time components (hours, minutes, seconds)"""
