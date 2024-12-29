@@ -1,5 +1,25 @@
 # Updated Validation Best Practices
 
+## Custom Field Implementation
+
+### Handle All Arguments
+- Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+- Example:
+  ```python
+  class CustomDateTimeField(Field):
+      def __init__(self, label=None, validators=None, **kwargs):
+          if validators is None:
+              validators = [InputRequired()]  # Default validator
+          super().__init__(label=label, validators=validators, **kwargs)
+  ```
+
+### Default Validators
+- Provide default validators if none are passed:
+  ```python
+  if validators is None:
+      validators = [InputRequired()]
+  ```
+
 ### Error Message Centralization
 - Define all error messages in `app/constants.py`.
 - Use constants instead of hardcoded strings for error messages.
@@ -8,6 +28,10 @@
   from app.constants import MISSING_REQUIRED_FIELD
   validators=[InputRequired(message=MISSING_REQUIRED_FIELD)]
   ```
+
+### Testing
+- Test edge cases thoroughly, especially for date/time validation.
+- Use mocking libraries like `freezegun` to ensure deterministic test behavior.
 
 ## Key Takeaways
 

@@ -1,11 +1,38 @@
 # Updated Coding Conventions
 
-### CustomDateTimeField Implementation
+## Custom Field Implementation
+
+### CustomDateTimeField
 - Always handle the `validators` argument in `__init__`.
 - Provide default validators if none are passed:
   ```python
   if validators is None:
       validators = [InputRequired()]
+  ```
+- Avoid passing the `validators` argument explicitly in forms unless necessary.
+
+### Dependency Management
+- Always verify dependencies are installed before running tests or the application:
+  ```bash
+  pip install -r requirements.txt
+  pip show pytest freezegun Flask
+  ```
+- Add a pre-test check to ensure all required dependencies are installed:
+  ```python
+  def test_dependencies():
+      try:
+          subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+      except subprocess.CalledProcessError:
+          pytest.fail("Failed to install dependencies")
+  ```
+
+### Circular Imports
+- Refactor shared functionality into separate modules (e.g., `app/common/utils.py`).
+- Use lazy imports where necessary:
+  ```python
+  def some_function():
+      from app.services.bot_service import run_bot  # Lazy import
+      run_bot()
   ```
 
 ## Testing Setup
