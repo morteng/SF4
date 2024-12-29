@@ -49,9 +49,8 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @admin_required
 def create():
     """Enhanced stipend creation with better error handling and logging"""
-    try:
-        form = StipendForm()
-        is_htmx = request.headers.get('HX-Request')
+    form = StipendForm()
+    is_htmx = request.headers.get('HX-Request')
         
         # Initialize form choices
         organizations = Organization.query.order_by(Organization.name).all()
@@ -97,11 +96,11 @@ def create():
             flash_message(FlashMessages.STIPEND_CREATE_SUCCESS, FlashCategory.SUCCESS)
             
             if is_htmx:
-                return render_template('admin/stipends/_stipend_row.html', stipend=stipend), 200, {
-                    'HX-Trigger': 'stipendCreated'
-                }
+                return redirect(url_for('admin.stipend.index'))
             return redirect(url_for('admin.stipend.index'))
             
+        if is_htmx:
+            return render_template('admin/stipends/create.html', form=form)
         return render_template('admin/stipends/create.html', form=form)
         
     except Exception as e:
