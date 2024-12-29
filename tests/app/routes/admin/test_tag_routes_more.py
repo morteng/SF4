@@ -4,7 +4,7 @@ from tests.conftest import logged_in_admin, tag_data, extract_csrf_token, get_al
 from app.constants import FlashMessages, FlashCategory
 from sqlalchemy.exc import IntegrityError
 import pytest
-from app.services.tag_service import create_tag
+from app.services.tag_service import tag_service
 
 def test_create_tag_get_request(logged_in_admin):
     response = logged_in_admin.get(url_for('admin.tag.create'))
@@ -42,11 +42,10 @@ def test_create_tag_with_invalid_form_data(logged_in_admin):
 
 def test_create_tag_with_integrity_error(logged_in_admin, tag_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
-        def mock_create_tag(*args, **kwargs):
+        def mock_create(*args, **kwargs):
             raise IntegrityError("test", {}, None)
 
-        # Corrected monkeypatch target
-        monkeypatch.setattr('app.routes.admin.tag_routes.create_tag', mock_create_tag)
+        monkeypatch.setattr(tag_service, 'create', mock_create)
 
         # Extract CSRF token
         create_response = logged_in_admin.get(url_for('admin.tag.create'))
@@ -71,7 +70,7 @@ def test_delete_nonexistent_tag(logged_in_admin):
 def test_delete_tag_with_integrity_error(logged_in_admin, tag_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
         # Create a tag to delete
-        new_tag = create_tag(tag_data)
+        new_tag = tag_service.create(tag_data)
         db_session.commit()
 
         def mock_commit(*args, **kwargs):
