@@ -60,7 +60,13 @@ class StipendForm(FlaskForm):
     application_deadline = CustomDateTimeField(
         'Application Deadline',
         validators=[DataRequired(message="Application deadline is required.")],
-        format='%Y-%m-%d %H:%M:%S'
+        format='%Y-%m-%d %H:%M:%S',
+        error_messages={
+            'required': 'Application deadline is required.',
+            'invalid': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
+            'past_date': 'Application deadline must be a future date',
+            'future_limit': 'Application deadline cannot be more than 5 years in the future'
+        }
     )
     organization_id = SelectField('Organization', coerce=int, validators=[
         DataRequired(message="Organization is required.")
