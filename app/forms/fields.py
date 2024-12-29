@@ -19,12 +19,16 @@ class CustomDateTimeField(DateTimeField):
             return True
             
         # Rest of the validation logic...
-        # Extract error_messages from kwargs to avoid passing it to Field.__init__()
-        error_messages = kwargs.pop('error_messages', {})
-        super().__init__(label, validators, format=format, **kwargs)
-        self.format = format
-        self.timezone_str = str(timezone) if timezone else 'UTC'
-        self._invalid_leap_year = False  # Track invalid leap year state
+        # Initialize default error messages
+        self.error_messages = {
+            'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
+            'invalid_date': 'Invalid date values (e.g., Feb 30)',
+            'invalid_time': 'Invalid time values (e.g., 25:61:61)',
+            'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
+            'required': 'Date is required',
+            'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)',
+            'past_date': 'Application deadline must be a future date'
+        }
         # Initialize default error messages
         self.error_messages = {
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
