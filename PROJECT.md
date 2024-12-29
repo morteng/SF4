@@ -246,6 +246,18 @@ user.profile                 GET        /user/profile
 - Reduced code duplication in form validation
 - Improved error message consistency
 
+## New Section: Lessons Learned
+- **Validation Improvements**:
+  - Consolidated leap year validation logic in `CustomDateTimeField` to avoid redundancy.
+  - Fixed `TypeError` caused by incorrect usage of `self.format` in `datetime.strptime`.
+  - Improved error handling for invalid dates and times.
+
+- **Error Handling**:
+  - Ensured all error messages are centralized in `app/constants.py` and used consistently across the codebase.
+
+- **Testing**:
+  - Added comprehensive tests for edge cases in `CustomDateTimeField`, including leap years, invalid time components, and missing fields.
+
 ## System Components
 - **Forms**:
   - Updated `CustomDateTimeField` to support custom error messages.

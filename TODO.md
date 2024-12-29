@@ -6,6 +6,9 @@
 - [x] Standardize validation error messages
 - [x] Remove hardcoded error messages
 - [x] Implement proper error message mapping
+- [x] Fix `TypeError` in `CustomDateTimeField` caused by incorrect `self.format` usage.
+- [x] Consolidate leap year validation logic in `CustomDateTimeField`.
+- [x] Add tests for edge cases in `CustomDateTimeField`.
 
 ## Next Session
 - [ ] Add more test cases for edge cases
