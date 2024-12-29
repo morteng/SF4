@@ -1,5 +1,31 @@
 # Updated Validation Best Practices
 
+## Date/Time Validation Best Practices
+1. **Data Type Awareness**:
+   - Always verify the data type of form field inputs before applying validation logic.
+2. **Timezone Handling**:
+   - Ensure all `datetime` objects are timezone-aware.
+3. **Future/Past Date Validation**:
+   - Validate that dates are within acceptable ranges (e.g., future dates for deadlines).
+4. **Error Messages**:
+   - Use centralized error messages from `app/constants.py` for consistency.
+
+## Error Handling
+1. **Centralized Error Messages**:
+   - Store all error messages in `app/constants.py`.
+2. **Consistency**:
+   - Use constants instead of hardcoded strings for error messages.
+3. **Logging**:
+   - Log validation errors with context for easier debugging.
+
+## Testing
+1. **Edge Cases**:
+   - Test edge cases thoroughly, especially for date/time validation.
+2. **Mocking**:
+   - Use `freezegun` for deterministic time-based testing.
+3. **Isolation**:
+   - Ensure database fixtures are properly reset between tests to avoid side effects.
+
 ### Date/Time Validation
 1. **Best Practices**:
    - Validate date and time components separately before full parsing.

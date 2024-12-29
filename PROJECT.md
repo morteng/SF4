@@ -26,6 +26,51 @@
   - Refactored shared functionality into `app/common/utils.py` to avoid circular imports.
   - Updated `create_limit` to be a proper property with getter/setter.
 
+## Lessons Learned
+
+### Dependency Management
+- **Issue**: Tests failed because `pytest` was not installed in the virtual environment.
+- **Solution**: Always verify dependencies are installed by running:
+  ```bash
+  pip install -r requirements.txt
+  ```
+- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
+
+### CustomDateTimeField Initialization
+- **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
+- **Solution**: Updated the `__init__` method to properly handle the `validators` argument:
+  ```python
+  class CustomDateTimeField(Field):
+      def __init__(self, label=None, validators=None, **kwargs):
+          if validators is None:
+              validators = [InputRequired()]  # Default validator
+          super().__init__(label=label, validators=validators, **kwargs)
+  ```
+- **Best Practice**: Ensure custom fields properly handle all arguments passed to them.
+
+### Circular Imports
+- **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
+- **Solution**: Refactor shared functionality into a separate module (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+- **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
+
+### Property Implementation
+- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
+- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
+  ```python
+  class BaseService:
+      def __init__(self):
+          self._create_limit = None
+
+      @property
+      def create_limit(self):
+          return self._create_limit
+
+      @create_limit.setter
+      def create_limit(self, value):
+          self._create_limit = value
+  ```
+- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
+
 #### **Lessons Learned**
 1. **Custom Field Implementation**:
    - Always ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
