@@ -21,7 +21,7 @@ class BaseRouteController:
             'delete_success': FlashMessages.DELETE_SUCCESS,
             'validation_error': FlashMessages.FORM_VALIDATION_ERROR,
             'not_found': FlashMessages.NOT_FOUND,
-            'error': FlashMessages.ERROR
+            'error': FlashMessages.GENERIC_ERROR
         }
 
     def _handle_form_choices(self, form):
