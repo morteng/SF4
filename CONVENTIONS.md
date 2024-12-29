@@ -329,15 +329,35 @@ If time-based tests are failing:
    ```bash
    pip install -r requirements.txt
    ```
-
 2. **Verify Installation**:
    Verify critical dependencies are installed:
    ```bash
    pip show freezegun Flask
    ```
-
 3. **Pre-Test Check**:
    Add a pre-test check to ensure all required dependencies are installed.
+
+### Property Implementation
+1. **Define Properties Correctly**:
+   Always define a property (`@property`) before using a setter (`@<property>.setter`).
+   Example:
+   ```python
+   class MyClass:
+       def __init__(self):
+           self._my_property = None
+
+       @property
+       def my_property(self):
+           return self._my_property
+
+       @my_property.setter
+       def my_property(self, value):
+           self._my_property = value
+   ```
+2. **Avoid Direct Attribute Access**:
+   Use properties to encapsulate attribute access and modification.
+3. **Document Properties**:
+   Add docstrings to properties and setters to clarify their purpose and behavior.
 
 ### Package Structure
 1. **`__init__.py` Files**:
