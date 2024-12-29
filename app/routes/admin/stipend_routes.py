@@ -57,10 +57,10 @@ def create():
     tags = Tag.query.order_by(Tag.name).all()
     form.organization_id.choices = [(org.id, org.name) for org in organizations]
     form.tags.choices = [(tag.id, tag.name) for tag in tags]
-        
-        if form.validate_on_submit():
-            # Prepare stipend data with optional fields
-            stipend_data = {
+    
+    if form.validate_on_submit():
+        # Prepare stipend data with optional fields
+        stipend_data = {
                 'name': form.name.data,
                 'summary': form.summary.data if form.summary.data else None,
                 'description': form.description.data if form.description.data else None,
