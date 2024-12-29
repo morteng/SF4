@@ -8,14 +8,14 @@
 /test
 /ask Code Cycle Step 4 (Optional Checks) - Is there a new issue? 
 # If yes, detail the problem and potential fixes.
-/architect implement fixes
+/code implement fixes
 
 # Prompt about console commands
 /ask Do we need to run any console commands for Step 4?
 # If so, we will add them to CONSOLE_CMDS_STEP4.txt. If not, ensure it’s empty or remove old commands.
 
 /add scripts/CONSOLE_CMDS_STEP4.txt
-/code Remove any previously executed console commands from CONSOLE_CMDS_STEP4.txt, and add new ones if needed. IMPORTANT: Don't run flask shell or other console commands that stop processing and require manual input to continue. You are not allowed to use such commands or tools. 
+/code Remove any previously executed console commands from CONSOLE_CMDS_STEP4.txt, and add new ones if needed. IMPORTANT: Don't run flask shell or other console commands that stop processing and require manual input to continue. You are not allowed to use such commands or tools. Prepend console commands with /run, e.g. /run flask shell.
 /drop scripts/CONSOLE_CMDS_STEP4.txt
 
 # Now load the console commands for Step 4.
