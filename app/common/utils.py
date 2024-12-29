@@ -37,3 +37,6 @@ def init_admin_user():
 def shared_function():
     """Shared functionality to avoid circular imports."""
     pass
+def init_admin_user():
+    # Implementation
+    pass
