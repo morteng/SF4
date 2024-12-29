@@ -364,6 +364,11 @@ class BaseService:
     def create_limit(self, value):
         """Setter for create_limit."""
         self._create_limit = value
+
+    @create_limit.setter
+    def create_limit(self, value):
+        """Setter for create_limit."""
+        self._create_limit = value
         self._create_limit = value
 class BaseService:
     def __init__(self):
