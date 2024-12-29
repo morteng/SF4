@@ -48,6 +48,7 @@ class FlashMessages(str, Enum):
     
     # User Management
     USER_CREATED = "User {username} created successfully."
+    NOT_FOUND = "{entity_name} not found."
     CREATE_USER_SUCCESS = "User created successfully."
     USER_UPDATED = "User updated successfully."
     USER_DELETED = "User deleted successfully."
