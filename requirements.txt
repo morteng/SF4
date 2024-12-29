@@ -18,3 +18,6 @@ redis==5.0.0
 bleach==6.0.0
 flask_testing==0.8.1
 croniter>=1.4.0,<2.0.0
+pytest
+freezegun
+Flask
