@@ -107,3 +107,32 @@ class BaseTestCase(TestCase):
         """Test service delete operation"""
         service.delete(entity)
         self.assertIsNone(self.model.query.get(entity.id))
+
+    def assertFormValid(self, form, data):
+        """Helper to test form validation with valid data"""
+        form.process(data=data)
+        self.assertTrue(form.validate(), 
+                       f"Form should be valid but got errors: {form.errors}")
+
+    def assertFormInvalid(self, form, data, expected_errors):
+        """Helper to test form validation with invalid data"""
+        form.process(data=data)
+        self.assertFalse(form.validate(), 
+                        "Form should be invalid but validated successfully")
+        for field, errors in expected_errors.items():
+            self.assertIn(field, form.errors, 
+                         f"Expected errors for field {field} not found")
+            for error in errors:
+                self.assertIn(error, form.errors[field], 
+                             f"Expected error '{error}' not found in {field} errors")
+
+    def assertServiceOperation(self, service, operation, valid_data, invalid_data=None):
+        """Generic helper to test service operations"""
+        # Test valid operation
+        result = getattr(service, operation)(valid_data)
+        self.assertIsNotNone(result)
+        
+        # Test invalid data
+        if invalid_data:
+            with self.assertRaises(ValidationError):
+                getattr(service, operation)(invalid_data)

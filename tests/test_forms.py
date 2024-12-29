@@ -6,9 +6,10 @@ class TestCustomDateTimeField(BaseTestCase):
     
     def test_empty_date(self):
         field = CustomDateTimeField()
-        field.process_formdata([''])
-        self.assertFalse(field.validate(None))
-        self.assertIn('Date is required', field.errors[0])
+        self.assertFormInvalid(
+            field, {'': ''},
+            {'': ['Date is required']}
+        )
 
     def test_vague_date_conversion(self):
         field = CustomDateTimeField()
@@ -30,9 +31,10 @@ class TestCustomDateTimeField(BaseTestCase):
 
     def test_invalid_vague_date(self):
         field = CustomDateTimeField()
-        field.process_formdata(['in NotAMonth'])
-        self.assertFalse(field.validate(None))
-        self.assertIn('Invalid date values', field.errors[0])
+        self.assertFormInvalid(
+            field, {'': 'in NotAMonth'},
+            {'': ['Invalid date values']}
+        )
 
     def test_year_only_format(self):
         field = CustomDateTimeField()
@@ -48,19 +50,22 @@ class TestCustomDateTimeField(BaseTestCase):
 
     def test_invalid_month(self):
         field = CustomDateTimeField()
-        field.process_formdata(['Month 2023'])
-        self.assertFalse(field.validate(None))
-        self.assertIn('Invalid date values', field.errors[0])
+        self.assertFormInvalid(
+            field, {'': 'Month 2023'},
+            {'': ['Invalid date values']}
+        )
 
     def test_invalid_year(self):
         field = CustomDateTimeField()
-        field.process_formdata(['August 999'])
-        self.assertFalse(field.validate(None))
-        self.assertIn('Invalid date values', field.errors[0])
+        self.assertFormInvalid(
+            field, {'': 'August 999'},
+            {'': ['Invalid date values']}
+        )
 
     def test_past_date(self):
         field = CustomDateTimeField()
-        field.process_formdata(['2020-01-01 00:00:00'])
-        self.assertFalse(field.validate(None))
-        self.assertIn('Application deadline must be a future date', field.errors[0])
+        self.assertFormInvalid(
+            field, {'': '2020-01-01 00:00:00'},
+            {'': ['Application deadline must be a future date']}
+        )
 
