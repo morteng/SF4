@@ -654,6 +654,48 @@ user.profile                 GET        /user/profile
 - Test edge cases thoroughly, especially for date/time validation.
 - Ensure database fixtures are properly reset between tests to avoid side effects.
 
+### Testing Setup
+1. **Activate Virtual Environment**:
+   - **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+2. **Install Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Verify Installation**:
+   ```bash
+   pip show pytest freezegun Flask
+   ```
+
+4. **Run Tests**:
+   ```bash
+   pytest
+   ```
+
+5. **Troubleshooting**:
+   - If tests fail due to missing dependencies:
+     ```bash
+     pip install pytest
+     pytest
+     ```
+   - Recreate virtual environment if needed:
+     ```bash
+     deactivate
+     rm -rf .venv
+     python -m venv .venv
+     source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+     pip install -r requirements.txt
+     pytest
+     ```
+
 ### Date/Time Validation
 - Fixed `TypeError` in `CustomDateTimeField` caused by incorrect `format` parameter handling.
 - Consolidated leap year validation logic to avoid redundancy.

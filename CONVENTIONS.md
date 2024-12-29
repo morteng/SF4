@@ -316,9 +316,60 @@ If tests fail with `ModuleNotFoundError`:
 
 ### Missing Dependencies
 If tests fail with `ModuleNotFoundError`:
-1. Ensure the virtual environment is activated
-2. Run `pip install -r requirements.txt`
-3. Verify installation with `pip show <package_name>`
+
+1. **Activate the Virtual Environment**:
+   - **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+2. **Install `pytest`**:
+   ```bash
+   pip install pytest
+   ```
+
+3. **Verify Installation**:
+   ```bash
+   pip show pytest
+   ```
+
+4. **Install All Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. **Run Tests**:
+   ```bash
+   pytest
+   ```
+
+6. **Recreate Virtual Environment (Optional)**:
+   ```bash
+   deactivate
+   rm -rf .venv
+   python -m venv .venv
+   source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+   pip install -r requirements.txt
+   ```
+
+7. **Add `pytest` to `requirements.txt` (Optional)**:
+   ```bash
+   echo "pytest" >> requirements.txt
+   ```
+
+8. **Verify Critical Packages**:
+   ```bash
+   pip show pytest freezegun Flask
+   ```
+
+9. **Run Dependency Verification Test**:
+   ```bash
+   pytest tests/test_dependencies.py
+   ```
 
 ### Freezegun Issues
 If time-based tests are failing:
