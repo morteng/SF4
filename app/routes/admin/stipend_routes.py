@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from wtforms.validators import ValidationError
 
 from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string, flash
+from flask_wtf.csrf import generate_csrf
 from app.services.notification_service import create_crud_notification
 from app.models.audit_log import AuditLog
 from app.models.notification import Notification
@@ -57,6 +58,10 @@ def create():
     form.organization_id.choices = [(org.id, org.name) for org in organizations]
     form.tags.choices = [(tag.id, tag.name) for tag in tags]
     
+    # Add CSRF token for HTMX requests
+    if is_htmx:
+        form.csrf_token.data = request.headers.get('X-CSRFToken')
+    
     if form.validate_on_submit():
         try:
             # Create stipend logic...
@@ -72,7 +77,10 @@ def create():
     
     if is_htmx:
         return render_template('admin/stipends/create.html', form=form)
-    return render_template('admin/stipends/create.html', form=form)
+    # Add CSRF token to the template context
+    return render_template('admin/stipends/create.html', 
+                         form=form,
+                         csrf_token=generate_csrf())
     
     # Initialize form choices
     organizations = Organization.query.order_by(Organization.name).all()
