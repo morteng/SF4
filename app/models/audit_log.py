@@ -99,7 +99,7 @@ class AuditLog(db.Model):
                 try:
                     Notification = get_notification_model()
                     Notification.create(
-                        type=NotificationType.AUDIT_LOG,
+                        type=NotificationType.AUDIT_LOG.value,
                         message=f"{action.capitalize()} operation on {object_type} {object_id}",
                         user_id=user_id,
                         related_object=log
