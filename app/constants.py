@@ -212,91 +212,11 @@ class FlashMessages(str, Enum):
     PASSWORD_RESET_SUCCESS = "Password reset successfully."
     PASSWORD_RESET_ERROR = "Failed to reset password."
     USER_SEARCH_ERROR = "Failed to search users."
-# Error messages
-INVALID_DATETIME_FORMAT = "Invalid date/time format. Expected format: YYYY-MM-DD HH:MM:SS"
-INVALID_LEAP_YEAR = "Invalid date: February 29th on a non-leap year"
-MISSING_DEPENDENCY = "Required dependency not found: {package}"
-INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
-MISSING_REQUIRED_FIELD = "This field is required"
-# Date/Time Validation Errors
-INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD."
-INVALID_TIME_FORMAT = "Invalid time format. Please use HH:MM:SS."
-INVALID_LEAP_YEAR = "Invalid date: February 29th is only valid in leap years."
-INVALID_DATETIME_FORMAT = "Invalid datetime format. Expected YYYY-MM-DD HH:MM:SS"
-MISSING_REQUIRED_FIELD = "This field is required"
-DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD."
-MISSING_DEPENDENCY_ERROR = "Required dependency {dep} is not installed."
-INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
-MISSING_REQUIRED_FIELD = "This field is required"
-INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
-MISSING_REQUIRED_FIELD = "This field is required"
-INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
-MISSING_REQUIRED_FIELD = "This field is required"
-INVALID_LEAP_YEAR_DATE = "Invalid date: February 29th is only valid in leap years"
-INVALID_TIME = "Invalid time. Hours must be 0-23, minutes 0-59, seconds 0-59"
-INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
-MISSING_REQUIRED_FIELD = "This field is required"
-INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
-MISSING_REQUIRED_FIELD = "This field is required"
-# Date/Time Validation Messages
-DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-TIME_FORMAT_ERROR = "Invalid time format. Please use HH:MM:SS."
-# Date/Time Validation Errors
-DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-DATE_REQUIRED_ERROR = "Date is required."
-INVALID_LEAP_YEAR_ERROR = "Invalid date: February 29th is not a valid date for this year."
-# Validation error messages
-INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-INVALID_LEAP_YEAR = "Invalid date: February 29th is only valid in leap years."
-# Centralized error messages and constants
-
-# Date/Time Validation
-INVALID_DATE = "Invalid date format"
-INVALID_TIME = "Invalid time format"
-MISSING_FIELD = "This field is required"
-INVALID_LEAP_YEAR = "Invalid date: not a leap year"
-INVALID_FUTURE_DATE = "Date must be in the future"
-
-# General Validation
-REQUIRED_FIELD = "This field is required"
-INVALID_INPUT = "Invalid input"
-DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-MISSING_FIELD_ERROR = "This field is required."
-# Date/Time Validation Messages
-DATE_TIME_VALIDATION_MESSAGES = {
-    "required": "This field is required",
-    "invalid_format": "Invalid date format. Please use YYYY-MM-DD HH:MM:SS",
-    "invalid_date": "Invalid date",
-    "invalid_time": "Invalid time",
-    "future_date_required": "Date must be in the future",
-    "leap_year": "Invalid date: February 29th on non-leap year",
-    "time_out_of_range": "Time must be between 00:00:00 and 23:59:59",
-}
-DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-MISSING_FIELD_ERROR = "This field is required."
-# Validation Error Messages
-INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-MISSING_REQUIRED_FIELD = "This field is required."
-# Centralized error messages for validation
-MISSING_REQUIRED_FIELD = "This field is required."
-INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-INVALID_TIME = "Invalid time. Please use HH:MM:SS format."
-INVALID_LEAP_YEAR = "Invalid date. February 29th is not a valid date in non-leap years."
-# Centralized error messages for validation
-MISSING_REQUIRED_FIELD = "This field is required."
-INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-INVALID_TIME = "Invalid time. Please ensure hours, minutes, and seconds are valid."
-INVALID_LEAP_YEAR = "Invalid date. February 29th is not valid for this year."
-# Error messages
-MISSING_REQUIRED_FIELD = "This field is required."
-INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-# Centralized error messages
-MISSING_REQUIRED_FIELD = "This field is required."
-INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-# Centralized error messages for consistent error handling
-
-MISSING_REQUIRED_FIELD = "This field is required."
-INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-INVALID_TIME = "Invalid time. Please use a valid time in HH:MM:SS format."
-MISSING_REQUIRED_FIELD = "This field is required."
-INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+class FlashMessages(str, Enum):
+    # Date/Time Validation
+    INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
+    INVALID_LEAP_YEAR = "Invalid date: February 29th is only valid in leap years"
+    INVALID_TIME = "Invalid time. Hours must be 0-23, minutes 0-59, seconds 0-59"
+    MISSING_REQUIRED_FIELD = "This field is required"
+    FUTURE_DATE_REQUIRED = "Date must be in the future"
+    PAST_DATE_REQUIRED = "Date must be in the past"
