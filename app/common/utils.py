@@ -6,13 +6,17 @@ from wtforms.validators import ValidationError
 from flask import Blueprint, current_app
 
 def validate_blueprint(bp):
-    """Validate blueprint parameters."""
+    """Validate blueprint parameters with more detailed checks."""
     if not isinstance(bp, Blueprint):
         raise ValueError("Invalid blueprint instance")
     if not bp.name:
         raise ValueError("Blueprint must have a name")
+    if '.' in bp.name:
+        raise ValueError("Blueprint name cannot contain dots")
     if not bp.url_prefix:
         raise ValueError("Blueprint must have a URL prefix")
+    if not bp.import_name:
+        raise ValueError("Blueprint must have an import name")
 
 def validate_blueprint_routes(app, required_routes):
     """Validate that all required routes are registered."""

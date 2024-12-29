@@ -50,8 +50,14 @@ def _validate_blueprint_params(name: str, import_name: str) -> None:
 try:
     _validate_blueprint_params('admin_stipend', __name__)
     admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
+    logger.debug(f"Created stipend blueprint: {admin_stipend_bp.name}")
+    logger.debug(f"URL prefix: {admin_stipend_bp.url_prefix}")
+    logger.debug(f"Import name: {admin_stipend_bp.import_name}")
+except ValueError as e:
+    logger.error(f"Blueprint validation error: {str(e)}")
+    raise
 except Exception as e:
-    logger.error(f"Failed to create stipend blueprint: {str(e)}")
+    logger.error(f"Unexpected error creating blueprint: {str(e)}")
     raise
 
 def register_stipend_routes(app) -> None:
