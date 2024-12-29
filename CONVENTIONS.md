@@ -1,7 +1,15 @@
 # Updated Coding Conventions
 
 ### Testing Setup
-1. **Dependency Verification**:
+1. **Install pytest**:
+   ```bash
+   pip install pytest
+   pip show pytest
+   echo "pytest" >> requirements.txt
+   pytest
+   ```
+
+2. **Dependency Verification**:
    - Add a pre-test check to ensure all required dependencies are installed:
      ```python
      def test_dependencies():
