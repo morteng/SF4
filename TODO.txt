@@ -1,38 +1,29 @@
 # Todo - Next Code Cycle
 
-1. **Blueprint Validation**:
-   - Implement BaseBlueprint class with built-in validation
-   - Update all blueprints to use BaseBlueprint
-   - Add tests for blueprint validation
+1. **Notification System**:
+   - Fix NotificationType enum validation error for 'AUDIT_LOG'
+   - Add tests for notification creation and handling
+   - Ensure notifications are properly linked to audit logs
 
-2. **Route Monitoring**:
-   - Add health check endpoint (/health)
-   - Implement route accessibility monitoring
-   - Add automated alerts for missing routes
-
-3. **Error Handling**:
-   - Standardize error messages for missing routes
-   - Add more context to error logs
-   - Update validation documentation
-
-### **Key Insights**
-1. **Application Context**:
-   - Always use `app.app_context()` when accessing `current_app`.
-   - Pass `app` explicitly when possible to avoid context issues.
-
-2. **Route Registration**:
-   - Validate blueprint names and URL prefixes during registration.
-   - Use consistent naming conventions for blueprints and endpoints.
+2. **Audit Log Improvements**:
+   - Add more detailed logging for critical operations
+   - Implement audit log cleanup for old entries
+   - Add tests for audit log functionality
 
 3. **Error Handling**:
-   - Log errors with context for easier debugging.
-   - Provide clear, actionable error messages.
+   - Standardize error messages across the application
+   - Add more context to error logs for debugging
+   - Implement graceful fallbacks for critical failures
 
-### **Lessons Learned**
-1. **Debugging**:
-   - Add debug logging to verify route registration.
-   - Use `--log-cli-level=DEBUG` for detailed test output.
+### Key Insights
+1. **Route Naming**:
+   - Consistent route naming is crucial for maintainability
+   - Always use the full blueprint name in templates and tests
 
-2. **Code Organization**:
-   - Keep validation logic modular and reusable.
-   - Centralize shared utilities in `app/common/utils.py`.
+2. **Testing**:
+   - Comprehensive test coverage prevents regressions
+   - Test both success and failure scenarios
+
+3. **Documentation**:
+   - Keep documentation up-to-date with code changes
+   - Use clear and concise language in todos and devlogs
