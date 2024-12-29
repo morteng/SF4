@@ -14,6 +14,9 @@ class StipendService(BaseService):
         self.add_post_update_hook(self._log_post_update)
         self.add_pre_delete_hook(self._log_pre_delete)
         self.add_post_delete_hook(self._log_post_delete)
+        # Add validation hooks
+        self.add_pre_validation_hook(self._pre_validate)
+        self.add_post_validation_hook(self._post_validate)
 
     def _log_pre_update(self, data):
         """Log state before update"""
@@ -42,6 +45,26 @@ class StipendService(BaseService):
             'organization_id': [(org.id, org.name) for org in organizations],
             'tags': [(tag.id, tag.name) for tag in tags]
         }
+
+    def _pre_validate(self, data):
+        """Pre-validation hook"""
+        # Ensure required fields are present
+        required_fields = ['name', 'application_deadline']
+        for field in required_fields:
+            if field not in data:
+                data[field] = None
+        return data
+
+    def _post_validate(self, data, errors):
+        """Post-validation hook"""
+        # Additional validation logic
+        if 'application_deadline' in data and data['application_deadline']:
+            try:
+                deadline = datetime.strptime(data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+                if deadline < datetime.now():
+                    errors['application_deadline'] = str(FlashMessages.PAST_DATE)
+            except ValueError:
+                errors['application_deadline'] = str(FlashMessages.INVALID_DATE_FORMAT)
 
     def _validate_create_data(self, data):
         """Validate stipend data before creation"""

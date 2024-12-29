@@ -56,10 +56,18 @@ class BaseService:
         self.post_update_hooks = []
         self.pre_delete_hooks = []
         self.post_delete_hooks = []
-        self.pre_validation_hooks = []  # Add this line
-        self.post_validation_hooks = []  # Add this line
+        self.pre_validation_hooks = []
+        self.post_validation_hooks = []
         self.validation_cache = {}
         self.cache_validation = False
+
+    def add_pre_validation_hook(self, hook):
+        """Add a hook to run before validation"""
+        self.pre_validation_hooks.append(hook)
+        
+    def add_post_validation_hook(self, hook):
+        """Add a hook to run after validation"""
+        self.post_validation_hooks.append(hook)
 
     def add_pre_create_hook(self, hook):
         self.pre_create_hooks.append(hook)
@@ -120,6 +128,10 @@ class BaseService:
         """Enhanced validation with date/time handling"""
         errors = {}
         
+        # Run pre-validation hooks
+        for hook in self.pre_validation_hooks:
+            data = hook(data)
+        
         # Validate date/time fields
         for field, rules in self.validation_rules.items():
             if rules.get('type') == 'datetime':
@@ -134,6 +146,10 @@ class BaseService:
                                 errors[field] = str(FlashMessages.INVALID_DATETIME_FORMAT)
                 except Exception as e:
                     errors[field] = str(e)
+        
+        # Run post-validation hooks
+        for hook in self.post_validation_hooks:
+            hook(data, errors)
         
         if errors:
             raise ValidationError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors=errors))

@@ -44,6 +44,10 @@ class BaseCrudController:
     def _handle_operation(self, operation, success_message, error_message, 
                         redirect_success, redirect_error, **kwargs):
         try:
+            # Run pre-validation if exists
+            if hasattr(self, '_pre_validate'):
+                kwargs['data'] = self._pre_validate(kwargs.get('data', {}))
+                
             result = operation(**kwargs)
             
             # Enhanced error handling for validation errors
