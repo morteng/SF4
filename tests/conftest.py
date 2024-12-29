@@ -23,17 +23,6 @@ except ImportError:
         RuntimeWarning
     )
 
-# Add a flag to track if freezegun is available
-try:
-    import freezegun
-    FREEZEGUN_INSTALLED = True
-except ImportError:
-    FREEZEGUN_INSTALLED = False
-    logging.warning(
-        "freezegun is not installed. Some tests may be skipped. "
-        "Run `pip install -r requirements.txt` to install dependencies."
-    )
-
 # Add a pytest marker for freezegun-dependent tests
 def pytest_configure(config):
     config.addinivalue_line(
@@ -54,7 +43,15 @@ def pytest_configure(config):
         "freezegun: mark tests that require freezegun package"
     )
     """Configure pytest options."""
-    pass
+    if not FREEZEGUN_INSTALLED:
+        config.addinivalue_line(
+            "markers",
+            "freezegun: mark tests that require freezegun package"
+        )
+        logging.warning(
+            "freezegun is not installed. Some tests may be skipped. "
+            "Run `pip install -r requirements.txt` to install dependencies."
+        )
 from datetime import datetime
 from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import SAWarning
