@@ -56,6 +56,62 @@
    - Test all error message variations for date/time fields.
    - Verify edge cases in date/time validation (e.g., 25:00:00, February 29th).
 
+## Key Takeaways
+
+### Validation Logic
+1. **Data Type Awareness**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Use `isinstance()` to check for `datetime` objects when working with date/time fields.
+
+2. **Timezone Handling**:
+   - Ensure all `datetime` objects are timezone-aware.
+   - Use `pytz.UTC.localize()` to add a timezone to naive `datetime` objects.
+
+3. **Future/Past Date Validation**:
+   - Validate that dates are within acceptable ranges (e.g., future dates for deadlines).
+   - Use `datetime.now(pytz.UTC)` for consistent timezone-aware comparisons.
+
+4. **Error Messages**:
+   - Use centralized error messages from `app/constants.py` for consistency.
+   - Provide clear, user-friendly error messages for validation failures.
+
+### Custom Field Implementation
+1. **Handle All Arguments**:
+   - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+2. **Default Validators**:
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
+
+### Testing
+1. **Edge Cases**:
+   - Test edge cases thoroughly, especially for date/time validation.
+2. **Mocking**:
+   - Use `freezegun` for deterministic time-based testing.
+3. **Isolation**:
+   - Ensure database fixtures are properly reset between tests to avoid side effects.
+
+### Date/Time Validation
+1. **Best Practices**:
+   - Validate date and time components separately before full parsing.
+   - Use specific error messages for different validation failures (e.g., invalid format, invalid time, invalid leap year).
+   - Handle edge cases like February 29th in non-leap years.
+
+2. **Error Handling**:
+   - Provide specific error messages for:
+     - Invalid date formats.
+     - Out-of-range values.
+     - Missing required fields.
+     - Invalid leap year dates.
+     - Invalid time components (hours, minutes, seconds).
+   - Use configurable error messages from `app/constants.py`.
+
+3. **Testing**:
+   - Test all error message variations for date/time fields.
+   - Verify edge cases in date/time validation (e.g., 25:00:00, February 29th).
+
 ### Custom Field Implementation
 1. **Handle All Arguments**:
    - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
