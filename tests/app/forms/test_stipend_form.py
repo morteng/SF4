@@ -249,24 +249,27 @@ def test_missing_required_fields(app, form_data):
 
 class TestCustomDateTimeField(BaseTestCase):
     def test_empty_date(self):
-        field = CustomDateTimeField(
-            label='Test Field',
-            format='%Y-%m-%d %H:%M:%S',
-            timezone='UTC',
-            error_messages={
-                'required': 'Date is required',
-                'invalid_format': 'Invalid date format',
-                'invalid_date': 'Invalid date values (e.g., Feb 30, Feb 31)',
-                'invalid_time': 'Invalid time values (e.g., 25:00:00, 12:60:00)',
-                'invalid_timezone': 'Invalid timezone',
-                'past_date': 'Date must be a future date',
-                'future_date': 'Date cannot be more than 5 years in the future',
-                'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)'
-            }
-        )
+        class TestForm(Form):
+            test_field = CustomDateTimeField(
+                label='Test Field',
+                format='%Y-%m-%d %H:%M:%S',
+                timezone='UTC',
+                error_messages={
+                    'required': 'Date is required',
+                    'invalid_format': 'Invalid date format',
+                    'invalid_date': 'Invalid date values (e.g., Feb 30, Feb 31)',
+                    'invalid_time': 'Invalid time values (e.g., 25:00:00, 12:60:00)',
+                    'invalid_timezone': 'Invalid timezone',
+                    'past_date': 'Date must be a future date',
+                    'future_date': 'Date cannot be more than 5 years in the future',
+                    'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)'
+                }
+            )
+        
+        form = TestForm()
         self.assertFormInvalid(
-            field, {'': ''},
-            {'': ['Date is required']}
+            form, {'test_field': ''},
+            {'test_field': ['Date is required']}
         )
 
     def test_invalid_date_format(self):
