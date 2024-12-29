@@ -216,6 +216,7 @@ class FlashMessages(str, Enum):
     UPDATE_ERROR = "Failed to update record."
     DELETE_ERROR = "Failed to delete record."
     INVALID_LEAP_YEAR_DATE = "Invalid date for February in non-leap years."
+    NOT_FOUND = "{entity_name} not found."
     CREATE_SUCCESS = "Record created successfully."
     UPDATE_SUCCESS = "Record updated successfully."
     DELETE_SUCCESS = "Record deleted successfully."

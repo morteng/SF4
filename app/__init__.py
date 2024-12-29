@@ -57,8 +57,12 @@ from dotenv import load_dotenv
 
 def register_blueprints(app):
     """Register all blueprints with the Flask app."""
+    # Lazy imports to avoid circular dependencies
     from app.routes.admin import register_admin_blueprints
+    from app.routes import register_blueprints as register_public_blueprints
+    
     register_admin_blueprints(app)
+    register_public_blueprints(app)
 
 def init_extensions(app):
     db.init_app(app)
