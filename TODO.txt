@@ -1,29 +1,24 @@
 # Todo - Next Code Cycle
 
-1. **Notification System**:
-   - Fix NotificationType enum validation error for 'AUDIT_LOG'
-   - Add tests for notification creation and handling
-   - Ensure notifications are properly linked to audit logs
+1. **Form Validation Fixes**:
+   - Investigate and fix Field.__init__() error_messages issue
+   - Add comprehensive form validation tests
+   - Ensure all form fields handle error messages properly
 
-2. **Audit Log Improvements**:
-   - Add more detailed logging for critical operations
-   - Implement audit log cleanup for old entries
-   - Add tests for audit log functionality
-
-3. **Error Handling**:
-   - Standardize error messages across the application
-   - Add more context to error logs for debugging
-   - Implement graceful fallbacks for critical failures
+2. **Stipend Creation Flow**:
+   - Fix redirect issue in stipend creation
+   - Add more test cases for edge cases
+   - Improve error handling and user feedback
 
 ### Key Insights
-1. **Route Naming**:
-   - Consistent route naming is crucial for maintainability
-   - Always use the full blueprint name in templates and tests
+1. **Form Handling**:
+   - Proper form validation is essential for data integrity
+   - Clear error messages improve user experience
 
 2. **Testing**:
-   - Comprehensive test coverage prevents regressions
-   - Test both success and failure scenarios
+   - Focus on testing both happy paths and edge cases
+   - Ensure tests cover all possible user interactions
 
-3. **Documentation**:
-   - Keep documentation up-to-date with code changes
-   - Use clear and concise language in todos and devlogs
+3. **Code Organization**:
+   - Keep controllers focused on business logic
+   - Maintain clear separation between routes and controllers
