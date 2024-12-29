@@ -1,3 +1,7 @@
+# This is your command file. You are allowed to add a set of console commands you need to run. you must update this document to remove the console commands after they have been executed. you must prepend console commands with /run 
+
+### Coding session start ###
+
 /git add .
 /commit
 
@@ -35,3 +39,5 @@
 # Step 6: Rince and repeat
 /reset
 /load CMD_TESTS.txt
+
+### Coding session end ###
