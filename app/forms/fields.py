@@ -41,18 +41,8 @@ class CustomDateTimeField(DateTimeField):
             self.data = None
             return
             
-        try:
-            super().process_formdata(valuelist)
-        except ValueError as e:
-            error_str = str(e)
-            if 'does not match format' in error_str:
-                self.errors.append(self.error_messages.get('invalid_format', 'Invalid date format'))
-            elif 'day is out of range' in error_str:
-                self.errors.append(self.error_messages.get('invalid_date', 'Invalid date values (e.g., Feb 29 in non-leap years)'))
-            elif 'time data' in error_str:
-                self.errors.append(self.error_messages.get('invalid_time', 'Invalid time values'))
-            self.data = None
-            
+        date_str = valuelist[0].strip()
+        
         # First check for leap year dates
         if '02-29' in date_str:
             try:
@@ -68,55 +58,45 @@ class CustomDateTimeField(DateTimeField):
                         self.data = None
                         self._invalid_leap_year = True
                         return  # Stop processing if invalid leap year
-            except ValueError as e:
-                # If we can't parse the date, check if it's a leap year case
-                if '02-29' in date_str:
-                    self.errors = []
-                    self.errors.append(self.error_messages['invalid_leap_year'])
-                    self.data = None
-                    self._invalid_leap_year = True
-                    return
-                else:
-                    # For other date errors, use the standard error message
-                    self.errors = []
-                    self.errors.append(self.error_messages['invalid_date'])
-                    self.data = None
-                    self._invalid_leap_year = False
-                    return
-            # First check if the date string matches the expected format
+            except ValueError:
+                self.errors = []
+                self.errors.append(self.error_messages['invalid_leap_year'])
+                self.data = None
+                self._invalid_leap_year = True
+                return
+
+        try:
+            # Validate format
             if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
                 self.errors.append(self.error_messages['invalid_format'])
                 self.data = None
                 return
 
-            try:
-                # Try to parse the full date string
-                parsed_dt = datetime.strptime(date_str, self.format)
+            # Try to parse the full date string
+            parsed_dt = datetime.strptime(date_str, self.format)
 
-                # Validate time components
-                if not self._validate_time_components(parsed_dt):
-                    return
+            # Validate time components
+            if not self._validate_time_components(parsed_dt):
+                return
 
-                # Validate date components
-                if not self._validate_date_components(parsed_dt):
-                    return
+            # Validate date components
+            if not self._validate_date_components(parsed_dt):
+                return
 
-                # If all validations pass, store the datetime
-                self.data = parsed_dt
-                self.raw_value = date_str
+            # If all validations pass, store the datetime
+            self.data = parsed_dt
+            self.raw_value = date_str
 
-            except ValueError as e:
-                error_str = str(e)
-
-                # Handle specific error cases
-                if 'does not match format' in error_str:
-                    self.errors.append(self.error_messages['invalid_format'])
-                elif 'day is out of range' in error_str or 'month is out of range' in error_str:
-                    self.errors.append(self.error_messages['invalid_date'])
-                elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
-                    self.errors.append(self.error_messages['invalid_time'])
-                else:
-                    self.errors.append(self.error_messages['invalid_date'])
+        except ValueError as e:
+            error_str = str(e)
+            if 'does not match format' in error_str:
+                self.errors.append(self.error_messages['invalid_format'])
+            elif 'day is out of range' in error_str or 'month is out of range' in error_str:
+                self.errors.append(self.error_messages['invalid_date'])
+            elif 'hour must be in' in error_str or 'minute must be in' in error_str or 'second must be in' in error_str:
+                self.errors.append(self.error_messages['invalid_time'])
+            else:
+                self.errors.append(self.error_messages['invalid_date'])
             except ValueError as e:
                 error_str = str(e)
                 if 'does not match format' in error_str:
