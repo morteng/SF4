@@ -12,7 +12,8 @@ def bot_data():
 
 @pytest.fixture(scope='function')
 def test_bot(db_session, bot_data):
-    bot = create_bot(bot_data)
+    bot_service = BotService()
+    bot = bot_service.create(bot_data)
     yield bot
 
     # Teardown: Attempt to delete the bot and rollback if an error occurs

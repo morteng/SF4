@@ -186,7 +186,8 @@ def schedule(id):
 @login_required
 @admin_required
 def edit(id):
-    bot = get_bot_by_id(id)
+    bot_service = BotService()
+    bot = bot_service.get_by_id(id)
     if not bot:
         flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)
         current_app.logger.error(f"Bot not found with id: {id}")
