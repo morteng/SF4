@@ -18,7 +18,7 @@ def get_requirements() -> List[str]:
         return [req.name for req in requirements]
 
 def test_all_dependencies_installed():
-    """Verify all packages in requirements.txt are installed"""
+    """Verify all packages in requirements.txt are installed."""
     missing_deps = []
     for package in get_requirements():
         try:
@@ -26,8 +26,10 @@ def test_all_dependencies_installed():
         except ImportError:
             missing_deps.append(package)
     
-    if missing_deps:
-        pytest.fail(f"Missing dependencies: {', '.join(missing_deps)}. Run `pip install -r requirements.txt` to install them.")
+    assert not missing_deps, (
+        f"Missing dependencies: {', '.join(missing_deps)}. "
+        "Run `pip install -r requirements.txt` to install them."
+    )
 
 def test_flask_limiter_installed():
     """Verify flask-limiter is installed and importable"""

@@ -21,7 +21,7 @@ except ImportError:
 def verify_dependencies():
     """Verify that all required dependencies are installed."""
     missing_deps = []
-    required_deps = ["freezegun"]  # Add other dependencies here if needed
+    required_deps = ["freezegun", "pytest", "Flask", "flask_limiter"]  # Add other critical dependencies here
 
     for dep in required_deps:
         try:
@@ -31,11 +31,11 @@ def verify_dependencies():
 
     if missing_deps:
         missing_deps_str = ", ".join(missing_deps)
-        logging.warning(
+        logging.error(
             f"The following dependencies are missing: {missing_deps_str}. "
             f"Run `pip install -r requirements.txt` to install them."
         )
-        logging.warning("Tests will proceed, but some functionality may be limited.")
+        pytest.fail(f"Missing dependencies: {missing_deps_str}")
 
 def pytest_sessionstart(session):
     """Verify dependencies at the start of the test session."""
