@@ -15,9 +15,7 @@
 
          @create_limit.setter
          def create_limit(self, value):
-             """Setter for create_limit with validation."""
-             if not isinstance(value, int) or value < 0:
-                 raise ValueError("create_limit must be a positive integer")
+             """Setter for create_limit."""
              self._create_limit = value
      ```
 
