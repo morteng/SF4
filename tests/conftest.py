@@ -26,10 +26,13 @@ except ImportError:
 def verify_dependencies():
     """Verify that all required dependencies are installed."""
     missing_deps = []
-    try:
-        import freezegun
-    except ImportError:
-        missing_deps.append("freezegun")
+    required_deps = ["freezegun"]  # Add other dependencies here if needed
+
+    for dep in required_deps:
+        try:
+            __import__(dep)
+        except ImportError:
+            missing_deps.append(dep)
 
     if missing_deps:
         missing_deps_str = ", ".join(missing_deps)
@@ -37,41 +40,12 @@ def verify_dependencies():
             f"The following dependencies are missing: {missing_deps_str}. "
             f"Run `pip install -r requirements.txt` to install them."
         )
-        # Log a warning but don't skip tests
         logging.warning("Tests will proceed, but some functionality may be limited.")
-    try:
-        import freezegun
-    except ImportError:
-        missing_deps.append("freezegun")
-
-    if missing_deps:
-        missing_deps_str = ", ".join(missing_deps)
-        raise ImportError(
-            f"The following dependencies are missing: {missing_deps_str}. "
-            f"Run `pip install -r requirements.txt` to install them."
-        )
-
-# Add a flag to track if freezegun is available
-try:
-    import freezegun
-    FREEZEGUN_INSTALLED = True
-except ImportError:
-    FREEZEGUN_INSTALLED = False
-    logging.warning(
-        "freezegun is not installed. Some tests may be skipped. "
-        "Run `pip install freezegun` to install it."
-    )
-    warnings.warn(
-        "freezegun is not installed. Some tests may be skipped. "
-        "Run `pip install freezegun` to install it.",
-        RuntimeWarning
-    )
 
 def pytest_sessionstart(session):
+    """Verify dependencies at the start of the test session."""
     verify_dependencies()
-    try:
-        import freezegun
-    except ImportError:
+    if not FREEZEGUN_INSTALLED:
         logging.warning(
             "freezegun is not installed. Some tests may be skipped. "
             "Run `pip install freezegun` to install it."
@@ -79,72 +53,11 @@ def pytest_sessionstart(session):
 
 # Add a pytest marker for freezegun-dependent tests
 def pytest_configure(config):
-    config.addinivalue_line(
-        "markers",
-        "freezegun: mark tests that require freezegun package"
-    )
-    
-    # Check for freezegun installation
-    try:
-        import freezegun
-    except ImportError:
-        logging.warning(
-            "freezegun is not installed. Some tests may be skipped. "
-            "Run `pip install -r requirements.txt` to install dependencies."
-        )
-    config.addinivalue_line(
-        "markers",
-        "freezegun: mark tests that require freezegun package"
-    )
     """Configure pytest options."""
-    if not FREEZEGUN_INSTALLED:
-        config.addinivalue_line(
-            "markers",
-            "freezegun: mark tests that require freezegun package"
-        )
-        logging.warning(
-            "freezegun is not installed. Some tests may be skipped. "
-            "Run `pip install -r requirements.txt` to install dependencies."
-        )
-def pytest_sessionstart(session):
-    verify_dependencies()
-    try:
-        import freezegun
-    except ImportError:
-        logging.warning(
-            "freezegun is not installed. Some tests may be skipped. "
-            "Run `pip install freezegun` to install it."
-        )
-
-# Add a pytest marker for freezegun-dependent tests
-def pytest_configure(config):
     config.addinivalue_line(
         "markers",
         "freezegun: mark tests that require freezegun package"
     )
-    
-    # Check for freezegun installation
-    try:
-        import freezegun
-    except ImportError:
-        logging.warning(
-            "freezegun is not installed. Some tests may be skipped. "
-            "Run `pip install -r requirements.txt` to install dependencies."
-        )
-    config.addinivalue_line(
-        "markers",
-        "freezegun: mark tests that require freezegun package"
-    )
-    """Configure pytest options."""
-    if not FREEZEGUN_INSTALLED:
-        config.addinivalue_line(
-            "markers",
-            "freezegun: mark tests that require freezegun package"
-        )
-        logging.warning(
-            "freezegun is not installed. Some tests may be skipped. "
-            "Run `pip install -r requirements.txt` to install dependencies."
-        )
 
 from datetime import datetime
 from werkzeug.security import generate_password_hash
