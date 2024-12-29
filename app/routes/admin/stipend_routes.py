@@ -49,14 +49,6 @@ def register_stipend_routes(app):
         if rule.endpoint.startswith('admin.stipend'):
             app.logger.debug(f"Route: {rule}")
 
-def register_stipend_routes(app):
-    """Register stipend routes with the application"""
-    app.register_blueprint(admin_stipend_bp)
-    app.logger.debug("Registered stipend routes:")
-    for rule in app.url_map.iter_rules():
-        if rule.endpoint.startswith('admin.stipend'):
-            app.logger.debug(f"Route: {rule}")
-
 class StipendController(BaseCrudController):
     def __init__(self):
         super().__init__(
