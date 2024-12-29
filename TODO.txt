@@ -3,10 +3,12 @@
 2. Update this list with new actionable items
 
 ### **Next Steps**
-1. **Ensure Consistent Constant Usage**:
-   - [x] Add `MISSING_FIELD_ERROR` to `app/constants.py`
-   - [x] Verify all FlashMessages constants are accessed with .value in forms
-   - [x] Add `EMAIL_REQUIRED` to `app/constants.py`
+1. **Add Missing Constants**:
+   - [x] Add `EMAIL_REQUIRED` to `app/constants.py`.
+2. **Fix Rate Limiter Configuration**:
+   - [x] Update `@Limiter.limit` decorator in `app/services/base_service.py`.
+3. **Refactor Imports**:
+   - [x] Use lazy imports in `app/__init__.py` to avoid circular dependencies.
 
 ### **Things to Remember for Next Coding Session**
 1. **Error Handling**:
