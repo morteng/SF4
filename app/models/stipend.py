@@ -64,7 +64,7 @@ class Stipend(db.Model):
             raise ValueError("Name is required")
         
         # Validate application deadline if provided
-        if 'application_deadline' in data and data['application_deadline']:
+        if 'application_deadline' in data and data['application_deadline'] and (isinstance(data['application_deadline'], str) and data['application_deadline'].strip()):
             parsed_dt = parse_flexible_date(data['application_deadline'])
             if not parsed_dt:
                 raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS, Month YYYY, or YYYY")

@@ -70,7 +70,7 @@ class CustomDateTimeField(DateTimeField):
 
     def process_formdata(self, valuelist):
         # First check if value is missing or empty
-        if not valuelist or not valuelist[0]:
+        if not valuelist or not valuelist[0] or (isinstance(valuelist[0], str) and not valuelist[0].strip()):
             self.errors.append(self.error_messages['required'])
             self.data = None
             return
