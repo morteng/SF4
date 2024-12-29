@@ -1,6 +1,6 @@
 import pytest
 from freezegun import freeze_time
-from app.forms.fields import CustomDateTimeField
+from app.forms.custom_fields import CustomDateTimeField
 from app.constants import FlashMessages
 
 @pytest.mark.parametrize("date_str, expected_error", [
@@ -19,44 +19,14 @@ def test_datetime_validation(date_str, expected_error):
 def test_past_date_validation():
     field = CustomDateTimeField()
     field.process_formdata(["2022-12-31 23:59:59"])
-    assert str(FlashMessages.PAST_DATE) in field.errors
+    assert str(FlashMessages.PAST_DATE_REQUIRED) in field.errors
 
 def test_future_date_validation():
     field = CustomDateTimeField()
     field.process_formdata(["2030-01-01 00:00:00"])
-    assert str(FlashMessages.FUTURE_DATE) in field.errors
+    assert str(FlashMessages.FUTURE_DATE_REQUIRED) in field.errors
 
 def test_valid_datetime():
     field = CustomDateTimeField()
     field.process_formdata(["2023-01-01 12:00:00"])
     assert not field.errors
-import pytest
-from app.forms import CustomDateTimeField
-
-@pytest.mark.parametrize("date,valid", [
-    ("2023-02-29 00:00:00", False),  # Invalid leap year
-    ("2023-13-01 00:00:00", False),  # Invalid month
-    ("2023-02-28 25:00:00", False),  # Invalid hour
-    ("2024-02-29 00:00:00", True),   # Valid leap year
-    ("2023-12-31 23:59:59", True),   # Valid date/time
-])
-def test_datetime_validation(date, valid):
-    field = CustomDateTimeField()
-    if valid:
-        field.validate(date)  # Should not raise
-    else:
-        with pytest.raises(ValueError):
-            field.validate(date)
-import pytest
-from app.forms import CustomDateTimeField
-
-@pytest.mark.parametrize("value,expected", [
-    ("2023-02-29 12:00:00", False),  # Invalid leap year
-    ("2023-13-01 12:00:00", False),  # Invalid month
-    ("2023-12-32 12:00:00", False),  # Invalid day
-    ("2023-12-31 25:00:00", False),  # Invalid hour
-])
-def test_invalid_datetime(value, expected):
-    field = CustomDateTimeField()
-    with pytest.raises(ValueError):
-        field.validate(value)

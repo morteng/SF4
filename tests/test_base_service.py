@@ -3,6 +3,7 @@ from app.services.base_service import BaseService
 from app.models.tag import Tag
 from wtforms.validators import ValidationError
 from app.extensions import db
+import pytest
 
 class TestBaseService(BaseTestCase):
     def setUp(self):
@@ -61,26 +62,15 @@ class TestBaseService(BaseTestCase):
         
         results = self.service.get_all().all()
         self.assertEqual(len(results), 2)
-import pytest
-from app.services.base_service import BaseService
 
-def test_create_limit_property():
-    service = BaseService()
-    
-    # Test valid values
-    service.create_limit = 10
-    assert service.create_limit == 10
-    
-    # Test invalid values
-    with pytest.raises(ValueError):
-        service.create_limit = -1
-        
-    with pytest.raises(ValueError): 
-        service.create_limit = "invalid"
-from app.services.base_service import BaseService
+    def test_rate_limit_validation(self):
+        # Test valid values
+        self.service.create_limit = "10 per minute"
+        assert self.service.create_limit == "10 per minute"
 
-def test_create_limit_property():
-    """Test the create_limit property getter and setter."""
-    service = BaseService()
-    service.create_limit = 10
-    assert service.create_limit == 10
+        # Test invalid values
+        with pytest.raises(ValueError):
+            self.service.create_limit = "invalid"
+
+        with pytest.raises(ValueError):
+            self.service.create_limit = -1
