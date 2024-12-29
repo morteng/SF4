@@ -360,16 +360,13 @@ class BaseService:
         """Getter for create_limit."""
         return self._create_limit
 
-    @create_limit.setter
+    @create_limit.setter 
     def create_limit(self, value):
-        """Setter for create_limit."""
+        """Setter for create_limit with validation."""
+        if not isinstance(value, int) or value < 0:
+            raise ValueError("Create limit must be a positive integer")
         self._create_limit = value
-
-    @create_limit.setter
-    def create_limit(self, value):
-        """Setter for create_limit."""
-        self._create_limit = value
-        self._create_limit = value
+        self.rate_limits['create'] = value
 class BaseService:
     def __init__(self):
         self._create_limit = None  # Initialize the private attribute
