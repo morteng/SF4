@@ -6,6 +6,13 @@ import re
 import logging
 import uuid
 import contextlib
+
+def pytest_configure():
+    """Verify that required packages are installed before running tests."""
+    try:
+        import freezegun
+    except ImportError:
+        pytest.fail("freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies.")
 from datetime import datetime
 from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import SAWarning
