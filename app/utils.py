@@ -446,8 +446,7 @@ def setup_rate_limits(app):
     limiter.limit("10/minute")(stipend_service.update_stipend)
     limiter.limit("3/minute")(stipend_service.delete_stipend)
     
-    # Bot operations
-    limiter.limit("10/hour")(run_bot)
+    # Bot operations rate limits would be set in bot_service
 from contextlib import contextmanager
 from datetime import datetime, timedelta
 from croniter import croniter
