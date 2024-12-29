@@ -129,7 +129,7 @@ class BaseService:
         self.rate_limits['create'] = value
         
     @handle_errors
-    @limiter.limit(lambda self: self.rate_limits['create'])
+    @self.limiter.limit(lambda self: self.rate_limits['create'])
     def create(self, data, user_id=None):
         """Create a new entity with validation and audit logging"""
         try:
@@ -250,7 +250,7 @@ class BaseService:
         self.rate_limits['update'] = value
         
     @handle_errors
-    @limiter.limit(lambda self: self.rate_limits['update'])
+    @self.limiter.limit(lambda self: self.rate_limits['update'])
     def update(self, id, data, user_id=None):
         """Update an existing entity with validation and audit logging"""
         entity = self.get_by_id(id)
@@ -280,7 +280,7 @@ class BaseService:
         self.rate_limits['delete'] = value
         
     @handle_errors
-    @limiter.limit(lambda self: self.rate_limits['delete'])
+    @self.limiter.limit(lambda self: self.rate_limits['delete'])
     def delete(self, id, user_id=None):
         """Enhanced delete with soft delete support"""
         entity = self.get_by_id(id)
