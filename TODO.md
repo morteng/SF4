@@ -11,6 +11,7 @@
 - [ ] Add more test cases for edge cases
 - [ ] Document new validation patterns
 - [ ] Review test coverage for new code
+- [ ] Add tests for bound/unbound field scenarios
 
 ## Low Priority
 - [ ] Optimize validation performance
