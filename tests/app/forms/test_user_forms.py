@@ -392,10 +392,8 @@ def test_profile_form_rate_limiting(client, setup_database):
     db.session.commit()
 
     with client:
-        # Disable rate limiting for this test
+        # Ensure rate limiting is disabled at both config and limiter levels
         current_app.config['RATELIMIT_ENABLED'] = False
-        
-        # Also disable rate limiting in the limiter extension if it exists
         if 'limiter' in current_app.extensions:
             current_app.extensions['limiter'].enabled = False
 
@@ -433,9 +431,10 @@ def test_profile_form_rate_limiting(client, setup_database):
             }, follow_redirects=True)
             responses.append(response.status_code)
             
-            # Refresh CSRF token every 5 requests
+            # Refresh CSRF token every 5 requests with debug logging
             if i > 0 and i % 5 == 0:
                 get_response = client.get(url_for('user.edit_profile'))
+                print(f"CSRF refresh response status: {get_response.status_code}")  # Debug logging
                 assert get_response.status_code == 200, f"Failed to refresh CSRF token after {i} requests"
                 soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
                 csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
@@ -445,6 +444,11 @@ def test_profile_form_rate_limiting(client, setup_database):
     
         # Verify all requests were successful
         assert all(r == 200 for r in responses), "Some requests failed unexpectedly"
+        
+        # Additional verification that rate limiting was truly disabled
+        if 'limiter' in current_app.extensions:
+            assert not current_app.extensions['limiter'].enabled, "Rate limiter is still enabled"
+        assert not current_app.config['RATELIMIT_ENABLED'], "Rate limiting is still enabled in config"
 
 def test_profile_update_creates_audit_log(client, setup_database):
     """Test that profile updates create audit logs"""

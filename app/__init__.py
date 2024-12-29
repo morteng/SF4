@@ -70,6 +70,11 @@ def create_app(config_name='development'):
         enabled=not app.config.get('TESTING'),  # Disable in test environment
         storage_options={"check_interval": 1}  # Add storage options
     )
+    
+    # Ensure limiter is fully disabled in test environment
+    if app.config.get('TESTING'):
+        limiter.enabled = False
+        app.config['RATELIMIT_ENABLED'] = False
 
     # Register blueprints before applying rate limits
     from app.routes.admin import register_admin_blueprints
