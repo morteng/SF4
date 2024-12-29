@@ -994,6 +994,20 @@ If time-based tests are failing:
 ### Testing Setup
 1. **Dependencies**:
    - Ensure all testing dependencies (e.g., `freezegun`, `pytest`) are installed and up-to-date.
+   - Install pytest with:
+     ```bash
+     # Activate virtual environment
+     # Windows:
+     .venv\Scripts\activate
+     # macOS/Linux:
+     source .venv/bin/activate
+     
+     # Install pytest
+     pip install pytest
+     
+     # Verify installation
+     pip show pytest
+     ```
    - Verify installation with `pip show <package_name>`.
    - Install all dependencies:
      ```bash

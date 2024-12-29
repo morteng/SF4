@@ -6,6 +6,7 @@
 - [x] Refactor `create_limit` into a proper property with a getter and setter.
 - [x] Add a pre-test dependency verification script.
 - [x] Install missing dependencies (`pytest`, `freezegun`, `Flask`).
+- [x] Add pytest installation instructions to documentation.
 - [x] Refactor `verify_dependencies()` to skip tests instead of failing the suite.
 - [x] Fix `CustomDateTimeField` initialization to handle `validators` argument.
 
