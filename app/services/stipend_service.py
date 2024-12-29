@@ -70,6 +70,15 @@ class StipendService(BaseService):
         """Validate stipend data before creation"""
         if not data.get('name'):
             raise ValueError(FlashMessages.REQUIRED_FIELD.format(field='name'))
+            
+        # Validate organization
+        if 'organization_id' not in data or not data['organization_id']:
+            raise ValueError('Organization is required.')
+        org = db.session.get(Organization, data['organization_id'])
+        if not org:
+            raise ValueError('Invalid organization selected')
+
+        # Validate application deadline
         if 'application_deadline' in data and data['application_deadline']:
             try:
                 datetime.strptime(data['application_deadline'], '%Y-%m-%d %H:%M:%S')

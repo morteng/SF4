@@ -18,8 +18,15 @@ class AdminStipendTestCase(unittest.TestCase):
         admin_user.set_password('password')
         admin_user.is_admin = True
         db.session.add(admin_user)
-        db.session.commit()  # Add this line
-        db.session.commit()  # Add this line
+        
+        # Create an organization
+        org = Organization(
+            name="Test Org", 
+            homepage_url="http://example.com",
+            description="Test organization"
+        )
+        db.session.add(org)
+        db.session.commit()
 
     def tearDown(self):
         db.session.remove()
