@@ -2,6 +2,30 @@
 
 ### Testing Setup
 
+#### Dependency Verification
+1. **Pre-Test Check**:
+   - Added `tests/test_dependencies.py` to verify all required dependencies are installed
+   - Example:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+
+2. **Graceful Handling**:
+   - Tests will fail with a clear message if dependencies are missing
+   - Run `pip install -r requirements.txt` to install all dependencies
+
+#### Validation Testing
+- Added comprehensive tests for edge cases in `tests/test_validation.py`
+- Uses `freezegun` for deterministic time-based testing
+- Tests include:
+  - Leap year validation
+  - Invalid time validation
+  - Centralized error message handling
+
 #### 1. Activate the Virtual Environment
    - **Windows**:
      ```bash

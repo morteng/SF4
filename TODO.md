@@ -26,6 +26,11 @@
 - [x] Centralized error messages in app/constants.py for date/time validation
 
 ## Next Session
+- [x] Install `pytest` and `freezegun`
+- [x] Add dependency verification test
+- [x] Fix `CustomDateTimeField` initialization
+- [x] Refactor circular imports
+- [x] Add edge case tests for date/time validation
 - [ ] Add comprehensive tests for edge cases in date/time validation.
 - [ ] Optimize validation performance in `CustomDateTimeField`.
 - [ ] Verify timezone handling in all date/time fields.

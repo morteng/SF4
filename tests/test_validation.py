@@ -52,3 +52,16 @@ def test_custom_datetime_field_validation():
 def test_time_based_validation():
     field = CustomDateTimeField()
     field.validate("2023-01-01 00:00:00")
+from freezegun import freeze_time
+from app.forms.admin_forms import StipendForm
+
+def test_leap_year_validation():
+    """Test validation of leap year dates"""
+    with freeze_time("2024-02-29"):  # Leap year
+        form = StipendForm(application_deadline="2024-02-29 12:00:00")
+        assert form.validate() is True
+
+def test_invalid_time_validation():
+    """Test validation of invalid time values"""
+    form = StipendForm(application_deadline="2023-02-29 25:00:00")  # Invalid date and time
+    assert form.validate() is False

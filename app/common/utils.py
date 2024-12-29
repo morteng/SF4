@@ -73,3 +73,7 @@ def init_admin_user():
 def some_function():
     from app.services.bot_service import run_bot  # Lazy import
     run_bot()
+def init_admin_user():
+    """Initialize the admin user"""
+    # Implementation for initializing admin user
+    pass

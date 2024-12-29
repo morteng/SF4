@@ -245,3 +245,6 @@ TIME_FORMAT_ERROR = "Invalid time format. Please use HH:MM:SS."
 DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
 DATE_REQUIRED_ERROR = "Date is required."
 INVALID_LEAP_YEAR_ERROR = "Invalid date: February 29th is not a valid date for this year."
+# Validation error messages
+INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+INVALID_LEAP_YEAR = "Invalid date: February 29th is only valid in leap years."
