@@ -1,6 +1,49 @@
 # Updated Coding Conventions
 
 ## Testing Setup
+1. **Install `pytest`**:
+   ```bash
+   pip install pytest
+   echo "pytest" >> requirements.txt
+   ```
+
+2. **Verify Installation**:
+   ```bash
+   pip show pytest
+   ```
+
+3. **Run Tests**:
+   ```bash
+   pytest
+   ```
+
+4. **Dependency Verification**:
+   Add a pre-test check to ensure all required dependencies are installed:
+   ```python
+   def test_dependencies():
+       try:
+           subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+       except subprocess.CalledProcessError:
+           pytest.fail("Failed to install dependencies")
+   ```
+
+## Custom Field Implementation
+1. **Handle All Arguments**:
+   - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+2. **Default Validators**:
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
+
+## Property Implementation
+1. **Define Properties Correctly**:
+   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
+2. **Avoid Direct Attribute Access**:
+   - Use properties to encapsulate attribute access and modification.
+3. **Document Properties**:
+   - Add docstrings to properties and setters to clarify their purpose and behavior.
 
 ### 1. Install Required Dependencies
 ```bash
