@@ -51,12 +51,12 @@ def create():
     """Enhanced stipend creation with better error handling and logging"""
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')
-        
-        # Initialize form choices
-        organizations = Organization.query.order_by(Organization.name).all()
-        tags = Tag.query.order_by(Tag.name).all()
-        form.organization_id.choices = [(org.id, org.name) for org in organizations]
-        form.tags.choices = [(tag.id, tag.name) for tag in tags]
+    
+    # Initialize form choices
+    organizations = Organization.query.order_by(Organization.name).all()
+    tags = Tag.query.order_by(Tag.name).all()
+    form.organization_id.choices = [(org.id, org.name) for org in organizations]
+    form.tags.choices = [(tag.id, tag.name) for tag in tags]
         
         if form.validate_on_submit():
             # Prepare stipend data with optional fields
