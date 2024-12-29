@@ -1,5 +1,4 @@
 /git add .
-
 /commit
 
 /add PROJECT.md
@@ -7,43 +6,29 @@
 /add VALIDATION.md
 /add TODO.md
 
-/ask how can we best work on the issues outlined in the TODO list, adhering to the project descripotion, coding conventions and vallidation conventions, and ensuring that we achieve successful tests?
-
+### Address the TODO list
+/ask Based on TODO.md, how should we proceed to fix these issues while adhering to PROJECT and VALIDATION conventions?
 /architect implement the suggested changes
-
-/run flask routes
-
 /test
 
-/ask what is causing the problem?
-
+### Refine & Debug
+/ask We encountered some issues in the test results. What’s causing the problem?
 /code implement the suggested changes
-
 /test
 
-/ask is there a need to re-evaluate some of the code? what code, why and how?
-
+### Potential Review & Re-Evaluation
+/ask Is the code structured well? Should we refactor or reorganize anything for clarity, maintainability, or performance?
 /architect implement the suggested changes
-
 /test
 
-/run flask routes
-
-/ask what is causing the problem?
-
-/code implement the suggested changes
-
-/test
-
-/ask is there duplicate code in the project? If so, how can we refactor it to improve the maintainability and readability of the code? How can we make the code better?
-
+### Duplicate Code Check
+/ask Is there duplicate code we can refactor? How can we make the code better?
 /architect implement the suggested changes
-
 /test
 
-/architect update PROJECT.md, CONVENTIONS.md, TODO.md and VALIDATION.md with what we have learned. Make sure to include the changes made to the codebase and the results of the tests. Also, include any additional insights or observations that may be relevant to the project. Keep them as compact as possible without losing important information.
+### Update Documentation
+/architect Update PROJECT.md, CONVENTIONS.md, TODO.md, and VALIDATION.md with all recent changes, test results, and insights.
 
-
+### Reset & Load
 /reset
-
 /load CMD_TESTS.txt
