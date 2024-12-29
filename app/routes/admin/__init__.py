@@ -117,6 +117,7 @@ def register_admin_blueprints(app):
     _admin_blueprints_registered = False
     
     if _admin_blueprints_registered:
+        logger.debug("Admin blueprints already registered. Skipping.")
         return
     
     try:
