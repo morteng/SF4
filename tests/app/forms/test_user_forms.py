@@ -62,7 +62,11 @@ def test_profile_form_valid(client, setup_database):
             'csrf_token': csrf_token
         }, follow_redirects=True)
         assert login_response.status_code == 200, "Login failed"
-        
+
+        # Clear audit logs from login operation
+        AuditLog.query.delete()
+        db.session.commit()
+
         # Get profile edit page
         profile_page = client.get(url_for('user.edit_profile'))
         assert profile_page.status_code == 200
