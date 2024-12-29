@@ -381,7 +381,8 @@ def test_delete_nonexistent_stipend(app, admin_user):
         with app.test_request_context():
             login_user(admin_user)
         
-        response = client.post('/admin/stipends/9999/delete', follow_redirects=True)  # Assuming there's no stipend with ID 9999
+        service = StipendService()
+        result = service.delete(9999)  # Assuming there's no stipend with ID 9999
 
     # Check if the correct flash message was set
     with app.test_request_context():
@@ -398,7 +399,8 @@ def test_get_stipend_by_valid_id(test_data, db_session, app):
     assert retrieved_stipend.name == test_data['name']
 
 def test_get_stipend_by_invalid_id(app):
-    retrieved_stipend = get_stipend_by_id(9999)  # Assuming there's no stipend with ID 9999
+    service = StipendService()
+    retrieved_stipend = service.get_by_id(9999)  # Assuming there's no stipend with ID 9999
     assert retrieved_stipend is None
 
 def test_get_all_stipends_with_multiple_entries(test_data, db_session, app):
