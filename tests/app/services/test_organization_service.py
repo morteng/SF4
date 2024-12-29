@@ -4,6 +4,7 @@ from app.models.organization import Organization
 from app.services.organization_service import OrganizationService
 from app.extensions import db
 from app.constants import FlashMessages
+from tests.conftest import BaseCRUDTest
 
 class TestOrganizationService(BaseCRUDTest):
     service_class = OrganizationService

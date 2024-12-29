@@ -4,6 +4,7 @@ from app.services.tag_service import tag_service
 from app.extensions import db
 from app.constants import FlashMessages
 from wtforms.validators import ValidationError
+from tests.conftest import BaseCRUDTest
 
 class TestTagService(BaseCRUDTest):
     service_class = tag_service.__class__
