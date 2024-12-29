@@ -19,7 +19,7 @@
    - Test all error message variations for date/time fields.
    - Verify edge cases in date/time validation (e.g., 25:00:00, February 29th).
 
-#### **Custom Field Implementation**
+### Custom Field Implementation
 1. **Handle All Arguments**:
    - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
 2. **Default Validators**:
@@ -29,7 +29,7 @@
          validators = [InputRequired()]
      ```
 
-#### **General Validation**
+### General Validation
 1. **Validation Logic**:
    - Always verify the data type of form field inputs before applying validation logic.
    - Ensure compatibility with parent classes when overriding attributes or methods.
@@ -47,7 +47,7 @@
    - Keep validation logic modular and reusable.
    - Avoid code duplication by using base classes and utilities.
 
-#### **Key Takeaways for Next Coding Session**
+### Key Takeaways for Next Coding Session
 1. **Validation Logic**:
    - Always verify the data type of form field inputs before applying validation logic.
    - Use centralized error messages from `app/constants.py` for consistency.

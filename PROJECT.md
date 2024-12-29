@@ -1,15 +1,18 @@
 # Project Specification: Stipend Discovery Website
 
 ## Key Updates
-- **Testing Improvements**:
-  - Added dependency verification test
-  - Added comprehensive edge case tests for date/time validation
-  - Improved test isolation using `freezegun`
-  
+- **Validation Improvements**:
+  - Fixed `CustomDateTimeField` initialization to handle `validators` argument correctly.
+  - Standardized error messages for date/time fields using `app/constants.py`.
+  - Added comprehensive tests for edge cases in date/time validation.
+
+- **Testing Setup**:
+  - Added `pytest` to `requirements.txt` and verified installation.
+  - Improved dependency verification with a pre-test check.
+
 - **Code Refactoring**:
-  - Fixed `CustomDateTimeField` initialization
-  - Refactored circular imports into `app/common/utils.py`
-  - Centralized validation error messages in `app/constants.py`
+  - Refactored shared functionality into `app/common/utils.py` to avoid circular imports.
+  - Updated `create_limit` to be a proper property with getter/setter.
 - **Validation Improvements**:
   - Fixed `CustomDateTimeField` initialization to handle `validators` argument correctly with default `InputRequired()`.
   - Standardized error messages for date/time fields using `app/constants.py`.

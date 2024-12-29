@@ -1,11 +1,8 @@
 # Updated Coding Conventions
 
 ### Testing Setup
-
-#### Dependency Verification
-1. **Pre-Test Check**:
-   - Added `tests/test_dependencies.py` to verify all required dependencies are installed
-   - Example:
+1. **Dependency Verification**:
+   - Add a pre-test check to ensure all required dependencies are installed:
      ```python
      def test_dependencies():
          try:
@@ -15,8 +12,49 @@
      ```
 
 2. **Graceful Handling**:
-   - Tests will fail with a clear message if dependencies are missing
-   - Run `pip install -r requirements.txt` to install all dependencies
+   - Use try-except blocks to handle missing dependencies in test files.
+   - Skip tests that require missing packages instead of failing the entire suite.
+
+### Property Implementation
+1. **Define Properties Correctly**:
+   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
+   - Example:
+     ```python
+     class BaseService:
+         def __init__(self):
+             self._create_limit = None
+
+         @property
+         def create_limit(self):
+             return self._create_limit
+
+         @create_limit.setter
+         def create_limit(self, value):
+             self._create_limit = value
+     ```
+
+2. **Avoid Direct Attribute Access**:
+   - Use properties to encapsulate attribute access and modification.
+
+3. **Document Properties**:
+   - Add docstrings to properties and setters to clarify their purpose and behavior.
+
+### Circular Imports
+1. **Refactor Shared Functionality**:
+   - Move shared code to a separate module (e.g., `app/common/utils.py`).
+2. **Use Lazy Imports**:
+   - Import dependencies at the function level when necessary:
+     ```python
+     def some_function():
+         from app.services.bot_service import run_bot  # Lazy import
+         run_bot()
+     ```
+
+### Key Takeaways
+- **Validation Logic**: Always verify the data type of form field inputs before applying validation logic.
+- **Testing**: Test edge cases thoroughly, especially for date/time validation.
+- **Error Handling**: Log validation errors with context for easier debugging.
+- **Code Organization**: Keep validation logic modular and reusable.
 
 #### Validation Testing
 - Added comprehensive tests for edge cases in `tests/test_validation.py`
