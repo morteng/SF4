@@ -5,6 +5,41 @@ from datetime import datetime
 from app.constants import FlashMessages
 
 class CustomDateTimeField(DateTimeField):
+    # Add caching for compiled regex pattern
+    _date_pattern = re.compile(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$')
+
+    @classmethod
+    def benchmark_validation(cls, iterations=1000):
+        """Benchmark validation performance"""
+        import time
+        test_cases = [
+            ('2024-12-31 23:59:59', True),  # Valid
+            ('2024-02-29 00:00:00', True),  # Leap year
+            ('2023-02-29 00:00:00', False), # Invalid leap year
+            ('2024-13-01 00:00:00', False), # Invalid month
+            ('2024-12-32 00:00:00', False), # Invalid day
+            ('2024-12-31 24:00:00', False), # Invalid hour
+            ('2024-12-31 23:60:00', False), # Invalid minute
+            ('2024-12-31 23:59:60', False), # Invalid second
+        ]
+        
+        field = cls()
+        results = {}
+        
+        for value, expected in test_cases:
+            start = time.perf_counter()
+            for _ in range(iterations):
+                field.process_formdata([value])
+            elapsed = time.perf_counter() - start
+            results[value] = {
+                'time': elapsed,
+                'iterations': iterations,
+                'valid': expected,
+                'actual': field.data is not None
+            }
+            
+        return results
+
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
         # Store format in a private variable
         self._format = format if isinstance(format, str) else '%Y-%m-%d %H:%M:%S'
@@ -50,8 +85,8 @@ class CustomDateTimeField(DateTimeField):
             
         date_str = valuelist[0].strip()
         
-        # Validate format
-        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
+        # Validate format using cached pattern
+        if not self._date_pattern.match(date_str):
             self.errors.append(self.error_messages['invalid_format'])
             self.data = None
             return
