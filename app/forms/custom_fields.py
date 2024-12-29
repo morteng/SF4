@@ -12,20 +12,11 @@ class CustomDateTimeField(Field):
     """
     
     def __init__(self, label=None, validators=None, format="%Y-%m-%d %H:%M:%S", **kwargs):
-        """Initialize the datetime field.
-        
-        Args:
-            label (str, optional): Field label
-            validators (list, optional): List of validators
-            format (str, optional): Datetime format string
-            **kwargs: Additional keyword arguments for Field
-        """
-        if validators is None:
-            validators = [InputRequired(message=MISSING_REQUIRED_FIELD)]
-        
+        """Initialize the datetime field."""
         # Remove format from kwargs if it exists to avoid duplicate parameter
         kwargs.pop('format', None)
         
+        # Initialize the field with validators
         self.format = format
         super().__init__(label=label, validators=validators, **kwargs)
 
