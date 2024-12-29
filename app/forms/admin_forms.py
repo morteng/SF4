@@ -4,7 +4,7 @@ import logging
 from datetime import datetime
 from flask_wtf import FlaskForm
 from app.constants import FlashMessages
-from app.forms.fields import CustomDateTimeField
+from app.forms.custom_fields import CustomDateTimeField
 from wtforms.validators import ValidationError
 import logging
 from wtforms import (
