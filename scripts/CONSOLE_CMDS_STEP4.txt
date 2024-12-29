@@ -5,8 +5,8 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
-flask routes
-pytest tests/test_admin_stipends.py -v --log-cli-level=DEBUG
+/run flask routes
+/run pytest tests/test_admin_stipends.py::AdminStipendTestCase::test_blueprint_registration -v --log-cli-level=DEBUG
 ### COMMANDS END ###
 
 # Once finished, jump to Step 5.
