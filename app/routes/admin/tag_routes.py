@@ -52,33 +52,8 @@ def paginate():
     tags = tag_service.get_all().paginate(page=page, per_page=10, error_out=False)
     return render_template('admin/tags/_tags_table.html', tags=tags)
 
-@admin_tag_bp.route('/<int:id>/edit', methods=['GET', 'POST'])  # Updated from .update to .edit
+@admin_tag_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def edit(id):
-    tag = tag_service.get_by_id(id)
-    if not tag:
-        flash_message(FlashMessages.GENERIC_ERROR, FlashCategory.ERROR)
-        return redirect(url_for('tag.index'))
-    
-    form = TagForm(obj=tag, original_name=tag.name)
-    
-    if form.validate_on_submit():
-        try:
-            tag_service.update(tag, form.data)
-            flash_message(FlashMessages.UPDATE_TAG_SUCCESS, FlashCategory.SUCCESS)
-            return redirect(url_for('tag.index'))
-        except IntegrityError as e:
-            db.session.rollback()
-            flash_message(FlashMessages.UPDATE_TAG_ERROR, FlashCategory.ERROR)
-            return render_template('admin/tags/update.html', form=form, tag=tag)
-        except Exception as e:
-            db.session.rollback()
-            flash_message(FlashMessages.UPDATE_TAG_ERROR, FlashCategory.ERROR)
-            return render_template('admin/tags/update.html', form=form, tag=tag)
-
-    # Add a specific flash message for invalid form data
-    if request.method == 'POST':
-        flash_message(FlashMessages.GENERIC_ERROR, FlashCategory.ERROR)
-
-    return render_template('admin/tags/update.html', form=form, tag=tag)
+    return tag_controller.edit(id)
