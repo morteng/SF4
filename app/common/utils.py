@@ -8,6 +8,7 @@ def validate_blueprint_routes(app, required_routes):
     registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
     missing_routes = [route for route in required_routes if route not in registered_routes]
     if missing_routes:
+        current_app.logger.error(f"Registered routes: {registered_routes}")
         raise RuntimeError(f"Missing routes: {', '.join(missing_routes)}")
 
 def validate_application_deadline(field):
