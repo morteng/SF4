@@ -1103,6 +1103,23 @@ user.profile                 GET        /user/profile
 - **Solution**: Refactored `verify_dependencies()` in `tests/conftest.py` to skip tests instead of failing the suite.
 - **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
 
+### Key Takeaways for Next Coding Session
+1. **Validation Logic**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Use centralized error messages from `app/constants.py` for consistency.
+
+2. **Testing**:
+   - Test edge cases thoroughly, especially for date/time validation.
+   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+
+3. **Error Handling**:
+   - Log validation errors with context for easier debugging.
+   - Provide clear, user-friendly error messages for validation failures.
+
+4. **Code Organization**:
+   - Keep validation logic modular and reusable.
+   - Avoid code duplication by using base classes and utilities.
+
 ### Property Implementation
 - **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
 - **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
