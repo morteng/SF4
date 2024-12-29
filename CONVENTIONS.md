@@ -32,6 +32,27 @@
 ### Pre-Test Verification
 Before running tests, the system will automatically verify that all required dependencies are installed. If any dependencies are missing, it will attempt to install them before skipping affected tests.
 
+To verify dependencies, run:
+```bash
+pytest tests/test_dependencies.py
+```
+
+Example implementation:
+```python
+import pytest
+import importlib
+
+def verify_dependencies():
+    missing_deps = []
+    for dep in ["pytest", "freezegun", "Flask"]:
+        try:
+            importlib.import_module(dep)
+        except ImportError:
+            missing_deps.append(dep)
+    if missing_deps:
+        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
+```
+
 ```python
 import subprocess
 import pytest

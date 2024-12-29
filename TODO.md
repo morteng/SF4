@@ -15,6 +15,8 @@
 
 ## Next Session
 - [x] Refactor other shared functionality into `app/common`.
+- [x] Add comprehensive tests for `BaseService` properties.
+- [x] Verify time-based tests with `freezegun`.
 - [ ] Optimize validation performance in `CustomDateTimeField`.
 - [ ] Add more comprehensive tests for timezone handling in date/time fields.
 - [x] Add comprehensive tests for `BaseService` properties.

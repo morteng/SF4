@@ -210,3 +210,18 @@ def test_dependencies():
     
     if missing_deps:
         pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
+import pytest
+import importlib
+
+def verify_dependencies():
+    missing_deps = []
+    for dep in ["pytest", "freezegun", "Flask"]:
+        try:
+            importlib.import_module(dep)
+        except ImportError:
+            missing_deps.append(dep)
+    if missing_deps:
+        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
+
+def test_dependencies():
+    verify_dependencies()
