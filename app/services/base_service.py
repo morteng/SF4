@@ -56,8 +56,8 @@ class BaseService:
         self.post_update_hooks = []
         self.pre_delete_hooks = []
         self.post_delete_hooks = []
-        self.pre_validation_hooks = []
-        self.post_validation_hooks = []
+        self.pre_validation_hooks = []  # Add this line
+        self.post_validation_hooks = []  # Add this line
         self.validation_cache = {}
         self.cache_validation = False
 
