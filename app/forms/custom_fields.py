@@ -22,6 +22,10 @@ class CustomDateTimeField(Field):
         """
         if validators is None:
             validators = [InputRequired(message=MISSING_REQUIRED_FIELD)]
+        
+        # Remove format from kwargs if it exists to avoid duplicate parameter
+        kwargs.pop('format', None)
+        
         self.format = format
         super().__init__(label=label, validators=validators, **kwargs)
 
