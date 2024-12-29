@@ -48,6 +48,17 @@ org_controller = BaseRouteController(
     'admin/organizations'
 )
 
+class OrganizationController(BaseRouteController):
+    def __init__(self):
+        super().__init__(
+            service=OrganizationService(),
+            entity_name='organization',
+            form_class=OrganizationForm,
+            template_dir='admin/organizations'
+        )
+
+org_controller = OrganizationController()
+
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 @admin_required

@@ -17,6 +17,17 @@ tag_controller = BaseRouteController(
     'admin/tags'
 )
 
+class TagController(BaseRouteController):
+    def __init__(self):
+        super().__init__(
+            service=TagService(),
+            entity_name='tag',
+            form_class=TagForm,
+            template_dir='admin/tags'
+        )
+
+tag_controller = TagController()
+
 @admin_tag_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 @admin_required

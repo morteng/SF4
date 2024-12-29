@@ -12,15 +12,11 @@ class OrganizationService(BaseService):
 
     def _validate_create_data(self, data):
         """Validate organization data before creation"""
-        self._validate_organization_data(data)
-
-    def _validate_update_data(self, data):
-        """Validate organization data before update"""
-        self._validate_organization_data(data)
-
-    def _validate_organization_data(self, data):
-        """Common organization data validation"""
         if not data.get('name'):
             raise ValueError(FlashMessages.REQUIRED_FIELD.format(field='name'))
         if not data.get('description'):
             raise ValueError(FlashMessages.REQUIRED_FIELD.format(field='description'))
+
+    def _validate_update_data(self, data):
+        """Validate organization data before update"""
+        self._validate_create_data(data)

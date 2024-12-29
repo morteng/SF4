@@ -16,13 +16,8 @@ class StipendService(BaseService):
             'tags': [(tag.id, tag.name) for tag in tags]
         }
 
-    def create(self, data, user_id=None):
-        """Create a new stipend with validation"""
-        self._validate_stipend_data(data)
-        return super().create(data, user_id)
-
-    def _validate_update_data(self, data):
-        """Stipend-specific update validation"""
+    def _validate_create_data(self, data):
+        """Validate stipend data before creation"""
         if not data.get('name'):
             raise ValueError(FlashMessages.REQUIRED_FIELD.format(field='name'))
         if 'application_deadline' in data and data['application_deadline']:
@@ -30,3 +25,7 @@ class StipendService(BaseService):
                 datetime.strptime(data['application_deadline'], '%Y-%m-%d %H:%M:%S')
             except ValueError:
                 raise ValueError(FlashMessages.INVALID_DATE_FORMAT)
+
+    def _validate_update_data(self, data):
+        """Validate stipend data before update"""
+        self._validate_create_data(data)
