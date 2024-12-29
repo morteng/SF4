@@ -54,20 +54,37 @@
 ---
 
 ### **Next Steps**
-1. **Verify Dependency Installation**:
+1. **Set Up Virtual Environment**:
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # macOS/Linux
+   .venv\Scripts\activate     # Windows
+   ```
+
+2. **Install Dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Run Tests**:
+3. **Verify Installations**:
+   ```bash
+   pip show flask pytest
+   ```
+
+4. **Run Tests**:
    ```bash
    pytest
    ```
 
-3. **Check Application Routes**:
+5. **Check Application Routes**:
    ```bash
    flask routes
    ```
+
+6. **Troubleshooting**:
+   - Ensure virtual environment is activated
+   - Check Python version (requires 3.8+)
+   - Review installation logs for errors
 
 ---
 
