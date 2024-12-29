@@ -213,8 +213,7 @@ class FlashCategory(str, Enum):
     USER_SEARCH_ERROR = "Failed to search users."
 class FlashMessages(str, Enum):
     INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
-    INVALID_LEAP_YEAR = "Invalid date for February in non-leap years."
-    INVALID_LEAP_YEAR_ERROR = "Invalid date for February in non-leap years."
+    INVALID_LEAP_YEAR_DATE = "Invalid date for February in non-leap years."
     CREATE_SUCCESS = "Record created successfully."
     UPDATE_SUCCESS = "Record updated successfully."
     DELETE_SUCCESS = "Record deleted successfully."
