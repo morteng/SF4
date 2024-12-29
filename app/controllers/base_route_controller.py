@@ -84,33 +84,7 @@ class BaseRouteController:
         error_message = str(error) if str(error) else self.flash_messages['error']
         response = self._handle_htmx_flash(error_message, FlashCategory.ERROR)
         return response or redirect(request.referrer or url_for('admin.dashboard.dashboard'))
-    def _handle_audit_logging(self, action, entity, user_id=None, before=None, after=None):
-        """Enhanced audit logging with HTMX support"""
-        if hasattr(self.service, 'audit_logger'):
-            details = {
-                'action': action,
-                'object_type': self.entity_name,
-                'object_id': entity.id if entity else None,
-                'user_id': user_id,
-                'before': before,
-                'after': after,
-                'is_htmx': bool(request.headers.get('HX-Request'))
-            }
-            self.service.audit_logger.log(**details)
 
-    def _handle_audit_logging(self, action, entity, user_id=None, before=None, after=None):
-        """Enhanced audit logging with HTMX support"""
-        if hasattr(self.service, 'audit_logger'):
-            details = {
-                'action': action,
-                'object_type': self.entity_name,
-                'object_id': entity.id if entity else None,
-                'user_id': user_id,
-                'before': before,
-                'after': after,
-                'is_htmx': bool(request.headers.get('HX-Request'))
-            }
-            self.service.audit_logger.log(**details)
 
     def _handle_redirect(self):
         """Handle redirect after successful operation"""
@@ -119,7 +93,7 @@ class BaseRouteController:
         return redirect(url_for(f'admin.{self.entity_name}.index'))
 
     def _handle_audit_logging(self, action, entity, user_id=None, before=None, after=None):
-        """Handle audit logging for CRUD operations"""
+        """Handle audit logging for CRUD operations with HTMX support"""
         if hasattr(self.service, 'audit_logger'):
             self.service.audit_logger.log(
                 action=action,
@@ -127,7 +101,8 @@ class BaseRouteController:
                 object_id=entity.id if entity else None,
                 user_id=user_id,
                 before=before,
-                after=after
+                after=after,
+                is_htmx=bool(request.headers.get('HX-Request'))
             )
 
     def _handle_form_validation(self, form):
