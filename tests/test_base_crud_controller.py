@@ -84,3 +84,8 @@ class TestBaseCrudController(BaseTestCase):
         form = StipendForm(homepage_url="invalid-url")
         assert form.validate() is False
         assert FlashMessages.INVALID_URL in form.homepage_url.errors
+
+        # Test invalid leap year
+        form = StipendForm(application_deadline="2023-02-29 12:00:00")
+        assert not form.validate()
+        assert FlashMessages.INVALID_LEAP_YEAR in form.application_deadline.errors

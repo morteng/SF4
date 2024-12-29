@@ -24,3 +24,9 @@ def validate_application_deadline(field):
     if field.data < now:
         raise ValidationError(FlashMessages.FUTURE_DATE_REQUIRED)
 
+    # Check for leap year
+    if field.data.month == 2 and field.data.day == 29:
+        year = field.data.year
+        if not (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)):
+            raise ValidationError(FlashMessages.INVALID_LEAP_YEAR)
+

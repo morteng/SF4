@@ -68,7 +68,10 @@ def create_app(config_name='development'):
     init_extensions(app)
     
     # Register blueprints
-    register_blueprints(app)  # This should now work
+    from app.routes.admin import register_admin_blueprints
+    from app.routes import register_blueprints
+    register_admin_blueprints(app)
+    register_blueprints(app)
     
     return app
 
