@@ -48,8 +48,9 @@ def _validate_blueprint_params(name: str, import_name: str) -> None:
 
 # Create blueprint with enhanced error handling
 try:
+    from app.common.utils import BaseBlueprint
     _validate_blueprint_params('admin_stipend', __name__)
-    admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
+    admin_stipend_bp = BaseBlueprint('admin_stipend', __name__, url_prefix='/admin/stipends')
     logger.debug(f"Created stipend blueprint: {admin_stipend_bp.name}")
     logger.debug(f"URL prefix: {admin_stipend_bp.url_prefix}")
     logger.debug(f"Import name: {admin_stipend_bp.import_name}")
