@@ -13,21 +13,6 @@ from app.constants import FlashMessages, FlashCategory
 from flask import get_flashed_messages
 import logging
 
-def test_create_stipend_with_invalid_date_format(self, db_session):
-        invalid_data = {
-            'name': "Test Stipend",
-            'application_deadline': 'invalid-format'
-        }
-        with pytest.raises(ValidationError):
-            self.service.create(invalid_data)
-
-def test_update_stipend_with_invalid_date_format(self, db_session, test_entity):
-        invalid_data = {
-            'name': "Test Stipend",
-            'application_deadline': 'invalid-format'
-        }
-        with pytest.raises(ValidationError):
-            self.service.update(test_entity, invalid_data)
 
 def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     # Modify test data with an invalid application_deadline format
