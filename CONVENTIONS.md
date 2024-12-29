@@ -1,15 +1,9 @@
 # Coding Conventions Guideline
 
 ## 1. Environment & Dependencies
-- **Virtual Environments**: Always activate `.venv` or equivalent before installing/running anything.  
-  bash
-  python -m venv .venv
-  source .venv/bin/activate  # macOS/Linux
-  .venv\Scripts\activate     # Windows
     
 - **Requirements**:  
   - Keep dependencies in `requirements.txt`.  
-  - Verify installs with `pip show <package>`.
 
 - **Pre-Test Verification**:  
   python
@@ -67,9 +61,9 @@
 - **Graceful Fails**: If a package is missing, skip the test. Don’t throw the entire test suite off the cliff.  
 - **Modular Code**: Minimal duplication, maximum reusability. Keep your code as neat as your desk (or neater, sir).
 
-
 ## 8. use newest versions of all moduels and libraries
 - **Up-to-date**: Keep your modules and libraries up-to-date to ensure you're using the latest features and security patches. Ensure requirements.txt reflects the latest versions of all dependencies.
 
 ## 9. About This environment
 - **Virtual Environment**: You are currently running inside an activated venv with all dependencies from requirements.txt already installed. 
+- **TODO.txt**: A file to keep track of tasks, ideas, or anything that needs to be addressed later. It's a simple text file where you can jot down notes, reminders, or to-dos. You can use it to capture ideas, brainstorm, or plan your work. It's a flexible tool that allows you to organize your thoughts and keep track of your tasks in a simple and accessible format. periodically review and compress this file if it gets too big.
