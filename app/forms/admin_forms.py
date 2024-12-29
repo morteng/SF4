@@ -46,8 +46,8 @@ class StipendForm(FlaskForm):
         Length(max=2000, message="Description cannot exceed 2000 characters.")
     ])
     homepage_url = URLField('Homepage URL', validators=[
-        DataRequired(message=FlashMessages.MISSING_FIELD_ERROR),
-        URL(message=FlashMessages.INVALID_URL)
+        DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
+        URL(message=FlashMessages.INVALID_URL.value)
     ])
     application_procedure = TextAreaField('Application Procedure', validators=[
         DataRequired(message="Application procedure is required."),
@@ -59,9 +59,9 @@ class StipendForm(FlaskForm):
     ])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
-        validators=[InputRequired(message=FlashMessages.MISSING_FIELD_ERROR)],
+        validators=[InputRequired(message=FlashMessages.MISSING_FIELD_ERROR.value)],
         error_messages={
-            'required': FlashMessages.MISSING_FIELD_ERROR,
+            'required': FlashMessages.MISSING_FIELD_ERROR.value,
             'invalid_format': FlashMessages.INVALID_DATE_FORMAT,
             'invalid_date': 'Invalid application deadline date',
             'invalid_time': 'Invalid application deadline time',

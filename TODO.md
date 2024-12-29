@@ -3,8 +3,8 @@
 2. Update this list with new actionable items
 
 ### **Next Steps**
-1. **Add Missing Constants**:
-   - Verify all constants used in forms and controllers are defined in `app/constants.py`.
+1. **Ensure Consistent Constant Usage**:
+   - Verify all FlashMessages constants are accessed with .value in forms
 
 ### **Things to Remember for Next Coding Session**
 1. **Error Handling**:
