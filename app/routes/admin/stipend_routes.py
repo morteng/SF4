@@ -1,14 +1,40 @@
-from flask import Blueprint, request, redirect, url_for, render_template, current_app
+from flask import (
+    Blueprint, request, redirect, url_for, 
+    render_template, current_app, render_template_string
+)
 from flask_login import login_required, current_user
-from app.extensions import limiter
 from sqlalchemy.exc import IntegrityError
+from wtforms import ValidationError
+from app.extensions import limiter, db
 from app.controllers.base_route_controller import BaseRouteController
 from app.services.stipend_service import StipendService
 from app.forms.admin_forms import StipendForm
-from app.utils import admin_required, flash_message
+from app.utils import (
+    admin_required, flash_message, 
+    log_audit, create_notification,
+    format_error_message
+)
 from app.models import Stipend, Organization, Tag
 from app.constants import FlashMessages, FlashCategory
-from app.extensions import db
+
+def get_stipend_by_id(id):
+    return Stipend.query.get_or_404(id)
+
+def update_stipend(stipend, data, session=None):
+    session = session or db.session
+    try:
+        for key, value in data.items():
+            setattr(stipend, key, value)
+        session.commit()
+        return stipend
+    except Exception as e:
+        session.rollback()
+        raise e
+
+def delete_stipend(id):
+    stipend = get_stipend_by_id(id)
+    db.session.delete(stipend)
+    db.session.commit()
 
 admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 stipend_controller = BaseRouteController(
