@@ -78,6 +78,26 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 
 ## Lessons Learned
 
+### Property Implementation
+- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
+- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
+  ```python
+  class BaseService:
+      def __init__(self):
+          self._create_limit = None
+
+      @property
+      def create_limit(self):
+          """Getter for create_limit."""
+          return self._create_limit
+
+      @create_limit.setter
+      def create_limit(self, value):
+          """Setter for create_limit."""
+          self._create_limit = value
+  ```
+- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
+
 ### Dependency Management
 - **Issue**: Tests failed because `freezegun` and `Flask` were listed in `requirements.txt` but not installed.
 - **Solution**: Always verify dependencies are installed by running:
@@ -85,6 +105,14 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
   pip install -r requirements.txt
   ```
 - **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
+
+### Package Structure
+- **Issue**: The `app/forms` directory was not recognized as a package because it lacked an `__init__.py` file.
+- **Solution**: Added `__init__.py` to `app/forms`:
+  ```bash
+  touch app/forms/__init__.py
+  ```
+- **Best Practice**: Always include `__init__.py` in Python package directories, even if empty.
 
 ### Circular Imports
 - **Issue**: Circular imports caused startup errors (e.g., `ModuleNotFoundError`).
@@ -310,6 +338,47 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 ---
 
 ## Coding Practices
+
+### Property Implementation
+1. **Define Properties Correctly**:
+   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
+   - Example:
+     ```python
+     class MyClass:
+         def __init__(self):
+             self._my_property = None
+
+         @property
+         def my_property(self):
+             return self._my_property
+
+         @my_property.setter
+         def my_property(self, value):
+             self._my_property = value
+     ```
+
+2. **Avoid Direct Attribute Access**:
+   - Use properties to encapsulate attribute access and modification.
+   - This ensures consistent behavior and validation.
+
+3. **Document Properties**:
+   - Add docstrings to properties and setters to clarify their purpose and behavior.
+
+### Dependency Management
+1. **Pre-Test Verification**:
+   - Add a test to verify all dependencies are installed before running the test suite.
+   - Example:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+
+2. **Graceful Handling**:
+   - Use try-except blocks to handle missing dependencies in test files.
+   - Skip tests that require missing packages instead of failing the entire suite.
 
 ### Property Implementation
 1. **Define Properties Correctly**:

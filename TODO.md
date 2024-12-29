@@ -2,6 +2,10 @@
 
 ## Completed
 - [x] Fix circular imports by refactoring shared functionality into `app/common/utils.py`.
+- [x] Add `__init__.py` to `app/forms` to make it a valid package.
+- [x] Refactor `create_limit` into a proper property with a getter and setter.
+- [x] Add a pre-test dependency verification script.
+- [x] Fix circular imports by refactoring shared functionality into `app/common/utils.py`.
 - [x] Add `__init__.py` to `app/common` and `app/forms` to make them recognizable as packages.
 - [x] Install missing dependencies (`freezegun`, `Flask`).
 - [x] Refactor `verify_dependencies()` to skip tests instead of failing the suite.
@@ -13,6 +17,11 @@
 - [x] Add a script to verify all dependencies listed in `requirements.txt` are installed.
 
 ## Next Session
+- [ ] Add comprehensive tests for `BaseService` properties.
+- [ ] Verify time-based tests with `freezegun`.
+- [ ] Refactor other shared functionality into `app/common`.
+- [ ] Optimize validation performance in `CustomDateTimeField`.
+- [ ] Add more comprehensive tests for timezone handling in date/time fields.
 - [ ] Add comprehensive tests for `BaseService` properties.
 - [ ] Verify time-based tests with `freezegun`.
 - [ ] Refactor other shared functionality into `app/common`.
