@@ -16,7 +16,8 @@ class BaseCrudController:
             'create_error': FlashMessages.CREATE_ERROR,
             'update_error': FlashMessages.UPDATE_ERROR,
             'delete_error': FlashMessages.DELETE_ERROR,
-            'not_found': FlashMessages.NOT_FOUND
+            'not_found': FlashMessages.NOT_FOUND,
+            'validation_error': FlashMessages.VALIDATION_ERROR
         }
         self.supports_htmx = True
         self.htmx_headers = {
@@ -52,10 +53,14 @@ class BaseCrudController:
                 )
             flash(success_message.format(self.entity_name), FlashCategory.SUCCESS.value)
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_success}'))
+        except ValidationError as e:
+            flash(self.flash_messages['validation_error'].format(
+                self.entity_name, str(e)), FlashCategory.ERROR.value)
+            return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
         except Exception as e:
             import logging
             logging.error(f"Error in {operation.__name__}: {str(e)}", exc_info=True)
-            flash(error_message.format(self.entity_name), FlashCategory.ERROR.value)
+            flash(error_message.format(self.entity_name, str(e)), FlashCategory.ERROR.value)
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
 
     def create(self, data):

@@ -107,9 +107,11 @@ class BaseService:
             if rules.get('required') and not data.get(field):
                 raise ValidationError(f"{field} is required")
             if rules.get('max_length') and len(str(data.get(field))) > rules['max_length']:
-                raise ValidationError(f"{field} exceeds maximum length")
+                raise ValidationError(f"{field} exceeds maximum length of {rules['max_length']}")
             if rules.get('choices') and data.get(field) not in rules['choices']:
                 raise ValidationError(f"{field} must be one of {rules['choices']}")
+            if rules.get('type') and not isinstance(data.get(field), rules['type']):
+                raise ValidationError(f"{field} must be of type {rules['type'].__name__}")
                 
         # Run post-validation hooks
         for hook in self.post_validation_hooks:
