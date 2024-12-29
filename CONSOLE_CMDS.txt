@@ -13,7 +13,8 @@
 
 ### COMMANDS START ###
 
-/run echo "Hello from the console!"
+/run pytest tests/test_datetime_validation.py -v
+/run flask routes
 
 ### COMMANDS END ###
 
