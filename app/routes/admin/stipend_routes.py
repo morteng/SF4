@@ -39,7 +39,7 @@ def delete_stipend(id):
     db.session.delete(stipend)
     db.session.commit()
 
-admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
+admin_stipend_bp = Blueprint('admin.stipend', __name__, url_prefix='/admin/stipends')
 
 def register_stipend_routes(app):
     """Register stipend routes with the application"""

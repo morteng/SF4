@@ -210,6 +210,11 @@ class FlashCategory(str, Enum):
     PASSWORD_RESET_SUCCESS = "Password reset successfully."
     PASSWORD_RESET_ERROR = "Failed to reset password."
     USER_SEARCH_ERROR = "Failed to search users."
+class RouteMessages(str, Enum):
+    ROUTE_REGISTRATION_ERROR = "Failed to register route: {route_name}"
+    ROUTE_REGISTERED = "Successfully registered route: {route_name}"
+    MISSING_BLUEPRINT = "Missing blueprint for route registration"
+
 class FlashMessages(str, Enum):
     GENERIC_ERROR = "An error occurred. Please try again."
     INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."

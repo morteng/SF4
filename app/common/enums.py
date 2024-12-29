@@ -13,6 +13,7 @@ class NotificationType(Enum):
     USER_UPDATED = 'user_updated'
     USER_DELETED = 'user_deleted'
     PASSWORD_RESET = 'password_reset'
+    ADMIN_ACTION = 'admin_action'  # Added for admin operations
 
 class NotificationPriority(Enum):
     LOW = 'low'

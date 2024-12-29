@@ -116,6 +116,18 @@ def register_admin_blueprints(app):
     # Create admin blueprint first
     admin_bp = create_admin_blueprint()
     
+    # Ensure all required blueprints are imported
+    try:
+        from .stipend_routes import admin_stipend_bp
+        from .user_routes import admin_user_bp
+        from .bot_routes import admin_bot_bp
+        from .organization_routes import admin_org_bp
+        from .tag_routes import admin_tag_bp
+        from .dashboard_routes import admin_dashboard_bp
+    except ImportError as e:
+        current_app.logger.error(f"Failed to import blueprints: {str(e)}")
+        raise
+    
     # Initialize rate limiter
     limiter = Limiter(
         get_remote_address,
