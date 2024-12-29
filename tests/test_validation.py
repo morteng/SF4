@@ -86,10 +86,12 @@ def test_custom_date_time_field_required():
     assert not form.validate()
     assert MISSING_REQUIRED_FIELD in form.application_deadline.errors
 
+from app.constants import FlashMessages
+
 def test_custom_date_time_field_invalid_format():
     form = StipendForm(application_deadline="invalid-date")
     assert not form.validate()
-    assert INVALID_DATE_FORMAT in form.application_deadline.errors
+    assert FlashMessages.INVALID_DATE_FORMAT in form.application_deadline.errors
 
 @freeze_time("2024-01-01")
 def test_custom_date_time_field_valid():
