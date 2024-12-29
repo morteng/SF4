@@ -45,10 +45,10 @@ def create():
     if form.validate_on_submit():
         # Check for existing username/email
         if User.query.filter_by(username=form.username.data).first():
-            flash_message(FlashMessages.USERNAME_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
+            flash(FlashMessages.USERNAME_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
             return render_template('admin/users/create.html', form=form), 400
         if User.query.filter_by(email=form.email.data).first():
-            flash_message(FlashMessages.EMAIL_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
+            flash(FlashMessages.EMAIL_ALREADY_EXISTS.value, FlashCategory.ERROR.value)
             return render_template('admin/users/create.html', form=form), 400
 
         try:
@@ -86,14 +86,13 @@ def create():
             )
 
             # Flash success message and redirect
-            # Flash success message and redirect
-            flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
+            flash(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
             
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Error creating user: {str(e)}")
-            flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
+            flash(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
             return render_template('admin/users/create.html', form=form), 500
 
     # Handle form validation errors
@@ -101,7 +100,7 @@ def create():
         field = getattr(form, field_name)
         for error in errors:
             msg = format_error_message(field, error)
-            flash_message(msg, FlashCategory.ERROR.value)
+            flash(msg, FlashCategory.ERROR.value)
             
     return render_template('admin/users/create.html', 
                         form=form,
