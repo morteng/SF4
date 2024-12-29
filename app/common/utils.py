@@ -24,6 +24,9 @@ def validate_blueprint_routes(app, required_routes):
         registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
         missing_routes = [route for route in required_routes if route not in registered_routes]
         
+        logger.debug(f"Registered routes: {registered_routes}")
+        logger.debug(f"Required routes: {required_routes}")
+        
         if missing_routes:
             app.logger.error("Route Validation Error:")
             app.logger.error(f"Registered routes: {registered_routes}")

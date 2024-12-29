@@ -1,5 +1,8 @@
 import json
+import logging
 from flask import Blueprint, redirect, url_for, request, current_app
+
+logger = logging.getLogger(__name__)
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from app.models.notification import Notification, NotificationType
@@ -112,7 +115,9 @@ def register_admin_blueprints(app):
     if _admin_blueprints_registered:
         return
     
-    admin_bp = create_admin_blueprint()
+    try:
+        admin_bp = create_admin_blueprint()
+        logger.debug("Created admin blueprint")
     
     try:
         from .stipend_routes import admin_stipend_bp
@@ -134,9 +139,16 @@ def register_admin_blueprints(app):
     validate_blueprint(admin_org_bp)
     validate_blueprint(admin_tag_bp)
     
-    # Register blueprints
-    admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
-    admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
+    # Register blueprints with debug logging
+    try:
+        admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
+        logger.debug(f"Registered stipend blueprint: {admin_stipend_bp.name}")
+        
+        admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
+        logger.debug(f"Registered dashboard blueprint: {admin_dashboard_bp.name}")
+    except Exception as e:
+        logger.error(f"Failed to register blueprints: {str(e)}")
+        raise
     admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')
     admin_bp.register_blueprint(admin_bot_bp, url_prefix='/bots')
     admin_bp.register_blueprint(admin_org_bp, url_prefix='/organizations')
@@ -148,11 +160,12 @@ def register_admin_blueprints(app):
         for rule in app.url_map.iter_rules():
             app.logger.debug(f"Route: {rule.endpoint}")
     
-    # Validate routes
+    # Validate routes with debug logging
     required_routes = [
         'admin_stipend.create',
         'admin_dashboard.dashboard'
     ]
+    logger.debug(f"Validating required routes: {required_routes}")
     validate_blueprint_routes(app, required_routes)
     
     _admin_blueprints_registered = True
