@@ -12,10 +12,10 @@
 - [x] Add a script to verify all dependencies listed in `requirements.txt` are installed.
 
 ## Next Session
-- [ ] Refactor `BaseService` to ensure all properties are implemented correctly.
-- [ ] Add comprehensive tests for property getters and setters.
-- [ ] Verify that all dependencies listed in `requirements.txt` are installed during test execution.
-- [ ] Add a pre-test dependency verification script to ensure all required packages are installed.
+- [x] Refactor `BaseService` to ensure all properties are implemented correctly.
+- [x] Add comprehensive tests for property getters and setters.
+- [x] Verify that all dependencies listed in `requirements.txt` are installed during test execution.
+- [x] Add a pre-test dependency verification script to ensure all required packages are installed.
 - [ ] Optimize validation performance in `CustomDateTimeField`.
 - [ ] Add more comprehensive tests for timezone handling in date/time fields.
 - [ ] Add validation benchmarks for date/time fields.
