@@ -59,7 +59,8 @@ class StipendForm(FlaskForm):
     ])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
-        validators=[DataRequired(message="Application deadline is required.")],
+        format="%Y-%m-%d %H:%M:%S",
+        validators=[InputRequired(message="Application deadline is required.")],
         error_messages={
             'required': 'Application deadline is required.',
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
