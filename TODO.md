@@ -14,7 +14,7 @@
 - [x] Consolidate leap year validation logic in `CustomDateTimeField`.
 
 ## Next Session
-- [ ] Refactor shared functionality into `app/common/utils.py` to avoid circular imports.
+- [ ] Refactor shared functionality into `app/common/base_service.py` to avoid circular imports.
 - [ ] Add a pre-test dependency verification script to ensure all required packages are installed.
 - [ ] Verify that all properties are correctly implemented with `@property` and `@<property>.setter`.
 - [ ] Add comprehensive tests for edge cases in date/time validation.

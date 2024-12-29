@@ -500,7 +500,7 @@ If time-based tests are failing:
 
 ### Circular Import Prevention
 1. **Refactor Shared Functionality**:
-   - Move shared code to a separate module (e.g., `app/common/utils.py`).
+   - Move shared code to a separate module (e.g., `app/common/base_service.py`).
 2. **Use Lazy Imports**:
    - Import dependencies at the function level when necessary:
      ```python
