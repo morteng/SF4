@@ -59,9 +59,16 @@ class Stipend(db.Model):
     @staticmethod
     def create(data, user_id=None):
         """Create a new stipend with validation and audit logging"""
+        print(f"\nCreating stipend with data: {data}")
         from app.services.stipend_service import StipendService
         service = StipendService()
-        return service.create(data, user_id)
+        try:
+            result = service.create(data, user_id)
+            print("Stipend created successfully")
+            return result
+        except Exception as e:
+            print(f"Error creating stipend: {str(e)}")
+            raise
 
     def update(self, data, user_id=None):
         """Update stipend fields with audit logging and validation"""

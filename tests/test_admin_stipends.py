@@ -44,6 +44,9 @@ class AdminStipendTestCase(unittest.TestCase):
         # Log in as admin
         response = self.login('admin', 'password')
         self.assertEqual(response.status_code, 200)
+        
+        # Print response data for debugging
+        print("\nResponse Data:", response.data.decode('utf-8'))
 
         # Navigate to the stipend creation page
         response = self.client.get(url_for('admin.stipend.create'))
