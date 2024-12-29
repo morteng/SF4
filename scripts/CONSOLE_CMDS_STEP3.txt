@@ -5,7 +5,6 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
-
 ### COMMANDS END ###
 
 # Once finished, jump to Step 4.
