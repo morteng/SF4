@@ -5,17 +5,6 @@ from datetime import datetime
 from app.constants import FlashMessages
 
 class CustomDateTimeField(DateTimeField):
-    """
-    Custom DateTimeField with enhanced validation features.
-    
-    Features:
-    - Timezone support
-    - Strict format validation (YYYY-MM-DD HH:MM:SS)
-    - Future/past date validation
-    - Leap year validation
-    - Custom error messages
-    """
-    
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
         # Ensure format is always a string
         if not isinstance(format, str):
@@ -24,14 +13,14 @@ class CustomDateTimeField(DateTimeField):
         # Merge custom error messages with defaults
         custom_messages = kwargs.pop('error_messages', {})
         self.error_messages = {
-            'required': FlashMessages.DATE_REQUIRED,
-            'invalid_format': FlashMessages.INVALID_DATE_FORMAT,
+            'required': str(FlashMessages.DATE_REQUIRED),
+            'invalid_format': str(FlashMessages.INVALID_DATE_FORMAT),
             'invalid_date': 'Invalid date values',
-            'invalid_time': FlashMessages.INVALID_TIME_VALUES,
-            'invalid_leap_year': FlashMessages.INVALID_LEAP_YEAR,
+            'invalid_time': str(FlashMessages.INVALID_TIME_VALUES),
+            'invalid_leap_year': str(FlashMessages.INVALID_LEAP_YEAR),
             'past_date': 'Date must be a future date',
             'future_date': 'Date cannot be more than 5 years in the future',
-            **custom_messages  # Allow overriding defaults
+            **custom_messages
         }
         super().__init__(label=label, validators=validators, format=format, **kwargs)
         self.render_kw = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
@@ -48,10 +37,8 @@ class CustomDateTimeField(DateTimeField):
 
 
     def process_formdata(self, valuelist):
-        # Clear any existing errors
         self.errors = []
-
-        # Check if value is missing or empty
+        
         if not valuelist or not valuelist[0].strip():
             self.errors.append(self.error_messages['required'])
             self.data = None
@@ -59,28 +46,29 @@ class CustomDateTimeField(DateTimeField):
 
         date_str = valuelist[0].strip()
         
-        # Validate format
+        # Validate format first
         if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
             self.errors.append(self.error_messages['invalid_format'])
             self.data = None
             return
 
+        # Validate time components before full parsing
         try:
-            # Ensure self.format is a string
-            if not isinstance(self.format, str):
-                self.format = '%Y-%m-%d %H:%M:%S'
-                
-            # Parse the full datetime using self.format
-            parsed_dt = datetime.strptime(date_str, self.format)
-            
-            # Validate time components
-            if not (0 <= parsed_dt.hour <= 23) or \
-               not (0 <= parsed_dt.minute <= 59) or \
-               not (0 <= parsed_dt.second <= 59):
+            time_part = date_str.split()[1]
+            hours, minutes, seconds = map(int, time_part.split(':'))
+            if not (0 <= hours <= 23) or not (0 <= minutes <= 59) or not (0 <= seconds <= 59):
                 self.errors.append(self.error_messages['invalid_time'])
                 self.data = None
                 return
+        except (IndexError, ValueError):
+            self.errors.append(self.error_messages['invalid_time'])
+            self.data = None
+            return
 
+        # Then validate full date
+        try:
+            parsed_dt = datetime.strptime(date_str, self.format)
+            
             # Validate leap year for February 29th
             if parsed_dt.month == 2 and parsed_dt.day == 29:
                 year = parsed_dt.year
@@ -90,9 +78,7 @@ class CustomDateTimeField(DateTimeField):
                     self.data = None
                     return
 
-            # If all validations pass, store the datetime
             self.data = parsed_dt
-
         except ValueError:
             self.errors.append(self.error_messages['invalid_date'])
             self.data = None

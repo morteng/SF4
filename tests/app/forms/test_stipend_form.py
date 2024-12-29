@@ -322,6 +322,19 @@ class TestCustomDateTimeField(BaseTestCase):
         form.test_field.process_formdata(['2023-01-01 25:00:00'])
         assert form.validate() is False
         assert 'Invalid time values' in form.test_field.errors
+        
+        # Test other invalid time cases
+        invalid_times = [
+            '2023-01-01 24:00:00',  # Invalid hour
+            '2023-01-01 23:60:00',  # Invalid minute
+            '2023-01-01 23:59:60',  # Invalid second
+        ]
+        
+        for time in invalid_times:
+            form = TestForm()
+            form.test_field.process_formdata([time])
+            assert form.validate() is False
+            assert 'Invalid time values' in form.test_field.errors
 
     def test_past_date(self):
         field = CustomDateTimeField()
