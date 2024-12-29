@@ -8,6 +8,18 @@ from pytz import timezone, utc
 class CustomDateTimeField(DateTimeField):
     """Custom DateTimeField with timezone support and enhanced validation."""
     
+    # Define error messages
+    error_messages = {
+        'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
+        'invalid_date': 'Invalid date values (e.g., Feb 30)',
+        'invalid_time': 'Invalid time values (e.g., 25:61:61)',
+        'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
+        'required': 'Date is required',
+        'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)',
+        'past_date': 'Application deadline must be a future date',
+        'future_date': 'Application deadline cannot be more than 5 years in the future'
+    }
+    
     def __init__(self, *args, **kwargs):
         kwargs['format'] = '%Y-%m-%d %H:%M:%S'
         kwargs['render_kw'] = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
