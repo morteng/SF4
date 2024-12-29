@@ -44,29 +44,7 @@ stipend_controller = BaseRouteController(
     'admin/stipends'
 )
 
-@admin_stipend_bp.route('/create', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")
-@login_required
-@admin_required
-def create():
-    return stipend_controller.create()
-
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")
-@login_required
-@admin_required
-def edit(id):
-    return stipend_controller.edit(id)
-
-@admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])
-@limiter.limit("3 per minute")
-@login_required
-@admin_required
-def delete(id):
-    return stipend_controller.delete(id)
-
-
-@admin_stipend_bp.route('/create', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")
 @login_required
 @admin_required
