@@ -2,6 +2,69 @@
 
 ## Testing Setup
 
+#### 1. Fix `pytest` Installation
+1. Activate your virtual environment:
+   - **Windows**: `.venv\Scripts\activate`
+   - **macOS/Linux**: `source .venv/bin/activate`
+
+2. Install `pytest`:
+   ```bash
+   pip install pytest
+   ```
+
+3. Verify the installation:
+   ```bash
+   pip show pytest
+   ```
+
+4. Add `pytest` to `requirements.txt`:
+   ```bash
+   echo "pytest" >> requirements.txt
+   ```
+
+#### 2. Fix `CustomDateTimeField` Initialization
+1. Locate the `CustomDateTimeField` class (likely in `app/forms/admin_forms.py` or similar).
+
+2. Replace the existing implementation with the corrected version:
+   ```python
+   from wtforms import Field
+   from wtforms.validators import InputRequired
+
+   class CustomDateTimeField(Field):
+       def __init__(self, label=None, validators=None, **kwargs):
+           if validators is None:
+               validators = [InputRequired()]  # Default validator
+           super().__init__(label=label, validators=validators, **kwargs)
+   ```
+
+3. Update forms using `CustomDateTimeField` to avoid passing `validators` explicitly unless needed. For example, in `StipendForm`:
+   ```python
+   application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
+   ```
+
+#### 3. Run the Tests
+1. Activate your virtual environment (if not already activated):
+   - **Windows**: `.venv\Scripts\activate`
+   - **macOS/Linux**: `source .venv/bin/activate`
+
+2. Run the tests:
+   ```bash
+   pytest
+   ```
+
+#### 4. Optional: Add Dependency Verification
+To avoid missing dependencies in the future, add a pre-test check in a file like `tests/test_dependencies.py`:
+```python
+import subprocess
+import pytest
+
+def test_dependencies():
+    try:
+        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+    except subprocess.CalledProcessError:
+        pytest.fail("Failed to install dependencies")
+```
+
 ### Dependency Verification
 1. **Pre-Test Check**:
    - Add a test to verify all dependencies are installed before running the test suite:
