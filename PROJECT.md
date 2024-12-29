@@ -108,6 +108,22 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
           self._create_limit = value
   ```
 - **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
+
+### Key Takeaways for Next Coding Session
+1. **Circular Imports**:
+   - Refactor shared functionality into separate modules and use lazy imports to avoid circular dependencies.
+
+2. **Dependency Management**:
+   - Always verify dependencies are installed before running tests or the application.
+
+3. **Property Implementation**:
+   - Always define properties correctly with `@property` and `@<property>.setter`.
+
+4. **Validation Logic**:
+   - Consolidate and test validation logic for edge cases, especially for date/time fields.
+
+5. **Testing**:
+   - Add comprehensive tests for all critical functionality, including edge cases.
 - **Issue**: Circular imports caused startup errors (e.g., `ModuleNotFoundError`).
 - **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
 - **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
