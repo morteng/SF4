@@ -377,6 +377,57 @@ class TestCustomDateTimeField(BaseTestCase):
         form.test_field.process_formdata(['2024-02-29 00:00:00'])  # 2024 is a leap year
         assert form.validate() is True
 
+def test_leap_year_validation(app):
+    """Test leap year validation directly on CustomDateTimeField."""
+    with app.test_request_context():
+        field = CustomDateTimeField(
+            error_messages={
+                'invalid_leap_year': FlashMessages.INVALID_LEAP_YEAR
+            }
+        )
+
+        # Test with a valid leap year date
+        field.process_formdata(['2024-02-29 12:00:00'])
+        assert field.validate(None) is True
+        assert field.errors == []
+
+        # Test with an invalid leap year date
+        field.process_formdata(['2023-02-29 12:00:00'])
+        assert field.validate(None) is False
+        assert FlashMessages.INVALID_LEAP_YEAR in field.errors
+
+def test_error_messages_from_constants(app):
+    """Test that error messages are using constants."""
+    with app.test_request_context():
+        field = CustomDateTimeField(
+            error_messages={
+                'required': FlashMessages.DATE_REQUIRED,
+                'invalid_format': FlashMessages.INVALID_DATE_FORMAT,
+                'invalid_time': FlashMessages.INVALID_TIME_VALUES,
+                'invalid_leap_year': FlashMessages.INVALID_LEAP_YEAR
+            }
+        )
+
+        # Test empty date
+        field.process_formdata([''])
+        assert field.validate(None) is False
+        assert FlashMessages.DATE_REQUIRED in field.errors
+
+        # Test invalid format
+        field.process_formdata(['2023/02/28 12:00:00'])
+        assert field.validate(None) is False
+        assert FlashMessages.INVALID_DATE_FORMAT in field.errors
+
+        # Test invalid time
+        field.process_formdata(['2023-02-28 25:00:00'])
+        assert field.validate(None) is False
+        assert FlashMessages.INVALID_TIME_VALUES in field.errors
+
+        # Test invalid leap year
+        field.process_formdata(['2023-02-29 12:00:00'])
+        assert field.validate(None) is False
+        assert FlashMessages.INVALID_LEAP_YEAR in field.errors
+
 def test_leap_year_validation_simplified(app):
     """Test leap year validation directly on CustomDateTimeField."""
     with app.test_request_context():

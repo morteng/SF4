@@ -14,19 +14,32 @@ def handle_errors(func):
             return func(*args, **kwargs)
         except ValidationError as e:
             db.session.rollback()
-            logger.error(f"Validation error in {func.__name__}: {str(e)}")
+            logger.error(f"Validation error in {func.__name__}: {str(e)}", extra={
+                'user_id': kwargs.get('user_id'),
+                'data': kwargs.get('data'),
+                'errors': e.messages
+            })
             raise ValueError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors=e.messages))
         except SQLAlchemyError as e:
             db.session.rollback()
-            logger.error(f"Database error in {func.__name__}: {str(e)}")
+            logger.error(f"Database error in {func.__name__}: {str(e)}", extra={
+                'user_id': kwargs.get('user_id'),
+                'data': kwargs.get('data')
+            })
             raise ValueError(FlashMessages.DATABASE_ERROR)
         except ValueError as e:
             db.session.rollback()
-            logger.error(f"Value error in {func.__name__}: {str(e)}")
+            logger.error(f"Value error in {func.__name__}: {str(e)}", extra={
+                'user_id': kwargs.get('user_id'),
+                'data': kwargs.get('data')
+            })
             raise
         except Exception as e:
             db.session.rollback()
-            logger.error(f"Error in {func.__name__}: {str(e)}")
+            logger.error(f"Error in {func.__name__}: {str(e)}", extra={
+                'user_id': kwargs.get('user_id'),
+                'data': kwargs.get('data')
+            })
             raise ValueError(FlashMessages.CRUD_OPERATION_ERROR.format(error=str(e)))
     return wrapper
 

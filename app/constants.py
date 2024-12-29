@@ -193,8 +193,8 @@ class FlashMessages(str, Enum):
     INVALID_TIME_COMPONENTS = "Invalid time values. Hours must be 0-23, minutes and seconds 0-59."
     INVALID_LEAP_YEAR_DATE = "Invalid date for February in non-leap years."
     INVALID_DATE_VALUES = "Invalid date values. Please check the day, month, and year."
-    DATETIME_IN_PAST = "Date/time cannot be in the past."
-    DATETIME_IN_FUTURE = "Date/time must be in the future."
+    PAST_DATE = "Date/time cannot be in the past."
+    FUTURE_DATE = "Date/time must be in the future."
     
     # CRUD Operation Messages
     CRUD_VALIDATION_ERROR = "Validation failed: {errors}"

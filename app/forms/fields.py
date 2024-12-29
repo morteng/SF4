@@ -45,23 +45,6 @@ class CustomDateTimeField(DateTimeField):
             
         date_str = valuelist[0].strip()
         
-        # Check for leap year dates first
-        if '02-29' in date_str:
-            try:
-                date_part = date_str.split()[0]
-                parsed_date = datetime.strptime(date_part, '%Y-%m-%d')
-                if parsed_date.month == 2 and parsed_date.day == 29:
-                    year = parsed_date.year
-                    is_leap = (year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
-                    if not is_leap:
-                        self.errors.append(self.error_messages['invalid_leap_year'])
-                        self.data = None
-                        return
-            except ValueError:
-                self.errors.append(self.error_messages['invalid_leap_year'])
-                self.data = None
-                return
-
         # Validate format
         if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
             self.errors.append(self.error_messages['invalid_format'])
