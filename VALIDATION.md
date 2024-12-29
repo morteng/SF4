@@ -17,6 +17,24 @@
    - Verify edge cases in date/time validation
    - Ensure consistent handling of empty/missing values
 
+### General Validation Best Practices
+1. **Validation Logic**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Ensure compatibility with parent classes when overriding attributes or methods.
+   - Use centralized error messages from `app/constants.py` for consistency.
+
+2. **Testing**:
+   - Test edge cases thoroughly, especially for date/time validation.
+   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+
+3. **Error Handling**:
+   - Log validation errors with context for easier debugging.
+   - Provide clear, user-friendly error messages for validation failures.
+
+4. **Code Organization**:
+   - Keep validation logic modular and reusable.
+   - Avoid code duplication by using base classes and utilities.
+
 1. **Define Properties Correctly**:
    - Always define a property (`@property`) before using a setter (`@<property>.setter`).
    - Example:

@@ -14,10 +14,16 @@
 - [x] Consolidate leap year validation logic in `CustomDateTimeField`.
 
 ## Next Session
-- [ ] Add comprehensive tests for property getters and setters
-- [ ] Verify that all dependencies listed in `requirements.txt` are installed during test execution
-- [ ] Add a pre-test dependency verification script to ensure all required packages are installed
-- [ ] Resolve circular imports by refactoring shared functionality into a separate module
+- [ ] Refactor shared functionality into `app/common/utils.py` to avoid circular imports.
+- [ ] Add a pre-test dependency verification script to ensure all required packages are installed.
+- [ ] Verify that all properties are correctly implemented with `@property` and `@<property>.setter`.
+- [ ] Add comprehensive tests for edge cases in date/time validation.
+- [ ] Ensure all error messages are centralized in `app/constants.py` and used consistently.
+
+## Long Term
+- [ ] Automate dependency verification during test execution.
+- [ ] Improve test coverage for all form fields.
+- [ ] Add integration tests for form validation.
 - [x] Refactor other shared functionality into `app/common`.
 - [x] Add comprehensive tests for `BaseService` properties.
 - [x] Verify time-based tests with `freezegun`.
