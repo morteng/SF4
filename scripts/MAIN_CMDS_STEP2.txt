@@ -14,9 +14,9 @@
 /ask Do we need to run any console commands for Step 2?
 # If so, we will add them to CONSOLE_CMDS_STEP2.txt. If not, ensure it’s empty or remove old commands.
 
-/add CONSOLE_CMDS_STEP2.txt
+/add scripts/CONSOLE_CMDS_STEP2.txt
 /code Remove any previously executed console commands from CONSOLE_CMDS_STEP2.txt, and add new ones if needed.
-/drop CONSOLE_CMDS_STEP2.txt
+/drop scripts/CONSOLE_CMDS_STEP2.txt
 
 # Now load the console commands for Step 2.
-/load CONSOLE_CMDS_STEP2.txt
+/load scripts/CONSOLE_CMDS_STEP2.txt

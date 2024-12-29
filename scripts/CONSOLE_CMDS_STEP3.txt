@@ -14,4 +14,4 @@
 ### COMMANDS END ###
 
 # Once finished, jump to Step 4.
-/load MAIN_CMDS_STEP4.txt
+/load scripts/MAIN_CMDS_STEP4.txt

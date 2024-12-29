@@ -13,6 +13,6 @@
 /run echo "Running console commands for Step 5"
 ### COMMANDS END ###
 
-# After finishing Step 5, we start againg with Step 1 of the Code Cycle.
+# After finishing Step 5, we start againg with Step 1 of the Coding Cycle.
 /reset
-/load MAIN_CMDS_STEP1.txt
+/load scripts/MAIN_CMDS_STEP1.txt
