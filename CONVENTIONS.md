@@ -18,6 +18,25 @@
    ```bash
    echo "pytest" >> requirements.txt
    ```
+5. Run tests:
+   ```bash
+   pytest
+   ```
+6. If tests fail due to missing dependencies:
+   ```bash
+   pip install -r requirements.txt
+   pytest
+   ```
+7. Recreate virtual environment (if needed):
+   ```bash
+   deactivate
+   rm -rf .venv
+   python -m venv .venv
+   source .venv/bin/activate  # macOS/Linux
+   .venv\Scripts\activate     # Windows
+   pip install -r requirements.txt
+   pytest
+   ```
 
 ### 2. Run Tests
 1. Run all tests:

@@ -4,8 +4,12 @@
 
 ### Handle All Arguments
 - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
-- Example:
+- Always provide default validators if none are passed.
+- Example implementation:
   ```python
+  from wtforms import Field
+  from wtforms.validators import InputRequired
+
   class CustomDateTimeField(Field):
       def __init__(self, label=None, validators=None, **kwargs):
           if validators is None:
