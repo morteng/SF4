@@ -212,3 +212,7 @@ class FlashMessages(str, Enum):
     PASSWORD_RESET_SUCCESS = "Password reset successfully."
     PASSWORD_RESET_ERROR = "Failed to reset password."
     USER_SEARCH_ERROR = "Failed to search users."
+# Error messages
+INVALID_DATETIME_FORMAT = "Invalid date/time format. Expected format: YYYY-MM-DD HH:MM:SS"
+INVALID_LEAP_YEAR = "Invalid date: February 29th on a non-leap year"
+MISSING_DEPENDENCY = "Required dependency not found: {package}"

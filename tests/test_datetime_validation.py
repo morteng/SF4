@@ -30,3 +30,20 @@ def test_valid_datetime():
     field = CustomDateTimeField()
     field.process_formdata(["2023-01-01 12:00:00"])
     assert not field.errors
+import pytest
+from app.forms import CustomDateTimeField
+
+@pytest.mark.parametrize("date,valid", [
+    ("2023-02-29 00:00:00", False),  # Invalid leap year
+    ("2023-13-01 00:00:00", False),  # Invalid month
+    ("2023-02-28 25:00:00", False),  # Invalid hour
+    ("2024-02-29 00:00:00", True),   # Valid leap year
+    ("2023-12-31 23:59:59", True),   # Valid date/time
+])
+def test_datetime_validation(date, valid):
+    field = CustomDateTimeField()
+    if valid:
+        field.validate(date)  # Should not raise
+    else:
+        with pytest.raises(ValueError):
+            field.validate(date)
