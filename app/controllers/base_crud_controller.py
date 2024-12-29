@@ -4,10 +4,28 @@ from app.models.audit_log import AuditLog
 from app.constants import FlashMessages, FlashCategory
 
 class BaseCrudController:
-    def __init__(self, service, entity_name, form_class):
+    def __init__(self, service, entity_name, form_class, audit_logger=None):
         self.service = service
         self.entity_name = entity_name
         self.form_class = form_class
+        self.audit_logger = audit_logger
+
+    def _handle_operation(self, operation, success_message, error_message, 
+                        redirect_success, redirect_error, **kwargs):
+        try:
+            result = operation(**kwargs)
+            if self.audit_logger and hasattr(result, 'id'):
+                self.audit_logger.log(
+                    operation.__name__,
+                    self.entity_name,
+                    result.id,
+                    f"Operation {operation.__name__} on {self.entity_name}"
+                )
+            flash(success_message.format(self.entity_name), 'success')
+            return redirect(url_for(f'admin.{self.entity_name}.{redirect_success}'))
+        except Exception as e:
+            flash(error_message.format(self.entity_name), 'error')
+            return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
 
     def _handle_operation(self, operation, success_message, error_message, 
                         redirect_success, redirect_error, **kwargs):

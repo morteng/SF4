@@ -45,15 +45,20 @@ admin_org_bp = Blueprint('organization', __name__, url_prefix='/organizations')
 csrf = CSRFProtect()
 
 
+org_controller = BaseCrudController(
+    OrganizationService(),
+    'organization',
+    OrganizationForm,
+    audit_logger=AuditLogger()
+)
+
 @admin_org_bp.route('/create', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")
 @login_required
 @admin_required
 @notification_count
-@csrf.exempt  # Temporarily disable CSRF for testing
 def create():
-    """Create a new organization with proper validation and audit logging"""
-    form = OrganizationForm()
+    return org_controller.create()
     
     if request.method == 'POST' and form.validate():
         try:
