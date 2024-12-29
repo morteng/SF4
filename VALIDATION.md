@@ -1,6 +1,4 @@
-## Updated Validation Rules
-
-### Dependency Validation
+## Dependency Validation
 1. **Issue**: Tests failed because `freezegun` was not installed, even though it was listed in `requirements.txt`.
 2. **Solution**:
    - Always install dependencies from `requirements.txt`:

@@ -70,23 +70,41 @@
 - Validate inputs
 - Preserve exception types
 
-## Updated Validation Conventions
+## Validation Best Practices
 
-1. **Date/Time Validation**:
-   - Validate date and time components separately before full parsing
-   - Use specific error messages for different validation failures
-   - Handle edge cases like February 29th in non-leap years
-   - Validate time components (hours, minutes, seconds) together
+### Dependency Validation
+1. **Issue**: Tests failed because `freezegun` was not installed, even though it was listed in `requirements.txt`.
+2. **Solution**:
+   - Always install dependencies from `requirements.txt`:
+     ```bash
+     pip install -r requirements.txt
+     ```
+   - Verify installation with:
+     ```bash
+     pip show <package_name>
+     ```
+3. **Best Practice**:
+   - Add a pre-test check to ensure all required dependencies are installed.
+   - Document the setup process to avoid similar issues in the future.
+
+### Date/Time Validation
+1. **Best Practices**:
+   - Validate date and time components separately before full parsing.
+   - Use specific error messages for different validation failures (e.g., invalid format, invalid time, invalid leap year).
+   - Handle edge cases like February 29th in non-leap years.
 
 2. **Error Handling**:
-   - Always use error messages from `app/constants.py`
-   - Provide clear, user-friendly error messages
-   - Log validation errors with context
+   - Provide specific error messages for:
+     - Invalid date formats.
+     - Out-of-range values.
+     - Missing required fields.
+     - Invalid leap year dates.
+     - Invalid time components (hours, minutes, seconds).
+   - Use configurable error messages from `app/constants.py`.
 
 3. **Testing**:
-   - Test all error message variations
-   - Verify edge cases in date/time validation
-   - Ensure consistent handling of empty/missing values
+   - Test all error message variations for date/time fields.
+   - Verify edge cases in date/time validation (e.g., 25:00:00, February 29th).
 
 ## Validation Best Practices
 
