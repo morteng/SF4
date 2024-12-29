@@ -293,6 +293,18 @@ user.profile                 GET        /user/profile
 
 ## Lessons Learned
 
+### Dependency Management
+- **Key Issue**: The `freezegun` package was listed in `requirements.txt` but not installed in the environment, causing test failures.
+- **Solution**: Always verify that all dependencies are installed by running:
+  ```bash
+  pip install -r requirements.txt
+  ```
+- **Best Practice**: After installing dependencies, verify their installation with:
+  ```bash
+  pip show <package_name>
+  ```
+- **Testing**: Use `freezegun` for deterministic time-based testing. Test edge cases thoroughly, especially for date/time validation.
+
 ### Date/Time Validation
 - **Issue**: The `validate_application_deadline` method in `StipendForm` assumed `field.data` was a string, but `CustomDateTimeField` parsed it into a `datetime` object, causing an `AttributeError`.
 - **Fix**: Updated the validation logic to handle `datetime` objects directly, including timezone handling and future date checks.

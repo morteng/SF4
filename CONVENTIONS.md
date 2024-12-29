@@ -146,6 +146,19 @@
    - Run tests with `pytest` after ensuring all dependencies are installed.
    - If tests fail due to missing dependencies, install them and re-run the tests.
 
+## Testing Setup
+1. **Dependencies**:
+   - Ensure all testing dependencies (e.g., `freezegun`, `pytest`) are installed and up-to-date.
+   - Verify installation with `pip show <package_name>`.
+
+2. **Virtual Environment**:
+   - Always activate the virtual environment before running tests or installing dependencies.
+   - Use `source .venv/bin/activate` (Linux/Mac) or `.venv\Scripts\activate` (Windows).
+
+3. **Test Execution**:
+   - Run tests with `pytest` after ensuring all dependencies are installed.
+   - If tests fail due to missing dependencies, install them and re-run the tests.
+
 ## Testing
 - Test both success and error cases
 - Verify error messages in validation tests
