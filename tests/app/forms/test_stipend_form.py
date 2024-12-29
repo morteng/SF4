@@ -254,22 +254,63 @@ def test_missing_required_fields(app, form_data):
         assert form.validate() is False
         assert 'Application deadline is required.' in form.errors['application_deadline']
 
-class TestCustomDateTimeField(Form):
-    test_field = CustomDateTimeField(
-        label='Test Field',
-        format='%Y-%m-%d %H:%M:%S',
-        timezone='UTC',
-        error_messages={
-            'required': 'Date is required',
-            'invalid_format': 'Invalid date format',
-            'invalid_date': 'Invalid date values (e.g., Feb 30, Feb 31)',
-            'invalid_time': 'Invalid time values (e.g., 25:00:00, 12:60:00)',
-            'invalid_timezone': 'Invalid timezone',
-            'past_date': 'Date must be a future date',
-            'future_date': 'Date cannot be more than 5 years in the future',
-            'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)'
-        }
-    )
+class TestCustomDateTimeField(BaseTestCase):
+    def test_empty_date(self):
+        field = CustomDateTimeField(
+            label='Test Field',
+            format='%Y-%m-%d %H:%M:%S',
+            timezone='UTC',
+            error_messages={
+                'required': 'Date is required',
+                'invalid_format': 'Invalid date format',
+                'invalid_date': 'Invalid date values (e.g., Feb 30, Feb 31)',
+                'invalid_time': 'Invalid time values (e.g., 25:00:00, 12:60:00)',
+                'invalid_timezone': 'Invalid timezone',
+                'past_date': 'Date must be a future date',
+                'future_date': 'Date cannot be more than 5 years in the future',
+                'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)'
+            }
+        )
+        self.assertFormInvalid(
+            field, {'': ''},
+            {'': ['Date is required']}
+        )
+
+    def test_invalid_date_format(self):
+        field = CustomDateTimeField()
+        self.assertFormInvalid(
+            field, {'': '2023-13-01 00:00:00'},  # Invalid month
+            {'': ['Invalid date values']}
+        )
+
+    def test_invalid_time_values(self):
+        field = CustomDateTimeField()
+        self.assertFormInvalid(
+            field, {'': '2023-01-01 25:00:00'},  # Invalid hour
+            {'': ['Invalid time values']}
+        )
+
+    def test_past_date(self):
+        field = CustomDateTimeField()
+        self.assertFormInvalid(
+            field, {'': '2020-01-01 00:00:00'},  # Past date
+            {'': ['Date must be a future date']}
+        )
+
+    def test_future_date_limit(self):
+        field = CustomDateTimeField()
+        future_date = datetime.now().replace(year=datetime.now().year + 6)
+        self.assertFormInvalid(
+            field, {'': future_date.strftime('%Y-%m-%d %H:%M:%S')},  # More than 5 years in future
+            {'': ['Date cannot be more than 5 years in the future']}
+        )
+
+    def test_leap_year_validation(self):
+        field = CustomDateTimeField()
+        self.assertFormInvalid(
+            field, {'': '2023-02-29 00:00:00'},  # Invalid leap year date
+            {'': ['Invalid date values (e.g., Feb 29 in non-leap years)']}
+        )
 
 def test_leap_year_validation_simplified(app):
     """Test leap year validation directly on CustomDateTimeField."""
