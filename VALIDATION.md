@@ -1,7 +1,11 @@
 # Validation Rules
 
 ## Database Operations  
-- Validate inputs before DB operations  
+- Validate inputs before DB operations
+- Handle flexible deadline formats:
+  * Full datetime (YYYY-MM-DD HH:MM:SS)
+  * Month/year (Month YYYY) 
+  * Year only (YYYY)
 - Handle constraints gracefully  
 - Rollback on errors  
 - Verify state after operations  
