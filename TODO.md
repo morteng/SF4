@@ -19,12 +19,7 @@
 - [ ] Improve test coverage for all form fields.
 - [ ] Add integration tests for form validation.
 
-## Medium Priority
-- [ ] Optimize validation performance in `CustomDateTimeField`.
-- [ ] Add validation benchmarks for date/time fields.
-- [ ] Expand test coverage for `BaseCrudController` and `BaseRouteController`.
-
 ## Security Priority
-- Implement rate limiting for API endpoints.
-- Implement session expiration
-- Add audit logging for admin actions
+- [ ] Implement rate limiting for API endpoints.
+- [ ] Implement session expiration.
+- [ ] Add audit logging for admin actions.

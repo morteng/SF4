@@ -93,6 +93,12 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 - Verified edge cases in date/time validation.
 - Improved test isolation and reliability.
 
+### Key Learnings
+- Always verify the data type of form field inputs before applying validation logic.
+- Ensure compatibility with parent classes when overriding attributes or methods.
+- Use centralized error messages from `app/constants.py` for consistency.
+- Test edge cases thoroughly, especially for date/time validation.
+
 ## System Components
 
 **Database Initialization**:  
