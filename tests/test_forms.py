@@ -13,10 +13,12 @@ def test_stipend_form_validation():
     # Test invalid date/time
     form.application_deadline.data = "invalid-date"
     assert not form.validate()
+    assert FlashMessages.INVALID_DATE_FORMAT in form.application_deadline.errors
 
     # Test missing required field
     form.application_deadline.data = None
     assert not form.validate()
+    assert FlashMessages.MISSING_FIELD_ERROR in form.application_deadline.errors
 import pytest
 from freezegun import freeze_time
 from app.forms.admin_forms import StipendForm

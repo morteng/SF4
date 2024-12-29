@@ -22,7 +22,9 @@ class BaseCrudController:
             'delete_error': FlashMessages.DELETE_ERROR,
             'not_found': FlashMessages.NOT_FOUND,
             'validation_error': FlashMessages.FORM_VALIDATION_ERROR,
-            'form_validation_error': FlashMessages.FORM_VALIDATION_ERROR  # Add this line
+            'form_validation_error': FlashMessages.FORM_VALIDATION_ERROR,
+            'invalid_date_format': FlashMessages.INVALID_DATE_FORMAT,
+            'missing_field': FlashMessages.MISSING_FIELD_ERROR
         }
         self.supports_htmx = True
         self.htmx_headers = {

@@ -31,12 +31,28 @@ from flask_wtf import CSRFProtect
 from dotenv import load_dotenv
 # Lazy import to avoid circular dependencies
 
+def register_blueprints(app):
+    from app.routes.admin import register_admin_blueprints
+    register_admin_blueprints(app)
+
+def init_extensions(app):
+    db.init_app(app)
+    login_manager.init_app(app)
+    migrate.init_app(app, db)
+    limiter.init_app(app)
+
 def create_app(config_name='development'):
     app = Flask(__name__)
     
     try:
         # Check dependencies before proceeding
         check_dependencies()
+        
+        # Initialize extensions
+        init_extensions(app)
+        
+        # Register blueprints
+        register_blueprints(app)
 
         # Set up migrations directory in root project directory
         basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # Go up one level
