@@ -2,7 +2,9 @@
 
 ## Key Updates
 - **Validation Improvements**:
-  - Fixed `CustomDateTimeField` initialization to handle `validators` argument correctly.
+  - Fixed `CustomDateTimeField` initialization to handle `validators` argument correctly with default InputRequired().
+  - Added centralized error messages in app/constants.py for date/time validation.
+  - Added comprehensive tests for edge cases including leap years and invalid times.
   - Standardized error messages for date/time fields using `app/constants.py`.
   - Added comprehensive tests for edge cases in date/time validation.
   - Refactored shared functionality into `app/common/utils.py`.

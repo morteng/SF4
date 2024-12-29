@@ -3,8 +3,9 @@
 ### Date/Time Validation
 1. **Best Practices**:
    - Validate date and time components separately before full parsing.
-   - Use specific error messages for different validation failures (e.g., invalid format, invalid time, invalid leap year).
+   - Use specific error messages from app/constants.py for different validation failures (e.g., invalid format, invalid time, invalid leap year).
    - Handle edge cases like February 29th in non-leap years.
+   - Ensure CustomDateTimeField properly handles validators argument with default InputRequired().
 
 2. **Error Handling**:
    - Provide specific error messages for:

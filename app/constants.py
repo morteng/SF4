@@ -241,3 +241,7 @@ MISSING_REQUIRED_FIELD = "This field is required"
 # Date/Time Validation Messages
 DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
 TIME_FORMAT_ERROR = "Invalid time format. Please use HH:MM:SS."
+# Date/Time Validation Errors
+DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+DATE_REQUIRED_ERROR = "Date is required."
+INVALID_LEAP_YEAR_ERROR = "Invalid date: February 29th is not a valid date for this year."

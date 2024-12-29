@@ -68,3 +68,16 @@ def test_time_validation(time_str, expected_error):
     form.application_deadline.data = f"2023-01-01 {time_str}"
     assert not form.validate()
     assert expected_error in form.application_deadline.errors
+from app.constants import DATE_FORMAT_ERROR, INVALID_LEAP_YEAR_ERROR
+
+def test_custom_date_time_field_leap_year():
+    form = StipendForm()
+    form.application_deadline.data = "2023-02-29 12:00:00"  # Invalid leap year
+    assert not form.validate()
+    assert INVALID_LEAP_YEAR_ERROR in form.application_deadline.errors
+
+def test_custom_date_time_field_invalid_time():
+    form = StipendForm()
+    form.application_deadline.data = "2023-01-01 25:00:00"  # Invalid time
+    assert not form.validate()
+    assert DATE_FORMAT_ERROR in form.application_deadline.errors
