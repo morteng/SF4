@@ -135,18 +135,6 @@ class BaseService:
         db.session.commit()
         return entities
 
-    def bulk_restore(self, ids, user_id=None):
-        """Restore multiple soft deleted entities"""
-        if not self.soft_delete_enabled:
-            raise ValueError("Model does not support soft delete")
-            
-        entities = self.model.query.filter(self.model.id.in_(ids)).all()
-        for entity in entities:
-            entity.is_deleted = False
-            self._log_audit('restore', entity, user_id=user_id)
-        db.session.commit()
-        return entities
-
     def soft_delete(self, id, user_id=None):
         """Soft delete implementation"""
         entity = self.get_by_id(id)

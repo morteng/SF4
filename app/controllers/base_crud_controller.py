@@ -19,18 +19,9 @@ class BaseCrudController:
                     operation.__name__,
                     self.entity_name,
                     result.id,
-                    f"Operation {operation.__name__} on {self.entity_name}"
+                    f"Operation {operation.__name__} on {self.entity_name}",
+                    user_id=current_user.id if current_user.is_authenticated else None
                 )
-            flash(success_message.format(self.entity_name), 'success')
-            return redirect(url_for(f'admin.{self.entity_name}.{redirect_success}'))
-        except Exception as e:
-            flash(error_message.format(self.entity_name), 'error')
-            return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
-
-    def _handle_operation(self, operation, success_message, error_message, 
-                        redirect_success, redirect_error, **kwargs):
-        try:
-            result = operation(**kwargs)
             flash(success_message.format(self.entity_name), FlashCategory.SUCCESS.value)
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_success}'))
         except Exception as e:

@@ -109,12 +109,34 @@ def run_bot(bot):
 def get_all_bots():
     return db.session.query(Bot).all()
 
-def update_bot(bot, data):
+def update_bot(self, bot, data, user_id=None):
+    """Update a bot with validation and audit logging"""
+    errors = self.validate_form_data(data)
+    if errors:
+        raise ValueError("\n".join(errors.values()))
+        
+    before = bot.to_dict()
     bot.name = data['name']
     bot.description = data['description']
-    # Update other fields as necessary
+    bot.schedule = data.get('schedule')
+    bot.is_active = data.get('is_active', True)
+    
+    if bot.schedule:
+        bot.next_run = bot.calculate_next_run()
+        bot.status = BotStatus.SCHEDULED
+        
     db.session.commit()
-    return bot  # Add this line to return the updated bot
+    
+    if self.audit_logger:
+        self.audit_logger.log(
+            action='update',
+            object_type='Bot',
+            object_id=bot.id,
+            user_id=user_id,
+            before=before,
+            after=bot.to_dict()
+        )
+    return bot
 
 def delete_bot(bot):
     db.session.delete(bot)
