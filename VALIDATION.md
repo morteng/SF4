@@ -1,40 +1,50 @@
-# Updated Validation Rules
-
-## Updated Validation Patterns
+## Updated Validation Rules
 
 ### Date/Time Validation
-1. **Validation Order**:
-   - Required → Format → Components → Full parsing.
-   - Validate time components before full date parsing.
+1. **Best Practices**:
+   - Validate date and time components separately before full parsing.
+   - Use specific error messages for different validation failures (e.g., invalid format, invalid time, invalid leap year).
+   - Handle edge cases like February 29th in non-leap years.
 
-2. **Error Messages**:
-   - Use specific messages for different validation failures.
-   - Centralize messages in `app/constants.py`.
-   - Provide clear, user-friendly messages.
+2. **Error Handling**:
+   - Provide specific error messages for:
+     - Invalid date formats.
+     - Out-of-range values.
+     - Missing required fields.
+     - Invalid leap year dates.
+     - Invalid time components (hours, minutes, seconds).
+   - Use configurable error messages from `app/constants.py`.
 
-3. **Edge Cases**:
-   - Handle invalid leap year dates.
-   - Validate time component ranges.
-   - Handle malformed datetime strings.
+3. **Testing**:
+   - Test all error message variations for date/time fields.
+   - Verify edge cases in date/time validation (e.g., 25:00:00, February 29th).
 
-4. **Timezone Handling**:
-   - Ensure all `datetime` objects are timezone-aware.
-   - Use `pytz.UTC.localize()` for naive `datetime` objects.
+### Error Handling
+- **Centralized Error Messages**:
+  - Always use error messages from `app/constants.py` for consistency.
+  - Avoid hardcoding error messages in validation logic.
 
-5. **Future/Past Date Validation**:
-   - Validate that dates are within acceptable ranges.
-   - Use `datetime.now(pytz.UTC)` for consistent comparisons.
+- **Field Initialization**:
+  - Ensure parameters are not passed multiple times during field initialization.
+  - Use consistent patterns for initializing custom fields.
 
-### Key Learnings
-- Always ensure parameters are not passed multiple times during field initialization.
-- Use centralized error messages from `app/constants.py` for consistency.
-- Test edge cases thoroughly, especially for date/time validation.
-- Keep validation logic modular and reusable.
+### Key Takeaways
+1. **Validation Logic**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Ensure compatibility with parent classes when overriding attributes or methods.
+   - Use centralized error messages from `app/constants.py` for consistency.
 
-### Testing Validation
-- Test all error message variations
-- Verify edge cases in date/time validation
-- Ensure consistent handling of empty/missing values
+2. **Testing**:
+   - Test edge cases thoroughly, especially for date/time validation.
+   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+
+3. **Error Handling**:
+   - Log validation errors with context for easier debugging.
+   - Provide clear, user-friendly error messages for validation failures.
+
+4. **Code Organization**:
+   - Keep validation logic modular and reusable.
+   - Avoid code duplication by using base classes and utilities.
 
 ## Updated Time Validation
 
