@@ -40,19 +40,6 @@ def create_admin_blueprint():
         )
     
     admin_bp.create_crud_notification = create_crud_notification
-    
-    # Add CRUD helper methods
-    def create_crud_notification(action, object_type, object_id, user_id):
-        """Helper to create standardized CRUD notifications"""
-        from app.models.notification import Notification
-        Notification.create(
-            type=f'{object_type.lower()}_{action}',
-            message=f'{object_type} {action}d: {object_id}',
-            related_object=f'{object_type}/{object_id}',
-            user_id=user_id
-        )
-    
-    admin_bp.create_crud_notification = create_crud_notification
 
     def log_audit(action, object_type, object_id=None, details=None, 
                  details_before=None, details_after=None):
@@ -95,18 +82,6 @@ def create_admin_blueprint():
     # Make audit logging available to routes
     admin_bp.log_audit = log_audit
 
-    def log_audit(action, object_type, object_id, details=None):
-        """Helper function to log admin actions"""
-        if current_user.is_authenticated:
-            audit_log = AuditLog(
-                user_id=current_user.id,
-                action=action,
-                object_type=object_type,
-                object_id=object_id,
-                details=details
-            )
-            db.session.add(audit_log)
-            db.session.commit()
     
     # Add before_request handler for security checks
     @admin_bp.before_request
@@ -186,10 +161,11 @@ def register_admin_blueprints(app):
     admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
     
     # Ensure all routes are properly registered
-    current_app.logger.debug("Registered admin blueprints:")
-    for rule in app.url_map.iter_rules():
-        if rule.endpoint.startswith('admin.'):
-            current_app.logger.debug(f"Route: {rule}")
+    with app.app_context():  # Add application context here
+        current_app.logger.debug("Registered admin blueprints:")
+        for rule in app.url_map.iter_rules():
+            if rule.endpoint.startswith('admin.'):
+                current_app.logger.debug(f"Route: {rule}")
     
     # Register the main admin blueprint
     app.register_blueprint(admin_bp)
