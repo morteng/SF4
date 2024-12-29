@@ -69,23 +69,34 @@ class CustomDateTimeField(DateTimeField):
             self.data = None
             return
             
-        # Validate time components separately before parsing
+        # Validate date portion first
+        date_part = date_str.split(' ')[0]
         try:
-            time_part = date_str.split(' ')[1]
+            datetime.strptime(date_part, '%Y-%m-%d')
+        except ValueError:
+            self.errors.append(self.error_messages.get('invalid_date', 'Invalid date values'))
+            self.data = None
+            return
+            
+        # Validate time components separately before parsing
+        time_part = date_str.split(' ')[1]
+        try:
             hours, minutes, seconds = map(int, time_part.split(':'))
             
+            time_errors = []
             if not (0 <= hours <= 23):
-                self.errors.append(self.error_messages.get('invalid_hour', 'Invalid hour value'))
+                time_errors.append(self.error_messages.get('invalid_hour', 'Invalid hour value'))
             if not (0 <= minutes <= 59):
-                self.errors.append(self.error_messages.get('invalid_minute', 'Invalid minute value'))
+                time_errors.append(self.error_messages.get('invalid_minute', 'Invalid minute value'))
             if not (0 <= seconds <= 59):
-                self.errors.append(self.error_messages.get('invalid_second', 'Invalid second value'))
+                time_errors.append(self.error_messages.get('invalid_second', 'Invalid second value'))
                 
-            if self.errors:
+            if time_errors:
+                self.errors.extend(time_errors)
                 self.data = None
                 return
                 
-            # Parse the full datetime if time components are valid
+            # Parse the full datetime if components are valid
             parsed_dt = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
                 
             # Check for leap year if February 29th
