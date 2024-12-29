@@ -11,10 +11,12 @@
    - Standardized usage of `INVALID_LEAP_YEAR_DATE` across all files.
    - Removed references to non-existent `INVALID_LEAP_YEAR` constant.
    - Fixed duplicate `UPDATE_ERROR` definition in `app/constants.py`.
+   - Added missing `NOT_FOUND` and `FORM_VALIDATION_ERROR` constants.
 
 3. **Improved Test Organization**:
    - Moved form-related tests to `tests/app/forms/test_forms.py` for better structure.
    - Added comprehensive date/time validation tests in `tests/test_datetime_validation.py`.
+   - Consolidated overlapping tests into single files to avoid redundancy.
 
 4. **Fixed Circular Imports**:
    - Refactored imports in `app/__init__.py` to use lazy imports.
@@ -36,6 +38,7 @@
 3. **Test Organization**:
    - Keep tests organized by module/package structure for better maintainability.
    - Use `tests/app/` for application-specific tests and `tests/` for general tests.
+   - Consolidate overlapping tests to avoid redundancy.
 
 4. **Error Handling**:
    - Add proper error handling for missing or invalid constants.
@@ -61,23 +64,6 @@
    - Keep modules small and logical.
    - Use base classes and utilities to avoid duplication.
 
-### **Key Takeaways for Next Coding Session**
-1. **Validation Logic**:
-   - Confirm data types before applying validation.
-   - Centralize error messages, stay consistent.
-
-2. **Testing**:
-   - More edge-case coverage.
-   - Keep a good variety of unit, integration, and E2E tests.
-
-3. **Error Handling & Logging**:
-   - Don't just "print" stuff—log it with context.
-   - Make error messages user-friendly (or at least developer-friendly).
-
-4. **Code Organization**:
-   - Keep modules small and logical.
-   - Use base classes and utilities to avoid duplication.
-
 ### **Lessons Learned**
 1. **Duplicate Constants**:
    - Duplicate constant definitions can cause `TypeError` in `Enum` classes.
@@ -98,23 +84,6 @@
 5. **Error Handling**:
    - Proper error handling in property setters is crucial for maintaining data integrity.
    - Logging errors with context makes debugging easier.
-
-6. **Rate Limiting**:
-   - Proper configuration and validation of rate limiters prevent runtime errors.
-   - Rate limit values should be validated in setters to ensure they are valid strings.
-
-7. **Circular Imports**:
-   - Circular imports can cause initialization errors and should be avoided.
-   - Use lazy imports or refactor shared logic into utility modules to reduce import complexity.
-   - Logging errors with context makes debugging easier.
-
-4. **Testing**:
-   - Comprehensive testing of properties and their validation logic is essential.
-   - Edge cases for date/time validation and rate limiting should be thoroughly tested.
-
-5. **Code Organization**:
-   - Modular and reusable validation logic improves maintainability.
-   - Using constants instead of hardcoded strings reduces the chance of errors.
 
 6. **Rate Limiting**:
    - Proper configuration and validation of rate limiters prevent runtime errors.
