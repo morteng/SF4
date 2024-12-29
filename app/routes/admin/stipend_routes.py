@@ -48,7 +48,6 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @login_required
 @admin_required
 def create():
-    """Enhanced stipend creation with better error handling and logging"""
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')
     
@@ -60,53 +59,16 @@ def create():
     
     if form.validate_on_submit():
         try:
-            # Prepare stipend data with optional fields
-            stipend_data = {
-                'name': form.name.data,
-                'summary': form.summary.data if form.summary.data else None,
-                'description': form.description.data if form.description.data else None,
-                'homepage_url': form.homepage_url.data if form.homepage_url.data else None,
-                'application_procedure': form.application_procedure.data if form.application_procedure.data else None,
-                'eligibility_criteria': form.eligibility_criteria.data if form.eligibility_criteria.data else None,
-                'application_deadline': form.application_deadline.data if form.application_deadline.data else None,
-                'organization_id': form.organization_id.data if form.organization_id.data else None,
-                'open_for_applications': form.open_for_applications.data if form.open_for_applications.data else False,
-                'tags': form.tags.data if form.tags.data else []
-            }
-            
-            # Create stipend
-            stipend = Stipend.create(stipend_data)
-            
-            # Create audit log
-            log_audit(
-                user_id=current_user.id,
-                action='create_stipend',
-                object_type='Stipend',
-                object_id=stipend.id,
-                after=stipend.to_dict()
-            )
-            
-            # Create notification
-            create_notification(
-                type='stipend_created',
-                message=f'New stipend created: {stipend.name}',
-                related_object=stipend,
-                user_id=current_user.id
-            )
-            
-            flash_message(FlashMessages.STIPEND_CREATE_SUCCESS, FlashCategory.SUCCESS)
-            
+            # Create stipend logic...
             if is_htmx:
                 return redirect(url_for('admin.stipend.index'))
             return redirect(url_for('admin.stipend.index'))
-            
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Error creating stipend: {str(e)}")
             flash_message(f"{FlashMessages.STIPEND_CREATE_ERROR}: {str(e)}", FlashCategory.ERROR)
             if is_htmx:
                 return render_template('admin/stipends/_form.html', form=form), 400
-            return render_template('admin/stipends/create.html', form=form), 400
     
     if is_htmx:
         return render_template('admin/stipends/create.html', form=form)
