@@ -86,7 +86,8 @@ def create():
             )
 
             # Flash success message and redirect
-            flash_message(FlashMessages.USER_CREATED.value.format(username=new_user.username), FlashCategory.SUCCESS.value)
+            # Flash success message and redirect
+            flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
             
         except Exception as e:
