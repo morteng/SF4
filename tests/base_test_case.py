@@ -34,9 +34,9 @@ class BaseTestCase(TestCase):
 
         # Create test tags
         tags = [
-            Tag(name='Research'),
-            Tag(name='Internship'),
-            Tag(name='Scholarship')
+            Tag(name='Research', category='Academic'),
+            Tag(name='Internship', category='Professional'),
+            Tag(name='Scholarship', category='Financial')
         ]
         db.session.add_all(tags)
 
