@@ -61,15 +61,23 @@
 
 ## Custom Field Implementation
 
-### CustomDateTimeField
-- Always handle the `validators` argument in `__init__`
-- Provide default validators if none are passed:
-  ```python
-  if validators is None:
-      validators = [InputRequired()]
-  ```
-- Use centralized error messages from `app/constants.py`
-- Avoid passing the `validators` argument explicitly in forms unless necessary
+### CustomDateTimeField Implementation
+1. **Handle All Arguments**:
+   - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`)
+2. **Default Validators**:
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
+3. **Error Messages**:
+   - Use centralized error messages from `app/constants.py`
+4. **Form Usage**:
+   - Avoid passing the `validators` argument explicitly in forms unless needed
+   - Example:
+     ```python
+     application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
+     ```
 - Always handle the `validators` argument in `__init__`.
 - Provide default validators if none are passed:
   ```python

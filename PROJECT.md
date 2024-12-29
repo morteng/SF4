@@ -118,9 +118,9 @@
   ```
 - **Best Practice**: Always verify dependencies are installed before running tests or the application.
 
-### CustomDateTimeField Initialization
+### CustomDateTimeField Implementation
 - **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
-- **Solution**: Updated the `__init__` method to properly handle the `validators` argument:
+- **Solution**: Updated the `__init__` method to properly handle the `validators` argument with a default `InputRequired()` validator:
   ```python
   class CustomDateTimeField(Field):
       def __init__(self, label=None, validators=None, **kwargs):
@@ -128,6 +128,13 @@
               validators = [InputRequired()]  # Default validator
           super().__init__(label=label, validators=validators, **kwargs)
   ```
+- **Best Practices**:
+  - Use centralized error messages from `app/constants.py`
+  - Avoid passing `validators` explicitly in forms unless needed
+  - Example form usage:
+    ```python
+    application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
+    ```
 - **Best Practice**: Ensure custom fields properly handle all arguments passed to them.
 
 ### Circular Imports
