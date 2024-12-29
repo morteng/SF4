@@ -214,6 +214,8 @@ class FlashCategory(str, Enum):
 class FlashMessages(str, Enum):
     INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
     UPDATE_ERROR = "Failed to update record."
+    DELETE_ERROR = "Failed to delete record."
+    UPDATE_ERROR = "Failed to update record."
     INVALID_LEAP_YEAR_DATE = "Invalid date for February in non-leap years."
     CREATE_SUCCESS = "Record created successfully."
     UPDATE_SUCCESS = "Record updated successfully."

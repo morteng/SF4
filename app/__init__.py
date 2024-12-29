@@ -33,11 +33,17 @@ def get_limiter():
     from flask_limiter.util import get_remote_address
     return Limiter, get_remote_address
 
+def get_limiter():
+    """Lazy import for Limiter to avoid circular imports"""
+    from flask_limiter import Limiter
+    from flask_limiter.util import get_remote_address
+    return Limiter, get_remote_address
+
 try:
     Limiter, get_remote_address = get_limiter()
     limiter = Limiter(
         key_func=get_remote_address,
-        storage_uri="redis://localhost:6379",
+        storage_uri="redis://localhost:6379",  # Use Redis for production
         default_limits=["100 per hour"]
     )
 except ImportError:

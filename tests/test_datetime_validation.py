@@ -12,6 +12,10 @@ from app.constants import FlashMessages
     ("2023-01-01 12:00:00+99:99", FlashMessages.INVALID_DATETIME_FORMAT),
     ("2023-01-01 12:00:00+00:00", None),  # Valid timezone
     ("2023-01-01 12:00:00", None),  # Valid datetime
+    ("2023-04-31 12:00:00", FlashMessages.INVALID_DATE_VALUES),  # April 31st
+    ("2023-06-31 12:00:00", FlashMessages.INVALID_DATE_VALUES),  # June 31st
+    ("2023-09-31 12:00:00", FlashMessages.INVALID_DATE_VALUES),  # September 31st
+    ("2023-11-31 12:00:00", FlashMessages.INVALID_DATE_VALUES),  # November 31st
 ])
 def test_datetime_validation(date_str, expected_error):
     field = CustomDateTimeField()
