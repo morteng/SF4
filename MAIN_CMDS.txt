@@ -9,13 +9,13 @@
 /read PROJECT.md
 /read CONVENTIONS.md
 /read VALIDATION.md
-/add TODO.md
+/add TODO.txt
 
 /run flask routes
 /test
 
 # Step 1: Identify & Plan
-/ask Based on TODO.md (and other docs), how do we address the issues?
+/ask Based on TODO.txt (and other docs), how do we address the issues?
 /architect implement the suggested changes
 
 # Step 2: Test & Debug
@@ -35,7 +35,7 @@
 /ask If there's a new issue, what is it?
 
 # Step 5: Final Documentation Updates
-/code update TODO.md with final changes & findings, important info and things we've learned that would be good to remember next coding session.
+/code update TODO.txt with final changes & findings, important info and things we've learned that would be good to remember next coding session.
 
 # Step 6: Remove previous console commands from CONSOLE_CMDS.txt and add any new ones that will be run next. 
 /add CONSOLE_CMDS.txt
