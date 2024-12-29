@@ -411,3 +411,18 @@ class BaseService:
         if not isinstance(value, int) and value is not None:
             raise ValueError("create_limit must be an integer or None")
         self._create_limit = value
+class BaseService:
+    def __init__(self):
+        self._create_limit = None
+
+    @property
+    def create_limit(self):
+        """Getter for create_limit property"""
+        return self._create_limit
+
+    @create_limit.setter 
+    def create_limit(self, value):
+        """Setter for create_limit property with validation"""
+        if not isinstance(value, int) or value < 0:
+            raise ValueError("Create limit must be a positive integer")
+        self._create_limit = value

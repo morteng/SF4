@@ -67,3 +67,12 @@ class CustomDateTimeField(Field):
         if validators is None:
             validators = [InputRequired()]  # Default validator
         super().__init__(label=label, validators=validators, **kwargs)
+from wtforms import Field
+from wtforms.validators import InputRequired
+from app.constants import MISSING_REQUIRED_FIELD
+
+class CustomDateTimeField(Field):
+    def __init__(self, label=None, validators=None, **kwargs):
+        if validators is None:
+            validators = [InputRequired(message=MISSING_REQUIRED_FIELD)]
+        super().__init__(label=label, validators=validators, **kwargs)

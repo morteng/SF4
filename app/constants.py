@@ -277,3 +277,8 @@ MISSING_FIELD_ERROR = "This field is required."
 # Validation Error Messages
 INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
 MISSING_REQUIRED_FIELD = "This field is required."
+# Centralized error messages for validation
+MISSING_REQUIRED_FIELD = "This field is required."
+INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+INVALID_TIME = "Invalid time. Please use HH:MM:SS format."
+INVALID_LEAP_YEAR = "Invalid date. February 29th is not a valid date in non-leap years."
