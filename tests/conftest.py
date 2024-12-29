@@ -13,14 +13,9 @@ try:
     FREEZEGUN_INSTALLED = True
 except ImportError:
     FREEZEGUN_INSTALLED = False
-    logging.warning(
-        "freezegun is not installed. Some tests may be skipped. "
-        "Run `pip install freezegun` to install it."
-    )
-    warnings.warn(
-        "freezegun is not installed. Some tests may be skipped. "
-        "Run `pip install freezegun` to install it.",
-        RuntimeWarning
+    pytest.skip(
+        "freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies.",
+        allow_module_level=True
     )
 
 def verify_dependencies():

@@ -37,10 +37,10 @@ def test_flask_limiter_installed():
 def test_freezegun_installed():
     """Verify freezegun is installed and importable"""
     try:
-        freezegun = importlib.import_module("freezegun")
+        import freezegun
         assert freezegun is not None
     except ImportError:
-        pytest.fail("freezegun is not installed - required for time-based testing")
+        pytest.fail("freezegun is not installed - required for time-based testing. Run `pip install -r requirements.txt` to install it.")
 
 def test_requirements_file_exists():
     """Verify requirements.txt exists and is readable"""

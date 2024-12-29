@@ -6,7 +6,14 @@ from app.forms.admin_forms import StipendForm
 from app.models.organization import Organization
 from app.models.tag import Tag
 from app.extensions import db
-from freezegun import freeze_time
+
+# Check for freezegun and skip all tests if not installed
+try:
+    from freezegun import freeze_time
+    FREEZEGUN_INSTALLED = True
+except ImportError:
+    FREEZEGUN_INSTALLED = False
+    pytest.skip("freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies.", allow_module_level=True)
 
 @pytest.fixture(autouse=True)
 def setup_db(app):

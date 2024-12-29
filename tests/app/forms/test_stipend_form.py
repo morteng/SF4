@@ -16,6 +16,13 @@ pytestmark = pytest.mark.skipif(
     not FREEZEGUN_INSTALLED,
     reason="freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies."
 )
+
+def pytest_configure(config):
+    """Add a marker for freezegun-dependent tests"""
+    config.addinivalue_line(
+        "markers",
+        "freezegun: mark tests that require freezegun package"
+    )
 def test_custom_date_time_field_validation():
     field = CustomDateTimeField()
     assert field.validate_format("2023-01-01 12:00:00") is True
