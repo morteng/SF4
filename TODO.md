@@ -4,7 +4,7 @@
 
 ### **Next Steps**
 1. **Ensure Consistent Constant Usage**:
-   - Verify all FlashMessages constants are accessed with .value in forms
+   - [x] Verify all FlashMessages constants are accessed with .value in forms
 
 ### **Things to Remember for Next Coding Session**
 1. **Error Handling**:

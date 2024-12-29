@@ -13,6 +13,8 @@ class CustomDateTimeField(Field):
         kwargs.pop('format', None)
         
         # Initialize the field with validators
+        if validators is None:
+            validators = [InputRequired(message=FlashMessages.MISSING_FIELD_ERROR.value)]  # Add .value
         self.format = format
         super().__init__(label=label, validators=validators, **kwargs)
 

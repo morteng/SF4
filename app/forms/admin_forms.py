@@ -59,9 +59,9 @@ class StipendForm(FlaskForm):
     ])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
-        validators=[InputRequired(message=FlashMessages.MISSING_FIELD_ERROR.value)],
+        validators=[InputRequired(message=FlashMessages.MISSING_FIELD_ERROR.value)],  # Add .value
         error_messages={
-            'required': FlashMessages.MISSING_FIELD_ERROR.value,
+            'required': FlashMessages.MISSING_FIELD_ERROR.value,  # Add .value
             'invalid_format': FlashMessages.INVALID_DATE_FORMAT,
             'invalid_date': 'Invalid application deadline date',
             'invalid_time': 'Invalid application deadline time',

@@ -211,7 +211,7 @@ class FlashCategory(str, Enum):
     PASSWORD_RESET_ERROR = "Failed to reset password."
     USER_SEARCH_ERROR = "Failed to search users."
 class FlashMessages(str, Enum):
-    MISSING_FIELD_ERROR = "This field is required."
+    MISSING_FIELD_ERROR = "This field is required."  # Add this line
     USERNAME_REQUIRED = "Username is required."
     USERNAME_LENGTH = "Username must be between 3 and 50 characters."
     USERNAME_FORMAT = "Username can only contain letters, numbers, and underscores."
