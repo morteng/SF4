@@ -80,16 +80,9 @@ class CustomDateTimeField(DateTimeField):
         try:
             hours, minutes, seconds = map(int, time_part.split(':'))
             
-            time_errors = []
-            if not (0 <= hours <= 23):
-                time_errors.append(self.error_messages.get('invalid_hour', 'Invalid hour value'))
-            if not (0 <= minutes <= 59):
-                time_errors.append(self.error_messages.get('invalid_minute', 'Invalid minute value'))
-            if not (0 <= seconds <= 59):
-                time_errors.append(self.error_messages.get('invalid_second', 'Invalid second value'))
-                
-            if time_errors:
-                self.errors.extend(time_errors)
+            # Consolidated time validation
+            if not (0 <= hours <= 23) or not (0 <= minutes <= 59) or not (0 <= seconds <= 59):
+                self.errors.append(self.error_messages.get('invalid_time', 'Invalid time values'))
                 self.data = None
                 return
                 
@@ -247,12 +240,6 @@ class CustomDateTimeField(DateTimeField):
         try:
             dt = datetime.strptime(str(self.data), '%Y-%m-%d %H:%M:%S')
             
-            # Validate time components
-            if not (0 <= dt.hour <= 23 and 
-                    0 <= dt.minute <= 59 and 
-                    0 <= dt.second <= 59):
-                self.errors.append(self.error_messages.get('invalid_time', 'Invalid time values'))
-                return False
                 
             # Validate date components
             try:
