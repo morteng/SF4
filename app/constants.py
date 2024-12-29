@@ -248,3 +248,15 @@ INVALID_LEAP_YEAR_ERROR = "Invalid date: February 29th is not a valid date for t
 # Validation error messages
 INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
 INVALID_LEAP_YEAR = "Invalid date: February 29th is only valid in leap years."
+# Centralized error messages and constants
+
+# Date/Time Validation
+INVALID_DATE = "Invalid date format"
+INVALID_TIME = "Invalid time format"
+MISSING_FIELD = "This field is required"
+INVALID_LEAP_YEAR = "Invalid date: not a leap year"
+INVALID_FUTURE_DATE = "Date must be in the future"
+
+# General Validation
+REQUIRED_FIELD = "This field is required"
+INVALID_INPUT = "Invalid input"

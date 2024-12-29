@@ -85,3 +85,9 @@ def some_function():
     """Example function using lazy imports"""
     from app.services.bot_service import run_bot  # Lazy import
     run_bot()
+# Shared utility functions to avoid circular imports
+
+def init_admin_user():
+    """Initialize the admin user"""
+    # Implementation will be moved here
+    pass
