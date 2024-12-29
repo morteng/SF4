@@ -701,9 +701,10 @@ def index():
                          total_pages=stipends.pages)
 
 
-@admin_stipend_bp.route('/paginate/<int:page>', methods=['GET'])
+@admin_stipend_bp.route('/paginate', methods=['GET'])
 @login_required
 @admin_required
-def paginate(page):
+def paginate():
+    page = request.args.get('page', 1, type=int)
     stipends = Stipend.query.paginate(page=page, per_page=10, error_out=False)
     return render_template('admin/stipends/_stipends_table.html', stipends=stipends)

@@ -36,6 +36,6 @@
     </div>
 
     {% from "_macros.html" import pagination %}
-    {{ pagination(stipends, url_for('admin.stipend.paginate'), current_page=stipends.page, total_pages=stipends.pages) }}
+    {{ pagination(stipends, url_for('admin.stipend.paginate', page='__PAGE__'), current_page=stipends.page, total_pages=stipends.pages) }}
 </div>
 {% endblock %}
