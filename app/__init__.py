@@ -2,6 +2,7 @@ import os
 import logging
 from flask import Flask
 from dotenv import load_dotenv
+from app.extensions import db, login_manager, migrate, csrf, limiter
 
 logger = logging.getLogger(__name__)
 
@@ -32,32 +33,6 @@ def create_app(config_name='development'):
     
     return app
 
-def init_extensions(app):
-    """Initialize Flask extensions"""
-    from app.extensions import db, login_manager, migrate, csrf, limiter
-    
-    # Initialize SQLAlchemy
-    db.init_app(app)
-    
-    # Initialize Flask-Login
-    login_manager.init_app(app)
-    login_manager.login_view = 'user.login'
-    
-    # Initialize Flask-Migrate
-    migrate.init_app(app, db)
-    
-    # Initialize CSRF protection
-    csrf.init_app(app)
-    
-    # Initialize rate limiter
-    limiter.init_app(app)
-    
-    # Setup user loader
-    from app.models.user import User
-    
-    @login_manager.user_loader
-    def load_user(user_id):
-        return db.session.get(User, int(user_id))
 
     # Blueprints will be registered in the app context below
 
