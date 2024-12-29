@@ -41,6 +41,21 @@
    - Add a pre-test check to ensure all required dependencies are installed.
    - Document the setup process to avoid similar issues in the future.
 
+### Dependency Validation
+1. **Issue**: Tests failed because `freezegun` was not installed, even though it was listed in `requirements.txt`.
+2. **Solution**:
+   - Always install dependencies from `requirements.txt`:
+     ```bash
+     pip install -r requirements.txt
+     ```
+   - Verify installation with:
+     ```bash
+     pip show <package_name>
+     ```
+3. **Best Practice**:
+   - Add a pre-test check to ensure all required dependencies are installed.
+   - Document the setup process to avoid similar issues in the future.
+
 1. **Define Properties Correctly**:
    - Always define a property (`@property`) before using a setter (`@<property>.setter`).
    - Example from BaseService implementation:

@@ -5,6 +5,7 @@
 - [x] Install `freezegun` for time-based testing.
 - [x] Add installation verification steps to documentation.
 - [x] Add a script to verify all dependencies listed in `requirements.txt` are installed.
+- [x] Resolve circular imports by refactoring shared functionality into a separate module.
 - [x] Install `freezegun` for time-based testing.
 - [x] Add installation verification steps to documentation.
 - [x] Consolidate leap year validation logic in `CustomDateTimeField`.
