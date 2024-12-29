@@ -1,0 +1,30 @@
+<div class="overflow-x-auto mt-6">
+    <table class="w-full border-collapse bg-white text-left text-sm">
+        <thead>
+            <tr class="bg-gray-50">
+                <th class="px-4 py-2">ID</th>
+                <th class="px-4 py-2">Name</th>
+                <th class="px-4 py-2">Description</th>
+                <th class="px-4 py-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for organization in organizations.items %}
+            <tr class="border-b border-gray-200">
+                <td class="px-4 py-2">{{ organization.id }}</td>
+                <td class="px-4 py-2">{{ organization.name }}</td>
+                <td class="px-4 py-2">{{ organization.description }}</td>
+                <td class="px-4 py-2">
+                    {% from "_macros.html" import edit_button, delete_button %}
+                    {{ edit_button(url_for('admin.organization.edit', id=organization.id), '#main-content') }}
+                    {{ delete_button(url_for('admin.organization.delete', id=organization.id), 'closest tr') }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% from "_macros.html" import pagination %}
+{{ pagination(organizations, url_for('admin.organization.paginate', page='__PAGE__'), 
+             current_page=organizations.page, total_pages=organizations.pages) }}

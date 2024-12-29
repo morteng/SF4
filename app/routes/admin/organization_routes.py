@@ -195,14 +195,36 @@ def delete(id):
     return redirect(url_for('admin.organization.index'))
 
 @admin_org_bp.route('/', methods=['GET'])
-@admin_org_bp.route('/paginate/<int:page>', methods=['GET'])
 @login_required
 @admin_required
-def index(page=1):
+def index():
     """List organizations with pagination"""
-    per_page = 20  # Items per page
-    organizations = get_all_organizations().paginate(page=page, per_page=per_page)
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
+    
+    # Use SQLAlchemy's paginate() method directly on the query
+    organizations = Organization.query.order_by(Organization.name).paginate(
+        page=page, 
+        per_page=per_page, 
+        error_out=False
+    )
     return render_template('admin/organizations/index.html',
+                         organizations=organizations)
+
+@admin_org_bp.route('/paginate', methods=['GET'])
+@login_required
+@admin_required
+def paginate():
+    """Handle pagination requests"""
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 20, type=int)
+    
+    organizations = Organization.query.order_by(Organization.name).paginate(
+        page=page, 
+        per_page=per_page, 
+        error_out=False
+    )
+    return render_template('admin/organizations/_organizations_table.html', 
                          organizations=organizations)
 
 @admin_org_bp.route('/<int:id>', methods=['GET'])
