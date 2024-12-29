@@ -160,3 +160,8 @@ def init_admin_user():
     """Initialize the admin user"""
     # Implementation will be added later
     pass
+# Shared utility functions to avoid circular imports
+
+def shared_function():
+    """Example shared function to be used across modules"""
+    pass

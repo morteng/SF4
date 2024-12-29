@@ -293,3 +293,8 @@ INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
 # Centralized error messages
 MISSING_REQUIRED_FIELD = "This field is required."
 INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+# Centralized error messages for consistent error handling
+
+MISSING_REQUIRED_FIELD = "This field is required."
+INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
+INVALID_TIME = "Invalid time. Please use a valid time in HH:MM:SS format."
