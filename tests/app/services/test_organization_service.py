@@ -1,13 +1,11 @@
 import pytest
 from app.models.organization import Organization
-from app.services.organization_service import (
-    get_all_organizations,
-    delete_organization,
-    create_organization,
-    get_organization_by_id,
-    update_organization
-)
+from app.services.organization_service import OrganizationService
 from app.extensions import db
+
+@pytest.fixture(scope='function')
+def org_service():
+    return OrganizationService()
 
 @pytest.fixture(scope='function')
 def organization_data():
@@ -38,7 +36,7 @@ def test_delete_organization(db_session, test_organization):
     organization = db_session.get(Organization, test_organization.id)
     assert organization is None
 
-def test_create_organization(db_session, organization_data):
+def test_create_organization(db_session, organization_data, org_service):
     organization = org_service.create(organization_data)
     assert organization is not None
     assert organization.name == organization_data['name']
@@ -52,7 +50,7 @@ def test_get_organization_by_id(db_session, test_organization):
     assert organization.description == test_organization.description
     assert organization.homepage_url == test_organization.homepage_url
 
-def test_update_organization(db_session, test_organization):
+def test_update_organization(db_session, test_organization, org_service):
     updated_data = {
         'name': 'Updated Organization',
         'description': 'This is an updated organization.',
@@ -64,7 +62,7 @@ def test_update_organization(db_session, test_organization):
     assert updated_organization.description == updated_data['description']
     assert updated_organization.homepage_url == updated_data['homepage_url']
 
-def test_update_organization_with_invalid_id(db_session):
+def test_update_organization_with_invalid_id(db_session, org_service):
     non_existent_id = 9999
     updated_data = {
         'name': 'Updated Organization',
