@@ -10,7 +10,10 @@
 # /run python manage.py migrate
 
 ### COMMANDS START ###
-/run echo "Running console commands for Step 1"
+/run rm tests/test_forms.py
+/run mv tests/app/forms/test_forms.py tests/app/forms/test_organization_forms.py
+/run find . -type d -name "__pycache__" -exec rm -r {} +
+/run pytest
 ### COMMANDS END ###
 
 # Once we're done, jump to Step 2.
