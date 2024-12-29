@@ -10,6 +10,10 @@
 # /run coverage run -m pytest
 
 ### COMMANDS START ###
+/run pytest --cov=app --cov-report=html
+/run flake8 app tests
+/run bandit -r app
+/run safety check
 ### COMMANDS END ###
 
 # Once finished, jump to Step 5.
