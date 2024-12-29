@@ -10,14 +10,9 @@
 - [x] Fix `CustomDateTimeField` initialization to handle `validators` argument.
 
 ## Next Session
-- [x] Fix `ModuleNotFoundError: No module named 'pytest'`
-- [x] Fix `TypeError: CustomDateTimeField.__init__() got an unexpected keyword argument 'validators'`
-- [x] Verify all dependencies are installed
-- [x] Refactor shared functionality into `app/common/utils.py` to avoid circular imports.
-- [x] Add a pre-test dependency verification script to ensure all required packages are installed.
-- [x] Verify that all properties are correctly implemented with `@property` and `@<property>.setter`.
-- [x] Add comprehensive tests for edge cases in date/time validation.
 - [ ] Ensure all error messages are centralized in `app/constants.py` and used consistently.
+- [ ] Add comprehensive tests for edge cases in date/time validation.
+- [ ] Optimize validation performance in `CustomDateTimeField`.
 
 ## Long Term
 - [ ] Automate dependency verification during test execution.

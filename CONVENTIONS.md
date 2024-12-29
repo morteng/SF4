@@ -25,6 +25,32 @@
 3. **Document Properties**:
    - Add docstrings to properties and setters to clarify their purpose and behavior.
 
+### Dependency Management
+1. **Pre-Test Verification**:
+   - Add a test to verify all dependencies are installed before running the test suite:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+
+2. **Graceful Handling**:
+   - Use try-except blocks to handle missing dependencies in test files.
+   - Skip tests that require missing packages instead of failing the entire suite.
+
+### Circular Imports
+1. **Refactor Shared Functionality**:
+   - Move shared code to a separate module (e.g., `app/common/utils.py`).
+2. **Use Lazy Imports**:
+   - Import dependencies at the function level when necessary:
+     ```python
+     def some_function():
+         from app.services.bot_service import run_bot  # Lazy import
+         run_bot()
+     ```
+
 ## Setup Instructions
 
 1. Create and activate a virtual environment:
