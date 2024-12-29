@@ -51,7 +51,7 @@ class AdminStipendTestCase(unittest.TestCase):
             
             self.assertEqual(response.status_code, 200)
             
-            # Create stipend with CSRF token
+            # Create stipend
             form_data = {
                 'name': 'Test Stipend',
                 'summary': 'This is a test stipend.',
@@ -61,8 +61,7 @@ class AdminStipendTestCase(unittest.TestCase):
                 'eligibility_criteria': 'Must be a student.',
                 'application_deadline': '2023-12-31 23:59:59',
                 'organization_id': 1,
-                'open_for_applications': 'y',
-                'csrf_token': csrf_token
+                'open_for_applications': 'y'
             }
             
             response = self.client.post(url_for('admin.stipend.create'), 
