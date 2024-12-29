@@ -1,8 +1,9 @@
 from tests.base_test_case import BaseTestCase
 from app.controllers.base_crud_controller import BaseCrudController
 from app.models import Tag
-from app.forms.admin_forms import TagForm
+from app.forms.admin_forms import TagForm, UserForm
 from app.services.tag_service import tag_service
+from app.constants import FlashMessages
 
 class TestBaseCrudController(BaseTestCase):
     def setUp(self):
