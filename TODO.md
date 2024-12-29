@@ -12,10 +12,10 @@
 - [x] Consolidate leap year validation logic in `CustomDateTimeField`.
 
 ## Next Session
-- [ ] Refactor other shared functionality into `app/common`.
+- [x] Refactor other shared functionality into `app/common`.
 - [ ] Optimize validation performance in `CustomDateTimeField`.
 - [ ] Add more comprehensive tests for timezone handling in date/time fields.
-- [ ] Add comprehensive tests for `BaseService` properties.
+- [x] Add comprehensive tests for `BaseService` properties.
 - [ ] Verify time-based tests with `freezegun`.
 
 ## Long Term
