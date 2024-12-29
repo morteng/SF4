@@ -1,236 +1,64 @@
-# Todo
-1. Add comprehensive test coverage for all edge cases, especially date/time validation
-2. Review all constants in `app/constants.py` to ensure consistency and completeness
+ # Todo
+ 1. Fix `BuildError` for endpoint `admin.stipend.create`:
+    - Verify route registration in `app/routes/admin/__init__.py`.
+    - Ensure `admin_stipend_bp` blueprint is correctly defined in `app/routes/admin/stipend_routes.py`.
 
-### **Final Changes**
-1. **Resolved Module Name Conflicts**:
-   - Deleted redundant `tests/test_forms.py` to resolve import conflicts.
-   - Renamed `tests/app/forms/test_forms.py` to `tests/app/forms/test_organization_forms.py` for unique module names.
+ 2. Add `AUDIT_LOG` to `NotificationType` enum in `app/common/enums.py`.
 
-2. **Cleared Pycache**:
-   - Removed stale compiled files from `__pycache__` directories to prevent test collection issues.
+ 3. Improve error handling for missing or invalid constants:
+    - Centralize error messages in `app/constants.py`.
+    - Add proper validation for enum values.
 
-3. **Improved Test Organization**:
-   - Consolidated all stipend form tests into `tests/test_main_forms.py`.
-   - Organized organization form tests in `tests/app/forms/test_organization_forms.py`.
+ 4. Add comprehensive test coverage for edge cases:
+    - Focus on date/time validation and route accessibility.
 
-4. **Fixed Flask Routes Error**:
-   - Resolved `UnboundLocalError` in `app/__init__.py` by properly initializing the `limiter` variable.
+ 5. Refactor shared logic into utility modules:
+    - Move reusable validation logic to `app/common/utils.py`.
+    - Avoid circular imports by using lazy imports where necessary.
 
-5. **Removed Redundant Dependency Check**:
-   - Deleted the `verify_dependencies()` function from `tests/conftest.py` as it was redundant and causing issues.
+ ### **Key Takeaways**
+ 1. **Route Registration**:
+    - Ensure all routes are properly registered in the Flask application.
+    - Verify blueprint definitions and endpoint names.
 
-6. **Improved Validation Logic**:
-   - Moved reusable validation logic (e.g., `validate_application_deadline`) to `app/common/utils.py`.
-   - Added comprehensive date/time validation tests in `tests/test_main_forms.py`.
+ 2. **Enum Management**:
+    - Keep enums up-to-date with all required values.
+    - Avoid using undefined enum values in the code.
 
-7. **Enhanced Error Handling**:
-   - Added proper error handling for missing or invalid constants.
-   - Improved logging with context for easier debugging.
+ 3. **Error Handling**:
+    - Provide clear, actionable error messages for validation failures.
+    - Log errors with context for easier debugging.
 
-### **Key Takeaways**
-1. **Test File Naming**:
-   - Always use unique names for test files to avoid import conflicts.
-   - Follow a consistent naming convention (e.g., `test_<module>_<feature>.py`).
+ 4. **Testing**:
+    - Test all validation paths, including invalid formats and missing fields.
+    - Use mocking tools like `freezegun` for deterministic time-based tests.
 
-2. **Constants Management**:
-   - Always use constants from `app/constants.py` instead of hardcoded strings.
-   - Verify that all constants referenced in the code exist in `app/constants.py`.
-   - Avoid duplicate constant definitions in `Enum` classes.
+ ### **Lessons Learned**
+ 1. **Application Context**:
+    - Ensure `current_app` is accessed within an application context.
+    - Use `app.app_context()` to wrap code that requires the application context.
 
-3. **Test Organization**:
-   - Keep tests organized by module/package structure for better maintainability.
-   - Use `tests/app/` for application-specific tests and `tests/` for general tests.
-   - Consolidate overlapping tests to avoid redundancy.
+ 2. **Code Organization**:
+    - Keep modules small and logical.
+    - Use base classes and utilities to avoid duplication.
 
-4. **Error Handling**:
-   - Add proper error handling for missing or invalid constants.
-   - Log errors with context for easier debugging.
+ 3. **Property Implementation**:
+    - Always define properties with `@property` before using `@<property>.setter`.
+    - Validate property values in setters to maintain data integrity.
 
-5. **Code Quality**:
-   - Regularly clear `__pycache__` directories to avoid stale compiled files.
-   - Use consistent naming conventions across the codebase.
+ ### **Next Steps**
+ 1. **Validation Logic**:
+    - Confirm data types before applying validation.
+    - Centralize error messages, stay consistent.
 
-6. **Validation Logic**:
-   - Confirm data types before applying validation.
-   - Centralize error messages, stay consistent.
+ 2. **Testing**:
+    - More edge-case coverage.
+    - Keep a good variety of unit, integration, and E2E tests.
 
-7. **Testing**:
-   - More edge-case coverage.
-   - Keep a good variety of unit, integration, and E2E tests.
+ 3. **Error Handling & Logging**:
+    - Don't just "print" stuff—log it with context.
+    - Make error messages user-friendly (or at least developer-friendly).
 
-8. **Error Handling & Logging**:
-   - Don't just "print" stuff—log it with context.
-   - Make error messages user-friendly (or at least developer-friendly).
-
-9. **Code Organization**:
-   - Keep modules small and logical.
-   - Use base classes and utilities to avoid duplication.
-
-### **Lessons Learned**
-1. **Duplicate Constants**:
-   - Duplicate constant definitions can cause `TypeError` in `Enum` classes.
-   - Ensure each constant is defined only once in `app/constants.py`.
-
-2. **Testing**:
-   - Comprehensive testing of date/time validation is essential—particularly with user-submitted data.
-   - Use mocking tools like `freezegun` for predictable time-based tests.
-
-3. **Code Organization**:
-   - Modular and reusable validation logic improves maintainability.
-   - Using constants instead of hardcoded strings reduces the chance of errors.
-
-4. **Property Implementation**:
-   - Always define properties with `@property` before using `@<property>.setter`.
-   - Validate property values in setters to maintain data integrity.
-
-5. **Error Handling**:
-   - Proper error handling in property setters is crucial for maintaining data integrity.
-   - Logging errors with context makes debugging easier.
-
-6. **Rate Limiting**:
-   - Proper configuration and validation of rate limiters prevent runtime errors.
-   - Rate limit values should be validated in setters to ensure they are valid strings.
-
-7. **Circular Imports**:
-   - Circular imports can cause initialization errors and should be avoided.
-   - Use lazy imports or refactor shared logic into utility modules to reduce import complexity.
-
-### **Next Steps**
-1. **Validation Logic**:
-   - Confirm data types before applying validation.
-   - Centralize error messages, stay consistent.
-
-2. **Testing**:
-   - More edge-case coverage.
-   - Keep a good variety of unit, integration, and E2E tests.
-
-3. **Error Handling & Logging**:
-   - Don't just "print" stuff—log it with context.
-   - Make error messages user-friendly (or at least developer-friendly).
-
-4. **Code Organization**:
-   - Keep modules small and logical.
-   - Use base classes and utilities to avoid duplication.
-
-
-### **Key Takeaways**
-1. **Test File Naming**:
-   - Always use unique names for test files to avoid import conflicts.
-   - Follow a consistent naming convention (e.g., `test_<module>_<feature>.py`).
-
-2. **Test Organization**:
-   - Keep tests organized by module/package structure for better maintainability.
-   - Consolidate overlapping tests to avoid redundancy.
-
-3. **Circular Imports**:
-   - Use lazy imports or refactor shared logic into utility modules to avoid circular dependencies.
-   - Keep imports minimal in `app/__init__.py`.
-
-4. **Validation Logic**:
-   - Always validate data types before applying validation logic.
-   - Use constants from `app/constants.py` for error messages.
-
-5. **Error Handling**:
-   - Proper error handling in property setters is crucial for maintaining data integrity.
-   - Log errors with context for easier debugging.
-
-### **Lessons Learned**
-1. **Duplicate Module Names**:
-   - Avoid using the same module name for different test files, as it causes `import file mismatch` errors.
-   - Delete redundant test files to prevent conflicts.
-
-2. **Stale Pycache Files**:
-   - Regularly clear `__pycache__` directories to avoid issues with stale compiled files.
-
-3. **Redundant Code**:
-   - Remove redundant functions like `verify_dependencies()` to simplify the codebase and prevent issues.
-
-4. **Initialization Order**:
-   - Ensure all variables (e.g., `limiter`) are properly initialized before use to avoid `UnboundLocalError`.
-
-### **Next Steps**
-1. **Validation Logic**:
-   - Confirm data types before applying validation.
-   - Centralize error messages, stay consistent.
-
-2. **Testing**:
-   - More edge-case coverage.
-   - Keep a good variety of unit, integration, and E2E tests.
-
-3. **Error Handling & Logging**:
-   - Don't just "print" stuff—log it with context.
-   - Make error messages user-friendly (or at least developer-friendly).
-
-4. **Code Organization**:
-   - Keep modules small and logical.
-   - Use base classes and utilities to avoid duplication.
-
-### **Key Takeaways for Next Coding Session**
-1. **Test File Naming**:
-   - Ensure all test files have unique names to avoid import conflicts.
-   - Use descriptive names that reflect the module being tested.
-
-2. **Constants Management**:
-   - Always use constants from `app/constants.py` instead of hardcoded strings.
-   - Verify that all constants referenced in the code exist in `app/constants.py`.
-   - Avoid duplicate constant definitions in `Enum` classes.
-
-3. **Test Organization**:
-   - Keep tests organized by module/package structure for better maintainability.
-   - Use `tests/app/` for application-specific tests and `tests/` for general tests.
-   - Consolidate overlapping tests to avoid redundancy.
-
-4. **Error Handling**:
-   - Add proper error handling for missing or invalid constants.
-   - Log errors with context for easier debugging.
-
-5. **Code Quality**:
-   - Regularly clear `__pycache__` directories to avoid stale compiled files.
-   - Use consistent naming conventions across the codebase.
-
-6. **Validation Logic**:
-   - Confirm data types before applying validation.
-   - Centralize error messages, stay consistent.
-
-7. **Testing**:
-   - More edge-case coverage.
-   - Keep a good variety of unit, integration, and E2E tests.
-
-8. **Error Handling & Logging**:
-   - Don't just "print" stuff—log it with context.
-   - Make error messages user-friendly (or at least developer-friendly).
-
-9. **Code Organization**:
-   - Keep modules small and logical.
-   - Use base classes and utilities to avoid duplication.
-
-### **Lessons Learned**
-1. **Duplicate Constants**:
-   - Duplicate constant definitions can cause `TypeError` in `Enum` classes.
-   - Ensure each constant is defined only once in `app/constants.py`.
-
-2. **Testing**:
-   - Comprehensive testing of date/time validation is essential—particularly with user-submitted data.
-   - Use mocking tools like `freezegun` for predictable time-based tests.
-
-3. **Code Organization**:
-   - Modular and reusable validation logic improves maintainability.
-   - Using constants instead of hardcoded strings reduces the chance of errors.
-
-4. **Property Implementation**:
-   - Always define properties with `@property` before using `@<property>.setter`.
-   - Validate property values in setters to maintain data integrity.
-
-5. **Error Handling**:
-   - Proper error handling in property setters is crucial for maintaining data integrity.
-   - Logging errors with context makes debugging easier.
-
-6. **Rate Limiting**:
-   - Proper configuration and validation of rate limiters prevent runtime errors.
-   - Rate limit values should be validated in setters to ensure they are valid strings.
-
-7. **Circular Imports**:
-   - Circular imports can cause initialization errors and should be avoided.
-   - Use lazy imports or refactor shared logic into utility modules to reduce import complexity.
-
+ 4. **Code Organization**:
+    - Keep modules small and logical.
+    - Use base classes and utilities to avoid duplication.

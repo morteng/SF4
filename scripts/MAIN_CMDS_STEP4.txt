@@ -9,7 +9,6 @@
 /ask Code Cycle Step 4 (Optional Checks) - Is there a new issue? 
 # If yes, detail the problem and potential fixes.
 /architect implement fixes
-/test
 
 # Prompt about console commands
 /ask Do we need to run any console commands for Step 4?

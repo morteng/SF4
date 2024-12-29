@@ -9,7 +9,6 @@
 /test
 /ask Code Cycle Step 2 (Test & Debug) - If tests fail, what's causing the issue?
 /architect implement fixes
-/test
 
 # Prompt about console commands
 /ask Do we need to run any console commands for Step 2?

@@ -17,7 +17,6 @@
 # Step 1 Prompt
 /ask Code Cycle Step 1 (Identify & Plan) - Based on TODO.txt and other docs, how do we address the issues?
 /architect implement the suggested changes
-/test
 
 # Prompt about console commands
 /ask Do we need to run any console commands for Step 1?
