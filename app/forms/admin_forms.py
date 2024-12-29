@@ -38,11 +38,11 @@ class StipendForm(FlaskForm):
         Length(max=100, message=FlashMessages.NAME_LENGTH)
     ])
     summary = TextAreaField('Summary', validators=[
-        DataRequired(message="Summary is required."),
+        DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
         Length(max=500, message="Summary cannot exceed 500 characters.")
     ])
     description = TextAreaField('Description', validators=[
-        DataRequired(message="Description is required."),
+        DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
         Length(max=2000, message="Description cannot exceed 2000 characters.")
     ])
     homepage_url = URLField('Homepage URL', validators=[

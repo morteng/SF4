@@ -213,6 +213,7 @@ class FlashCategory(str, Enum):
     USER_SEARCH_ERROR = "Failed to search users."
 class FlashMessages(str, Enum):
     CREATE_ERROR = "Error creating record."
+    MISSING_FIELD_ERROR = "This field is required."  # Add this line
     EMAIL_REQUIRED = "Email is required."
     EMAIL_INVALID = "Invalid email address."
     EMAIL_LENGTH = "Email cannot exceed 100 characters."
