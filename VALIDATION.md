@@ -61,19 +61,31 @@
    - Add docstrings to properties and setters to clarify their purpose and behavior.
 
 ### Dependency Validation
-1. **Issue**: Tests failed because `freezegun` was not installed, even though it was listed in `requirements.txt`.
-2. **Solution**:
-   - Always install dependencies from `requirements.txt`:
-     ```bash
-     pip install -r requirements.txt
-     ```
-   - Verify installation with:
-     ```bash
-     pip show <package_name>
-     ```
-3. **Best Practice**:
-   - Add a pre-test check to ensure all required dependencies are installed.
-   - Document the setup process to avoid similar issues in the future.
+
+### Best Practices
+1. **Pre-Test Verification**:
+   Add a pre-test check to ensure all required dependencies are installed:
+   ```python
+   def verify_dependencies():
+       missing_deps = []
+       for dep in ["freezegun", "Flask"]:
+           try:
+               importlib.import_module(dep)
+           except ImportError:
+               missing_deps.append(dep)
+       if missing_deps:
+           pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
+   ```
+
+2. **Graceful Handling**:
+   Skip tests that require missing packages instead of failing the entire suite.
+
+### Package Structure
+1. **`__init__.py` Files**:
+   Always include `__init__.py` in directories to make them recognizable as Python packages.
+
+2. **Avoid Circular Imports**:
+   Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
 
 ### Dependency Validation
 1. **Issue**: Tests failed because `freezegun` was not installed, even though it was listed in `requirements.txt`.
