@@ -27,8 +27,8 @@
 /ask If there's a new issue, what is it?
 
 # Step 5: Final Documentation Updates
-/architect update PROJECT.md, CONVENTIONS.md, TODO.md, and VALIDATION.md with final changes & findings.
+/architect update PROJECT.md, CONVENTIONS.md, TODO.md, and VALIDATION.md with final changes & findings, important info and things we've learned that would be good to remember next coding session.
 
-# Step 6: Reset or Next
+# Step 6: Rince and repeat
 /reset
 /load CMD_TESTS.txt
