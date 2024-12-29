@@ -2,27 +2,31 @@
 
 ## Setup Instructions
 
-1. **Create and Activate Virtual Environment**:
+1. Create and activate a virtual environment:
    ```bash
    python -m venv .venv
    source .venv/bin/activate  # On macOS/Linux
    .venv\Scripts\activate     # On Windows
    ```
 
-2. **Install Dependencies**:
+2. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Verify Installation**:
-   Check if critical dependencies are installed:
+3. Verify critical dependencies:
    ```bash
    pip show freezegun Flask
    ```
 
-4. **Run Tests**:
+4. Run tests:
    ```bash
    pytest
+   ```
+
+5. Verify all dependencies are installed:
+   ```bash
+   pytest tests/test_dependencies.py
    ```
 
 ### Troubleshooting

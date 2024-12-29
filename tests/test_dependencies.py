@@ -101,3 +101,12 @@ def test_development_environment():
         subprocess.check_call(['pip', '--version'])
     except subprocess.CalledProcessError:
         pytest.fail("pip is not installed or not in PATH")
+import subprocess
+import pytest
+
+def test_dependencies():
+    """Verify all dependencies are installed."""
+    try:
+        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+    except subprocess.CalledProcessError:
+        pytest.fail("Failed to install dependencies")
