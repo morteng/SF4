@@ -11,6 +11,7 @@ class BaseCrudController:
         self.form_class = form_class
         self.template_dir = template_dir
         self.audit_logger = audit_logger
+        self.service.cache_validation = True  # Enable validation caching by default
         self.flash_messages = {
             'create_success': FlashMessages.CREATE_SUCCESS,
             'update_success': FlashMessages.UPDATE_SUCCESS,

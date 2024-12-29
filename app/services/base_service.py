@@ -44,6 +44,8 @@ class BaseService:
         self.post_delete_hooks = []
         self.pre_validation_hooks = []
         self.post_validation_hooks = []
+        self.validation_cache = {}
+        self.cache_validation = False
 
     def add_pre_create_hook(self, hook):
         self.pre_create_hooks.append(hook)
@@ -101,7 +103,12 @@ class BaseService:
             raise ValueError(f"Failed to create {self.model.__name__}: {str(e)}")
 
     def validate(self, data):
-        """Enhanced validation with hooks"""
+        """Enhanced validation with caching and hooks"""
+        if self.cache_validation:
+            cache_key = frozenset(data.items())
+            if cache_key in self.validation_cache:
+                return self.validation_cache[cache_key]
+                
         errors = {}
         
         # Run pre-validation hooks
@@ -139,7 +146,27 @@ class BaseService:
                 errors.update({field: str(e) for field in e.messages})
             
         if errors:
+            if self.cache_validation:
+                self.validation_cache[cache_key] = errors
             raise ValidationError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors=errors))
+
+    def benchmark_validation(self, data, iterations=1000):
+        """Benchmark validation performance"""
+        import time
+        start = time.time()
+        
+        for _ in range(iterations):
+            try:
+                self.validate(data)
+            except ValidationError:
+                pass
+                
+        elapsed = time.time() - start
+        return {
+            'iterations': iterations,
+            'total_time': elapsed,
+            'avg_time': elapsed / iterations
+        }
 
     def validate_create(self, data):
         """Validate data before creation"""

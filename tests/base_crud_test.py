@@ -59,6 +59,39 @@ class BaseCRUDTest:
         assert response.status_code == 400
         assert b"ValidationError" in response.data
 
+    def test_validation_benchmark(self):
+        """Test validation performance"""
+        benchmark = self.service.benchmark_validation(self.valid_data)
+        assert benchmark['avg_time'] < 0.01  # Should take less than 10ms per validation
+
+    def test_validation_caching(self):
+        """Test validation caching"""
+        self.service.cache_validation = True
+        
+        # First run should populate cache
+        start = time.time()
+        self.service.validate(self.valid_data)
+        first_run = time.time() - start
+        
+        # Second run should be faster
+        start = time.time()
+        self.service.validate(self.valid_data)
+        second_run = time.time() - start
+        
+        assert second_run < first_run / 2  # Should be at least twice as fast
+
+    def test_validation_error_messages(self):
+        """Test validation error messages"""
+        try:
+            self.service.validate(self.invalid_data)
+        except ValidationError as e:
+            errors = e.messages
+            assert isinstance(errors, dict)
+            for field, message in errors.items():
+                assert isinstance(field, str)
+                assert isinstance(message, str)
+                assert len(message) > 0
+
     def test_create_audit_log(self):
         """Test audit logging on create"""
         response = self.client.post(self.create_url, data=self.valid_data)
