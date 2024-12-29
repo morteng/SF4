@@ -474,3 +474,12 @@ def test_dependencies():
     
     if missing_deps:
         pytest.fail(f"Missing dependencies: {', '.join(missing_deps)}")
+import subprocess
+import pytest
+
+def test_dependencies():
+    """Verify all required dependencies are installed"""
+    try:
+        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+    except subprocess.CalledProcessError:
+        pytest.fail("Failed to install dependencies")

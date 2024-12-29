@@ -2,6 +2,62 @@
 
 ## Testing Setup
 
+### 1. Install Required Dependencies
+```bash
+pip install pytest freezegun Flask
+echo "pytest" >> requirements.txt
+echo "freezegun" >> requirements.txt
+```
+
+### 2. Verify Installation
+```bash
+pip show pytest freezegun Flask
+```
+
+### 3. Run Tests
+```bash
+pytest
+```
+
+### 4. Add Pre-Test Dependency Verification
+Create `tests/test_dependencies.py`:
+```python
+import subprocess
+import pytest
+
+def test_dependencies():
+    try:
+        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+    except subprocess.CalledProcessError:
+        pytest.fail("Failed to install dependencies")
+```
+
+### 5. Fix Circular Imports
+Create shared utilities module:
+```bash
+mkdir -p app/common
+touch app/common/utils.py
+```
+
+Use lazy imports where needed:
+```python
+def some_function():
+    from app.services.bot_service import run_bot  # Lazy import
+    run_bot()
+```
+
+### 6. CustomDateTimeField Implementation
+```python
+from wtforms import Field
+from wtforms.validators import InputRequired
+
+class CustomDateTimeField(Field):
+    def __init__(self, label=None, validators=None, **kwargs):
+        if validators is None:
+            validators = [InputRequired()]  # Default validator
+        super().__init__(label=label, validators=validators, **kwargs)
+```
+
 ### 1. Install pytest
 1. Activate your virtual environment:
    - **Windows**: `.venv\Scripts\activate`
