@@ -24,30 +24,44 @@
    pytest
    ```
 
-### Dependency Verification
-1. **Pre-Test Check**:
-   - Add a test to verify all dependencies are installed before running the test suite:
-     ```python
-     def test_dependencies():
-         try:
-             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-         except subprocess.CalledProcessError:
-             pytest.fail("Failed to install dependencies")
-     ```
+### **5. Add Pre-Test Dependency Verification**
+1. Create a test file (e.g., `tests/test_dependencies.py`) with the following content:
+   ```python
+   import subprocess
+   import pytest
+
+   def test_dependencies():
+       try:
+           subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+       except subprocess.CalledProcessError:
+           pytest.fail("Failed to install dependencies")
+   ```
+2. Run the test to verify dependencies:
+   ```bash
+   pytest tests/test_dependencies.py
+   ```
 
 2. **Graceful Handling**:
    - Use try-except blocks to handle missing dependencies in test files.
    - Skip tests that require missing packages instead of failing the entire suite.
 
-### CustomDateTimeField Implementation
-The `CustomDateTimeField` class must handle the `validators` argument correctly:
-```python
-class CustomDateTimeField(Field):
-    def __init__(self, label=None, validators=None, **kwargs):
-        if validators is None:
-            validators = [InputRequired()]  # Default validator
-        super().__init__(label=label, validators=validators, **kwargs)
-```
+### **2. Fix `CustomDateTimeField` Initialization**
+1. Locate the `CustomDateTimeField` class in your codebase (likely in `app/forms/admin_forms.py` or a similar file).
+2. Replace the existing implementation with the corrected version:
+   ```python
+   from wtforms import Field
+   from wtforms.validators import InputRequired
+
+   class CustomDateTimeField(Field):
+       def __init__(self, label=None, validators=None, **kwargs):
+           if validators is None:
+               validators = [InputRequired()]  # Default validator
+           super().__init__(label=label, validators=validators, **kwargs)
+   ```
+3. Ensure that the `StipendForm` class (or any other form using `CustomDateTimeField`) does not pass the `validators` argument explicitly unless necessary. For example:
+   ```python
+   application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
+   ```
 
 ## Testing Setup
 
@@ -83,11 +97,21 @@ class CustomDateTimeField(Field):
         super().__init__(label=label, validators=validators, **kwargs)
 ```
 
-### Circular Import Prevention
-To avoid circular dependencies:
-1. Move shared functionality to `app/common/utils.py`
-2. Use lazy imports where necessary:
+### **3. Fix Circular Imports**
+1. Identify the circular import chain. For example:
+   ```
+   app/__init__.py → app/routes/admin/user_routes.py → app/forms/admin_forms.py → app/__init__.py
+   ```
+2. Refactor shared functionality into a separate module (e.g., `app/common/utils.py`). For example:
    ```python
+   # app/common/utils.py
+   def init_admin_user():
+       # Implementation
+       pass
+   ```
+3. Use lazy imports where necessary. For example:
+   ```python
+   # app/routes/admin/user_routes.py
    def some_function():
        from app.services.bot_service import run_bot  # Lazy import
        run_bot()
@@ -205,26 +229,21 @@ To avoid circular dependencies:
   - Invalid time validation
   - Centralized error message handling
 
-#### 1. Activate the Virtual Environment
-   - **Windows**:
-     ```bash
-     .venv\Scripts\activate
-     ```
-   - **macOS/Linux**:
-     ```bash
-     source .venv/bin/activate
-     ```
-
-#### 2. Install `pytest`
-   Run this command to install `pytest`:
+### **1. Fix `pytest` Installation**
+1. Activate your virtual environment:
+   - **Windows**: `.venv\Scripts\activate`
+   - **macOS/Linux**: `source .venv/bin/activate`
+2. Install `pytest`:
    ```bash
-     pip install pytest
+   pip install pytest
    ```
-
-#### 3. Verify Installation
-   Confirm `pytest` is installed by running:
+3. Verify the installation:
    ```bash
-     pip show pytest
+   pip show pytest
+   ```
+4. Add `pytest` to `requirements.txt`:
+   ```bash
+   echo "pytest" >> requirements.txt
    ```
    If installed correctly, you'll see details about the `pytest` package.
 
