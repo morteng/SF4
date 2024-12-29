@@ -3,9 +3,9 @@
 2. Review all constants in `app/constants.py` to ensure consistency and completeness
 
 ### **Recent Changes**
-1. **Fixed Missing Constants**:
-   - Added `MISSING_FIELD_ERROR` and `INVALID_DATE_FORMAT` to `FlashMessages` class in `app/constants.py`.
-   - Ensured all constants used in forms and tests are properly defined.
+1. **Fixed Duplicate Constants**:
+   - Removed duplicate definitions of `INVALID_DATE_FORMAT` in `app/constants.py`.
+   - Ensured all constants are defined only once in the `FlashMessages` class.
 
 2. **Improved Form Validation**:
    - Updated form validation messages to use centralized constants from `app/constants.py`.
@@ -16,42 +16,30 @@
    - Moved shared utilities to `app/common/utils.py`.
 
 4. **Fixed Test Failures**:
-   - Resolved `ImportError` in `tests/test_forms.py` by adding missing constants.
-   - Ensured all tests pass after adding required constants.
+   - Resolved `ImportError` in `tests/test_validation.py` by fixing constant imports.
+   - Ensured all tests pass after removing duplicate constants.
 
-### **Things to Remember for Next Coding Session**
-1. **Centralized Constants**:
-   - Always define error messages and validation strings in `app/constants.py`.
-   - Avoid hardcoding strings in forms, tests, or other modules.
+### **Key Takeaways for Next Coding Session**
+1. **Validation Logic**:
+   - Confirm data types before applying validation.
+   - Centralize error messages, stay consistent.
 
-2. **Property Implementation**:
-   - Always define properties with `@property` before using `@<property>.setter`.
-   - Validate property values in setters to maintain data integrity.
+2. **Testing**:
+   - More edge-case coverage.
+   - Keep a good variety of unit, integration, and E2E tests.
 
-3. **Error Handling**:
-   - Include proper error handling for `try` blocks.
-   - Log errors with context to facilitate debugging.
+3. **Error Handling & Logging**:
+   - Don't just "print" stuff—log it with context.
+   - Make error messages user-friendly (or at least developer-friendly).
 
-4. **Testing**:
-   - Add tests for edge cases, especially for date/time validation and rate limiting.
-   - Use mocking tools like `freezegun` for deterministic time-based tests.
-
-5. **Code Organization**:
-   - Keep validation logic modular and reusable.
-   - Avoid hardcoding strings; use constants instead.
-
-6. **Rate Limiting**:
-   - Ensure rate limiters are properly configured with valid string values (e.g., "10 per minute").
-   - Validate rate limit values in setters to prevent invalid configurations.
-
-7. **Circular Imports**:
-   - Use lazy imports to avoid circular dependencies.
-   - Refactor shared logic into utility modules to reduce import complexity.
+4. **Code Organization**:
+   - Keep modules small and logical.
+   - Use base classes and utilities to avoid duplication.
 
 ### **Lessons Learned**
-1. **Missing Constants**:
-   - Missing constants can cause runtime errors, so add them as soon as they are identified.
-   - Centralize all error messages and validation strings in `app/constants.py`.
+1. **Duplicate Constants**:
+   - Duplicate constant definitions can cause `TypeError` in `Enum` classes.
+   - Ensure each constant is defined only once in `app/constants.py`.
 
 2. **Testing**:
    - Comprehensive testing of date/time validation is essential—particularly with user-submitted data.
@@ -76,49 +64,6 @@
 7. **Circular Imports**:
    - Circular imports can cause initialization errors and should be avoided.
    - Use lazy imports or refactor shared logic into utility modules to reduce import complexity.
-
-### **Things to Remember for Next Coding Session**
-1. **Property Implementation**:
-   - Always define properties with `@property` before using `@<property>.setter`.
-   - Validate property values in setters to maintain data integrity.
-
-2. **Constants Management**:
-   - Keep all error messages and validation strings in `app/constants.py`.
-   - Verify that all required constants are defined and imported correctly.
-   - Avoid duplicate definitions of constants to prevent `TypeError`.
-
-3. **Error Handling**:
-   - Include proper error handling for `try` blocks.
-   - Log errors with context to facilitate debugging.
-
-4. **Testing**:
-   - Add tests for all properties and their validation logic.
-   - Include edge cases for date/time validation and rate limiting.
-
-5. **Code Organization**:
-   - Keep validation logic modular and reusable.
-   - Avoid hardcoding strings; use constants instead.
-
-6. **Rate Limiting**:
-   - Ensure rate limiters are properly configured with valid string values (e.g., "10 per minute").
-   - Validate rate limit values in setters to prevent invalid configurations.
-
-7. **Circular Imports**:
-   - Use lazy imports to avoid circular dependencies.
-   - Refactor shared logic into utility modules to reduce import complexity.
-
-### **Lessons Learned**
-1. **Property Implementation**:
-   - Always define properties with `@property` before using `@<property>.setter`.
-   - Validate property values in setters to maintain data integrity.
-
-2. **Centralized Constants**:
-   - Keeping all error messages and validation strings in `app/constants.py` ensures consistency and reduces the chance of typos.
-   - Missing constants can cause runtime errors, so add them as soon as they are identified.
-   - Duplicate definitions of constants can cause `TypeError`, so ensure each constant is defined only once.
-
-3. **Error Handling**:
-   - Proper error handling in property setters is crucial for maintaining data integrity.
    - Logging errors with context makes debugging easier.
 
 4. **Testing**:
