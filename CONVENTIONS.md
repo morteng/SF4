@@ -2015,6 +2015,16 @@ If time-based tests are failing:
 
 ## Updated Validation Best Practices
 
+### Date/Time Validation Best Practices
+1. **Data Type Awareness**:
+   - Always verify the data type of form field inputs before applying validation logic.
+2. **Timezone Handling**:
+   - Ensure all `datetime` objects are timezone-aware.
+3. **Future/Past Date Validation**:
+   - Validate that dates are within acceptable ranges (e.g., future dates for deadlines).
+4. **Error Messages**:
+   - Use centralized error messages from `app/constants.py` for consistency.
+
 ### Date/Time Validation
 1. **Data Type Awareness**:
    - Always verify the data type of form field inputs before applying validation logic.
