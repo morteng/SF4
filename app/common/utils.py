@@ -165,3 +165,6 @@ def init_admin_user():
 def shared_function():
     """Example shared function to be used across modules"""
     pass
+def init_admin_user():
+    # Shared functionality for initializing admin user
+    pass

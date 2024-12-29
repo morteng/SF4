@@ -76,3 +76,22 @@ def test_custom_date_time_field():
     # Test edge cases
     with pytest.raises(ValueError):
         field.process_formdata(["invalid_date"])
+import pytest
+from freezegun import freeze_time
+from app.forms.admin_forms import StipendForm
+from app.constants import MISSING_REQUIRED_FIELD, INVALID_DATE_FORMAT
+
+def test_custom_date_time_field_required():
+    form = StipendForm()
+    assert not form.validate()
+    assert MISSING_REQUIRED_FIELD in form.application_deadline.errors
+
+def test_custom_date_time_field_invalid_format():
+    form = StipendForm(application_deadline="invalid-date")
+    assert not form.validate()
+    assert INVALID_DATE_FORMAT in form.application_deadline.errors
+
+@freeze_time("2024-01-01")
+def test_custom_date_time_field_valid():
+    form = StipendForm(application_deadline="2024-01-01 12:00:00")
+    assert form.validate()
