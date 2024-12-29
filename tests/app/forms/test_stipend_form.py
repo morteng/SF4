@@ -294,11 +294,18 @@ class TestCustomDateTimeField(BaseTestCase):
         )
 
     def test_future_date_limit(self):
-        field = CustomDateTimeField()
+        class TestForm(Form):
+            test_field = CustomDateTimeField(
+                error_messages={
+                    'future_date': 'Date cannot be more than 5 years in the future'
+                }
+            )
+        
+        form = TestForm()
         future_date = datetime.now().replace(year=datetime.now().year + 6)
         self.assertFormInvalid(
-            field, {'': future_date.strftime('%Y-%m-%d %H:%M:%S')},  # More than 5 years in future
-            {'': ['Date cannot be more than 5 years in the future']}
+            form, {'test_field': future_date.strftime('%Y-%m-%d %H:%M:%S')},
+            {'test_field': ['Date cannot be more than 5 years in the future']}
         )
 
     def test_leap_year_validation(self):
