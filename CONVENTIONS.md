@@ -613,6 +613,49 @@ If time-based tests are failing:
 ### Property Implementation
 1. **Define Properties Correctly**:
    - Always define a property (`@property`) before using a setter (`@<property>.setter`).
+2. **Avoid Direct Attribute Access**:
+   - Use properties to encapsulate attribute access and modification.
+3. **Document Properties**:
+   - Add docstrings to properties and setters to clarify their purpose and behavior.
+
+### Custom Field Implementation
+1. **Handle All Arguments**:
+   - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+2. **Default Validators**:
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
+
+### Dependency Management
+1. **Pre-Test Verification**:
+   - Add a pre-test check to ensure all required dependencies are installed:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+2. **Graceful Handling**:
+   - Use try-except blocks to handle missing dependencies in test files.
+   - Skip tests that require missing packages instead of failing the entire suite.
+
+### Circular Imports
+1. **Refactor Shared Functionality**:
+   - Move shared code to a separate module (e.g., `app/common/utils.py`).
+2. **Use Lazy Imports**:
+   - Import dependencies at the function level when necessary:
+     ```python
+     def some_function():
+         from app.services.bot_service import run_bot  # Lazy import
+         run_bot()
+     ```
+
+### Property Implementation
+1. **Define Properties Correctly**:
+   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
    - Example:
      ```python
      class MyClass:
@@ -1033,6 +1076,41 @@ If time-based tests are failing:
    - Use consistent patterns for initializing custom fields.
 
 ## Updated Validation Best Practices
+
+### Date/Time Validation
+1. **Data Type Awareness**:
+   - Always verify the data type of form field inputs before applying validation logic.
+2. **Timezone Handling**:
+   - Ensure all `datetime` objects are timezone-aware.
+3. **Future/Past Date Validation**:
+   - Validate that dates are within acceptable ranges (e.g., future dates for deadlines).
+4. **Error Messages**:
+   - Use centralized error messages from `app/constants.py` for consistency.
+
+### Custom Field Implementation
+1. **Handle All Arguments**:
+   - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+2. **Default Validators**:
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
+
+### General Validation
+1. **Validation Logic**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Ensure compatibility with parent classes when overriding attributes or methods.
+   - Use centralized error messages from `app/constants.py` for consistency.
+2. **Testing**:
+   - Test edge cases thoroughly, especially for date/time validation.
+   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+3. **Error Handling**:
+   - Log validation errors with context for easier debugging.
+   - Provide clear, user-friendly error messages for validation failures.
+4. **Code Organization**:
+   - Keep validation logic modular and reusable.
+   - Avoid code duplication by using base classes and utilities.
 
 1. **Date/Time Validation**:
    - Validate date and time components separately before full parsing

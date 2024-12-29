@@ -1,6 +1,22 @@
 # Updated TODO List
 
 ## Completed
+- [x] Fix `CustomDateTimeField` initialization to handle `validators` argument.
+- [x] Install `pytest` and verify dependencies.
+- [x] Refactor shared functionality into `app/common/utils.py` to avoid circular imports.
+
+## Next Session
+- [ ] Ensure all error messages are centralized in `app/constants.py` and used consistently.
+- [ ] Add comprehensive tests for edge cases in date/time validation.
+- [ ] Optimize validation performance in `CustomDateTimeField`.
+- [ ] Verify timezone handling in all date/time fields.
+- [ ] Refactor validation logic in other forms to ensure consistency with `StipendForm`.
+
+## Long Term
+- [ ] Automate dependency verification during test execution.
+- [ ] Improve test coverage for all form fields.
+- [ ] Add integration tests for form validation.
+- [ ] Refactor other shared functionality into `app/common`.
 - [x] Fix circular imports by refactoring shared functionality into `app/common/utils.py`.
 - [x] Add comprehensive pytest installation and verification steps to documentation.
 - [x] Add `__init__.py` to `app/forms` to make it a valid package.
