@@ -113,6 +113,9 @@ _admin_blueprints_registered = False
 def register_admin_blueprints(app):
     global _admin_blueprints_registered
     
+    # Reset the flag to allow registration
+    _admin_blueprints_registered = False
+    
     if _admin_blueprints_registered:
         return
     
