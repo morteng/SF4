@@ -50,72 +50,31 @@ class StipendForm(FlaskForm):
     tags = SelectMultipleField('Tags', coerce=int, validators=[Optional()])
 
     def validate_application_deadline(self, field):
-        # Skip validation if the field is empty or invalid (CustomDateTimeField handles this)
         if not field.data or field.errors:
-            print(f"Field data: {field.data}, Errors: {field.errors}")  # Debugging
             return
         
-        # If we somehow still have a string, convert it to datetime
         if isinstance(field.data, str):
             try:
                 field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
             except ValueError:
                 raise ValidationError('Invalid date format')
     
-        # Ensure datetime is timezone-aware
         now = datetime.now(pytz.UTC)
         if field.data.tzinfo is None:
             field.data = pytz.UTC.localize(field.data)
         
-        # Validate future date
         if field.data < now:
             raise ValidationError('Application deadline must be a future date')
         
-        # Validate not too far in future
         max_future = now.replace(year=now.year + 5)
         if field.data > max_future:
             raise ValidationError('Application deadline cannot be more than 5 years in the future')
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Initialize choices for SelectMultipleFields
-        from app.models import Tag, Organization
-        with db.session.no_autoflush:
-            # Populate organization choices
-            self.organization_id.choices = [
-                (org.id, org.name) for org in Organization.query.order_by(Organization.name).all()
-            ]
-            # Populate tag choices
-            self.tags.choices = [
-                (tag.id, tag.name) for tag in Tag.query.order_by(Tag.name).all()
-            ]
-
-    def validate_application_deadline(self, field):
-        # Skip validation if the field is empty or invalid (CustomDateTimeField handles this)
-        if not field.data or field.errors:
-            print(f"Field data: {field.data}, Errors: {field.errors}")  # Debugging
-            return
-        
-        # If we somehow still have a string, convert it to datetime
-        if isinstance(field.data, str):
-            try:
-                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-            except ValueError:
-                raise ValidationError('Invalid date format')
-    
-        # Ensure datetime is timezone-aware
-        now = datetime.now(pytz.UTC)
-        if field.data.tzinfo is None:
-            field.data = pytz.UTC.localize(field.data)
-        
-        # Validate future date
-        if field.data < now:
-            raise ValidationError('Application deadline must be a future date')
-        
-        # Validate not too far in future
-        max_future = now.replace(year=now.year + 5)
-        if field.data > max_future:
-            raise ValidationError('Application deadline cannot be more than 5 years in the future')
+    def validate_organization_id(self, field):
+        if field.data:  # Only validate if organization_id is provided
+            organization = db.session.get(Organization, field.data)
+            if not organization:
+                raise ValidationError('Invalid organization selected.')
 
     submit = SubmitField('Create')
 

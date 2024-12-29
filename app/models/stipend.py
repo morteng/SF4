@@ -33,17 +33,14 @@ class Stipend(db.Model):
         
         # Validate application deadline if provided
         if 'application_deadline' in data and data['application_deadline']:
-            # First validate date format
             if isinstance(data['application_deadline'], str):
                 try:
-                    # Parse the datetime string and make it timezone-aware
                     parsed_dt = datetime.strptime(
                         data['application_deadline'], '%Y-%m-%d %H:%M:%S')
                     data['application_deadline'] = parsed_dt.replace(tzinfo=timezone.utc)
                 except ValueError:
                     raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS")
             
-            # Then validate date range
             now = datetime.now(timezone.utc)
             if data['application_deadline'] < now:
                 raise ValueError("Application deadline must be a future date")
