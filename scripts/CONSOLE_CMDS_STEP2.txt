@@ -4,16 +4,8 @@
 # Console commands for Step 2.
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
-### PENDING CONSOLE COMMANDS ###
-# Example commands:
-# /run echo "Hello from Step 2!"
-# /run pytest --maxfail=1
-
 ### COMMANDS START ###
-/run flask db migrate -m "Fix Notification model and route registration"
-/run flask db upgrade
 /run pytest tests/test_admin_stipends.py -v
-/run flask routes
 ### COMMANDS END ###
 
 # Once finished, jump to Step 3.
