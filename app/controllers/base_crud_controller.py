@@ -96,8 +96,24 @@ class BaseCrudController:
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_success}'))
             
         except ValidationError as e:
-            for field, error in e.messages.items():
-                flash(f"{field}: {error}", FlashCategory.ERROR.value)
+            # Enhanced validation error handling
+            error_messages = []
+            for field, errors in e.messages.items():
+                for error in errors:
+                    # Use standardized error messages from constants
+                    error_msg = self.flash_messages.get('validation_error', str(error))
+                    flash(f"{field}: {error_msg}", FlashCategory.ERROR.value)
+                    error_messages.append(f"{field}: {error_msg}")
+            
+            # Handle HTMX responses for validation errors
+            htmx_response = self._handle_htmx_response(
+                success=False,
+                template=f'admin/{self.entity_name}/{redirect_error}.html',
+                context={'errors': error_messages}
+            )
+            if htmx_response:
+                return htmx_response
+                
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
             
         except Exception as e:

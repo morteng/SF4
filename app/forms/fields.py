@@ -6,8 +6,8 @@ from app.constants import FlashMessages
 
 class CustomDateTimeField(DateTimeField):
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
-        # Initialize error messages using constants
-        self.error_messages = {
+        # Initialize with default error messages from constants
+        kwargs.setdefault('error_messages', {
             'required': str(FlashMessages.DATE_REQUIRED),
             'invalid_format': str(FlashMessages.INVALID_DATETIME_FORMAT),
             'invalid_time': str(FlashMessages.INVALID_TIME_COMPONENTS),
@@ -15,11 +15,11 @@ class CustomDateTimeField(DateTimeField):
             'invalid_date': str(FlashMessages.INVALID_DATE_VALUES),
             'past_date': str(FlashMessages.PAST_DATE),
             'future_date': str(FlashMessages.FUTURE_DATE),
-            **kwargs.pop('error_messages', {})
-        }
+        })
         
         super().__init__(label=label, validators=validators, format=format, **kwargs)
         self.render_kw = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
+        self._format = format
 
     def process_formdata(self, valuelist):
         if not valuelist or not valuelist[0].strip():
