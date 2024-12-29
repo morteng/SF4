@@ -695,8 +695,10 @@ def delete(id):
 def index():
     page = request.args.get('page', 1, type=int)
     stipends = Stipend.query.paginate(page=page, per_page=10, error_out=False)
-    current_app.logger.info(f"Stipends fetched: {stipends.items}")  # Debug: Log the fetched stipends
-    return render_template('admin/stipends/index.html', stipends=stipends)
+    return render_template('admin/stipends/index.html', 
+                         stipends=stipends,
+                         current_page=stipends.page,
+                         total_pages=stipends.pages)
 
 
 @admin_stipend_bp.route('/paginate/<int:page>', methods=['GET'])
