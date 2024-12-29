@@ -68,11 +68,26 @@ def register_stipend_routes(app) -> None:
         raise ValueError("Invalid Flask application instance")
         
     try:
+        # Register blueprint with admin prefix
         app.register_blueprint(admin_stipend_bp)
         logger.info("Successfully registered stipend routes")
-        for rule in app.url_map.iter_rules():
-            if rule.endpoint.startswith('admin.stipend'):
-                logger.debug(f"Route: {rule}")
+        
+        # Verify routes are registered correctly
+        registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
+        required_routes = [
+            'stipend.create',
+            'stipend.edit',
+            'stipend.delete',
+            'stipend.index',
+            'stipend.paginate'
+        ]
+        
+        # Check if all required routes are registered
+        missing_routes = [route for route in required_routes if route not in registered_routes]
+        if missing_routes:
+            raise RuntimeError(f"Missing routes: {', '.join(missing_routes)}")
+            
+        logger.debug("All stipend routes registered successfully")
     except Exception as e:
         logger.error(f"Failed to register stipend routes: {str(e)}")
         raise RuntimeError(f"Route registration failed: {str(e)}")
