@@ -43,15 +43,7 @@ class StipendForm(FlaskForm):
     ])
     application_procedure = TextAreaField('Application Procedure')
     eligibility_criteria = TextAreaField('Eligibility Criteria')
-    application_deadline = CustomDateTimeField(
-        'Application Deadline',
-        validators=[DataRequired(message="Application deadline is required.")],
-        render_kw={
-            "placeholder": "YYYY-MM-DD HH:MM:SS",
-            "pattern": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}",
-            "title": "Please enter date in YYYY-MM-DD HH:MM:SS format."
-        }
-    )
+    application_deadline = CustomDateTimeField('Application Deadline')  # Now optional
     organization_id = SelectField('Organization', coerce=int, validators=[
         DataRequired(message="Organization is required.")
     ])
