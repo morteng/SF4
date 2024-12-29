@@ -1,63 +1,72 @@
 # Todo
-1. Fix tests
-2. Update this list with new actionable items
+1. Fix remaining tests
+2. Add comprehensive test coverage for all edge cases
 
-### **Next Steps**
-1. **Add Missing Constants**:
-   - [x] Add `EMAIL_REQUIRED` to `app/constants.py`.
-2. **Fix Rate Limiter Configuration**:
-   - [x] Update `@Limiter.limit` decorator in `app/services/base_service.py`.
-3. **Refactor Imports**:
-   - [x] Use lazy imports in `app/__init__.py` to avoid circular dependencies.
+### **Recent Changes**
+1. **Fixed Property Implementation**:
+   - Corrected `create_limit`, `update_limit`, and `delete_limit` properties in `BaseService` to use proper property decorators.
+   - Added validation for rate limit values in setters.
+
+2. **Updated Constants**:
+   - Added missing constants like `CREATE_SUCCESS`, `UPDATE_SUCCESS`, and `DELETE_SUCCESS` to `FlashMessages` class in `app/constants.py`.
+
+3. **Improved Error Handling**:
+   - Added proper error handling for property setters in `BaseService`.
+   - Enhanced logging for validation errors.
+
+4. **Refactored Imports**:
+   - Used lazy imports in `app/__init__.py` to avoid circular dependencies.
+   - Moved shared utilities to `app/common/utils.py`.
 
 ### **Things to Remember for Next Coding Session**
-1. **Error Handling**:
-   - Always include proper error handling for `try` blocks to avoid syntax errors.
-   - Log errors with context to facilitate debugging.
+1. **Property Implementation**:
+   - Always define properties with `@property` before using `@<property>.setter`.
+   - Validate property values in setters to maintain data integrity.
 
 2. **Constants Management**:
-   - Use `app/constants.py` for all error messages and validation strings.
+   - Keep all error messages and validation strings in `app/constants.py`.
    - Verify that all required constants are defined and imported correctly.
-   - Add missing constants as soon as they are identified to avoid runtime errors.
 
-3. **Dependency Management**:
-   - Always check compatibility between library versions, especially for critical dependencies like `Flask-Login` and `Werkzeug`.
-   - Update `requirements.txt` to reflect the correct versions.
+3. **Error Handling**:
+   - Include proper error handling for `try` blocks.
+   - Log errors with context to facilitate debugging.
 
 4. **Testing**:
-   - Run tests after making changes to dependencies, constants, or validation logic.
-   - Use `pytest` for comprehensive testing, including edge cases for date/time validation.
-   - Ensure all test dependencies are installed before running tests.
+   - Add tests for all properties and their validation logic.
+   - Include edge cases for date/time validation and rate limiting.
 
 5. **Code Organization**:
    - Keep validation logic modular and reusable.
    - Avoid hardcoding strings; use constants instead.
-   - Ensure properties are defined correctly with `@property` and `@<property>.setter`.
 
 6. **Rate Limiting**:
    - Ensure rate limiters are properly configured with valid string values (e.g., "10 per minute").
    - Validate rate limit values in setters to prevent invalid configurations.
 
 ### **Lessons Learned**
-1. **Proper Error Handling**:
-   - Always include `except` or `finally` blocks for `try` statements to avoid syntax errors.
+1. **Property Implementation**:
+   - Always define properties with `@property` before using `@<property>.setter`.
+   - Validate property values in setters to maintain data integrity.
 
 2. **Centralized Constants**:
    - Keeping all error messages and validation strings in `app/constants.py` ensures consistency and reduces the chance of typos.
    - Missing constants can cause runtime errors, so add them as soon as they are identified.
 
-3. **Dependency Verification**:
-   - Verify dependencies before running tests to avoid installation issues.
+3. **Error Handling**:
+   - Proper error handling in property setters is crucial for maintaining data integrity.
+   - Logging errors with context makes debugging easier.
 
-4. **Testing Edge Cases**:
-   - Pay special attention to edge cases for date/time validation, such as leap years and invalid time components.
+4. **Testing**:
+   - Comprehensive testing of properties and their validation logic is essential.
+   - Edge cases for date/time validation and rate limiting should be thoroughly tested.
 
-5. **Property Implementation**:
-   - Always define properties with `@property` before using `@<property>.setter`.
-   - Validate property values in setters to maintain data integrity.
+5. **Code Organization**:
+   - Modular and reusable validation logic improves maintainability.
+   - Using constants instead of hardcoded strings reduces the chance of errors.
 
 6. **Rate Limiting**:
-   - Ensure rate limiters are properly configured and validated to prevent runtime errors.
+   - Proper configuration and validation of rate limiters prevent runtime errors.
+   - Rate limit values should be validated in setters to ensure they are valid strings.
 
 ### **Recent Changes**
 1. **Added Missing Constants**:
