@@ -44,11 +44,35 @@ stipend_controller = BaseRouteController(
     'admin/stipends'
 )
 
+class StipendController(BaseRouteController):
+    def __init__(self):
+        super().__init__(
+            service=StipendService(),
+            entity_name='stipend',
+            form_class=StipendForm,
+            template_dir='admin/stipends'
+        )
+
+    def _prepare_create_data(self, form):
+        return {
+            'name': form.name.data,
+            'summary': form.summary.data,
+            'description': form.description.data,
+            'homepage_url': form.homepage_url.data,
+            'application_procedure': form.application_procedure.data,
+            'eligibility_criteria': form.eligibility_criteria.data,
+            'application_deadline': form.application_deadline.data,
+            'open_for_applications': form.open_for_applications.data
+        }
+
+stipend_controller = StipendController()
+
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")
 @login_required
 @admin_required
 def create():
+    return stipend_controller.create()
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')
     
