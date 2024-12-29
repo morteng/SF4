@@ -1,0 +1,52 @@
+{% extends "admin/layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Create New Tag</h1>
+    
+    <form method="POST" action="{{ url_for('admin.tag.create') }}" class="needs-validation" novalidate>
+        {{ form.hidden_tag() }}
+        
+        <div class="mb-3">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control" + (' is-invalid' if form.name.errors else '')) }}
+            {% if form.name.errors %}
+                <div class="invalid-feedback">
+                    {% for error in form.name.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.category.label(class="form-label") }}
+            {{ form.category(class="form-control" + (' is-invalid' if form.category.errors else '')) }}
+            {% if form.category.errors %}
+                <div class="invalid-feedback">
+                    {% for error in form.category.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Create Tag</button>
+            <a href="{{ url_for('admin.tag.index') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% if request.headers.get('HX-Request') %}
+<script>
+    // HTMX response handling
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.location.pathname !== "{{ url_for('admin.tag.create') }}") {
+            window.location.reload();
+        }
+    });
+</script>
+{% endif %}
+
+{% endblock %}
