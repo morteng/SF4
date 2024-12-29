@@ -4,7 +4,16 @@ from wtforms.validators import ValidationError
 from datetime import datetime
 
 class CustomDateTimeField(DateTimeField):
-    """Custom DateTimeField with timezone support and enhanced validation."""
+    """
+    Custom DateTimeField with enhanced validation features.
+    
+    Features:
+    - Timezone support
+    - Strict format validation (YYYY-MM-DD HH:MM:SS)
+    - Future/past date validation
+    - Leap year validation
+    - Custom error messages
+    """
     
     # Define error messages
     error_messages = {

@@ -3,6 +3,7 @@
 from enum import Enum
 
 class NotificationType(Enum):
+    """Enum representing different types of system notifications."""
     BOT_SUCCESS = 'bot_success'
     BOT_ERROR = 'bot_error'
     USER_ACTION = 'user_action'
