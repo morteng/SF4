@@ -27,7 +27,10 @@ class CustomDateTimeField(DateTimeField):
         'required': 'Date is required',
         'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)',
         'past_date': 'Application deadline must be a future date',
-        'future_date': 'Application deadline cannot be more than 5 years in the future'
+        'future_date': 'Application deadline cannot be more than 5 years in the future',
+        'invalid_hour_value': 'Invalid hour value',
+        'invalid_minute_value': 'Invalid minute value',
+        'invalid_second_value': 'Invalid second value'
     }
     
     def __init__(self, *args, **kwargs):
