@@ -77,20 +77,19 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 
 ## Lessons Learned
 
-### Validation Improvements
+### Date/Time Validation
 - Fixed `TypeError` in `CustomDateTimeField` caused by incorrect `format` parameter handling.
 - Consolidated leap year validation logic to avoid redundancy.
 - Improved error message consistency using constants from `app/constants.py`.
 - Added comprehensive tests for edge cases in date/time validation.
 
 ### Error Handling
-- Ensured all error messages are centralized in `app/constants.py`.
-- Standardized error message format across all fields.
-- Improved validation error reporting.
+- Ensured all error messages are centralized in `app/constants.py` and used consistently across the codebase.
+- Improved validation error reporting for better debugging.
 
 ### Testing
 - Added comprehensive test coverage for date/time validation.
-- Verified edge cases in date/time validation.
+- Verified edge cases in date/time validation (e.g., leap years, invalid time components).
 - Improved test isolation and reliability.
 
 ### Key Learnings
@@ -98,6 +97,8 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 - Ensure compatibility with parent classes when overriding attributes or methods.
 - Use centralized error messages from `app/constants.py` for consistency.
 - Test edge cases thoroughly, especially for date/time validation.
+- Log validation errors with context for easier debugging.
+- Provide clear, user-friendly error messages for validation failures.
 
 ## System Components
 

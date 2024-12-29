@@ -5,6 +5,8 @@
 - [x] Consolidate leap year validation logic in `CustomDateTimeField`.
 - [x] Add tests for edge cases in date/time validation.
 - [x] Standardize error messages using constants from `app/constants.py`.
+- [x] Improve validation error reporting for better debugging.
+- [x] Add comprehensive test coverage for date/time validation.
 
 ## Next Session
 - [ ] Optimize validation performance in `CustomDateTimeField`.
