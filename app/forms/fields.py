@@ -51,7 +51,7 @@ class CustomDateTimeField(DateTimeField):
         
         # First check if value is missing or empty
         if not valuelist or self._is_empty_value(valuelist[0]):
-            self.errors.append('Application deadline is required.')
+            self.errors.append(self.error_messages.get('required', 'Date is required'))
             self.data = None
             return
             
