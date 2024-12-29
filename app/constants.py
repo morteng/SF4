@@ -234,3 +234,5 @@ INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM
 MISSING_REQUIRED_FIELD = "This field is required"
 INVALID_LEAP_YEAR_DATE = "Invalid date: February 29th is only valid in leap years"
 INVALID_TIME = "Invalid time. Hours must be 0-23, minutes 0-59, seconds 0-59"
+INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
+MISSING_REQUIRED_FIELD = "This field is required"
