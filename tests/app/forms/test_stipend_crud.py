@@ -1,5 +1,9 @@
 import pytest
 from datetime import datetime
+from tests.conftest import FREEZEGUN_INSTALLED
+
+# Mark all tests in this file as requiring freezegun
+pytestmark = pytest.mark.freezegun
 from app.models.stipend import Stipend
 from app.models.organization import Organization
 from app.models.tag import Tag

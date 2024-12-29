@@ -18,7 +18,12 @@ except ImportError:
         "Run `pip install -r requirements.txt` to install dependencies."
     )
 
-def pytest_configure():
+# Add a pytest marker for freezegun-dependent tests
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers",
+        "freezegun: mark tests that require freezegun package"
+    )
     """Configure pytest options."""
     pass
 from datetime import datetime
