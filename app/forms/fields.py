@@ -6,8 +6,8 @@ from app.constants import FlashMessages
 
 class CustomDateTimeField(DateTimeField):
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
-        # Initialize with default error messages from constants
-        kwargs.setdefault('error_messages', {
+        # Initialize error messages once
+        error_messages = {
             'required': str(FlashMessages.DATE_REQUIRED),
             'invalid_format': str(FlashMessages.INVALID_DATETIME_FORMAT),
             'invalid_time': str(FlashMessages.INVALID_TIME_COMPONENTS),
@@ -15,8 +15,12 @@ class CustomDateTimeField(DateTimeField):
             'invalid_date': str(FlashMessages.INVALID_DATE_VALUES),
             'past_date': str(FlashMessages.PAST_DATE),
             'future_date': str(FlashMessages.FUTURE_DATE),
-        })
+        }
         
+        # Merge with any custom error messages
+        kwargs['error_messages'] = {**error_messages, **kwargs.get('error_messages', {})}
+        
+        # Call parent __init__ with all parameters
         super().__init__(label=label, validators=validators, format=format, **kwargs)
         self.render_kw = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
         self._format = format
@@ -35,42 +39,60 @@ class CustomDateTimeField(DateTimeField):
             
         date_str = valuelist[0]
         try:
+            # Optimized parsing and validation
             parsed_dt = datetime.strptime(date_str, self.format)
             
-            # Validate date components
+            # Validate date components first (cheaper operation)
             try:
                 datetime(parsed_dt.year, parsed_dt.month, parsed_dt.day)
             except ValueError:
-                raise ValidationError(self.error_messages['invalid_date'])
+                self.errors.append(self.error_messages['invalid_date'])
+                self.data = None
+                return
                 
-            # Validate time components
-            self._validate_time_components(parsed_dt)
+            # Then validate time components
+            if not (0 <= parsed_dt.hour <= 23 and 
+                    0 <= parsed_dt.minute <= 59 and 
+                    0 <= parsed_dt.second <= 59):
+                self.errors.append(self.error_messages['invalid_time'])
+                self.data = None
+                return
                 
-            # Leap year validation
+            # Leap year validation only when needed
             if parsed_dt.month == 2 and parsed_dt.day == 29:
                 try:
                     datetime(parsed_dt.year, 2, 29)
                 except ValueError:
-                    raise ValidationError(self.error_messages['invalid_leap_year'])
+                    self.errors.append(self.error_messages['invalid_leap_year'])
+                    self.data = None
+                    return
                     
             # Future date validation
             now = datetime.now()
             if parsed_dt < now:
-                raise ValidationError(self.error_messages['past_date'])
+                self.errors.append(self.error_messages['past_date'])
+                self.data = None
+                return
+                
+            # Future date limit (5 years)
+            max_future = now.replace(year=now.year + 5)
+            if parsed_dt > max_future:
+                self.errors.append(self.error_messages['future_date'])
+                self.data = None
+                return
                 
             self.data = parsed_dt
             self.raw_value = date_str
             
-        except ValidationError:
-            raise
         except ValueError as e:
             error_str = str(e)
             if 'does not match format' in error_str:
-                raise ValidationError(self.error_messages['invalid_format'])
+                self.errors.append(self.error_messages['invalid_format'])
             elif 'day is out of range' in error_str or 'month is out of range' in error_str:
-                raise ValidationError(self.error_messages['invalid_date'])
+                self.errors.append(self.error_messages['invalid_date'])
             else:
-                raise ValidationError(self.error_messages['invalid_date'])
+                self.errors.append(self.error_messages['invalid_date'])
+            self.data = None
 
     @classmethod
     def benchmark_validation(cls, iterations=1000):
