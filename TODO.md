@@ -9,6 +9,7 @@
 - [x] Implement proper error message mapping
 - [x] Add pre-parsing time component validation
 - [x] Improve error handling for invalid time values
+- [x] Fix required field validation in CustomDateTimeField
 - [ ] Update remaining routes to use new error handling
 
 ## Medium Priority

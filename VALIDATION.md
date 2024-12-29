@@ -40,6 +40,9 @@
 - Log errors before returning responses
 - Clear existing errors before new validation
 - Use error_messages dictionary for all validation errors
+- Handle required field validation first
+- Return appropriate error messages for missing required fields
+- Ensure consistent handling of empty/missing values
 
 ## Testing
 - Test all error message variations

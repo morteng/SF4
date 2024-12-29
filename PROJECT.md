@@ -246,6 +246,9 @@ user.profile                 GET        /user/profile
 - Enhanced time component validation with separate checks for hours, minutes, seconds
 - Added pre-parsing time validation to catch invalid values early
 - Improved error message consistency for invalid time values
+- Fixed required field validation in CustomDateTimeField
+- Added proper handling of missing/empty fields
+- Improved validation order (required → format → content)
 
 ## Technical Updates
 - Fixed failing tests for date validation
