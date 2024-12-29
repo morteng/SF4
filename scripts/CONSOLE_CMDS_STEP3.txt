@@ -10,7 +10,6 @@
 # /run python some_script.py
 
 ### COMMANDS START ###
-/run echo "Running console commands for Step 3"
 ### COMMANDS END ###
 
 # Once finished, jump to Step 4.
