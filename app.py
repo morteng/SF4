@@ -3,17 +3,12 @@ from flask import Flask
 
 app = create_app()
 
-# Verify Blueprint registration
+# Handle duplicate Blueprints
 if isinstance(app, Flask):
-    registered_blueprints = [bp.name for bp in app.blueprints.values()]
-    if len(registered_blueprints) != len(set(registered_blueprints)):
-        # Instead of raising an error, just log it
+    bp_names = [bp.name for bp in app.blueprints.values()]
+    if len(bp_names) != len(set(bp_names)):
         app.logger.warning("Duplicate Blueprint registration detected")
-        # Remove duplicates
-        unique_blueprints = {}
-        for bp in app.blueprints.values():
-            unique_blueprints[bp.name] = bp
-        app.blueprints = unique_blueprints
+        app.blueprints = {bp.name: bp for bp in app.blueprints.values()}
 
 if __name__ == '__main__':
     app.run(debug=True)
