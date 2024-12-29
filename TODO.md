@@ -1,50 +1,34 @@
-## **TODO.md**
-
 ### **Final Changes & Findings**
-1. **Duplicate Constants**:
-   - Removed duplicate `MISSING_REQUIRED_FIELD` from `app/constants.py`.
+1. **Duplicate Constants in `app/constants.py`:**
+   - Removed duplicate `MISSING_REQUIRED_FIELD` definition in the `FlashMessages` class.
    - Ensured all constants are unique and centralized.
 
-2. **Dependency Conflicts**:
+2. **Dependency Conflicts in `requirements.txt`:**
    - Downgraded `Flask` to `2.3.2` to resolve conflicts with `Werkzeug 2.3.7`.
+   - Verified compatibility with `Flask-Login 0.6.3`.
 
-3. **Error Handling**:
+3. **Syntax Error in `app/__init__.py`:**
+   - Fixed incomplete `try-except` block around `load_dotenv()`.
+   - Added proper error handling for environment variable loading.
+
+4. **Error Handling Improvements:**
    - Enhanced error handling in `app/__init__.py` to catch and log initialization issues.
-1. **Dependency Conflicts**:
-   - **Issue**: `Flask-Login 0.6.3` is incompatible with `Werkzeug 3.0.1` due to the removal of `url_decode` in `Werkzeug 3.x`.
-   - **Fix**: Downgraded `Werkzeug` to `2.3.7` to maintain compatibility with `Flask-Login 0.6.3`.
-   - **Lesson**: Always verify compatibility between library versions, especially for critical dependencies like `Flask-Login` and `Werkzeug`.
-
-2. **Missing Constants**:
-   - **Issue**: `app/forms/custom_fields.py` imports `MISSING_REQUIRED_FIELD` and `INVALID_DATETIME_FORMAT` from `app/constants.py`, but these constants were missing.
-   - **Fix**: Added the following constants to `app/constants.py`:
-     ```python
-     MISSING_REQUIRED_FIELD = "This field is required."
-     INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS."
-     ```
-   - **Lesson**: Ensure all required constants are defined in `app/constants.py` to avoid `ImportError`.
-
-3. **Testing**:
-   - **Issue**: Tests failed due to dependency conflicts and missing constants.
-   - **Fix**: Resolved dependency issues and added missing constants, allowing tests to run successfully.
-   - **Lesson**: Always run tests after making changes to dependencies or constants to catch issues early.
+   - Added `try-except` blocks for critical operations like database initialization and bot setup.
 
 ---
 
 ### **Important Info**
-1. **Dependencies**:
-   - **Key Versions**:
-     - `Flask-Login==0.6.3`
-     - `Werkzeug==2.3.7`
-   - **Reason**: These versions are compatible and avoid the `url_decode` issue.
+1. **Key Dependency Versions:**
+   - `Flask==2.3.2`
+   - `Werkzeug==2.3.7`
+   - `Flask-Login==0.6.3`
 
-2. **Constants**:
-   - **Location**: `app/constants.py`
-   - **Purpose**: Centralized error messages and validation strings for consistency and maintainability.
+2. **Constants Location:**
+   - All error messages and validation strings are centralized in `app/constants.py`.
 
-3. **Testing**:
-   - **Command**: `pytest`
-   - **Pre-Test Check**: Ensure all dependencies are installed and compatible.
+3. **Testing:**
+   - Run tests using `pytest`.
+   - Ensure all dependencies are installed and compatible before running tests.
 
 ---
 
