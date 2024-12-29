@@ -183,6 +183,22 @@ class FlashMessages(str, Enum):
     FORM_SUBMISSION_ERROR = "Form submission failed. Please try again."
     FORM_INVALID_CSRF = "Invalid CSRF token. Please refresh the page and try again."
     FORM_DUPLICATE_USERNAME = "Username already exists. Please choose a different username."
+    
+    # New Validation Messages
+    INVALID_DATE_RANGE = "Date must be between {min_date} and {max_date}."
+    INVALID_TIME_RANGE = "Time must be between {start_time} and {end_time}."
+    MISSING_REQUIRED_FIELD = "{field} is required."
+    INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS."
+    INVALID_TIME_COMPONENTS = "Invalid time values. Hours must be 0-23, minutes and seconds 0-59."
+    INVALID_LEAP_YEAR_DATE = "Invalid date for February in non-leap years."
+    DATETIME_IN_PAST = "Date/time cannot be in the past."
+    DATETIME_IN_FUTURE = "Date/time must be in the future."
+    
+    # CRUD Operation Messages
+    CRUD_VALIDATION_ERROR = "Validation failed: {errors}"
+    CRUD_OPERATION_ERROR = "Operation failed: {error}"
+    CRUD_RECORD_NOT_FOUND = "{entity} not found."
+    CRUD_PERMISSION_DENIED = "You don't have permission to perform this action."
 
     # Profile Management
     UPDATE_PROFILE_SUCCESS = "Profile updated successfully."
