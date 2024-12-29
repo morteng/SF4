@@ -67,16 +67,10 @@ class CustomDateTimeField(DateTimeField):
             return
             
         # Validate time components separately
-        # Validate format and components
-        date_str = valuelist[0].strip()
-        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
-            self.errors.append(self.error_messages.get('invalid_format', 'Invalid date format'))
-            self.data = None
-            return
             
         try:
-            # Parse the full datetime
-            parsed_dt = datetime.strptime(date_str, self.format)
+            # Parse the full datetime - ensure format is a string
+            parsed_dt = datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
             
             # Validate time components
             if not (0 <= parsed_dt.hour <= 23 and 
