@@ -80,6 +80,35 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 
 ### Circular Imports
 - **Issue**: Circular imports caused startup errors (e.g., `ModuleNotFoundError`).
+- **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/base_service.py`) and use lazy imports where necessary.
+- **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
+
+### Dependency Management
+- **Issue**: Tests failed because `pytest` and other dependencies were not installed.
+- **Solution**: Always verify dependencies are installed by running:
+  ```bash
+  pip install -r requirements.txt
+  ```
+- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
+
+### Property Implementation
+- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
+- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
+  ```python
+  class BaseService:
+      def __init__(self):
+          self._create_limit = None
+
+      @property
+      def create_limit(self):
+          return self._create_limit
+
+      @create_limit.setter
+      def create_limit(self, value):
+          self._create_limit = value
+  ```
+- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
+- **Issue**: Circular imports caused startup errors (e.g., `ModuleNotFoundError`).
 - **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
 - **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
 

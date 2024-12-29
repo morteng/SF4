@@ -422,6 +422,88 @@ If time-based tests are failing:
 
 ## Best Practices
 
+### Date/Time Validation
+1. **Data Type Awareness**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Use `isinstance()` to check for `datetime` objects when working with date/time fields.
+
+2. **Timezone Handling**:
+   - Ensure all `datetime` objects are timezone-aware.
+   - Use `pytz.UTC.localize()` to add a timezone to naive `datetime` objects.
+
+3. **Future/Past Date Validation**:
+   - Validate that dates are within acceptable ranges (e.g., future dates for deadlines).
+   - Use `datetime.now(pytz.UTC)` for consistent timezone-aware comparisons.
+
+4. **Error Messages**:
+   - Use centralized error messages from `app/constants.py` for consistency.
+   - Provide clear, user-friendly error messages for validation failures.
+
+### General Validation
+1. **Validation Logic**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Ensure compatibility with parent classes when overriding attributes or methods.
+   - Use centralized error messages from `app/constants.py` for consistency.
+
+2. **Testing**:
+   - Test edge cases thoroughly, especially for date/time validation.
+   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+
+3. **Error Handling**:
+   - Log validation errors with context for easier debugging.
+   - Provide clear, user-friendly error messages for validation failures.
+
+4. **Code Organization**:
+   - Keep validation logic modular and reusable.
+   - Avoid code duplication by using base classes and utilities.
+
+### Circular Import Prevention
+1. **Refactor Shared Functionality**:
+   - Move shared code to a separate module (e.g., `app/common/utils.py`).
+2. **Use Lazy Imports**:
+   - Import dependencies at the function level when necessary:
+     ```python
+     def some_function():
+         from app.services.bot_service import BotService  # Lazy import
+         bot_service = BotService()
+     ```
+
+### Dependency Management
+1. **Pre-Test Verification**:
+   - Add a test to verify all dependencies are installed before running the test suite:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+2. **Graceful Handling**:
+   - Use try-except blocks to handle missing dependencies in test files.
+   - Skip tests that require missing packages instead of failing the entire suite.
+
+### Property Implementation
+1. **Define Properties Correctly**:
+   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
+   - Example:
+     ```python
+     class MyClass:
+         def __init__(self):
+             self._my_property = None
+
+         @property
+         def my_property(self):
+             return self._my_property
+
+         @my_property.setter
+         def my_property(self, value):
+             self._my_property = value
+     ```
+2. **Avoid Direct Attribute Access**:
+   - Use properties to encapsulate attribute access and modification.
+3. **Document Properties**:
+   - Add docstrings to properties and setters to clarify their purpose and behavior.
+
 ### Circular Imports
 1. **Refactor Shared Functionality**:
    - Move shared code to a separate module (e.g., `app/common/utils.py`).
