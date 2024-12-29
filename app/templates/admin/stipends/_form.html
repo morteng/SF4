@@ -3,7 +3,7 @@
           hx-post="{{ url_for('admin.stipend.create') }}"
           hx-target="#main-content"
           hx-swap="innerHTML"
-          hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           class="space-y-4">
         
         {{ form.hidden_tag() }}
