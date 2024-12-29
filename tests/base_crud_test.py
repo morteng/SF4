@@ -1,5 +1,6 @@
 import pytest
 from app.extensions import db
+from app.models.audit_log import AuditLog
 
 class BaseCRUDTest:
     @pytest.fixture(autouse=True)
