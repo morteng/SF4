@@ -1,5 +1,6 @@
 freezegun==1.2.2
 pytest==7.4.3
+pytest-cov==4.1.0
 Flask==2.3.2  # Compatible with Werkzeug 2.3.7
 Flask-SQLAlchemy==3.1.1
 alembic==1.12.0
