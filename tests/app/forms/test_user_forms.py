@@ -431,6 +431,9 @@ def test_profile_form_rate_limiting(client, setup_database):
 
 def test_profile_update_creates_audit_log(client, setup_database):
     """Test that profile updates create audit logs"""
+    # Log out any existing session
+    client.get(url_for('public.logout'))
+    
     # Create test user
     password_hash = generate_password_hash("password123")
     user = User(username="testuser", email="test@example.com", password_hash=password_hash)
@@ -441,17 +444,9 @@ def test_profile_update_creates_audit_log(client, setup_database):
         # First make a GET request to establish session and get CSRF token
         get_response = client.get(url_for('public.login'))
         
-        # Handle both 200 and 302 cases
+        # Handle redirects by following them
         if get_response.status_code == 302:
-            # Follow the redirect
             get_response = client.get(get_response.location)
-        
-        # If we're still getting a redirect, try logging out first
-        if get_response.status_code == 302:
-            client.get(url_for('public.logout'))
-            get_response = client.get(url_for('public.login'))
-            if get_response.status_code == 302:
-                get_response = client.get(get_response.location)
         
         assert get_response.status_code == 200, f"Expected 200, got {get_response.status_code}"
 
@@ -496,49 +491,6 @@ def test_profile_update_creates_audit_log(client, setup_database):
         assert audit_log.action == "profile_update", "Incorrect audit log action"
         assert "newusername" in audit_log.details, "Username not in audit log details"
         assert "newemail@example.com" in audit_log.details, "Email not in audit log details"
-    """Test rate limiting on profile form submissions"""
-    # Create test user
-    password_hash = generate_password_hash("password123")
-    user = User(username="testuser", email="test@example.com", password_hash=password_hash)
-    db.session.add(user)
-    db.session.commit()
-
-    with client:
-        # First make a GET request to establish session and get CSRF token
-        get_response = client.get(url_for('public.login'))
-        assert get_response.status_code == 200
-        
-        # Extract CSRF token using BeautifulSoup
-        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
-        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
-        assert csrf_token, "CSRF token not found in form"
-
-        # Login user
-        login_response = client.post(url_for('public.login'), data={
-            'username': 'testuser',
-            'password': 'password123',
-            'csrf_token': csrf_token
-        }, follow_redirects=True)
-        assert login_response.status_code == 200, "Login failed"
-
-        # Get CSRF token from the profile edit page
-        get_response = client.get(url_for('user.edit_profile'))
-        assert get_response.status_code == 200, "Failed to access profile edit page"
-        soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
-        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
-        assert csrf_token, "CSRF token not found in profile form"
-
-        # Submit profile form multiple times to trigger rate limiting
-        for _ in range(11):  # Assuming rate limit is 10 requests per minute
-            response = client.post(url_for('user.edit_profile'), data={
-                'username': 'testuser',
-                'email': 'test@example.com',
-                'csrf_token': csrf_token
-            })
-
-        # Verify rate limiting response
-        assert response.status_code == 429, f"Expected 429, got {response.status_code}"
-        assert b"Too Many Requests" in response.data, "Rate limit error message not found"
 
 def test_profile_form_validation_errors(client, setup_database):
     """Test various validation errors in profile form"""
