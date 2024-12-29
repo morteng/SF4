@@ -56,6 +56,36 @@
 4. **Code Organization**:
    - Keep validation logic modular and reusable.
    - Avoid code duplication by using base classes and utilities.
+
+### Dependency Management
+- **Issue**: Tests failed because `pytest` and other dependencies were not installed.
+- **Solution**: Always verify dependencies are installed by running:
+  ```bash
+  pip install -r requirements.txt
+  ```
+- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
+
+### Property Implementation
+- **Issue**: The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.
+- **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
+  ```python
+  class BaseService:
+      def __init__(self):
+          self._create_limit = None
+
+      @property
+      def create_limit(self):
+          return self._create_limit
+
+      @create_limit.setter
+      def create_limit(self, value):
+          self._create_limit = value
+  ```
+- **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
+
+### Circular Imports
+- **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
+- **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
 - **Dependency Management**:
   - Always verify dependencies are installed before running tests or the application.
 - **Property Implementation**:

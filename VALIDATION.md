@@ -67,3 +67,20 @@
    - Keep validation logic modular and reusable.
    - Avoid code duplication by using base classes and utilities.
 
+### Key Takeaways
+1. **Validation Logic**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Use centralized error messages from `app/constants.py` for consistency.
+
+2. **Testing**:
+   - Test edge cases thoroughly, especially for date/time validation.
+   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+
+3. **Error Handling**:
+   - Log validation errors with context for easier debugging.
+   - Provide clear, user-friendly error messages for validation failures.
+
+4. **Code Organization**:
+   - Keep validation logic modular and reusable.
+   - Avoid code duplication by using base classes and utilities.
+

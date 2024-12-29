@@ -5,9 +5,9 @@
 - [x] Install `pytest` and verify installation with `pip show pytest`.
 - [x] Add `pytest` to `requirements.txt` for future environments.
 - [x] Refactor shared functionality into `app/common/utils.py` to avoid circular imports.
+- [x] Centralized error messages in app/constants.py for date/time validation
 
 ## Next Session
-- [x] Centralized error messages in app/constants.py for date/time validation
 - [ ] Add comprehensive tests for edge cases in date/time validation.
 - [ ] Optimize validation performance in `CustomDateTimeField`.
 - [ ] Verify timezone handling in all date/time fields.
