@@ -21,3 +21,6 @@ croniter>=1.4.0,<2.0.0
 pytest
 freezegun
 Flask
+pytest
+freezegun
+Flask
