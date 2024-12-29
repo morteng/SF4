@@ -10,6 +10,10 @@
 # /run python manage.py migrate
 
 ### COMMANDS START ###
+/run flask db migrate -m "Add Notification.create method and fix routes"
+/run flask db upgrade
+/run pytest --cov=app tests/test_admin_stipends.py -v
+/run flask routes
 ### COMMANDS END ###
 
 # Once we're done, jump to Step 2.
