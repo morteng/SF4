@@ -1,69 +1,7 @@
-import pytest
-from datetime import datetime, timedelta
-from app.models.tag import Tag
-from flask_wtf.csrf import generate_csrf
-from app.constants import FlashMessages
-from app import create_app
-from app.forms.admin_forms import StipendForm
-from app.models.organization import Organization
-from app.models.tag import Tag
-from app.models.stipend import Stipend
-from app.models.audit_log import AuditLog
-from app.models.notification import Notification, NotificationType
-from app.extensions import db
-from app.forms.fields import CustomDateTimeField
-from wtforms import Form, StringField
-from tests.base_test_case import BaseTestCase
-
-@pytest.fixture
-def app():
-    app = create_app('testing')
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
-    with app.app_context():
-        db.create_all()
-        yield app
-        db.session.remove()
-        db.drop_all()
-
-@pytest.fixture
-def test_db(app):
-    return db
-
-@pytest.fixture
-def form_data(app):
-    # Create a test organization and tag within application context
-    with app.app_context():
-        # Clean up existing test data
-        db.session.query(Tag).filter(Tag.name == "Test Tag").delete()
-        db.session.query(Organization).filter(Organization.name == "Test Org").delete()
-        db.session.commit()
-
-        # Create new test data
-        org = Organization(name="Test Org", description="Test Description", homepage_url="https://test.org")
-        tag = Tag(name="Test Tag", category="Test Category")
-        db.session.add(org)
-        db.session.add(tag)
-        db.session.commit()
-
-        # Generate CSRF token inside a test request context
-        with app.test_request_context():
-            csrf_token = generate_csrf()
-
-        return {
-            'name': 'Test Stipend',
-            'summary': 'Test summary',
-            'description': 'Test description',
-            'homepage_url': 'https://example.com',
-            'application_procedure': 'Test procedure',
-            'eligibility_criteria': 'Test criteria',
-            'organization_id': org.id,
-            'tags': [tag.id],  # Add the required tag
-            'open_for_applications': True,
-            'application_deadline': '2025-12-31 23:59:59',  # Add valid future date
-            'csrf_token': csrf_token  # Add CSRF token
-        }
+# This file has been split into:
+# - test_stipend_validation.py
+# - test_stipend_crud.py
+# - test_stipend_audit_logging.py
 
 from freezegun import freeze_time
 
