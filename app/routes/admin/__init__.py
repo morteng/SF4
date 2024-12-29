@@ -150,8 +150,8 @@ def register_admin_blueprints(app):
     
     # Validate routes
     required_routes = [
-        'admin.stipend.create',
-        'admin.dashboard.dashboard'
+        'admin_stipend.create',
+        'admin_dashboard.dashboard'
     ]
     validate_blueprint_routes(app, required_routes)
     
