@@ -98,6 +98,10 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
   ```
 - **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
 
+### Circular Imports
+- **Issue**: Circular dependencies were identified in the import chain (`app/__init__.py` → `app/utils.py` → `app/services/bot_service.py` → `app/services/base_service.py`).
+- **Solution**: Refactor shared functionality into a separate module (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+
 ### Dependency Management
 - **Issue**: Tests failed because `freezegun` was listed in `requirements.txt` but not installed.
 - **Solution**: Always verify dependencies are installed by running:
@@ -105,10 +109,6 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
   pip install -r requirements.txt
   ```
 - **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
-
-### Circular Imports
-- **Issue**: Circular dependencies were identified in the import chain (`app/utils.py` → `app/services/bot_service.py` → `app/services/base_service.py`).
-- **Solution**: Refactor shared functionality into a separate module (e.g., `app/common/utils.py`) and use lazy imports where necessary.
 
 1. **Property Implementation**:
    - The `create_limit` function in `BaseService` was incorrectly implemented as a regular function instead of a property.

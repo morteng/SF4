@@ -147,10 +147,21 @@ If time-based tests are failing:
 3. **Document Properties**:
    - Add docstrings to properties and setters to clarify their purpose and behavior.
 
-## Dependency Management
+### Dependency Management
 1. **Pre-Test Verification**:
    - Add a test to verify all dependencies are installed before running the test suite.
    - Example:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+
+2. **Graceful Handling**:
+   - Use try-except blocks to handle missing dependencies in test files.
+   - Skip tests that require missing packages instead of failing the entire suite.
      ```python
      def test_dependencies():
          try:
