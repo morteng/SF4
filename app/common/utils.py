@@ -5,8 +5,8 @@ from wtforms.validators import ValidationError
 
 def validate_application_deadline(field):
     """Validate that the application deadline is a future date."""
-    if field.errors:
-        return
+    if not isinstance(field.data, (str, datetime)):
+        raise ValidationError(FlashMessages.INVALID_DATE_FORMAT)
 
     if not field.data:
         raise ValidationError(FlashMessages.MISSING_FIELD_ERROR)

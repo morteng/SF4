@@ -137,6 +137,7 @@ class FlashCategory(str, Enum):
     INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
     INVALID_TIME_VALUES = "Invalid time values. Hours must be 0-23, minutes and seconds 0-59."
     DATE_REQUIRED = "Date is required."
+    FORM_VALIDATION_ERROR = "Form validation failed. Please check your input."
     DELETE_STIPEND_SUCCESS = "Stipend deleted successfully."
     DELETE_STIPEND_ERROR = "Failed to delete stipend."
     INVALID_ORGANIZATION = "Invalid organization selected. Please choose a valid organization."
