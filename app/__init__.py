@@ -130,6 +130,7 @@ def create_app(config_name='development'):
             from app.common.utils import init_admin_user
             
             # Only run migrations if the env.py file exists
+            migrations_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'migrations')
             env_path = os.path.join(migrations_dir, 'env.py')
             if os.path.exists(env_path):
                 from flask_migrate import upgrade
