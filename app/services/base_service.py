@@ -116,51 +116,25 @@ class BaseService:
             raise ValueError(f"Failed to create {self.model.__name__}: {str(e)}")
 
     def validate(self, data):
-        """Enhanced validation with caching and hooks"""
-        if self.cache_validation:
-            cache_key = frozenset(data.items())
-            if cache_key in self.validation_cache:
-                return self.validation_cache[cache_key]
-                
+        """Enhanced validation with date/time handling"""
         errors = {}
         
-        # Run pre-validation hooks
-        for hook in self.pre_validation_hooks:
-            try:
-                data = hook(data)
-            except ValidationError as e:
-                errors.update({field: str(e) for field in e.messages})
-            
-        # Core validation
+        # Validate date/time fields
         for field, rules in self.validation_rules.items():
-            try:
-                value = data.get(field)
-                
-                if rules.get('required') and not value:
-                    raise ValidationError(FlashMessages.MISSING_REQUIRED_FIELD.format(field=field))
-                    
-                if rules.get('max_length') and len(str(value)) > rules['max_length']:
-                    raise ValidationError(FlashMessages.NAME_LENGTH)
-                    
-                if rules.get('choices') and value not in rules['choices']:
-                    raise ValidationError(f"{field} must be one of {rules['choices']}")
-                    
-                if rules.get('type') and not isinstance(value, rules['type']):
-                    raise ValidationError(f"{field} must be of type {rules['type'].__name__}")
-                    
-            except ValidationError as e:
-                errors[field] = str(e)
-            
-        # Run post-validation hooks
-        for hook in self.post_validation_hooks:
-            try:
-                hook(data)
-            except ValidationError as e:
-                errors.update({field: str(e) for field in e.messages})
-            
+            if rules.get('type') == 'datetime':
+                try:
+                    value = data.get(field)
+                    if value:
+                        # Convert to datetime object if string
+                        if isinstance(value, str):
+                            try:
+                                datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+                            except ValueError:
+                                errors[field] = str(FlashMessages.INVALID_DATETIME_FORMAT)
+                except Exception as e:
+                    errors[field] = str(e)
+        
         if errors:
-            if self.cache_validation:
-                self.validation_cache[cache_key] = errors
             raise ValidationError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors=errors))
 
     def benchmark_validation(self, data, iterations=1000):

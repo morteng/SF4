@@ -44,6 +44,12 @@ class BaseCrudController:
         try:
             result = operation(**kwargs)
             
+            # Enhanced error handling for validation errors
+            if isinstance(result, dict) and 'errors' in result:
+                for field, error in result['errors'].items():
+                    flash(f"{field}: {error}", FlashCategory.ERROR.value)
+                return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
+                
             # Enhanced audit logging
             if self.audit_logger:
                 try:
@@ -80,51 +86,11 @@ class BaseCrudController:
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_success}'))
             
         except ValidationError as e:
-            # Log validation errors
-            if self.audit_logger:
-                try:
-                    details = {
-                        'operation': operation.__name__,
-                        'entity': self.entity_name,
-                        'errors': str(e),
-                        'success': False
-                    }
-                    self.audit_logger.log(
-                        user_id=current_user.id if current_user.is_authenticated else None,
-                        action=operation.__name__,
-                        object_type=self.entity_name,
-                        details=details,
-                        ip_address=request.remote_addr
-                    )
-                except Exception:
-                    pass  # Don't fail the operation if audit logging fails
-                    
-            flash(self.flash_messages['validation_error'].format(
-                self.entity_name, str(e)), FlashCategory.ERROR.value)
+            for field, error in e.messages.items():
+                flash(f"{field}: {error}", FlashCategory.ERROR.value)
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
             
         except Exception as e:
-            # Log operation errors
-            if self.audit_logger:
-                try:
-                    details = {
-                        'operation': operation.__name__,
-                        'entity': self.entity_name,
-                        'error': str(e),
-                        'success': False
-                    }
-                    self.audit_logger.log(
-                        user_id=current_user.id if current_user.is_authenticated else None,
-                        action=operation.__name__,
-                        object_type=self.entity_name,
-                        details=details,
-                        ip_address=request.remote_addr
-                    )
-                except Exception:
-                    pass  # Don't fail the operation if audit logging fails
-                    
-            import logging
-            logging.error(f"Error in {operation.__name__}: {str(e)}", exc_info=True)
             flash(error_message.format(self.entity_name, str(e)), FlashCategory.ERROR.value)
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
 
