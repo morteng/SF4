@@ -45,9 +45,13 @@ def create_app(config_name='development'):
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
         # Load environment variables
-    load_dotenv()
+        try:
+            load_dotenv()
+        except Exception as e:
+            logger.error(f"Failed to load environment variables: {str(e)}")
+            raise RuntimeError(f"Environment variable loading failed: {str(e)}")
 
-    from app.config import config_by_name
+        from app.config import config_by_name
     app.config.from_object(config_by_name[config_name])
 
     # Initialize extensions
