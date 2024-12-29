@@ -271,6 +271,16 @@ user.profile                 GET        /user/profile
 - Fixed failing tests for date validation
 - Reduced code duplication in admin routes
 - Improved test coverage for form validation
+- **Fixed `CustomDateTimeField` Initialization**:
+  - Resolved the `TypeError` caused by duplicate `format` parameter in `CustomDateTimeField`.
+  - Updated `StipendForm` to avoid passing the `format` parameter explicitly.
+- **Improved Validation**:
+  - Enhanced date/time validation logic in `CustomDateTimeField` to handle edge cases (e.g., leap years, invalid time components).
+  - Standardized error messages using constants from `app/constants.py`.
+- **Lessons Learned**:
+  - Always ensure parameters are not passed multiple times during field initialization.
+  - Use centralized error messages from `app/constants.py` for consistency.
+  - Test edge cases thoroughly, especially for date/time validation.
 
 ## Technical Stack
 - Backend: Flask, SQLite/PostgreSQL, Alembic, HTMX

@@ -57,16 +57,15 @@
 - Log validation errors with context
 
 ## Error Handling
-- Centralize common error responses
-- Use consistent error message format
-- Always use configurable error messages
-- Never hardcode error messages
-- Log errors before returning responses
-- Clear existing errors before new validation
-- Use error_messages dictionary for all validation errors
-- Handle required field validation first
-- Return appropriate error messages for missing required fields
-- Ensure consistent handling of empty/missing values
+- **Centralized Error Messages**:
+  - Always use error messages from `app/constants.py` for consistency.
+  - Avoid hardcoding error messages in validation logic.
+- **Field Initialization**:
+  - Ensure parameters are not passed multiple times during field initialization.
+  - Use consistent patterns for initializing custom fields.
+- **Testing**:
+  - Test all error message variations for validation fields.
+  - Verify edge cases in date/time validation (e.g., 25:00:00, February 29th).
 
 ## Testing
 - Test all error message variations

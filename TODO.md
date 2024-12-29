@@ -11,16 +11,14 @@
 - [x] Add tests for edge cases in `CustomDateTimeField`.
 
 ## Next Session
-- [ ] Add more test cases for edge cases
-- [ ] Document new validation patterns
-- [ ] Review test coverage for new code
-- [ ] Add tests for bound/unbound field scenarios
+- [ ] Add more test cases for edge cases in `CustomDateTimeField`.
+- [ ] Document new validation patterns in `CONVENTIONS.md`.
+- [ ] Review test coverage for `CustomDateTimeField` and `StipendForm`.
 
 ## Medium Priority
-- [ ] Add more test cases for edge cases
-- [ ] Document new validation patterns
-- [ ] Review test coverage for new code
-- [ ] Add tests for bound/unbound field scenarios
+- [ ] Optimize validation performance in `CustomDateTimeField`.
+- [ ] Add validation benchmarks for date/time fields.
+- [ ] Expand test coverage for `BaseCrudController` and `BaseRouteController`.
 
 ## Low Priority
 - [ ] Optimize validation performance
