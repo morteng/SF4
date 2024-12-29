@@ -1,88 +1,33 @@
-from datetime import datetime, timezone
-import time
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify, current_app
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-from app.models.bot import Bot
-from app.models.audit_log import AuditLog
+from app.controllers.base_crud_controller import BaseCrudController
 from app.forms.admin_forms import BotForm
-from app.extensions import db
-from app.utils import (
-    admin_required, 
-    flash_message, 
-    calculate_next_run,
-    log_audit,
-    create_notification
-)
-from app.constants import FlashMessages, FlashCategory
 from app.services.bot_service import BotService
+from app.constants import FlashMessages, FlashCategory
 
 admin_bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
 
-# Initialize rate limiter
-limiter = Limiter(
-    key_func=get_remote_address,
-    default_limits=["100 per hour", "10 per minute"]
+bot_controller = BaseCrudController(
+    service=BotService(),
+    entity_name='bot',
+    form_class=BotForm
 )
 
 @admin_bot_bp.route('/create', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")
 @login_required
-@admin_required
 def create():
-    form = BotForm()
-    is_htmx = request.headers.get('HX-Request')
-    
-    if form.validate_on_submit():
-        try:
-            bot_data = {
-                'name': form.name.data,
-                'description': form.description.data,
-                'status': 'inactive',
-                'schedule': form.schedule.data,
-                'last_run': None
-            }
-            
-            bot_service = BotService()
-            new_bot = bot_service.create(bot_data, user_id=current_user.id)
-            
-            flash_message(FlashMessages.BOT_CREATE_SUCCESS, FlashCategory.SUCCESS)
-            
-            if is_htmx:
-                return render_template('admin/bots/_bot_row.html', bot=new_bot), 200, {
-                    'HX-Trigger': 'botCreated'
-                }
-            return redirect(url_for('admin.bot.index'))
-            
-        except Exception as e:
-            db.session.rollback()
-            current_app.logger.error(f"Error creating bot: {str(e)}")
-            flash_message(f"{FlashMessages.BOT_CREATE_ERROR}: {str(e)}", FlashCategory.ERROR)
-            if is_htmx:
-                return render_template('admin/bots/_form.html', form=form), 400
-    
+    if request.method == 'POST':
+        form = BotForm(request.form)
+        if form.validate():
+            return bot_controller.create(form.data)
+    else:
+        form = BotForm()
     return render_template('admin/bots/create.html', form=form)
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
-@admin_required
 def delete(id):
-    bot_service = BotService()
-    bot = bot_service.get_by_id(id)
-    if bot:
-        try:
-            bot_service.delete(bot)
-            flash_message(FlashMessages.DELETE_BOT_SUCCESS.value, FlashCategory.SUCCESS.value)
-            current_app.logger.info(f"Flash message set: {FlashMessages.DELETE_BOT_SUCCESS.value}")
-        except Exception as e:
-            db.session.rollback()
-            flash_message(f"{FlashMessages.DELETE_BOT_ERROR.value}{str(e)}", FlashCategory.ERROR.value)
-            current_app.logger.error(f"Failed to delete bot: {e}")
-    else:
-        flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)  # Use specific bot not found message
-        current_app.logger.error(f"Bot not found with id: {id}")
-    return redirect(url_for('admin.bot.index'))
+    return bot_controller.delete(id)
 
 @admin_bot_bp.route('/', methods=['GET'])
 @login_required
@@ -165,32 +110,13 @@ def schedule(id):
 
 @admin_bot_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @login_required
-@admin_required
 def edit(id):
-    bot_service = BotService()
-    bot = bot_service.get_by_id(id)
-    if not bot:
-        flash_message(FlashMessages.BOT_NOT_FOUND.value, FlashCategory.ERROR.value)
-        current_app.logger.error(f"Bot not found with id: {id}")
-        return redirect(url_for('admin.bot.index'))
-    
-    form = BotForm(obj=bot)
     if request.method == 'POST':
-        if form.validate_on_submit():
-            try:
-                bot_service = BotService()
-                bot_service.update(bot, form.data)
-                flash_message(FlashMessages.UPDATE_BOT_SUCCESS.value, FlashCategory.SUCCESS.value)
-                current_app.logger.info(f"Flash message set: {FlashMessages.UPDATE_BOT_SUCCESS.value}")
-                return redirect(url_for('admin.bot.index'))
-            except Exception as e:
-                db.session.rollback()
-                flash_message(f"{FlashMessages.UPDATE_BOT_ERROR.value}{str(e)}", FlashCategory.ERROR.value)
-                current_app.logger.error(f"Failed to update bot: {e}")
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    flash_message(f"{field}: {error}", FlashCategory.ERROR.value)
-                    current_app.logger.error(f"Flashing error: {field}: {error}")
-
+        form = BotForm(request.form)
+        if form.validate():
+            return bot_controller.edit(id, form.data)
+    else:
+        bot_service = BotService()
+        bot = bot_service.get_by_id(id)
+        form = BotForm(obj=bot)
     return render_template('admin/bots/edit.html', form=form, bot=bot)

@@ -1,13 +1,10 @@
-from app.models.bot import Bot, BotStatus, BotSchedule
+from app.models.bot import Bot, BotStatus
 from app.services.base_service import BaseService
 from app.extensions import db
-from app.models.notification import Notification
-from datetime import datetime
 
 class BotService(BaseService):
     def __init__(self):
         super().__init__(Bot)
-        # Add bot specific validation rules
         self.validation_rules = {
             'name': {'required': True, 'max_length': 100},
             'description': {'required': True},
@@ -20,48 +17,11 @@ class BotService(BaseService):
             'schedule': [('daily', 'Daily'), ('weekly', 'Weekly'), ('monthly', 'Monthly')]
         }
 
-    def validate_form_data(self, data):
+    def validate_create(self, data):
         """Add bot specific validation"""
-        errors = {}
-        for field, rules in self.validation_rules.items():
-            if rules.get('required') and not data.get(field):
-                errors[field] = f"{field} is required"
-            if rules.get('max_length') and len(data.get(field, '')) > rules['max_length']:
-                errors[field] = f"{field} must be less than {rules['max_length']} characters"
-            if rules.get('choices') and data.get(field) not in rules['choices']:
-                errors[field] = f"{field} must be one of {', '.join(rules['choices'])}"
-        return errors
-
-    def create(self, data, user_id=None):
-        """Create a new bot with validation and audit logging"""
-        errors = self.validate_form_data(data)
+        errors = super().validate(data)
         if errors:
             raise ValueError("\n".join(errors.values()))
-            
-        bot = Bot(
-            name=data['name'],
-            description=data['description'],
-            status=BotStatus.INACTIVE,
-            schedule=data.get('schedule'),
-            is_active=data.get('is_active', True)
-        )
-        
-        if bot.schedule:
-            bot.next_run = bot.calculate_next_run()
-            bot.status = BotStatus.SCHEDULED
-            
-        db.session.add(bot)
-        db.session.commit()
-        
-        if self.audit_logger:
-            self.audit_logger.log(
-                action='create',
-                object_type='Bot',
-                object_id=bot.id,
-                user_id=user_id,
-                after=bot.to_dict()
-            )
-        return bot
 
     def get_by_id(self, bot_id):
         return db.session.get(Bot, bot_id)
