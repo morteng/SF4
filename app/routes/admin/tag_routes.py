@@ -51,9 +51,3 @@ def paginate():
     page = request.args.get('page', 1, type=int)
     tags = tag_service.get_all().paginate(page=page, per_page=10, error_out=False)
     return render_template('admin/tags/_tags_table.html', tags=tags)
-
-@admin_tag_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def edit(id):
-    return tag_controller.edit(id)
