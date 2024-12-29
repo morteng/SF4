@@ -29,6 +29,9 @@ class FlashCategory(str, Enum):
     WARNING = "warning"
 
 class FlashMessages(str, Enum):
+    # CSRF
+    CSRF_ERROR = "Invalid CSRF token. Please refresh the page and try again."
+    
     # General
     GENERIC_SUCCESS = "Operation completed successfully."
     GENERIC_ERROR = "An error occurred. Please try again."
