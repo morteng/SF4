@@ -9,6 +9,13 @@
      if validators is None:
          validators = [InputRequired()]
      ```
+3. **Error Message Centralization**:
+   - Use error messages from `app/constants.py` instead of hardcoded strings.
+   - Example:
+     ```python
+     from app.constants import MISSING_REQUIRED_FIELD
+     validators=[InputRequired(message=MISSING_REQUIRED_FIELD)]
+     ```
 
 ## Date/Time Validation
 1. **Data Type Awareness**:

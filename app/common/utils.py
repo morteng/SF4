@@ -150,3 +150,7 @@ def some_function():
 def init_admin_user():
     # Shared initialization logic
     pass
+def init_admin_user():
+    """Initialize the admin user."""
+    # Implementation will be added later
+    pass

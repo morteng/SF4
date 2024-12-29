@@ -3,6 +3,18 @@
 ### Property Implementation
 1. **Define Properties Correctly**:
    - Always define a property (`@property`) before using a setter (`@<property>.setter`).
+   
+### Dependency Management
+1. **Pre-Test Verification**:
+   - Add a test to verify all dependencies are installed before running the test suite.
+   - Example:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
    - Example:
      ```python
      class MyClass:
