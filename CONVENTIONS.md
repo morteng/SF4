@@ -268,22 +268,34 @@ If time-based tests are failing:
 3. **Document Properties**:
    - Add docstrings to properties and setters to clarify their purpose and behavior.
 
-## Validation Best Practices
+## Best Practices
 
-### Dependency Validation
-1. **Issue**: Tests failed because `freezegun` was not installed, even though it was listed in `requirements.txt`.
-2. **Solution**:
-   - Always install dependencies from `requirements.txt`:
-     ```bash
-     pip install -r requirements.txt
-     ```
-   - Verify installation with:
-     ```bash
-     pip show <package_name>
-     ```
-3. **Best Practice**:
-   - Add a pre-test check to ensure all required dependencies are installed.
-   - Document the setup process to avoid similar issues in the future.
+### Dependency Management
+1. **Install Dependencies**:
+   Always install dependencies from `requirements.txt`:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Verify Installation**:
+   Verify critical dependencies are installed:
+   ```bash
+   pip show freezegun Flask
+   ```
+
+3. **Pre-Test Check**:
+   Add a pre-test check to ensure all required dependencies are installed.
+
+### Package Structure
+1. **`__init__.py` Files**:
+   Always include `__init__.py` in directories to make them recognizable as Python packages.
+
+2. **Avoid Circular Imports**:
+   Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+
+### Testing
+1. **Graceful Handling**:
+   Skip tests that require missing dependencies instead of failing the entire suite.
 
 ### Date/Time Validation
 - Always verify the data type of form field inputs before applying validation logic.

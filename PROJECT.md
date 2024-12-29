@@ -78,34 +78,29 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 
 ## Lessons Learned
 
-1. **Circular Imports**:
-   - Circular imports can cause the application to fail at startup.
-   - **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+### Dependency Management
+- **Issue**: Tests failed because `freezegun` and `Flask` were listed in `requirements.txt` but not installed.
+- **Solution**: Always verify dependencies are installed by running:
+  ```bash
+  pip install -r requirements.txt
+  ```
+- **Best Practice**: Add a pre-test check to ensure all required dependencies are installed.
 
-2. **Property Implementation**:
-   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
-   - **Example**:
-     ```python
-     class BaseService:
-         def __init__(self):
-             self._create_limit = None
+### Circular Imports
+- **Issue**: Circular imports caused startup errors (e.g., `ModuleNotFoundError`).
+- **Solution**: Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
 
-         @property
-         def create_limit(self):
-             return self._create_limit
+### Package Structure
+- **Issue**: Directories like `app/common` and `app/forms` were not recognized as packages.
+- **Solution**: Add `__init__.py` files to make directories recognizable as Python packages:
+  ```bash
+  touch app/common/__init__.py
+  touch app/forms/__init__.py
+  ```
 
-         @create_limit.setter
-         def create_limit(self, value):
-             self._create_limit = value
-     ```
-
-3. **Missing Dependencies**:
-   - Ensure all dependencies listed in `requirements.txt` are installed before running tests.
-   - **Solution**: Run `pip install -r requirements.txt` and verify installation with `pip show <package_name>`.
-
-4. **Package Structure**:
-   - Ensure directories are recognized as packages by including an `__init__.py` file.
-   - **Example**: Add `app/common/__init__.py` to make `app/common` a package.
+### Testing Improvements
+- **Issue**: Missing dependencies caused test failures instead of graceful skips.
+- **Solution**: Refactor `verify_dependencies()` in `tests/conftest.py` to skip tests instead of failing the suite.
 - **Solution**: Refactored `create_limit` into a proper property with a getter and setter:
   ```python
   class BaseService:
