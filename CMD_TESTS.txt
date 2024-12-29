@@ -25,12 +25,6 @@
 
 /test
 
-/ask how can we best work on the issues outlined in the TODO list, achieve successful tests?
-
-/architect implement the suggested changes
-
-/test
-
 /run flask routes
 
 /ask what is causing the problem?
