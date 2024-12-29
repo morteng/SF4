@@ -6,7 +6,7 @@ from app.constants import FlashMessages
 
 class CustomDateTimeField(DateTimeField):
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
-        # Store format separately to avoid duplicate parameter
+        # Store format in a private variable
         self._format = format if isinstance(format, str) else '%Y-%m-%d %H:%M:%S'
         
         # Initialize error messages
@@ -21,6 +21,7 @@ class CustomDateTimeField(DateTimeField):
             **kwargs.pop('error_messages', {})
         }
         
+        # Call parent __init__ without passing format
         super().__init__(label=label, validators=validators, **kwargs)
         self.render_kw = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
 
