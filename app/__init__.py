@@ -14,11 +14,14 @@ def check_dependencies():
             missing_deps.append(dep)
     if missing_deps:
         raise RuntimeError(f"Missing dependencies: {', '.join(missing_deps)}. Run 'pip install -r requirements.txt' to install them.")
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
+def get_limiter():
+    """Lazy import for Limiter to avoid circular imports"""
+    from flask_limiter import Limiter
+    from flask_limiter.util import get_remote_address
+    return Limiter, get_remote_address
 
 try:
-    from flask_limiter import Limiter
+    Limiter, get_remote_address = get_limiter()
 except ImportError:
     raise ImportError(
         "Flask-Limiter is required. Please install it using 'pip install Flask-Limiter==3.5.0'"
