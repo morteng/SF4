@@ -36,11 +36,11 @@ def create_app(config_name='development'):
         migrations_dir = os.path.join(basedir, 'migrations')
     
         # Ensure migrations directory exists
-    if not os.path.exists(migrations_dir):
-        os.makedirs(migrations_dir)
-        logger.info(f"Created migrations directory at {migrations_dir}")
+        if not os.path.exists(migrations_dir):
+            os.makedirs(migrations_dir)
+            logger.info(f"Created migrations directory at {migrations_dir}")
     
-    # Configure SQLAlchemy database URI
+        # Configure SQLAlchemy database URI
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', f'sqlite:///{os.path.join(basedir, "app.db")}')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
