@@ -18,17 +18,21 @@ class BaseCrudController:
             'delete_error': FlashMessages.DELETE_ERROR,
             'not_found': FlashMessages.NOT_FOUND
         }
-        self.supports_htmx = True  # Add HTMX support flag
+        self.supports_htmx = True
+        self.htmx_headers = {
+            'HX-Trigger': f'{entity_name}Updated'
+        }
 
     def _handle_htmx_response(self, success, template, context=None, **kwargs):
-        """Handle HTMX response formatting"""
+        """Enhanced HTMX response handling"""
         if not self.supports_htmx or not request.headers.get('HX-Request'):
             return None
             
         status = 200 if success else 400
-        headers = {
-            'HX-Trigger': f'{self.entity_name}{"Created" if success else "Error"}'
-        }
+        headers = self.htmx_headers.copy()
+        if success:
+            headers['HX-Redirect'] = url_for(f'admin.{self.entity_name}.index')
+            
         return render_template(template, **(context or {})), status, headers
 
     def _handle_operation(self, operation, success_message, error_message, 

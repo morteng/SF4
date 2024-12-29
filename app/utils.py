@@ -483,6 +483,16 @@ def db_session_scope():
         # Ensure session is properly closed
         session.close()
 
+def htmx_response(template, context=None, status=200, headers=None):
+    """Helper for creating HTMX responses"""
+    if context is None:
+        context = {}
+    if headers is None:
+        headers = {}
+        
+    headers['HX-Trigger'] = 'pageUpdate'
+    return render_template(template, **context), status, headers
+
 def log_operation(operation):
     """Decorator for logging operations"""
     def decorator(func):

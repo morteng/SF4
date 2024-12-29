@@ -79,7 +79,7 @@ class BaseRouteController:
         return render_template(f"{self.template_dir}/{template}.html", **context)
 
     def handle_service_error(self, error):
-        """Handle service layer errors consistently"""
+        """Enhanced error handling with HTMX support"""
         logger.error(f"Error in {self.entity_name} controller: {str(error)}")
         error_message = str(error) if str(error) else self.flash_messages['error']
         
@@ -95,8 +95,15 @@ class BaseRouteController:
                 endpoint=request.endpoint
             )
         
-        response = self._handle_htmx_flash(error_message, FlashCategory.ERROR)
-        return response or redirect(request.referrer or url_for('admin.dashboard.dashboard'))
+        # Handle HTMX response
+        if request.headers.get('HX-Request'):
+            return jsonify({
+                'success': False,
+                'message': error_message
+            }), 400
+            
+        flash_message(error_message, FlashCategory.ERROR)
+        return redirect(request.referrer or url_for('admin.dashboard.dashboard'))
 
 
     def _handle_redirect(self):

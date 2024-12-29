@@ -40,6 +40,25 @@ class BaseCRUDTest:
         response = self.client.post(f"{self.delete_url}/999")
         assert response.status_code == 404
 
+    def test_htmx_create_success(self):
+        """Test successful creation via HTMX"""
+        headers = {'HX-Request': 'true'}
+        response = self.client.post(self.create_url, 
+                                  data=self.valid_data,
+                                  headers=headers)
+        assert response.status_code == 204
+        assert 'HX-Redirect' in response.headers
+        assert self.model.query.filter_by(**self.valid_data).first() is not None
+
+    def test_htmx_create_validation_error(self):
+        """Test creation with invalid data via HTMX"""
+        headers = {'HX-Request': 'true'}
+        response = self.client.post(self.create_url, 
+                                  data=self.invalid_data,
+                                  headers=headers)
+        assert response.status_code == 400
+        assert b"ValidationError" in response.data
+
     def test_create_audit_log(self):
         """Test audit logging on create"""
         response = self.client.post(self.create_url, data=self.valid_data)

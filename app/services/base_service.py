@@ -38,6 +38,8 @@ class BaseService:
         self.post_update_hooks = []
         self.pre_delete_hooks = []
         self.post_delete_hooks = []
+        self.pre_validation_hooks = []
+        self.post_validation_hooks = []
 
     def add_pre_create_hook(self, hook):
         self.pre_create_hooks.append(hook)
@@ -95,7 +97,12 @@ class BaseService:
             raise ValueError(f"Failed to create {self.model.__name__}: {str(e)}")
 
     def validate(self, data):
-        """Validate data against defined rules"""
+        """Enhanced validation with hooks"""
+        # Run pre-validation hooks
+        for hook in self.pre_validation_hooks:
+            data = hook(data)
+            
+        # Core validation
         for field, rules in self.validation_rules.items():
             if rules.get('required') and not data.get(field):
                 raise ValidationError(f"{field} is required")
@@ -103,6 +110,10 @@ class BaseService:
                 raise ValidationError(f"{field} exceeds maximum length")
             if rules.get('choices') and data.get(field) not in rules['choices']:
                 raise ValidationError(f"{field} must be one of {rules['choices']}")
+                
+        # Run post-validation hooks
+        for hook in self.post_validation_hooks:
+            hook(data)
 
     def validate_create(self, data):
         """Validate data before creation"""
