@@ -38,7 +38,7 @@ def pytest_collection_modifyitems(config, items):
 
 def verify_dependencies():
     missing_deps = []
-    for dep in ["Flask", "Flask-Login", "Werkzeug"]:
+    for dep in ["Flask", "Flask-Login", "Werkzeug", "pytest", "freezegun"]:
         try:
             __import__(dep)
         except ImportError:

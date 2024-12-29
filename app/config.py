@@ -21,11 +21,14 @@ class Config(object):
                 raise ValueError(f"{var} environment variable is required.")
     # Add these lines
     RATELIMIT_STORAGE_URI = 'memory://'  # For development, use Redis in production
-    RATELIMIT_STRATEGY = 'fixed-window-elastic-expiry'  # More forgiving strategy
+    RATELIMIT_STRATEGY = 'fixed-window-elastic-expiry'
     RATELIMIT_DEFAULT = "200 per day;50 per hour"
-    RATELIMIT_USER_MANAGEMENT = "20 per minute"  # Increased rate limit for user management
-    RATELIMIT_PROFILE_UPDATE = "20 per minute"  # Increased rate limit for profile updates
-    RATELIMIT_ENABLED = True  # Enable rate limiting
+    RATELIMIT_USER_MANAGEMENT = "20 per minute"
+    RATELIMIT_PROFILE_UPDATE = "20 per minute"
+    RATELIMIT_BOT_OPERATIONS = "10 per hour"
+    RATELIMIT_LOGIN = "10 per minute"
+    RATELIMIT_GLOBAL = "1000 per day"
+    RATELIMIT_ENABLED = True
     RATELIMIT_HEADERS_ENABLED = True
     RATELIMIT_IN_MEMORY_FALLBACK_ENABLED = True
 
@@ -57,7 +60,11 @@ class TestConfig(Config):
     RATELIMIT_GLOBAL = "9999999 per second"
     RATELIMIT_HEADERS_ENABLED = False
     RATELIMIT_IN_MEMORY_FALLBACK_ENABLED = True
-    RATELIMIT_STRATEGY = 'fixed-window-elastic-expiry'  # More forgiving for tests
+    RATELIMIT_STRATEGY = 'fixed-window-elastic-expiry'
+    
+    # Enable detailed error logging for tests
+    LOGGING_LEVEL = 'DEBUG'
+    LOGGING_FORMAT = '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
     
     # Enable detailed error logging for tests
     LOGGING_LEVEL = 'DEBUG'
