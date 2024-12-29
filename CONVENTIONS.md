@@ -30,13 +30,35 @@
    ```
 
 ### Pre-Test Verification
-Before running tests, the system will automatically verify that all required dependencies are installed. If any dependencies are missing, the test session will skip affected tests instead of failing.
+Before running tests, the system will automatically verify that all required dependencies are installed. If any dependencies are missing, it will attempt to install them before skipping affected tests.
 
 To manually verify dependencies:
 ```bash
 pip install -r requirements.txt
 pip show freezegun Flask
 pytest tests/test_dependencies.py
+```
+
+Example dependency verification function:
+```python
+import subprocess
+import pytest
+import importlib
+
+def verify_dependencies():
+    missing_deps = []
+    for dep in ["freezegun", "Flask"]:
+        try:
+            importlib.import_module(dep)
+        except ImportError:
+            missing_deps.append(dep)
+    
+    if missing_deps:
+        print(f"Attempting to install missing dependencies: {', '.join(missing_deps)}")
+        try:
+            subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+        except subprocess.CalledProcessError:
+            pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
 ```
 
 ### Dependency Verification
