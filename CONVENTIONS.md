@@ -171,8 +171,8 @@ class CustomDateTimeField(Field):
         super().__init__(label=label, validators=validators, **kwargs)
 ```
 
-### **1. Install and Verify `pytest`**
-1. **Activate the Virtual Environment**:
+### **1. Install `pytest`**
+1. Activate your virtual environment:
    - **Windows**:
      ```bash
      .venv\Scripts\activate
@@ -182,44 +182,97 @@ class CustomDateTimeField(Field):
      source .venv/bin/activate
      ```
 
-2. **Install `pytest`**:
+2. Install `pytest`:
    ```bash
    pip install pytest
    ```
 
-3. **Verify Installation**:
+3. Verify the installation:
    ```bash
    pip show pytest
    ```
-   - This should display details about the `pytest` package if installed correctly.
 
-4. **Add `pytest` to `requirements.txt`**:
+4. Add `pytest` to `requirements.txt` for future use:
    ```bash
    echo "pytest" >> requirements.txt
    ```
 
-5. **Run Tests**:
+### **2. Fix `CustomDateTimeField`**
+1. Locate the `CustomDateTimeField` class. It's likely in `app/forms/admin_forms.py` or a similar file.
+
+2. Replace the existing implementation with the corrected version:
+   ```python
+   from wtforms import Field
+   from wtforms.validators import InputRequired
+
+   class CustomDateTimeField(Field):
+       def __init__(self, label=None, validators=None, **kwargs):
+           if validators is None:
+               validators = [InputRequired()]  # Default validator
+           super().__init__(label=label, validators=validators, **kwargs)
+   ```
+
+3. Update any forms using `CustomDateTimeField` to avoid passing the `validators` argument explicitly unless necessary. For example:
+   ```python
+   application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
+   ```
+
+### **3. Run Tests**
+1. Activate your virtual environment (if not already activated):
+   - **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+2. Run the tests:
    ```bash
    pytest
    ```
 
-6. **Optional: Install All Dependencies**:
-   If other dependencies are missing:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-7. **Recreate Virtual Environment (if needed)**:
-   If issues persist:
+### **4. Optional: Recreate Virtual Environment (if issues persist)**
+If the tests still fail due to missing dependencies or a corrupted environment, recreate the virtual environment:
+1. Deactivate the current environment:
    ```bash
    deactivate
+   ```
+
+2. Delete the existing virtual environment:
+   ```bash
    rm -rf .venv
+   ```
+
+3. Create a new virtual environment:
+   ```bash
    python -m venv .venv
-   source .venv/bin/activate  # macOS/Linux
-   .venv\Scripts\activate     # Windows
+   ```
+
+4. Activate the new environment:
+   - **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+5. Install dependencies:
+   ```bash
    pip install -r requirements.txt
+   ```
+
+6. Run the tests again:
+   ```bash
    pytest
    ```
+
+### Expected Outcome:
+- The `pytest` command should execute without errors.
+- All tests should pass, and the `flask routes` command should work correctly.
 
 ### **2. Fix `CustomDateTimeField` Initialization**
 1. **Locate the `CustomDateTimeField` Class**:
@@ -920,56 +973,108 @@ class CustomDateTimeField(Field):
   - Invalid time validation
   - Centralized error message handling
 
-### **1. Fix `pytest` Installation**
+### **1. Install `pytest`**
 1. Activate your virtual environment:
-   - **Windows**: `.venv\Scripts\activate`
-   - **macOS/Linux**: `source .venv/bin/activate`
+   - **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
 2. Install `pytest`:
    ```bash
    pip install pytest
    ```
+
 3. Verify the installation:
    ```bash
    pip show pytest
    ```
-4. Add `pytest` to `requirements.txt`:
+
+4. Add `pytest` to `requirements.txt` for future use:
    ```bash
    echo "pytest" >> requirements.txt
    ```
-   If installed correctly, you'll see details about the `pytest` package.
 
-#### 4. Add `pytest` to `requirements.txt`
-   Add `pytest` to your `requirements.txt` file to ensure it's installed in the future:
-   ```bash
-     echo "pytest" >> requirements.txt
+### **2. Fix `CustomDateTimeField`**
+1. Locate the `CustomDateTimeField` class. It's likely in `app/forms/admin_forms.py` or a similar file.
+
+2. Replace the existing implementation with the corrected version:
+   ```python
+   from wtforms import Field
+   from wtforms.validators import InputRequired
+
+   class CustomDateTimeField(Field):
+       def __init__(self, label=None, validators=None, **kwargs):
+           if validators is None:
+               validators = [InputRequired()]  # Default validator
+           super().__init__(label=label, validators=validators, **kwargs)
    ```
 
-#### 5. Run Tests
-   After installing `pytest`, run the tests:
-   ```bash
-     pytest
+3. Update any forms using `CustomDateTimeField` to avoid passing the `validators` argument explicitly unless necessary. For example:
+   ```python
+   application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
    ```
 
-#### 6. Optional: Install All Dependencies
-   If other dependencies are missing, install them using:
+### **3. Run Tests**
+1. Activate your virtual environment (if not already activated):
+   - **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+2. Run the tests:
    ```bash
-     pip install -r requirements.txt
+   pytest
    ```
 
-#### 7. Recreate Virtual Environment (if needed)
-   If the issue persists, recreate the virtual environment:
+### **4. Optional: Recreate Virtual Environment (if issues persist)**
+If the tests still fail due to missing dependencies or a corrupted environment, recreate the virtual environment:
+1. Deactivate the current environment:
    ```bash
-     deactivate
-     rm -rf .venv
-     python -m venv .venv
-     source .venv/bin/activate  # macOS/Linux
-     .venv\Scripts\activate     # Windows
-     pip install -r requirements.txt
-     pytest
+   deactivate
    ```
 
-#### Expected Outcome:
-After following these steps, the `pytest` command should work without errors, and your tests should run successfully.
+2. Delete the existing virtual environment:
+   ```bash
+   rm -rf .venv
+   ```
+
+3. Create a new virtual environment:
+   ```bash
+   python -m venv .venv
+   ```
+
+4. Activate the new environment:
+   - **Windows**:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+5. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+6. Run the tests again:
+   ```bash
+   pytest
+   ```
+
+### Expected Outcome:
+- The `pytest` command should execute without errors.
+- All tests should pass, and the `flask routes` command should work correctly.
 
 #### **Property Implementation**
 1. **Define Properties Correctly**:
