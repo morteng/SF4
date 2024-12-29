@@ -230,11 +230,11 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Navigate to the stipend creation page
-        response = self.client.get(url_for('stipend.create'))
+        response = self.client.get(url_for('admin_stipend.create'))
         self.assertEqual(response.status_code, 200)
 
         # Create a new stipend with invalid data
-        response = self.client.post(url_for('stipend.create'), data={
+        response = self.client.post(url_for('admin_stipend.create'), data={
             'name': '',  # Empty name should trigger validation error
             'summary': 'This is a test stipend.',
             'description': 'Detailed description of the test stipend.',
@@ -256,7 +256,7 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Attempt to create a stipend with an invalid organization ID
-        response = self.client.post(url_for('stipend.create'), data={
+        response = self.client.post(url_for('admin_stipend.create'), data={
             'name': 'Test Stipend',
             'summary': 'This is a test stipend.',
             'description': 'Detailed description of the test stipend.',
@@ -392,7 +392,7 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Attempt to access the stipend creation page (should be unauthorized)
-        response = self.client.get(url_for('stipend.create'))
+        response = self.client.get(url_for('admin_stipend.create'))
         self.assertEqual(response.status_code, 403)  # Assuming you return a 403 Forbidden
 
         # Attempt to create a stipend (should be unauthorized)
