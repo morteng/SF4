@@ -17,6 +17,22 @@ except ImportError:
         "freezegun is not installed. Some tests may be skipped. "
         "Run `pip install -r requirements.txt` to install dependencies."
     )
+    warnings.warn(
+        "freezegun is not installed. Some tests may be skipped. "
+        "Run `pip install -r requirements.txt` to install dependencies.",
+        RuntimeWarning
+    )
+
+# Add a flag to track if freezegun is available
+try:
+    import freezegun
+    FREEZEGUN_INSTALLED = True
+except ImportError:
+    FREEZEGUN_INSTALLED = False
+    logging.warning(
+        "freezegun is not installed. Some tests may be skipped. "
+        "Run `pip install -r requirements.txt` to install dependencies."
+    )
 
 # Add a pytest marker for freezegun-dependent tests
 def pytest_configure(config):

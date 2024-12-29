@@ -5,6 +5,28 @@
 
 from datetime import datetime, timedelta
 import pytest
+import logging
+
+# Add fallback mechanism for freezegun
+try:
+    from freezegun import freeze_time
+    FREEZEGUN_INSTALLED = True
+except ImportError:
+    FREEZEGUN_INSTALLED = False
+    def freeze_time(*args, **kwargs):
+        def decorator(f):
+            return f
+        return decorator
+    logging.warning(
+        "freezegun is not installed. Some tests may be skipped. "
+        "Run `pip install -r requirements.txt` to install dependencies."
+    )
+
+# Mark all time-dependent tests with the freezegun marker
+pytestmark = pytest.mark.skipif(
+    not FREEZEGUN_INSTALLED,
+    reason="freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies."
+)
 
 # Add fallback mechanism for freezegun
 try:
