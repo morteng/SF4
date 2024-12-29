@@ -35,7 +35,7 @@ class CustomDateTimeField(DateTimeField):
 
     def validate(self, form, extra_validators=()):
         # Skip validation if the field is empty
-        if not self.data:
+        if self._is_empty_value(self.data):
             return True
             
         # Check if the date string matches the expected format
