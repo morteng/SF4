@@ -113,6 +113,75 @@ class AdminStipendTestCase(unittest.TestCase):
                            "Stipend eligibility criteria does not match")
             self.assertTrue(stipend.open_for_applications,
                           "Stipend should be open for applications")
+        except Exception as e:
+            self.fail(f"Test failed with exception: {str(e)}")
+            
+            # Extract CSRF token from hidden form field with error handling
+            try:
+                csrf_token = response.data.decode('utf-8').split(
+                    'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+                if not csrf_token:
+                    raise ValueError("CSRF token is empty")
+            except (IndexError, ValueError) as e:
+                self.fail(f"Failed to extract CSRF token: {str(e)}")
+            
+            # Log in as admin with CSRF token
+            response = self.client.post(url_for('public.login'), data={
+                'username': 'admin',
+                'password': 'password',
+                'csrf_token': csrf_token
+            }, follow_redirects=True)
+            
+            self.assertEqual(response.status_code, 200,
+                           "Login failed - check admin credentials and CSRF token")
+            
+            # Get CSRF token for stipend creation form
+            response = self.client.get(url_for('admin_stipend.create'))
+            self.assertEqual(response.status_code, 200)
+            try:
+                csrf_token = response.data.decode('utf-8').split(
+                    'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+                if not csrf_token:
+                    raise ValueError("CSRF token is empty")
+            except (IndexError, ValueError) as e:
+                self.fail(f"Failed to extract CSRF token: {str(e)}")
+            
+            # Create stipend with CSRF token
+            form_data = {
+                'name': 'Test Stipend',
+                'summary': 'This is a test stipend.',
+                'description': 'Detailed description of the test stipend.',
+                'homepage_url': 'http://example.com/stipend',
+                'application_procedure': 'Send an email to admin@example.com',
+                'eligibility_criteria': 'Must be a student.',
+                'application_deadline': '2023-12-31 23:59:59',
+                'organization_id': 1,
+                'open_for_applications': 'y',
+                'csrf_token': csrf_token
+            }
+            
+            response = self.client.post(url_for('admin.stipend.create'), 
+                                      data=form_data,
+                                      follow_redirects=True)
+            
+            self.assertEqual(response.status_code, 200,
+                           "Stipend creation failed - check form validation and CSRF token")
+            
+            # Verify stipend creation
+            stipend = Stipend.query.filter_by(name='Test Stipend').first()
+            self.assertIsNotNone(stipend, "Stipend was not created in database")
+            self.assertEqual(stipend.summary, 'This is a test stipend.',
+                           "Stipend summary does not match")
+            self.assertEqual(stipend.description, 'Detailed description of the test stipend.',
+                           "Stipend description does not match")
+            self.assertEqual(stipend.homepage_url, 'http://example.com/stipend',
+                           "Stipend homepage URL does not match")
+            self.assertEqual(stipend.application_procedure, 'Send an email to admin@example.com',
+                           "Stipend application procedure does not match")
+            self.assertEqual(stipend.eligibility_criteria, 'Must be a student.',
+                           "Stipend eligibility criteria does not match")
+            self.assertTrue(stipend.open_for_applications,
+                          "Stipend should be open for applications")
 
     def test_update_stipend(self):
         # Log in as admin
