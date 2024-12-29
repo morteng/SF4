@@ -266,16 +266,21 @@ user.profile                 GET        /user/profile
 
 ## Lessons Learned
 
+### Date/Time Validation
+- **Issue**: The `validate_application_deadline` method in `StipendForm` assumed `field.data` was a string, but `CustomDateTimeField` parsed it into a `datetime` object, causing an `AttributeError`.
+- **Fix**: Updated the validation logic to handle `datetime` objects directly, including timezone handling and future date checks.
+- **Key Takeaway**: Always verify the data type of form field inputs before applying validation logic.
+
+### Error Handling
+- **Issue**: The `format` property in `CustomDateTimeField` was read-only, causing compatibility issues with the parent `DateTimeField` class.
+- **Fix**: Removed the read-only property and handled the `format` attribute directly.
+- **Key Takeaway**: Ensure compatibility with parent classes when overriding attributes or methods.
+
 ### Validation Improvements
 - Fixed `TypeError` in `CustomDateTimeField` caused by incorrect `format` parameter handling
 - Consolidated leap year validation logic to avoid redundancy
 - Improved error message consistency using constants from `app/constants.py`
 - Added comprehensive tests for edge cases in date/time validation
-
-### Error Handling
-- Ensured all error messages are centralized in `app/constants.py`
-- Standardized error message format across all fields
-- Improved validation error reporting
 
 ### Testing
 - Added comprehensive test coverage for date/time validation

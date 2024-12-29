@@ -17,6 +17,14 @@
    - Validate time component ranges.
    - Handle malformed datetime strings.
 
+4. **Timezone Handling**:
+   - Ensure all `datetime` objects are timezone-aware.
+   - Use `pytz.UTC.localize()` for naive `datetime` objects.
+
+5. **Future/Past Date Validation**:
+   - Validate that dates are within acceptable ranges.
+   - Use `datetime.now(pytz.UTC)` for consistent comparisons.
+
 ### Key Learnings
 - Always ensure parameters are not passed multiple times during field initialization.
 - Use centralized error messages from `app/constants.py` for consistency.

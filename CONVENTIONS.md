@@ -62,17 +62,29 @@
    - Ensure consistent handling of empty/missing values
 
 ## Validation Best Practices
-1. **Date/Time Validation**:
-   - Validate date and time components separately before full parsing.
-   - Use specific error messages for different validation failures (e.g., invalid format, invalid time, invalid leap year).
-   - Handle edge cases like February 29th in non-leap years.
-2. **Error Handling**:
-   - Always use error messages from `app/constants.py` instead of hardcoding them.
+
+### Date/Time Validation Best Practices
+1. **Data Type Awareness**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Use `isinstance()` to check for `datetime` objects when working with date/time fields.
+
+2. **Timezone Handling**:
+   - Ensure all `datetime` objects are timezone-aware.
+   - Use `pytz.UTC.localize()` to add a timezone to naive `datetime` objects.
+
+3. **Future/Past Date Validation**:
+   - Validate that dates are within acceptable ranges (e.g., future dates for deadlines).
+   - Use `datetime.now(pytz.UTC)` for consistent timezone-aware comparisons.
+
+4. **Error Messages**:
+   - Use centralized error messages from `app/constants.py` for consistency.
    - Provide clear, user-friendly error messages for validation failures.
-3. **Testing**:
+
+5. **General Validation**:
+   - Validate date and time components separately before full parsing.
+   - Handle edge cases like February 29th in non-leap years.
    - Test all error message variations for validation fields.
    - Verify edge cases in date/time validation (e.g., 25:00:00, February 29th).
-4. **Field Initialization**:
    - Avoid passing the same parameter multiple times during field initialization.
    - Use consistent patterns for initializing custom fields.
 
