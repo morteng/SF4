@@ -239,13 +239,23 @@ def organization_data():
         'homepage_url': 'http://example.com/organization'
     }
 
+class BaseTest:
+    @pytest.fixture
+    def test_entity(self, db_session, app, model, data):
+        """Generic fixture for test entities"""
+        with app.app_context():
+            entity = model(**data)
+            db_session.add(entity)
+            db_session.commit()
+            yield entity
+            db_session.delete(entity)
+            db_session.commit()
+
 @pytest.fixture(scope='function')
 def test_organization(db_session, organization_data, app):
-    """Provide a test organization."""
-    with app.app_context():
-        organization = Organization(**organization_data)
-        db_session.add(organization)
-        db_session.commit()
+    """Provide a test organization using BaseTest."""
+    base_test = BaseTest()
+    yield from base_test.test_entity(db_session, app, Organization, organization_data)
         # Yield the organization within the app context
         yield organization
         # Cleanup within the same app context

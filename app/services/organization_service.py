@@ -6,7 +6,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def get_all_organizations():
+class OrganizationService(BaseService):
+    def __init__(self, audit_logger=None):
+        super().__init__(Organization, audit_logger)
+
+    def get_all_organizations():
     """Get all organizations ordered by name."""
     try:
         return Organization.query.order_by(func.lower(Organization.name)).all()
