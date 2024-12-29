@@ -30,28 +30,11 @@ def edit(id):
     return tag_controller.edit(id)
 
 @admin_tag_bp.route('/<int:id>/delete', methods=['POST'])
-@login_required
-@admin_required
-def delete(id):
-    return tag_controller.delete(id)
-
-@admin_tag_bp.route('/<int:id>/delete', methods=['POST'])
 @limiter.limit("3 per minute")
 @login_required
 @admin_required
 def delete(id):
-    """Delete tag with audit logging"""
-    tag = tag_service.get_by_id(id)
-    if tag:
-        try:
-            tag_service.delete(tag)
-            flash_message(FlashMessages.DELETE_TAG_SUCCESS, FlashCategory.SUCCESS)
-        except Exception as e:
-            db.session.rollback()
-            flash_message(FlashMessages.DELETE_TAG_ERROR, FlashCategory.ERROR)
-    else:
-        flash_message(FlashMessages.GENERIC_ERROR, FlashCategory.ERROR)
-    return redirect(url_for('admin.tag.index'))  # Change 'tag.index' to 'admin.tag.index'
+    return tag_controller.delete(id)
 
 @admin_tag_bp.route('/', methods=['GET'])
 @login_required
