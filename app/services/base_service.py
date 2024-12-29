@@ -129,8 +129,8 @@ class BaseService:
         self.rate_limits['create'] = value
         
     @handle_errors
-    @self.limiter.limit(lambda self: self.rate_limits['create'])
     def create(self, data, user_id=None):
+        self.limiter.limit(self.rate_limits['create'])(self.create)(data, user_id)
         """Create a new entity with validation and audit logging"""
         try:
             # Run pre-create hooks
@@ -250,8 +250,8 @@ class BaseService:
         self.rate_limits['update'] = value
         
     @handle_errors
-    @self.limiter.limit(lambda self: self.rate_limits['update'])
     def update(self, id, data, user_id=None):
+        self.limiter.limit(self.rate_limits['update'])(self.update)(id, data, user_id)
         """Update an existing entity with validation and audit logging"""
         entity = self.get_by_id(id)
         
@@ -280,8 +280,8 @@ class BaseService:
         self.rate_limits['delete'] = value
         
     @handle_errors
-    @self.limiter.limit(lambda self: self.rate_limits['delete'])
     def delete(self, id, user_id=None):
+        self.limiter.limit(self.rate_limits['delete'])(self.delete)(id, user_id)
         """Enhanced delete with soft delete support"""
         entity = self.get_by_id(id)
         
