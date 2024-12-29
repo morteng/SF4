@@ -3,7 +3,22 @@
 2. Review all constants in `app/constants.py` to ensure consistency and completeness
 
 ### **Recent Changes**
-1. **Fixed Test File Conflicts**:
+1. **Fixed `GENERIC_ERROR` AttributeError**:
+   - Added `GENERIC_ERROR` to `FlashMessages` enum in `app/constants.py`.
+
+2. **Resolved Test File Conflicts**:
+   - Deleted `tests/test_forms.py` to resolve import conflicts.
+
+3. **Cleared Pycache**:
+   - Removed stale compiled files from `__pycache__` directories.
+
+4. **Configured Redis for Rate Limiting**:
+   - Added Redis as the storage backend for Flask-Limiter.
+
+5. **Ensured Test File Uniqueness**:
+   - Renamed `tests/app/forms/test_forms.py` to `tests/app/forms/test_organization_forms.py`.
+
+6. **Fixed Test File Conflicts**:
    - Deleted `tests/test_forms.py` to resolve import conflicts.
    - Consolidated all stipend form tests into `tests/test_main_forms.py`.
    - Organized organization form tests in `tests/app/forms/test_forms.py`.

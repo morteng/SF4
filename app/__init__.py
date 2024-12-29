@@ -59,12 +59,16 @@ def init_extensions(app):
     login_manager.init_app(app)
     migrate.init_app(app, db)
     
-    # Initialize limiter
+    # Initialize Redis for rate limiting
     from flask_limiter import Limiter
     from flask_limiter.util import get_remote_address
+    from redis import Redis
+    
+    redis = Redis.from_url(app.config.get('REDIS_URL', 'redis://localhost:6379/0'))
     limiter = Limiter(
         key_func=get_remote_address,
         app=app,
+        storage_uri="redis://localhost:6379/0",  # Use Redis for storage
         default_limits=["200 per day", "50 per hour"]
     )
 
