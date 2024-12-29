@@ -1,7 +1,8 @@
 # Updated Coding Conventions
 
 ### Testing Setup
-1. **Activate Virtual Environment**:
+
+#### 1. Activate the Virtual Environment
    - **Windows**:
      ```bash
      .venv\Scripts\activate
@@ -11,36 +12,51 @@
      source .venv/bin/activate
      ```
 
-2. **Install Dependencies**:
+#### 2. Install `pytest`
+   Run this command to install `pytest`:
    ```bash
-   pip install -r requirements.txt
+     pip install pytest
    ```
 
-3. **Verify Installation**:
+#### 3. Verify Installation
+   Confirm `pytest` is installed by running:
    ```bash
-   pip show pytest freezegun Flask
+     pip show pytest
+   ```
+   If installed correctly, you'll see details about the `pytest` package.
+
+#### 4. Add `pytest` to `requirements.txt`
+   Add `pytest` to your `requirements.txt` file to ensure it's installed in the future:
+   ```bash
+     echo "pytest" >> requirements.txt
    ```
 
-4. **Run Tests**:
+#### 5. Run Tests
+   After installing `pytest`, run the tests:
    ```bash
-   pytest
-   ```
-
-5. **Troubleshooting**:
-   - If tests fail due to missing dependencies:
-     ```bash
-     pip install -r requirements.txt
      pytest
-     ```
-   - Recreate virtual environment if needed:
-     ```bash
+   ```
+
+#### 6. Optional: Install All Dependencies
+   If other dependencies are missing, install them using:
+   ```bash
+     pip install -r requirements.txt
+   ```
+
+#### 7. Recreate Virtual Environment (if needed)
+   If the issue persists, recreate the virtual environment:
+   ```bash
      deactivate
      rm -rf .venv
      python -m venv .venv
-     source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+     source .venv/bin/activate  # macOS/Linux
+     .venv\Scripts\activate     # Windows
      pip install -r requirements.txt
      pytest
-     ```
+   ```
+
+#### Expected Outcome:
+After following these steps, the `pytest` command should work without errors, and your tests should run successfully.
 
 #### **Property Implementation**
 1. **Define Properties Correctly**:

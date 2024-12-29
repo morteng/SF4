@@ -4,6 +4,7 @@
 - [x] Fix `CustomDateTimeField` initialization to handle `validators` argument with default `InputRequired()`.
 - [x] Install `pytest` and verify installation with `pip show pytest`.
 - [x] Add `pytest` to `requirements.txt` for future environments.
+- [x] Document pytest installation and verification steps in CONVENTIONS.md
 - [x] Refactor shared functionality into `app/common/utils.py` to avoid circular imports.
 - [x] Centralized error messages in `app/constants.py` for date/time validation.
 
