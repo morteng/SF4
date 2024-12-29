@@ -77,6 +77,11 @@
   ```
 - **Best Practice**: Always define a property (`@property`) before using a setter (`@<property>.setter`).
 
+### Testing Improvements
+- Added comprehensive test coverage for date/time validation
+- Verified edge cases in date/time validation (e.g., leap years, invalid time components)
+- Improved test isolation and reliability
+
 #### **Lessons Learned**
 1. **Custom Field Implementation**:
    - Always ensure custom fields properly handle all arguments passed to them (e.g., `validators`).

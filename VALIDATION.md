@@ -108,17 +108,25 @@
 2. **Testing**:
    - Test edge cases thoroughly, especially for date/time validation.
    - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+   - Add comprehensive tests for all validation scenarios.
 3. **Error Handling**:
    - Log validation errors with context for easier debugging.
    - Provide clear, user-friendly error messages for validation failures.
 4. **Code Organization**:
    - Keep validation logic modular and reusable.
    - Avoid code duplication by using base classes and utilities.
+   - Centralize shared validation functions in common utilities.
 
-### Date/Time Validation
-1. **Best Practices**:
-   - Validate date and time components separately before full parsing.
-   - Use specific error messages for different validation failures (e.g., invalid format, invalid time, invalid leap year).
+### Property Implementation
+1. **Define Properties Correctly**:
+   - Always use `@property` decorator for getters.
+   - Use `@<property>.setter` for setters.
+2. **Validation in Setters**:
+   - Include validation logic in property setters.
+3. **Private Attributes**:
+   - Use private attributes (e.g., `_property_name`) for internal storage.
+4. **Documentation**:
+   - Add clear docstrings explaining property behavior and validation rules.
    - Handle edge cases like February 29th in non-leap years.
 
 2. **Error Handling**:

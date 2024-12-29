@@ -9,20 +9,21 @@
 - [x] Refactor shared functionality into `app/common/utils.py` to avoid circular imports.
 - [x] Centralize error messages in `app/constants.py` for date/time validation.
 - [x] Implement proper property handling in `BaseService` with getters and setters.
+- [x] Add comprehensive tests for edge cases in date/time validation.
 
 ## Next Session
-- [ ] Add comprehensive tests for edge cases in date/time validation.
 - [ ] Optimize validation performance in `CustomDateTimeField`.
 - [ ] Verify timezone handling in all date/time fields.
 - [ ] Refactor validation logic in other forms to ensure consistency with `StipendForm`.
 - [ ] Add property implementation tests for all service classes.
+- [ ] Add integration tests for form validation.
 
 ## Long Term
 - [ ] Automate dependency verification during test execution.
 - [ ] Improve test coverage for all form fields.
-- [ ] Add integration tests for form validation.
 - [ ] Refactor other shared functionality into `app/common`.
 - [ ] Document property implementation patterns across the codebase.
+- [ ] Add performance benchmarks for validation logic.
 - [x] Fix `CustomDateTimeField` initialization to handle `validators` argument with default `InputRequired()`:
   - Added default validator when none provided
   - Updated form implementations to avoid duplicate validators
