@@ -33,7 +33,7 @@
 
 /test
 
-/ask is there duplicate code in the project? If so, how can we refactor it to improve the maintainability and readability of the code?
+/ask is there duplicate code in the project? If so, how can we refactor it to improve the maintainability and readability of the code? How can we make the code better?
 
 /architect implement the suggested changes
 
