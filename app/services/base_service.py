@@ -32,6 +32,30 @@ class BaseService:
         self.audit_logger = audit_logger
         self.soft_delete_enabled = hasattr(model, 'is_deleted')
         self.validation_rules = {}
+        self.pre_create_hooks = []
+        self.post_create_hooks = []
+        self.pre_update_hooks = [] 
+        self.post_update_hooks = []
+        self.pre_delete_hooks = []
+        self.post_delete_hooks = []
+
+    def add_pre_create_hook(self, hook):
+        self.pre_create_hooks.append(hook)
+        
+    def add_post_create_hook(self, hook):
+        self.post_create_hooks.append(hook)
+        
+    def add_pre_update_hook(self, hook):
+        self.pre_update_hooks.append(hook)
+        
+    def add_post_update_hook(self, hook):
+        self.post_update_hooks.append(hook)
+        
+    def add_pre_delete_hook(self, hook):
+        self.pre_delete_hooks.append(hook)
+        
+    def add_post_delete_hook(self, hook):
+        self.post_delete_hooks.append(hook)
 
     @handle_errors
     def get_by_id(self, id):
@@ -50,10 +74,18 @@ class BaseService:
     def create(self, data, user_id=None):
         """Create a new entity with validation and audit logging"""
         try:
+            # Run pre-create hooks
+            for hook in self.pre_create_hooks:
+                data = hook(data)
+                
             self.validate_create(data)
             entity = self.model(**data)
             db.session.add(entity)
             db.session.commit()
+            
+            # Run post-create hooks
+            for hook in self.post_create_hooks:
+                hook(entity)
             
             self._log_audit('create', entity, user_id=user_id, after=entity.to_dict())
             return entity

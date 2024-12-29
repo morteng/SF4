@@ -72,7 +72,48 @@ stipend_controller = StipendController()
 @login_required
 @admin_required
 def create():
-    return stipend_controller.create()
+    if request.method == 'POST':
+        form = StipendForm()
+        if form.validate_on_submit():
+            try:
+                data = {
+                    'name': form.name.data,
+                    'summary': form.summary.data,
+                    'description': form.description.data,
+                    'homepage_url': form.homepage_url.data,
+                    'application_procedure': form.application_procedure.data,
+                    'eligibility_criteria': form.eligibility_criteria.data,
+                    'application_deadline': form.application_deadline.data,
+                    'open_for_applications': form.open_for_applications.data
+                }
+                
+                stipend = stipend_controller.create(data)
+                
+                # Handle HTMX response
+                if request.headers.get('HX-Request'):
+                    return render_template(
+                        'admin/stipends/_stipend_row.html',
+                        stipend=stipend
+                    ), 200, {
+                        'HX-Trigger': 'stipendCreated'
+                    }
+                    
+                flash_message(FlashMessages.STIPEND_CREATE_SUCCESS, FlashCategory.SUCCESS)
+                return redirect(url_for('admin.stipend.index'))
+                
+            except Exception as e:
+                db.session.rollback()
+                current_app.logger.error(f"Error creating stipend: {str(e)}")
+                flash_message(f"{FlashMessages.STIPEND_CREATE_ERROR}: {str(e)}", FlashCategory.ERROR)
+                
+                if request.headers.get('HX-Request'):
+                    return render_template(
+                        'admin/stipends/_form.html',
+                        form=form,
+                        error_messages=[str(e)]
+                    ), 400
+                    
+        return render_template('admin/stipends/create.html', form=form)
 
 
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
