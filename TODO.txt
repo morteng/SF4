@@ -9,6 +9,7 @@
 
 2. **Updated Constants**:
    - Added missing constants like `CREATE_SUCCESS`, `UPDATE_SUCCESS`, and `DELETE_SUCCESS` to `FlashMessages` class in `app/constants.py`.
+   - Removed duplicate definitions of `CREATE_SUCCESS` to fix `TypeError`.
 
 3. **Improved Error Handling**:
    - Added proper error handling for property setters in `BaseService`.
@@ -18,6 +19,12 @@
    - Used lazy imports in `app/__init__.py` to avoid circular dependencies.
    - Moved shared utilities to `app/common/utils.py`.
 
+5. **Fixed Circular Imports**:
+   - Refactored imports in `app/__init__.py` and `app/common/utils.py` to avoid circular dependencies.
+
+6. **Cleaned Up Code**:
+   - Removed duplicate definitions of `init_admin_user` and `shared_function` in `app/common/utils.py`.
+
 ### **Things to Remember for Next Coding Session**
 1. **Property Implementation**:
    - Always define properties with `@property` before using `@<property>.setter`.
@@ -26,6 +33,7 @@
 2. **Constants Management**:
    - Keep all error messages and validation strings in `app/constants.py`.
    - Verify that all required constants are defined and imported correctly.
+   - Avoid duplicate definitions of constants to prevent `TypeError`.
 
 3. **Error Handling**:
    - Include proper error handling for `try` blocks.
@@ -43,6 +51,10 @@
    - Ensure rate limiters are properly configured with valid string values (e.g., "10 per minute").
    - Validate rate limit values in setters to prevent invalid configurations.
 
+7. **Circular Imports**:
+   - Use lazy imports to avoid circular dependencies.
+   - Refactor shared logic into utility modules to reduce import complexity.
+
 ### **Lessons Learned**
 1. **Property Implementation**:
    - Always define properties with `@property` before using `@<property>.setter`.
@@ -51,6 +63,7 @@
 2. **Centralized Constants**:
    - Keeping all error messages and validation strings in `app/constants.py` ensures consistency and reduces the chance of typos.
    - Missing constants can cause runtime errors, so add them as soon as they are identified.
+   - Duplicate definitions of constants can cause `TypeError`, so ensure each constant is defined only once.
 
 3. **Error Handling**:
    - Proper error handling in property setters is crucial for maintaining data integrity.
@@ -67,6 +80,29 @@
 6. **Rate Limiting**:
    - Proper configuration and validation of rate limiters prevent runtime errors.
    - Rate limit values should be validated in setters to ensure they are valid strings.
+
+7. **Circular Imports**:
+   - Circular imports can cause initialization errors and should be avoided.
+   - Use lazy imports or refactor shared logic into utility modules to reduce import complexity.
+
+### **Recent Changes**
+1. **Added Missing Constants**:
+   - Added `MISSING_FIELD_ERROR`, `USERNAME_REQUIRED`, `USERNAME_LENGTH`, `USERNAME_FORMAT`, and `EMAIL_REQUIRED` to `app/constants.py`.
+
+2. **Refactored Validation Logic**:
+   - Moved reusable validation logic (e.g., `validate_application_deadline`) to `app/common/utils.py`.
+
+3. **Improved Tests**:
+   - Added edge case tests in `tests/test_base_crud_controller.py` for invalid form submissions and missing fields.
+
+4. **Updated `requirements.txt`**:
+   - Added `beautifulsoup4` for HTML parsing in tests.
+
+5. **Fixed Property Implementation**:
+   - Consolidated the `create_limit` property in `app/services/base_service.py` to avoid conflicts and ensure proper validation.
+
+6. **Rate Limiter Configuration**:
+   - Added validation for rate limit values in `app/services/base_service.py` to ensure they are valid strings.
 
 ### **Recent Changes**
 1. **Added Missing Constants**:
