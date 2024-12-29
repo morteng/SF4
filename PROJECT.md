@@ -18,6 +18,50 @@
 
 ## Lessons Learned
 
+### Recent Issues and Fixes
+1. **`CustomDateTimeField` Initialization**:
+   - **Issue**: The `CustomDateTimeField` class raised a `TypeError` when passed the `validators` argument.
+   - **Solution**: Updated the `__init__` method to properly handle the `validators` argument:
+     ```python
+     class CustomDateTimeField(Field):
+         def __init__(self, label=None, validators=None, **kwargs):
+             if validators is None:
+                 validators = [InputRequired()]  # Default validator
+             super().__init__(label=label, validators=validators, **kwargs)
+     ```
+   - **Best Practice**: Ensure custom fields properly handle all arguments passed to them.
+
+2. **Dependency Management**:
+   - **Issue**: Tests failed because `pytest` was not installed in the virtual environment.
+   - **Solution**: Installed `pytest` and verified dependencies:
+     ```bash
+     pip install pytest
+     pip show pytest
+     ```
+   - **Best Practice**: Always verify dependencies are installed before running tests or the application.
+
+3. **Circular Imports**:
+   - **Issue**: Circular dependencies caused startup errors (e.g., `ModuleNotFoundError`).
+   - **Solution**: Refactored shared functionality into a separate module (e.g., `app/common/utils.py`) and used lazy imports where necessary.
+   - **Best Practice**: Avoid circular dependencies by keeping imports clean and modular.
+
+### Key Takeaways for Next Coding Session
+1. **Validation Logic**:
+   - Always verify the data type of form field inputs before applying validation logic.
+   - Use centralized error messages from `app/constants.py` for consistency.
+
+2. **Testing**:
+   - Test edge cases thoroughly, especially for date/time validation.
+   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+
+3. **Error Handling**:
+   - Log validation errors with context for easier debugging.
+   - Provide clear, user-friendly error messages for validation failures.
+
+4. **Code Organization**:
+   - Keep validation logic modular and reusable.
+   - Avoid code duplication by using base classes and utilities.
+
 ### Dependency Management
 - **Issue**: Tests failed because `pytest` and other dependencies were not installed.
 - **Solution**: Always verify dependencies are installed by running:

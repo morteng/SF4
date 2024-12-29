@@ -585,6 +585,63 @@ If time-based tests are failing:
          validators = [InputRequired()]
      ```
 
+### Dependency Management
+1. **Pre-Test Verification**:
+   - Add a pre-test check to ensure all required dependencies are installed:
+     ```python
+     def test_dependencies():
+         try:
+             subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+         except subprocess.CalledProcessError:
+             pytest.fail("Failed to install dependencies")
+     ```
+2. **Graceful Handling**:
+   - Use try-except blocks to handle missing dependencies in test files.
+   - Skip tests that require missing packages instead of failing the entire suite.
+
+### Circular Imports
+1. **Refactor Shared Functionality**:
+   - Move shared code to a separate module (e.g., `app/common/utils.py`).
+2. **Use Lazy Imports**:
+   - Import dependencies at the function level when necessary:
+     ```python
+     def some_function():
+         from app.services.bot_service import run_bot  # Lazy import
+         run_bot()
+     ```
+
+### Property Implementation
+1. **Define Properties Correctly**:
+   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
+   - Example:
+     ```python
+     class MyClass:
+         def __init__(self):
+             self._my_property = None
+
+         @property
+         def my_property(self):
+             return self._my_property
+
+         @my_property.setter
+         def my_property(self, value):
+             self._my_property = value
+     ```
+2. **Avoid Direct Attribute Access**:
+   - Use properties to encapsulate attribute access and modification.
+3. **Document Properties**:
+   - Add docstrings to properties and setters to clarify their purpose and behavior.
+
+### Custom Field Implementation
+1. **Handle All Arguments**:
+   - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+2. **Default Validators**:
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
+
 ### Circular Import Prevention
 1. **Refactor Shared Functionality**:
    - Move shared code to a separate module (e.g., `app/common/utils.py`).
