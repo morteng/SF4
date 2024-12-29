@@ -281,11 +281,10 @@ class TestCustomDateTimeField(BaseTestCase):
                 format='%Y-%m-%d %H:%M:%S',
                 timezone='UTC',
                 error_messages={
-                    'required': 'Date is required',
+                    'required': 'Date is required',  # Generic message for general case
                     'invalid_format': 'Invalid date format',
-                    'invalid_date': 'Invalid date values (e.g., Feb 30, Feb 31)',
-                    'invalid_time': 'Invalid time values (e.g., 25:00:00, 12:60:00)',
-                    'invalid_timezone': 'Invalid timezone',
+                    'invalid_date': 'Invalid date values',
+                    'invalid_time': 'Invalid time values',
                     'past_date': 'Date must be a future date',
                     'future_date': 'Date cannot be more than 5 years in the future',
                     'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)'
@@ -295,7 +294,7 @@ class TestCustomDateTimeField(BaseTestCase):
         form = TestForm()
         self.assertFormInvalid(
             form, {'test_field': ''},
-            {'test_field': ['Application deadline is required.']}
+            {'test_field': ['Date is required']}  # Updated to match generic message
         )
 
     def test_invalid_date_format(self):

@@ -15,30 +15,24 @@ class CustomDateTimeField(DateTimeField):
     - Custom error messages
     """
     
-    # Define error messages
-    error_messages = {
-        'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
-        'required': 'Application deadline is required.',
-        'invalid_date': 'Invalid date values (e.g., Feb 30)',
-        'invalid_time': 'Invalid time values',
-        'invalid_hour': 'Hour must be between 0 and 23',
-        'invalid_minute': 'Minute must be between 0 and 59',
-        'invalid_second': 'Second must be between 0 and 59',
-        'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
-        'required': 'Date is required',
-        'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)',
-        'past_date': 'Application deadline must be a future date',
-        'future_date': 'Application deadline cannot be more than 5 years in the future',
-        'invalid_hour_value': 'Invalid hour value',
-        'invalid_minute_value': 'Invalid minute value',
-        'invalid_second_value': 'Invalid second value'
-    }
-    
     def __init__(self, *args, **kwargs):
         self.timezone = kwargs.pop('timezone', None)
         # Merge custom error messages with defaults
         custom_messages = kwargs.pop('error_messages', {})
-        self.error_messages = {**self.error_messages, **custom_messages}
+        self.error_messages = {
+            'required': 'Date is required',
+            'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
+            'invalid_date': 'Invalid date values',
+            'invalid_time': 'Invalid time values',
+            'invalid_hour': 'Hour must be between 0 and 23',
+            'invalid_minute': 'Minute must be between 0 and 59',
+            'invalid_second': 'Second must be between 0 and 59',
+            'missing_time': 'Time is required. Please use YYYY-MM-DD HH:MM:SS',
+            'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)',
+            'past_date': 'Date must be a future date',
+            'future_date': 'Date cannot be more than 5 years in the future',
+            **custom_messages  # Allow overriding defaults
+        }
         self.format = '%Y-%m-%d %H:%M:%S'  # Set format as instance attribute
         kwargs['format'] = self.format  # Pass to parent
         kwargs['render_kw'] = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}

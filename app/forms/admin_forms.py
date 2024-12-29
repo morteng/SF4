@@ -63,9 +63,12 @@ class StipendForm(FlaskForm):
         format='%Y-%m-%d %H:%M:%S',
         error_messages={
             'required': 'Application deadline is required.',
-            'invalid': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
+            'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
+            'invalid_date': 'Invalid application deadline date',
+            'invalid_time': 'Invalid application deadline time',
             'past_date': 'Application deadline must be a future date',
-            'future_limit': 'Application deadline cannot be more than 5 years in the future'
+            'future_date': 'Application deadline cannot be more than 5 years in the future',
+            'invalid_leap_year': 'Invalid application deadline date (e.g., Feb 29 in non-leap years)'
         }
     )
     organization_id = SelectField('Organization', coerce=int, validators=[
