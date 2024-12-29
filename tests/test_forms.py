@@ -16,4 +16,4 @@ def test_stipend_form_validation():
 
     # Test missing required field
     form.application_deadline.data = None
-        assert not form.validate()
+    assert not form.validate()
