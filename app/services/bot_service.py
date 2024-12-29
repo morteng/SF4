@@ -172,3 +172,6 @@ class ReviewBot:
             bot.status = 'failed'
         finally:
             db.session.commit()
+def some_function():
+    from app.services.bot_service import run_bot  # Lazy import
+    run_bot()
