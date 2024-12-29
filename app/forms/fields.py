@@ -18,11 +18,6 @@ class CustomDateTimeField(DateTimeField):
         if not self.data:
             return True
             
-        # Check if the date string matches the expected format
-        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', str(self.data)):
-            self.errors.append(self.error_messages['invalid_format'])
-            return False
-            
         # Initialize default error messages
         self.error_messages = {
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
@@ -33,6 +28,20 @@ class CustomDateTimeField(DateTimeField):
             'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)',
             'past_date': 'Application deadline must be a future date'
         }
+
+        # Check if the date string matches the expected format
+        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', str(self.data)):
+            self.errors.append(self.error_messages['invalid_format'])
+            return False
+            
+        # Validate the date/time components
+        try:
+            datetime.strptime(str(self.data), '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            self.errors.append(self.error_messages['invalid_date'])
+            return False
+            
+        return True
         # Initialize default error messages
         self.error_messages = {
             'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
@@ -62,6 +71,14 @@ class CustomDateTimeField(DateTimeField):
         # Validate format first
         if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
             self.errors.append(self.error_messages['invalid_format'])
+            self.data = None
+            return
+            
+        # Validate date/time components
+        try:
+            datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            self.errors.append(self.error_messages['invalid_date'])
             self.data = None
             return
             

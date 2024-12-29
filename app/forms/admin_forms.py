@@ -54,19 +54,14 @@ class StipendForm(FlaskForm):
         if not field.data or field.errors:
             return
             
-        # First validate the format
-        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', str(field.data)):
-            raise ValidationError('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
-            
-        # Then validate the date/time values
-        try:
-            if isinstance(field.data, str):
-                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
-        except ValueError:
-            raise ValidationError('Invalid date/time values')
-            
         # Validate future date
         now = datetime.now(pytz.UTC)
+        if isinstance(field.data, str):
+            try:
+                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise ValidationError('Invalid date/time values')
+                
         if field.data.tzinfo is None:
             field.data = pytz.UTC.localize(field.data)
             
