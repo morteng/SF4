@@ -1,3 +1,10 @@
+def validate_application_deadline(field):
+    """Reusable validation logic for application deadlines."""
+    if field.errors:
+        return
+    # Add validation logic here
+    pass
+
 def shared_function():
     """Shared utility function to avoid circular imports."""
     pass

@@ -213,6 +213,8 @@ class FlashCategory(str, Enum):
 class FlashMessages(str, Enum):
     # Date/Time Validation
     MISSING_REQUIRED_FIELD = "This field is required"
+    NAME_REQUIRED = "Name is required."
+    NAME_LENGTH = "Name cannot exceed 100 characters."
     INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
     INVALID_LEAP_YEAR = "Invalid date: February 29th is only valid in leap years"
     INVALID_TIME = "Invalid time. Hours must be 0-23, minutes 0-59, seconds 0-59"

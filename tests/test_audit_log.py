@@ -44,10 +44,12 @@ def test_profile_update_creates_audit_log(client, db_session):
         
         assert get_response.status_code == 200, f"Expected 200, got {get_response.status_code}"
 
-        # Extract CSRF token using BeautifulSoup
+        # Extract CSRF token using BeautifulSoup with error handling
         soup = BeautifulSoup(get_response.data.decode(), 'html.parser')
-        csrf_token = soup.find('input', {'name': 'csrf_token'})['value']
-        assert csrf_token, "CSRF token not found in form"
+        csrf_input = soup.find('input', {'name': 'csrf_token'})
+        assert csrf_input is not None, "CSRF token input not found in form"
+        csrf_token = csrf_input.get('value')
+        assert csrf_token, "CSRF token value is empty"
 
         # Login user
         login_response = client.post(url_for('public.login'), data={

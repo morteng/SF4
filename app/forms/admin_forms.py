@@ -259,8 +259,8 @@ class OrganizationForm(FlaskForm):
     id = HiddenField('ID')
     csrf_token = HiddenField('CSRF Token')
     name = StringField('Name', validators=[
-        DataRequired(message="This field is required."),
-        Length(max=100, message="Organization name cannot exceed 100 characters."),
+        DataRequired(message=FlashMessages.NAME_REQUIRED),
+        Length(max=100, message=FlashMessages.NAME_LENGTH),
         Regexp('^[A-Za-z0-9 ]*$', message='Organization name must contain only letters, numbers, and spaces.')
     ])
     description = TextAreaField('About', validators=[
