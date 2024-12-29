@@ -60,8 +60,8 @@ class CustomDateTimeField(DateTimeField):
         self.errors = []
         
         # First check if value is missing or empty
-        if not valuelist or self._is_empty_value(valuelist[0]):
-            self.errors.append(self.error_messages.get('required', 'Date is required'))
+        if not valuelist or not valuelist[0].strip():
+            self.errors.append(self.error_messages['required'])
             self.data = None
             return
             

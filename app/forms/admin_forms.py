@@ -59,9 +59,8 @@ class StipendForm(FlaskForm):
     ])
     application_deadline = CustomDateTimeField(
         'Application Deadline',
-        validators=[
-            DataRequired(message="Application deadline is required.")  # Explicitly require the field
-        ]
+        validators=[DataRequired(message="Application deadline is required.")],
+        format='%Y-%m-%d %H:%M:%S'
     )
     organization_id = SelectField('Organization', coerce=int, validators=[
         DataRequired(message="Organization is required.")

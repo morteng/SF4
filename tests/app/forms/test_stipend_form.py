@@ -204,6 +204,32 @@ def test_time_component_validation(app, form_data):
 #             print("Validation errors:", form.errors)
 #         assert any('Invalid date values (e.g., Feb 29 in non-leap years)' in error for error in form.errors['application_deadline'])
 
+def test_empty_application_deadline(app, form_data):
+    """Test validation when application_deadline is empty."""
+    with app.test_request_context():
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        invalid_data = form_data.copy()
+        invalid_data['application_deadline'] = ''
+
+        form = StipendForm(data=invalid_data, meta={'csrf': False})
+        form.tags.choices = tag_choices
+        assert form.validate() is False
+        assert 'application_deadline' in form.errors
+        assert 'Application deadline is required.' in form.errors['application_deadline']
+
+def test_missing_application_deadline(app, form_data):
+    """Test validation when application_deadline is missing."""
+    with app.test_request_context():
+        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+        invalid_data = form_data.copy()
+        del invalid_data['application_deadline']
+
+        form = StipendForm(data=invalid_data, meta={'csrf': False})
+        form.tags.choices = tag_choices
+        assert form.validate() is False
+        assert 'application_deadline' in form.errors
+        assert 'Application deadline is required.' in form.errors['application_deadline']
+
 def test_missing_required_fields(app, form_data):
     """Test validation of all required fields."""
     required_fields = [
