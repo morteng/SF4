@@ -61,7 +61,20 @@ class CustomDateTimeField(DateTimeField):
         # Continue with format validation if value exists
         date_str = valuelist[0].strip()
         if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', date_str):
-            self.errors.append('Invalid date format. Please use YYYY-MM-DD HH:MM:SS')
+            self.errors.append(self.error_messages.get('invalid_format', 'Invalid date format'))
+            self.data = None
+            return
+            
+        # Validate time components separately
+        try:
+            time_part = date_str.split()[1]
+            hour, minute, second = map(int, time_part.split(':'))
+            if not (0 <= hour <= 23 and 0 <= minute <= 59 and 0 <= second <= 59):
+                self.errors.append(self.error_messages.get('invalid_time', 'Invalid time values'))
+                self.data = None
+                return
+        except ValueError:
+            self.errors.append(self.error_messages.get('invalid_time', 'Invalid time values'))
             self.data = None
             return
             
@@ -69,7 +82,7 @@ class CustomDateTimeField(DateTimeField):
         try:
             datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
         except ValueError:
-            self.errors.append('Invalid date values')
+            self.errors.append(self.error_messages.get('invalid_date', 'Invalid date values'))
             self.data = None
             return
             
