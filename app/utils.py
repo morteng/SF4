@@ -414,6 +414,13 @@ def flash_message(message, category):
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from app.services.bot_service import run_bot
+from bleach import clean as bleach_clean
+
+def clean(text, tags=None, attributes=None):
+    """Sanitize input text using bleach."""
+    if not text:
+        return text
+    return bleach_clean(text, tags=tags, attributes=attributes)
 
 limiter = Limiter(
     key_func=get_remote_address,

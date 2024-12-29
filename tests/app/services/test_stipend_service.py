@@ -3,7 +3,7 @@ import re  # Import the re module to use regex for extracting CSRF token
 from wtforms.validators import ValidationError
 from app.models.stipend import Stipend
 from app.models.organization import Organization
-from app.services.stipend_service import create_stipend, update_stipend, delete_stipend, get_stipend_by_id, get_all_stipends
+from app.services.stipend_service import StipendService
 from datetime import datetime
 from flask_login import login_user
 from app.extensions import db  # Ensure consistent session usage
@@ -25,7 +25,8 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
             login_user(admin_user)
         
         stipend_data = {k: v for k, v in form.data.items() if k != 'submit'}
-        response = client.post('/admin/stipends/create', data=stipend_data, follow_redirects=True)
+        service = StipendService()
+        result = service.create(stipend_data)
 
     # Assert that the stipend was not created due to validation errors
     new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
@@ -53,7 +54,8 @@ def test_create_stipend_with_all_fields(test_data, db_session, app, admin_user):
         form = StipendForm(data=test_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
         
-        response = client.post('/admin/stipends/create', data=form.data, follow_redirects=True)
+        service = StipendService()
+        result = service.create(form.data)
 
     # Query the stipend from the session to ensure it's bound
     new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
@@ -91,7 +93,8 @@ def test_create_stipend_with_missing_optional_fields(db_session, app, admin_user
         form = StipendForm(data=test_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
         
-        response = client.post('/admin/stipends/create', data=form.data, follow_redirects=True)
+        service = StipendService()
+        result = service.create(form.data)
 
     # Query the stipend from the session to ensure it's bound
     new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
@@ -119,7 +122,8 @@ def test_create_stipend_with_invalid_date_format(test_data, db_session, app, adm
         # Create a form instance and validate it
         form = StipendForm(data=test_data)
         
-        response = client.post('/admin/stipends/create', data=form.data, follow_redirects=True)
+        service = StipendService()
+        result = service.create(form.data)
 
     # Assert that the stipend was not created due to validation errors
     new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
@@ -153,7 +157,8 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
         # Simulate form submission to the edit route
-        response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
+        service = StipendService()
+        result = service.update(stipend.id, form.data)
         assert response.status_code == 200
         
         db.session.refresh(stipend)
@@ -185,7 +190,8 @@ def test_update_stipend_with_invalid_application_deadline_format(test_data, db_s
             
         # Create a form instance and validate it
         form = StipendForm(data=update_data)
-        response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
+        service = StipendService()
+        result = service.update(stipend.id, form.data)
 
     # Assert that the stipend was not updated due to validation errors
     updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
@@ -220,7 +226,8 @@ def test_update_stipend_open_for_applications(test_data, db_session, app, admin_
         form = StipendForm(data=update_data)
         assert form.validate(), f"Form validation failed: {form.errors}"
         # Simulate form submission after calling update_stipend
-        response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
+        service = StipendService()
+        result = service.update(stipend.id, form.data)
 
     # Query the stipend from the session to ensure it's bound
     updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
@@ -258,7 +265,8 @@ def test_update_stipend_open_for_applications_as_string(test_data, db_session, a
         assert form.validate(), f"Form validation failed: {form.errors}"
         
         # Simulate form submission after calling update_stipend
-        response = client.post(f'/admin/stipends/{stipend.id}/edit', data=form.data, follow_redirects=True)
+        service = StipendService()
+        result = service.update(stipend.id, form.data)
 
     # Query the stipend from the session to ensure it's bound
     updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
@@ -357,7 +365,8 @@ def test_delete_existing_stipend(test_data, db_session, app, admin_user):
         with app.test_request_context():
             login_user(admin_user)
         
-        response = client.post(f'/admin/stipends/{stipend.id}/delete', follow_redirects=True)
+        service = StipendService()
+        result = service.delete(stipend.id)
 
     # Assert that the stipend was deleted
     deleted_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
@@ -383,7 +392,8 @@ def test_get_stipend_by_valid_id(test_data, db_session, app):
     db_session.add(stipend)
     db_session.commit()
 
-    retrieved_stipend = get_stipend_by_id(stipend.id)
+    service = StipendService()
+    retrieved_stipend = service.get_by_id(stipend.id)
     assert retrieved_stipend is not None
     assert retrieved_stipend.name == test_data['name']
 
@@ -398,10 +408,12 @@ def test_get_all_stipends_with_multiple_entries(test_data, db_session, app):
     db_session.add(stipend2)
     db_session.commit()
 
-    all_stipends = get_all_stipends()
+    service = StipendService()
+    all_stipends = service.get_all()
     assert len(all_stipends) == 2
     assert any(s.name == test_data['name'] for s in all_stipends)
 
 def test_get_all_stipends_with_no_entries(app):
-    all_stipends = get_all_stipends()
+    service = StipendService()
+    all_stipends = service.get_all()
     assert len(all_stipends) == 0
