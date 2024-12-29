@@ -18,6 +18,7 @@ class CustomDateTimeField(DateTimeField):
     # Define error messages
     error_messages = {
         'invalid_format': 'Invalid date format. Please use YYYY-MM-DD HH:MM:SS',
+        'required': 'Application deadline is required.',
         'invalid_date': 'Invalid date values (e.g., Feb 30)',
         'invalid_time': 'Invalid time values',
         'invalid_hour': 'Hour must be between 0 and 23',
@@ -46,8 +47,10 @@ class CustomDateTimeField(DateTimeField):
     def _is_empty_value(self, value):
         """Check if the value is empty or whitespace only."""
         if value is None:
+            self.errors.append(self.error_messages['required'])
             return True
         if isinstance(value, str) and not value.strip():
+            self.errors.append(self.error_messages['required'])
             return True
         return False
 
