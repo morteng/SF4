@@ -121,8 +121,10 @@ If time-based tests are failing:
 
 ## Property Implementation Best Practices
 1. **Define Properties Correctly**:
-   - Always define a property (`@property`) before using a setter (`@<property>.setter`).
+   - Always define a property (`@property`) before using a setter (`@<property>.setter`)
    - Include validation in setters
+   - Use private attributes for storage
+   - Include docstrings explaining their purpose
    - Example from BaseService implementation with validation:
      ```python
      class BaseService:

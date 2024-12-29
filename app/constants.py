@@ -216,3 +216,5 @@ class FlashMessages(str, Enum):
 INVALID_DATETIME_FORMAT = "Invalid date/time format. Expected format: YYYY-MM-DD HH:MM:SS"
 INVALID_LEAP_YEAR = "Invalid date: February 29th on a non-leap year"
 MISSING_DEPENDENCY = "Required dependency not found: {package}"
+INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
+MISSING_REQUIRED_FIELD = "This field is required"
