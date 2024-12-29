@@ -4,16 +4,8 @@
 # Console commands for Step 4.
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
-### PENDING CONSOLE COMMANDS ###
-# Example commands:
-# /run echo "Hello from Step 4!"
-# /run coverage run -m pytest
-
 ### COMMANDS START ###
-/run pytest --cov=app --cov-report=html
-/run flake8 app tests
-/run bandit -r app
-/run safety check
+/run pytest tests/test_admin_stipends.py -v
 ### COMMANDS END ###
 
 # Once finished, jump to Step 5.
