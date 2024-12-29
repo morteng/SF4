@@ -50,11 +50,11 @@ class StipendForm(FlaskForm):
         URL(message=FlashMessages.INVALID_URL.value)
     ])
     application_procedure = TextAreaField('Application Procedure', validators=[
-        DataRequired(message="Application procedure is required."),
+        DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
         Length(max=2000, message="Application procedure cannot exceed 2000 characters.")
     ])
     eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[
-        DataRequired(message="Eligibility criteria is required."),
+        DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
         Length(max=2000, message="Eligibility criteria cannot exceed 2000 characters.")
     ])
     application_deadline = CustomDateTimeField(
