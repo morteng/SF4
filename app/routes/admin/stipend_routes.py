@@ -49,7 +49,6 @@ admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
 @login_required
 @admin_required
 def create():
-    """Create new stipend with HTMX support and audit logging"""
     form = StipendForm()
     is_htmx = request.headers.get('HX-Request')
     
@@ -59,12 +58,9 @@ def create():
     form.organization_id.choices = [(org.id, org.name) for org in organizations]
     form.tags.choices = [(tag.id, tag.name) for tag in tags]
     
-    # Generate CSRF token for the template
-    csrf_token_value = generate_csrf()
-    
     if form.validate_on_submit():
         try:
-            # Prepare stipend data - only include fields that have values
+            # Prepare stipend data
             stipend_data = {
                 'name': form.name.data,
                 'summary': form.summary.data if form.summary.data else None,
@@ -101,9 +97,7 @@ def create():
             flash_message(FlashMessages.STIPEND_CREATE_SUCCESS, FlashCategory.SUCCESS)
             
             if is_htmx:
-                return render_template('admin/stipends/_stipend_row.html', stipend=stipend), 200, {
-                    'HX-Trigger': 'stipendCreated'
-                }
+                return redirect(url_for('admin.stipend.index'))
             return redirect(url_for('admin.stipend.index'))
             
         except ValueError as e:
@@ -111,20 +105,17 @@ def create():
             current_app.logger.error(f"Validation error creating stipend: {str(e)}")
             flash_message(f"Validation error: {str(e)}", FlashCategory.ERROR)
             if is_htmx:
-                return render_template('admin/stipends/_form.html', form=form, csrf_token=csrf_token_value), 400
+                return render_template('admin/stipends/_form.html', form=form)
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Error creating stipend: {str(e)}")
             flash_message(f"{FlashMessages.STIPEND_CREATE_ERROR}: {str(e)}", FlashCategory.ERROR)
             if is_htmx:
-                return render_template('admin/stipends/_form.html', form=form, csrf_token=csrf_token_value), 400
+                return render_template('admin/stipends/_form.html', form=form)
     
-    # Generate CSRF token for the template
-    csrf_token_value = generate_csrf()
-    
-    return render_template('admin/stipends/create.html', 
-                         form=form,
-                         csrf_token=csrf_token_value)
+    if is_htmx:
+        return render_template('admin/stipends/_form.html', form=form)
+    return render_template('admin/stipends/create.html', form=form)
 
 
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
