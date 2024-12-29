@@ -1,6 +1,6 @@
 # Updated Validation Best Practices
 
-### Custom Field Implementation
+## Custom Field Implementation
 1. **Handle All Arguments**:
    - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
 2. **Default Validators**:
@@ -9,6 +9,32 @@
      if validators is None:
          validators = [InputRequired()]
      ```
+
+## Error Handling
+1. **Centralized Error Messages**:
+   - Store all error messages in `app/constants.py`.
+2. **Consistency**:
+   - Use constants instead of hardcoded strings for error messages.
+3. **User-Friendly Messages**:
+   - Provide clear, actionable error messages for validation failures.
+
+## Testing
+1. **Edge Cases**:
+   - Test edge cases thoroughly, especially for date/time validation.
+2. **Mocking**:
+   - Use `freezegun` for deterministic time-based testing.
+3. **Isolation**:
+   - Ensure database fixtures are properly reset between tests to avoid side effects.
+
+## Key Takeaways
+1. **Validation Logic**:
+   - Always verify the data type of form field inputs before applying validation logic.
+2. **Testing**:
+   - Test edge cases thoroughly, especially for date/time validation.
+3. **Error Handling**:
+   - Log validation errors with context for easier debugging.
+4. **Code Organization**:
+   - Keep validation logic modular and reusable.
 3. **Error Message Centralization**:
    - Use error messages from `app/constants.py` instead of hardcoded strings.
    - Example:

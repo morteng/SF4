@@ -1053,6 +1053,34 @@ user.profile                 GET        /user/profile
    - Always define properties with `@property` and `@<property>.setter`.
    - Include validation in setters and use private attributes for storage.
 
+5. **Error Handling**:
+   - Centralize error messages in `app/constants.py` for consistency.
+   - Avoid hardcoding error messages in validation logic.
+
+6. **Testing**:
+   - Test edge cases thoroughly, especially for date/time validation.
+   - Use mocking libraries like `freezegun` to ensure deterministic test behavior.
+
+## Lessons Learned
+1. **Custom Field Implementation**:
+   - Always ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
+
+2. **Dependency Management**:
+   - Always verify dependencies are installed before running tests or the application.
+   - Add a pre-test check to ensure all required dependencies are installed.
+
+3. **Circular Imports**:
+   - Refactor shared functionality into separate modules (e.g., `app/common/utils.py`) and use lazy imports where necessary.
+
+4. **Property Implementation**:
+   - Always define properties with `@property` and `@<property>.setter`.
+   - Include validation in setters and use private attributes for storage.
+
 ## Key Takeaways for Next Coding Session
 1. **Validation Logic**:
    - Always verify the data type of form field inputs before applying validation logic.
