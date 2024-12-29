@@ -151,8 +151,9 @@ If time-based tests are failing:
 
 ### Dependency Management
 1. **Pre-Test Verification**:
-   - Add a test to verify all dependencies are installed before running the test suite.
-   - Example:
+   - Add pre-test verification of dependencies
+   - Use try-except blocks to handle missing dependencies gracefully
+   - Example test:
      ```python
      def test_dependencies():
          try:
