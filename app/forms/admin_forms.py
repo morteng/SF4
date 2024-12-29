@@ -68,23 +68,34 @@ class StipendForm(FlaskForm):
         if not field.data or field.errors:
             return
             
-        # Validate future date
-        now = datetime.now(pytz.UTC)
+        # Handle flexible deadline formats
         if isinstance(field.data, str):
             try:
-                field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+                # Try full datetime format first
+                try:
+                    field.data = datetime.strptime(field.data, '%Y-%m-%d %H:%M:%S')
+                except ValueError:
+                    # Try month/year format
+                    try:
+                        field.data = datetime.strptime(field.data, '%B %Y')
+                    except ValueError:
+                        # Try year only format
+                        field.data = datetime.strptime(field.data, '%Y')
             except ValueError:
-                raise ValidationError('Invalid date/time values')
+                raise ValidationError('Invalid date format. Use YYYY-MM-DD HH:MM:SS, Month YYYY, or YYYY')
                 
         if field.data.tzinfo is None:
             field.data = pytz.UTC.localize(field.data)
             
-        if field.data < now:
-            raise ValidationError('Application deadline must be a future date')
+        # Only validate future date if provided
+        if field.data:
+            now = datetime.now(pytz.UTC)
+            if field.data < now:
+                raise ValidationError('Application deadline must be a future date')
             
-        max_future = now.replace(year=now.year + 5)
-        if field.data > max_future:
-            raise ValidationError('Application deadline cannot be more than 5 years in the future')
+            max_future = now.replace(year=now.year + 5)
+            if field.data > max_future:
+                raise ValidationError('Application deadline cannot be more than 5 years in the future')
 
     def validate_organization_id(self, field):
         if field.data:  # Only validate if organization_id is provided
