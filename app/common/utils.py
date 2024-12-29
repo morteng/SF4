@@ -20,6 +20,13 @@ def validate_blueprint(bp):
         raise ValueError("Blueprint must have a URL prefix")
     if not bp.import_name:
         raise ValueError("Blueprint must have an import name")
+    
+    # Validate endpoint names
+    for endpoint in bp.view_functions.keys():
+        if not isinstance(endpoint, str):
+            raise ValueError(f"Invalid endpoint name: {endpoint}")
+        if not endpoint.startswith(bp.name + '.'):
+            raise ValueError(f"Endpoint {endpoint} must start with blueprint name {bp.name}")
 
 def validate_blueprint_routes(app, required_routes):
     """Validate that all required routes are registered."""
@@ -31,16 +38,21 @@ def validate_blueprint_routes(app, required_routes):
         logger.debug(f"Required routes: {required_routes}")
         
         if missing_routes:
+            # Get detailed blueprint info
+            blueprint_info = []
+            for name, bp in app.blueprints.items():
+                blueprint_info.append(f"{name}: {list(bp.view_functions.keys())}")
+            
             app.logger.error("Route Validation Error:")
             app.logger.error(f"Registered routes: {registered_routes}")
             app.logger.error(f"Missing routes: {missing_routes}")
-            app.logger.error(f"Current blueprints: {list(app.blueprints.keys())}")
+            app.logger.error(f"Current blueprints: {blueprint_info}")
             
             # Provide more detailed error message
             error_msg = (
                 f"Missing routes: {', '.join(missing_routes)}.\n"
                 "Check blueprint names and route endpoints.\n"
-                f"Registered blueprints: {list(app.blueprints.keys())}\n"
+                f"Registered blueprints: {blueprint_info}\n"
                 f"Registered routes: {registered_routes}"
             )
             raise RuntimeError(error_msg)

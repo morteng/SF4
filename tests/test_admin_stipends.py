@@ -480,5 +480,20 @@ class AdminStipendTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 403)  # Assuming you return a 403 Forbidden
 
+    def test_blueprint_registration(self):
+        """Test that admin blueprints are registered correctly."""
+        with patch('app.routes.admin.__init__.register_admin_blueprints') as mock_register:
+            self.app = create_app('testing')
+            mock_register.assert_called_once_with(self.app)
+
+    def test_route_validation(self):
+        """Test that required routes are validated."""
+        with patch('app.common.utils.validate_blueprint_routes') as mock_validate:
+            self.app = create_app('testing')
+            mock_validate.assert_called_once_with(
+                self.app,
+                ['admin.stipend.create', 'admin.dashboard.dashboard']
+            )
+
 if __name__ == '__main__':
     unittest.main()

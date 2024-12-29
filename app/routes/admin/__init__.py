@@ -119,58 +119,56 @@ def register_admin_blueprints(app):
         admin_bp = create_admin_blueprint()
         logger.debug("Created admin blueprint")
         
+        # Import blueprints
         from .stipend_routes import admin_stipend_bp
         from .dashboard_routes import admin_dashboard_bp
         from .user_routes import admin_user_bp
         from .bot_routes import admin_bot_bp
         from .organization_routes import admin_org_bp
         from .tag_routes import admin_tag_bp
-    except ImportError as e:
-        current_app.logger.error(f"Failed to import blueprints: {str(e)}")
-        raise
-    except Exception as e:
-        logger.error(f"Error during blueprint creation: {str(e)}")
-        raise
-    
-    # Validate blueprints
-    from app.common.utils import validate_blueprint
-    validate_blueprint(admin_stipend_bp)
-    validate_blueprint(admin_dashboard_bp)
-    validate_blueprint(admin_user_bp)
-    validate_blueprint(admin_bot_bp)
-    validate_blueprint(admin_org_bp)
-    validate_blueprint(admin_tag_bp)
-    
-    # Register blueprints with debug logging
-    try:
+        
+        # Validate blueprints before registration
+        validate_blueprint(admin_stipend_bp)
+        validate_blueprint(admin_dashboard_bp)
+        validate_blueprint(admin_user_bp)
+        validate_blueprint(admin_bot_bp)
+        validate_blueprint(admin_org_bp)
+        validate_blueprint(admin_tag_bp)
+        
+        # Register blueprints with debug logging
         admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
         logger.debug(f"Registered stipend blueprint: {admin_stipend_bp.name}")
         
         admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
         logger.debug(f"Registered dashboard blueprint: {admin_dashboard_bp.name}")
+        
+        admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')
+        admin_bp.register_blueprint(admin_bot_bp, url_prefix='/bots')
+        admin_bp.register_blueprint(admin_org_bp, url_prefix='/organizations')
+        admin_bp.register_blueprint(admin_tag_bp, url_prefix='/tags')
+        
+        # Register admin blueprint with app
+        app.register_blueprint(admin_bp)
+        logger.debug("Registered admin blueprint with app")
+        
+        # Debug logging for registered routes
+        with app.app_context():
+            app.logger.debug("Registered routes:")
+            for rule in app.url_map.iter_rules():
+                app.logger.debug(f"Route: {rule.endpoint}")
+        
+        # Validate required routes
+        required_routes = [
+            'admin.stipend.create',
+            'admin.dashboard.dashboard'
+        ]
+        logger.debug(f"Validating required routes: {required_routes}")
+        validate_blueprint_routes(app, required_routes)
+        
+        _admin_blueprints_registered = True
     except Exception as e:
-        logger.error(f"Failed to register blueprints: {str(e)}")
+        logger.error(f"Failed to register admin blueprints: {str(e)}")
         raise
-    admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')
-    admin_bp.register_blueprint(admin_bot_bp, url_prefix='/bots')
-    admin_bp.register_blueprint(admin_org_bp, url_prefix='/organizations')
-    admin_bp.register_blueprint(admin_tag_bp, url_prefix='/tags')
-    
-    # Debug logging
-    with app.app_context():
-        app.logger.debug("Registered routes:")
-        for rule in app.url_map.iter_rules():
-            app.logger.debug(f"Route: {rule.endpoint}")
-    
-    # Validate routes with debug logging
-    required_routes = [
-        'admin_stipend.create',
-        'admin_dashboard.dashboard'
-    ]
-    logger.debug(f"Validating required routes: {required_routes}")
-    validate_blueprint_routes(app, required_routes)
-    
-    _admin_blueprints_registered = True
 from flask import abort
 from functools import wraps
 from flask_login import current_user

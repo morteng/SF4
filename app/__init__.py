@@ -24,11 +24,25 @@ def create_app(config_name='development'):
     # Register blueprints with proper order
     from app.routes import register_blueprints
     try:
+        # Register admin blueprints first
+        from app.routes.admin import register_admin_blueprints
+        register_admin_blueprints(app)
+        
+        # Register public blueprints
         register_blueprints(app)
+        
         # Verify all routes are registered
         with app.app_context():
             registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
             app.logger.debug(f"Registered routes: {registered_routes}")
+            
+            # Validate critical routes
+            required_routes = [
+                'admin.stipend.create',
+                'admin.dashboard.dashboard'
+            ]
+            from app.common.utils import validate_blueprint_routes
+            validate_blueprint_routes(app, required_routes)
     except Exception as e:
         app.logger.error(f"Failed to register blueprints: {str(e)}")
         raise
