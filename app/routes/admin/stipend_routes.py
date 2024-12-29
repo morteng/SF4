@@ -37,12 +37,6 @@ def delete_stipend(id):
     db.session.commit()
 
 admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
-stipend_controller = BaseRouteController(
-    StipendService(),
-    'stipend',
-    StipendForm,
-    'admin/stipends'
-)
 
 class StipendController(BaseCrudController):
     def __init__(self):
