@@ -32,6 +32,27 @@
 ### Pre-Test Verification
 Before running tests, the system will automatically verify that all required dependencies are installed. If any dependencies are missing, it will attempt to install them before skipping affected tests.
 
+```python
+import subprocess
+import pytest
+import importlib
+
+def verify_dependencies():
+    missing_deps = []
+    for dep in ["freezegun", "Flask"]:
+        try:
+            importlib.import_module(dep)
+        except ImportError:
+            missing_deps.append(dep)
+    
+    if missing_deps:
+        print(f"Attempting to install missing dependencies: {', '.join(missing_deps)}")
+        try:
+            subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+        except subprocess.CalledProcessError:
+            pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
+```
+
 To manually verify dependencies:
 ```bash
 pip install -r requirements.txt
@@ -87,6 +108,18 @@ pytest
 To avoid circular dependencies:
 1. Move shared functionality to `app/common/utils.py`
 2. Use lazy imports for dependencies that cannot be refactored
+3. Example:
+   ```python
+   # Move shared code to app/common/utils.py
+   def init_admin_user():
+       # Implementation
+       pass
+
+   # Example lazy import
+   def some_function():
+       from app.services.bot_service import run_bot  # Lazy import
+       run_bot()
+   ```
 3. Example:
    ```python
    def some_function():
