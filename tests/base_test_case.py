@@ -3,6 +3,7 @@ from app import create_app, db
 from app.models import User, Stipend, Tag, Organization
 from app.constants import FlashMessages
 from datetime import datetime, timedelta
+from wtforms.validators import ValidationError
 
 class BaseTestCase(TestCase):
     def create_app(self):
