@@ -124,7 +124,6 @@ class BaseService:
         """Get all entities with pagination support"""
         return self.model.query
 
-    @handle_errors
     @property
     def create_limit(self):
         """Getter for create_limit."""
