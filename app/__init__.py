@@ -41,10 +41,10 @@ def create_app(config_name='development'):
             logger.info(f"Created migrations directory at {migrations_dir}")
     
         # Configure SQLAlchemy database URI
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', f'sqlite:///{os.path.join(basedir, "app.db")}')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', f'sqlite:///{os.path.join(basedir, "app.db")}')
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # Load environment variables
+        # Load environment variables
     load_dotenv()
 
     from app.config import config_by_name
