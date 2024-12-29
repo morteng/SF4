@@ -91,49 +91,13 @@ def create():
                 user_id=current_user.id
             )
 
-            flash_message(FlashMessages.USER_CREATED.value, FlashCategory.SUCCESS.value)
+            flash_message(FlashMessages.USER_CREATED.value.format(username=new_user.username), FlashCategory.SUCCESS.value)
             return redirect(url_for('admin.user.index'))
         except Exception as e:
             db.session.rollback()
             current_app.logger.error(f"Error creating user: {str(e)}")
             flash_message(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}", FlashCategory.ERROR.value)
             return render_template('admin/users/create.html', form=form), 500
-            
-            # Verify user creation
-            if not new_user or not new_user.id:
-                db.session.rollback()
-                raise ValueError("Failed to create user - invalid user object returned")
-            
-            # Verify user creation
-            if not new_user or not new_user.id:
-                db.session.rollback()
-                raise ValueError("Failed to create user - invalid user object returned")
-                
-                # Create audit log with before/after state
-                AuditLog.create(
-                    user_id=current_user.id,
-                    action=FlashMessages.AUDIT_CREATE.value,
-                    object_type='User',
-                    object_id=new_user.id,
-                    details_before=None,
-                    details_after={
-                        'username': new_user.username,
-                        'email': new_user.email,
-                        'is_admin': new_user.is_admin
-                    },
-                    ip_address=request.remote_addr
-                )
-                
-                # Create notification with proper type and message
-                Notification.create(
-                    type='user_created',
-                    message=FlashMessages.USER_CREATED.value.format(username=new_user.username),
-                    related_object=f'User:{new_user.id}',
-                    user_id=current_user.id
-                )
-                
-                flash_message(FlashMessages.CREATE_USER_SUCCESS.value, FlashCategory.SUCCESS)
-                return redirect(url_for('admin.user.index'))
                 
         except ValueError as e:
             # Handle validation errors
