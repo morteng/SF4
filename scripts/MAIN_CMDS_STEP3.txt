@@ -13,7 +13,7 @@
 # If so, we will add them to CONSOLE_CMDS_STEP3.txt. If not, ensure it’s empty or remove old commands.
 
 /add scripts/CONSOLE_CMDS_STEP3.txt
-/code Remove any previously executed console commands from CONSOLE_CMDS_STEP3.txt, and add new ones if needed.
+/code Remove any previously executed console commands from CONSOLE_CMDS_STEP3.txt, and add new ones if needed. IMPORTANT: Don't run flask shell or other console commands that stop processing and require manual input to continue. You are not allowed to use such commands or tools. 
 /drop scripts/CONSOLE_CMDS_STEP3.txt
 
 # Now load the console commands for Step 3.
