@@ -271,6 +271,54 @@ class CustomDateTimeField(Field):
    echo "pytest" >> requirements.txt
    ```
 
+### **2. Fix `CustomDateTimeField` Initialization**
+1. Ensure the `CustomDateTimeField` class handles the `validators` argument correctly:
+   ```python
+   from wtforms import Field
+   from wtforms.validators import InputRequired
+
+   class CustomDateTimeField(Field):
+       def __init__(self, label=None, validators=None, **kwargs):
+           if validators is None:
+               validators = [InputRequired()]  # Default validator
+           super().__init__(label=label, validators=validators, **kwargs)
+   ```
+2. Update forms using `CustomDateTimeField` to avoid passing `validators` explicitly:
+   ```python
+   application_deadline = CustomDateTimeField("Application Deadline", format="%Y-%m-%d %H:%M:%S")
+   ```
+
+### **3. Add Dependency Verification**
+1. Create `tests/test_dependencies.py`:
+   ```python
+   import subprocess
+   import pytest
+
+   def test_dependencies():
+       try:
+           subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+       except subprocess.CalledProcessError:
+           pytest.fail("Failed to install dependencies")
+   ```
+2. Run the dependency test:
+   ```bash
+   pytest tests/test_dependencies.py
+   ```
+
+### **4. Resolve Circular Imports**
+1. Create shared utilities module:
+   ```bash
+   mkdir -p app/common
+   touch app/common/utils.py
+   ```
+2. Move shared functionality into `app/common/utils.py`
+3. Use lazy imports where needed:
+   ```python
+   def some_function():
+       from app.services.bot_service import run_bot  # Lazy import
+       run_bot()
+   ```
+
 ### **2. Fix `CustomDateTimeField`**
 1. Locate the `CustomDateTimeField` class. It's likely in `app/forms/admin_forms.py` or a similar file.
 
