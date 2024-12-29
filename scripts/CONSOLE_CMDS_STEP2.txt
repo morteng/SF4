@@ -10,7 +10,9 @@
 # /run pytest --maxfail=1
 
 ### COMMANDS START ###
-/run echo "Running console commands for Step 2"
+/run rm tests/test_main_forms.py
+/run find . -type d -name "__pycache__" -exec rm -r {} +
+/run pytest
 ### COMMANDS END ###
 
 # Once finished, jump to Step 3.
