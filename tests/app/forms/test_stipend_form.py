@@ -322,11 +322,23 @@ class TestCustomDateTimeField(BaseTestCase):
         )
 
     def test_leap_year_validation(self):
-        field = CustomDateTimeField()
-        self.assertFormInvalid(
-            field, {'': '2023-02-29 00:00:00'},  # Invalid leap year date
-            {'': ['Invalid date values (e.g., Feb 29 in non-leap years)']}
-        )
+        class TestForm(Form):
+            test_field = CustomDateTimeField(
+                error_messages={
+                    'invalid_date': 'Invalid date values (e.g., Feb 29 in non-leap years)'
+                }
+            )
+        
+        # Test invalid leap year date
+        form = TestForm()
+        form.test_field.process_formdata(['2023-02-29 00:00:00'])
+        assert form.validate() is False
+        assert 'Invalid date values (e.g., Feb 29 in non-leap years)' in form.test_field.errors
+        
+        # Test valid leap year date
+        form = TestForm()
+        form.test_field.process_formdata(['2024-02-29 00:00:00'])  # 2024 is a leap year
+        assert form.validate() is True
 
 def test_leap_year_validation_simplified(app):
     """Test leap year validation directly on CustomDateTimeField."""
@@ -620,3 +632,55 @@ def test_stipend_delete_operation(app, form_data, test_db):
         assert log is not None
         assert log.action == 'delete_stipend'
         assert log.details is not None
+def test_utils_format_error_message():
+    from app.utils import format_error_message
+    
+    # Test with field object
+    class TestField:
+        def __init__(self, name, label=None):
+            self.name = name
+            self.label = label
+    
+    field = TestField('test_field', 'Test Field')
+    error = 'Invalid value'
+    assert format_error_message(field, error) == 'Test Field: Invalid value'
+    
+    # Test with field name only
+    field = TestField('test_field')
+    assert format_error_message(field, error) == 'test_field: Invalid value'
+    
+    # Test with string field
+    assert format_error_message('test_field', error) == 'test_field: Invalid value'
+    
+    # Test with mapped error
+    assert format_error_message(field, 'invalid_format') == 'Invalid format'
+
+def test_base_service_create():
+    from app.services.base_service import BaseService
+    from app.models.stipend import Stipend
+    
+    class TestService(BaseService):
+        def __init__(self):
+            super().__init__(Stipend)
+    
+    service = TestService()
+    
+    # Test valid creation
+    data = {
+        'name': 'Test Stipend',
+        'summary': 'Test summary',
+        'description': 'Test description',
+        'homepage_url': 'https://example.com',
+        'application_procedure': 'Test procedure',
+        'eligibility_criteria': 'Test criteria',
+        'application_deadline': '2025-12-31 23:59:59',
+        'open_for_applications': True
+    }
+    stipend = service.create(data)
+    assert stipend.id is not None
+    
+    # Test invalid data
+    invalid_data = data.copy()
+    invalid_data['name'] = ''
+    with pytest.raises(ValueError):
+        service.create(invalid_data)

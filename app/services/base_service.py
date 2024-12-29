@@ -49,13 +49,18 @@ class BaseService:
     @handle_errors
     def create(self, data, user_id=None):
         """Create a new entity with validation and audit logging"""
-        self.validate_create(data)
-        entity = self.model(**data)
-        db.session.add(entity)
-        db.session.commit()
-        
-        self._log_audit('create', entity, user_id=user_id, after=entity.to_dict())
-        return entity
+        try:
+            self.validate_create(data)
+            entity = self.model(**data)
+            db.session.add(entity)
+            db.session.commit()
+            
+            self._log_audit('create', entity, user_id=user_id, after=entity.to_dict())
+            return entity
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error creating {self.model.__name__}: {str(e)}")
+            raise ValueError(f"Failed to create {self.model.__name__}: {str(e)}")
 
     def validate(self, data):
         """Validate data against defined rules"""
