@@ -33,59 +33,31 @@ def create_app(config_name='development'):
     return app
 
 def init_extensions(app):
-    # Initialize extensions only if they haven't been initialized yet
-    if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
-        db.init_app(app)
-    # Initialize other extensions
+    """Initialize Flask extensions"""
+    from app.extensions import db, login_manager, migrate, csrf, limiter
+    
+    # Initialize SQLAlchemy
+    db.init_app(app)
+    
+    # Initialize Flask-Login
     login_manager.init_app(app)
+    login_manager.login_view = 'user.login'
+    
+    # Initialize Flask-Migrate
     migrate.init_app(app, db)
-    # Initialize Redis for rate limiting
-    from flask_limiter import Limiter
-    from flask_limiter.util import get_remote_address
-    from redis import Redis
-
-    redis = Redis.from_url(app.config.get('REDIS_URL', 'redis://localhost:6379/0'))
-    limiter = Limiter(
-        key_func=get_remote_address,
-        app=app,
-        storage_uri="redis://localhost:6379/0",  # Use Redis for storage
-        default_limits=["200 per day", "50 per hour"]
-    )
+    
     # Initialize CSRF protection
-    csrf = CSRFProtect(app)
-    app.config['WTF_CSRF_ENABLED'] = True
-    app.config['WTF_CSRF_SECRET_KEY'] = app.config.get('WTF_CSRF_SECRET_KEY', app.config['SECRET_KEY'])
-    app.config['WTF_CSRF_TIME_LIMIT'] = 3600  # 1 hour token validity
-    app.config['WTF_CSRF_HEADERS'] = ['X-CSRFToken']
-    app.config['WTF_CSRF_SSL_STRICT'] = True
-
-    from app.models.user import User  # Import the User model
-
-    @login_manager.user_loader
-    def load_user(user_id):
-        return db.session.get(User, int(user_id))  
-
-    # Initialize rate limiter from extensions
-    from app.extensions import limiter
+    csrf.init_app(app)
+    
+    # Initialize rate limiter
     limiter.init_app(app)
     
-    # Ensure limiter is fully disabled in test environment
-    if app.config.get('TESTING'):
-        limiter.enabled = False
-        app.config['RATELIMIT_ENABLED'] = False
+    # Setup user loader
+    from app.models.user import User
     
-    # Ensure limiter is fully disabled in test environment
-    if app.config.get('TESTING'):
-        limiter.enabled = False
-        app.config['RATELIMIT_ENABLED'] = False
-
-    # Register blueprints before applying rate limits
-    from app.routes.admin import register_admin_blueprints
-    from app.routes.admin.user_routes import admin_user_bp
-    register_admin_blueprints(app)
-    
-    # Apply specific limits to admin routes
-    limiter.limit("10 per minute")(admin_user_bp)
+    @login_manager.user_loader
+    def load_user(user_id):
+        return db.session.get(User, int(user_id))
 
     # Blueprints will be registered in the app context below
 
