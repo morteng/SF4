@@ -1,56 +1,34 @@
 import os
 import logging
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-from flask_migrate import Migrate
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
 from dotenv import load_dotenv
-
-# Initialize extensions
-db = SQLAlchemy()
-login_manager = LoginManager()
-migrate = Migrate()
-limiter = Limiter(key_func=get_remote_address)  # Initialize limiter here
 
 logger = logging.getLogger(__name__)
 
-def register_blueprints(app):
-    """Register all blueprints with the Flask app."""
-    from app.routes.admin import register_admin_blueprints
-    from app.routes import register_blueprints as register_public_blueprints
-    
-    register_admin_blueprints(app)
-    register_public_blueprints(app)
-from app.extensions import db, login_manager, migrate, init_extensions  # Add 'migrate' and 'init_extensions' here
-from flask_wtf import CSRFProtect
-from dotenv import load_dotenv
-# Lazy import to avoid circular dependencies
-
-def register_blueprints(app):
-    """Register all blueprints with the Flask app."""
-    from app.routes.admin import register_admin_blueprints
-    from app.routes import register_blueprints as register_public_blueprints
-    
-    register_admin_blueprints(app)
-    register_public_blueprints(app)
-
 def create_app(config_name='development'):
+    """Create and configure the Flask application."""
     app = Flask(__name__)
     
     # Load environment variables
     load_dotenv()
     
-    # Configure SQLAlchemy database URI
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///app.db')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # Load configuration
+    from app.config import config_by_name
+    app.config.from_object(config_by_name[config_name])
     
     # Initialize extensions
+    from app.extensions import init_extensions
     init_extensions(app)
     
     # Register blueprints
+    from app.routes import register_blueprints
     register_blueprints(app)
+    
+    # Setup logging
+    logging.basicConfig(
+        level=logging.DEBUG if app.config.get('DEBUG') else logging.INFO,
+        format='%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+    )
     
     return app
 

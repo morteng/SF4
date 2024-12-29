@@ -1,43 +1,21 @@
 # app/config.py
-
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-class Config(object):
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    if not SECRET_KEY:
-        raise ValueError("SECRET_KEY environment variable is required.")
-        
-    @classmethod
-    def validate_config(cls):
-        required_vars = ["SECRET_KEY", "SQLALCHEMY_DATABASE_URI"]
-        for var in required_vars:
-            if not getattr(cls, var):
-                raise ValueError(f"{var} environment variable is required.")
-    
+class Config:
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///app.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    WTF_CSRF_ENABLED = True  # Ensure CSRF protection is enabled
-
-    @classmethod
-    def validate_config(cls):
-        required_vars = ["SECRET_KEY", "SQLALCHEMY_DATABASE_URI"]
-        for var in required_vars:
-            if not getattr(cls, var):
-                raise ValueError(f"{var} environment variable is required.")
-    # Add these lines
-    RATELIMIT_STORAGE_URI = 'memory://'  # For development, use Redis in production
-    RATELIMIT_STRATEGY = 'fixed-window-elastic-expiry'
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or SECRET_KEY
+    
+    # Rate limiting configuration
+    RATELIMIT_STORAGE_URI = 'memory://'
+    RATELIMIT_STRATEGY = 'fixed-window'
     RATELIMIT_DEFAULT = "200 per day;50 per hour"
-    RATELIMIT_USER_MANAGEMENT = "20 per minute"
-    RATELIMIT_PROFILE_UPDATE = "20 per minute"
-    RATELIMIT_BOT_OPERATIONS = "10 per hour"
-    RATELIMIT_LOGIN = "10 per minute"
-    RATELIMIT_GLOBAL = "1000 per day"
     RATELIMIT_ENABLED = True
-    RATELIMIT_HEADERS_ENABLED = True
-    RATELIMIT_IN_MEMORY_FALLBACK_ENABLED = True
 
 class TestConfig(Config):
     DEBUG = False
