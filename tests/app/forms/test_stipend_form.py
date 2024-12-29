@@ -12,6 +12,7 @@ from app.models.notification import Notification, NotificationType
 from app.extensions import db
 from app.forms.fields import CustomDateTimeField
 from wtforms import Form, StringField
+from tests.base_test_case import BaseTestCase
 
 @pytest.fixture
 def app():
