@@ -115,14 +115,17 @@ class StipendForm(FlaskForm):
         print(f"\nValidating organization_id: {field.data}")
         if not field.data:
             raise ValidationError('Organization is required.')
-        try:
-            organization = db.session.get(Organization, field.data)
-            if not organization:
-                print(f"Organization with ID {field.data} not found")
-                raise ValidationError('Invalid organization selected.')
-        except Exception as e:
-            logger.error(f"Error validating organization: {str(e)}")
-            raise ValidationError('Error validating organization.')
+        organization = db.session.get(Organization, field.data)
+        if not organization:
+            raise ValidationError('Invalid organization selected.')
+        print(f"Organization validation successful: {organization.name}")
+
+    def validate(self):
+        print("\nStarting form validation")
+        result = super().validate()
+        if not result:
+            print("Form validation failed with errors:", self.errors)
+        return result
 
 
 class TagForm(FlaskForm):

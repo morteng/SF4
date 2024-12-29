@@ -45,25 +45,26 @@ class AdminStipendTestCase(unittest.TestCase):
         response = self.login('admin', 'password')
         self.assertEqual(response.status_code, 200)
         
-        # Print response data for debugging
-        print("\nResponse Data:", response.data.decode('utf-8'))
-
-        # Navigate to the stipend creation page
-        response = self.client.get(url_for('admin.stipend.create'))
-        self.assertEqual(response.status_code, 200)
-
-        # Create a new stipend
-        response = self.client.post(url_for('admin.stipend.create'), data={
+        # Print form data being submitted
+        form_data = {
             'name': 'Test Stipend',
             'summary': 'This is a test stipend.',
             'description': 'Detailed description of the test stipend.',
             'homepage_url': 'http://example.com/stipend',
             'application_procedure': 'Send an email to admin@example.com',
             'eligibility_criteria': 'Must be a student.',
-            'application_deadline': '2023-12-31 23:59:59',  # Ensure this format
-            'organization_id': 1,  # Ensure this matches a valid organization
+            'application_deadline': '2023-12-31 23:59:59',
+            'organization_id': 1,
             'open_for_applications': 'y'
-        }, follow_redirects=True)
+        }
+        print("\nForm data being submitted:", form_data)
+        
+        response = self.client.post(url_for('admin.stipend.create'), 
+                                  data=form_data,
+                                  follow_redirects=True)
+        
+        # Print response data for debugging
+        print("\nResponse data:", response.data.decode('utf-8'))
 
         self.assertEqual(response.status_code, 200)
         # Check if the stipend was created successfully

@@ -58,7 +58,7 @@ class Stipend(db.Model):
 
     @staticmethod
     def create(data, user_id=None):
-        """Create a new stipend with validation and audit logging"""
+        """Add debug logging to creation process"""
         print(f"\nCreating stipend with data: {data}")
         from app.services.stipend_service import StipendService
         service = StipendService()
