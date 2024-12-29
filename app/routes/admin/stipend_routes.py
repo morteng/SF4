@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
 from wtforms import ValidationError
 from app.extensions import limiter, db
-from app.controllers.base_route_controller import BaseRouteController
+from app.controllers.base_crud_controller import BaseCrudController
 from app.services.stipend_service import StipendService
 from app.forms.admin_forms import StipendForm
 from app.utils import (
