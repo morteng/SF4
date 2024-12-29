@@ -29,7 +29,7 @@ def test_invalid_time_validation():
 import pytest
 from freezegun import freeze_time
 from wtforms import ValidationError
-from app.forms.fields import CustomDateTimeField
+from app.forms.custom_fields import CustomDateTimeField
 from app import constants
 
 def test_custom_datetime_field_validation():
