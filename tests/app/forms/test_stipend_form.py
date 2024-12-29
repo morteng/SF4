@@ -1,13 +1,10 @@
-# This file has been split into:
-# - test_stipend_validation.py
-# - test_stipend_crud.py
-# - test_stipend_audit_logging.py
-
-from datetime import datetime, timedelta
-import pytest
 import logging
+import pytest
+from datetime import datetime
+from app.forms.admin_forms import StipendForm, CustomDateTimeField
+from app.constants import FlashMessages
 
-# Add fallback mechanism for freezegun
+# Handle freezegun import with fallback
 try:
     from freezegun import freeze_time
     FREEZEGUN_INSTALLED = True
@@ -22,11 +19,24 @@ except ImportError:
         "Run `pip install -r requirements.txt` to install dependencies."
     )
 
-# Mark all time-dependent tests as skipped if freezegun is not installed
+# Skip time-dependent tests if freezegun is not installed
 pytestmark = pytest.mark.skipif(
     not FREEZEGUN_INSTALLED,
     reason="freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies."
 )
+def test_custom_date_time_field_validation():
+    field = CustomDateTimeField()
+    assert field.validate_format("2023-01-01 12:00:00") is True
+    assert field.validate_format("invalid-date") is False
+
+@pytest.mark.skipif(not FREEZEGUN_INSTALLED, reason="freezegun is not installed")
+@freeze_time("2023-01-01 12:00:00")
+def test_stipend_form_future_date_validation():
+    form = StipendForm()
+    form.application_deadline.data = datetime(2022, 12, 31, 23, 59, 59)
+    assert form.validate() is False
+    assert FlashMessages.INVALID_FUTURE_DATE in form.application_deadline.errors
+
 from flask_wtf.csrf import generate_csrf
 from app.models import Organization, Tag, Stipend, AuditLog
 from app.forms.admin_forms import StipendForm
