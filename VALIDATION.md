@@ -150,9 +150,11 @@
    - Add a pre-test check to ensure all required dependencies are installed.
    - Document the setup process to avoid similar issues in the future.
 
+## Property Validation Best Practices
+
 1. **Define Properties Correctly**:
    - Always define a property (`@property`) before using a setter (`@<property>.setter`).
-   - Example from BaseService implementation:
+   - Example:
      ```python
      class BaseService:
          def __init__(self):
@@ -160,21 +162,32 @@
 
          @property
          def create_limit(self):
-             """Getter for create_limit."""
              return self._create_limit
 
          @create_limit.setter
          def create_limit(self, value):
-             """Setter for create_limit."""
              self._create_limit = value
      ```
-
 2. **Avoid Direct Attribute Access**:
    - Use properties to encapsulate attribute access and modification.
-   - This ensures consistent behavior and validation.
-
 3. **Document Properties**:
    - Add docstrings to properties and setters to clarify their purpose and behavior.
+
+## Dependency Validation
+
+1. **Issue**: Tests failed because `pytest` was not installed, even though it was listed in `requirements.txt`.
+2. **Solution**:
+   - Always install dependencies from `requirements.txt`:
+     ```bash
+     pip install -r requirements.txt
+     ```
+   - Verify installation with:
+     ```bash
+     pip show <package_name>
+     ```
+3. **Best Practice**:
+   - Add a pre-test check to ensure all required dependencies are installed.
+   - Document the setup process to avoid similar issues in the future.
 
 ## Dependency Validation
 1. **Issue**: Tests failed because `freezegun` was not installed, even though it was listed in `requirements.txt`.
