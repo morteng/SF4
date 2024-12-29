@@ -12,8 +12,8 @@
 - [x] Add a script to verify all dependencies listed in `requirements.txt` are installed.
 
 ## Next Session
-- [ ] Add a script to verify all dependencies listed in `requirements.txt` are installed.
-- [ ] Document the process for setting up the development environment, including dependency installation.
+- [x] Add a script to verify all dependencies listed in `requirements.txt` are installed.
+- [x] Document the process for setting up the development environment, including dependency installation.
 - [ ] Optimize validation performance in `CustomDateTimeField`.
 - [ ] Add more comprehensive tests for timezone handling in date/time fields.
 - [ ] Add validation benchmarks for date/time fields.

@@ -1,26 +1,30 @@
 import importlib
 import pytest
 import subprocess
+from typing import List
 try:
     from requirements.parser import RequirementsParser
 except ImportError:
     RequirementsParser = None
 
-def test_all_dependencies_installed():
-    """Verify all packages in requirements.txt are installed"""
+def get_requirements() -> List[str]:
+    """Get list of package names from requirements.txt"""
     if RequirementsParser is None:
         pytest.skip("requirements-parser not installed")
         
     with open("requirements.txt") as f:
         parser = RequirementsParser()
         requirements = parser.parse(f)
-    
+        return [req.name for req in requirements]
+
+def test_all_dependencies_installed():
+    """Verify all packages in requirements.txt are installed"""
     missing_deps = []
-    for req in requirements:
+    for package in get_requirements():
         try:
-            importlib.import_module(req.name)
+            importlib.import_module(package)
         except ImportError:
-            missing_deps.append(req.name)
+            missing_deps.append(package)
     
     if missing_deps:
         pytest.fail(f"Missing dependencies: {', '.join(missing_deps)}. Run `pip install -r requirements.txt` to install them.")
@@ -37,3 +41,61 @@ def test_freezegun_installed():
         assert freezegun is not None
     except ImportError:
         pytest.fail("freezegun is not installed - required for time-based testing")
+
+def test_requirements_file_exists():
+    """Verify requirements.txt exists and is readable"""
+    try:
+        with open("requirements.txt") as f:
+            assert f.readable()
+    except FileNotFoundError:
+        pytest.fail("requirements.txt file not found")
+    except PermissionError:
+        pytest.fail("No permission to read requirements.txt")
+
+def test_requirements_format():
+    """Verify requirements.txt has valid format"""
+    try:
+        get_requirements()
+    except Exception as e:
+        pytest.fail(f"Invalid requirements.txt format: {str(e)}")
+
+def test_package_versions():
+    """Verify installed packages meet minimum version requirements"""
+    import pkg_resources
+    missing_deps = []
+    version_mismatches = []
+    
+    for package in get_requirements():
+        try:
+            pkg_resources.require(package)
+        except pkg_resources.DistributionNotFound:
+            missing_deps.append(package)
+        except pkg_resources.VersionConflict as e:
+            version_mismatches.append(f"{package}: {str(e)}")
+    
+    if missing_deps or version_mismatches:
+        errors = []
+        if missing_deps:
+            errors.append(f"Missing packages: {', '.join(missing_deps)}")
+        if version_mismatches:
+            errors.append(f"Version mismatches: {', '.join(version_mismatches)}")
+        pytest.fail("\n".join(errors))
+
+def test_development_environment():
+    """Verify basic development environment setup"""
+    # Test virtual environment
+    try:
+        import sys
+        assert 'venv' in sys.prefix or '.venv' in sys.prefix, "Not running in a virtual environment"
+    except AssertionError:
+        pytest.fail("Not running in a virtual environment. Create and activate one first.")
+    
+    # Test Python version
+    import platform
+    assert platform.python_version_tuple()[0] == '3', "Python 3 is required"
+    
+    # Test pip is installed
+    try:
+        subprocess.check_call(['pip', '--version'])
+    except subprocess.CalledProcessError:
+        pytest.fail("pip is not installed or not in PATH")
