@@ -39,8 +39,9 @@ class CustomDateTimeField(DateTimeField):
             'invalid_leap_year': 'Invalid date values (e.g., Feb 29 in non-leap years)',
             'past_date': 'Application deadline must be a future date'
         }
-        # Update with any custom error messages passed in
-        self.error_messages.update(error_messages)
+        # Update with any custom error messages from kwargs
+        if hasattr(self, 'error_messages'):
+            self.error_messages.update(getattr(self, 'error_messages', {}))
 
     def process_formdata(self, valuelist):
         if not valuelist or not valuelist[0]:
