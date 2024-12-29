@@ -135,7 +135,11 @@ stipend_controller = StipendController()
 def create():
     logger.debug("Processing stipend creation request")
     try:
-        return stipend_controller.create()
+        if request.method == 'POST':
+            form_data = request.form.to_dict()
+            return stipend_controller.create(form_data)
+        else:
+            return stipend_controller.create()
     except Exception as e:
         logger.error(f"Error creating stipend: {str(e)}")
         current_app.logger.error(f"Stipend creation failed: {str(e)}")

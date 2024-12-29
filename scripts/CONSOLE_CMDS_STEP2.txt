@@ -5,6 +5,7 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
+/run pytest tests/test_admin_stipends.py -v
 ### COMMANDS END ###
 
 # Once finished, jump to Step 3.
