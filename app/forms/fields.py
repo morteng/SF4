@@ -175,15 +175,52 @@ class CustomDateTimeField(DateTimeField):
         if self.errors:
             return False
             
-        # Then proceed with normal validation
-        result = super().validate(form, extra_validators)
-        
-        # If validation failed and we have a required field error, replace it with our custom message
-        if not result and 'This field is required.' in self.errors:
-            self.errors.remove('This field is required.')
-            self.errors.append(self.error_messages.get('required', 'Date is required'))
+        # Validate the format first
+        if not re.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$', str(self.data)):
+            self.errors.append(self.error_messages['invalid_format'])
+            return False
             
-        return result
+        # Validate date components
+        try:
+            dt = datetime.strptime(str(self.data), '%Y-%m-%d %H:%M:%S')
+            
+            # Validate time components
+            if not (0 <= dt.hour <= 23 and 
+                    0 <= dt.minute <= 59 and 
+                    0 <= dt.second <= 59):
+                self.errors.append(self.error_messages['invalid_time'])
+                return False
+                
+            # Validate date components
+            try:
+                datetime(dt.year, dt.month, dt.day)
+            except ValueError:
+                self.errors.append(self.error_messages['invalid_date'])
+                return False
+                
+            # Check for leap year
+            if dt.month == 2 and dt.day == 29:
+                if not (dt.year % 4 == 0 and (dt.year % 100 != 0 or dt.year % 400 == 0)):
+                    self.errors.append(self.error_messages['invalid_leap_year'])
+                    return False
+                    
+            # Validate future date
+            now = datetime.now()
+            if dt < now:
+                self.errors.append(self.error_messages['past_date'])
+                return False
+                
+            # Validate future date limit (5 years)
+            max_future = now.replace(year=now.year + 5)
+            if dt > max_future:
+                self.errors.append(self.error_messages['future_date'])
+                return False
+                
+        except ValueError:
+            self.errors.append(self.error_messages['invalid_date'])
+            return False
+            
+        return True
         
     def _validate_date_components(self, dt):
         try:
