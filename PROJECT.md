@@ -78,9 +78,9 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 ## Lessons Learned
 
 ### Validation Improvements
-- Consolidated leap year validation logic in `CustomDateTimeField`
-- Fixed `TypeError` caused by incorrect usage of `self.format`
-- Improved error handling for invalid dates and times
+- Fixed `TypeError` in `CustomDateTimeField` caused by incorrect `format` parameter handling
+- Consolidated leap year validation logic to avoid redundancy
+- Improved error message consistency using constants from `app/constants.py`
 - Added comprehensive tests for edge cases in date/time validation
 
 ### Error Handling

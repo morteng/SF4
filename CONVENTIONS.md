@@ -40,12 +40,22 @@
 - Preserve exception types
 
 ## Updated Validation Conventions
-- Use specific error messages for different validation scenarios
-- Validate time components (hours, minutes, seconds) together
-- Provide clear, user-friendly error messages
-- Use consistent error message format across all fields
-- Handle edge cases in time validation (e.g., 25:00:00)
-- Ensure validation order: required → format → components → full parsing
+
+1. **Date/Time Validation**:
+   - Validate date and time components separately before full parsing
+   - Use specific error messages for different validation failures
+   - Handle edge cases like February 29th in non-leap years
+   - Validate time components (hours, minutes, seconds) together
+
+2. **Error Handling**:
+   - Always use error messages from `app/constants.py`
+   - Provide clear, user-friendly error messages
+   - Log validation errors with context
+
+3. **Testing**:
+   - Test all error message variations
+   - Verify edge cases in date/time validation
+   - Ensure consistent handling of empty/missing values
 
 ## Validation Best Practices
 1. **Date/Time Validation**:

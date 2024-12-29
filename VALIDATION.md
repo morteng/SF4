@@ -17,6 +17,12 @@
    - Validate time component ranges
    - Handle malformed datetime strings
 
+### Key Learnings
+- Always ensure parameters are not passed multiple times during field initialization
+- Use centralized error messages from `app/constants.py` for consistency
+- Test edge cases thoroughly, especially for date/time validation
+- Keep validation logic modular and reusable
+
 ### Testing Validation
 - Test all error message variations
 - Verify edge cases in date/time validation
