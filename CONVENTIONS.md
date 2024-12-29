@@ -27,6 +27,10 @@
 - Validate date and time components separately
 - Add specific validation for time values (hours, minutes, seconds)
 - Map error message keys consistently
+- Validate time components before full datetime parsing
+- Use specific error messages for each validation failure
+- Handle edge cases in time validation (e.g., 25:00:00)
+- Ensure validation order: format → components → full parsing
 
 ## Testing
 - Test both success and error cases
