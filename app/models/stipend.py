@@ -59,54 +59,60 @@ class Stipend(db.Model):
         from flask import request, current_app
         from datetime import datetime
         
-        # Validate required field
-        if 'name' not in data or not data['name']:
-            raise ValueError("Name is required")
-        
-        # Validate application deadline if provided
-        if 'application_deadline' in data and data['application_deadline'] and (isinstance(data['application_deadline'], str) and data['application_deadline'].strip()):
-            parsed_dt = parse_flexible_date(data['application_deadline'])
-            if not parsed_dt:
-                raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS, Month YYYY, or YYYY")
-            
-            now = datetime.now(timezone.utc)
-            if parsed_dt < now:
-                raise ValueError("Application deadline must be a future date")
-            if (parsed_dt - now).days > 365 * 5:
-                raise ValueError("Application deadline cannot be more than 5 years in the future")
-            
-            data['application_deadline'] = parsed_dt
-        
-        # Validate organization exists if provided
-        if 'organization_id' in data and data['organization_id']:
-            org = Organization.query.get(data['organization_id'])
-            if not org:
-                raise ValueError("Invalid organization ID")
-        
-        # Create stipend
-        stipend = Stipend(**data)
-        db.session.add(stipend)
-        db.session.commit()
-        
-        # Create audit log
         try:
-            AuditLog.create(
-                user_id=user_id if user_id else 0,
-                action='create_stipend',
-                object_type='Stipend',
-                object_id=stipend.id,
-                details_before=None,
-                details_after=stipend.to_dict(),
-                ip_address=request.remote_addr if request else '127.0.0.1',
-                http_method='POST',
-                endpoint='admin.stipend.create'
-            )
+            # Validate required field
+            if 'name' not in data or not data['name']:
+                raise ValueError("Name is required")
+            
+            # Validate application deadline if provided
+            if 'application_deadline' in data and data['application_deadline']:
+                parsed_dt = parse_flexible_date(data['application_deadline'])
+                if not parsed_dt:
+                    raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS, Month YYYY, or YYYY")
+                
+                now = datetime.now(timezone.utc)
+                if parsed_dt < now:
+                    raise ValueError("Application deadline must be a future date")
+                if (parsed_dt - now).days > 365 * 5:
+                    raise ValueError("Application deadline cannot be more than 5 years in the future")
+                
+                data['application_deadline'] = parsed_dt
+            
+            # Validate organization exists if provided
+            if 'organization_id' in data and data['organization_id']:
+                org = Organization.query.get(data['organization_id'])
+                if not org:
+                    raise ValueError("Invalid organization ID")
+            
+            # Create stipend
+            stipend = Stipend(**data)
+            db.session.add(stipend)
+            db.session.commit()
+            
+            # Create audit log
+            try:
+                AuditLog.create(
+                    user_id=user_id if user_id else 0,
+                    action='create_stipend',
+                    object_type='Stipend',
+                    object_id=stipend.id,
+                    details_before=None,
+                    details_after=stipend.to_dict(),
+                    ip_address=request.remote_addr if request else '127.0.0.1',
+                    http_method='POST',
+                    endpoint='admin.stipend.create'
+                )
+            except Exception as e:
+                db.session.rollback()
+                current_app.logger.error(f"Error creating audit log: {str(e)}")
+                raise
+            
+            return stipend
+            
         except Exception as e:
             db.session.rollback()
-            current_app.logger.error(f"Error creating audit log: {str(e)}")
-            raise
-        
-        return stipend
+            current_app.logger.error(f"Error creating stipend: {str(e)}")
+            raise ValueError(str(e)) from e
 
     def update(self, data, user_id=None):
         """Update stipend fields with audit logging and validation"""

@@ -54,12 +54,21 @@ class BaseRouteController:
     def handle_form_errors(self, form):
         """Handle form validation errors consistently"""
         errors = {field: errors[0] for field, errors in form.errors.items()}
+        error_message = self.flash_messages['validation_error']
+        
         if self.supports_htmx and request.headers.get('HX-Request'):
-            return jsonify({'success': False, 'errors': errors}), 400
+            return jsonify({
+                'success': False,
+                'message': error_message,
+                'errors': errors
+            }), 400
+            
         error_messages = [f"{getattr(form, field).label.text}: {error}" 
                          for field, error in errors.items()]
         return render_template(f'{self.template_dir}/create.html', 
-                             form=form, error_messages=error_messages)
+                             form=form, 
+                             error_messages=error_messages,
+                             main_error=error_message)
 
     def handle_htmx_response(self, template, context=None):
         """Handle HTMX-specific responses"""
@@ -72,9 +81,9 @@ class BaseRouteController:
     def handle_service_error(self, error):
         """Handle service layer errors consistently"""
         logger.error(f"Error in {self.entity_name} controller: {str(error)}")
-        flash(self.flash_messages['error'], 'error')
-        return redirect(request.referrer or url_for('admin.dashboard.dashboard'))
-                             
+        error_message = str(error) if str(error) else self.flash_messages['error']
+        response = self._handle_htmx_flash(error_message, FlashCategory.ERROR)
+        return response or redirect(request.referrer or url_for('admin.dashboard.dashboard'))
     def _handle_audit_logging(self, action, entity, user_id=None, before=None, after=None):
         """Enhanced audit logging with HTMX support"""
         if hasattr(self.service, 'audit_logger'):

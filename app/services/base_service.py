@@ -15,11 +15,15 @@ def handle_errors(func):
         except SQLAlchemyError as e:
             db.session.rollback()
             logger.error(f"Database error in {func.__name__}: {str(e)}")
-            raise
+            raise ValueError("A database error occurred. Please try again later.")
+        except ValidationError as e:
+            db.session.rollback()
+            logger.error(f"Validation error in {func.__name__}: {str(e)}")
+            raise ValueError(str(e))
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error in {func.__name__}: {str(e)}")
-            raise
+            raise ValueError("An unexpected error occurred. Please try again later.")
     return wrapper
 
 class BaseService:
