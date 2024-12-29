@@ -17,6 +17,10 @@ class CustomDateTimeField(DateTimeField):
     """
     
     def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
+        # Ensure format is always a string
+        if not isinstance(format, str):
+            format = '%Y-%m-%d %H:%M:%S'
+            
         # Merge custom error messages with defaults
         custom_messages = kwargs.pop('error_messages', {})
         self.error_messages = {
@@ -62,6 +66,10 @@ class CustomDateTimeField(DateTimeField):
             return
 
         try:
+            # Ensure self.format is a string
+            if not isinstance(self.format, str):
+                self.format = '%Y-%m-%d %H:%M:%S'
+                
             # Parse the full datetime using self.format
             parsed_dt = datetime.strptime(date_str, self.format)
             
