@@ -1,71 +1,35 @@
-from flask import Blueprint, render_template, redirect, url_for, request, current_app
-from app.models.tag import Tag
-from flask_login import login_required, current_user
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-from app.models.audit_log import AuditLog
-from app.constants import FlashMessages, FlashCategory
+from flask import Blueprint
+from flask_login import login_required
+from app.controllers.base_route_controller import BaseRouteController
+from app.services.tag_service import TagService
 from app.forms.admin_forms import TagForm
-from app.utils import format_error_message
-from app.services.tag_service import tag_service
-from app.extensions import db  # Ensure this matches how db is defined or imported
-from sqlalchemy.exc import IntegrityError  # Import IntegrityError
-from app.utils import admin_required, flash_message
+from app.utils import admin_required
 
 admin_tag_bp = Blueprint('tag', __name__, url_prefix='/tags')
-
-# Initialize rate limiter
-limiter = Limiter(
-    key_func=get_remote_address,
-    default_limits=["100 per hour", "10 per minute"]
+tag_controller = BaseRouteController(
+    TagService(),
+    'tag',
+    TagForm,
+    'admin/tags'
 )
 
 @admin_tag_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def create():
-    form = TagForm()
-    if form.validate_on_submit():
-        try:
-            new_tag = tag_service.create(form.data)
-            if new_tag is None:
-                flash_message(FlashMessages.CREATE_TAG_ERROR, FlashCategory.ERROR)
-                return render_template('admin/tags/create.html', form=form)
-            flash_message(FlashMessages.CREATE_TAG_SUCCESS, FlashCategory.SUCCESS)
-            
-            if request.headers.get('HX-Request'):
-                return render_template('admin/tags/_tag_row.html', tag=new_tag), 200, {
-                    'HX-Trigger': 'tagCreated',
-                    'HX-Reswap': 'outerHTML',
-                    'HX-Retarget': '#tag-table'
-                }
-            return redirect(url_for('admin.tag.index'))
-        except IntegrityError as e:
-            db.session.rollback()
-            flash_message(FlashMessages.CREATE_TAG_ERROR, FlashCategory.ERROR)
-            return render_template('admin/tags/create.html', form=form)
-        except IntegrityError as e:
-            db.session.rollback()
-            flash_message(FlashMessages.CREATE_TAG_ERROR, FlashCategory.ERROR)
-            return render_template('admin/tags/create.html', form=form), 400
-        except Exception as e:
-            db.session.rollback()
-            current_app.logger.error(f"Failed to create tag: {e}")
-            flash_message(FlashMessages.GENERIC_ERROR, FlashCategory.ERROR)
-            return render_template('admin/tags/create.html', form=form), 500
-    else:
-        error_messages = []
-        field_errors = {}
-        for field_name, errors in form.errors.items():
-            field = getattr(form, field_name)
-            field_errors[field_name] = []
-            for error in errors:
-                msg = format_error_message(field, error)
-                error_messages.append(msg)
-                field_errors[field_name].append(msg)
-                flash_message(msg, FlashCategory.ERROR)
+    return tag_controller.create()
 
-    return render_template('admin/tags/create.html', form=form)
+@admin_tag_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit(id):
+    return tag_controller.edit(id)
+
+@admin_tag_bp.route('/<int:id>/delete', methods=['POST'])
+@login_required
+@admin_required
+def delete(id):
+    return tag_controller.delete(id)
 
 @admin_tag_bp.route('/<int:id>/delete', methods=['POST'])
 @limiter.limit("3 per minute")

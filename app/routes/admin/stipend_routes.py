@@ -1,47 +1,35 @@
-from datetime import datetime
-import logging
-import pytz
-from app.models.notification import NotificationType
-from sqlalchemy.exc import IntegrityError
-from wtforms.validators import ValidationError
-
-from flask import Blueprint, render_template, redirect, url_for, request, current_app, render_template_string, flash
-from flask_wtf.csrf import generate_csrf
-from app.services.notification_service import create_crud_notification
-from app.models.audit_log import AuditLog
-from app.models.notification import Notification
-from app.services.notification_service import get_notification_count
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-
-# Initialize rate limiter
-limiter = Limiter(
-    key_func=get_remote_address,
-    default_limits=["100 per hour", "10 per minute"]
-)
-from flask_login import current_user
-from app.models.audit_log import AuditLog
-from app.utils import format_error_message
-from jinja2 import TemplateNotFound
+from flask import Blueprint
 from flask_login import login_required
-
-from app.constants import FlashCategory, FlashMessages
-from app.forms.admin_forms import StipendForm, OrganizationForm
-from app.models.stipend import Stipend
-from app.models.organization import Organization
-from app.models.tag import Tag
-from app.services.organization_service import get_organization_by_id
-from app.services.stipend_service import (
-    get_stipend_by_id,
-    delete_stipend,
-    get_all_stipends,
-    create_stipend,
-    update_stipend
-)
-from app.extensions import db
-from app.utils import admin_required, flash_message, log_audit, create_notification
+from app.controllers.base_route_controller import BaseRouteController
+from app.services.stipend_service import StipendService
+from app.forms.admin_forms import StipendForm
+from app.utils import admin_required
 
 admin_stipend_bp = Blueprint('stipend', __name__, url_prefix='/stipends')
+stipend_controller = BaseRouteController(
+    StipendService(),
+    'stipend',
+    StipendForm,
+    'admin/stipends'
+)
+
+@admin_stipend_bp.route('/create', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def create():
+    return stipend_controller.create()
+
+@admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit(id):
+    return stipend_controller.edit(id)
+
+@admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])
+@login_required
+@admin_required
+def delete(id):
+    return stipend_controller.delete(id)
 
 
 @admin_stipend_bp.route('/create', methods=['GET', 'POST'])
