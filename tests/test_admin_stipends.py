@@ -69,7 +69,7 @@ class AdminStipendTestCase(unittest.TestCase):
                            "Login failed - check admin credentials and CSRF token")
             
             # Get CSRF token for stipend creation form
-            response = self.client.get(url_for('admin_stipend.create'))
+            response = self.client.get(url_for('admin.admin_stipend.create'))
             self.assertEqual(response.status_code, 200)
             try:
                 csrf_token = response.data.decode('utf-8').split(
