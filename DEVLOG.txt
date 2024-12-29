@@ -17,5 +17,7 @@
 3. Document route registration best practices
 
 ## Questions/Concerns:
-1. Should we add a validation function for blueprint names?
-2. Should we create a base blueprint class with built-in validation?
+1. Should we add a validation function for blueprint names? 
+YES!
+2. Should we create a base blueprint class with built-in validation? 
+YES!
