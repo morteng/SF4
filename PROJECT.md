@@ -81,7 +81,7 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 ## 5. Database Schema
 
 ### Stipends
-```
+
 id (PK)
 name
 summary
@@ -93,30 +93,30 @@ application_deadline (DateTime)
 open_for_applications (Boolean)
 created_at (DateTime)
 updated_at (DateTime)
-```
+
 - Many-to-Many with **Tags** and **Organizations**.
 
 ### Organizations
-```
+
 id (PK)
 name
 description
 homepage_url
 created_at (DateTime)
 updated_at (DateTime)
-```
+
 - Many-to-Many with **Stipends**.
 
 ### Tags
-```
+
 id (PK)
 name
 category
-```
+
 - Many-to-Many with **Stipends**.
 
 ### Users
-```
+
 id (PK)
 username
 password_hash
@@ -124,27 +124,27 @@ email
 is_admin (Boolean)
 created_at (DateTime)
 updated_at (DateTime)
-```
+
 - Basic authentication for admin interface.
 
 ### Bots
-```
+
 id (PK)
 name
 description
 status
 last_run (DateTime)
 error_log (Text)
-```
+
 
 ### Notifications
-```
+
 id (PK)
 message
 type
 read_status (Boolean)
 created_at (DateTime)
-```
+
 - Used for alerting admin about flagged stipends, errors, etc.
 
 ---
@@ -232,18 +232,18 @@ Below is a partial list for clarity. `public` routes are accessible to all, whil
 ### Key Classes & Functions
 
 - **`CustomDateTimeField`**  
-  ```python
+  python
   class CustomDateTimeField(Field):
       def __init__(self, label=None, validators=None, **kwargs):
           if validators is None:
               validators = [InputRequired()]  # Default validator
           super().__init__(label=label, validators=validators, **kwargs)
           # Additional date/time parsing logic...
-  ```
+  
   - Ensures any form field based on this class has at least one validator by default.
 
 - **`BaseService`**  
-  ```python
+  python
   class BaseService:
       def __init__(self):
           self._create_limit = None
@@ -256,7 +256,7 @@ Below is a partial list for clarity. `public` routes are accessible to all, whil
       def create_limit(self, value):
           # Insert any validation or logging if needed
           self._create_limit = value
-  ```
+  
   - Common parent for various specialized services (StipendService, TagService, etc.).
 
 - **`app/common/utils.py`**  

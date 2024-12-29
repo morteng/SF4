@@ -1,58 +1,54 @@
-Sir, here’s the consolidated Coding Conventions Guideline—short, sweet, and still full of the good stuff:
-
----
-
 # Coding Conventions Guideline
 
 ## 1. Environment & Dependencies
 - **Virtual Environments**: Always activate `.venv` or equivalent before installing/running anything.  
-  ```bash
+  bash
   python -m venv .venv
   source .venv/bin/activate  # macOS/Linux
   .venv\Scripts\activate     # Windows
-  ```  
+    
 - **Requirements**:  
   - Keep dependencies in `requirements.txt`.  
   - Verify installs with `pip show <package>`.
 
 - **Pre-Test Verification**:  
-  ```python
+  python
   def test_dependencies():
       try:
           subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
       except subprocess.CalledProcessError:
           pytest.fail("Failed to install dependencies")
-  ```
+  
   (Skips tests gracefully if something’s missing—no meltdown required.)
 
 ## 2. Testing Setup
 - **pytest**: The go-to test runner.
-  ```bash
+  bash
   pip install pytest
   pytest
-  ```
+  
 - **freezegun**: For controlling date/time in tests without rewriting the space-time continuum, sir.
 
 - **Virtual Environment Recreation** (optional, if your environment spontaneously combusts):
-  ```bash
+  bash
   deactivate
   rm -rf .venv
   python -m venv .venv
   # reactivate and reinstall
-  ```
+  
 
 ## 3. Custom Field Implementation
 - **Handle All Arguments**: If you create a `CustomDateTimeField`, accept all typical field arguments.
 - **Default Validators**: If `validators` is `None`, default to `[InputRequired()]`.
-  ```python
+  python
   if validators is None:
       validators = [InputRequired()]
-  ```
+  
 - **Usage**: Avoid passing in the `validators` argument again unless it’s truly necessary.
 
 ## 4. Property Implementation
 - **@property** before `@<property>.setter`:  
-  ```python
+  python
   @property
   def create_limit(self):
       return self._create_limit
@@ -60,7 +56,7 @@ Sir, here’s the consolidated Coding Conventions Guideline—short, sweet, and 
   @create_limit.setter
   def create_limit(self, value):
       self._create_limit = value
-  ```
+  
 - **No Direct `_attribute` Access**: Keep logic consistent (and your code less feral).
 
 - **Docstrings**: Because future you will forget what that property was for, sir.
@@ -84,4 +80,3 @@ Sir, here’s the consolidated Coding Conventions Guideline—short, sweet, and 
 
 ---
 
-That’s it, sir. Implement these guidelines and you’ll have cleaner code, fewer headaches, and more time to sip tea while the tests run successfully. Enjoy!
