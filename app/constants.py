@@ -47,7 +47,7 @@ class FlashMessages(str, Enum):
     DELETE_ERROR = "Error deleting record."
     
     # User Management
-    USER_CREATED = "User created successfully."
+    USER_CREATED = "User {username} created successfully."
     CREATE_USER_SUCCESS = "User created successfully."
     USER_UPDATED = "User updated successfully."
     USER_DELETED = "User deleted successfully."
