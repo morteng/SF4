@@ -226,3 +226,5 @@ INVALID_DATETIME_FORMAT = "Invalid datetime format. Expected YYYY-MM-DD HH:MM:SS
 MISSING_REQUIRED_FIELD = "This field is required"
 DATE_FORMAT_ERROR = "Invalid date format. Please use YYYY-MM-DD."
 MISSING_DEPENDENCY_ERROR = "Required dependency {dep} is not installed."
+INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
+MISSING_REQUIRED_FIELD = "This field is required"
