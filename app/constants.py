@@ -195,6 +195,8 @@ class FlashMessages(str, Enum):
     INVALID_DATE_VALUES = "Invalid date values. Please check the day, month, and year."
     PAST_DATE = "Date/time cannot be in the past."
     FUTURE_DATE = "Date/time must be in the future."
+    MISSING_REQUIRED_FIELD = "This field is required."
+    INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS."
     # CRUD Operation Messages
     CRUD_VALIDATION_ERROR = "Validation failed: {errors}"
     CRUD_OPERATION_ERROR = "Operation failed: {error}"
