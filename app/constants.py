@@ -242,4 +242,3 @@ class FlashMessages(str, Enum):
     INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS."
     FORM_VALIDATION_ERROR = "Form validation failed. Please check your input."
     DATE_REQUIRED = "Date is required."
-    INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS."

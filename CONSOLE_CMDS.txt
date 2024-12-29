@@ -13,6 +13,7 @@
 
 ### COMMANDS START ###
 
+/run find . -type d -name "__pycache__" -exec rm -rf {} +
 /run pytest tests/test_datetime_validation.py -v
 /run pytest tests/test_main_forms.py -v
 /run pytest tests/app/forms/test_forms.py -v
