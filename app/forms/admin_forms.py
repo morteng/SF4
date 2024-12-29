@@ -350,3 +350,13 @@ class OrganizationForm(FlaskForm):
         
         # Update the field data with stripped value
         field.data = stripped
+from flask_wtf import FlaskForm
+from wtforms.validators import InputRequired
+from app.forms.custom_fields import CustomDateTimeField
+
+class StipendForm(FlaskForm):
+    application_deadline = CustomDateTimeField(
+        "Application Deadline",
+        format="%Y-%m-%d %H:%M:%S",
+        validators=[InputRequired()]  # Explicitly pass validators
+    )
