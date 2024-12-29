@@ -61,23 +61,23 @@ def create():
     if form.validate_on_submit():
         # Prepare stipend data with optional fields
         stipend_data = {
-                'name': form.name.data,
-                'summary': form.summary.data if form.summary.data else None,
-                'description': form.description.data if form.description.data else None,
-                'homepage_url': form.homepage_url.data if form.homepage_url.data else None,
-                'application_procedure': form.application_procedure.data if form.application_procedure.data else None,
-                'eligibility_criteria': form.eligibility_criteria.data if form.eligibility_criteria.data else None,
-                'application_deadline': form.application_deadline.data if form.application_deadline.data else None,  # Optional
-                'organization_id': form.organization_id.data if form.organization_id.data else None,
-                'open_for_applications': form.open_for_applications.data if form.open_for_applications.data else False,
-                'tags': form.tags.data if form.tags.data else []
-            }
-            
-            # Create stipend
-            stipend = Stipend.create(stipend_data)
-            
-            # Create audit log
-            log_audit(
+            'name': form.name.data,
+            'summary': form.summary.data if form.summary.data else None,
+            'description': form.description.data if form.description.data else None,
+            'homepage_url': form.homepage_url.data if form.homepage_url.data else None,
+            'application_procedure': form.application_procedure.data if form.application_procedure.data else None,
+            'eligibility_criteria': form.eligibility_criteria.data if form.eligibility_criteria.data else None,
+            'application_deadline': form.application_deadline.data if form.application_deadline.data else None,  # Optional
+            'organization_id': form.organization_id.data if form.organization_id.data else None,
+            'open_for_applications': form.open_for_applications.data if form.open_for_applications.data else False,
+            'tags': form.tags.data if form.tags.data else []
+        }
+        
+        # Create stipend
+        stipend = Stipend.create(stipend_data)
+        
+        # Create audit log
+        log_audit(
                 user_id=current_user.id,
                 action='create_stipend',
                 object_type='Stipend',
