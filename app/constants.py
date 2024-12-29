@@ -240,4 +240,5 @@ class FlashMessages(str, Enum):
     NAME_LENGTH = "Name cannot exceed 100 characters."
     INVALID_URL = "Please enter a valid URL starting with http:// or https://."
     INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS."
+    FORM_VALIDATION_ERROR = "Form validation failed. Please check your input."
     DATE_REQUIRED = "Date is required."
