@@ -3,7 +3,6 @@ from wtforms.fields import SelectField
 from wtforms.validators import ValidationError
 from datetime import datetime
 from app.constants import FlashMessages
-    def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
         # Initialize error messages
         self.error_messages = {
             'required': str(FlashMessages.DATE_REQUIRED),
