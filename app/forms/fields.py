@@ -17,7 +17,6 @@ class CustomDateTimeField(DateTimeField):
     """
     
     def __init__(self, format='%Y-%m-%d %H:%M:%S', **kwargs):
-        self.timezone = kwargs.pop('timezone', None)
         # Merge custom error messages with defaults
         custom_messages = kwargs.pop('error_messages', {})
         self.error_messages = {
@@ -30,10 +29,8 @@ class CustomDateTimeField(DateTimeField):
             'future_date': 'Date cannot be more than 5 years in the future',
             **custom_messages  # Allow overriding defaults
         }
-        self.format = format  # Set format as instance attribute
-        kwargs['format'] = self.format  # Pass to parent
-        kwargs['render_kw'] = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
-        super().__init__(**kwargs)
+        super().__init__(format=format, **kwargs)  # Pass format to parent class
+        self.render_kw = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
         
     def _is_empty_value(self, value):
         """Check if the value is empty or whitespace only."""
@@ -88,7 +85,7 @@ class CustomDateTimeField(DateTimeField):
             # If all validations pass, store the datetime
             self.data = parsed_dt
 
-        except ValueError as e:
+        except ValueError:
             self.errors.append(self.error_messages['invalid_date'])
             self.data = None
             

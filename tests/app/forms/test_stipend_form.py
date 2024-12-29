@@ -417,6 +417,33 @@ def test_error_messages_from_constants(app):
         assert field.validate(None) is False
         assert FlashMessages.INVALID_LEAP_YEAR in field.errors
 
+def test_custom_datetime_field_initialization(app):
+    """Test CustomDateTimeField initialization with custom format."""
+    with app.test_request_context():
+        field = CustomDateTimeField(format='%Y/%m/%d %H:%M')
+        assert field.format == '%Y/%m/%d %H:%M'
+        assert field.render_kw == {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
+
+def test_invalid_time_components(app):
+    """Test validation of invalid time components."""
+    with app.test_request_context():
+        field = CustomDateTimeField()
+        
+        # Test invalid hour
+        field.process_formdata(['2023-02-28 24:00:00'])
+        assert field.validate(None) is False
+        assert FlashMessages.INVALID_TIME_VALUES in field.errors
+        
+        # Test invalid minute
+        field.process_formdata(['2023-02-28 23:60:00'])
+        assert field.validate(None) is False
+        assert FlashMessages.INVALID_TIME_VALUES in field.errors
+        
+        # Test invalid second
+        field.process_formdata(['2023-02-28 23:59:60'])
+        assert field.validate(None) is False
+        assert FlashMessages.INVALID_TIME_VALUES in field.errors
+
 def test_stipend_create_operation(app, form_data, test_db):
     """Test CRUD create operation"""
     with app.test_request_context():
