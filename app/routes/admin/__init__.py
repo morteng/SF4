@@ -196,6 +196,18 @@ def register_admin_blueprints(app):
     # Register the main admin blueprint
     app.register_blueprint(admin_bp)
     
+    # Verify all required routes are registered
+    required_routes = [
+        'admin_stipend.create',
+        'admin_dashboard.dashboard'
+    ]
+    
+    registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
+    missing_routes = [route for route in required_routes if route not in registered_routes]
+    
+    if missing_routes:
+        raise RuntimeError(f"Missing routes: {', '.join(missing_routes)}")
+    
     # Mark blueprints as registered
     _admin_blueprints_registered = True
 from flask import abort
