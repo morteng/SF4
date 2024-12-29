@@ -138,23 +138,46 @@ class BaseService:
         if errors:
             raise ValidationError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors=errors))
 
-    def benchmark_validation(self, data, iterations=1000):
-        """Benchmark validation performance"""
+    def benchmark_validation(self, iterations=1000):
+        """Benchmark validation performance with various test cases"""
         import time
-        start = time.time()
+        from datetime import datetime
         
-        for _ in range(iterations):
-            try:
-                self.validate(data)
-            except ValidationError:
-                pass
-                
-        elapsed = time.time() - start
-        return {
-            'iterations': iterations,
-            'total_time': elapsed,
-            'avg_time': elapsed / iterations
-        }
+        test_cases = [
+            {'valid': True, 'data': {'date_field': '2024-12-31 23:59:59'}},
+            {'valid': True, 'data': {'date_field': '2024-02-29 00:00:00'}},  # Leap year
+            {'valid': False, 'data': {'date_field': '2023-02-29 00:00:00'}}, # Invalid leap year
+            {'valid': False, 'data': {'date_field': '2024-13-01 00:00:00'}}, # Invalid month
+            {'valid': False, 'data': {'date_field': '2024-12-32 00:00:00'}}, # Invalid day
+            {'valid': False, 'data': {'date_field': '2024-12-31 24:00:00'}}, # Invalid hour
+            {'valid': False, 'data': {'date_field': '2024-12-31 23:60:00'}}, # Invalid minute
+            {'valid': False, 'data': {'date_field': '2024-12-31 23:59:60'}}, # Invalid second
+        ]
+        
+        results = {}
+        
+        for case in test_cases:
+            data = case['data']
+            expected = case['valid']
+            
+            start = time.perf_counter()
+            for _ in range(iterations):
+                try:
+                    self.validate(data)
+                    actual = True
+                except ValidationError:
+                    actual = False
+            elapsed = time.perf_counter() - start
+            
+            results[str(data)] = {
+                'iterations': iterations,
+                'time': elapsed,
+                'expected': expected,
+                'actual': actual,
+                'avg_time': elapsed / iterations
+            }
+        
+        return results
 
     def validate_create(self, data):
         """Validate data before creation"""
