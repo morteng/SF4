@@ -93,7 +93,7 @@ class AdminStipendTestCase(unittest.TestCase):
                 'csrf_token': csrf_token
             }
             
-            response = self.client.post(url_for('admin.stipend.create'), 
+            response = self.client.post(url_for('admin.admin_stipend.create'), 
                                       data=form_data,
                                       follow_redirects=True)
             
