@@ -493,7 +493,7 @@ class AdminStipendTestCase(unittest.TestCase):
             self.app = create_app('testing')
             mock_validate.assert_called_once_with(
                 self.app,
-                ['admin.stipend.create', 'admin.dashboard.dashboard']
+                ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
             )
 
 if __name__ == '__main__':
