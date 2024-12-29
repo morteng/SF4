@@ -119,12 +119,8 @@ def create():
             if is_htmx:
                 return render_template('admin/stipends/_form.html', form=form), 400
     
-    # Generate CSRF token for the template
-    csrf_token_value = generate_csrf()
-    
     return render_template('admin/stipends/create.html', 
-                         form=form,
-                         csrf_token=csrf_token_value)
+                         form=form)
     
     # Initialize form choices
     organizations = Organization.query.order_by(Organization.name).all()
