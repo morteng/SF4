@@ -37,7 +37,7 @@
 
 /test
 
-/ask what is causing the problem?
+/ask is there duplicate code in the project? If so, how can we refactor it to improve the maintainability and readability of the code?
 
 /code implement the suggested changes
 
