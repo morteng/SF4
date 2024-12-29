@@ -154,3 +154,9 @@ def init_admin_user():
     """Initialize the admin user."""
     # Implementation will be added later
     pass
+# Shared utility functions
+
+def init_admin_user():
+    """Initialize the admin user"""
+    # Implementation will be added later
+    pass

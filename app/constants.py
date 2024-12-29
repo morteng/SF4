@@ -287,3 +287,6 @@ MISSING_REQUIRED_FIELD = "This field is required."
 INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
 INVALID_TIME = "Invalid time. Please ensure hours, minutes, and seconds are valid."
 INVALID_LEAP_YEAR = "Invalid date. February 29th is not valid for this year."
+# Error messages
+MISSING_REQUIRED_FIELD = "This field is required."
+INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."

@@ -1,5 +1,32 @@
 # Updated Validation Best Practices
 
+### Custom Field Implementation
+1. **Handle All Arguments**:
+   - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+2. **Default Validators**:
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
+3. **Error Message Centralization**:
+   - Use error messages from `app/constants.py` instead of hardcoded strings.
+   - Example:
+     ```python
+     from app.constants import MISSING_REQUIRED_FIELD
+     validators=[InputRequired(message=MISSING_REQUIRED_FIELD)]
+     ```
+
+### Date/Time Validation
+1. **Data Type Awareness**:
+   - Always verify the data type of form field inputs before applying validation logic.
+2. **Timezone Handling**:
+   - Ensure all `datetime` objects are timezone-aware.
+3. **Future/Past Date Validation**:
+   - Validate that dates are within acceptable ranges (e.g., future dates for deadlines).
+4. **Error Messages**:
+   - Use centralized error messages from `app/constants.py` for consistency.
+
 ## Custom Field Implementation
 1. **Handle All Arguments**:
    - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
