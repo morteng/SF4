@@ -82,6 +82,19 @@ class BaseRouteController:
         """Handle service layer errors consistently"""
         logger.error(f"Error in {self.entity_name} controller: {str(error)}")
         error_message = str(error) if str(error) else self.flash_messages['error']
+        
+        # Add error details to audit log
+        if hasattr(self.service, 'audit_logger'):
+            self.service.audit_logger.log(
+                action='error',
+                object_type=self.entity_name,
+                details=f"Error: {error_message}",
+                user_id=current_user.id if current_user.is_authenticated else None,
+                ip_address=request.remote_addr,
+                http_method=request.method,
+                endpoint=request.endpoint
+            )
+        
         response = self._handle_htmx_flash(error_message, FlashCategory.ERROR)
         return response or redirect(request.referrer or url_for('admin.dashboard.dashboard'))
 

@@ -277,25 +277,18 @@ def validate_url(url: str) -> bool:
 def format_error_message(field: Any, error: Union[str, Exception]) -> str:
     """
     Format error messages consistently for both HTMX and regular requests.
-    
-    Args:
-        field: The form field that generated the error
-        error: The error message or exception
-        
-    Returns:
-        str: Formatted error message with field name/label
     """
     error_map = {
-        'invalid_format': 'Invalid format. Please use YYYY-MM-DD HH:MM:SS',
-        'invalid_date': 'Invalid date values',
-        'invalid_time': 'Invalid time values',
-        'invalid_timezone': 'Invalid timezone selected',
-        'daylight_saving': 'Ambiguous time due to daylight saving',
-        'future_date': 'Date must be in the future',
-        'past_date': 'Date must be in the past',
-        'timezone_conversion': 'Error converting timezone',
-        'missing_time': 'Time is required',
-        'required': 'This field is required'
+        'invalid_format': FlashMessages.INVALID_FORMAT,
+        'invalid_date': FlashMessages.INVALID_DATE,
+        'invalid_time': FlashMessages.INVALID_TIME,
+        'invalid_timezone': FlashMessages.INVALID_TIMEZONE,
+        'daylight_saving': FlashMessages.DAYLIGHT_SAVING,
+        'future_date': FlashMessages.FUTURE_DATE_REQUIRED,
+        'past_date': FlashMessages.PAST_DATE_REQUIRED,
+        'timezone_conversion': FlashMessages.TIMEZONE_CONVERSION_ERROR,
+        'missing_time': FlashMessages.TIME_REQUIRED,
+        'required': FlashMessages.FIELD_REQUIRED
     }
     
     # Return mapped error if available
