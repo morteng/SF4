@@ -16,7 +16,7 @@ class CustomDateTimeField(DateTimeField):
     - Custom error messages
     """
     
-    def __init__(self, format='%Y-%m-%d %H:%M:%S', **kwargs):
+    def __init__(self, label=None, validators=None, format='%Y-%m-%d %H:%M:%S', **kwargs):
         # Merge custom error messages with defaults
         custom_messages = kwargs.pop('error_messages', {})
         self.error_messages = {
@@ -29,7 +29,7 @@ class CustomDateTimeField(DateTimeField):
             'future_date': 'Date cannot be more than 5 years in the future',
             **custom_messages  # Allow overriding defaults
         }
-        super().__init__(format=format, **kwargs)  # Pass format to parent class
+        super().__init__(label=label, validators=validators, format=format, **kwargs)
         self.render_kw = {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
         
     def _is_empty_value(self, value):

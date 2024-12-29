@@ -279,10 +279,8 @@ class TestCustomDateTimeField(BaseTestCase):
         class TestForm(Form):
             test_field = CustomDateTimeField(
                 label='Test Field',
-                format='%Y-%m-%d %H:%M:%S',
-                timezone='UTC',
                 error_messages={
-                    'required': 'Date is required',  # Generic message for general case
+                    'required': 'Date is required',
                     'invalid_format': 'Invalid date format',
                     'invalid_date': 'Invalid date values',
                     'invalid_time': 'Invalid time values',
@@ -295,7 +293,7 @@ class TestCustomDateTimeField(BaseTestCase):
         form = TestForm()
         self.assertFormInvalid(
             form, {'test_field': ''},
-            {'test_field': ['Date is required']}  # Updated to match generic message
+            {'test_field': ['Date is required']}
         )
 
     def test_invalid_date_format(self):
@@ -423,6 +421,26 @@ def test_custom_datetime_field_initialization(app):
         field = CustomDateTimeField(format='%Y/%m/%d %H:%M')
         assert field.format == '%Y/%m/%d %H:%M'
         assert field.render_kw == {'placeholder': 'YYYY-MM-DD HH:MM:SS'}
+
+def test_invalid_time_components(app):
+    """Test validation of invalid time components."""
+    with app.test_request_context():
+        field = CustomDateTimeField()
+        
+        # Test invalid hour
+        field.process_formdata(['2023-02-28 24:00:00'])
+        assert field.validate(None) is False
+        assert FlashMessages.INVALID_TIME_VALUES in field.errors
+        
+        # Test invalid minute
+        field.process_formdata(['2023-02-28 23:60:00'])
+        assert field.validate(None) is False
+        assert FlashMessages.INVALID_TIME_VALUES in field.errors
+        
+        # Test invalid second
+        field.process_formdata(['2023-02-28 23:59:60'])
+        assert field.validate(None) is False
+        assert FlashMessages.INVALID_TIME_VALUES in field.errors
 
 def test_invalid_time_components(app):
     """Test validation of invalid time components."""
