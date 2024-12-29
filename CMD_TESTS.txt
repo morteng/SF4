@@ -1,6 +1,15 @@
-# This is your command file. You are allowed to add a set of console commands you need to run. you must update this document to remove the console commands after they have been executed. you must prepend console commands with /run 
+# --------------------------------------
+# SINGLE_FILE_CMDS.txt
+# --------------------------------------
+# This file orchestrates your coding session and any console commands
+# you need to run, all in one place. IMPORTANT! you are only allowed to edit the console commands section of this document - NEVER alter any other part of the loop.
 
-### Coding session start ###
+### PENDING CONSOLE COMMANDS ###
+# Add any new console commands below with /run prefix and remove them after they’re executed
+# Example:
+# /run echo "Hello from the console!"
+
+### MAIN CODING SESSION ###
 
 /git add .
 /commit
@@ -34,10 +43,11 @@
 /ask If there's a new issue, what is it?
 
 # Step 5: Final Documentation Updates
-/architect update TODO.md with final changes & findings, important info and things we've learned that would be good to remember next coding session.
+/architect update TODO.md with final changes & findings, important info and things we've learned that would be good to remember next coding session. Remove the console commands that were run from the Pending console commands section of CMD_TESTS.md file (this document). DO NOT CHANGE ANY OTHER SECTIONS.
 
-# Step 6: Rince and repeat
+
+# End of main coding session
 /reset
-/load CMD_TESTS.txt
 
-### Coding session end ###
+# Optionally load something else
+/load CMD_TESTS.txt
