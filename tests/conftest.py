@@ -37,7 +37,8 @@ def verify_dependencies():
             f"The following dependencies are missing: {missing_deps_str}. "
             f"Run `pip install -r requirements.txt` to install them."
         )
-        pytest.skip(f"Skipping tests due to missing dependencies: {missing_deps_str}")
+        # Log a warning but don't skip tests
+        logging.warning("Tests will proceed, but some functionality may be limited.")
     try:
         import freezegun
     except ImportError:
