@@ -2,6 +2,7 @@ import pytest
 from datetime import datetime, timedelta
 from app.models.tag import Tag
 from flask_wtf.csrf import generate_csrf
+from app.constants import FlashMessages
 from app import create_app
 from app.forms.admin_forms import StipendForm
 from app.models.organization import Organization
