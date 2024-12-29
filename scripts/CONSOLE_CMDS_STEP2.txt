@@ -10,9 +10,10 @@
 # /run pytest --maxfail=1
 
 ### COMMANDS START ###
-/run rm tests/test_main_forms.py
+/run pytest tests/test_admin_stipends.py -v --capture=no
+/run flask db migrate -m "Add organization validation"
+/run flask db upgrade
 /run find . -type d -name "__pycache__" -exec rm -r {} +
-/run pytest
 ### COMMANDS END ###
 
 # Once finished, jump to Step 3.
