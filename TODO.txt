@@ -113,23 +113,6 @@
    - Keep modules small and logical.
    - Use base classes and utilities to avoid duplication.
 
-### **Recent Changes**
-1. **Fixed Module Name Conflicts**:
-   - Deleted redundant `tests/test_forms.py` to resolve import conflicts.
-   - Renamed `tests/app/forms/test_forms.py` to `tests/app/forms/test_organization_forms.py` for unique module names.
-
-2. **Cleared Pycache**:
-   - Removed stale compiled files from `__pycache__` directories to prevent test collection issues.
-
-3. **Improved Test Organization**:
-   - Consolidated all stipend form tests into `tests/test_main_forms.py`.
-   - Organized organization form tests in `tests/app/forms/test_organization_forms.py`.
-
-4. **Fixed Flask Routes Error**:
-   - Resolved `UnboundLocalError` in `app/__init__.py` by properly initializing the `limiter` variable.
-
-5. **Removed Redundant Dependency Check**:
-   - Deleted the `verify_dependencies()` function from `tests/conftest.py` as it was redundant and causing issues.
 
 ### **Key Takeaways**
 1. **Test File Naming**:
@@ -250,43 +233,4 @@
 7. **Circular Imports**:
    - Circular imports can cause initialization errors and should be avoided.
    - Use lazy imports or refactor shared logic into utility modules to reduce import complexity.
-
-### **Recent Changes**
-1. **Fixed Duplicate Constants**:
-   - Removed duplicate constants (`CREATE_SUCCESS`, `UPDATE_SUCCESS`, `DELETE_SUCCESS`, `MISSING_FIELD_ERROR`) from `FlashMessages` class in `app/constants.py`.
-
-2. **Refactored Validation Logic**:
-   - Moved reusable validation logic (e.g., `validate_application_deadline`) to `app/common/utils.py`.
-
-3. **Improved Tests**:
-   - Added edge case tests in `tests/test_base_crud_controller.py` for invalid form submissions and missing fields.
-
-4. **Updated `requirements.txt`**:
-   - Added `beautifulsoup4` for HTML parsing in tests.
-
-5. **Fixed Property Implementation**:
-   - Consolidated the `create_limit` property in `app/services/base_service.py` to avoid conflicts and ensure proper validation.
-
-6. **Rate Limiter Configuration**:
-   - Added validation for rate limit values in `app/services/base_service.py` to ensure they are valid strings.
-
-### **Recent Changes**
-1. **Added Missing Constants**:
-   - Added `MISSING_FIELD_ERROR`, `USERNAME_REQUIRED`, `USERNAME_LENGTH`, `USERNAME_FORMAT`, and `EMAIL_REQUIRED` to `app/constants.py`.
-
-2. **Refactored Validation Logic**:
-   - Moved reusable validation logic (e.g., `validate_application_deadline`) to `app/common/utils.py`.
-
-3. **Improved Tests**:
-   - Added edge case tests in `tests/test_base_crud_controller.py` for invalid form submissions and missing fields.
-
-4. **Updated `requirements.txt`**:
-   - Added `beautifulsoup4` for HTML parsing in tests.
-
-5. **Fixed Property Implementation**:
-   - Consolidated the `create_limit` property in `app/services/base_service.py` to avoid conflicts and ensure proper validation.
-
-6. **Rate Limiter Configuration**:
-   - Added validation for rate limit values in `app/services/base_service.py` to ensure they are valid strings.
-
 
