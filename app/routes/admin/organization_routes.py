@@ -1,4 +1,11 @@
 from flask import Blueprint, request, redirect, url_for, render_template, flash
+from app.extensions import limiter
+
+# Define rate limits
+ORG_RATE_LIMITS = {
+    'delete': "5/minute",
+    'update': "10/minute"
+}
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from app.controllers.base_route_controller import BaseRouteController

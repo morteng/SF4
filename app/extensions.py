@@ -15,8 +15,11 @@ limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"],
     storage_uri="memory://",
-    strategy="fixed-window"  # Use basic fixed window strategy
+    strategy="fixed-window",  # Use basic fixed window strategy
+    enabled=True
 )
+
+__all__ = ['db', 'login_manager', 'csrf', 'migrate', 'limiter']  # Export limiter
 
 Session = None
 db_session = None

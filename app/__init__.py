@@ -60,16 +60,9 @@ def create_app(config_name='development'):
     def load_user(user_id):
         return db.session.get(User, int(user_id))  
 
-    # Initialize rate limiter with proper storage
-    limiter = Limiter(
-        app=app,  # Pass app directly to ensure proper initialization
-        key_func=get_remote_address,
-        default_limits=["200 per day", "50 per hour"],
-        storage_uri="memory://",
-        strategy="fixed-window",  # Explicit strategy
-        enabled=not app.config.get('TESTING'),  # Disable in test environment
-        storage_options={"check_interval": 1}  # Add storage options
-    )
+    # Initialize rate limiter from extensions
+    from app.extensions import limiter
+    limiter.init_app(app)
     
     # Ensure limiter is fully disabled in test environment
     if app.config.get('TESTING'):
