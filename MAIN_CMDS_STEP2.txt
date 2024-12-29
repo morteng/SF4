@@ -3,21 +3,7 @@
 # --------------------------------------
 # This file orchestrates your main coding session. You follow these steps each coding session. I'm showing it to you so you can understand the flow of your work cycle, and how you can run console commands near the end of each session.
 
-/git add .
-/commit
 
-/read PROJECT.md
-/read CONVENTIONS.md
-/read VALIDATION.md
-/read MAIN_CMDS.txt
-/add TODO.txt
-
-/run flask routes
-/test
-
-# Step 1: Identify & Plan
-/ask Based on TODO.txt (and other docs), how do we address the issues?
-/architect implement the suggested changes
 
 # Step 2: Test & Debug
 /run flask routes
@@ -25,6 +11,10 @@
 /ask If tests fail, what's causing the issue?
 /architect implement fixes
 /test
+
+
+
+
 
 # Step 3: Refine & Summarize
 /ask Should we revisit or refactor any code? Summarize the current status.
