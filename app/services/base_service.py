@@ -129,7 +129,7 @@ class BaseService:
         self.rate_limits['create'] = value
         
     @handle_errors
-    @Limiter.limit(lambda self: self.rate_limits['create'])
+    @limiter.limit(lambda self: self.rate_limits['create'])
     def create(self, data, user_id=None):
         """Create a new entity with validation and audit logging"""
         try:
