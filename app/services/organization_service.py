@@ -2,6 +2,7 @@ from app.models.organization import Organization
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy import func
 from app.extensions import db
+from app.services.base_service import BaseService
 import logging
 
 logger = logging.getLogger(__name__)
