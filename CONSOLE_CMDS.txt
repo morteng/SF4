@@ -13,9 +13,10 @@
 
 ### COMMANDS START ###
 
-/run pytest tests/test_validation.py -v
-/run pytest tests/test_forms.py -v
 /run pytest tests/test_datetime_validation.py -v
+/run pytest tests/test_main_forms.py -v
+/run pytest tests/app/forms/test_forms.py -v
+/run rm -rf tests/__pycache__ tests/app/forms/__pycache__
 
 ### COMMANDS END ###
 

@@ -3,22 +3,42 @@
 2. Review all constants in `app/constants.py` to ensure consistency and completeness
 
 ### **Recent Changes**
-1. **Fixed Duplicate Constants**:
-   - Removed duplicate definitions of `INVALID_DATE_FORMAT` in `app/constants.py`.
-   - Ensured all constants are defined only once in the `FlashMessages` class.
-   - Replaced `INVALID_LEAP_YEAR` with `INVALID_LEAP_YEAR_DATE` for consistency.
+1. **Fixed Test File Conflicts**:
+   - Renamed `tests/test_forms.py` to `tests/test_main_forms.py` to avoid import conflicts.
+   - Ensured all test files have unique names to prevent module collisions.
 
-2. **Improved Form Validation**:
-   - Updated form validation messages to use centralized constants from `app/constants.py`.
-   - Added proper error handling for date/time validation in forms.
+2. **Updated Constants Usage**:
+   - Standardized usage of `INVALID_LEAP_YEAR_DATE` across all files.
+   - Removed references to non-existent `INVALID_LEAP_YEAR` constant.
 
-3. **Refactored Imports**:
-   - Used lazy imports in `app/__init__.py` to avoid circular dependencies.
-   - Moved shared utilities to `app/common/utils.py`.
+3. **Improved Test Organization**:
+   - Moved form-related tests to `tests/app/forms/test_forms.py` for better structure.
+   - Added comprehensive date/time validation tests in `tests/test_datetime_validation.py`.
 
-4. **Fixed Test Failures**:
-   - Resolved `ImportError` in `tests/test_validation.py` by fixing constant imports.
-   - Ensured all tests pass after removing duplicate constants.
+4. **Fixed Circular Imports**:
+   - Refactored imports in `app/__init__.py` to use lazy imports.
+   - Moved shared utilities to `app/common/utils.py` to reduce dependencies.
+
+### **Key Takeaways for Next Coding Session**
+1. **Test File Naming**:
+   - Ensure all test files have unique names to avoid import conflicts.
+   - Use descriptive names that reflect the module being tested.
+
+2. **Constants Management**:
+   - Always use constants from `app/constants.py` instead of hardcoded strings.
+   - Verify that all constants referenced in the code exist in `app/constants.py`.
+
+3. **Test Organization**:
+   - Keep tests organized by module/package structure for better maintainability.
+   - Use `tests/app/` for application-specific tests and `tests/` for general tests.
+
+4. **Error Handling**:
+   - Add proper error handling for missing or invalid constants.
+   - Log errors with context for easier debugging.
+
+5. **Code Quality**:
+   - Regularly clear `__pycache__` directories to avoid stale compiled files.
+   - Use consistent naming conventions across the codebase.
 
 ### **Key Takeaways for Next Coding Session**
 1. **Validation Logic**:
