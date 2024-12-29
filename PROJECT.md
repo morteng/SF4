@@ -294,7 +294,7 @@ user.profile                 GET        /user/profile
 ## Lessons Learned
 
 ### Dependency Management
-- **Key Issue**: The `freezegun` package was listed in `requirements.txt` but not installed in the environment, causing test failures.
+- **Issue**: The `freezegun` package was listed in `requirements.txt` but not installed, causing test failures.
 - **Solution**: Always verify that all dependencies are installed by running:
   ```bash
   pip install -r requirements.txt
@@ -303,28 +303,26 @@ user.profile                 GET        /user/profile
   ```bash
   pip show <package_name>
   ```
-- **Testing**: Use `freezegun` for deterministic time-based testing. Test edge cases thoroughly, especially for date/time validation.
-
-### Date/Time Validation
-- **Issue**: The `validate_application_deadline` method in `StipendForm` assumed `field.data` was a string, but `CustomDateTimeField` parsed it into a `datetime` object, causing an `AttributeError`.
-- **Fix**: Updated the validation logic to handle `datetime` objects directly, including timezone handling and future date checks.
-- **Key Takeaway**: Always verify the data type of form field inputs before applying validation logic.
-
-### Error Handling
-- **Issue**: The `format` property in `CustomDateTimeField` was read-only, causing compatibility issues with the parent `DateTimeField` class.
-- **Fix**: Removed the read-only property and handled the `format` attribute directly.
-- **Key Takeaway**: Ensure compatibility with parent classes when overriding attributes or methods.
-
-### Validation Improvements
-- Fixed `TypeError` in `CustomDateTimeField` caused by incorrect `format` parameter handling
-- Consolidated leap year validation logic to avoid redundancy
-- Improved error message consistency using constants from `app/constants.py`
-- Added comprehensive tests for edge cases in date/time validation
 
 ### Testing
-- Added comprehensive test coverage for date/time validation
-- Verified edge cases in date/time validation
-- Improved test isolation and reliability
+- Use `freezegun` for deterministic time-based testing.
+- Test edge cases thoroughly, especially for date/time validation.
+- Ensure database fixtures are properly reset between tests to avoid side effects.
+
+### Date/Time Validation
+- Fixed `TypeError` in `CustomDateTimeField` caused by incorrect `format` parameter handling.
+- Consolidated leap year validation logic to avoid redundancy.
+- Improved error message consistency using constants from `app/constants.py`.
+- Added comprehensive tests for edge cases in date/time validation.
+
+### Error Handling
+- Ensured all error messages are centralized in `app/constants.py` and used consistently across the codebase.
+- Improved validation error reporting for better debugging.
+
+### Testing
+- Added comprehensive test coverage for date/time validation.
+- Verified edge cases in date/time validation (e.g., leap years, invalid time components).
+- Improved test isolation and reliability.
 
 ## New Section: Lessons Learned
 - **Validation Improvements**:
