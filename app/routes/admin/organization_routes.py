@@ -54,11 +54,6 @@ org_controller = BaseRouteController(
 def create():
     return org_controller.create()
 
-@admin_org_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def edit(id):
-    return org_controller.edit(id)
 
 @admin_org_bp.route('/<int:id>/delete', methods=['POST'])
 @limiter.limit(ORG_RATE_LIMITS['delete'])
