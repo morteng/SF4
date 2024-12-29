@@ -2,7 +2,7 @@
 # CMD_TESTS.txt
 # --------------------------------------
 # This file orchestrates your coding session and any console commands
-# you need to run, all in one place. IMPORTANT! you are only allowed to edit the console commands section of this document - NEVER alter any other part of the loop.
+# you need to run, all in one place. You are currently running inside an activated venv with all dependencies from requirements.txt already installed. IMPORTANT! you are only allowed to edit the console commands section of this document - NEVER alter any other part of the loop.
 
 ### PENDING CONSOLE COMMANDS ###
 # Add any new console commands below with /run prefix and remove them after they’re executed
