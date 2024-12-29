@@ -7,7 +7,7 @@ from app.forms.admin_forms import TagForm
 from app.utils import admin_required, flash_message
 from app.models import Tag
 from app.constants import FlashMessages, FlashCategory
-from app.extensions import db
+from app.extensions import db, limiter
 
 admin_tag_bp = Blueprint('tag', __name__, url_prefix='/tags')
 tag_controller = BaseRouteController(
