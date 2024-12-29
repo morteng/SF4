@@ -1,4 +1,4 @@
-from .base_test_case import BaseTestCase
+from tests.base_test_case import BaseTestCase
 from app.models import Stipend, Tag, Organization
 
 class TestBaseModel(BaseTestCase):
