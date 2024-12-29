@@ -36,26 +36,13 @@ class StipendForm(FlaskForm):
         DataRequired(message=FlashMessages.NAME_REQUIRED.value),
         Length(max=100, message=FlashMessages.NAME_LENGTH.value)
     ])
-    summary = TextAreaField('Summary', validators=[
-        DataRequired(message="Summary is required."),
-        Length(min=1, max=500, message="Summary must be between 1 and 500 characters.")
-    ])
-    description = TextAreaField('Description', validators=[
-        DataRequired(message="Description is required."),
-        Length(min=1, max=2000, message="Description must be between 1 and 2000 characters.")
-    ])
+    summary = TextAreaField('Summary')
+    description = TextAreaField('Description')
     homepage_url = URLField('Homepage URL', validators=[
-        DataRequired(message="Homepage URL is required."),
         URL(message="Please enter a valid URL starting with http:// or https://.")
     ])
-    application_procedure = TextAreaField('Application Procedure', validators=[
-        DataRequired(message="Application procedure is required."),
-        Length(min=1, max=1000, message="Application procedure must be between 1 and 1000 characters.")
-    ])
-    eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[
-        DataRequired(message="Eligibility criteria is required."),
-        Length(min=1, max=1000, message="Eligibility criteria must be between 1 and 1000 characters.")
-    ])
+    application_procedure = TextAreaField('Application Procedure')
+    eligibility_criteria = TextAreaField('Eligibility Criteria')
     application_deadline = CustomDateTimeField(
         'Application Deadline',
         validators=[DataRequired(message="Application deadline is required.")],

@@ -60,18 +60,18 @@ def create():
         form.tags.choices = [(tag.id, tag.name) for tag in tags]
         
         if form.validate_on_submit():
-            # Prepare stipend data
+            # Prepare stipend data with optional fields
             stipend_data = {
                 'name': form.name.data,
-                'summary': form.summary.data,
-                'description': form.description.data,
-                'homepage_url': form.homepage_url.data,
-                'application_procedure': form.application_procedure.data,
-                'eligibility_criteria': form.eligibility_criteria.data,
-                'application_deadline': form.application_deadline.data,
-                'organization_id': form.organization_id.data,
-                'open_for_applications': form.open_for_applications.data,
-                'tags': form.tags.data  # Will be handled in model __init__
+                'summary': form.summary.data if form.summary.data else None,
+                'description': form.description.data if form.description.data else None,
+                'homepage_url': form.homepage_url.data if form.homepage_url.data else None,
+                'application_procedure': form.application_procedure.data if form.application_procedure.data else None,
+                'eligibility_criteria': form.eligibility_criteria.data if form.eligibility_criteria.data else None,
+                'application_deadline': form.application_deadline.data if form.application_deadline.data else None,
+                'organization_id': form.organization_id.data if form.organization_id.data else None,
+                'open_for_applications': form.open_for_applications.data if form.open_for_applications.data else False,
+                'tags': form.tags.data if form.tags.data else []
             }
             
             # Create stipend
