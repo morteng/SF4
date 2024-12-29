@@ -3,6 +3,7 @@
 from enum import Enum
 
 # Form validation messages
+MISSING_FIELD_ERROR = "This field is required."
 MISSING_REQUIRED_FIELD = "This field is required"
 INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
 

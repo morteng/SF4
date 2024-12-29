@@ -4,6 +4,7 @@
 
 ### **Next Steps**
 1. **Ensure Consistent Constant Usage**:
+   - [x] Add `MISSING_FIELD_ERROR` to `app/constants.py`
    - [x] Verify all FlashMessages constants are accessed with .value in forms
 
 ### **Things to Remember for Next Coding Session**
