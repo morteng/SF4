@@ -9,6 +9,13 @@
 - [x] Fix `TypeError` in `CustomDateTimeField` caused by incorrect `self.format` usage.
 - [x] Consolidate leap year validation logic in `CustomDateTimeField`.
 - [x] Add tests for edge cases in `CustomDateTimeField`.
+- [x] Add time validation logic to `CustomDateTimeField`
+- [x] Standardize validation error messages
+- [x] Remove hardcoded error messages
+- [x] Implement proper error message mapping
+- [x] Fix `TypeError` in `CustomDateTimeField` caused by incorrect `self.format` usage.
+- [x] Consolidate leap year validation logic in `CustomDateTimeField`.
+- [x] Add tests for edge cases in `CustomDateTimeField`.
 
 ## Next Session
 - [ ] Add more test cases for edge cases in `CustomDateTimeField`.
