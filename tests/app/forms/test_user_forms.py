@@ -476,6 +476,10 @@ def test_profile_update_creates_audit_log(client, setup_database):
         }, follow_redirects=True)
         assert login_response.status_code == 200, "Login failed"
 
+        # Clear any existing audit logs from login
+        AuditLog.query.delete()
+        db.session.commit()
+
         # Get CSRF token from the profile edit page
         get_response = client.get(url_for('user.edit_profile'))
         assert get_response.status_code == 200, "Failed to access profile edit page"
@@ -488,7 +492,7 @@ def test_profile_update_creates_audit_log(client, setup_database):
             'username': 'newusername',
             'email': 'newemail@example.com',
             'csrf_token': csrf_token
-        }, follow_redirects=True)  # Add follow_redirects=True
+        }, follow_redirects=True)
         
         # Verify successful update
         assert response.status_code == 200, "Profile update failed"
