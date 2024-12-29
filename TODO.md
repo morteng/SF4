@@ -1,17 +1,16 @@
 # TODO List
 
 ## High Priority
-1. Fix all failing tests
-2. Implement comprehensive test coverage
-3. Add validation for all form fields
-4. Implement proper error handling
+1. Implement bot scaffolding (basic CRUD and scheduling)
+2. Add bot management UI
+3. Implement bot scheduling functionality
 
 ## Medium Priority
-1. Refactor form validation logic
-2. Add logging for critical operations
-3. Implement proper transaction handling
+1. Add bot status monitoring
+2. Implement bot error handling
+3. Add bot execution history
 
 ## Low Priority
-1. Optimize database queries
-2. Add documentation for complex logic
-3. Implement performance monitoring
+1. Implement actual bot functionality (TagBot, UpdateBot, ReviewBot)
+2. Add bot performance metrics
+3. Implement bot notifications

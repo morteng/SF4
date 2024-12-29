@@ -30,10 +30,11 @@ The **Stipend Discovery Website** is a Flask-based web application that helps us
 - Alembic for migrations  
 - HTMX for dynamic interaction
 
-**Bots**:  
-- **TagBot**: Auto-tags stipends, just build the scaffolding for it for now.
-- **UpdateBot**: Updates and flags stale entries, just build the scaffolding for now. 
-- **ReviewBot**: Flags suspicious entries for admin review, just build the scaffolding for now.
+## Bots
+- **Bot Scaffolding**: Basic CRUD operations and scheduling implemented
+- **Bot Management**: Admin interface for starting/stopping bots
+- **Scheduling**: Basic scheduling functionality available
+- **Placeholder Implementation**: Actual bot functionality not yet implemented
 
 **Frontend**:  
 - HTML Templates  
