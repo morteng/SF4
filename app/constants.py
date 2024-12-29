@@ -212,7 +212,6 @@ class FlashCategory(str, Enum):
     PASSWORD_RESET_ERROR = "Failed to reset password."
     USER_SEARCH_ERROR = "Failed to search users."
 class FlashMessages(str, Enum):
-    CREATE_SUCCESS = "Record created successfully."
     CREATE_ERROR = "Error creating record."
     UPDATE_SUCCESS = "Record updated successfully."
     DELETE_SUCCESS = "Record deleted successfully."
