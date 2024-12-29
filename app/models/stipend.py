@@ -2,6 +2,38 @@ from .association_tables import stipend_tag_association, organization_stipends
 from app.extensions import db
 from .organization import Organization
 from datetime import datetime, timezone
+from dateutil.parser import parse
+from dateutil.relativedelta import relativedelta
+
+def parse_flexible_date(date_str):
+    """Parse flexible date formats into datetime objects"""
+    if not date_str:
+        return None
+    
+    try:
+        # Try parsing as full datetime first
+        dt = parse(date_str)
+        
+        # Handle vague descriptions like "in August"
+        if 'in ' in date_str.lower():
+            month = date_str.lower().split('in ')[1].strip()
+            dt = parse(month)
+            # Set to end of month if only month is specified
+            dt = dt + relativedelta(day=31)
+            
+        # Handle month/year format
+        elif len(date_str.split()) == 2 and not date_str[-1].isdigit():
+            dt = parse(date_str)
+            dt = dt + relativedelta(day=31)
+            
+        # Handle year only
+        elif len(date_str) == 4 and date_str.isdigit():
+            dt = parse(date_str)
+            dt = dt + relativedelta(month=12, day=31)
+            
+        return dt.replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
 
 class Stipend(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,19 +65,17 @@ class Stipend(db.Model):
         
         # Validate application deadline if provided
         if 'application_deadline' in data and data['application_deadline']:
-            if isinstance(data['application_deadline'], str):
-                try:
-                    parsed_dt = datetime.strptime(
-                        data['application_deadline'], '%Y-%m-%d %H:%M:%S')
-                    data['application_deadline'] = parsed_dt.replace(tzinfo=timezone.utc)
-                except ValueError:
-                    raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS")
+            parsed_dt = parse_flexible_date(data['application_deadline'])
+            if not parsed_dt:
+                raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS, Month YYYY, or YYYY")
             
             now = datetime.now(timezone.utc)
-            if data['application_deadline'] < now:
+            if parsed_dt < now:
                 raise ValueError("Application deadline must be a future date")
-            if (data['application_deadline'] - now).days > 365 * 5:
+            if (parsed_dt - now).days > 365 * 5:
                 raise ValueError("Application deadline cannot be more than 5 years in the future")
+            
+            data['application_deadline'] = parsed_dt
         
         # Validate organization exists if provided
         if 'organization_id' in data and data['organization_id']:
@@ -118,23 +148,17 @@ class Stipend(db.Model):
             if 'eligibility_criteria' in data:
                 self.eligibility_criteria = data['eligibility_criteria']
             if 'application_deadline' in data:
-                # Validate application deadline
-                if isinstance(data['application_deadline'], str):
-                    try:
-                        # Parse the datetime string and make it timezone-aware
-                        parsed_dt = datetime.strptime(
-                            data['application_deadline'], '%Y-%m-%d %H:%M:%S')
-                        data['application_deadline'] = parsed_dt.replace(tzinfo=timezone.utc)
-                    except ValueError:
-                        raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS")
+                parsed_dt = parse_flexible_date(data['application_deadline'])
+                if not parsed_dt:
+                    raise ValueError("Invalid date format. Use YYYY-MM-DD HH:MM:SS, Month YYYY, or YYYY")
                 
                 now = datetime.now(timezone.utc)
-                if data['application_deadline'] < now:
+                if parsed_dt < now:
                     raise ValueError("Application deadline must be a future date")
-                if (data['application_deadline'] - now).days > 365 * 5:
+                if (parsed_dt - now).days > 365 * 5:
                     raise ValueError("Application deadline cannot be more than 5 years in the future")
                 
-                self.application_deadline = data['application_deadline']
+                self.application_deadline = parsed_dt
             if 'organization_id' in data:
                 org = Organization.query.get(data['organization_id'])
                 if not org:
@@ -224,7 +248,13 @@ class Stipend(db.Model):
             'homepage_url': self.homepage_url,
             'application_procedure': self.application_procedure,
             'eligibility_criteria': self.eligibility_criteria,
-            'application_deadline': self.application_deadline.isoformat() if self.application_deadline else None,
+            'application_deadline': (
+                self.application_deadline.strftime('%B %Y') 
+                if self.application_deadline and self.application_deadline.hour == 23 and self.application_deadline.minute == 59
+                else self.application_deadline.strftime('%Y-%m-%d %H:%M:%S') 
+                if self.application_deadline 
+                else None
+            ),
             'open_for_applications': self.open_for_applications,
             'organization_id': self.organization_id,
             'organization': self.organization.name if self.organization else None,
