@@ -1,7 +1,8 @@
-from app.models.bot import Bot
+from app.models.bot import Bot, BotStatus, BotSchedule
 from app.services.base_service import BaseService
 from app.extensions import db
 from app.models.notification import Notification
+from datetime import datetime
 
 class BotService(BaseService):
     def __init__(self):
@@ -17,11 +18,15 @@ class BotService(BaseService):
         bot = Bot(
             name=data['name'],
             description=data['description'],
-            status=data.get('status', 'inactive'),
+            status=BotStatus.INACTIVE,
             schedule=data.get('schedule'),
-            next_run=calculate_next_run(data.get('schedule')) if data.get('schedule') else None,
             is_active=data.get('is_active', True)
         )
+        
+        if bot.schedule:
+            bot.next_run = bot.calculate_next_run()
+            bot.status = BotStatus.SCHEDULED
+            
         db.session.add(bot)
         db.session.commit()
         return bot
