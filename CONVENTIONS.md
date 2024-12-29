@@ -5,7 +5,17 @@
 2. Include validation in setters and use private attributes for storage.
 3. Document properties with clear docstrings.
 
-Example:
+### Custom Field Implementation
+1. **Handle All Arguments**:
+   - Ensure custom fields properly handle all arguments passed to them (e.g., `validators`).
+2. **Default Validators**:
+   - Provide default validators if none are passed:
+     ```python
+     if validators is None:
+         validators = [InputRequired()]
+     ```
+
+Example Property Implementation:
 ```python
 class BaseService:
     def __init__(self):

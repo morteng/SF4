@@ -3,6 +3,8 @@
 ## Key Updates
 - **Validation Improvements**:
   - Fixed `CustomDateTimeField` initialization to handle the `validators` argument correctly with a default `InputRequired()` validator.
+  - Added `pytest` testing framework and dependency verification.
+  - Refactored circular imports into `app/common/utils.py`.
   - Centralized error messages in `app/constants.py` for consistency.
   - Added pre-test dependency verification.
   - Standardized error messages for date/time fields using `app/constants.py`.
