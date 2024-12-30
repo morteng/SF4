@@ -1,21 +1,24 @@
 # Todo - Next Code Cycle
 
-1. **Immediate Actions**:
-   - Remove failing test_create_stipend_past_date
-   - Add CSRF debug logging to base controller
-   - Verify CSRF token handling in all form submissions
+1. **CSRF Token Fixes**:
+   - Update test_create_stipend_valid to handle CSRF tokens
+   - Add session management to test setup
+   - Verify CSRF token flow between login and form submission
+   - Add CSRF token to all form submissions in tests
 
 2. **Test Coverage**:
    - Increase test coverage to 60%
    - Focus on working functionality tests
    - Add tests for core business logic
+   - Document CSRF token handling process for tests
 
 3. **Security**:
    - Verify session timeout functionality
    - Audit CSRF protection implementation
    - Review token validation flow
+   - Test session persistence across requests
 
 4. **Technical Debt**:
    - Document CSRF token handling process
-   - Update test documentation
-   - Review test dependencies
+   - Update test documentation with CSRF examples
+   - Review test dependencies for session management
