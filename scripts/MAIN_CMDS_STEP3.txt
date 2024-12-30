@@ -5,7 +5,7 @@
 
 # Step 3 workflow
 /ask Code Cycle Step 3 (Refine & Summarize) - Should we revisit or refactor any code? Summarize the current status.
-/architect implement improvements
+/code implement improvements
 
 # Prompt about console commands
 /ask Do we need to run any console commands for Step 3?
