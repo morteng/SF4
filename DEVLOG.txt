@@ -18,9 +18,25 @@
    - Password strength validation implemented (min 8 chars, 1 number, 1 special char)
    - Session timeout set to 30 minutes
 
+## Immediate Action Plan (CEO Priority: Fix All Tests):
+1. **Fix Login Redirect Test**:
+   - Update test to expect 302 redirect after successful login
+   - Add follow_redirects=True to test client requests
+   - Verify admin status after redirect
+
+2. **Implement Missing Test Methods**:
+   - Add test_login method to AdminStipendTestCase
+   - Include CSRF token handling in all form tests
+   - Add comprehensive form validation tests
+
+3. **Improve Test Coverage**:
+   - Add edge case tests for form validation
+   - Implement integration tests for form submissions
+   - Add tests for rate limiting functionality
+
 ## Next Steps:
-1. Implement missing test_login method
-2. Fix failing login redirect test
+1. Fix failing login redirect test
+2. Implement missing test_login method
 3. Add comprehensive form validation tests
 4. Implement login rate limiting
 5. Continue improving test coverage
@@ -30,3 +46,5 @@
 ### Decisions Made:
 1. Rate limit thresholds: 5 attempts/minute
 2. Password requirements: Minimum 8 chars, 1 number, 1 special character
+3. Login redirect tests will expect 302 status code
+4. All form tests will include CSRF token handling
