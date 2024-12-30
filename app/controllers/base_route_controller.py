@@ -158,6 +158,8 @@ class BaseRouteController:
         # Debug log CSRF token state
         logger.debug(f"CSRF token in form: {form.csrf_token._value()}")
         logger.debug(f"Session CSRF token: {session.get('csrf_token')}")
+        logger.debug(f"Request headers: {dict(request.headers)}")
+        logger.debug(f"Session data: {dict(session)}")
         
         if form.validate_on_submit():
             try:
