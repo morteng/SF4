@@ -16,6 +16,23 @@
   (Skips tests gracefully if something’s missing—no meltdown required.)
 
 ## 2. Testing Setup
+
+### Test Organization
+- **Folder Structure**:
+  ```
+  tests/
+    auth/        # Authentication tests
+    models/      # Model tests
+    routes/      # Route tests
+    services/    # Service tests
+    fixtures/    # Test fixtures
+    integration/ # Integration tests
+  ```
+- **Naming Conventions**:
+  - Test files: `test_<module>_<functionality>.py`
+  - Test functions: `test_<scenario>`
+  - Fixtures: `<scope>_<fixture_name>`
+  
 - **pytest**   
 - **freezegun**: For controlling date/time in tests.
 
