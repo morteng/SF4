@@ -6,9 +6,6 @@
 
 ### COMMANDS START ###
 /run pytest tests/test_admin_stipends.py::AdminStipendTestCase::test_create_stipend_invalid_characters -v --cov=app --cov-report=term-missing --log-cli-level=DEBUG
-/run pytest tests/test_admin_stipends.py::AdminStipendTestCase::test_create_stipend_valid -v --cov=app --cov-report=term-missing --log-cli-level=DEBUG
-/run pytest tests/test_admin_stipends.py::AdminStipendTestCase::test_create_stipend_missing_name -v --cov=app --cov-report=term-missing --log-cli-level=DEBUG
-/run pytest tests/test_admin_stipends.py::AdminStipendTestCase::test_create_stipend_csrf_validation -v --cov=app --cov-report=term-missing --log-cli-level=DEBUG
 ### COMMANDS END ###
 
 # Once finished, jump to Step 3.
