@@ -40,6 +40,12 @@ class StipendForm(FlaskForm):
         Regexp(r'^[a-zA-Z0-9\s\-,.()\'"]+$', 
                message=FlashMessages.INVALID_NAME_CHARACTERS)
     ])
+    name = StringField('Name', validators=[
+        DataRequired(message=FlashMessages.NAME_REQUIRED),
+        Length(max=100, message=FlashMessages.NAME_LENGTH),
+        Regexp(r'^[a-zA-Z0-9\s\-,.()\'"]+$', 
+               message=FlashMessages.INVALID_NAME_CHARACTERS)
+    ])
     summary = TextAreaField('Summary', validators=[
         DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
         Length(max=500, message="Summary cannot exceed 500 characters.")
