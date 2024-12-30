@@ -6,13 +6,13 @@
 # Step 5 workflow
 /drop DEVLOG.txt
 /add DEVLOG.txt
-/architect Code Cycle Step 5 (Final Docs) - Finalize all documentation! Update TODO.txt with your latest insights, focusing on a short list of truly important tasks. In DEVLOG.txt, give a brief status report, add a fun emoji that captures our current vibe, and summarize this code cycle. Remove old content and answered questions, but keep anything still pending for me, your boss. Also remove any CEO messages that have been 100% resolved. 
+/code Code Cycle Step 5 (Final Docs) - Finalize all documentation! Update TODO.txt with your latest insights, focusing on a short list of truly important tasks. In DEVLOG.txt, give a brief status report, add a fun emoji that captures our current vibe, and summarize this code cycle. Remove old content and answered questions, but keep anything still pending for me, your boss. Also remove any CEO messages that have been 100% resolved. Do not comment on code or explain yoursel, just perform the edits.
 /drop DEVLOG.txt
 
 # Prompt about console commands
 
 /add scripts/CONSOLE_CMDS_STEP5.txt
-/code Remove previously executed console commands from CONSOLE_CMDS_STEP5.txt and add new ones if needed. Do not use commands requiring manual input. Prepend new commands with /run. Do not comment on code or explain yoursel, fjust perform the edit.
+/code Remove previously executed console commands from CONSOLE_CMDS_STEP5.txt and add new ones if needed. Do not use commands requiring manual input. Prepend new commands with /run. Do not comment on code or explain yoursel, just perform the edit.
 /drop scripts/CONSOLE_CMDS_STEP5.txt
 
 # Now load the console commands for Step 5.
