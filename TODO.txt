@@ -1,5 +1,5 @@
 # Priority Tasks
 
-1. Review and optimize audit log test coverage
-2. Update audit log documentation
-3. Verify test stability metrics
+1. Fix login test assertions to match current redirect behavior
+2. Improve test coverage for authentication flows
+3. Organize tests into modular subfolders per CEO directive
