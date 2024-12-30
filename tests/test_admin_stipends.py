@@ -191,7 +191,7 @@ class AdminStipendTestCase(unittest.TestCase):
         
         # Test with invalid characters
         response = self.create_stipend_with_data({
-            'name': 'Invalid@Name#123',
+            'name': 'Invalid@Name#123',  # Contains invalid special characters
             'summary': 'Test summary',
             'description': 'Test description',
             'homepage_url': 'http://example.com',
@@ -203,7 +203,7 @@ class AdminStipendTestCase(unittest.TestCase):
         })
         
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Invalid characters in name', response.data)
+        self.assertIn(b'Stipend name can only contain letters, numbers, spaces, hyphens, and basic punctuation', response.data)
         try:
             with self.client:
                 # Get CSRF token from login page
