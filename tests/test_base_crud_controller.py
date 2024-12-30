@@ -1,4 +1,5 @@
 from unittest.mock import patch
+from flask import Response
 from tests.base_test_case import BaseTestCase
 from app.controllers.base_crud_controller import BaseCrudController
 from app.models import Tag
@@ -13,12 +14,13 @@ class TestBaseCrudController(BaseTestCase):
             service=tag_service,
             entity_name='tag',
             form_class=TagForm,
-            template_dir='admin/tag'  # Add this line to specify the template directory
+            template_dir='admin/tag'
         )
 
     @patch('app.controllers.base_crud_controller.render_template')
     def test_create_success(self, mock_render):
-        mock_render.return_value = "Mocked Template"
+        # Mock render_template to return a Flask Response object
+        mock_render.return_value = Response(status=200)
         form_data = {'name': 'New Tag', 'category': 'TestCategory'}
         with self.client:
             self.login()
@@ -33,7 +35,8 @@ class TestBaseCrudController(BaseTestCase):
 
     @patch('app.controllers.base_crud_controller.render_template')
     def test_create_validation_error(self, mock_render):
-        mock_render.return_value = "Mocked Template"
+        # Mock render_template to return a Flask Response object
+        mock_render.return_value = Response(status=200)
         form_data = {'name': '', 'category': 'TestCategory'}  # Invalid data
         with self.client:
             self.login()

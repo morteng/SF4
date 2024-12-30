@@ -126,16 +126,7 @@ class BaseCrudController:
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
 
     def create(self, data=None):
-        """Handle both GET and POST requests for creation.
-        
-        Args:
-            data: Form data for POST requests, None for GET requests
-            
-        Returns:
-            Response: Rendered template or redirect
-        """
         if data is None:
-            # Handle GET request - return form template
             try:
                 return render_template(
                     f'{self.template_dir}/create.html',
@@ -143,10 +134,9 @@ class BaseCrudController:
                 )
             except Exception as e:
                 logger.error(f"Template not found: {str(e)}")
-                flash("An error occurred while loading the form. Please try again.", FlashCategory.ERROR.value)
+                flash(self.flash_messages['template_not_found'], FlashCategory.ERROR.value)
                 return redirect(url_for(f'admin.{self.entity_name}.index'))
         else:
-            # Handle POST request - process form data
             form = self.form_class(data=data)
             if form.validate():
                 try:
