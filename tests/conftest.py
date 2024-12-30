@@ -324,6 +324,28 @@ def test_required_packages():
     except ImportError:
         pytest.fail("Flask-Limiter is not installed")
 
+@pytest.mark.parametrize('route_name,method', [
+    ('admin.stipend.create', 'POST'),
+    ('admin.stipend.edit', 'POST'),
+    ('admin.stipend.delete', 'POST')
+])
+def test_csrf_validation(client, logged_in_admin, route_name, method):
+    """Test CSRF validation for protected routes."""
+    # Make request without CSRF token
+    response = client.open(
+        url_for(route_name),
+        method=method,
+        data={},
+        follow_redirects=True
+    )
+    
+    # Should redirect with CSRF error
+    assert response.status_code == 302
+    with client.session_transaction() as session:
+        assert '_flashes' in session
+        flash_messages = session['_flashes']
+        assert any('CSRF token is missing' in msg for category, msg in flash_messages)
+
 def generate_csrf_token():
     """Generate a CSRF token for testing."""
     from flask_wtf.csrf import generate_csrf
@@ -364,12 +386,26 @@ def get_csrf_token(client, route_name):
 
 def login_as_admin(client, username='admin', password='admin'):
     """Helper to login as admin user."""
+    # Get login page to set CSRF token
+    client.get(url_for('public.login'))
+    
+    # Get CSRF token
     csrf_token = get_csrf_token(client, 'public.login')
-    return client.post(url_for('public.login'), data={
+    
+    # Submit login form with CSRF token
+    response = client.post(url_for('public.login'), data={
         'username': username,
         'password': password,
         'csrf_token': csrf_token
     }, follow_redirects=True)
+    
+    # Verify login was successful
+    assert response.status_code == 200
+    with client.session_transaction() as session:
+        assert '_user_id' in session
+        assert '_fresh' in session
+    
+    return response
 
 def submit_form(client, route_name, form_data, method='POST'):
     """Helper to submit a form with CSRF token and proper headers."""
@@ -386,13 +422,31 @@ def submit_form(client, route_name, form_data, method='POST'):
         'X-Requested-With': 'XMLHttpRequest'
     }
     
-    return client.open(
+    # Ensure form data is properly encoded
+    if method == 'POST':
+        data = form_data
+    else:
+        data = None
+        query_string = form_data
+    
+    response = client.open(
         url_for(route_name),
         method=method,
-        data=form_data,
+        data=data,
+        query_string=query_string if method != 'POST' else None,
         headers=headers,
         follow_redirects=True
     )
+    
+    # Verify CSRF token was accepted
+    if response.status_code == 302:
+        with client.session_transaction() as session:
+            if '_flashes' in session:
+                flash_messages = session['_flashes']
+                assert not any('CSRF' in msg for category, msg in flash_messages), \
+                    "CSRF validation failed in form submission"
+    
+    return response
 
 def get_all_tags():
     with current_app.app_context():  # Ensure application context is set
