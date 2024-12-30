@@ -1,8 +1,8 @@
 # Priority Tasks
 
-1. Verify login route implementation for error message handling
-2. Add more test cases for different login scenarios
-3. Improve test coverage for authentication-related code
-4. Add integration tests for complete login flow
-5. Add model tests for User and authentication
-6. Add route tests for all auth endpoints
+1. Verify all auth tests pass
+2. Review test coverage report
+3. Add integration tests for complete auth flow
+4. Implement model tests for User class
+5. Add route tests for registration and logout
+6. Update documentation with new test structure
