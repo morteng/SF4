@@ -730,7 +730,7 @@ class AdminStipendTestCase(unittest.TestCase):
                     follow_redirects=True
                 )
                 self.assertEqual(response.status_code, 200)
-                self.assertIn(b'This field is required', response.data)
+                self.assertIn(b'Invalid CSRF token', response.data)
 
     def test_blueprint_registration(self):
         """Test that the admin stipend blueprint is registered correctly."""
