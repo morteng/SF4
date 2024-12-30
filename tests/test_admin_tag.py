@@ -1,6 +1,7 @@
 import unittest
 from flask import Flask
 from app import create_app, db
+from app.models.user import User
 
 class AdminTagTestCase(unittest.TestCase):
     def setUp(self):
@@ -9,7 +10,27 @@ class AdminTagTestCase(unittest.TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
+        
+        # Create test admin user
+        self.admin = User(username='admin', email='admin@test.com')
+        self.admin.set_password('adminpassword')
+        self.admin.is_admin = True
+        db.session.add(self.admin)
+        db.session.commit()
+        
         self.client = self.app.test_client()
+        
+        # Login as admin
+        login_response = self.client.post('/login', data={
+            'username': 'admin',
+            'password': 'adminpassword'
+        }, follow_redirects=True)
+        self.assertEqual(login_response.status_code, 200)
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
 
     def test_create_tag_invalid_characters(self):
         """Test creating a tag with invalid characters"""
@@ -20,6 +41,7 @@ class AdminTagTestCase(unittest.TestCase):
         
         # Extract CSRF token from the form
         csrf_token = self.extract_csrf_token(form_page.data)
+        self.assertIsNotNone(csrf_token, "CSRF token not found in form")
         
         # Submit form with invalid characters
         response = self.client.post(
