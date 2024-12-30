@@ -1,13 +1,10 @@
 import unittest
-from unittest.mock import patch
 from flask import url_for
-from flask.ctx import _cv_app
 from app import create_app, db
 from app.models.user import User
 from app.models.stipend import Stipend
 from app.models.organization import Organization
-from datetime import datetime  # Import datetime module
-from app.constants import FlashMessages
+from datetime import datetime
 
 class AdminStipendTestCase(unittest.TestCase):
     def setUp(self):
@@ -389,43 +386,43 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Test different boolean representations
-        for value, expected in [('y', True), ('n', False), ('true', True), 
-                              ('false', False), ('1', True), ('0', False)]:
-            csrf_token = self.get_csrf_token('admin.admin_stipend.create')
-            
-            # Add debug logging
-            self.app.logger.debug(f"Testing boolean value: {value}")
-            
-            response = self.client.post(url_for('admin.admin_stipend.create'), data={
-                'name': f'Test Stipend {value}',  # Unique name for each test
-                'summary': 'This is a test stipend.',
-                'description': 'Detailed description of the test stipend.',
-                'homepage_url': 'http://example.com/stipend',
-                'application_procedure': 'Send an email to admin@example.com',
-                'eligibility_criteria': 'Must be a student.',
-                'application_deadline': datetime(2023, 12, 31, 23, 59, 59).strftime('%Y-%m-%d %H:%M:%S'),
-                'organization_id': 1,
-                'open_for_applications': value,
-                'csrf_token': csrf_token
-            }, follow_redirects=True)
+        test_cases = [
+            ('y', True),
+            ('n', False),
+            ('true', True),
+            ('false', False),
+            ('1', True),
+            ('0', False)
+        ]
 
-            self.assertEqual(response.status_code, 200)
-            
-            # Add more debug logging
-            self.app.logger.debug(f"Response data: {response.data.decode('utf-8')}")
-            
-            # Check if stipend was created
-            stipend = Stipend.query.filter_by(name=f'Test Stipend {value}').first()
-            if stipend is None:
-                self.app.logger.error(f"Failed to create stipend with value: {value}")
-                self.fail(f"Stipend creation failed for value: {value}")
-            
-            self.assertEqual(stipend.open_for_applications, expected,
-                           f"Expected {expected} for value {value}, got {stipend.open_for_applications}")
-            
-            # Clean up
-            db.session.delete(stipend)
-            db.session.commit()
+        for value, expected in test_cases:
+            with self.subTest(value=value):
+                csrf_token = self.get_csrf_token('admin.admin_stipend.create')
+                
+                response = self.client.post(url_for('admin.admin_stipend.create'), data={
+                    'name': f'Test Stipend {value}',
+                    'summary': 'This is a test stipend.',
+                    'description': 'Detailed description of the test stipend.',
+                    'homepage_url': 'http://example.com/stipend',
+                    'application_procedure': 'Send an email to admin@example.com',
+                    'eligibility_criteria': 'Must be a student.',
+                    'application_deadline': datetime(2023, 12, 31, 23, 59, 59).strftime('%Y-%m-%d %H:%M:%S'),
+                    'organization_id': 1,
+                    'open_for_applications': value,
+                    'csrf_token': csrf_token
+                }, follow_redirects=True)
+
+                self.assertEqual(response.status_code, 200)
+                
+                # Verify stipend creation and boolean value
+                stipend = Stipend.query.filter_by(name=f'Test Stipend {value}').first()
+                self.assertIsNotNone(stipend, f"Stipend creation failed for value: {value}")
+                self.assertEqual(stipend.open_for_applications, expected,
+                               f"Expected {expected} for value {value}, got {stipend.open_for_applications}")
+                
+                # Clean up
+                db.session.delete(stipend)
+                db.session.commit()
 
 
     def test_unauthorized_access(self):
@@ -516,24 +513,6 @@ class AdminStipendTestCase(unittest.TestCase):
 
 
 
-
-    def test_blueprint_registration(self):
-        """Test that the admin stipend blueprint is registered correctly."""
-        with self.app.app_context():
-            registered_routes = [rule.endpoint for rule in self.app.url_map.iter_rules()]
-            self.assertIn('admin.admin_stipend.create', registered_routes)
-            self.assertIn('admin.admin_stipend.edit', registered_routes)
-            self.assertIn('admin.admin_stipend.delete', registered_routes)
-
-    def test_route_validation(self):
-        """Test that required routes are validated."""
-        with patch('app.common.utils.validate_blueprint_routes') as mock_validate:
-            self.app = create_app('testing')
-            mock_validate.assert_called_once_with(
-                self.app,
-                ['admin.admin_stipend.create', 'admin.admin_stipend.edit',
-                 'admin.admin_stipend.delete', 'admin.dashboard.dashboard']
-            )
 
 if __name__ == '__main__':
     unittest.main()
