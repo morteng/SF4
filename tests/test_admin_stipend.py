@@ -1,5 +1,12 @@
 from flask import url_for
 
+def login(client, username, password):
+    """Helper function to log in a test user"""
+    return client.post(url_for('public.login'), data=dict(
+        username=username,
+        password=password
+    ), follow_redirects=True)
+
 def test_create_stipend_with_invalid_open_for_applications(client, admin_user):
     """Test creating a stipend with invalid open_for_applications value"""
     login(client, admin_user.username, 'password')
