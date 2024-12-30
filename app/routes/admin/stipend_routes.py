@@ -141,7 +141,7 @@ def create():
         logger.warning(f"Non-admin user {current_user.id} attempted to access stipend creation")
         abort(403)
     
-    form = StipendForm()
+    form = StipendForm(request.form)
     logger.debug("Stipend form initialized successfully")
     
     if request.method == 'POST':
