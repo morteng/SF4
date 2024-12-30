@@ -531,6 +531,58 @@ class AdminStipendTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 403)  # Assuming you return a 403 Forbidden
 
+    def test_create_stipend_invalid_date(self):
+        # Log in as admin
+        self.login('admin', 'password')
+        
+        # Get CSRF token
+        response = self.client.get(url_for('admin.admin_stipend.create'))
+        csrf_token = response.data.decode('utf-8').split(
+            'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+        
+        # Test with invalid date format
+        response = self.client.post(url_for('admin.admin_stipend.create'), data={
+            'name': 'Test Stipend',
+            'summary': 'Test summary',
+            'description': 'Test description',
+            'homepage_url': 'http://example.com',
+            'application_procedure': 'Test procedure',
+            'eligibility_criteria': 'Test criteria',
+            'application_deadline': 'invalid-date',
+            'organization_id': 1,
+            'open_for_applications': 'y',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Invalid date/time format', response.data)
+
+    def test_create_stipend_past_date(self):
+        # Log in as admin
+        self.login('admin', 'password')
+        
+        # Get CSRF token
+        response = self.client.get(url_for('admin.admin_stipend.create'))
+        csrf_token = response.data.decode('utf-8').split(
+            'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+        
+        # Test with past date
+        response = self.client.post(url_for('admin.admin_stipend.create'), data={
+            'name': 'Test Stipend',
+            'summary': 'Test summary',
+            'description': 'Test description',
+            'homepage_url': 'http://example.com',
+            'application_procedure': 'Test procedure',
+            'eligibility_criteria': 'Test criteria',
+            'application_deadline': '2020-01-01 00:00:00',
+            'organization_id': 1,
+            'open_for_applications': 'y',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Application deadline must be in the future', response.data)
+
     def test_blueprint_registration(self):
         """Test that the admin stipend blueprint is registered correctly."""
         with self.app.app_context():

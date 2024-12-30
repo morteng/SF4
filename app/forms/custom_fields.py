@@ -1,7 +1,6 @@
-from wtforms import Field
+from wtforms import Field, ValidationError
 from wtforms.validators import InputRequired
 from datetime import datetime
-from wtforms import ValidationError
 from app.constants import FlashMessages
 
 class CustomDateTimeField(Field):
