@@ -52,15 +52,44 @@ class AdminStipendTestCase(unittest.TestCase):
     def login(self):
         # Get CSRF token from login page
         response = self.client.get(url_for('public.login'))
-        csrf_token = response.data.decode('utf-8').split(
-            'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+        self.assertEqual(response.status_code, 200)
+        
+        # Extract CSRF token safely
+        try:
+            csrf_token = response.data.decode('utf-8').split(
+                'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+            if not csrf_token:
+                raise ValueError("Empty CSRF token")
+        except (IndexError, ValueError) as e:
+            self.fail(f"Failed to extract CSRF token: {str(e)}")
         
         # Log in as admin
-        return self.client.post(url_for('public.login'), data={
+        response = self.client.post(url_for('public.login'), data={
             'username': 'admin',
             'password': 'admin',
             'csrf_token': csrf_token
         }, follow_redirects=True)
+        
+        # Verify successful login
+        self.assertEqual(response.status_code, 200)
+        with self.client.session_transaction() as session:
+            self.assertIn('_user_id', session)
+            self.assertTrue(session.get('is_admin', False))
+        
+        return response
+
+    def get_csrf_token(self, route_name):
+        """Helper method to get CSRF token from a specific route"""
+        response = self.client.get(url_for(route_name))
+        self.assertEqual(response.status_code, 200)
+        try:
+            csrf_token = response.data.decode('utf-8').split(
+                'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+            if not csrf_token:
+                raise ValueError("Empty CSRF token")
+            return csrf_token
+        except (IndexError, ValueError) as e:
+            self.fail(f"Failed to extract CSRF token from {route_name}: {str(e)}")
 
     def create_stipend_with_data(self, form_data):
         """Helper method to create a stipend with form data"""
