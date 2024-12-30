@@ -85,13 +85,6 @@ class StipendForm(FlaskForm):
 
     submit = SubmitField('Create')
 
-    name = StringField('Name', validators=[
-        DataRequired(message=FlashMessages.NAME_REQUIRED),
-        Length(max=100, message=FlashMessages.NAME_LENGTH),
-        Regexp(r'^[a-zA-Z0-9\s\-,.()\'"]+$', 
-               message=FlashMessages.INVALID_NAME_CHARACTERS)
-    ])
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Initialize organization choices
