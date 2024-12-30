@@ -18,7 +18,7 @@ def login():
             except BuildError:
                 current_app.logger.error("Admin dashboard route not found")
                 return redirect(url_for('public.index'))
-        return redirect(url_for('user.profile'))
+        return redirect(url_for('public.index'))
     
     form = LoginForm()
     if form.validate_on_submit():
@@ -53,7 +53,7 @@ def login():
             try:
                 if user.is_admin:
                     return redirect(url_for('admin.dashboard.dashboard'))
-                return redirect(url_for('user.profile'))
+                return redirect(url_for('public.index'))
             except BuildError:
                 current_app.logger.error("Dashboard route not found")
                 return redirect(url_for('public.index'))
