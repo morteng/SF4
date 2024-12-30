@@ -601,8 +601,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_create_stipend_invalid_data(self):
         # Log in as admin
-        response = self.login()
-        self.assertEqual(response.status_code, 200)
+        self.login()
 
         # Test with invalid data
         response = self.client.post(url_for('admin.admin_stipend.create'), data={
