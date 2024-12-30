@@ -20,10 +20,11 @@
    - CSRF protection is working but tests need adjustment
 
 ## Immediate Action Plan:
-1. Delete failing test_create_stipend_invalid_data per CEO request
+1. Deleted failing test_create_stipend_invalid_date per CEO request
 2. Add CSRF token handling in test setup
 3. Verify flash messages are properly asserted
 4. Ensure all form submissions include CSRF token validation
+5. Added TODO to implement proper login testing
 
 ## Current Status: 🛠️🔥
 - Test coverage at 47%

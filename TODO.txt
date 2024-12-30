@@ -3,6 +3,7 @@
 1. **Critical Fixes**:
    - Fix CSRF token validation in test_create_stipend_invalid_data
    - Add route_name parameter to get_csrf_token() call
+   - Implement proper login testing with credential handling
 
 2. **Testing**:
    - Add edge case tests for form validation
