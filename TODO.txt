@@ -1,23 +1,20 @@
 # Todo - Next Code Cycle
 
-1. **Form Validation**:
+1. **Form Initialization**:
    - Fix form field initialization
    - Add template rendering tests
-   - Improve coverage for edge cases
-   - Add form validation helper methods
+   - Implement form field initialization checker
 
-2. **Testing Infrastructure**:
-   - Create template-specific test cases
-   - Add tests for invalid character handling
-   - Improve form initialization error handling
+2. **Test Coverage**:
+   - Add edge case tests for form validation
+   - Improve template rendering test coverage
 
 ---
 
 ### Key Insights
 1. **Form Initialization**:
-   - WTForms fields must be defined at class level
-   - Dynamic field creation in __init__ doesn't work with templates
+   - WTForms fields must be properly initialized
+   - Need better error handling for form rendering
 2. **Testing**:
-   - Need better error handling in form initialization
    - Template rendering tests are essential
-   - Invalid character handling needs more test coverage
+   - Need more comprehensive edge case coverage
