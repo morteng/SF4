@@ -31,9 +31,13 @@ class AdminStipendTestCase(unittest.TestCase):
         db.session.commit()
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
-        self.app_context.pop()
+        try:
+            db.session.remove()
+            db.drop_all()
+        except Exception as e:
+            print(f"Error during teardown: {str(e)}")
+        finally:
+            self.app_context.pop()
 
     def login(self, username, password):
         # Get CSRF token first
