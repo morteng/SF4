@@ -136,10 +136,15 @@ class BaseCrudController:
         """
         if data is None:
             # Handle GET request - return form template
-            return render_template(
-                f'{self.template_dir}/create.html',
-                form=self.form_class()
-            )
+            try:
+                return render_template(
+                    f'{self.template_dir}/create.html',
+                    form=self.form_class()
+                )
+            except Exception as e:
+                logger.error(f"Template not found: {str(e)}")
+                flash("An error occurred while loading the form. Please try again.", FlashCategory.ERROR.value)
+                return redirect(url_for(f'admin.{self.entity_name}.index'))
         else:
             # Handle POST request - process form data
             form = self.form_class(data=data)

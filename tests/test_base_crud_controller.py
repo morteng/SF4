@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from tests.base_test_case import BaseTestCase
 from app.controllers.base_crud_controller import BaseCrudController
 from app.models import Tag
@@ -15,17 +16,24 @@ class TestBaseCrudController(BaseTestCase):
             template_dir='admin/tag'  # Add this line to specify the template directory
         )
 
-    def test_create_success(self):
+    @patch('app.controllers.base_crud_controller.render_template')
+    def test_create_success(self, mock_render):
+        mock_render.return_value = "Mocked Template"
         form_data = {'name': 'New Tag', 'category': 'TestCategory'}
         with self.client:
             self.login()
             response = self.controller.create(form_data)
-            self.assertEqual(response.status_code, 302)
-            
+            self.assertEqual(response.status_code, 200)
+            mock_render.assert_called_once_with(
+                'admin/tag/create.html',
+                form=self.controller.form_class()
+            )
             tag = Tag.query.filter_by(name='New Tag').first()
             self.assertIsNotNone(tag)
 
-    def test_create_validation_error(self):
+    @patch('app.controllers.base_crud_controller.render_template')
+    def test_create_validation_error(self, mock_render):
+        mock_render.return_value = "Mocked Template"
         form_data = {'name': '', 'category': 'TestCategory'}  # Invalid data
         with self.client:
             self.login()
