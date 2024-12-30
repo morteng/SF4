@@ -1,20 +1,22 @@
 # Todo - Next Code Cycle
 
-1. **Form Initialization**:
-   - Fix form field initialization
+1. **Form Debugging**:
+   - Verify form initialization logging
+   - Check form inheritance chain
    - Add template rendering tests
-   - Implement form field initialization checker
 
 2. **Test Coverage**:
    - Add edge case tests for form validation
    - Improve template rendering test coverage
+   - Add form initialization tests
 
 ---
 
 ### Key Insights
 1. **Form Initialization**:
-   - WTForms fields must be properly initialized
-   - Need better error handling for form rendering
+   - Debug logging helps identify initialization issues
+   - Proper inheritance chain is crucial
 2. **Testing**:
    - Template rendering tests are essential
    - Need more comprehensive edge case coverage
+   - Form initialization tests are needed

@@ -33,6 +33,11 @@ from app.extensions import db
 
 
 class StipendForm(FlaskForm):
+    def __init__(self, *args, **kwargs):
+        logger.debug("Initializing StipendForm")
+        super().__init__(*args, **kwargs)
+        logger.debug(f"Form fields initialized: {self._fields.keys()}")
+        
     csrf_token = HiddenField('CSRF Token')
     name = StringField('Name', validators=[
         DataRequired(message=FlashMessages.NAME_REQUIRED),
@@ -357,22 +362,3 @@ class OrganizationForm(FlaskForm):
         
         # Update the field data with stripped value
         field.data = stripped
-from flask_wtf import FlaskForm
-from wtforms.validators import InputRequired
-from app.forms.custom_fields import CustomDateTimeField
-
-class StipendForm(FlaskForm):
-    application_deadline = CustomDateTimeField(
-        "Application Deadline",
-        format="%Y-%m-%d %H:%M:%S",
-        validators=[InputRequired(message=FlashMessages.MISSING_FIELD_ERROR)],
-        error_messages={
-            'required': FlashMessages.MISSING_FIELD_ERROR,
-            'invalid_format': FlashMessages.INVALID_DATE_FORMAT,
-            'invalid_date': FlashMessages.INVALID_DATE_VALUES,
-            'invalid_time': FlashMessages.INVALID_TIME_COMPONENTS,
-            'past_date': FlashMessages.FUTURE_DATE_REQUIRED,
-            'future_date': 'Application deadline cannot be more than 5 years in the future',
-            'invalid_leap_year': FlashMessages.INVALID_LEAP_YEAR_DATE
-        }
-    )
