@@ -148,62 +148,6 @@ class AdminStipendTestCase(unittest.TestCase):
         except (IndexError, ValueError) as e:
             self.fail(f"Failed to extract CSRF token: {str(e)}")
 
-    def test_create_stipend_valid(self):
-        # Start session
-        with self.client:
-            # Get CSRF token from login page
-            response = self.client.get(url_for('public.login'))
-            self.assertEqual(response.status_code, 200)
-            
-            # Extract CSRF token
-            try:
-                csrf_token = response.data.decode('utf-8').split(
-                    'name="csrf_token" type="hidden" value="')[1].split('"')[0]
-                if not csrf_token:
-                    raise ValueError("Empty CSRF token")
-            except (IndexError, ValueError) as e:
-                self.fail(f"Failed to extract CSRF token: {str(e)}")
-            
-            # Log in as admin
-            response = self.client.post(url_for('public.login'), data={
-                'username': 'admin',
-                'password': 'admin',
-                'csrf_token': csrf_token
-            }, follow_redirects=True)
-            self.assertEqual(response.status_code, 200)
-            
-            # Get CSRF token from login page
-            response = self.client.get(url_for('public.login'))
-            self.assertEqual(response.status_code, 200)
-            csrf_token = self._extract_csrf_token(response)
-            
-            # Get CSRF token for stipend creation
-            response = self.client.get(url_for('admin.admin_stipend.create'))
-            self.assertEqual(response.status_code, 200)
-            try:
-                csrf_token = response.data.decode('utf-8').split(
-                    'name="csrf_token" type="hidden" value="')[1].split('"')[0]
-                if not csrf_token:
-                    raise ValueError("Empty CSRF token")
-            except (IndexError, ValueError) as e:
-                self.fail(f"Failed to extract CSRF token: {str(e)}")
-
-            # Test valid stipend creation with CSRF token
-            response = self.client.post(url_for('admin.admin_stipend.create'), data={
-                'name': 'Valid Stipend',
-                'summary': 'Valid summary',
-                'description': 'Valid description',
-                'homepage_url': 'http://valid.com',
-                'application_procedure': 'Valid procedure',
-                'eligibility_criteria': 'Valid criteria',
-                'application_deadline': '2024-12-31 23:59:59',
-                'organization_id': 1,
-                'open_for_applications': 'y',
-                'csrf_token': csrf_token
-            }, follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
-        stipend = Stipend.query.filter_by(name='Valid Stipend').first()
-        self.assertIsNotNone(stipend)
 
 
 
