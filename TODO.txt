@@ -1,8 +1,8 @@
 # Priority Tasks
 
-1. Add error message display for invalid login credentials
-2. Update login template to show validation errors
-3. Add test coverage for error message visibility
-4. Add model tests for User and authentication
-5. Add route tests for all auth endpoints
-6. Verify login template renders error messages correctly (need access to templates)
+1. Verify login route implementation for error message handling
+2. Add more test cases for different login scenarios
+3. Improve test coverage for authentication-related code
+4. Add integration tests for complete login flow
+5. Add model tests for User and authentication
+6. Add route tests for all auth endpoints
