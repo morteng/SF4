@@ -6,7 +6,7 @@
 # Step 5 workflow
 /drop DEVLOG.txt
 /add DEVLOG.txt
-/architect Code Cycle Step 5 (Final Docs) - Finalize all documentation! Update TODO.txt with your latest insights, focusing on a short list of truly important tasks. In DEVLOG.txt, give a brief status report, add a fun emoji that captures our current vibe (like 🚀 if we're soaring, or 🤔 if we're still brainstorming), and summarize this code cycle. Remove old content and answered questions, but keep anything still pending for me, your boss. Also remove any CEO messages that have been 100% resolved. 
+/architect Code Cycle Step 5 (Final Docs) - Finalize all documentation! Update TODO.txt with your latest insights, focusing on a short list of truly important tasks. In DEVLOG.txt, give a brief status report, add a fun emoji that captures our current vibe, and summarize this code cycle. Remove old content and answered questions, but keep anything still pending for me, your boss. Also remove any CEO messages that have been 100% resolved. 
 /drop DEVLOG.txt
 
 # Prompt about console commands
