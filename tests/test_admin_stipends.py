@@ -51,8 +51,8 @@ class AdminStipendTestCase(unittest.TestCase):
             self.app_context.pop()
 
     def login(self):
-        # Get CSRF token from login page
-        response = self.client.get(url_for('public.login'))
+        # Get CSRF token from stipend creation page
+        response = self.client.get(url_for('admin.admin_stipend.create'))
         self.assertEqual(response.status_code, 200)
         
         # Extract CSRF token safely
