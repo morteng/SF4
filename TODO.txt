@@ -1,22 +1,43 @@
 # Todo - Next Code Cycle
 
-1. **Form Validation Review**:
-   - Verify all forms use centralized constants
-   - Add integration tests for end-to-end form validation
+1. **Template Management**:
+   - Ensure all required templates (e.g., `admin/tag/create.html`) exist in the `templates` directory.
+   - Verify template paths in controllers and tests.
 
-2. **Constants Audit**:
-   - Review other constants for potential duplicates
-   - Add a linter to catch duplicate definitions
+2. **Test Coverage**:
+   - Add more tests for `BaseCrudController` to cover edge cases and error scenarios.
+   - Increase coverage for other critical components (e.g., `BaseService`, `TagService`).
+
+3. **Error Handling**:
+   - Enhance error handling in `BaseCrudController` to log and handle missing templates gracefully.
+   - Add specific error messages for template-related issues.
+
+4. **Code Refactoring**:
+   - Review and refactor `BaseCrudController` to improve modularity and reusability.
+   - Consolidate shared logic into utility functions or base classes.
+
+5. **Documentation**:
+   - Update inline documentation for `BaseCrudController` and related components.
+   - Add docstrings for all public methods and classes.
+
+---
 
 ### Key Insights
 1. **Centralization**:
-   - Centralized constants improve maintainability
-   - Consistent error messages enhance user experience
+   - Centralized constants improve maintainability.
+   - Consistent error messages enhance user experience.
 
 2. **Testing**:
-   - Comprehensive testing catches duplicate definitions
-   - Integration tests ensure end-to-end functionality
+   - Comprehensive testing catches issues early.
+   - Mocking is essential for isolating test dependencies.
 
 3. **Code Quality**:
-   - Linting helps maintain code consistency
-   - Modular code structure makes maintenance easier
+   - Modular code structure makes maintenance easier.
+   - Clear error handling improves debugging and user feedback.
+
+---
+
+### Resolved Issues
+1. Fixed missing `INVALID_NAME_CHARACTERS` constant.
+2. Updated `BaseCrudController` to handle missing templates gracefully.
+3. Mocked `render_template` in tests to avoid dependency on actual template files.
