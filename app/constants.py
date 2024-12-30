@@ -123,7 +123,6 @@ class FlashCategory(str, Enum):
     # Form Validation Messages
     NAME_REQUIRED = "Stipend name is required."
     NAME_LENGTH = "Stipend name cannot exceed 100 characters."
-    INVALID_NAME_CHARACTERS = "Name can only contain letters, numbers, spaces, and basic punctuation."
     # Name validation message moved to FlashMessages enum to avoid duplication
     FORM_FIELD_REQUIRED = "{field} is required."
     FORM_INVALID_URL = "{field} must be a valid URL starting with http:// or https://."
