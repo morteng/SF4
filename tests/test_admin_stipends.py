@@ -659,9 +659,16 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_create_stipend_past_date(self):
         # Test with past date
-        response = self.create_stipend_with_data({
-            'application_deadline': '2020-01-01 00:00:00'
-        })
+        self.login()
+        csrf_token = self.get_csrf_token('admin.admin_stipend.create')
+        response = self.client.post(
+            url_for('admin.admin_stipend.create'),
+            data={
+                'application_deadline': '2020-01-01 00:00:00',
+                'csrf_token': csrf_token
+            },
+            follow_redirects=True
+        )
         self.assertIn(b'Application deadline must be in the future', response.data)
 
     # TODO: Reimplement missing required fields test after fixing CSRF token handling
