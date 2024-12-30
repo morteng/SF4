@@ -23,6 +23,12 @@ class TestConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     WTF_CSRF_ENABLED = True  # Enable CSRF in testing to match production
     WTF_CSRF_SECRET_KEY = 'test-secret-key'  # Add a test CSRF secret key
+    
+    # CSRF testing configuration
+    WTF_CSRF_CHECK_DEFAULT = True
+    WTF_CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE']
+    WTF_CSRF_TIME_LIMIT = 3600  # 1 hour for tests
+    WTF_CSRF_SSL_STRICT = False  # Disable SSL strict for testing
     SERVER_NAME = 'localhost'
     APPLICATION_ROOT = '/'
     PREFERRED_URL_SCHEME = 'http'
@@ -67,6 +73,16 @@ class TestConfig(Config):
         from flask_limiter import Limiter
         limiter = Limiter(app=app)
         limiter.storage.reset()
+        
+        # Setup test CSRF handling
+        @app.before_request
+        def set_csrf():
+            from flask_wtf.csrf import generate_csrf
+            if app.testing:
+                # Generate and set CSRF token for all test requests
+                csrf_token = generate_csrf()
+                from flask import g
+                g.csrf_token = csrf_token
 
 class DevelopmentConfig(Config):
     DEBUG = True
