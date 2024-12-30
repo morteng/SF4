@@ -151,7 +151,7 @@ class FlashCategory(str, Enum):
     DELETE_TAG_ERROR = "Failed to delete tag."
 
     # CSRF
-    CSRF_INVALID = "Invalid CSRF token. Please refresh the page and try again."
+    CSRF_ERROR = "Invalid CSRF token. Please refresh the page and try again."
     ACCESS_DENIED = "Access denied. You don't have permission to perform this action."
     RATE_LIMIT_EXCEEDED = "Too many requests. Please try again later."
 

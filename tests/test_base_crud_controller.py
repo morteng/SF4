@@ -114,7 +114,7 @@ class TestBaseCrudController(BaseTestCase):
             self.login()
             response = self.controller.create(form_data)
             self.assertEqual(response.status_code, 200)
-            self.assertIn('Name cannot be empty.', response.get_data(as_text=True))
+            self.assertIn(FlashMessages.NAME_REQUIRED.value, response.get_data(as_text=True))
 
     def test_stipend_form_validation(self):
         # Test missing name
