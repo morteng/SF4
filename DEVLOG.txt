@@ -33,7 +33,9 @@
 
 ### Open Questions:
 1. Should we implement a custom widget for datetime fields?
+ANSWER: YES
 2. Do we need additional validation for datetime formats?
+ANSWER: No.
 
 ---
 
