@@ -79,7 +79,7 @@ class AdminStipendTestCase(unittest.TestCase):
         
         # Verify successful login and admin status
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Welcome, admin', response.data)  # Verify login success message
+        self.assertIn(b'Login successful', response.data)  # Verify login success message
         with self.client.session_transaction() as session:
             self.assertIn('_user_id', session)
             self.assertTrue(session.get('is_admin', False))
