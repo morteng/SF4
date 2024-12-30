@@ -141,7 +141,7 @@ def db_session(_db, app):
 
 @pytest.fixture(scope='function')
 def client(app):
-    """Provides a test client with proper session and context management."""
+    """Provides a test client with proper session, CSRF, and context management."""
     with app.app_context():
         # Initialize rate limiter if present
         if 'limiter' in app.extensions:
@@ -162,8 +162,10 @@ def client(app):
         # Create test client within application context
         client = app.test_client()
         
-        # Push request context
+        # Push request context and generate CSRF token
         with app.test_request_context():
+            # Get initial CSRF token
+            client.get('/')
             yield client
 
 @pytest.fixture(scope='function')
@@ -328,21 +330,28 @@ def generate_csrf_token():
     return generate_csrf()
 
 def extract_csrf_token(response_data):
-    """Extract CSRF token from response data."""
+    """Extract CSRF token from response data with improved reliability."""
     try:
         decoded_data = response_data.decode('utf-8')
-        # Look for CSRF token in hidden input field
-        match = re.search(r'<input[^>]*name="csrf_token"[^>]*value="([^"]+)"', decoded_data)
-        if match:
-            return match.group(1)
-        # Look for CSRF token in meta tag
-        match = re.search(r'<meta[^>]*name="csrf-token"[^>]*content="([^"]+)"', decoded_data)
-        if match:
-            return match.group(1)
-        # Look for CSRF token in form
-        match = re.search(r'name="csrf_token"\s*value="([^"]+)"', decoded_data)
-        if match:
-            return match.group(1)
+        
+        # Try multiple patterns to find CSRF token
+        patterns = [
+            r'<input[^>]*name="csrf_token"[^>]*value="([^"]+)"',  # Form input
+            r'<meta[^>]*name="csrf-token"[^>]*content="([^"]+)"',  # Meta tag
+            r'name="csrf_token"\s*value="([^"]+)"',  # Form field
+            r'csrf_token.*?value="([^"]+)"',  # More flexible form field
+            r'csrf-token.*?content="([^"]+)"'  # More flexible meta tag
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, decoded_data, re.DOTALL)
+            if match:
+                return match.group(1)
+                
+        # If no match found, try to get from headers
+        if hasattr(response_data, 'headers'):
+            return response_data.headers.get('X-CSRF-Token')
+            
         return None
     except Exception as e:
         logging.error(f"Error extracting CSRF token: {str(e)}")
@@ -362,13 +371,28 @@ def login_as_admin(client, username='admin', password='admin'):
         'csrf_token': csrf_token
     }, follow_redirects=True)
 
-def submit_form(client, route_name, form_data):
-    """Helper to submit a form with CSRF token."""
+def submit_form(client, route_name, form_data, method='POST'):
+    """Helper to submit a form with CSRF token and proper headers."""
+    # Get CSRF token from the route
     csrf_token = get_csrf_token(client, route_name)
-    form_data['csrf_token'] = csrf_token
-    return client.post(url_for(route_name), 
-                      data=form_data,
-                      follow_redirects=True)
+    
+    # Add CSRF token to form data if not already present
+    if 'csrf_token' not in form_data:
+        form_data['csrf_token'] = csrf_token
+        
+    # Set headers including CSRF token
+    headers = {
+        'X-CSRFToken': csrf_token,
+        'X-Requested-With': 'XMLHttpRequest'
+    }
+    
+    return client.open(
+        url_for(route_name),
+        method=method,
+        data=form_data,
+        headers=headers,
+        follow_redirects=True
+    )
 
 def get_all_tags():
     with current_app.app_context():  # Ensure application context is set
