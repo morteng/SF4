@@ -122,6 +122,13 @@ class StipendForm(FlaskForm):
         self.tags.choices = [
             (tag.id, tag.name) for tag in Tag.query.order_by(Tag.name).all()
         ]
+        # Ensure all fields are properly initialized
+        self.name = StringField('Name', validators=[
+            DataRequired(message=FlashMessages.NAME_REQUIRED),
+            Length(max=100, message=FlashMessages.NAME_LENGTH),
+            Regexp(r'^[a-zA-Z0-9\s\-,.()\'"]+$', 
+                   message=FlashMessages.INVALID_NAME_CHARACTERS)
+        ])
 
 
     def validate_open_for_applications(self, field):
