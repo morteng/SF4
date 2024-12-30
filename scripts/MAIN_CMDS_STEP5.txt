@@ -6,7 +6,7 @@
 # Step 5 workflow
 /drop DEVLOG.txt
 /add DEVLOG.txt
-/architect Code Cycle Step 5 (Final Docs) - Please finalize documentation. Update TODO.txt with final changes, insights & findings as well as a list of actionable todo items for next code cycle. Try to keep the todo list as short as possible, conentrate on one part of the project at a time. Consolidate the information in it when possible. Update DEVLOG.txt with a short summary of this code cycle and whatever you think is fitting to put in there. Remove old content and any questions that I have answered. Keep unanswered questions for when I get to them. If you have any additional comments, questions, or concerns for me, yout boss, please add them to DEVLOG.txt and keep them there until I have answered them. 
+/architect Code Cycle Step 5 (Final Docs) - Please finalize documentation. Update TODO.txt with final changes, insights & findings as well as a list of actionable todo items for next code cycle. Try to keep the todo list as short as possible, conentrate on one part of the project at a time. Consolidate the information in it when possible. Update DEVLOG.txt with a status report, a short summary of this code cycle and whatever you think is fitting to put in there. Remove old content and any questions that I have answered. Keep unanswered questions for when I get to them. If you have any additional comments, questions, or concerns for me, yout boss, please add them to DEVLOG.txt and keep them there until I have answered them. 
 /drop DEVLOG.txt
 
 # Prompt about console commands

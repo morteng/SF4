@@ -17,8 +17,8 @@
 3. Added better test coverage for authentication
 
 ## Open Questions:
-1. Should we implement a more sophisticated form validation system?
-2. Are there any additional edge cases we should test for authentication?
+1. Should we implement a more sophisticated form validation system? Just get them working, i don't care.
+2. Are there any additional edge cases we should test for authentication? I leave this up to you.
 
 ## Next Steps:
 1. Finalize form validation implementation
