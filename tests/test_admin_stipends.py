@@ -680,6 +680,10 @@ class AdminStipendTestCase(unittest.TestCase):
         })
         self.assertIn(b'Application deadline must be in the future', response.data)
 
+    # TODO: Reimplement missing required fields test after fixing CSRF token handling
+    # def test_create_stipend_missing_required_fields(self):
+    #     # Test missing required fields with proper CSRF token handling
+
     def test_create_stipend_missing_required_fields(self):
         # Test missing required fields
         required_fields = [
