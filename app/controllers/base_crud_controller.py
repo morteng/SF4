@@ -127,47 +127,27 @@ class BaseCrudController:
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
 
     def create(self, data=None):
-        try:
-            template_path = f'{self.template_dir}/create.html'
-            full_path = os.path.join('templates', template_path)
-            
-            # Check if template exists
-            if not os.path.exists(full_path):
-                logger.error(f"Template not found: {template_path}")
-                flash(FlashMessages.TEMPLATE_NOT_FOUND.value, FlashCategory.ERROR.value)
-                return redirect(url_for(f'admin.{self.entity_name}.index'))
-                
-            # Mock template rendering for testing
-            if os.environ.get('FLASK_ENV') == 'testing':
-                return Response(status=200)
-                
-            return render_template(
-                template_path,
-                form=self.form_class()
-            )
-        except Exception as e:
-            logger.error(f"Error rendering template: {str(e)}")
-            flash(FlashMessages.TEMPLATE_ERROR.value, FlashCategory.ERROR.value)
-            return redirect(url_for(f'admin.{self.entity_name}.index'))
-        else:
-            form = self.form_class(data=data)
-            if form.validate():
-                try:
-                    result = self.service.create(form.data)
-                    if result.success:
-                        flash(self.flash_messages['create_success'], 'success')
-                        return redirect(url_for(f'admin.{self.entity_name}.index'))
-                    else:
-                        flash(result.message, 'error')
-                except Exception as e:
-                    logger.error(f"Error creating {self.entity_name}: {str(e)}")
-                    flash(f"Error creating {self.entity_name}: {str(e)}", 'error')
-            else:
-                flash('Invalid form data', 'error')
+        form = self.form_class(data=data)
+        if not form.validate():
+            # Return 200 with form errors
             return render_template(
                 f'{self.template_dir}/create.html',
                 form=form
-            )
+            ), 200
+        try:
+            result = self.service.create(form.data)
+            if result.success:
+                flash(self.flash_messages['create_success'], 'success')
+                return redirect(url_for(f'admin.{self.entity_name}.index'))
+            else:
+                flash(result.message, 'error')
+        except Exception as e:
+            logger.error(f"Error creating {self.entity_name}: {str(e)}")
+            flash(f"Error creating {self.entity_name}: {str(e)}", 'error')
+        return render_template(
+            f'{self.template_dir}/create.html',
+            form=form
+        ), 200
 
     def edit(self, id, data):
         def update_operation(**kwargs):

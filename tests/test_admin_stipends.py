@@ -19,6 +19,7 @@ class AdminStipendTestCase(unittest.TestCase):
         admin_user = User(username='admin', email='admin@example.com')
         admin_user.set_password('admin')
         admin_user.is_admin = True
+        admin_user.is_active = True
         db.session.add(admin_user)
         db.session.commit()
 
@@ -27,14 +28,6 @@ class AdminStipendTestCase(unittest.TestCase):
             'username': 'admin',
             'password': 'admin'
         }, follow_redirects=True)
-
-        # Create an admin user with proper property access
-        admin_user = User(username='admin', email='admin@example.com')
-        admin_user.set_password('admin')  # Set password to 'admin'
-        admin_user.is_admin = True
-        admin_user.is_active = True
-        db.session.add(admin_user)
-        db.session.commit()
         
         # Verify user creation
         created_user = User.query.filter_by(username='admin').first()
@@ -53,7 +46,8 @@ class AdminStipendTestCase(unittest.TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
-        self.app_context.pop()
+        if hasattr(self, 'app_context'):
+            self.app_context.pop()
 
     def login(self, username, password):
         # Get CSRF token first

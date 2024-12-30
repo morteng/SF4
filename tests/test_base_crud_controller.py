@@ -48,7 +48,7 @@ class TestBaseCrudController(BaseTestCase):
             self.login()
             response = self.controller.create(form_data)
             self.assertEqual(response.status_code, 200)
-            self.assertIn('Name cannot be empty.', response.get_data(as_text=True))
+            self.assertIn('This field is required.', response.get_data(as_text=True))
 
     def test_edit_success(self):
         tag = Tag.query.first()
