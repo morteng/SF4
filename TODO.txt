@@ -1,14 +1,13 @@
 # Todo - Next Code Cycle
 
-1. **Testing Improvements**:
-   - Implement proper CSRF token handling in all form tests
-   - Add proper flash message assertions
-   - Work towards 60% test coverage goal
+1. **CSRF Token Handling**:
+   - Fix CSRF token validation in test_create_stipend_past_date
+   - Implement consistent CSRF token handling across all form tests
 
-2. **Security**:
+2. **Test Coverage**:
+   - Increase test coverage to 60%
+   - Add tests for edge cases in date validation
+
+3. **Security**:
    - Verify session timeout functionality
-   - Ensure CSRF protection is working in all form submissions
-
-3. **Code Quality**:
-   - Add docstrings to all test functions
-   - Improve test organization and structure
+   - Audit CSRF protection implementation
