@@ -1,14 +1,13 @@
 # Todo - Next Code Cycle
 
-1. **Template Management**:
-   - Create missing admin templates (starting with `admin/tag/create.html`)
-   - Implement base template for admin CRUD operations
-   - Ensure all templates are located within the app\templates directory. move or delete the template files in templates 
+1. **Test Improvements**:
+   - Fix CSRF token handling in test setup
+   - Update test assertions to match actual error responses
+   - Create helper functions for common test operations
 
-
-2. **Test Coverage**:
-   - Add tests for edge cases in stipend validation
-   - Expand test coverage for error scenarios
+2. **Validation**:
+   - Verify validation error message formats
+   - Ensure consistent error handling across all forms
 
 ---
 
