@@ -5,8 +5,7 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
-/run pytest tests/test_admin_stipends.py -v --cov=app --cov-report=term-missing
-/run flask routes
+/run pytest tests/test_admin_stipends.py::AdminStipendTestCase::test_create_stipend_invalid_characters -v --cov=app --cov-report=term-missing
 ### COMMANDS END ###
 
 # After finishing Step 5, we start again with Step 1 of the Coding Cycle.
