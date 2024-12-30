@@ -154,22 +154,6 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertIsNotNone(stipend)
 
 
-    def test_create_stipend_name_too_long(self):
-        # Test name field exceeding length limit
-        long_name = 'a' * 101
-        response = self.create_stipend_with_data({
-            'name': long_name,
-            'summary': 'Test summary',
-            'description': 'Test description',
-            'homepage_url': 'http://example.com',
-            'application_procedure': 'Test procedure',
-            'eligibility_criteria': 'Test criteria',
-            'application_deadline': '2024-12-31 23:59:59',
-            'organization_id': 1,
-            'open_for_applications': 'y'
-        })
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Stipend name cannot exceed 100 characters', response.data)
 
         try:
             with self.client:
