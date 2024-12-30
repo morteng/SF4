@@ -54,6 +54,23 @@ class AdminStipendTestCase(unittest.TestCase):
             'csrf_token': csrf_token
         }, follow_redirects=True)
 
+    def create_stipend_with_data(self, form_data):
+        """Helper method to create a stipend with form data"""
+        # Get CSRF token from create page
+        response = self.client.get(url_for('admin.admin_stipend.create'))
+        csrf_token = response.data.decode('utf-8').split(
+            'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+        
+        # Add CSRF token to form data
+        form_data['csrf_token'] = csrf_token
+        
+        # Submit the form
+        return self.client.post(
+            url_for('admin.admin_stipend.create'),
+            data=form_data,
+            follow_redirects=True
+        )
+
     def test_create_stipend_valid(self):
         # Test valid stipend creation
         response = self.create_stipend_with_data({

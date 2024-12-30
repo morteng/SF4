@@ -126,16 +126,21 @@ class BaseCrudController:
             return redirect(url_for(f'admin.{self.entity_name}.{redirect_error}', **kwargs))
 
     def create(self, data=None):
-        if data is None:
-            try:
-                return render_template(
-                    f'{self.template_dir}/create.html',
-                    form=self.form_class()
-                )
-            except Exception as e:
-                logger.error(f"Template not found: {str(e)}")
-                flash(self.flash_messages['template_not_found'], FlashCategory.ERROR.value)
+        try:
+            template_path = f'{self.template_dir}/create.html'
+            if not os.path.exists(os.path.join('templates', template_path)):
+                logger.error(f"Template not found: {template_path}")
+                flash(FlashMessages.TEMPLATE_NOT_FOUND.value, FlashCategory.ERROR.value)
                 return redirect(url_for(f'admin.{self.entity_name}.index'))
+                
+            return render_template(
+                template_path,
+                form=self.form_class()
+            )
+        except Exception as e:
+            logger.error(f"Error rendering template: {str(e)}")
+            flash(FlashMessages.TEMPLATE_ERROR.value, FlashCategory.ERROR.value)
+            return redirect(url_for(f'admin.{self.entity_name}.index'))
         else:
             form = self.form_class(data=data)
             if form.validate():
