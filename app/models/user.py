@@ -15,6 +15,16 @@ class User(db.Model):
 
     __mapper_args__ = {"confirm_deleted_rows": False}
 
+    def __init__(self, username, email, password=None, is_admin=False):
+        self.username = username
+        self.email = email
+        if password:
+            self.set_password(password)
+        self.is_admin = is_admin
+        self.is_active = True
+        self.created_at = db.func.current_timestamp()
+        self.updated_at = db.func.current_timestamp()
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
