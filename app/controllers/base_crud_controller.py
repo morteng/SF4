@@ -131,6 +131,7 @@ class BaseCrudController:
             template_path = f'{self.template_dir}/create.html'
             full_path = os.path.join('templates', template_path)
             
+            # Check if template exists
             if not os.path.exists(full_path):
                 logger.error(f"Template not found: {template_path}")
                 flash(FlashMessages.TEMPLATE_NOT_FOUND.value, FlashCategory.ERROR.value)

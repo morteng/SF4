@@ -87,6 +87,35 @@ class TestBaseCrudController(BaseTestCase):
         assert form.validate() is False
         assert FlashMessages.USERNAME_FORMAT in form.username.errors
 
+    def test_create_missing_template(self):
+        # Remove the test template to simulate missing template
+        os.remove('templates/admin/tag/create.html')
+        
+        with self.client:
+            self.login()
+            response = self.controller.create()
+            self.assertEqual(response.status_code, 302)  # Should redirect
+            self.assertIn(FlashMessages.TEMPLATE_NOT_FOUND.value, response.get_data(as_text=True))
+
+    def test_create_template_error(self):
+        # Simulate a template rendering error
+        with patch('app.controllers.base_crud_controller.render_template') as mock_render:
+            mock_render.side_effect = Exception("Template rendering failed")
+            with self.client:
+                self.login()
+                response = self.controller.create()
+                self.assertEqual(response.status_code, 302)  # Should redirect
+                self.assertIn(FlashMessages.TEMPLATE_ERROR.value, response.get_data(as_text=True))
+
+    def test_create_invalid_form_data(self):
+        # Test invalid form data
+        form_data = {'name': '', 'category': 'TestCategory'}  # Invalid data
+        with self.client:
+            self.login()
+            response = self.controller.create(form_data)
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('Name cannot be empty.', response.get_data(as_text=True))
+
     def test_stipend_form_validation(self):
         # Test missing name
         form = StipendForm(name="")

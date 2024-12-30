@@ -226,7 +226,6 @@ class FlashMessages(str, Enum):
     TEMPLATE_ERROR = "Error loading template. Please try again later."
     ADMIN_ACCESS_ERROR = "You don't have permission to access this page."
     INVALID_NAME_CHARACTERS = "Name can only contain letters, numbers, spaces, and basic punctuation."
-    INVALID_NAME_CHARACTERS = "Name can only contain letters, numbers, spaces, and basic punctuation."
     INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
     UPDATE_ERROR = "Failed to update record."
     DELETE_ERROR = "Failed to delete record."
