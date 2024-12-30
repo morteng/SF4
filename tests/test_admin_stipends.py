@@ -357,12 +357,16 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertIn(b'Invalid URL.', response.data)  # Ensure this matches the expected error message
 
     def test_create_stipend_with_invalid_organization(self):
+        """Test creating a stipend with an invalid organization ID"""
         # Log in as admin
         response = self.login()
         self.assertEqual(response.status_code, 200)
 
+        # Get CSRF token
+        csrf_token = self.get_csrf_token('admin.admin_stipend.create')
+
         # Attempt to create a stipend with an invalid organization ID
-        response = self.client.post(url_for('admin_stipend.create'), data={
+        response = self.client.post(url_for('admin.admin_stipend.create'), data={
             'name': 'Test Stipend',
             'summary': 'This is a test stipend.',
             'description': 'Detailed description of the test stipend.',
@@ -371,15 +375,43 @@ class AdminStipendTestCase(unittest.TestCase):
             'eligibility_criteria': 'Must be a student.',
             'application_deadline': datetime(2023, 12, 31, 23, 59, 59).strftime('%Y-%m-%d %H:%M:%S'),
             'organization_id': 9999,  # Invalid organization ID
-            'open_for_applications': 'y'
+            'open_for_applications': 'y',
+            'csrf_token': csrf_token
         }, follow_redirects=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Invalid organization selected.', response.data)
 
-    # TODO: Implement proper boolean validation tests for open_for_applications field
-    # Need to handle various boolean string representations (true/false, yes/no, 1/0, y/n)
-    # and ensure proper validation error messages
+    def test_boolean_validation(self):
+        """Test various boolean representations for open_for_applications field"""
+        # Log in as admin
+        response = self.login()
+        self.assertEqual(response.status_code, 200)
+
+        # Test different boolean representations
+        for value, expected in [('y', True), ('n', False), ('true', True), 
+                              ('false', False), ('1', True), ('0', False)]:
+            csrf_token = self.get_csrf_token('admin.admin_stipend.create')
+            
+            response = self.client.post(url_for('admin.admin_stipend.create'), data={
+                'name': 'Test Stipend',
+                'summary': 'This is a test stipend.',
+                'description': 'Detailed description of the test stipend.',
+                'homepage_url': 'http://example.com/stipend',
+                'application_procedure': 'Send an email to admin@example.com',
+                'eligibility_criteria': 'Must be a student.',
+                'application_deadline': datetime(2023, 12, 31, 23, 59, 59).strftime('%Y-%m-%d %H:%M:%S'),
+                'organization_id': 1,
+                'open_for_applications': value,
+                'csrf_token': csrf_token
+            }, follow_redirects=True)
+
+            self.assertEqual(response.status_code, 200)
+            stipend = Stipend.query.filter_by(name='Test Stipend').first()
+            self.assertIsNotNone(stipend)
+            self.assertEqual(stipend.open_for_applications, expected)
+            db.session.delete(stipend)
+            db.session.commit()
 
 
     def test_unauthorized_access(self):
@@ -475,7 +507,9 @@ class AdminStipendTestCase(unittest.TestCase):
         """Test that the admin stipend blueprint is registered correctly."""
         with self.app.app_context():
             registered_routes = [rule.endpoint for rule in self.app.url_map.iter_rules()]
-            self.assertIn('admin.admin_stipend.create', registered_routes)  # Updated to match registered route
+            self.assertIn('admin.admin_stipend.create', registered_routes)
+            self.assertIn('admin.admin_stipend.edit', registered_routes)
+            self.assertIn('admin.admin_stipend.delete', registered_routes)
 
     def test_route_validation(self):
         """Test that required routes are validated."""
@@ -483,7 +517,8 @@ class AdminStipendTestCase(unittest.TestCase):
             self.app = create_app('testing')
             mock_validate.assert_called_once_with(
                 self.app,
-                ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+                ['admin.admin_stipend.create', 'admin.admin_stipend.edit',
+                 'admin.admin_stipend.delete', 'admin.dashboard.dashboard']
             )
 
 if __name__ == '__main__':
