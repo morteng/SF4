@@ -273,11 +273,16 @@ class OrganizationForm(FlaskForm):
         self.original_name = original_name or None
 
     def validate_name(self, name):
+        """Enhanced name validation with better error messages"""
         if not name.data or not name.data.strip():
-            raise ValidationError('Name: This field is required.')
-        if len(name.data.strip()) > 100:
-            raise ValidationError('Name: Organization name cannot exceed 100 characters.')
-        if name.data != self.original_name:
+            raise ValidationError(FlashMessages.NAME_REQUIRED.value)
+            
+        if len(name.data) > 100:
+            raise ValidationError(FlashMessages.NAME_LENGTH.value)
+            
+        if not re.match(r'^[a-zA-Z0-9\s\-,.()\'"]+$', name.data):
+            logger.warning(f"Invalid characters in organization name: {name.data}")
+            raise ValidationError(FlashMessages.INVALID_NAME_CHARACTERS.value)
             try:
                 organization = Organization.query.filter_by(name=name.data).first()
                 if organization:
