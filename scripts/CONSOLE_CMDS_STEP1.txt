@@ -7,7 +7,6 @@
 ### COMMANDS START ###
 /run pytest tests/test_base_crud_controller.py -v
 /run pytest tests/test_admin_stipends.py -v
-/run flask routes
 ### COMMANDS END ###
 
 # Once we're done, jump to Step 2.

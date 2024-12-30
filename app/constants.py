@@ -41,7 +41,6 @@ class FlashCategory(str, Enum):
     INVALID_DATE_VALUES = "Invalid date values. Please check the day, month, and year."
     
     # CSRF
-    CSRF_ERROR = "Invalid CSRF token. Please refresh the page and try again."
     
     # General
     GENERIC_SUCCESS = "Operation completed successfully."
