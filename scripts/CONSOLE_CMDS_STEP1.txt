@@ -5,6 +5,9 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
+/run flask db drop --yes-i-know
+/run flask db upgrade
+/run pytest --cov=app tests/test_admin_stipends.py -v
 ### COMMANDS END ###
 
 # Once we're done, jump to Step 2.
