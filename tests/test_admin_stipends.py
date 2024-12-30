@@ -15,6 +15,19 @@ class AdminStipendTestCase(unittest.TestCase):
         db.create_all()
         self.client = self.app.test_client()
 
+        # Create admin user
+        admin_user = User(username='admin', email='admin@example.com')
+        admin_user.set_password('admin')
+        admin_user.is_admin = True
+        db.session.add(admin_user)
+        db.session.commit()
+
+        # Login as admin
+        self.client.post(url_for('public.login'), data={
+            'username': 'admin',
+            'password': 'admin'
+        }, follow_redirects=True)
+
         # Create an admin user with proper property access
         admin_user = User(username='admin', email='admin@example.com')
         admin_user.set_password('admin')  # Set password to 'admin'

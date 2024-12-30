@@ -16,6 +16,11 @@ class TestBaseCrudController(BaseTestCase):
             form_class=TagForm,
             template_dir='admin/tag'
         )
+        
+        # Create test template directory
+        os.makedirs('templates/admin/tag', exist_ok=True)
+        with open('templates/admin/tag/create.html', 'w') as f:
+            f.write('<html></html>')
 
     @patch('app.controllers.base_crud_controller.render_template')
     def test_create_success(self, mock_render):
