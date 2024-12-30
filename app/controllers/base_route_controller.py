@@ -1,4 +1,4 @@
-from flask import redirect, url_for, render_template, request, jsonify, flash
+from flask import redirect, url_for, render_template, request, jsonify, flash, session
 import logging
 from flask_login import current_user
 from sqlalchemy.exc import SQLAlchemyError
