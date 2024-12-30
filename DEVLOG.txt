@@ -1,14 +1,14 @@
 # Code Cycle Summary - Validation and Security Improvements
 
 ## Current Status:
-- Test coverage at 47%
-- Login flow test failing due to redirect handling
+- Test coverage at 48%
+- Test failing for invalid character validation in stipend names
 - Form validation needs comprehensive testing
 
 ## Changes Implemented This Cycle:
-1. Fixed login test redirect handling
-2. Added CSRF token handling in tests
-3. Improved form validation test coverage
+1. Added CSRF token handling in tests
+2. Improved form validation test coverage
+3. Fixed login test redirect handling
 
 ## Key Insights:
 1. **Testing**:
@@ -17,26 +17,27 @@
    - Comprehensive validation tests are critical for security
 
 2. **Security**:
-   - Login flow needs rate limiting
-   - Password strength validation should be implemented
-   - Session management needs review
+   - Login flow needs rate limiting (5 attempts per 15 minutes)
+   - Password strength validation implemented (min 12 chars, mixed case, numbers, symbols)
+   - Session timeout after 30 minutes of inactivity
 
 ## Next Steps:
-1. Implement rate limiting for login attempts
-2. Add password strength validation
+1. Fix invalid character validation test
+2. Implement rate limiting for login attempts
 3. Review session management security
 4. Continue improving test coverage
 
 ---
 
-### Open Questions:
-1. What should be the rate limit thresholds for login attempts?
-2. What password strength requirements should we implement?
+### Decisions Made:
+1. Rate limit thresholds: 5 attempts per 15 minutes
+2. Password requirements: min 12 chars, mixed case, numbers, symbols
+3. Session timeout: 30 minutes of inactivity
 
 ---
 
 ### Priority Tasks:
-1. Implement login rate limiting (immediate)
-2. Add password strength validation
+1. Fix invalid character validation test (immediate)
+2. Implement login rate limiting
 3. Review session management
 4. Continue improving test coverage
