@@ -6,7 +6,7 @@
 
 ### COMMANDS START ###
 /run pytest tests/test_admin_stipends.py::AdminStipendTestCase::test_create_stipend_invalid_characters -v --cov=app --cov-report=term-missing
-/run pytest tests/test_admin_stipends.py::AdminStipendTestCase::test_login_redirect -v --cov=app --cov-report=term-missing
+/run pytest tests/test_admin_stipends.py::AdminStipendTestCase::test_login -v --cov=app --cov-report=term-missing
 ### COMMANDS END ###
 
 # Once finished, jump to Step 3.
