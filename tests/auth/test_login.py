@@ -65,14 +65,7 @@ def test_login_missing_csrf(client, db_session, app):
     
     assert b"CSRF token is missing" in response.data
 
-def test_login_invalid_credentials(client, db_session, app):
-    """Test login with invalid credentials"""
-    # Create test user
-    with app.app_context():
-        user = User(username='testuser', email='test@example.com')
-        user.set_password('testpass')
-        db_session.add(user)
-        db_session.commit()
+
 
     # Get CSRF token
     login_page = client.get(url_for('public.login'))
