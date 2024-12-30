@@ -1,8 +1,8 @@
 # Code Cycle Summary - CustomDateTimeField Fixes
 
 ## Current Status:
-- Test_create_stipend_invalid_characters failing due to missing _value method in CustomDateTimeField
-- CustomDateTimeField widget implementation incomplete
+- Login test assertions improved to handle redirects and verify flash messages
+- Added route listing for debugging
 - Test coverage at 48%
 - Form rendering needs improvement
 
