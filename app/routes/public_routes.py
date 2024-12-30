@@ -59,12 +59,8 @@ def login():
                 return redirect(url_for('public.index'))
                 
         # Use consistent error message for security
-        if not user or not user.check_password(form.password.data):
-            flash('Invalid username or password', 'danger')
-            return render_template('login.html', form=form, error_message='Invalid username or password')
-        else:
-            flash('Login failed. Please try again.', 'danger')
-            return render_template('login.html', form=form, error_message='Login failed. Please try again.')
+        flash('Invalid username or password', 'danger')
+        return render_template('login.html', form=form)
     return render_template('login.html', form=form)
 
 from app.models.tag import Tag
