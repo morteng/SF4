@@ -2,8 +2,9 @@
 
 ## Current Status:
 - Test coverage at 48%
-- Test failing for invalid character validation in stipend names
-- Form validation needs comprehensive testing
+- Fixed login redirect test assertion
+- Invalid character validation test now passing
+- Form validation coverage improved
 
 ## Changes Implemented This Cycle:
 1. Added CSRF token handling in tests

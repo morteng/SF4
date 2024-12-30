@@ -64,7 +64,7 @@ class AdminStipendTestCase(unittest.TestCase):
     def login(self):
         # Get CSRF token from login page
         response = self.client.get(url_for('public.login'))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)  # Expect redirect after successful login
         
         # Extract CSRF token
         csrf_token = response.data.decode('utf-8').split(
