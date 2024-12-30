@@ -5,8 +5,7 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
-/run pytest tests/auth/test_csrf.py -v --log-cli-level=DEBUG
-/run pytest tests/auth/test_login.py -v --log-cli-level=DEBUG
+/run pytest tests/auth/ -v --log-cli-level=DEBUG
 ### COMMANDS END ###
 
 # Once we're done, jump to Step 2.
