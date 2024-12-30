@@ -393,8 +393,11 @@ class AdminStipendTestCase(unittest.TestCase):
                               ('false', False), ('1', True), ('0', False)]:
             csrf_token = self.get_csrf_token('admin.admin_stipend.create')
             
+            # Add debug logging
+            self.app.logger.debug(f"Testing boolean value: {value}")
+            
             response = self.client.post(url_for('admin.admin_stipend.create'), data={
-                'name': 'Test Stipend',
+                'name': f'Test Stipend {value}',  # Unique name for each test
                 'summary': 'This is a test stipend.',
                 'description': 'Detailed description of the test stipend.',
                 'homepage_url': 'http://example.com/stipend',
@@ -407,8 +410,20 @@ class AdminStipendTestCase(unittest.TestCase):
             }, follow_redirects=True)
 
             self.assertEqual(response.status_code, 200)
-            stipend = Stipend.query.filter_by(name='Test Stipend').first()
-            self.assertEqual(stipend.open_for_applications, expected)
+            
+            # Add more debug logging
+            self.app.logger.debug(f"Response data: {response.data.decode('utf-8')}")
+            
+            # Check if stipend was created
+            stipend = Stipend.query.filter_by(name=f'Test Stipend {value}').first()
+            if stipend is None:
+                self.app.logger.error(f"Failed to create stipend with value: {value}")
+                self.fail(f"Stipend creation failed for value: {value}")
+            
+            self.assertEqual(stipend.open_for_applications, expected,
+                           f"Expected {expected} for value {value}, got {stipend.open_for_applications}")
+            
+            # Clean up
             db.session.delete(stipend)
             db.session.commit()
 
