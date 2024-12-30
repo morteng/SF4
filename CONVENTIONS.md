@@ -21,17 +21,32 @@
 - **Folder Structure**:
   ```
   tests/
-    auth/        # Authentication tests (login, logout, registration)
-    models/      # Model tests (database models and relationships)
-    routes/      # Route tests (endpoint functionality)
-    services/    # Service tests (business logic)
-    fixtures/    # Test fixtures (shared test data)
-    integration/ # Integration tests (cross-module functionality)
+    auth/            # Authentication tests (login, logout, registration)
+    models/          # Model tests (database models and relationships)
+    routes/          # Route tests (endpoint functionality)
+    services/        # Service tests (business logic)
+    fixtures/        # Test fixtures (shared test data)
+    integration/     # Integration tests (cross-module functionality)
+    utils/           # Testing utilities and helpers
   ```
   
 - **File Naming**:
   - Test files: `test_<module>_<functionality>.py`
     Example: `test_auth_login.py`, `test_user_model.py`
+  
+- **Modular Test Structure**:
+  - Each test file should focus on a single module or functionality
+  - Keep tests small and focused on specific behaviors
+  - Use fixtures for shared test setup
+  - Follow Arrange-Act-Assert pattern for test clarity
+  - Include both positive and negative test cases
+  - Test edge cases and error conditions
+  
+- **Test Maintenance**:
+  - Run tests individually after changes to verify functionality
+  - Update tests when corresponding code is refactored
+  - Keep test coverage above 80% for critical modules
+  - Document test cases in test file docstrings
   
 - **Test Function Naming**:
   - `test_<scenario>[_when_<condition>]`
