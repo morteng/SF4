@@ -16,24 +16,32 @@ class AdminStipendTestCase(unittest.TestCase):
         db.create_all()
         self.client = self.app.test_client()
 
-        # Create admin user
-        admin_user = User(username='admin', email='admin@example.com')
+        # Create admin user with proper permissions
+        admin_user = User(
+            username='admin', 
+            email='admin@example.com',
+            is_admin=True,
+            is_active=True
+        )
         admin_user.set_password('admin')
-        admin_user.is_admin = True
-        admin_user.is_active = True
         db.session.add(admin_user)
         db.session.commit()
 
-        # Login as admin
-        self.client.post(url_for('public.login'), data={
-            'username': 'admin',
-            'password': 'admin'
-        }, follow_redirects=True)
-        
-        # Verify user creation
+        # Verify admin user creation
         created_user = User.query.filter_by(username='admin').first()
-        self.assertIsNotNone(created_user, "Admin user was not created in database")
-        self.assertTrue(created_user.check_password('admin'), "Password verification failed")
+        self.assertIsNotNone(created_user)
+        self.assertTrue(created_user.is_admin)
+        self.assertTrue(created_user.is_active)
+        self.assertTrue(created_user.check_password('admin'))
+
+        # Create an organization
+        org = Organization(
+            name="Test Org", 
+            homepage_url="http://example.com",
+            description="Test organization"
+        )
+        db.session.add(org)
+        db.session.commit()
         
         # Create an organization
         org = Organization(
@@ -51,27 +59,22 @@ class AdminStipendTestCase(unittest.TestCase):
             self.app_context.pop()
 
     def login(self):
-        # Get CSRF token from stipend creation page
-        response = self.client.get(url_for('admin.admin_stipend.create'))
+        # Get CSRF token from login page
+        response = self.client.get(url_for('public.login'))
         self.assertEqual(response.status_code, 200)
         
-        # Extract CSRF token safely
-        try:
-            csrf_token = response.data.decode('utf-8').split(
-                'name="csrf_token" type="hidden" value="')[1].split('"')[0]
-            if not csrf_token:
-                raise ValueError("Empty CSRF token")
-        except (IndexError, ValueError) as e:
-            self.fail(f"Failed to extract CSRF token: {str(e)}")
+        # Extract CSRF token
+        csrf_token = response.data.decode('utf-8').split(
+            'name="csrf_token" type="hidden" value="')[1].split('"')[0]
         
-        # Log in as admin
+        # Log in as admin with follow_redirects=True
         response = self.client.post(url_for('public.login'), data={
             'username': 'admin',
             'password': 'admin',
             'csrf_token': csrf_token
         }, follow_redirects=True)
         
-        # Verify successful login
+        # Verify successful login and admin status
         self.assertEqual(response.status_code, 200)
         with self.client.session_transaction() as session:
             self.assertIn('_user_id', session)
@@ -173,6 +176,10 @@ class AdminStipendTestCase(unittest.TestCase):
     def test_create_stipend_invalid_characters(self):
         # Login first
         self.login()
+        
+        # Get CSRF token from stipend creation page
+        response = self.client.get(url_for('admin.admin_stipend.create'))
+        self.assertEqual(response.status_code, 200)
         
         # Test with invalid characters
         response = self.create_stipend_with_data({

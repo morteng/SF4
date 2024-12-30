@@ -1,10 +1,6 @@
 # Todo - Next Code Cycle
 
-1. **Test Setup**:
-   - Add explicit admin permission setup in setUp()
-   - Handle login redirects properly in test assertions
-
-2. **Validation**:
+1. **Validation**:
    - Verify error message formats match actual responses
    - Add test for admin permission verification
 
@@ -18,3 +14,9 @@
 2. **Test Reliability**:
    - Tests need to account for authentication flow
    - Error messages must match actual application behavior
+
+---
+
+### Completed Tasks
+1. Added explicit admin permission setup in setUp()
+2. Handled login redirects properly in test assertions
