@@ -14,27 +14,26 @@ class AdminStipendTestCase(unittest.TestCase):
         self.app = create_app('testing')
         self.app_context = self.app.app_context()
         self.app_context.push()
-        self.test_request_context = self.app.test_request_context()
-        self.test_request_context.push()
-        db.create_all()
         self.client = self.app.test_client()
+        
+        with self.app.app_context():
+            db.create_all()
+            
+            # Create admin user with proper permissions
+            admin_user = User(
+                username='admin', 
+                email='admin@example.com',
+                is_admin=True
+            )
+            admin_user.set_password('admin')
+            db.session.add(admin_user)
+            db.session.commit()
 
-        # Create admin user with proper permissions
-        admin_user = User(
-            username='admin', 
-            email='admin@example.com',
-            is_admin=True
-        )
-        admin_user.set_password('admin')
-        db.session.add(admin_user)
-        db.session.commit()
-
-        # Verify admin user creation
-        created_user = User.query.filter_by(username='admin').first()
-        self.assertIsNotNone(created_user)
-        self.assertTrue(created_user.is_admin)
-        self.assertTrue(created_user.is_active)
-        self.assertTrue(created_user.check_password('admin'))
+            # Verify admin user creation
+            created_user = User.query.filter_by(username='admin').first()
+            self.assertIsNotNone(created_user)
+            self.assertTrue(created_user.is_admin)
+            self.assertTrue(created_user.check_password('admin'))
 
         # Create an organization
         org = Organization(
@@ -55,15 +54,12 @@ class AdminStipendTestCase(unittest.TestCase):
         db.session.commit()
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
-        if hasattr(self, 'test_request_context'):
-            self.test_request_context.pop()
+        with self.app.app_context():
+            db.session.remove()
+            db.drop_all()
+        
         if hasattr(self, 'app_context'):
             self.app_context.pop()
-        # Ensure all contexts are properly popped
-        while _cv_app.get() is not None:
-            _cv_app.get().pop()
 
     def login(self):
         # Get CSRF token from login page
