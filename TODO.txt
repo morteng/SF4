@@ -1,21 +1,26 @@
 # Todo - Next Code Cycle
 
-1. **CEO Priority**:
-   - Remove all failing tests immediately
-   - Focus on maintaining core functionality tests
-
-2. **Testing Improvements**:
+1. **Testing Improvements**:
    - Implement proper CSRF token handling in all form tests
    - Add CSRF token handling in test setup
    - Verify flash messages are properly asserted
    - Ensure all form submissions include CSRF token validation
+   - Reorganize test structure for better maintainability
    - Work towards 60% test coverage goal
 
-3. **Security**:
+2. **Security**:
    - Review CSRF implementation
    - Add tests for rate limiting functionality
    - Verify session timeout functionality
+   - Ensure CSRF protection is working in all form submissions
 
-4. **Code Quality**:
+3. **Code Quality**:
    - Document test removal decisions
-   - Maintain security while removing failing tests
+   - Maintain security while improving test coverage
+   - Add docstrings to all test functions
+   - Improve test organization and structure
+
+4. **Refactoring**:
+   - Create helper functions for common test patterns
+   - Centralize test setup and teardown logic
+   - Improve test data management
