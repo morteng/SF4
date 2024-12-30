@@ -160,8 +160,11 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertIn(b'Stipend name cannot exceed 100 characters', response.data)
 
     def test_create_stipend_invalid_characters(self):
-        # Test name with invalid characters
-        response = self.create_stipend_with_data({
+        # Login first
+        self.login_as_admin()
+        
+        # Test with invalid characters
+        response = self.submit_form('admin.admin_stipend.create', {
             'name': 'Invalid@Name#123',
             'summary': 'Test summary',
             'description': 'Test description',
@@ -172,8 +175,9 @@ class AdminStipendTestCase(unittest.TestCase):
             'organization_id': 1,
             'open_for_applications': 'y'
         })
+        
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Invalid characters in name', response.data)
+        self.assertIn(b'Name can only contain letters, numbers, spaces, and basic punctuation', response.data)
         try:
             with self.client:
                 # Get CSRF token from login page

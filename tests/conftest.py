@@ -348,6 +348,28 @@ def extract_csrf_token(response_data):
         logging.error(f"Error extracting CSRF token: {str(e)}")
         return None
 
+def get_csrf_token(client, route_name):
+    """Helper to get CSRF token for a specific route."""
+    response = client.get(url_for(route_name))
+    return extract_csrf_token(response.data)
+
+def login_as_admin(client, username='admin', password='admin'):
+    """Helper to login as admin user."""
+    csrf_token = get_csrf_token(client, 'public.login')
+    return client.post(url_for('public.login'), data={
+        'username': username,
+        'password': password,
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
+
+def submit_form(client, route_name, form_data):
+    """Helper to submit a form with CSRF token."""
+    csrf_token = get_csrf_token(client, route_name)
+    form_data['csrf_token'] = csrf_token
+    return client.post(url_for(route_name), 
+                      data=form_data,
+                      follow_redirects=True)
+
 def get_all_tags():
     with current_app.app_context():  # Ensure application context is set
         return Tag.query.all()
