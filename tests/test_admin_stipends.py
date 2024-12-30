@@ -121,12 +121,20 @@ class AdminStipendTestCase(unittest.TestCase):
         # Add CSRF token to form data
         form_data['csrf_token'] = csrf_token
         
-        # Submit the form
-        return self.client.post(
+        # Submit the form with debug logging
+        self.app.logger.debug(f"Submitting form with CSRF token: {csrf_token}")
+        self.app.logger.debug(f"Form data: {form_data}")
+        
+        response = self.client.post(
             url_for('admin.admin_stipend.create'),
             data=form_data,
             follow_redirects=True
         )
+        
+        self.app.logger.debug(f"Response status: {response.status_code}")
+        self.app.logger.debug(f"Response data: {response.data.decode('utf-8')}")
+        
+        return response
 
     def test_create_stipend_valid(self):
         # Test valid stipend creation
@@ -179,28 +187,8 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertIn(b'Stipend name cannot exceed 100 characters', response.data)
 
     def test_create_stipend_invalid_characters(self):
-        # Login first and verify admin status
-        response = self.login()
-        self.assertEqual(response.status_code, 200)
-        
-        with self.client.session_transaction() as session:
-            self.assertTrue(session.get('is_admin', False))
-    
-        # Get CSRF token from stipend creation page
-        response = self.client.get(url_for('admin.admin_stipend.create'))
-        self.assertEqual(response.status_code, 200)
-        
-        # Extract CSRF token with error handling
-        try:
-            csrf_token = response.data.decode('utf-8').split(
-                'name="csrf_token" type="hidden" value="')[1].split('"')[0]
-            if not csrf_token:
-                raise ValueError("Empty CSRF token")
-        except (IndexError, ValueError) as e:
-            self.fail(f"Failed to extract CSRF token: {str(e)}")
-        
-        # Test with invalid characters
-        response = self.client.post(url_for('admin.admin_stipend.create'), data={
+        # Test with invalid characters using helper method
+        response = self.create_stipend_with_data({
             'name': 'Invalid@Name#123',  # Contains invalid special characters
             'summary': 'Test summary',
             'description': 'Test description',
@@ -209,9 +197,8 @@ class AdminStipendTestCase(unittest.TestCase):
             'eligibility_criteria': 'Test criteria',
             'application_deadline': '2024-12-31 23:59:59',
             'organization_id': 1,
-            'open_for_applications': 'y',
-            'csrf_token': csrf_token
-        }, follow_redirects=True)
+            'open_for_applications': 'y'
+        })
         
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Stipend name can only contain letters, numbers, spaces, hyphens, and basic punctuation', response.data)
