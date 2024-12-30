@@ -254,8 +254,6 @@ class FlashMessages(str, Enum):
     INVALID_URL = "Please enter a valid URL starting with http:// or https://."
     INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS."
     INVALID_NAME_CHARACTERS = "Name can only contain letters, numbers, spaces, and basic punctuation."
-    NAME_REQUIRED = "Name is required."
-    NAME_LENGTH = "Name cannot exceed 100 characters."
     FORM_VALIDATION_ERROR = "Form validation failed. Please check your input."
     DATE_REQUIRED = "Date is required."
     CSRF_ERROR = "Invalid CSRF token. Please refresh the page and try again."
