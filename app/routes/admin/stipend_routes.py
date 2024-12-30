@@ -165,16 +165,10 @@ def create():
             db.session.commit()
             flash(FlashMessages.CREATE_SUCCESS.value, 'success')
             return redirect(url_for('admin.admin_stipend.index'))
-            except Exception as e:
-                db.session.rollback()
-                logger.error(f"Database error creating stipend: {str(e)}")
-                flash(FlashMessages.CREATE_ERROR.value, 'error')
-                return render_template('admin/stipends/create.html', form=form)
-        else:
-            # Handle form validation errors
-            for field, errors in form.errors.items():
-                for error in errors:
-                    flash(f"{getattr(form, field).label.text}: {error}", 'error')
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Database error creating stipend: {str(e)}")
+            flash(FlashMessages.CREATE_ERROR.value, 'error')
             return render_template('admin/stipends/create.html', form=form)
     
     return render_template('admin/stipends/create.html', form=form)
