@@ -164,7 +164,7 @@ class AdminStipendTestCase(unittest.TestCase):
         self.login()
         
         # Test with invalid characters
-        response = self.submit_form('admin.admin_stipend.create', {
+        response = self.create_stipend_with_data({
             'name': 'Invalid@Name#123',
             'summary': 'Test summary',
             'description': 'Test description',
