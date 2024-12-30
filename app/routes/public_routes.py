@@ -25,6 +25,8 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
+            session['_user_id'] = str(user.id)
+            session['is_admin'] = user.is_admin
             
             # Create audit log
             try:
