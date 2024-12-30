@@ -515,6 +515,11 @@ class AdminStipendTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
 
+        # Verify session does not have admin privileges
+        with self.client.session_transaction() as session:
+            self.assertFalse(session.get('is_admin', False),
+                       "Non-admin user should not have admin privileges")
+
         # Attempt to access the stipend creation page (should be unauthorized)
         response = self.client.get(url_for('admin_stipend.create'))
         self.assertEqual(response.status_code, 403)  # Assuming you return a 403 Forbidden
