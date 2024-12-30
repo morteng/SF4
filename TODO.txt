@@ -1,8 +1,8 @@
 # Todo - Next Code Cycle
 
 1. **Critical Fixes**:
-   - Fix CSRF token validation in stipend creation tests
-   - Add comprehensive form validation tests
+   - Fixed CSRF token validation in stipend creation tests
+   - Added comprehensive form validation tests
 
 2. **Testing**:
    - Add edge case tests for form validation
