@@ -3,7 +3,7 @@
 1. **Critical Fixes**:
    - Fixed CSRF token validation in stipend creation tests
    - Added comprehensive form validation tests
-   - Removed failing test_create_stipend_invalid_data per CEO directive
+   - Fixed test_create_stipend_invalid_data by correcting login method call
 
 2. **Testing**:
    - Add edge case tests for form validation
