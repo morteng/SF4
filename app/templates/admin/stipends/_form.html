@@ -15,7 +15,7 @@
     {% endif %}
     
     <form method="POST"
-          hx-post="{{ url_for('admin.stipend.create') }}"
+          hx-post="{{ url_for('admin.admin_stipend.create') }}"
           hx-target="#stipend-form"
           hx-swap="outerHTML"
           hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'
