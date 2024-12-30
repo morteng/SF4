@@ -164,7 +164,7 @@ def create():
                 # Handle form validation errors
                 for field, errors in form.errors.items():
                     for error in errors:
-                        flash(f"{getattr(form, field).label.text}: {error}", 'error")
+                        flash(f"{getattr(form, field).label.text}: {error}", 'error')
                 return render_template('admin/stipends/create.html', form=form)
         
         return render_template('admin/stipends/create.html', form=form)
