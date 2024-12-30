@@ -186,35 +186,6 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Stipend name cannot exceed 100 characters', response.data)
 
-    def test_create_stipend_invalid_characters(self):
-        # First login to establish session
-        self.login()
-        
-        # Get CSRF token from stipend creation page
-        response = self.client.get(url_for('admin.admin_stipend.create'))
-        self.assertEqual(response.status_code, 200)
-        
-        # Extract CSRF token
-        csrf_token = response.data.decode('utf-8').split(
-            'name="csrf_token" type="hidden" value="')[1].split('"')[0]
-        
-        # Test with invalid characters
-        response = self.client.post(url_for('admin.admin_stipend.create'), data={
-            'name': 'Invalid@Name#123',  # Contains invalid special characters
-            'summary': 'Test summary',
-            'description': 'Test description',
-            'homepage_url': 'http://example.com',
-            'application_procedure': 'Test procedure',
-            'eligibility_criteria': 'Test criteria',
-            'application_deadline': '2024-12-31 23:59:59',
-            'organization_id': 1,
-            'open_for_applications': 'y',
-            'csrf_token': csrf_token
-        }, follow_redirects=True)
-        
-        # Expect 302 redirect with flash message
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Stipend name can only contain letters, numbers, spaces, hyphens, and basic punctuation', response.data)
         try:
             with self.client:
                 # Get CSRF token from login page

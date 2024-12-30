@@ -5,7 +5,7 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
-/run pytest tests/test_admin_stipends.py::AdminStipendTestCase::test_create_stipend_invalid_characters -v --cov=app --cov-report=term-missing
+/run pytest tests/test_admin_stipends.py -v --cov=app --cov-report=term-missing
 ### COMMANDS END ###
 
 # Once we're done, jump to Step 2.
