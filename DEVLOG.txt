@@ -47,3 +47,12 @@
 4. All form tests include CSRF token handling
 5. Form validation errors will return 302 redirect with flash messages
 6. Update test assertions to check for flash messages instead of response data
+
+---
+
+## Refactoring Summary:
+1. Need to update test setup to properly handle CSRF tokens
+2. Should refactor form validation tests to expect 302 redirects
+3. Need to update test assertions to check flash messages
+4. Should add CSRF token validation in form submission tests
+5. Need to improve error handling for invalid character validation
