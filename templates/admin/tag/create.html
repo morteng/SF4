@@ -1,1 +1,17 @@
-<html></html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Tag</title>
+</head>
+<body>
+    <h1>Create Tag</h1>
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" required>
+        <button type="submit">Create</button>
+    </form>
+</body>
+</html>

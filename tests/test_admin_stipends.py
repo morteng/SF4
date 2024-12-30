@@ -49,22 +49,23 @@ class AdminStipendTestCase(unittest.TestCase):
         if hasattr(self, 'app_context'):
             self.app_context.pop()
 
-    def login(self, username, password):
-        # Get CSRF token first
+    def login(self):
+        # Get CSRF token from login page
         response = self.client.get(url_for('public.login'))
         csrf_token = response.data.decode('utf-8').split(
             'name="csrf_token" type="hidden" value="')[1].split('"')[0]
-            
+        
+        # Log in as admin
         return self.client.post(url_for('public.login'), data={
-            'username': username,
-            'password': password,
+            'username': 'admin',
+            'password': 'admin',
             'csrf_token': csrf_token
         }, follow_redirects=True)
 
     def create_stipend_with_data(self, form_data):
         """Helper method to create a stipend with form data"""
-        # Get CSRF token from create page
-        response = self.client.get(url_for('admin.admin_stipend.create'))
+        # Get CSRF token from login page
+        response = self.client.get(url_for('public.login'))
         csrf_token = response.data.decode('utf-8').split(
             'name="csrf_token" type="hidden" value="')[1].split('"')[0]
         
