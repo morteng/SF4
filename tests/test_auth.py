@@ -1,20 +1,17 @@
-def test_login(client):
+def test_login(client, db_session, app):
     """Test login flow including CSRF protection"""
-    # First verify we can access login page when not authenticated
+    # Create test user
+    with app.app_context():
+        user = User(username='testuser', email='test@example.com')
+        user.set_password('testpass')
+        db_session.add(user)
+        db_session.commit()
+
+    # Get login page and extract CSRF token using helper
     login_page = client.get('/login')
     assert login_page.status_code == 200
     
-    # Verify CSRF token is present in the form
-    login_html = login_page.data.decode()
-    assert 'name="csrf_token"' in login_html
-    
-    # Extract CSRF token more safely
-    csrf_token = None
-    if 'name="csrf_token"' in login_html:
-        csrf_start = login_html.find('name="csrf_token" value="') + len('name="csrf_token" value="')
-        csrf_end = login_html.find('"', csrf_start)
-        csrf_token = login_html[csrf_start:csrf_end]
-    
+    csrf_token = extract_csrf_token(login_page.data)
     assert csrf_token is not None, "CSRF token not found in login form"
     
     # Submit login with valid credentials and CSRF token

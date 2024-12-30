@@ -26,6 +26,14 @@ def pytest_configure(config):
         "markers",
         "freezegun: mark tests that require freezegun package"
     )
+    config.addinivalue_line(
+        "markers",
+        "auth: mark tests related to authentication"
+    )
+    config.addinivalue_line(
+        "markers",
+        "csrf: mark tests related to CSRF protection"
+    )
 
 # Skip freezegun-dependent tests if freezegun is not installed
 def pytest_collection_modifyitems(config, items):
