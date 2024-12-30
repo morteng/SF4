@@ -135,36 +135,37 @@ stipend_controller = StipendController()
 def create():
     """Handle stipend creation requests."""
     logger.debug("Processing stipend creation request")
-    try:
-        form = StipendForm()
-        
-        if request.method == 'POST':
-            if form.validate_on_submit():
-                try:
-                    form_data = request.form.to_dict()
-                    # Process form data
-                    stipend = Stipend.create(form_data, current_user.id)
-                    db.session.commit()
-                    flash(FlashMessages.CREATE_SUCCESS.value, 'success')
-                    return redirect(url_for('admin.admin_stipend.index'))
-                except Exception as e:
-                    db.session.rollback()
-                    logger.error(f"Database error creating stipend: {str(e)}")
-                    flash(FlashMessages.CREATE_ERROR.value, 'error')
-                    return render_template('admin/stipends/create.html', form=form)
-            else:
-                # Handle form validation errors
-                for field, errors in form.errors.items():
-                    for error in errors:
-                        flash(f"{getattr(form, field).label.text}: {error}", 'error')
+    
+    # Verify admin status
+    if not current_user.is_admin:
+        logger.warning(f"Non-admin user {current_user.id} attempted to access stipend creation")
+        abort(403)
+    
+    form = StipendForm()
+    logger.debug("Stipend form initialized successfully")
+    
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            try:
+                form_data = request.form.to_dict()
+                # Process form data
+                stipend = Stipend.create(form_data, current_user.id)
+                db.session.commit()
+                flash(FlashMessages.CREATE_SUCCESS.value, 'success')
+                return redirect(url_for('admin.admin_stipend.index'))
+            except Exception as e:
+                db.session.rollback()
+                logger.error(f"Database error creating stipend: {str(e)}")
+                flash(FlashMessages.CREATE_ERROR.value, 'error')
                 return render_template('admin/stipends/create.html', form=form)
-        
-        return render_template('admin/stipends/create.html', form=form)
-        
-    except Exception as e:
-        logger.error(f"Unexpected error in stipend creation: {str(e)}", exc_info=True)
-        flash(FlashMessages.CREATE_ERROR.value, 'error')
-        return redirect(url_for('admin.admin_stipend.index'))
+        else:
+            # Handle form validation errors
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash(f"{getattr(form, field).label.text}: {error}", 'error')
+            return render_template('admin/stipends/create.html', form=form)
+    
+    return render_template('admin/stipends/create.html', form=form)
 
 @admin_stipend_bp.route('/<int:id>/edit', methods=['GET', 'POST'])
 @limiter.limit("10 per minute")

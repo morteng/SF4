@@ -1,6 +1,6 @@
+from datetime import datetime
 from wtforms import Field, ValidationError
 from wtforms.validators import InputRequired
-from datetime import datetime
 from app.constants import FlashMessages
 
 class CustomDateTimeField(Field):
@@ -8,6 +8,8 @@ class CustomDateTimeField(Field):
         if validators is None:
             validators = [InputRequired(message=FlashMessages.MISSING_FIELD_ERROR.value)]
         self.format = format
+        # Remove error_messages from kwargs if present
+        kwargs.pop('error_messages', None)
         super().__init__(label=label, validators=validators, **kwargs)
 
     def process_formdata(self, valuelist):

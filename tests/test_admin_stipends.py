@@ -48,8 +48,8 @@ class AdminStipendTestCase(unittest.TestCase):
                 response = self.client.get(url_for('public.login'))
                 self.assertEqual(response.status_code, 200)
                 self.app.logger.debug("CSRF token page loaded successfully")
-
-            # Extract CSRF token from hidden form field with error handling
+    
+            # Extract CSRF token
             try:
                 csrf_token = response.data.decode('utf-8').split(
                     'name="csrf_token" type="hidden" value="')[1].split('"')[0]
@@ -57,21 +57,23 @@ class AdminStipendTestCase(unittest.TestCase):
                     raise ValueError("CSRF token is empty")
             except (IndexError, ValueError) as e:
                 self.fail(f"Failed to extract CSRF token: {str(e)}")
-
-            # Log in as admin with CSRF token
+    
+            # Log in as admin
             response = self.client.post(url_for('public.login'), data={
                 'username': 'admin',
                 'password': 'password',
                 'csrf_token': csrf_token
             }, follow_redirects=True)
-
+    
             self.assertEqual(response.status_code, 200,
                        "Login failed - check admin credentials and CSRF token")
-
-            # Verify session
+    
+            # Verify session and admin status
             with self.client.session_transaction() as session:
-                self.assertIn('_user_id', session)  # Changed from 'user_id' to '_user_id'
-                self.assertEqual(session['_user_id'], '1')  # Changed to string comparison
+                self.assertIn('_user_id', session)
+                self.assertEqual(session['_user_id'], '1')
+                self.assertTrue(session.get('is_admin', False),
+                          "User does not have admin privileges")
 
             # Get CSRF token for stipend creation form
             response = self.client.get(url_for('admin.admin_stipend.create'))
