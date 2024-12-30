@@ -75,6 +75,11 @@ class TestBaseCrudController(BaseTestCase):
         assert form.validate() is False
         assert FlashMessages.NAME_REQUIRED in form.name.errors
 
+        # Test invalid characters in name
+        form = StipendForm(name="Invalid@Name")
+        assert form.validate() is False
+        assert FlashMessages.INVALID_NAME_CHARACTERS in form.name.errors
+
         # Test name too long
         form = StipendForm(name="a" * 101)
         assert form.validate() is False
