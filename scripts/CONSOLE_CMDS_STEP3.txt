@@ -5,9 +5,7 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
-/run flask db migrate -m "Fix is_active implementation"
-/run flask db upgrade
-/run pytest tests/test_admin_stipends.py -v --cov=app --cov-report=html
+/run pytest tests/test_admin_stipends.py -v
 ### COMMANDS END ###
 
 # Once we're done, jump to Step 4.
