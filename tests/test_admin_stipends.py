@@ -70,8 +70,8 @@ class AdminStipendTestCase(unittest.TestCase):
     
             # Verify session
             with self.client.session_transaction() as session:
-                self.assertIn('user_id', session)
-                self.assertEqual(session['user_id'], 1)
+                self.assertIn('_user_id', session)  # Changed from 'user_id' to '_user_id'
+                self.assertEqual(session['_user_id'], '1')  # Changed to string comparison
     
             # Get CSRF token for stipend creation form
             response = self.client.get(url_for('admin.admin_stipend.create'))
