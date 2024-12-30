@@ -2,25 +2,13 @@
 
 1. **Testing Improvements**:
    - Implement proper CSRF token handling in all form tests
-   - Add CSRF token handling in test setup
-   - Verify flash messages are properly asserted
-   - Ensure all form submissions include CSRF token validation
-   - Reorganize test structure for better maintainability
+   - Add proper flash message assertions
    - Work towards 60% test coverage goal
 
 2. **Security**:
-   - Review CSRF implementation
-   - Add tests for rate limiting functionality
    - Verify session timeout functionality
    - Ensure CSRF protection is working in all form submissions
 
 3. **Code Quality**:
-   - Document test removal decisions
-   - Maintain security while improving test coverage
    - Add docstrings to all test functions
    - Improve test organization and structure
-
-4. **Refactoring**:
-   - Create helper functions for common test patterns
-   - Centralize test setup and teardown logic
-   - Improve test data management
