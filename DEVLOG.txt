@@ -1,30 +1,36 @@
-# Code Cycle Summary - Stipend Form Validation
+# Code Cycle Plan - Stipend Form Fixes
 
-## Project current status report
-- Stipend form rendering still failing due to missing 'name' field
-- Login and basic blueprint tests passing
-- Coverage at 48% overall
+## Current Issues:
+1. Stipend form rendering fails due to missing 'name' field
+2. Test coverage needs improvement (48% overall)
+3. Form validation needs better error handling
 
-## Changes Implemented:
-1. Refactored StipendForm field initialization
-2. Added detailed form field validation
-3. Improved test coverage for invalid character handling
+## Immediate Priorities:
+1. Fix StipendForm field initialization
+2. Add template rendering tests
+3. Improve form validation coverage
 
-## Key Insights:
-1. **Form Initialization**:
-   - WTForms fields must be defined at class level
-   - Dynamic field creation in __init__ doesn't work with templates
+## Implementation Plan:
+1. **Form Fixes**:
+   - Add 'name' field to StipendForm class
+   - Ensure all fields are properly initialized
+   - Add validation for special characters in name field
+
 2. **Testing**:
-   - Need better error handling in form initialization
-   - Template rendering tests are essential
+   - Add template rendering tests
+   - Expand test coverage for edge cases
+   - Add form validation helper methods
+
+3. **Error Handling**:
+   - Improve error messages in constants.py
+   - Add better exception handling in form validation
+
+## Expected Outcomes:
+1. Stipend form renders correctly
+2. Test coverage increases to 60%+
+3. Better error handling for form validation
 
 ## Next Steps:
-1. Fix form field initialization
-2. Add template rendering tests
-3. Improve coverage for edge cases
-
----
-
-### Additional Questions:
-1. Should we add form validation helper methods?
-2. Do we need to add more template-specific tests?
+1. Implement form fixes
+2. Add new tests
+3. Improve error handling
