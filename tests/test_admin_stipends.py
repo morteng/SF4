@@ -384,7 +384,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_delete_stipend(self):
         # Log in as admin
-        self.login()
+        response = self.login()
         self.assertEqual(response.status_code, 200)
 
         # Create a new stipend
@@ -411,7 +411,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_stipend_index(self):
         # Log in as admin
-        self.login()
+        response = self.login()
         self.assertEqual(response.status_code, 200)
 
         # Create a new stipend
@@ -449,7 +449,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_stipend_validation_errors(self):
         # Log in as admin
-        self.login()
+        response = self.login()
         self.assertEqual(response.status_code, 200)
 
         # Navigate to the stipend creation page
@@ -475,7 +475,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_create_stipend_with_invalid_organization(self):
         # Log in as admin
-        self.login()
+        response = self.login()
         self.assertEqual(response.status_code, 200)
 
         # Attempt to create a stipend with an invalid organization ID
@@ -496,7 +496,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_create_stipend_with_invalid_open_for_applications(self):
         # Log in as admin
-        self.login()
+        response = self.login()
         self.assertEqual(response.status_code, 200)
 
         # Attempt to create a stipend with invalid open_for_applications
@@ -517,7 +517,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_create_stipend_with_invalid_open_for_applications(self):
         # Log in as admin
-        self.login()
+        response = self.login()
         self.assertEqual(response.status_code, 200)
 
         # Attempt to create a stipend with invalid open_for_applications
@@ -538,7 +538,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_create_stipend_with_invalid_open_for_applications(self):
         # Log in as admin
-        self.login()
+        response = self.login()
         self.assertEqual(response.status_code, 200)
 
         # Attempt to create a stipend with invalid open_for_applications
@@ -559,7 +559,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_create_stipend_with_invalid_open_for_applications(self):
         # Log in as admin
-        self.login()
+        response = self.login()
         self.assertEqual(response.status_code, 200)
 
         # Attempt to create a stipend with invalid open_for_applications
@@ -580,7 +580,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_create_stipend_with_invalid_open_for_applications(self):
         # Log in as admin
-        self.login()
+        response = self.login()
         self.assertEqual(response.status_code, 200)
 
         # Attempt to create a stipend with invalid open_for_applications
@@ -601,7 +601,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_create_stipend_invalid_data(self):
         # Log in as admin
-        self.login()
+        response = self.login()
         self.assertEqual(response.status_code, 200)
 
         # Test with invalid data
