@@ -1,22 +1,5 @@
-# Todo - Next Code Cycle
+# Priority Tasks
 
-1. **Test Coverage Improvement**:
-   - Add tests for user authentication flows
-   - Add tests for stipend listing functionality
-   - Add edge case tests for date/time validation
-   - Document test coverage strategy
-
-2. **Test Maintenance**:
-   - Verify all remaining tests are passing
-   - Review test dependencies
-   - Document test execution process
-
-3. **New Test Development**:
-   - Add tests for basic CRUD operations across all models
-   - Create integration tests for admin workflows
-   - Add tests for error handling scenarios
-
-4. **Documentation**:
-   - Update test documentation with coverage strategy
-   - Create test development guidelines
-   - Document test cleanup process
+1. Fix CSRF token validation in admin stipend creation tests
+2. Implement boolean field validation for stipend forms
+3. Remove all non-working tests per CEO directive
