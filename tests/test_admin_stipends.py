@@ -338,7 +338,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_update_stipend(self):
         # Log in as admin
-        response = self.login('admin', 'password')
+        self.login()
         self.assertEqual(response.status_code, 200)
 
         # Create a new stipend
