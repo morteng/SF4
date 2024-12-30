@@ -27,7 +27,8 @@ def test_login(client, db_session, app):
     }, follow_redirects=True)
     
     assert response.status_code == 200
-    assert b"Welcome" in response.data  # Updated to match actual redirect content
+    assert b"Hey! Welcome to our website." in response.data
+    assert b"We hope you find everything you need here." in response.data
 
 def test_login_invalid_csrf(client, db_session, app):
     """Test login with invalid CSRF token"""
