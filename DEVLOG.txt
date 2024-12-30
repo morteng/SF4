@@ -26,4 +26,6 @@
 
 ### Additional Questions:
 1. Should we add form validation helper methods?
+ANSWER: Probably
 2. Do we need to add more template-specific tests?
+ANSWER: Yes template system should be refactored to be better.
