@@ -35,7 +35,7 @@
 1. Should we implement a custom widget for datetime fields? 
    - Decision: Yes, to ensure consistent datetime handling
 2. Do we need additional validation for datetime formats?
-   - Decision: Yes, add format validation in _value method
+   - Decision: NO!
 
 ---
 
