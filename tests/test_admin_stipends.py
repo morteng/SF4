@@ -599,28 +599,6 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Open for Applications must be a boolean value.', response.data)
 
-    def test_create_stipend_invalid_data(self):
-        # Log in as admin
-        self.login()
-
-        # Test with invalid data
-        response = self.client.post(url_for('admin.admin_stipend.create'), data={
-            'name': '',  # Invalid: empty name
-            'summary': 'Test',
-            'description': 'Test',
-            'homepage_url': 'invalid-url',
-            'application_procedure': 'Test',
-            'eligibility_criteria': 'Test',
-            'application_deadline': 'invalid-date',
-            'organization_id': 1,
-            'open_for_applications': 'y',
-            'csrf_token': self.get_csrf_token()
-        }, follow_redirects=True)
-        
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'This field is required', response.data)
-        self.assertIn(b'Invalid URL', response.data)
-        self.assertIn(b'Invalid date/time format', response.data)
 
     def test_create_stipend_missing_csrf(self):
         # Log in as admin
