@@ -1,3 +1,4 @@
+import os
 from unittest.mock import patch
 from flask import Response
 from tests.base_test_case import BaseTestCase
