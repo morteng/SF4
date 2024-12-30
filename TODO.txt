@@ -1,22 +1,21 @@
 # Todo - Next Code Cycle
 
-1. **Validation**:
-   - Verify error message formats match actual responses
-   - Add test for admin permission verification
+1. **Form Validation**:
+   - Fix StipendForm initialization in stipend routes
+   - Ensure all form fields are properly defined and accessible
+   - Add tests for form field validation
+
+2. **Template Rendering**:
+   - Verify template variable passing in stipend routes
+   - Add error handling for missing form fields
 
 ---
 
 ### Key Insights
-1. **Authentication**:
-   - Admin permissions must be explicitly set up in tests
-   - Login redirects need to be properly handled
+1. **Form Initialization**:
+   - Form fields must be properly initialized before template rendering
+   - Missing fields cause template rendering errors
 
-2. **Test Reliability**:
-   - Tests need to account for authentication flow
-   - Error messages must match actual application behavior
-
----
-
-### Completed Tasks
-1. Added explicit admin permission setup in setUp()
-2. Handled login redirects properly in test assertions
+2. **Test Coverage**:
+   - Need more comprehensive tests for form handling
+   - Template rendering tests should verify all required fields
