@@ -1,17 +1,14 @@
 # Todo - Next Code Cycle
 
-1. **Critical Fixes (CEO Priority)**:
-   - Fix failing login redirect test (302 expected)
-   - Implement missing test_login method
-   - Add CSRF token handling to all form tests
-
-2. **Security**:
-   - Implement login rate limiting (5 attempts/minute)
-   - Review session management
-   - Add tests for rate limiting functionality
-
-3. **Testing**:
+1. **Critical Fixes**:
+   - Fix CSRF token validation in stipend creation tests
    - Add comprehensive form validation tests
+
+2. **Testing**:
    - Add edge case tests for form validation
    - Implement integration tests for form submissions
    - Verify admin status after login redirect
+
+3. **Security**:
+   - Review session management
+   - Add tests for rate limiting functionality
