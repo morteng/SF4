@@ -1,21 +1,20 @@
 # Todo - Next Code Cycle
 
-1. **Test Improvements**:
-   - Fix login test assertion for redirect response
-   - Set up admin user permissions in test setup
-   - Verify validation error message formats
+1. **Test Setup**:
+   - Add explicit admin permission setup in setUp()
+   - Handle login redirects properly in test assertions
 
 2. **Validation**:
-   - Ensure consistent error handling across all forms
-   - Add tests for edge cases in stipend validation
+   - Verify error message formats match actual responses
+   - Add test for admin permission verification
 
 ---
 
 ### Key Insights
-1. **Test Setup**:
-   - Need proper admin user setup for tests
-   - Account for redirect responses in assertions
+1. **Authentication**:
+   - Admin permissions must be explicitly set up in tests
+   - Login redirects need to be properly handled
 
-2. **Validation**:
-   - Need thorough testing of edge cases
-   - Centralized error handling improves maintainability
+2. **Test Reliability**:
+   - Tests need to account for authentication flow
+   - Error messages must match actual application behavior

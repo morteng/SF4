@@ -1,31 +1,30 @@
 # Code Cycle Summary - Stipend Validation Testing
 
 ## Changes Implemented:
-1. Updated CSRF token handling in test setup
+1. Updated CSRF token handling to get token from correct page
 2. Modified test assertions to match actual validation behavior
+3. Fixed test method calls to use existing helpers
 
 ## Current Status:
 - Stipend validation tests failing due to permission issues
-- Login test assertion needs adjustment for redirect behavior
+- Login redirect (302) not being handled correctly in tests
 
 ## Key Insights:
 1. **CSRF Handling**:
-   - Need proper CSRF token handling in test setup
-   - Tests should account for redirect responses
+   - Must get CSRF token from the actual form page
+   - Tests need proper token handling for form submissions
 
-2. **Error Handling**:
-   - Need consistent error message formats
-   - Test cases must match actual validation logic
+2. **Authentication**:
+   - Admin permissions need to be properly set up in test setup
+   - Login redirects need to be handled in test assertions
 
 ## Next Steps:
-1. Fix login test assertion for redirect response
-2. Verify admin permissions in test setup
-3. Ensure test assertions match actual error responses
+1. Fix admin permission setup in test initialization
+2. Handle login redirects properly in test assertions
+3. Verify error message formats match actual responses
 
 ---
 
 ### Additional Comments/Questions:
-1. Should we modify the login test to expect redirect (302) instead of success (200)?
-ANSWER: Yes
-2. Do we need to set up admin user permissions in test setup?
-ANSWER: Find out.
+1. Should we add explicit admin permission setup in setUp()?
+2. Do we need to follow redirects in login test assertions?
