@@ -12,7 +12,7 @@
    - CSRF token validation needs proper handling in tests
    - Form submission tests need CSRF token handling
    - Flash messages not being properly asserted in tests
-   - Stipend name length validation test failing due to CSRF token issue
+   - Stipend date validation test failing due to CSRF token issue
 
 2. **Security**:
    - Login rate limiting working (5 attempts/minute)
@@ -40,4 +40,9 @@
 - Removed test_create_stipend_name_too_long() per CEO's instruction
 - Verified remaining tests are passing
 - Updated test coverage metrics
+
+## Current Test Status:
+- test_blueprint_registration: PASS
+- test_create_stipend_missing_required_fields: PASS
+- test_create_stipend_past_date: FAIL (CSRF token issue)
 
