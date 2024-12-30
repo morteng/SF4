@@ -340,7 +340,7 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Create a new stipend with invalid data
-        response = self.client.post(url_for('admin_stipend.create'), data={
+        response = self.client.post(url_for('admin.admin_stipend.create'), data={
             'name': '',  # Empty name should trigger validation error
             'summary': 'This is a test stipend.',
             'description': 'Detailed description of the test stipend.',
