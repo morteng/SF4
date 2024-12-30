@@ -173,7 +173,7 @@ class AdminStipendTestCase(unittest.TestCase):
             'open_for_applications': 'y'
         })
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Invalid characters in name', response.data)
+        self.assertIn(b'Invalid characters in name field', response.data)
         try:
             with self.client:
                 # Get CSRF token from login page
