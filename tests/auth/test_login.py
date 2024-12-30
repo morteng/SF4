@@ -46,7 +46,7 @@ def test_login_invalid_csrf(client, db_session, app):
         'csrf_token': 'invalid_token'
     }, follow_redirects=True)
     
-    assert b"CSRF token is invalid" in response.data
+    assert b"The CSRF session token is missing" in response.data
 
 def test_login_missing_csrf(client, db_session, app):
     """Test login with missing CSRF token"""
