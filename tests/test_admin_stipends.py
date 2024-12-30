@@ -102,24 +102,25 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def create_stipend_with_data(self, form_data):
         """Helper method to create a stipend with form data"""
-        # First login to establish session
-        self.login()
-        
-        # Get CSRF token from stipend creation page
-        response = self.client.get(url_for('admin.admin_stipend.create'))
-        self.assertEqual(response.status_code, 200)
-        
-        # Extract CSRF token with error handling
-        try:
-            csrf_token = response.data.decode('utf-8').split(
-                'name="csrf_token" type="hidden" value="')[1].split('"')[0]
-            if not csrf_token:
-                raise ValueError("Empty CSRF token")
-        except (IndexError, ValueError) as e:
-            self.fail(f"Failed to extract CSRF token: {str(e)}")
-        
-        # Add CSRF token to form data
-        form_data['csrf_token'] = csrf_token
+        with self.client:
+            # First login to establish session
+            self.login()
+            
+            # Get CSRF token from stipend creation page
+            response = self.client.get(url_for('admin.admin_stipend.create'))
+            self.assertEqual(response.status_code, 200)
+            
+            # Extract CSRF token with error handling
+            try:
+                csrf_token = response.data.decode('utf-8').split(
+                    'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+                if not csrf_token:
+                    raise ValueError("Empty CSRF token")
+            except (IndexError, ValueError) as e:
+                self.fail(f"Failed to extract CSRF token: {str(e)}")
+            
+            # Add CSRF token to form data
+            form_data['csrf_token'] = csrf_token
         
         # Submit the form with debug logging
         self.app.logger.debug(f"Submitting form with CSRF token: {csrf_token}")
@@ -137,8 +138,42 @@ class AdminStipendTestCase(unittest.TestCase):
         return response
 
     def test_create_stipend_valid(self):
-        # Test valid stipend creation
-        response = self.create_stipend_with_data({
+        # Start session
+        with self.client:
+            # Get CSRF token from login page
+            response = self.client.get(url_for('public.login'))
+            self.assertEqual(response.status_code, 200)
+            
+            # Extract CSRF token
+            try:
+                csrf_token = response.data.decode('utf-8').split(
+                    'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+                if not csrf_token:
+                    raise ValueError("Empty CSRF token")
+            except (IndexError, ValueError) as e:
+                self.fail(f"Failed to extract CSRF token: {str(e)}")
+            
+            # Log in as admin
+            response = self.client.post(url_for('public.login'), data={
+                'username': 'admin',
+                'password': 'admin',
+                'csrf_token': csrf_token
+            }, follow_redirects=True)
+            self.assertEqual(response.status_code, 200)
+            
+            # Get CSRF token for stipend creation
+            response = self.client.get(url_for('admin.admin_stipend.create'))
+            self.assertEqual(response.status_code, 200)
+            try:
+                csrf_token = response.data.decode('utf-8').split(
+                    'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+                if not csrf_token:
+                    raise ValueError("Empty CSRF token")
+            except (IndexError, ValueError) as e:
+                self.fail(f"Failed to extract CSRF token: {str(e)}")
+            
+            # Test valid stipend creation
+            response = self.client.post(url_for('admin.admin_stipend.create'), data={
             'name': 'Valid Stipend',
             'summary': 'Valid summary',
             'description': 'Valid description',

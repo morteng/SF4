@@ -149,8 +149,15 @@ class BaseRouteController:
 
     def create(self):
         """Handle create operation"""
+        logger = logging.getLogger(__name__)
+        logger.debug("Starting create operation")
+        
         form = self.form_class()
         is_htmx = request.headers.get('HX-Request')
+        
+        # Debug log CSRF token state
+        logger.debug(f"CSRF token in form: {form.csrf_token._value()}")
+        logger.debug(f"Session CSRF token: {session.get('csrf_token')}")
         
         if form.validate_on_submit():
             try:
