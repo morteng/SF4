@@ -26,4 +26,9 @@
 
 ### Additional Comments/Questions:
 1. Should we implement a test helper for CSRF token handling?
+ANSWER: Yes
 2. Do we need to update the validation error message constants?
+ANSWER: Find out.
+
+### Priority request from CEO ###
+1. Ensure all templates are located within the app\templates directory. move or delete the template files in templates. Give this request top priority.
