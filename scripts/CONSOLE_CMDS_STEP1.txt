@@ -6,6 +6,9 @@
 
 ### COMMANDS START ###
 /run pytest tests/auth/test_login.py -v --log-cli-level=DEBUG --cov=app --cov-report=term-missing
+/run git branch -m main
+/run git tag v0.1.0
+/run git push origin main --tags
 ### COMMANDS END ###
 
 # Once we're done, jump to Step 2.
