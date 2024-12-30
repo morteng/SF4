@@ -5,8 +5,7 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
-/run pytest tests/test_admin_stipends.py -v --cov=app --cov-report=html
 ### COMMANDS END ###
 
-# Once finished, jump to Step 4.
+# Once we're done, jump to Step 4.
 /load scripts/MAIN_CMDS_STEP4.txt
