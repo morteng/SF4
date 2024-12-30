@@ -1,43 +1,28 @@
 # Todo - Next Code Cycle
 
 1. **Template Management**:
-   - Ensure all required templates (e.g., `admin/tag/create.html`) exist in the `templates` directory.
-   - Verify template paths in controllers and tests.
+   - Create missing `admin/tag/create.html` template
+   - Verify template paths in controllers and tests
 
-2. **Test Coverage**:
-   - Add more tests for `BaseCrudController` to cover edge cases and error scenarios.
-   - Increase coverage for other critical components (e.g., `BaseService`, `TagService`).
+2. **CSRF Handling**:
+   - Ensure CSRF tokens are properly handled in test cases
+   - Add CSRF token validation in form submissions
 
-3. **Error Handling**:
-   - Enhance error handling in `BaseCrudController` to log and handle missing templates gracefully.
-   - Add specific error messages for template-related issues.
-
-4. **Code Refactoring**:
-   - Review and refactor `BaseCrudController` to improve modularity and reusability.
-   - Consolidate shared logic into utility functions or base classes.
-
-5. **Documentation**:
-   - Update inline documentation for `BaseCrudController` and related components.
-   - Add docstrings for all public methods and classes.
+3. **Test Coverage**:
+   - Add tests for invalid character handling in stipend names
+   - Expand test coverage for error scenarios
 
 ---
 
 ### Key Insights
-1. **Centralization**:
-   - Centralized constants improve maintainability.
-   - Consistent error messages enhance user experience.
+1. **Template Issues**:
+   - Missing templates cause test failures
+   - Need to verify template paths in controllers
 
-2. **Testing**:
-   - Comprehensive testing catches issues early.
-   - Mocking is essential for isolating test dependencies.
+2. **CSRF Validation**:
+   - CSRF token validation is critical for security
+   - Tests need to handle CSRF tokens properly
 
-3. **Code Quality**:
-   - Modular code structure makes maintenance easier.
-   - Clear error handling improves debugging and user feedback.
-
----
-
-### Resolved Issues
-1. Fixed missing `INVALID_NAME_CHARACTERS` constant.
-2. Updated `BaseCrudController` to handle missing templates gracefully.
-3. Mocked `render_template` in tests to avoid dependency on actual template files.
+3. **Error Handling**:
+   - Clear error messages improve user experience
+   - Centralized constants make maintenance easier
