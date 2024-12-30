@@ -619,6 +619,53 @@ class AdminStipendTestCase(unittest.TestCase):
         with self.assertRaises(ValueError):
             user.is_active = 'invalid'
 
+    def test_create_stipend_invalid_date_format(self):
+        # Test invalid date formats
+        invalid_formats = [
+            '2023/12/31',  # Wrong separator
+            '31-12-2023',  # Wrong order
+            '2023-13-01',  # Invalid month
+            '2023-12-32',  # Invalid day
+            '2023-12-31 25:00:00'  # Invalid time
+        ]
+        for date_str in invalid_formats:
+            with self.subTest(date_str=date_str):
+                response = self.create_stipend_with_data({'application_deadline': date_str})
+                self.assertIn(b'Invalid date/time format', response.data)
+
+    def test_create_stipend_past_date(self):
+        # Test with past date
+        response = self.create_stipend_with_data({
+            'application_deadline': '2020-01-01 00:00:00'
+        })
+        self.assertIn(b'Application deadline must be in the future', response.data)
+
+    def test_create_stipend_missing_required_fields(self):
+        # Test missing required fields
+        required_fields = [
+            'name', 'summary', 'description', 'homepage_url',
+            'application_procedure', 'eligibility_criteria',
+            'application_deadline', 'organization_id'
+        ]
+        
+        for field in required_fields:
+            with self.subTest(field=field):
+                form_data = {
+                    'name': 'Test Stipend',
+                    'summary': 'Test summary',
+                    'description': 'Test description',
+                    'homepage_url': 'http://example.com',
+                    'application_procedure': 'Test procedure',
+                    'eligibility_criteria': 'Test criteria',
+                    'application_deadline': '2023-12-31 23:59:59',
+                    'organization_id': 1,
+                    'open_for_applications': 'y'
+                }
+                del form_data[field]  # Remove the required field
+                
+                response = self.create_stipend_with_data(form_data)
+                self.assertIn(b'This field is required', response.data)
+
     def test_blueprint_registration(self):
         """Test that the admin stipend blueprint is registered correctly."""
         with self.app.app_context():

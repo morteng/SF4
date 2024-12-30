@@ -6,8 +6,10 @@ from app.constants import FlashMessages
 class CustomDateTimeField(Field):
     def __init__(self, label=None, validators=None, format="%Y-%m-%d %H:%M:%S", **kwargs):
         if validators is None:
-            validators = [InputRequired(message="This field is required")]
+            validators = [InputRequired(message=FlashMessages.MISSING_FIELD_ERROR)]
         self.format = format
+        # Remove error_messages from kwargs if present
+        kwargs.pop('error_messages', None)
         super().__init__(label=label, validators=validators, **kwargs)
 
     def process_formdata(self, valuelist):
@@ -17,4 +19,4 @@ class CustomDateTimeField(Field):
                 self.data = datetime.strptime(date_str, self.format)
             except ValueError:
                 self.data = None
-                raise ValidationError(f'Invalid date format. Use {self.format}')
+                raise ValidationError(FlashMessages.INVALID_DATETIME_FORMAT)

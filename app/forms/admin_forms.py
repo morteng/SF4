@@ -62,7 +62,7 @@ class StipendForm(FlaskForm):
         'Application Deadline',
         format="%Y-%m-%d %H:%M:%S",
         validators=[
-            InputRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
+            InputRequired(message=FlashMessages.MISSING_FIELD_ERROR),
             validate_application_deadline
         ]
     )
