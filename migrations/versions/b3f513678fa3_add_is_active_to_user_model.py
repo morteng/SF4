@@ -50,6 +50,14 @@ def upgrade():
             batch_op.add_column(sa.Column('min_runtime', sa.Float(), nullable=True))
 
     # Modify stipend table columns
+    conn = op.get_bind()
+    inspector = sa.inspect(conn)
+    tables = inspector.get_table_names()
+
+    # Check if the temporary table exists and drop it if it does
+    if '_alembic_tmp_stipend' in tables:
+        op.drop_table('_alembic_tmp_stipend')
+
     with op.batch_alter_table('stipend', schema=None) as batch_op:
         batch_op.alter_column('summary',
                existing_type=sa.TEXT(),
