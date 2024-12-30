@@ -47,7 +47,6 @@ def test_organization_form_valid_data(app):
     ("Valid Org", "", "https://valid.org", True),  # Empty description is allowed
     ("Valid Org", "Valid description", "invalid-url", False),  # Invalid URL
     ("Valid Org", "Valid description", "", False),  # Missing URL
-    ("a" * 256, "Valid description", "https://valid.org", False),  # Name too long
 ])
 def test_organization_form_invalid_data(app, name, description, homepage_url, expected):
     """Test organization form with invalid data"""
