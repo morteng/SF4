@@ -603,6 +603,22 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Application deadline must be in the future', response.data)
 
+    def test_user_is_active(self):
+        # Create a new user
+        user = User(username='testuser', email='test@example.com')
+        user.set_password('password')
+        
+        # Verify default is_active status
+        self.assertTrue(user.is_active, "New user should be active by default")
+        
+        # Test setting is_active
+        user.is_active = False
+        self.assertFalse(user.is_active, "User should be inactive after setting is_active to False")
+        
+        # Test invalid is_active value
+        with self.assertRaises(ValueError):
+            user.is_active = 'invalid'
+
     def test_blueprint_registration(self):
         """Test that the admin stipend blueprint is registered correctly."""
         with self.app.app_context():
