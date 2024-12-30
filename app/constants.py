@@ -200,6 +200,10 @@ class FlashCategory(str, Enum):
     CRUD_OPERATION_ERROR = "Operation failed: {error}"
     CRUD_RECORD_NOT_FOUND = "{entity} not found."
     CRUD_PERMISSION_DENIED = "You don't have permission to perform this action."
+    
+    # Template Management
+    TEMPLATE_NOT_FOUND = "Template not found."
+    TEMPLATE_ERROR = "Error rendering template."
 
     # Profile Management
     UPDATE_PROFILE_SUCCESS = "Profile updated successfully."
