@@ -45,12 +45,6 @@ class StipendForm(FlaskForm):
         Regexp(r'^[a-zA-Z0-9\s\-,.()\'"]+$', 
                message=FlashMessages.INVALID_NAME_CHARACTERS)
     ])
-    name = StringField('Name', validators=[
-        DataRequired(message=FlashMessages.NAME_REQUIRED),
-        Length(max=100, message=FlashMessages.NAME_LENGTH),
-        Regexp(r'^[a-zA-Z0-9\s\-,.()\'"]+$', 
-               message=FlashMessages.INVALID_NAME_CHARACTERS)
-    ])
     summary = TextAreaField('Summary', validators=[
         DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
         Length(max=500, message="Summary cannot exceed 500 characters.")
@@ -120,13 +114,10 @@ class StipendForm(FlaskForm):
         return None  # Explicitly return None as required by WTForms
 
     def validate_organization_id(self, field):
-        print(f"\nValidating organization_id: {field.data}")
-        if not field.data:
-            raise ValidationError('Organization is required.')
-        organization = db.session.get(Organization, field.data)
-        if not organization:
-            raise ValidationError('Invalid organization selected.')
-        print(f"Organization validation successful: {organization.name}")
+        if field.data:  # Only validate if organization_id is provided
+            organization = db.session.get(Organization, field.data)
+            if not organization:
+                raise ValidationError('Invalid organization selected.')
 
     def validate(self):
         logger.debug("Validating StipendForm")
@@ -134,17 +125,6 @@ class StipendForm(FlaskForm):
         
         if not result:
             logger.warning(f"Form validation failed with errors: {self.errors}")
-            return False
-            
-        # Additional validation
-        if not self.organization_id.data:
-            logger.warning("Organization ID is required")
-            self.organization_id.errors.append("Organization is required")
-            return False
-            
-        if not self.application_deadline.data:
-            logger.warning("Application deadline is required")
-            self.application_deadline.errors.append("Application deadline is required")
             return False
             
         return True
