@@ -1,14 +1,15 @@
 import unittest
+from flask import Flask
+from app import create_app, db
 
 class AdminTagTestCase(unittest.TestCase):
     def setUp(self):
         """Set up test client and authenticate"""
-        super().setUp()
-        # Login as admin user
-        self.client.post('/login', data={
-            'username': 'admin',
-            'password': 'adminpassword'
-        })
+        self.app = create_app('testing')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
+        self.client = self.app.test_client()
 
     def test_create_tag_invalid_characters(self):
         """Test creating a tag with invalid characters"""
