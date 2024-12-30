@@ -1,14 +1,12 @@
 # Todo - Next Code Cycle
 
 1. **Critical Fixes**:
-   - Fixed CSRF token validation in stipend creation tests
-   - Added comprehensive form validation tests
-   - Fixed test_create_stipend_invalid_data by correcting login method call
+   - Fix CSRF token validation in test_create_stipend_invalid_data
+   - Add route_name parameter to get_csrf_token() call
 
 2. **Testing**:
    - Add edge case tests for form validation
    - Implement integration tests for form submissions
-   - Verify admin status after login redirect
 
 3. **Security**:
    - Review session management
