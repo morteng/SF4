@@ -177,7 +177,7 @@ class AdminStipendTestCase(unittest.TestCase):
         })
         
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Name can only contain letters, numbers, spaces, and basic punctuation', response.data)
+        self.assertIn(b'Invalid characters in name', response.data)
         try:
             with self.client:
                 # Get CSRF token from login page
