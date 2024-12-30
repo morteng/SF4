@@ -58,11 +58,9 @@ def login():
                 current_app.logger.error("Dashboard route not found")
                 return redirect(url_for('public.index'))
                 
-        # Enhanced error handling with specific messages
-        if not user:
-            flash('Username not found.', 'danger')
-        elif not user.check_password(form.password.data):
-            flash('Invalid password.', 'danger')
+        # Use consistent error message for security
+        if not user or not user.check_password(form.password.data):
+            flash('Invalid username or password', 'danger')
         else:
             flash('Login failed. Please try again.', 'danger')
     return render_template('login.html', form=form, error_messages=form.errors)
