@@ -17,7 +17,7 @@
 3. Added better test coverage for authentication
 
 ## Open Questions:
-1. Should we implement a more sophisticated form validation system? Just get them working, i don't care.
+1. Should we implement a more sophisticated form validation system? Just get them working.
 2. Are there any additional edge cases we should test for authentication? I leave this up to you.
 
 ## Next Steps:
@@ -28,4 +28,4 @@
 ## Additional Comments:
 - The CustomDateTimeField implementation needs final review
 - Authentication flow tests should be expanded
-- Consider adding integration tests for end-to-end flows
+- Consider adding integration tests for end-to-end flows Yes, prioritize this
