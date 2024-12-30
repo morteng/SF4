@@ -69,7 +69,8 @@ def test_login_invalid_credentials(client, test_user):
     }, follow_redirects=True)
 
     assert response.status_code == 200
-    assert b"Invalid username or password" in response.data
+    messages = get_flashed_messages()
+    assert "Invalid username or password" in messages
 
 def test_login_empty_fields(client, db_session, app):
     """Test login with empty fields"""
