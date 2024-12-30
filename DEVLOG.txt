@@ -4,6 +4,7 @@
 1. Fixed context management in test setup/teardown
 2. Updated login assertion to match actual success message
 3. Improved test reliability with proper context handling
+4. Fixed test assertions for login flow
 
 ## Current Status:
 - Stipend form rendering failing due to missing 'name' field
