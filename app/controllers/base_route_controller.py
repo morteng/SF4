@@ -79,8 +79,10 @@ class BaseRouteController:
         return render_template(f"{self.template_dir}/{template}.html", **context)
 
     def handle_service_error(self, error):
-        """Enhanced error handling with HTMX support"""
+        """Enhanced error handling with HTMX support and detailed messages"""
         logger.error(f"Error in {self.entity_name} controller: {str(error)}")
+        
+        # Extract error message from exception or use default
         error_message = str(error) if str(error) else self.flash_messages['error']
         
         # Add error details to audit log
@@ -99,11 +101,46 @@ class BaseRouteController:
         if request.headers.get('HX-Request'):
             return jsonify({
                 'success': False,
-                'message': error_message
+                'message': error_message,
+                'error_type': error.__class__.__name__ if error else 'UnknownError'
             }), 400
             
+        # Add error to flash messages and return to referrer
         flash_message(error_message, FlashCategory.ERROR)
+        
+        # For authentication errors, stay on current page
+        if isinstance(error, (AuthenticationError, PermissionError)):
+            return redirect(request.url)
+            
         return redirect(request.referrer or url_for('admin.dashboard.dashboard'))
+
+    def handle_authentication_error(self, error):
+        """Specialized handler for authentication errors"""
+        logger.error(f"Authentication error: {str(error)}")
+        error_message = str(error) if str(error) else "Authentication failed"
+        
+        # Add to audit log
+        if hasattr(self.service, 'audit_logger'):
+            self.service.audit_logger.log(
+                action='auth_error',
+                object_type='User',
+                details=f"Auth Error: {error_message}",
+                user_id=current_user.id if current_user.is_authenticated else None,
+                ip_address=request.remote_addr,
+                http_method=request.method,
+                endpoint=request.endpoint
+            )
+        
+        # Handle HTMX
+        if request.headers.get('HX-Request'):
+            return jsonify({
+                'success': False,
+                'message': error_message,
+                'error_type': 'AuthenticationError'
+            }), 401
+            
+        flash_message(error_message, FlashCategory.ERROR)
+        return redirect(request.url)
 
 
     def _handle_redirect(self):

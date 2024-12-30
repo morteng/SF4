@@ -343,12 +343,36 @@ class BaseService:
             self.audit_logger.log(
                 action=action,
                 object_type=self.model.__name__,
-                object_id=entity.id,
+                object_id=entity.id if entity else None,
                 user_id=user_id,
                 before=before,
-                after=after or entity.to_dict(),
+                after=after or (entity.to_dict() if entity else None),
                 ip_address=request.remote_addr if request else '127.0.0.1',
                 endpoint=request.endpoint if request else 'unknown',
                 http_method=request.method if request else 'UNKNOWN',
-                user_agent=request.headers.get('User-Agent') if request else None
+                user_agent=request.headers.get('User-Agent') if request else None,
+                error_details=getattr(self, '_last_error', None)
             )
+
+    def handle_authentication_error(self, error):
+        """Specialized handler for authentication errors"""
+        error_message = str(error) if str(error) else "Authentication failed"
+        self._last_error = {
+            'type': 'AuthenticationError',
+            'message': error_message,
+            'timestamp': datetime.utcnow().isoformat()
+        }
+        
+        # Log the error
+        logger.error(f"Authentication error: {error_message}")
+        
+        # Add to audit log
+        self._log_audit(
+            action='auth_error',
+            entity=None,
+            user_id=getattr(error, 'user_id', None),
+            before=None,
+            after=None
+        )
+        
+        raise AuthenticationError(error_message)
