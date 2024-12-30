@@ -136,6 +136,14 @@ def create():
     """Handle stipend creation requests."""
     logger.debug("Processing stipend creation request")
     try:
+        if not current_user.is_authenticated:
+            logger.warning("Unauthenticated user attempted to access stipend creation")
+            return redirect(url_for('public.login'))
+            
+        if not current_user.is_admin:
+            logger.warning(f"Non-admin user {current_user.id} attempted to access stipend creation")
+            return redirect(url_for('admin.dashboard.dashboard'))
+
         form = StipendForm()
         
         if request.method == 'POST':
@@ -156,7 +164,7 @@ def create():
         return render_template('admin/stipends/create.html', form=form)
         
     except Exception as e:
-        logger.error(f"Error creating stipend: {str(e)}")
+        logger.error(f"Error creating stipend: {str(e)}", exc_info=True)
         current_app.logger.error(f"Stipend creation failed: {str(e)}")
         flash(FlashMessages.CREATE_ERROR.value, 'error')
         return redirect(url_for('admin.admin_stipend.index'))
