@@ -16,15 +16,12 @@
 /test
 
 # Step 1 Prompt
-/ask Code Cycle Step 1 (Identify & Plan) - Based on TODO.txt and the other docs, how do we address the issues? If I have answered any questions since last time in DEVLOG.txt, incorporate your new knowledge and my desicions into the project files as necessary.
-/architect implement the suggested changes
+/architect Code Cycle Step 1 (Identify & Plan) - Based on TODO.txt and the other docs, how do we address the issues? If I have answered any questions since last time in DEVLOG.txt, incorporate your new knowledge and my desicions into the project files as necessary.
 
 # Prompt about console commands
-/ask Do we need to run any console commands for Step 1?
-# If so, we will add them to CONSOLE_CMDS_STEP1.txt. If not, ensure it’s empty or remove old commands.
 
 /add scripts/CONSOLE_CMDS_STEP1.txt
-/code Remove any previously executed console commands from CONSOLE_CMDS_STEP1.txt, and add new ones if needed. IMPORTANT: Don't run flask shell or other console commands that stop processing and require manual input to continue. You are not allowed to use such commands or tools. Prepend console commands with /run, e.g. /run flask routes.
+/code Remove any previously executed console commands from CONSOLE_CMDS_STEP1.txt, and add new ones if needed. IMPORTANT: Don't run flask shell or other console commands that stop processing and require manual input to continue. You are not allowed to use such commands or tools. Prepend console commands with /run, e.g. /run flask routes. Do not comment on code or explain yourself, just perform the edit.
 /drop scripts/CONSOLE_CMDS_STEP1.txt
 
 # Now load the console commands for Step 1.
