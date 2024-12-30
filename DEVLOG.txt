@@ -5,6 +5,7 @@
 - Login redirect test failing (302 vs 200)
 - Missing test_login method in AdminStipendTestCase
 - Form validation needs comprehensive testing
+- CSRF token validation failing in stipend creation
 - CEO Priority: Fix All Tests
 
 ## Key Insights:
@@ -18,6 +19,7 @@
    - Login flow needs rate limiting (5 attempts/minute)
    - Password strength validation implemented (min 8 chars, 1 number, 1 special char)
    - Session timeout set to 30 minutes
+   - CSRF protection is working but needs proper test handling
 
 ## Immediate Action Plan (CEO Priority: Fix All Tests):
 1. **Fix Login Redirect Test**:
@@ -35,6 +37,11 @@
    - Implement integration tests for form submissions
    - Add tests for rate limiting functionality
 
+## Refactoring Needed:
+1. Update test_login method to handle CSRF tokens
+2. Refactor stipend creation tests to properly handle CSRF
+3. Add validation for special characters in stipend names
+
 ## Next Steps:
 1. Fix failing login redirect test
 2. Implement missing test_login method
@@ -51,3 +58,4 @@
 4. All form tests will include CSRF token handling
 5. Focus on fixing test_create_stipend_invalid_characters first
 6. Add test coverage for admin stipend routes
+7. Add CSRF token handling to all form tests
