@@ -182,9 +182,10 @@ class AdminStipendTestCase(unittest.TestCase):
         response = self.login()
         with self.client.session_transaction() as session:
             self.assertTrue(session.get('is_admin', False))
-        
+    
         # Get CSRF token from stipend creation page
         response = self.client.get(url_for('admin.admin_stipend.create'))
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.status_code, 200)
         
         # Test with invalid characters
