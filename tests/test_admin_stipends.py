@@ -6,6 +6,7 @@ from app.models.user import User
 from app.models.stipend import Stipend
 from app.models.organization import Organization
 from datetime import datetime  # Import datetime module
+from app.constants import FlashMessages
 
 class AdminStipendTestCase(unittest.TestCase):
     def setUp(self):
