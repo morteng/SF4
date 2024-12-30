@@ -36,9 +36,15 @@ class AdminStipendTestCase(unittest.TestCase):
         self.app_context.pop()
 
     def login(self, username, password):
+        # Get CSRF token first
+        response = self.client.get(url_for('public.login'))
+        csrf_token = response.data.decode('utf-8').split(
+            'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+            
         return self.client.post(url_for('public.login'), data={
             'username': username,
-            'password': password
+            'password': password,
+            'csrf_token': csrf_token
         }, follow_redirects=True)
 
     def test_create_stipend(self):

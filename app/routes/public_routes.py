@@ -24,9 +24,15 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
+            # Ensure user is active before logging in
+            if not user.is_active:
+                flash('Your account is inactive.', 'danger')
+                return redirect(url_for('public.login'))
+                
             login_user(user)
             session['_user_id'] = str(user.id)
             session['is_admin'] = user.is_admin
+            session['_fresh'] = True  # Mark session as fresh
             
             # Create audit log
             try:
@@ -85,9 +91,29 @@ def filter_stipends():
     return render_template('_stipend_list.html', stipends=stipends)
 
 @public_bp.route('/logout')
-@login_required  # Ensure the user is logged in to log out
+@login_required
 def logout():
+    # Clear session data
+    session.pop('_user_id', None)
+    session.pop('is_admin', None)
+    session.pop('_fresh', None)
+    
+    # Logout user
     logout_user()
+    
+    # Create audit log
+    try:
+        AuditLog.create(
+            user_id=current_user.id,
+            action='logout',
+            details='User logged out',
+            ip_address=request.remote_addr,
+            http_method=request.method,
+            endpoint=request.endpoint
+        )
+    except Exception as e:
+        current_app.logger.error(f"Error creating logout audit log: {str(e)}")
+    
     flash('You have been logged out.', 'success')
     return redirect(url_for('public.index'))
 
