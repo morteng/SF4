@@ -1,28 +1,20 @@
 # Todo - Next Code Cycle
 
 1. **Template Management**:
-   - Create missing `admin/tag/create.html` template
-   - Verify template paths in controllers and tests
+   - Create missing admin templates (starting with `admin/tag/create.html`)
+   - Implement base template for admin CRUD operations
 
-2. **CSRF Handling**:
-   - Ensure CSRF tokens are properly handled in test cases
-   - Add CSRF token validation in form submissions
-
-3. **Test Coverage**:
-   - Add tests for invalid character handling in stipend names
+2. **Test Coverage**:
+   - Add tests for edge cases in stipend validation
    - Expand test coverage for error scenarios
 
 ---
 
 ### Key Insights
-1. **Template Issues**:
+1. **Template Structure**:
+   - Need consistent base template for admin CRUD operations
    - Missing templates cause test failures
-   - Need to verify template paths in controllers
 
-2. **CSRF Validation**:
-   - CSRF token validation is critical for security
-   - Tests need to handle CSRF tokens properly
-
-3. **Error Handling**:
-   - Clear error messages improve user experience
-   - Centralized constants make maintenance easier
+2. **Validation**:
+   - Need thorough testing of edge cases
+   - Centralized error handling improves maintainability
