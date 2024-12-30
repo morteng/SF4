@@ -3,6 +3,7 @@
 ## Current Status:
 - Test coverage at 48%
 - Login redirect test failing (302 vs 200)
+- Missing test_login method in AdminStipendTestCase
 - Form validation needs comprehensive testing
 - CEO priority: Fix all tests
 
@@ -17,6 +18,7 @@
    - Login redirects need proper handling in tests
    - CSRF tokens must be handled in all form submissions
    - Comprehensive validation tests are critical for security
+   - Missing test methods need to be implemented
 
 2. **Security**:
    - Login flow needs rate limiting (5 attempts/minute)
@@ -24,10 +26,11 @@
    - Session timeout set to 30 minutes
 
 ## Next Steps:
-1. Fix failing login redirect test
-2. Add comprehensive form validation tests
-3. Implement rate limiting for login attempts
-4. Continue improving test coverage
+1. Implement missing test_login method
+2. Fix failing login redirect test
+3. Add comprehensive form validation tests
+4. Implement login rate limiting
+5. Continue improving test coverage
 
 ---
 
@@ -38,7 +41,8 @@
 ---
 
 ### Priority Tasks:
-1. Fix failing login redirect test (immediate)
-2. Add comprehensive form validation tests
-3. Implement login rate limiting
-4. Continue improving test coverage
+1. Implement missing test_login method (immediate)
+2. Fix failing login redirect test
+3. Add comprehensive form validation tests
+4. Implement login rate limiting
+5. Continue improving test coverage
