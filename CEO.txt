@@ -1,1 +1,3 @@
 HI! CEO HERE AGAIN. If you create new test files, make sure they are modular for easy maiatenance and in a logical folder structure under tests/ add this to conventions file or other part of docmentation if appropriate. Move the test files in tests folder to logical subfolders, make them modular with logical file names and in neat subfolder structre. test the tests by running them one by one. We have had major code refactoring recently, maybe we should rewrite tests from scratch? THANK YOU!
+
+HELLO! CEO HERE AGAIN! Aider commits after each edit, I want you to start taking charge of branches and versioning and pushing to github. work out a proper semantic versioning scheme and implement it. update relevant docs accordingly.
