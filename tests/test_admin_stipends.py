@@ -70,16 +70,23 @@ class AdminStipendTestCase(unittest.TestCase):
         csrf_token = response.data.decode('utf-8').split(
             'name="csrf_token" type="hidden" value="')[1].split('"')[0]
         
-        # Log in as admin with follow_redirects=True
+        # Log in as admin without follow_redirects to test redirect
         response = self.client.post(url_for('public.login'), data={
             'username': 'admin',
             'password': 'admin',
             'csrf_token': csrf_token
-        }, follow_redirects=True)
+        })
+        
+        # Verify redirect status and location
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.location, url_for('public.index', _external=True))
+        
+        # Follow the redirect
+        response = self.client.get(response.location)
+        self.assertEqual(response.status_code, 200)
         
         # Verify successful login and admin status
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Login successful', response.data)  # Verify login success message
+        self.assertIn(b'Login successful', response.data)
         with self.client.session_transaction() as session:
             self.assertIn('_user_id', session)
             self.assertTrue(session.get('is_admin', False))
