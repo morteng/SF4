@@ -1,6 +1,19 @@
-from wtforms import Field
-from wtforms.validators import InputRequired
+from wtforms import Field, StringField
+from wtforms.validators import InputRequired, Length, Regexp
 from app.constants import FlashMessages
+
+class CustomNameField(StringField):
+    """Custom field for validating stipend names."""
+    
+    def __init__(self, label=None, validators=None, **kwargs):
+        if validators is None:
+            validators = [
+                InputRequired(message=FlashMessages.NAME_REQUIRED),
+                Length(max=100, message=FlashMessages.NAME_LENGTH),
+                Regexp(r'^[a-zA-Z0-9\s\-.,!?\'"()]+$', 
+                      message=FlashMessages.INVALID_NAME_CHARACTERS)
+            ]
+        super().__init__(label=label, validators=validators, **kwargs)
 
 class CustomDateTimeField(Field):
     """Custom field for validating date/time strings."""
