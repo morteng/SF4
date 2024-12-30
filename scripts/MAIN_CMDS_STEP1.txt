@@ -17,9 +17,9 @@
 /test
 
 # Step 1 Prompt
-/architect Code Cycle Step 1 (Identify & Plan) - Based on TODO.txt and the other docs, how do we address the issues? 
-# Prompt about console commands
+/architect Code Cycle Step 1 (Identify & Plan) - Based on TODO.txt and the other docs, how do we address the issues? Are there any directives from the CEO we should focus on? 
 
+# Prompt about console commands
 /add scripts/CONSOLE_CMDS_STEP1.txt
 /code Remove previously executed console commands from CONSOLE_CMDS_STEP1.txt and add new ones if needed. Do not use commands requiring manual input. Prepend new commands with /run. Do not comment on code or explain yoursel, just perform the edit.
 /drop scripts/CONSOLE_CMDS_STEP1.txt
