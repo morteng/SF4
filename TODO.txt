@@ -1,16 +1,20 @@
 # Todo - Next Code Cycle
 
-1. **Security Improvements**:
+1. **Immediate Fixes**:
+   - Fix login redirect handling (302 vs 200 expected)
+   - Fix invalid character validation in stipend names
+
+2. **Security Improvements**:
    - Implement login rate limiting (5 attempts per 15 minutes)
    - Add password strength validation (min 12 chars, mixed case, numbers, symbols)
    - Review session management (timeout after 30 minutes of inactivity)
 
-2. **Form Validation**:
+3. **Form Validation**:
    - Add comprehensive validation tests for all form fields
    - Test edge cases for special characters, length limits, and required fields
    - Add CSRF token validation tests
 
-3. **Test Coverage**:
+4. **Test Coverage**:
    - Improve test coverage for edge cases
    - Add integration tests for form submissions
    - Add authentication flow tests (login, logout, session timeout)
@@ -19,7 +23,8 @@
 
 ### Key Insights
 1. **Testing**:
-   - Need proper redirect handling in authentication tests
+   - Login redirect handling needs adjustment
+   - Invalid character validation needs fixing
    - CSRF tokens must be handled in all form submissions
    - Comprehensive validation tests are critical for security
 2. **Security**:
