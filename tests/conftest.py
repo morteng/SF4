@@ -518,6 +518,10 @@ def app():
     with app.app_context():
         db.create_all()
         yield app
+        # Explicitly clean up
+        db.session.remove()
+        if hasattr(db, 'engine'):
+            db.engine.dispose()
         db.drop_all()
 
 @pytest.fixture

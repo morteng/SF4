@@ -21,7 +21,7 @@ class User(db.Model):
         if password:
             self.set_password(password)
         self.is_admin = is_admin
-        self.is_active = True
+        self.is_active = True  # This will now use the property setter
         self.created_at = db.func.current_timestamp()
         self.updated_at = db.func.current_timestamp()
 
@@ -40,7 +40,15 @@ class User(db.Model):
     # Flask-Login required properties and methods
     @property
     def is_active(self):
-        return True
+        """Return whether the user is active."""
+        return self._is_active
+
+    @is_active.setter
+    def is_active(self, value):
+        """Set the user's active status."""
+        if not isinstance(value, bool):
+            raise ValueError("is_active must be a boolean")
+        self._is_active = value
 
     @property
     def is_authenticated(self):

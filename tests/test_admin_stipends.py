@@ -15,10 +15,11 @@ class AdminStipendTestCase(unittest.TestCase):
         db.create_all()
         self.client = self.app.test_client()
 
-        # Create an admin user
+        # Create an admin user with proper property access
         admin_user = User(username='admin', email='admin@example.com')
-        admin_user.set_password('password')
+        admin_user.set_password('admin')
         admin_user.is_admin = True
+        admin_user.is_active = True
         db.session.add(admin_user)
         
         # Create an organization
@@ -31,13 +32,9 @@ class AdminStipendTestCase(unittest.TestCase):
         db.session.commit()
 
     def tearDown(self):
-        try:
-            db.session.remove()
-            db.drop_all()
-        except Exception as e:
-            print(f"Error during teardown: {str(e)}")
-        finally:
-            self.app_context.pop()
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
 
     def login(self, username, password):
         # Get CSRF token first
