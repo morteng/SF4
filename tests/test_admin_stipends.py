@@ -659,17 +659,41 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_create_stipend_past_date(self):
         # Test with past date
+        # First login to establish session
         self.login()
-        csrf_token = self.get_csrf_token('admin.admin_stipend.create')
-        response = self.client.post(
-            url_for('admin.admin_stipend.create'),
-            data={
-                'application_deadline': '2020-01-01 00:00:00',
-                'csrf_token': csrf_token
-            },
-            follow_redirects=True
-        )
-        self.assertIn(b'Application deadline must be in the future', response.data)
+        
+        # Use session transaction to maintain state
+        with self.client.session_transaction() as session:
+            # Get CSRF token from stipend creation page
+            response = self.client.get(url_for('admin.admin_stipend.create'))
+            self.assertEqual(response.status_code, 200)
+            
+            # Extract CSRF token with error handling
+            try:
+                csrf_token = response.data.decode('utf-8').split(
+                    'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+                if not csrf_token:
+                    raise ValueError("Empty CSRF token")
+            except (IndexError, ValueError) as e:
+                self.fail(f"Failed to extract CSRF token: {str(e)}")
+            
+            # Submit the form with debug logging
+            self.app.logger.debug(f"Submitting form with CSRF token: {csrf_token}")
+            
+            response = self.client.post(
+                url_for('admin.admin_stipend.create'),
+                data={
+                    'application_deadline': '2020-01-01 00:00:00',
+                    'csrf_token': csrf_token
+                },
+                follow_redirects=True
+            )
+            
+            self.app.logger.debug(f"Response status: {response.status_code}")
+            self.app.logger.debug(f"Response data: {response.data.decode('utf-8')}")
+            
+            self.assertEqual(response.status_code, 200)
+            self.assertIn(b'Application deadline must be in the future', response.data)
 
     # TODO: Reimplement missing required fields test after fixing CSRF token handling
     # def test_create_stipend_missing_required_fields(self):
