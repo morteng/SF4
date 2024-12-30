@@ -5,3 +5,4 @@
 3. Add test coverage for error message visibility
 4. Add model tests for User and authentication
 5. Add route tests for all auth endpoints
+6. Verify login template renders error messages correctly (need access to templates)
