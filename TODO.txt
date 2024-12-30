@@ -1,28 +1,14 @@
 # Todo - Next Code Cycle
 
-1. **Security Improvements**:
-   - Implement login rate limiting
-   - Add password strength validation
+1. **Critical Fixes**:
+   - Implement missing test_login method
+   - Fix failing login redirect test (302 vs 200)
+
+2. **Security**:
+   - Implement login rate limiting (5 attempts/minute)
    - Review session management
 
-2. **Form Validation**:
-   - Add comprehensive validation tests for all form fields
-   - Test edge cases for special characters, length limits, and required fields
-   - Add CSRF token validation tests
-
-3. **Test Coverage**:
+3. **Testing**:
+   - Add comprehensive form validation tests
    - Improve test coverage for edge cases
    - Add integration tests for form submissions
-   - Add authentication flow tests (login, logout, session timeout)
-   - Verify all tests handle CSRF tokens and redirects properly
-
----
-
-### Key Insights
-1. **Testing**:
-   - CSRF tokens must be handled in all form submissions
-   - Comprehensive validation tests are critical for security
-2. **Security**:
-   - Rate limiting essential for login attempts
-   - Strong password requirements improve account security
-   - Proper session management prevents unauthorized access
