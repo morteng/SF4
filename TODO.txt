@@ -2,4 +2,4 @@
 
 1. Fix CSRF token validation in admin stipend creation tests
 2. Implement boolean field validation for stipend forms
-3. Remove all non-working tests per CEO directive
+3. Add FlashMessages enum values for profile updates
