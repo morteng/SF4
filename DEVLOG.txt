@@ -22,16 +22,21 @@
 1. Update tests to properly handle CSRF tokens
 2. Fix invalid character test to expect 302 redirect
 3. Add comprehensive form validation tests
+4. Add CSRF token handling to test setup
+5. Update test assertions for form validation errors
 
 ## Refactoring Needed:
 1. Update test setup to include CSRF token handling
 2. Add CSRF token validation in form submission tests
 3. Refactor test assertions for redirect status codes
+4. Update form validation error handling
 
 ## Next Steps:
 1. Implement CSRF token handling in test setup
 2. Add edge case tests for form validation
 3. Improve test coverage for form submissions
+4. Update form validation error messages
+5. Add integration tests for admin routes
 
 ---
 
@@ -40,3 +45,5 @@
 2. Password requirements: Minimum 8 chars, 1 number, 1 special character
 3. Login redirect tests expect 302 status code
 4. All form tests include CSRF token handling
+5. Form validation errors will return 302 redirect with flash messages
+6. Update test assertions to check for flash messages instead of response data
