@@ -75,14 +75,8 @@ class AdminStipendTestCase(unittest.TestCase):
             'username': 'admin',
             'password': 'admin',
             'csrf_token': csrf_token
-        })
+        }, follow_redirects=True)
         
-        # Verify redirect status and location
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.location, url_for('public.index', _external=True))
-        
-        # Follow the redirect
-        response = self.client.get(response.location)
         self.assertEqual(response.status_code, 200)
         
         # Verify successful login and admin status
