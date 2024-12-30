@@ -1,13 +1,13 @@
 # Todo - Next Code Cycle
 
 1. **Critical Fixes**:
-   - Fix CSRF token validation in test_create_stipend_invalid_data
-   - Add route_name parameter to get_csrf_token() call
-   - Implement proper login testing with credential handling
+   - Implement proper CSRF token handling in all form tests
+   - Add comprehensive error handling for form validation
 
 2. **Testing**:
-   - Add edge case tests for form validation
-   - Implement integration tests for form submissions
+   - Add CSRF token handling in test setup
+   - Verify flash messages are properly asserted
+   - Ensure all form submissions include CSRF token validation
 
 3. **Security**:
    - Review session management
