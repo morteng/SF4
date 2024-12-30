@@ -1,12 +1,17 @@
 from functools import wraps
 from sqlalchemy.exc import SQLAlchemyError
 from wtforms import ValidationError
+from werkzeug.exceptions import Unauthorized
 from app.extensions import db
 import logging
 from datetime import datetime
 from app.constants import FlashMessages, FlashCategory
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+
+class AuthenticationError(Unauthorized):
+    """Custom authentication error class"""
+    pass
 
 logger = logging.getLogger(__name__)
 

@@ -2,9 +2,14 @@ from flask import redirect, url_for, render_template, request, jsonify, flash, s
 import logging
 from flask_login import current_user
 from sqlalchemy.exc import SQLAlchemyError
+from werkzeug.exceptions import Unauthorized
 from app.utils import flash_message
 from app.constants import FlashMessages, FlashCategory
 from app.extensions import db
+
+class AuthenticationError(Unauthorized):
+    """Custom authentication error class"""
+    pass
 
 logger = logging.getLogger(__name__)
 
