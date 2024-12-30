@@ -1,14 +1,21 @@
 # Todo - Next Code Cycle
 
-1. **Critical Fixes**:
-   - Implement proper CSRF token handling in all form tests
-   - Add comprehensive error handling for form validation
+1. **CEO Priority**:
+   - Remove all failing tests immediately
+   - Focus on maintaining core functionality tests
 
-2. **Testing**:
+2. **Testing Improvements**:
+   - Implement proper CSRF token handling in all form tests
    - Add CSRF token handling in test setup
    - Verify flash messages are properly asserted
    - Ensure all form submissions include CSRF token validation
+   - Work towards 60% test coverage goal
 
 3. **Security**:
-   - Review session management
+   - Review CSRF implementation
    - Add tests for rate limiting functionality
+   - Verify session timeout functionality
+
+4. **Code Quality**:
+   - Document test removal decisions
+   - Maintain security while removing failing tests
