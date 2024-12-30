@@ -147,9 +147,9 @@ def test_login_invalid_credentials(client, test_user):
     }, follow_redirects=True)
 
     assert response.status_code == 200
-    # Check for flashed message instead of HTML content
+    # Check for error message in the response
     assert b"Invalid username or password" in response.data
-    # TODO: Properly verify error message display once we have access to templates
+    # Verify user is not logged in
     with client.session_transaction() as session:
         assert '_user_id' not in session
 
