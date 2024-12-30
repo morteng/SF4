@@ -162,11 +162,14 @@ def client(app):
         # Create test client within application context
         client = app.test_client()
         
-        # Push request context and generate CSRF token
-        with app.test_request_context():
-            # Get initial CSRF token
-            client.get('/')
-            yield client
+        # Initialize CSRF token by making a GET request
+        client.get('/')
+        
+        # Verify CSRF token is set in session
+        with client.session_transaction() as session:
+            assert 'csrf_token' in session, "CSRF token not set in session"
+            
+        yield client
 
 @pytest.fixture(scope='function')
 def admin_user(db_session, app):
@@ -379,6 +382,20 @@ def extract_csrf_token(response_data):
         logging.error(f"Error extracting CSRF token: {str(e)}")
         return None
 
+def get_csrf_token(client, route_name=None):
+    """Helper to get CSRF token for a specific route or from the session."""
+    if route_name:
+        response = client.get(url_for(route_name))
+    else:
+        response = client.get('/')
+    
+    token = extract_csrf_token(response.data)
+    if not token:
+        # Fallback to session token
+        with client.session_transaction() as session:
+            token = session.get('csrf_token')
+    return token
+
 def get_csrf_token(client, route_name):
     """Helper to get CSRF token for a specific route."""
     response = client.get(url_for(route_name))
@@ -409,8 +426,8 @@ def login_as_admin(client, username='admin', password='admin'):
 
 def submit_form(client, route_name, form_data, method='POST'):
     """Helper to submit a form with CSRF token and proper headers."""
-    # Get CSRF token from the route
-    csrf_token = get_csrf_token(client, route_name)
+    # Get CSRF token from the session
+    csrf_token = get_csrf_token(client)
     
     # Add CSRF token to form data if not already present
     if 'csrf_token' not in form_data:
@@ -419,7 +436,8 @@ def submit_form(client, route_name, form_data, method='POST'):
     # Set headers including CSRF token
     headers = {
         'X-CSRFToken': csrf_token,
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
+        'Referer': 'http://localhost/'  # Add referer header for CSRF validation
     }
     
     # Ensure form data is properly encoded
@@ -429,6 +447,10 @@ def submit_form(client, route_name, form_data, method='POST'):
         data = None
         query_string = form_data
     
+    # Make initial GET request to set CSRF token in session
+    client.get(url_for(route_name))
+    
+    # Submit form
     response = client.open(
         url_for(route_name),
         method=method,
