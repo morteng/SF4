@@ -22,3 +22,12 @@ class CustomDateTimeField(Field):
             except ValueError:
                 self.data = None
                 raise ValidationError(FlashMessages.INVALID_DATETIME_FORMAT)
+
+    def _value(self):
+        """Return the formatted string representation of the field's data.
+        
+        This method is required by WTForms for proper template rendering.
+        """
+        if self.data:
+            return self.data.strftime(self.format)
+        return ''
