@@ -1,20 +1,23 @@
 # Todo - Next Code Cycle
 
-1. **Custom Field Fixes**:
-   - Implement _value method in CustomDateTimeField
-   - Add comprehensive form rendering tests
-   - Review custom field implementation
+1. **Form Validation**:
+   - Add comprehensive form validation tests
+   - Test edge cases for all form fields
 
-2. **Testing Improvements**:
-   - Add edge case tests for custom fields
-   - Improve template rendering test coverage
+2. **Login Flow**:
+   - Review login flow security
+   - Add rate limiting for login attempts
+
+3. **Test Coverage**:
+   - Improve test coverage for edge cases
+   - Add integration tests for form submissions
 
 ---
 
 ### Key Insights
-1. **Custom Fields**:
-   - Need complete widget implementation
-   - Must handle value formatting properly
-2. **Testing**:
-   - Custom fields require specific rendering tests
-   - Edge cases for datetime formats need coverage
+1. **Testing**:
+   - Need thorough validation tests for all form fields
+   - Edge cases need specific test coverage
+2. **Security**:
+   - Login flow needs security review
+   - Rate limiting would improve security
