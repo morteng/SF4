@@ -661,7 +661,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_create_stipend_invalid_date(self):
         # Log in as admin
-        self.login('admin', 'password')
+        self.login()
         
         # Get CSRF token
         response = self.client.get(url_for('admin.admin_stipend.create'))
