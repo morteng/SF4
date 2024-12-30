@@ -1,23 +1,28 @@
 # Todo - Next Code Cycle
 
-1. **Form Validation**:
-   - Add comprehensive form validation tests
-   - Test edge cases for all form fields
+1. **Security Improvements**:
+   - Implement login rate limiting (5 attempts per 15 minutes)
+   - Add password strength validation (min 12 chars, mixed case, numbers, symbols)
+   - Review session management (timeout after 30 minutes of inactivity)
 
-2. **Login Flow**:
-   - Review login flow security
-   - Add rate limiting for login attempts
+2. **Form Validation**:
+   - Add comprehensive validation tests for all form fields
+   - Test edge cases for special characters, length limits, and required fields
+   - Add CSRF token validation tests
 
 3. **Test Coverage**:
    - Improve test coverage for edge cases
    - Add integration tests for form submissions
+   - Add authentication flow tests (login, logout, session timeout)
 
 ---
 
 ### Key Insights
 1. **Testing**:
-   - Need thorough validation tests for all form fields
-   - Edge cases need specific test coverage
+   - Need proper redirect handling in authentication tests
+   - CSRF tokens must be handled in all form submissions
+   - Comprehensive validation tests are critical for security
 2. **Security**:
-   - Login flow needs security review
-   - Rate limiting would improve security
+   - Rate limiting essential for login attempts
+   - Strong password requirements improve account security
+   - Proper session management prevents unauthorized access
