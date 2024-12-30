@@ -32,4 +32,6 @@
 
 ### Additional Comments/Questions:
 1. Should we create a base template for all admin CRUD operations to ensure consistency?
+ANSWER: YES.
 2. Are there any specific edge cases or scenarios we should prioritize for testing?
+ANSWER: You figure it out.
