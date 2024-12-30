@@ -5,7 +5,7 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
-/run pytest tests/test_auth.py -v --cov=app --cov-report=term-missing --log-cli-level=DEBUG
+/run pytest tests/auth/test_login.py -v --cov=app --cov-report=term-missing --log-cli-level=DEBUG
 ### COMMANDS END ###
 
 # After finishing Step 5, we start again with Step 1 of the Coding Cycle.
