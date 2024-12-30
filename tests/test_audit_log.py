@@ -4,6 +4,8 @@ from werkzeug.security import generate_password_hash
 from flask import url_for
 from app.models.audit_log import AuditLog
 from app.models.user import User
+from app.models.notification import Notification
+from app.constants import NotificationType
 
 def test_audit_log_creation(client, db_session, test_user):
     log = AuditLog.create(
