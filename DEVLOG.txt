@@ -22,12 +22,11 @@
    - CSRF protection is working but tests need adjustment
 
 ## Immediate Action Plan:
-1. Updated tests to properly handle CSRF tokens
-2. Fixed invalid character test to expect 302 redirect
-3. Added comprehensive form validation tests
-4. Added CSRF token handling to test setup
-5. Updated test assertions to check flash messages
-6. Fixed test_create_stipend_invalid_characters to handle CSRF and redirects
+1. Update test setup to include CSRF token handling
+2. Fix invalid character test to expect 302 redirect
+3. Add CSRF token validation in form submission tests
+4. Update test assertions to check flash messages
+5. Fix test_create_stipend_invalid_characters to handle CSRF and redirects
 
 ## Refactoring Needed:
 1. Update test setup to include CSRF token handling
@@ -64,3 +63,12 @@
 4. Should add CSRF token validation in form submission tests
 5. Need to improve error handling for invalid character validation
 6. Must fix test_create_stipend_invalid_characters immediately
+
+---
+
+## CEO Priority Fixes:
+1. Fix test_create_stipend_invalid_characters to handle CSRF tokens
+2. Update test to expect 302 redirect instead of 200
+3. Verify flash messages are properly asserted
+4. Ensure all form submissions include CSRF token validation
+5. Add comprehensive error handling for invalid character validation
