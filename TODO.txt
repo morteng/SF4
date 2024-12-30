@@ -1,21 +1,22 @@
 # Todo - Next Code Cycle
 
 1. **Test Coverage Improvement**:
-   - Add tests for working core functionality
+   - Add tests for user authentication flows
+   - Add tests for stipend listing functionality
+   - Add edge case tests for date/time validation
    - Document test coverage strategy
-   - Verify test suite stability
 
-2. **New Test Development**:
-   - Create tests for user authentication
-   - Add tests for stipend listing
-   - Verify basic CRUD operations
+2. **Test Maintenance**:
+   - Verify all remaining tests are passing
+   - Review test dependencies
+   - Document test execution process
 
-3. **Documentation**:
-   - Document test cleanup process
+3. **New Test Development**:
+   - Add tests for basic CRUD operations across all models
+   - Create integration tests for admin workflows
+   - Add tests for error handling scenarios
+
+4. **Documentation**:
    - Update test documentation with coverage strategy
    - Create test development guidelines
-
-4. **Technical Debt**:
-   - Review test dependencies
-   - Verify test environment setup
-   - Document test execution process
+   - Document test cleanup process
