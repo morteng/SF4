@@ -10,6 +10,7 @@
 1. Added CSRF token handling in tests
 2. Improved form validation test coverage
 3. Fixed login test redirect handling
+4. Updated login test to properly handle redirects and CSRF tokens
 
 ## Key Insights:
 1. **Testing**:

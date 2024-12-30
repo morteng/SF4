@@ -14,6 +14,7 @@
    - Improve test coverage for edge cases
    - Add integration tests for form submissions
    - Add authentication flow tests (login, logout, session timeout)
+   - Verify all tests handle CSRF tokens and redirects properly
 
 ---
 
