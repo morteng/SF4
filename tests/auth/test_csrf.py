@@ -1,5 +1,7 @@
 import pytest
 from flask import url_for
+from app.models.user import User
+from tests.conftest import extract_csrf_token
 
 @pytest.mark.csrf
 def test_csrf_protection(client):
