@@ -3,6 +3,8 @@
 1. **Template Management**:
    - Create missing admin templates (starting with `admin/tag/create.html`)
    - Implement base template for admin CRUD operations
+   - Ensure all templates are located within the app\templates directory. move or delete the template files in templates 
+
 
 2. **Test Coverage**:
    - Add tests for edge cases in stipend validation
