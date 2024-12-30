@@ -17,10 +17,16 @@ class AdminStipendTestCase(unittest.TestCase):
 
         # Create an admin user with proper property access
         admin_user = User(username='admin', email='admin@example.com')
-        admin_user.set_password('admin')
+        admin_user.set_password('admin')  # Set password to 'admin'
         admin_user.is_admin = True
         admin_user.is_active = True
         db.session.add(admin_user)
+        db.session.commit()
+        
+        # Verify user creation
+        created_user = User.query.filter_by(username='admin').first()
+        self.assertIsNotNone(created_user, "Admin user was not created in database")
+        self.assertTrue(created_user.check_password('admin'), "Password verification failed")
         
         # Create an organization
         org = Organization(
@@ -65,10 +71,10 @@ class AdminStipendTestCase(unittest.TestCase):
             except (IndexError, ValueError) as e:
                 self.fail(f"Failed to extract CSRF token: {str(e)}")
     
-            # Log in as admin
+            # Log in as admin with correct password
             response = self.client.post(url_for('public.login'), data={
                 'username': 'admin',
-                'password': 'password',
+                'password': 'admin',  # Use 'admin' as password
                 'csrf_token': csrf_token
             }, follow_redirects=True)
     
