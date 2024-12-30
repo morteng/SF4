@@ -73,6 +73,39 @@ class StipendForm(FlaskForm):
     ])
     open_for_applications = BooleanField('Open for Applications', default=False)
     tags = SelectMultipleField('Tags', coerce=int, validators=[Optional()])
+    summary = TextAreaField('Summary', validators=[
+        DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
+        Length(max=500, message="Summary cannot exceed 500 characters.")
+    ])
+    description = TextAreaField('Description', validators=[
+        DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
+        Length(max=2000, message="Description cannot exceed 2000 characters.")
+    ])
+    homepage_url = URLField('Homepage URL', validators=[
+        DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
+        URL(message=FlashMessages.INVALID_URL.value)
+    ])
+    application_procedure = TextAreaField('Application Procedure', validators=[
+        DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
+        Length(max=2000, message="Application procedure cannot exceed 2000 characters.")
+    ])
+    eligibility_criteria = TextAreaField('Eligibility Criteria', validators=[
+        DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
+        Length(max=2000, message="Eligibility criteria cannot exceed 2000 characters.")
+    ])
+    application_deadline = CustomDateTimeField(
+        'Application Deadline',
+        format="%Y-%m-%d %H:%M:%S",
+        validators=[
+            InputRequired(message=FlashMessages.MISSING_FIELD_ERROR),
+            validate_application_deadline
+        ]
+    )
+    organization_id = SelectField('Organization', coerce=int, validators=[
+        DataRequired(message="Organization is required.")
+    ])
+    open_for_applications = BooleanField('Open for Applications', default=False)
+    tags = SelectMultipleField('Tags', coerce=int, validators=[Optional()])
 
     def validate_application_deadline(self, field):
         validate_application_deadline(field)
