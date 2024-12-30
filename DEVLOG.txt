@@ -5,10 +5,11 @@
 - Login redirect test failing (302 vs 200)
 - Missing test_login method in AdminStipendTestCase
 - Form validation needs comprehensive testing
+- CEO Priority: Fix All Tests
 
 ## Key Insights:
 1. **Testing**:
-   - Login redirects need proper handling in tests
+   - Login redirects need proper handling in tests (expect 302)
    - CSRF tokens must be handled in all form submissions
    - Comprehensive validation tests are critical for security
    - Missing test methods need to be implemented
@@ -48,3 +49,5 @@
 2. Password requirements: Minimum 8 chars, 1 number, 1 special character
 3. Login redirect tests will expect 302 status code
 4. All form tests will include CSRF token handling
+5. Focus on fixing test_create_stipend_invalid_characters first
+6. Add test coverage for admin stipend routes
