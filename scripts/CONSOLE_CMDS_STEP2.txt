@@ -5,7 +5,7 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
-/run pytest tests/auth/test_login.py::test_login_invalid_credentials -v --log-cli-level=DEBUG --pdb
+/run pytest tests/auth/test_login.py -v --log-cli-level=DEBUG --cov=app --cov-report=term-missing
 ### COMMANDS END ###
 
 # Once finished, jump to Step 3.

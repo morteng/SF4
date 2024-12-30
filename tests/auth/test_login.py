@@ -48,36 +48,27 @@ def test_login_invalid_csrf(client, db_session, app):
     
     assert b"The CSRF session token is missing" in response.data
 
-def test_login_missing_csrf(client, db_session, app):
+def test_login_missing_csrf(client, test_user):
     """Test login with missing CSRF token"""
-    # Create test user
-    with app.app_context():
-        user = User(username='testuser', email='test@example.com')
-        user.set_password('testpass')
-        db_session.add(user)
-        db_session.commit()
-
-    # Submit login without CSRF token
     response = client.post(url_for('public.login'), data={
-        'username': 'testuser',
-        'password': 'testpass'
+        'username': test_user.username,
+        'password': 'password123'
     }, follow_redirects=True)
     
     assert b"CSRF token is missing" in response.data
 
-
-
-    # Get CSRF token
-    login_page = client.get(url_for('public.login'))
-    csrf_token = extract_csrf_token(login_page.data)
+def test_login_invalid_credentials(client, test_user):
+    """Test login with invalid credentials"""
+    login_response = client.get(url_for('public.login'))
+    csrf_token = extract_csrf_token(login_response.data)
     
-    # Submit login with invalid credentials
     response = client.post(url_for('public.login'), data={
-        'username': 'wronguser',
-        'password': 'wrongpass',
+        'username': test_user.username,
+        'password': 'wrongpassword',
         'csrf_token': csrf_token
     }, follow_redirects=True)
-    
+
+    assert response.status_code == 200
     assert b"Invalid username or password" in response.data
 
 def test_login_empty_fields(client, db_session, app):
