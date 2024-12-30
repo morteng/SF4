@@ -36,7 +36,8 @@ class StipendForm(FlaskForm):
     csrf_token = HiddenField('CSRF Token')
     name = StringField('Name', validators=[
         DataRequired(message=FlashMessages.NAME_REQUIRED),
-        Length(max=100, message=FlashMessages.NAME_LENGTH)
+        Length(max=100, message=FlashMessages.NAME_LENGTH),
+        Regexp(r'^[a-zA-Z0-9\s\-,.()\'"]+$', message=FlashMessages.INVALID_NAME_CHARACTERS)
     ])
     summary = TextAreaField('Summary', validators=[
         DataRequired(message=FlashMessages.MISSING_FIELD_ERROR.value),
