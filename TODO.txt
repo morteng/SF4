@@ -1,17 +1,20 @@
 # Todo - Next Code Cycle
 
 1. **Form Validation**:
-   - Fix StipendForm initialization in stipend routes
-   - Ensure all form fields are properly defined and accessible
-   - Add tests for form field validation
+   - Add template rendering tests
+   - Improve coverage for edge cases
+   - Document form validation patterns
+
+2. **Testing Infrastructure**:
+   - Add form validation helper methods
+   - Create template-specific test cases
 
 ---
 
 ### Key Insights
 1. **Form Initialization**:
-   - Form fields must be properly initialized before template rendering
-   - Missing fields cause template rendering errors
-
-2. **Test Coverage**:
-   - Need more comprehensive tests for form handling
-   - Template rendering tests should verify all required fields
+   - WTForms requires fields to be defined at class level
+   - Field initialization in __init__ causes template rendering errors
+2. **Testing**:
+   - Base test classes reduce duplication
+   - Detailed logging helps debug form issues
