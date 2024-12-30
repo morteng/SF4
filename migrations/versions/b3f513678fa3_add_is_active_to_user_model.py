@@ -17,16 +17,23 @@ depends_on = None
 
 
 def upgrade():
-    # Add is_active column to user table as nullable first
-    with op.batch_alter_table('user', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('is_active', sa.Boolean(), nullable=True))
+    # Check if the is_active column already exists in the user table
+    conn = op.get_bind()
+    inspector = sa.inspect(conn)
+    columns = inspector.get_columns('user')
+    column_names = [col['name'] for col in columns]
 
-    # Set a default value for existing rows
-    op.execute("UPDATE user SET is_active = TRUE")
+    if 'is_active' not in column_names:
+        # Add is_active column to user table as nullable first
+        with op.batch_alter_table('user', schema=None) as batch_op:
+            batch_op.add_column(sa.Column('is_active', sa.Boolean(), nullable=True))
 
-    # Alter the column to be NOT NULL
-    with op.batch_alter_table('user', schema=None) as batch_op:
-        batch_op.alter_column('is_active', nullable=False)
+        # Set a default value for existing rows
+        op.execute("UPDATE user SET is_active = TRUE")
+
+        # Alter the column to be NOT NULL
+        with op.batch_alter_table('user', schema=None) as batch_op:
+            batch_op.alter_column('is_active', nullable=False)
 
     # Check if the schedule column already exists in the bot table
     conn = op.get_bind()
