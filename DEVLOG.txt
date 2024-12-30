@@ -1,5 +1,8 @@
 # Code Cycle Summary - Stipend Form Validation
 
+## Project current status report
+1. write a report here next time.
+
 ## Changes Implemented:
 1. Fixed context management in test setup/teardown
 2. Updated login assertion to match actual success message
