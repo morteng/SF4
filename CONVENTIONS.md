@@ -21,13 +21,33 @@
 - **Folder Structure**:
   ```
   tests/
-    auth/        # Authentication tests
-    models/      # Model tests
-    routes/      # Route tests
-    services/    # Service tests
-    fixtures/    # Test fixtures
-    integration/ # Integration tests
+    auth/        # Authentication tests (login, logout, registration)
+    models/      # Model tests (database models and relationships)
+    routes/      # Route tests (endpoint functionality)
+    services/    # Service tests (business logic)
+    fixtures/    # Test fixtures (shared test data)
+    integration/ # Integration tests (cross-module functionality)
   ```
+  
+- **File Naming**:
+  - Test files: `test_<module>_<functionality>.py`
+    Example: `test_auth_login.py`, `test_user_model.py`
+  
+- **Test Function Naming**:
+  - `test_<scenario>[_when_<condition>]`
+    Example: `test_login_success`, `test_login_fails_when_invalid_credentials`
+  
+- **Fixtures**:
+  - Place shared fixtures in `tests/fixtures/`
+  - Name fixtures descriptively: `<scope>_<fixture_name>`
+    Example: `user_factory`, `client_with_csrf`
+  
+- **Best Practices**:
+  - Keep tests focused on single functionality
+  - Use clear, descriptive test names
+  - Group related tests in the same file
+  - Use fixtures for shared test setup
+  - Clean up test data after each test
 - **Naming Conventions**:
   - Test files: `test_<module>_<functionality>.py`
   - Test functions: `test_<scenario>`

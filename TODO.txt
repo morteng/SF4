@@ -2,6 +2,7 @@
 
 1. ✔️ Fix login test assertions to match current redirect behavior
 2. ✔️ Improve test coverage for authentication flows
-3. Organize tests into modular subfolders per CEO directive
+3. ✔️ Organize tests into modular subfolders per CEO directive
 4. Add model tests for User and authentication
 5. Add route tests for all auth endpoints
+6. Update documentation with test organization guidelines
