@@ -11,7 +11,8 @@ class TestBaseCrudController(BaseTestCase):
         self.controller = BaseCrudController(
             service=tag_service,
             entity_name='tag',
-            form_class=TagForm
+            form_class=TagForm,
+            template_dir='admin/tag'  # Add this line to specify the template directory
         )
 
     def test_create_success(self):
