@@ -137,6 +137,17 @@ class AdminStipendTestCase(unittest.TestCase):
         
         return response
 
+    def _extract_csrf_token(self, response):
+        """Helper method to extract CSRF token from response"""
+        try:
+            csrf_token = response.data.decode('utf-8').split(
+                'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+            if not csrf_token:
+                raise ValueError("Empty CSRF token")
+            return csrf_token
+        except (IndexError, ValueError) as e:
+            self.fail(f"Failed to extract CSRF token: {str(e)}")
+
     def test_create_stipend_valid(self):
         # Start session
         with self.client:
@@ -161,16 +172,10 @@ class AdminStipendTestCase(unittest.TestCase):
             }, follow_redirects=True)
             self.assertEqual(response.status_code, 200)
             
-            # Get CSRF token for stipend creation
-            response = self.client.get(url_for('admin.admin_stipend.create'))
+            # Get CSRF token from login page
+            response = self.client.get(url_for('public.login'))
             self.assertEqual(response.status_code, 200)
-            try:
-                csrf_token = response.data.decode('utf-8').split(
-                    'name="csrf_token" type="hidden" value="')[1].split('"')[0]
-                if not csrf_token:
-                    raise ValueError("Empty CSRF token")
-            except (IndexError, ValueError) as e:
-                self.fail(f"Failed to extract CSRF token: {str(e)}")
+            csrf_token = self._extract_csrf_token(response)
             
             # Get CSRF token for stipend creation
             response = self.client.get(url_for('admin.admin_stipend.create'))

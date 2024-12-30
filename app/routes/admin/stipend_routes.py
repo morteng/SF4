@@ -145,14 +145,26 @@ def create():
     logger.debug("Stipend form initialized successfully")
     
     if request.method == 'POST':
-        if form.validate_on_submit():
-            try:
-                form_data = request.form.to_dict()
-                # Process form data
-                stipend = Stipend.create(form_data, current_user.id)
-                db.session.commit()
-                flash(FlashMessages.CREATE_SUCCESS.value, 'success')
-                return redirect(url_for('admin.admin_stipend.index'))
+        if not form.validate():
+            logger.warning(f"Form validation failed: {form.errors}")
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash(f"{field}: {error}", 'error')
+            return render_template('admin/stipends/create.html', form=form)
+            
+        try:
+            # Verify CSRF token
+            if not form.csrf_token.validate(form):
+                logger.warning("Invalid CSRF token in stipend creation")
+                flash(FlashMessages.INVALID_CSRF.value, 'error')
+                return render_template('admin/stipends/create.html', form=form)
+                
+            form_data = request.form.to_dict()
+            # Process form data
+            stipend = Stipend.create(form_data, current_user.id)
+            db.session.commit()
+            flash(FlashMessages.CREATE_SUCCESS.value, 'success')
+            return redirect(url_for('admin.admin_stipend.index'))
             except Exception as e:
                 db.session.rollback()
                 logger.error(f"Database error creating stipend: {str(e)}")

@@ -38,7 +38,9 @@ class StipendForm(FlaskForm):
         super().__init__(*args, **kwargs)
         logger.debug(f"Form fields initialized: {self._fields.keys()}")
         
-    csrf_token = HiddenField('CSRF Token')
+    csrf_token = HiddenField('CSRF Token', validators=[
+        DataRequired(message="CSRF token is required")
+    ])
     name = StringField('Name', validators=[
         DataRequired(message=FlashMessages.NAME_REQUIRED),
         Length(max=100, message=FlashMessages.NAME_LENGTH),
