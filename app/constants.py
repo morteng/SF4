@@ -221,7 +221,6 @@ class RouteMessages(str, Enum):
     MISSING_BLUEPRINT = "Missing blueprint for route registration"
 
 class FlashMessages(str, Enum):
-    CSRF_ERROR = "Invalid CSRF token. Please refresh the page and try again."
     GENERIC_ERROR = "An error occurred. Please try again."
     TEMPLATE_ERROR = "Error loading template. Please try again later."
     ADMIN_ACCESS_ERROR = "You don't have permission to access this page."
