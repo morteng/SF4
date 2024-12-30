@@ -76,6 +76,7 @@ class AdminStipendTestCase(unittest.TestCase):
         
         # Verify successful login and admin status
         self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Welcome, admin', response.data)  # Verify login success message
         with self.client.session_transaction() as session:
             self.assertIn('_user_id', session)
             self.assertTrue(session.get('is_admin', False))
@@ -174,8 +175,10 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertIn(b'Stipend name cannot exceed 100 characters', response.data)
 
     def test_create_stipend_invalid_characters(self):
-        # Login first
-        self.login()
+        # Login first and verify admin status
+        response = self.login()
+        with self.client.session_transaction() as session:
+            self.assertTrue(session.get('is_admin', False))
         
         # Get CSRF token from stipend creation page
         response = self.client.get(url_for('admin.admin_stipend.create'))
