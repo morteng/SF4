@@ -1,9 +1,9 @@
 # Todo - Next Code Cycle
 
 1. **Form Validation**:
+   - Fix form field initialization
    - Add template rendering tests
    - Improve coverage for edge cases
-   - Document form validation patterns
 
 2. **Testing Infrastructure**:
    - Add form validation helper methods
@@ -13,8 +13,8 @@
 
 ### Key Insights
 1. **Form Initialization**:
-   - WTForms requires fields to be defined at class level
-   - Field initialization in __init__ causes template rendering errors
+   - WTForms fields must be defined at class level
+   - Dynamic field creation in __init__ doesn't work with templates
 2. **Testing**:
-   - Base test classes reduce duplication
-   - Detailed logging helps debug form issues
+   - Need better error handling in form initialization
+   - Template rendering tests are essential
