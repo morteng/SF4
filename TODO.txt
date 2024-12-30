@@ -1,22 +1,20 @@
 # Todo - Next Code Cycle
 
-1. **Form Debugging**:
-   - Verify form initialization logging
-   - Check form inheritance chain
-   - Add template rendering tests
+1. **Custom Field Fixes**:
+   - Implement _value method in CustomDateTimeField
+   - Add comprehensive form rendering tests
+   - Review custom field implementation
 
-2. **Test Coverage**:
-   - Add edge case tests for form validation
+2. **Testing Improvements**:
+   - Add edge case tests for custom fields
    - Improve template rendering test coverage
-   - Add form initialization tests
 
 ---
 
 ### Key Insights
-1. **Form Initialization**:
-   - Debug logging helps identify initialization issues
-   - Proper inheritance chain is crucial
+1. **Custom Fields**:
+   - Need complete widget implementation
+   - Must handle value formatting properly
 2. **Testing**:
-   - Template rendering tests are essential
-   - Need more comprehensive edge case coverage
-   - Form initialization tests are needed
+   - Custom fields require specific rendering tests
+   - Edge cases for datetime formats need coverage
