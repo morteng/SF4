@@ -219,6 +219,7 @@ class RouteMessages(str, Enum):
 
 class FlashMessages(str, Enum):
     GENERIC_ERROR = "An error occurred. Please try again."
+    INVALID_NAME_CHARACTERS = "Name can only contain letters, numbers, spaces, and basic punctuation."
     INVALID_DATE_FORMAT = "Invalid date format. Please use YYYY-MM-DD HH:MM:SS."
     UPDATE_ERROR = "Failed to update record."
     DELETE_ERROR = "Failed to delete record."
