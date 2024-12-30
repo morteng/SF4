@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
 from flask import url_for
+from flask.ctx import _cv_app
 from app import create_app, db
 from app.models.user import User
 from app.models.stipend import Stipend
