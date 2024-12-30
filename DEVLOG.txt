@@ -42,7 +42,7 @@
 ---
 
 ### Priority Tasks:
-1. Fix login redirect test (immediate)
+1. ✅ Added test_login_redirect test case
 2. Update stipend name validation
 3. Add comprehensive form validation tests
 4. Implement login rate limiting
