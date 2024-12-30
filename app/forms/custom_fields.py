@@ -1,9 +1,11 @@
 from datetime import datetime
-from wtforms import Field, ValidationError
+from wtforms import Field, ValidationError, widgets
 from wtforms.validators import InputRequired
 from app.constants import FlashMessages
 
 class CustomDateTimeField(Field):
+    widget = widgets.TextInput()
+
     def __init__(self, label=None, validators=None, format="%Y-%m-%d %H:%M:%S", **kwargs):
         if validators is None:
             validators = [InputRequired(message=FlashMessages.MISSING_FIELD_ERROR)]
