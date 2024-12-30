@@ -9,6 +9,7 @@
 - Added detailed CSRF token debug logging
 - Verified CSRF token flow between login and form submission
 - Identified missing CSRF token in form submissions
+- Confirmed CSRF token is not being passed in POST request
 
 ## Immediate Actions:
 1. Fix CSRF token handling in test_create_stipend_valid
@@ -18,10 +19,12 @@
 ## Pending Issues:
 - CSRF token validation failing in form submissions
 - Test coverage needs improvement (target 60%)
+- CSRF token not being included in POST request data
 
 ## Next Steps:
 1. Fix CSRF token handling in test cases
 2. Add CSRF token validation to all form tests
 3. Document CSRF token handling process for tests
 4. Increase test coverage for working functionality
+5. Verify CSRF token is included in POST request data
 
