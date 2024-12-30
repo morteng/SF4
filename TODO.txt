@@ -1,20 +1,20 @@
 # Todo - Next Code Cycle
 
 1. **Test Improvements**:
-   - Fix CSRF token handling in test setup
-   - Update test assertions to match actual error responses
-   - Create helper functions for common test operations
+   - Fix login test assertion for redirect response
+   - Set up admin user permissions in test setup
+   - Verify validation error message formats
 
 2. **Validation**:
-   - Verify validation error message formats
    - Ensure consistent error handling across all forms
+   - Add tests for edge cases in stipend validation
 
 ---
 
 ### Key Insights
-1. **Template Structure**:
-   - Need consistent base template for admin CRUD operations
-   - Missing templates cause test failures
+1. **Test Setup**:
+   - Need proper admin user setup for tests
+   - Account for redirect responses in assertions
 
 2. **Validation**:
    - Need thorough testing of edge cases

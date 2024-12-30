@@ -1,34 +1,31 @@
 # Code Cycle Summary - Stipend Validation Testing
 
 ## Changes Implemented:
-1. Updated test assertions for invalid character validation
-2. Modified error message handling in test cases
+1. Updated CSRF token handling in test setup
+2. Modified test assertions to match actual validation behavior
+
+## Current Status:
+- Stipend validation tests failing due to permission issues
+- Login test assertion needs adjustment for redirect behavior
 
 ## Key Insights:
-1. **Validation Testing**:
+1. **CSRF Handling**:
+   - Need proper CSRF token handling in test setup
+   - Tests should account for redirect responses
+
+2. **Error Handling**:
    - Need consistent error message formats
    - Test cases must match actual validation logic
 
-2. **CSRF Handling**:
-   - CSRF token validation is failing in tests
-   - Need to ensure proper CSRF token handling in test setup
-
-## Current Status:
-- Stipend validation tests failing due to CSRF token issues
-- Error message assertions not matching actual responses
-
 ## Next Steps:
-1. Fix CSRF token handling in test setup
-2. Verify validation error message formats
+1. Fix login test assertion for redirect response
+2. Verify admin permissions in test setup
 3. Ensure test assertions match actual error responses
 
 ---
 
 ### Additional Comments/Questions:
-1. Should we implement a test helper for CSRF token handling?
+1. Should we modify the login test to expect redirect (302) instead of success (200)?
 ANSWER: Yes
-2. Do we need to update the validation error message constants?
+2. Do we need to set up admin user permissions in test setup?
 ANSWER: Find out.
-
-### Priority request from CEO ###
-1. Ensure all templates are located within the app\templates directory. move or delete the template files in templates. Give this request top priority.
