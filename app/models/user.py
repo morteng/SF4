@@ -15,11 +15,13 @@ class User(db.Model):
 
     __mapper_args__ = {"confirm_deleted_rows": False}
 
-    def __init__(self, username, email, password=None, is_admin=False, is_active=True):
+    def __init__(self, username, email, password=None, password_hash=None, is_admin=False, is_active=True):
         self.username = username
         self.email = email
         if password:
             self.set_password(password)
+        elif password_hash:
+            self.password_hash = password_hash
         self.is_admin = is_admin
         self.is_active = is_active  # This will now use the property setter
         self.created_at = db.func.current_timestamp()

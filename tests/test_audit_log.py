@@ -32,8 +32,11 @@ def test_audit_log_object_type_without_id(client, db_session, test_user):
 def test_profile_update_creates_audit_log(client, db_session):
     """Test that profile updates create audit logs"""
     # Create test user
-    password_hash = generate_password_hash("password123")
-    user = User(username="testuser", email="test@example.com", password_hash=password_hash)
+    user = User(
+        username="testuser", 
+        email="test@example.com", 
+        password="password123"  # Use password instead of password_hash
+    )
     db_session.add(user)
     db_session.commit()
 
