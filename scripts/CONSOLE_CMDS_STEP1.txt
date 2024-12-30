@@ -5,8 +5,7 @@
 # ONLY EDIT BETWEEN "COMMANDS START" and "COMMANDS END".
 
 ### COMMANDS START ###
-/run pytest tests/test_admin_stipends.py -v --cov=app --cov-report=term-missing --log-cli-level=DEBUG -k "not test_boolean_validation"
-/run flask routes
+/run pytest tests/test_admin_stipends.py -v --cov=app --cov-report=term-missing --log-cli-level=DEBUG
 ### COMMANDS END ###
 
 # Once we're done, jump to Step 2.
