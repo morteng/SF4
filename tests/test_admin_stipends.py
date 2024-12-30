@@ -161,7 +161,7 @@ class AdminStipendTestCase(unittest.TestCase):
 
     def test_create_stipend_invalid_characters(self):
         # Login first
-        self.login_as_admin()
+        self.login()
         
         # Test with invalid characters
         response = self.submit_form('admin.admin_stipend.create', {
