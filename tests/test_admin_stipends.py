@@ -408,7 +408,6 @@ class AdminStipendTestCase(unittest.TestCase):
 
             self.assertEqual(response.status_code, 200)
             stipend = Stipend.query.filter_by(name='Test Stipend').first()
-            self.assertIsNotNone(stipend)
             self.assertEqual(stipend.open_for_applications, expected)
             db.session.delete(stipend)
             db.session.commit()
