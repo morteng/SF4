@@ -31,3 +31,12 @@ class CustomDateTimeField(Field):
         if self.data:
             return self.data.strftime(self.format)
         return ''
+
+    def _value(self):
+        """Return the formatted string representation of the field's data.
+        
+        This method is required by WTForms for proper template rendering.
+        """
+        if self.data:
+            return self.data.strftime(self.format)
+        return ''
