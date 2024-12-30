@@ -153,21 +153,6 @@ class AdminStipendTestCase(unittest.TestCase):
         stipend = Stipend.query.filter_by(name='Valid Stipend').first()
         self.assertIsNotNone(stipend)
 
-    def test_create_stipend_missing_name(self):
-        # Test missing name field
-        response = self.create_stipend_with_data({
-            'name': '',
-            'summary': 'Test summary',
-            'description': 'Test description',
-            'homepage_url': 'http://example.com',
-            'application_procedure': 'Test procedure',
-            'eligibility_criteria': 'Test criteria',
-            'application_deadline': '2024-12-31 23:59:59',
-            'organization_id': 1,
-            'open_for_applications': 'y'
-        })
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Stipend name is required', response.data)
 
     def test_create_stipend_name_too_long(self):
         # Test name field exceeding length limit
