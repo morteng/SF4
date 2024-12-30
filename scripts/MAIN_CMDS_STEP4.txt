@@ -4,8 +4,6 @@
 # Step 4: Optional Additional Checks
 
 # Step 4 workflow
-/run flask routes
-/test
 /ask Code Cycle Step 4 (Optional Checks) - Is there a new issue? 
 # If yes, detail the problem and potential fixes.
 /architect implement fixes
