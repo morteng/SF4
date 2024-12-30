@@ -6,7 +6,7 @@
 # Step 5 workflow
 /drop DEVLOG.txt
 /add DEVLOG.txt
-/code Code Cycle Step 5 (Final Docs) - Finalize all documentation! Update TODO.txt with your latest insights, focusing on a short list of truly important tasks. If there are any priority requests from the CEO, please address them immediately, they are very important and superseed all other tasks. In DEVLOG.txt, give a brief status report, add a fun emoji that captures our current vibe, and summarize this code cycle. Remove old content and answered questions, but keep anything still pending for me, your boss. Also remove any CEO messages from CEO.txt that have been 100% resolved. Do not comment on code or explain yoursel, just perform the edits. If I have answered any questions since last time in DEVLOG.txt, incorporate your new knowledge and my desicions into the project. Write a summary of the plan in DEVLOG.txt. 
+/code Code Cycle Step 5 (Final Docs) - Finalize all documentation! Update TODO.txt with your latest insights, focusing on a short list of truly important tasks. If there are any priority requests from the CEO, please address them immediately, they are very important and superseed all other priorities. In DEVLOG.txt, give a brief status report, add a fun emoji that captures our current vibe, and summarize this code cycle. Remove old content and answered questions, but keep anything still pending for me, your boss. Also remove any CEO messages from CEO.txt that have been 100% resolved. Do not comment on code or explain yoursel, just perform the edits. If I have answered any questions since last time in DEVLOG.txt, incorporate your new knowledge and my desicions into the project. Write a summary of the plan in DEVLOG.txt. 
 
 /drop DEVLOG.txt
 
