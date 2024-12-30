@@ -22,8 +22,7 @@ class AdminStipendTestCase(unittest.TestCase):
         admin_user = User(
             username='admin', 
             email='admin@example.com',
-            is_admin=True,
-            is_active=True
+            is_admin=True
         )
         admin_user.set_password('admin')
         db.session.add(admin_user)
@@ -61,6 +60,9 @@ class AdminStipendTestCase(unittest.TestCase):
             self.test_request_context.pop()
         if hasattr(self, 'app_context'):
             self.app_context.pop()
+        # Ensure all contexts are properly popped
+        while _cv_app.get() is not None:
+            _cv_app.get().pop()
 
     def login(self):
         # Get CSRF token from login page
