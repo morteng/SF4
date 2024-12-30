@@ -6,13 +6,13 @@
 # Step 5 workflow
 /drop DEVLOG.txt
 /add DEVLOG.txt
-/architect Code Cycle Step 5 (Final Docs) - Please finalize documentation. Update TODO.txt with final changes, insights & findings as well as a list of actionable todo items for next code cycle. Remove tasks you have completed. Try to keep the todo list as short as possible, conentrate on one part of the project at a time. Consolidate the information in it when possible. Update DEVLOG.txt with a current project status report, a short summary of this code cycle and whatever you think is fitting to put in there. Remove old content and any questions that I have answered. Keep unanswered questions for when I get to them. If you have any additional comments, questions, or concerns for me, your boss, please add them to DEVLOG.txt and keep them there until I have answered them. If there are any priority requests from the CEO, please address them immediately.
+/architect Code Cycle Step 5 (Final Docs) - Please finalize documentation. Update TODO.txt with final changes, insights & findings as well as a list of actionable todo items for next code cycle. Remove tasks you have completed. Try to keep the todo list as short as possible, conentrate on one part of the project at a time. Consolidate the information in it when possible. Update DEVLOG.txt with a current project status report, a short summary of this code cycle and whatever you think is fitting to put in there. Remove old content and any questions that I have answered. Keep unanswered questions for when I get to them. If you have any additional comments, questions, or concerns for me, your boss, please add them to DEVLOG.txt and keep them there until I have answered them. Tremove any priority messages from the CEO that have been verified to be successfully resolved.
 /drop DEVLOG.txt
 
 # Prompt about console commands
 
 /add scripts/CONSOLE_CMDS_STEP5.txt
-/code Remove previously executed console commands from CONSOLE_CMDS_STEP5.txt and add new ones if needed. Do not use commands requiring manual input. Prepend new commands with /run. Do not comment on code or explain yourselfjust perform the edit.
+/code Remove previously executed console commands from CONSOLE_CMDS_STEP5.txt and add new ones if needed. Do not use commands requiring manual input. Prepend new commands with /run. Do not comment on code or explain yoursel, fjust perform the edit.
 /drop scripts/CONSOLE_CMDS_STEP5.txt
 
 # Now load the console commands for Step 5.

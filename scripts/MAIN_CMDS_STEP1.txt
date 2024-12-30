@@ -10,18 +10,19 @@
 /read CONVENTIONS.md
 /read VALIDATION.md
 /add DEVLOG.txt
+/add CEO.txt
 /add TODO.txt
 
 /run flask routes
 /test
 
 # Step 1 Prompt
-/architect Code Cycle Step 1 (Identify & Plan) - Based on TODO.txt and the other docs, how do we address the issues? If I have answered any questions since last time in DEVLOG.txt, incorporate your new knowledge and my desicions into the project. Write a summary of the plan in DEVLOG.txt. Any priority requests from the CEO must be handled immediately.
+/architect Code Cycle Step 1 (Identify & Plan) - Based on TODO.txt and the other docs, how do we address the issues? If I have answered any questions since last time in DEVLOG.txt, incorporate your new knowledge and my desicions into the project. Write a summary of the plan in DEVLOG.txt. If there are any priority requests from the CEO, please address them immediately.
 
 # Prompt about console commands
 
 /add scripts/CONSOLE_CMDS_STEP1.txt
-/code Remove previously executed console commands from CONSOLE_CMDS_STEP1.txt and add new ones if needed. Do not use commands requiring manual input. Prepend new commands with /run. Do not comment on code or explain yourselfjust perform the edit.
+/code Remove previously executed console commands from CONSOLE_CMDS_STEP1.txt and add new ones if needed. Do not use commands requiring manual input. Prepend new commands with /run. Do not comment on code or explain yoursel, fjust perform the edit.
 /drop scripts/CONSOLE_CMDS_STEP1.txt
 
 # Now load the console commands for Step 1.
