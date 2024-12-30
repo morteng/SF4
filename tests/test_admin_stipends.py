@@ -13,6 +13,8 @@ class AdminStipendTestCase(unittest.TestCase):
         self.app = create_app('testing')
         self.app_context = self.app.app_context()
         self.app_context.push()
+        self.test_request_context = self.app.test_request_context()
+        self.test_request_context.push()
         db.create_all()
         self.client = self.app.test_client()
 
@@ -55,6 +57,8 @@ class AdminStipendTestCase(unittest.TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+        if hasattr(self, 'test_request_context'):
+            self.test_request_context.pop()
         if hasattr(self, 'app_context'):
             self.app_context.pop()
 
