@@ -136,14 +136,6 @@ def create():
     """Handle stipend creation requests."""
     logger.debug("Processing stipend creation request")
     try:
-        if not current_user.is_authenticated:
-            logger.warning("Unauthenticated user attempted to access stipend creation")
-            return redirect(url_for('public.login'))
-            
-        if not current_user.is_admin:
-            logger.warning(f"Non-admin user {current_user.id} attempted to access stipend creation")
-            return redirect(url_for('admin.dashboard.dashboard'))
-
         form = StipendForm()
         
         if request.method == 'POST':

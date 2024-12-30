@@ -48,7 +48,7 @@ class AdminStipendTestCase(unittest.TestCase):
                 response = self.client.get(url_for('public.login'))
                 self.assertEqual(response.status_code, 200)
                 self.app.logger.debug("CSRF token page loaded successfully")
-    
+
             # Extract CSRF token from hidden form field with error handling
             try:
                 csrf_token = response.data.decode('utf-8').split(
@@ -57,22 +57,22 @@ class AdminStipendTestCase(unittest.TestCase):
                     raise ValueError("CSRF token is empty")
             except (IndexError, ValueError) as e:
                 self.fail(f"Failed to extract CSRF token: {str(e)}")
-    
+
             # Log in as admin with CSRF token
             response = self.client.post(url_for('public.login'), data={
                 'username': 'admin',
                 'password': 'password',
                 'csrf_token': csrf_token
             }, follow_redirects=True)
-    
+
             self.assertEqual(response.status_code, 200,
                        "Login failed - check admin credentials and CSRF token")
-    
+
             # Verify session
             with self.client.session_transaction() as session:
                 self.assertIn('_user_id', session)  # Changed from 'user_id' to '_user_id'
                 self.assertEqual(session['_user_id'], '1')  # Changed to string comparison
-    
+
             # Get CSRF token for stipend creation form
             response = self.client.get(url_for('admin.admin_stipend.create'))
             self.assertEqual(response.status_code, 200)
@@ -83,7 +83,7 @@ class AdminStipendTestCase(unittest.TestCase):
                     raise ValueError("CSRF token is empty")
             except (IndexError, ValueError) as e:
                 self.fail(f"Failed to extract CSRF token: {str(e)}")
-    
+
             # Create stipend with CSRF token
             form_data = {
                 'name': 'Test Stipend',
@@ -97,14 +97,14 @@ class AdminStipendTestCase(unittest.TestCase):
                 'open_for_applications': 'y',
                 'csrf_token': csrf_token
             }
-    
+
             response = self.client.post(url_for('admin.admin_stipend.create'),
                                   data=form_data,
                                   follow_redirects=True)
-    
+
             self.assertEqual(response.status_code, 200,
                        "Stipend creation failed - check form validation and CSRF token")
-    
+
             # Verify stipend creation
             stipend = Stipend.query.filter_by(name='Test Stipend').first()
             self.assertIsNotNone(stipend, "Stipend was not created in database")
