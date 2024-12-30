@@ -56,7 +56,8 @@ def test_audit_log_notification_details(client, db_session, test_user):
     
     notification = Notification.query.filter_by(
         type=NotificationType.AUDIT_LOG,
-        related_object=log
+        related_object_type='AuditLog',
+        related_object_id=log.id
     ).first()
     
     assert "Test_action operation on TestType 123" in notification.message
