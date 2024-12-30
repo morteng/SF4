@@ -752,6 +752,36 @@ class AdminStipendTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Application deadline must be in the future', response.data)
 
+    def test_login(self):
+        """Test admin login functionality"""
+        # Get CSRF token from login page
+        response = self.client.get(url_for('public.login'))
+        self.assertEqual(response.status_code, 200)
+        
+        # Extract CSRF token
+        try:
+            csrf_token = response.data.decode('utf-8').split(
+                'name="csrf_token" type="hidden" value="')[1].split('"')[0]
+            if not csrf_token:
+                raise ValueError("Empty CSRF token")
+        except (IndexError, ValueError) as e:
+            self.fail(f"Failed to extract CSRF token: {str(e)}")
+        
+        # Test successful login
+        response = self.client.post(url_for('public.login'), data={
+            'username': 'admin',
+            'password': 'admin',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Login successful', response.data)
+        
+        # Verify session contains admin user
+        with self.client.session_transaction() as session:
+            self.assertIn('_user_id', session)
+            self.assertTrue(session.get('is_admin', False))
+            
     def test_user_is_active(self):
         # Create a new user
         user = User(username='testuser', email='test@example.com')
