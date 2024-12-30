@@ -1,4 +1,4 @@
-# Code Cycle Summary 🚀🤔
+# Code Cycle Summary
 
 ## Current Status: 🛠️🔥
 - Test coverage at 49%
@@ -24,6 +24,5 @@
 2. Add CSRF token handling in test setup
 3. Verify flash messages are properly asserted
 4. Ensure all form submissions include CSRF token validation
-5. Added TODO to implement proper login testing
 5. Added TODO to implement proper login testing
 
