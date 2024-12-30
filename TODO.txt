@@ -4,10 +4,12 @@
    - Fix form field initialization
    - Add template rendering tests
    - Improve coverage for edge cases
+   - Add form validation helper methods
 
 2. **Testing Infrastructure**:
-   - Add form validation helper methods
    - Create template-specific test cases
+   - Add tests for invalid character handling
+   - Improve form initialization error handling
 
 ---
 
@@ -18,3 +20,4 @@
 2. **Testing**:
    - Need better error handling in form initialization
    - Template rendering tests are essential
+   - Invalid character handling needs more test coverage
