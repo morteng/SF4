@@ -13,9 +13,6 @@
 /add CEO.txt
 /add TODO.txt
 
-/run flask routes
-/test
-
 # Step 1 Prompt
 /architect Code Cycle Step 1 (Identify & Plan) - Based on TODO.txt and the other docs, how do we address the issues? Are there any directives from the CEO we should focus on? 
 
