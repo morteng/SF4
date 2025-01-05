@@ -275,6 +275,26 @@ def validate_production_environment() -> bool:
     logging.info("Production environment validation passed")
     return True
 
+def archive_logs() -> bool:
+    """Archive current logs to a timestamped file
+    
+    Returns:
+        bool: True if archiving succeeded, False otherwise
+    """
+    try:
+        log_file = Path('version_management.log')
+        if not log_file.exists():
+            logging.warning("No log file found to archive")
+            return False
+            
+        archive_path = log_file.with_suffix(f".{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
+        log_file.rename(archive_path)
+        logging.info(f"Logs archived to: {archive_path}")
+        return True
+    except Exception as e:
+        logging.error(f"Log archiving failed: {str(e)}")
+        return False
+
 def verify_logging_configuration() -> bool:
     """Verify logging configuration is working correctly
     
