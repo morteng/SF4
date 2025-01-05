@@ -20,3 +20,5 @@
 - Fix alembic migration commands
 - Validate production environment setup
 - Fix Git tag creation
+- Create deployment verification script
+- Add production environment validation tests
