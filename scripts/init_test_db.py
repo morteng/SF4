@@ -3,7 +3,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.factory import create_app
-from app.extensions import db
+from app.extensions import db, init_extensions
 
 def init_test_db():
     """Initialize a fresh test database"""

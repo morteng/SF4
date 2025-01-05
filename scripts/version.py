@@ -56,6 +56,9 @@ def main():
     parser = argparse.ArgumentParser(description='Version management utilities')
     subparsers = parser.add_subparsers(dest='command', required=True)
 
+    # Add check-version command
+    check_parser = subparsers.add_parser('check-version', help='Check current version')
+
     # Test connection command
     test_conn_parser = subparsers.add_parser('test-connection', help='Test database connection')
     test_conn_parser.add_argument('db_path', help='Path to database file')
