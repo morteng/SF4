@@ -9,3 +9,4 @@
 - Implement database backup functionality
 - Fix database connection validation syntax
 - Add alembic version validation
+- Fix Python command execution syntax
