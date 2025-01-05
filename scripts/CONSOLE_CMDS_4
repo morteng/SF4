@@ -4,16 +4,19 @@
 
 ### CODE START ###
 # Run final version management tests
-/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
+/run pytest tests/version_management/ --cov=scripts.version --cov-report=term -v
 
 # Verify production environment validation
-/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); print('Environment valid:', validate_production_environment())"
+/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); assert validate_production_environment(); print('Environment validation passed')"
 
-# Check database backup functionality
-/run python -c "from scripts.version import create_db_backup; import logging; logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'); create_db_backup('instance/stipend.db')"
+# Test database backup functionality
+/run python -c "from scripts.version import create_db_backup; import logging; logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'); assert create_db_backup('instance/stipend.db'); print('Database backup test passed')"
 
 # Verify version file validation
-/run python -c "from scripts.version import validate_version_file; import tempfile; with tempfile.NamedTemporaryFile('w+t') as f: f.write('1.2.3'); f.flush(); print('Version file valid:', validate_version_file(f.name))"
+/run python -c "from scripts.version import validate_version_file; assert validate_version_file(); print('Version file validation passed')"
+
+# Check Git status
+/run git status
 ### CODE END ###
 
 # Print the current datetime to console
