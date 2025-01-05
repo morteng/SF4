@@ -13,3 +13,5 @@
 - Resolve create_app import issues in tests
 - Implement database backup validation
 - Add version management integration tests
+- Fix database connection validation
+- Add backup validation tests
