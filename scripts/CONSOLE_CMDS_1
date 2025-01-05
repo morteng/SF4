@@ -3,6 +3,18 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
+# Verify versioning
+/run flask shell -c "from scripts.version import get_version; print(get_version())"
+
+# Check Git status
+/run git status
+
+# Verify GitHub connection
+/run git remote -v
+
+# Check current branch
+/run git branch --show-current
+
 # Verify database migrations
 /run flask db current
 
