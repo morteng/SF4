@@ -56,9 +56,16 @@ def test_create_db_backup(test_db_path):
     assert backup_result is True
     assert len(list(Path(test_db_path).parent.glob("*.backup_*.db"))) == 1
 
-def test_validate_version_file():
+def test_validate_version_file(tmp_path):
     """Test version file validation"""
     assert validate_version_file() is True
+    # Test with invalid version file
+    invalid_file = tmp_path / "invalid.txt"
+    invalid_file.write_text("invalid")
+    assert validate_version_file(str(invalid_file)) is False
+    
+    # Test with missing file
+    assert validate_version_file(str(tmp_path / "nonexistent.txt")) is False
     
     # Test with invalid version file
     invalid_file = tmp_path / "invalid.txt"
