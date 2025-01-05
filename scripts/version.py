@@ -3,6 +3,7 @@ import re
 import sqlite3
 import logging
 import time
+import os
 from typing import Optional, Tuple
 from datetime import datetime
 from pathlib import Path
