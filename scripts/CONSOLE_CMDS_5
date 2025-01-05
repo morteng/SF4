@@ -11,16 +11,16 @@
 /run scripts/validate_schema.py
 
 # Update release notes
-/run scripts/version.py --update-release-notes
+/run scripts/version.py update-release-notes
 
 # Update documentation
-/run scripts/version.py --update-docs
+/run scripts/version.py update-docs
 
 # Archive logs
 /run scripts/archive_logs.py
 
 # Verify deployment
-/run scripts/version.py --verify-deployment
+/run scripts/version.py verify-deployment
 
 # Commit changes
 /run git add .
@@ -29,6 +29,9 @@
 # Create and push version tag
 /run git tag v1.0.0
 /run git push origin v1.0.0
+
+# Update version history
+/run scripts/version.py update-version-history
 ### CODE END ###
 
 # Print the current datetime to console

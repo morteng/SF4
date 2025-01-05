@@ -127,9 +127,26 @@ def update_release_notes():
         with open('RELEASE_NOTES.md', 'a') as f:
             f.write(f"\n## Version {__version__} - {datetime.now().strftime('%Y-%m-%d')}\n")
             f.write("- Initial production release\n")
+            f.write("- Fixed version management CLI arguments\n")
+            f.write("- Added proper error handling for archive-logs\n")
+            f.write("- Implemented version history tracking\n")
         return True
     except Exception as e:
         logging.error(f"Failed to update release notes: {str(e)}")
+        return False
+
+def update_version_history():
+    """Update version history file"""
+    try:
+        with open('VERSION_HISTORY.md', 'a') as f:
+            f.write(f"\n## {__version__} - {datetime.now().strftime('%Y-%m-%d')}\n")
+            f.write("- Initial production release\n")
+            f.write("- Fixed version management CLI arguments\n")
+            f.write("- Added proper error handling for archive-logs\n")
+            f.write("- Implemented version history tracking\n")
+        return True
+    except Exception as e:
+        logging.error(f"Failed to update version history: {str(e)}")
         return False
 
 def update_documentation():
