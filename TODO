@@ -17,3 +17,6 @@
 - Test schema migration validation
 - Fix Python command execution issues
 - Resolve coverage reporting problems
+- Fix alembic migration commands
+- Validate production environment setup
+- Fix Git tag creation
