@@ -55,6 +55,12 @@ def main():
     backup_parser.add_argument('source_db', help='Source database path')
     backup_parser.add_argument('backup_path', help='Backup destination path')
 
+    # Environment validation command
+    env_parser = subparsers.add_parser('--validate-env', help='Validate production environment')
+    
+    # Log archiving command
+    archive_parser = subparsers.add_parser('--archive-logs', help='Archive logs')
+
     args = parser.parse_args()
 
     if args.command == '--test-connection':
@@ -64,6 +70,14 @@ def main():
     elif args.command == '--backup':
         result = create_db_backup(args.source_db, args.backup_path)
         print(f"Backup {'successful' if result else 'failed'}")
+        exit(0 if result else 1)
+    elif args.command == '--validate-env':
+        result = validate_production_environment()
+        print(f"Environment validation {'passed' if result else 'failed'}")
+        exit(0 if result else 1)
+    elif args.command == '--archive-logs':
+        result = archive_logs()
+        print(f"Log archiving {'completed' if result else 'failed'}")
         exit(0 if result else 1)
     else:
         parser.print_help()

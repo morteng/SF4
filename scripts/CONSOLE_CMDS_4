@@ -10,16 +10,16 @@
 /run coverage html
 
 # Verify database schema
-/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.upgrade(config, 'head')"
+/run scripts/validate_schema.py
 
 # Validate production environment
-/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); assert validate_production_environment()"
+/run scripts/version.py --validate-env
 
 # Create database backup
-/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
+/run scripts/version.py --backup instance/stipend.db stipend_backup.db
 
 # Archive logs
-/run python -c "from scripts.version import archive_logs; archive_logs()"
+/run scripts/version.py --archive-logs
 
 # Create release tag
 /run git tag -a v1.0.0 -m "Initial release"
