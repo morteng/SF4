@@ -20,6 +20,7 @@
 - [x] Add proper error handling for version management commands
 - [x] Create app.utils module with login_required decorator
 - [x] Fix pytest configuration warnings
+- [x] Fix pytest.ini merge conflict markers
 - [x] Fix version file validation test
 - [x] Add comprehensive version management tests
 - [x] Add build metadata validation tests
