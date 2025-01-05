@@ -1,7 +1,10 @@
 # Code Cycle Step 1
 
-#print datetime to console
-/run python -c "from datetime import datetime; print(datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\"))"
+# Import the format_datetime utility
+from app.utils import format_datetime
+
+# Print the current datetime to console
+print(format_datetime())
 
 /read scripts/PROJECT
 /read scripts/CONVENTIONS
