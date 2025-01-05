@@ -35,6 +35,8 @@
 - [x] Add database backup tests
 - [x] Add version file validation tests
 - [x] Add production environment validation tests
+- [x] Fix Windows command execution issues
+- [x] Add Windows-specific test commands
 - [x] Add missing imports in test files
 - [x] Finalize deployment documentation
 - [x] Fix database backup functionality
