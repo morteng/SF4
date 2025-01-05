@@ -8,6 +8,12 @@ MISSING_REQUIRED_FIELD = "This field is required"
 INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
 
 
+class NotificationType(Enum):
+    INFO = 'info'
+    WARNING = 'warning'
+    ERROR = 'error'
+    SUCCESS = 'success'
+
 class NotificationPriority(Enum):
     LOW = 'low'
     MEDIUM = 'medium'
