@@ -15,28 +15,20 @@
 # Check current branch
 /run git branch --show-current
 
+# Verify branch naming convention
+/run python -c "import re; from scripts.version import get_version; version = get_version(); branch = subprocess.check_output(['git', 'branch', '--show-current']).decode().strip(); assert re.match(r'(feature|bugfix|hotfix|release|chore)/.+', branch), f'Invalid branch name: {branch}'; print(f'Branch {branch} follows naming conventions')"
+
+# Verify version bump functionality
+/run python -c "from scripts.version import bump_version; print(bump_version('patch'))"
+
+# Verify GitHub push functionality
+/run python -c "from scripts.version import push_to_github; print(push_to_github('test-branch', 'Test commit'))"
+
 # Verify database migrations
 /run flask db current
 
 # Check application status
 /run flask shell -c "from app import create_app; app = create_app(); print(app.config['ENV'])"
-
-# Verify form imports
-/run flask shell -c "from app.forms.admin_forms import StipendForm; print(StipendForm())"
-
-# Check form validation
-/run flask shell -c "from app.forms.admin_forms import StipendForm; form = StipendForm(); print(form.validate())"
-
-# Verify core routes
-/run flask routes | findstr stipend
-/run flask routes | findstr admin
-/run flask routes | findstr user
-
-# Check test coverage
-/run pytest tests/ --cov=app --cov-report=term-missing
-
-# Verify database connection
-/run flask shell -c "from app.models import Stipend; print(Stipend.query.first())"
 ### CODE END ###
 
 # Print the current datetime to console
