@@ -3,20 +3,23 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Run version management tests with coverage
-/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
+# Initialize test database
+/run python -c "from app import create_app; app = create_app('testing'); from app.models import db; db.create_all()"
 
-# Validate database connection
-/run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s'); assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
+# Run version management tests
+/run pytest tests/version_management/ -v
 
-# Create database backup
-/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
+# Validate database schema
+/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.upgrade(config, 'head')"
 
-# Validate version file
-/run python -c "from scripts.version import validate_version_file; assert validate_version_file()"
+# Check test coverage
+/run pytest --cov=scripts.version --cov-report=term-missing
 
-# Check Git status
-/run git status
+# Verify database connection
+/run python -c "from scripts.version import validate_db_connection; assert validate_db_connection('instance/stipend.db')"
+
+# Create test data backup
+/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db', 'test_backup.db')"
 ### CODE END ###
 
 # Print the current datetime to console
