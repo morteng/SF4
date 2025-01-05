@@ -3,20 +3,20 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Test database connection with retry logic
-/run python -c "import logging; logging.basicConfig(level=logging.DEBUG); from scripts.version import validate_db_connection; print(f'Database connection: {validate_db_connection("instance/stipend.db")}')"
+# Create database backup
+/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
 
-# Initialize database schema
-/run python -c "from app import create_app; app = create_app(); from app.extensions import db; with app.app_context(): db.create_all(); print('Database schema created successfully')"
+# Run version management tests
+/run pytest tests/version_management/ -v
 
-# Run basic database tests
-/run pytest tests/test_database.py -v
+# Check production environment validation
+/run python -c "from scripts.version import validate_production_environment; print(f'Production environment valid: {validate_production_environment()}')"
+
+# Bump version and commit changes
+/run python -c "from scripts.version import bump_version, update_version_file, push_to_github; new_version = bump_version('minor'); update_version_file(new_version); push_to_github('feature/version-management', f'Version management improvements - v{new_version}')"
 
 # Check test coverage
-/run pytest --cov=app --cov-report=term-missing
-
-# Verify version management
-/run python -c "from scripts.version import validate_version; assert validate_version('1.0.0'); print('Version validation passed')"
+/run pytest --cov=scripts.version --cov-report=term-missing
 
 # Check Git status
 /run git status

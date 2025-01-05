@@ -1,10 +1,23 @@
 import subprocess
 import re
 import sqlite3
+import logging
+import time
 from typing import Optional, Tuple
 from datetime import datetime
+from pathlib import Path
 
-__version__ = "0.1.0"  # Initial version
+__version__ = "0.2.0"  # Enhanced version management
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('version_management.log'),
+        logging.StreamHandler()
+    ]
+)
 
 def validate_db_connection(db_path: str) -> bool:
     """Validate database connection with retry logic and detailed logging"""
@@ -120,5 +133,32 @@ def validate_version_file() -> bool:
             content = f.read()
             return '__version__' in content
     except Exception as e:
-        print(f"Version file validation error: {str(e)}")
+        logging.error(f"Version file validation error: {str(e)}")
         return False
+
+def create_db_backup(db_path: str) -> bool:
+    """Create a timestamped backup of the database"""
+    try:
+        backup_path = Path(db_path).with_suffix(f".backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.db")
+        conn = sqlite3.connect(db_path)
+        with conn:
+            conn.execute(f"VACUUM INTO '{backup_path}'")
+        logging.info(f"Database backup created at: {backup_path}")
+        return True
+    except sqlite3.Error as e:
+        logging.error(f"Database backup failed: {str(e)}")
+        return False
+
+def validate_production_environment() -> bool:
+    """Validate production environment settings"""
+    required_vars = [
+        'DATABASE_URL',
+        'SECRET_KEY',
+        'ADMIN_EMAIL'
+    ]
+    missing_vars = [var for var in required_vars if var not in os.environ]
+    
+    if missing_vars:
+        logging.error(f"Missing required environment variables: {', '.join(missing_vars)}")
+        return False
+    return True
