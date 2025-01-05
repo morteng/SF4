@@ -3,17 +3,17 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Run final version management tests
-/run pytest tests/version_management/ --cov=scripts.version --cov-report=term -v
+# Run final version management tests with coverage
+/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
 
-# Verify production environment validation
-/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); assert validate_production_environment(); print('Environment validation passed')"
+# Verify database connection validation
+/run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'); assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
 
 # Test database backup functionality
 /run python -c "from scripts.version import create_db_backup; import logging; logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'); assert create_db_backup('instance/stipend.db'); print('Database backup test passed')"
 
-# Verify version file validation
-/run python -c "from scripts.version import validate_version_file; assert validate_version_file(); print('Version file validation passed')"
+# Check alembic current version
+/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.current(config)"
 
 # Check Git status
 /run git status
