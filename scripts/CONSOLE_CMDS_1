@@ -3,26 +3,23 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Verify version file integrity
-/run python -c "from scripts.version import validate_version_file; assert validate_version_file(); print('Version file integrity check passed')"
+# Create new branch for database fixes
+/run git checkout -b bugfix/database-connection
 
-# Verify database connection validation
-/run python -c "from scripts.version import validate_db_connection; assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
+# Verify database connection with logging
+/run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.DEBUG); assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
 
-# Verify version history tracking
-/run python -c "from scripts.version import get_version_history; history = get_version_history(); assert len(history) > 0; print(f'Version history: {history}')"
+# Test database operations
+/run python -c "from app.models import db; from app.models.stipend import Stipend; db.create_all(); print('Database schema created successfully')"
 
-# Verify pre-commit hooks
-/run python -c "from scripts.version import validate_version_pre_commit; assert validate_version_pre_commit(); print('Pre-commit version validation passed')"
+# Verify version validation
+/run python -c "from scripts.version import validate_version; assert validate_version('1.0.0'); print('Version validation passed')"
+
+# Check test coverage
+/run pytest --cov=app --cov-report=term-missing
 
 # Check Git status
 /run git status
-
-# Verify GitHub connection
-/run git remote -v
-
-# Check current branch
-/run git branch --show-current
 ### CODE END ###
 
 # Print the current datetime to console
