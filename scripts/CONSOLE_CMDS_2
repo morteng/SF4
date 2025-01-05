@@ -3,29 +3,20 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Install core dependencies
-/run pip install flask werkzeug pytest pytest-cov
+# Verify current version
+/run python -c "from scripts.version import get_version; print(get_version())"
 
-# Verify installation
-/run pip show flask werkzeug pytest
+# Test version bumping
+/run python -c "from scripts.version import bump_version; print(bump_version('patch'))"
 
-# Initialize Flask application
-/run flask --app app init
+# Verify git branch was created
+/run git branch --show-current
 
-# Initialize database migrations
-/run flask db init
+# Push changes to GitHub
+/run python -c "from scripts.version import push_to_github; push_to_github('bugfix/v0.1.1', 'Bump version to 0.1.1')"
 
-# Create initial migration
-/run flask db migrate -m "Initial migration"
-
-# Apply migrations
-/run flask db upgrade
-
-# Verify database setup
-/run flask db current
-
-# Run initial tests
-/run pytest tests/ --cov=app --cov-report=term-missing
+# Verify remote branches
+/run git branch -r
 ### CODE END ###
 
 # Print the current datetime to console
