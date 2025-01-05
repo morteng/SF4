@@ -7,13 +7,14 @@ from datetime import datetime
 __version__ = "0.1.0"  # Initial version
 
 def validate_db_connection(db_path: str) -> bool:
-    """Validate database connection"""
+    """Validate database connection with better error handling"""
     try:
         conn = sqlite3.connect(db_path)
         conn.execute("SELECT 1")
         conn.close()
         return True
-    except sqlite3.Error:
+    except sqlite3.Error as e:
+        print(f"Database connection error: {str(e)}")
         return False
 
 def get_db_version(db_path: str) -> Optional[str]:
@@ -105,3 +106,12 @@ def push_to_github(branch_name: str, commit_message: str) -> bool:
         print(f"Error details: {e.stderr.decode()}")
         return False
 
+def validate_version_file() -> bool:
+    """Validate version file integrity"""
+    try:
+        with open(__file__, 'r') as f:
+            content = f.read()
+            return '__version__' in content
+    except Exception as e:
+        print(f"Version file validation error: {str(e)}")
+        return False
