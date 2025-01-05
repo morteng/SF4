@@ -42,6 +42,12 @@
 # Check logging configuration
 /run python -c "import logging; from scripts.version import verify_logging_configuration; assert verify_logging_configuration(); print('Logging configuration verified')"
 
+# Archive logs
+/run python -c "import shutil; from datetime import datetime; shutil.move('version_management.log', f'logs/version_management_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log')"
+
+# Verify deployment configuration
+/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); assert validate_production_environment(); print('Environment validation test passed')"
+
 
 ### CODE END ###
 

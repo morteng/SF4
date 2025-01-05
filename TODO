@@ -27,6 +27,8 @@
 - Finalize deployment documentation
 - Add production environment logging
 - Generate coverage reports
+- Archive deployment logs
+- Verify deployment configuration
 - Verify deployment configuration
 - Complete release documentation
 - Add production environment logging
