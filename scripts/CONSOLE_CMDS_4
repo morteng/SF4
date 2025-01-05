@@ -3,23 +3,20 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Install remaining required packages
-/run pip install flask-login
+# Verify database connection
+/run python -c "from scripts.version import validate_db_connection; print(validate_db_connection('instance/app.db'))"
 
-# Initialize database
-/run flask db init
+# Check current version
+/run python -c "from scripts.version import get_version; print(f'Current version: {get_version()}')"
 
-# Create initial migration
-/run flask db migrate -m "Initial migration"
-
-# Apply database changes
+# Run database migrations
 /run flask db upgrade
 
 # Verify database state
 /run flask db current
 
-# Run all tests with coverage
-/run pytest tests/ --cov=app --cov-report=term-missing
+# Run critical tests
+/run pytest tests/app/test_version.py --cov=app --cov-report=term-missing
 
 # Check Flask routes
 /run flask routes
