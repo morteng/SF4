@@ -9,7 +9,8 @@ logger = logging.getLogger(__name__)
 
 def create_app(config_name='development'):
     """Create and configure the Flask application."""
-    app = Flask(__name__)
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_pyfile('config.py', silent=True)
     
     # Configure logging
     logging.basicConfig(

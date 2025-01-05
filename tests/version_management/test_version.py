@@ -2,6 +2,7 @@ import pytest
 import sqlite3
 from datetime import datetime
 from scripts.version import (
+    __version__,
     validate_db_connection,
     get_db_version,
     validate_version,
