@@ -6,13 +6,13 @@
 # Verify version file functionality
 /run python -c "from scripts.version import get_version; print(get_version())"
 
-# Test version bumping
-/run python -c "from scripts.version import bump_version; print(bump_version('patch'))"
+# Test version validation
+/run python -c "from scripts.version import validate_version; print(validate_version('1.2.3'))"
 
-# Verify GitHub integration
-/run python -c "from scripts.version import push_to_github; push_to_github('bugfix/v0.1.1', 'Bump version to 0.1.1')"
+# Verify database connection
+/run python -c "from scripts.version import validate_db_connection; print(validate_db_connection('instance/app.db'))"
 
-# Run tests with coverage
+# Run basic tests with coverage
 /run pytest tests/ --cov=app --cov-report=term-missing
 
 # Verify database state
