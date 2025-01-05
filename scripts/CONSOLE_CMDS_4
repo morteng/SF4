@@ -3,26 +3,29 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
+# Initialize fresh test database
+/run scripts/init_test_db.py
+
+# Validate database schema
+/run scripts/validate_schema.py
+
+# Verify database connection
+/run scripts/validate_db.py
+
+# Create test backup
+/run scripts/create_backup.py
+
 # Run all tests with coverage
 /run pytest --cov=app --cov=scripts --cov-report=term-missing -v
 
 # Generate coverage report
 /run coverage html
 
-# Verify database schema
-/run scripts/validate_schema.py
-
 # Validate production environment
 /run scripts/version.py --validate-env
 
-# Create database backup
-/run scripts/version.py --backup instance/stipend.db stipend_backup.db
-
 # Archive logs
 /run scripts/version.py --archive-logs
-
-# Create release tag
-/run git tag -a v1.0.0 -m "Initial release"
 ### CODE END ###
 
 # Print the current datetime to console

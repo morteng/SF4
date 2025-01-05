@@ -332,7 +332,7 @@ def create_version_history(new_version: str) -> None:
         f.write(f"## {new_version} - {datetime.now().strftime('%Y-%m-%d')}\n")
         f.write("- Initial release\n\n")
 
-def create_db_backup(db_path: str) -> bool:
+def create_db_backup(source_db: str, backup_path: str) -> bool:
     """Create a timestamped backup of the database"""
     try:
         backup_path = Path(db_path).with_suffix(f".backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.db")
