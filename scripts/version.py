@@ -90,7 +90,7 @@ def main():
         result = validate_db_connection(args.db_path)
         print(f"Connection {'successful' if result else 'failed'}")
         exit(0 if result else 1)
-    elif args.command == '--backup':
+    elif args.command == 'backup':
         result = create_db_backup(args.source_db, args.backup_path)
         print(f"Backup {'successful' if result else 'failed'}")
         exit(0 if result else 1)
@@ -387,24 +387,49 @@ def validate_production_environment() -> bool:
     logging.info("Production environment validation passed")
     return True
 
-def archive_logs() -> bool:
+def archive_logs(force: bool = False) -> bool:
     """Archive current logs to a timestamped file
     
+    Args:
+        force: If True, create empty archive even if no logs exist
+        
     Returns:
         bool: True if archiving succeeded, False otherwise
     """
     try:
         log_file = Path('version_management.log')
+        
+        # Handle case where log file doesn't exist
         if not log_file.exists():
+            if force:
+                # Create empty archive file
+                archive_path = log_file.with_suffix(f".{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
+                archive_path.touch()
+                logging.info(f"Created empty log archive: {archive_path}")
+                return True
             logging.warning("No log file found to archive")
             return False
             
+        # Verify log file has content
+        if not force and log_file.stat().st_size == 0:
+            logging.warning("Log file is empty, not archiving")
+            return False
+            
+        # Create archive path with timestamp
         archive_path = log_file.with_suffix(f".{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
+        
+        # Move log file to archive
         log_file.rename(archive_path)
+        
+        # Verify archive was created
+        if not archive_path.exists():
+            raise RuntimeError("Archive file was not created")
+            
         logging.info(f"Logs archived to: {archive_path}")
         return True
+        
     except Exception as e:
-        logging.error(f"Log archiving failed: {str(e)}")
+        logging.error(f"Log archiving failed: {str(e)}", exc_info=True)
         return False
 
 def verify_logging_configuration() -> bool:
