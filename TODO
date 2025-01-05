@@ -11,3 +11,4 @@
 - Add alembic version validation
 - Fix Python command execution syntax
 - Add production environment validation
+- Fix production environment validation syntax
