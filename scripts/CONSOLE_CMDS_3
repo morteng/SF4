@@ -9,6 +9,9 @@
 # Generate coverage report
 /run coverage html
 
+# Check test coverage
+/run coverage report
+
 # Check Git status
 /run git status
 ### CODE END ###
