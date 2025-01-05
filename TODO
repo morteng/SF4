@@ -8,3 +8,4 @@
 - Validate CRUD consistency
 - Implement database backup functionality
 - Fix database connection validation syntax
+- Add alembic version validation
