@@ -30,6 +30,7 @@ def validate_db_connection(db_path: str) -> bool:
             conn = sqlite3.connect(db_path)
             conn.execute("SELECT 1")
             conn.close()
+            logging.info(f"Database connection successful to {db_path}")
             return True
         except sqlite3.Error as e:
             if attempt == max_retries - 1:

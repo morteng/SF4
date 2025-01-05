@@ -19,3 +19,5 @@
 - Fix pytest.ini syntax errors
 - Add proper error handling for database backup
 - Improve version file validation
+- Add database connection logging
+- Enhance test coverage for logging

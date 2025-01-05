@@ -25,6 +25,11 @@ def test_validate_db_connection_success(tmp_path):
     with sqlite3.connect(db_path):
         pass
     assert validate_db_connection(str(db_path)) is True
+    
+    # Test logging output
+    with open('version_management.log') as log_file:
+        log_content = log_file.read()
+        assert "Database connection successful" in log_content
 
 def test_validate_db_connection_failure():
     assert validate_db_connection("/invalid/path/test.db") is False
