@@ -62,6 +62,9 @@ def test_validate_version_file():
 def test_validate_production_environment(monkeypatch):
     """Test production environment validation"""
     # Test missing environment variables
+    monkeypatch.delenv('DATABASE_URL', raising=False)
+    monkeypatch.delenv('SECRET_KEY', raising=False)
+    monkeypatch.delenv('ADMIN_EMAIL', raising=False)
     assert validate_production_environment() is False
     
     # Test with all required variables
