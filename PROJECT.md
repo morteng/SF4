@@ -1,0 +1,122 @@
+# Project Specification: Stipend Discovery Website
+
+## Overview
+
+The **Stipend Discovery Website** helps users dynamically explore and filter stipends through a responsive, mobile-first interface. Built using Flask with HTMX for real-time interactivity, the platform includes a secure admin interface for managing stipends, tags, organizations, and users. Automated bots streamline operations like data scraping, tagging, validation, and updates. Testing, security, and modularity are integral to its development.
+
+---
+
+## Key Features
+
+- **User Interaction**: HTMX-powered real-time, tag-based stipend discovery.
+- **Admin Interface**: Secure CRUD operations for stipends, tags, organizations, and bots.
+- **Automation**: Bots handle tagging (TagBot), updates (UpdateBot), and validation (ReviewBot).
+- **Dynamic Updates**: AJAX ensures seamless user experiences.
+- **Testing and Quality**: `pytest` with 80%+ coverage goal and real-time health checks on startup.
+
+---
+
+## Technical Stack
+
+- **Backend**: Flask, SQLite (dev), PostgreSQL (prod), Alembic (migrations).
+- **Frontend**: HTMX, responsive CSS, modular templates.
+- **Automation**: Bots for scraping, tagging, updating, and validation.
+- **Testing**: `pytest`, `pytest-cov` for unit, integration, and end-to-end tests.
+- **Security**: Basic authentication, input validation, conservative scraping policies.
+
+---
+
+## Database Schema
+
+- **Stipends**: `id`, `name`, `summary`, `description`, `homepage_url`, `eligibility_criteria`, `application_deadline`, `open_for_applications`.
+- **Organizations**: `id`, `name`, `description`, `homepage_url`.
+- **Tags**: `id`, `name`, `category`.
+- **Users**: `id`, `username`, `password_hash`, `email`, `is_admin`.
+- **Bots**: `id`, `name`, `status`, `last_run`, `error_log`.
+- **Notifications**: `id`, `message`, `type`, `read_status`.
+
+Relationships:
+- Many-to-Many: `Stipends ↔ Tags`, `Stipends ↔ Organizations`.
+
+---
+
+## System Components
+
+- **User-Facing**:
+  - Homepage: Popular stipends and tag filters.
+  - Search: HTMX-powered stipend filtering.
+  - Details: Comprehensive stipend info.
+
+- **Admin Section**:
+  - Secure login and CRUD operations for stipends, tags, organizations, and users.
+  - Bot dashboard for status and scheduling.
+  - Real-time notifications for flagged entries and errors.
+
+- **Bots**:
+  - **TagBot**: Infers tags for stipends.
+  - **UpdateBot**: Refreshes data, flags invalid entries.
+  - **ReviewBot**: Performs sanity checks, flags suspicious data.
+  - Scheduler: Admin-controlled bot scheduling.
+
+---
+
+## Testing Specification
+
+- **Framework**: `pytest` with `pytest-cov` for coverage.
+- **Test Types**: Unit, integration, and end-to-end.
+- **Goals**: 80%+ coverage, robust error handling, and clear assertions.
+- **Environment**: In-memory SQLite database with fixtures for isolation.
+
+Sample Tests:
+1. **Unit**: Verify `User` model password hashing.
+2. **Integration**: Test admin-created stipend updates in the database.
+3. **End-to-End**: Validate the stipend search workflow.
+
+---
+
+## Security and Environment
+
+- **Security**:
+  - Input validation and authentication for admin routes.
+  - Salted password hashes with `werkzeug.security`.
+  - Conservative scraping to avoid IP blocks.
+
+- **Environment**:
+  - `.env` for sensitive variables (excluded from version control).
+  - Config classes for dev, test, and production setups.
+
+---
+
+## Collaboration and Documentation
+
+- **Branching**: Use feature branches (e.g., `feature/add-login`).
+- **Commit Messages**: Clear, descriptive, and frequent.
+- **Code Reviews**: Required for merging into the main branch.
+
+Documentation:
+- `README.md`: Overview, setup instructions, dependencies.
+- Code: Docstrings and comments for clarity.
+
+---
+
+## Folder Structure
+
+
+Project Root/
+  app/
+    models/, routes/, services/, forms/, templates/, static/
+  tests/
+    app/, bots/, conftest.py
+  bots/
+    tag_bot.py, update_bot.py, review_bot.py
+  instance/
+  migrations/
+  .env.example, README.md, requirements.txt
+
+
+---
+
+## Conclusion
+
+This streamlined document outlines the project’s technical, architectural, and procedural details, ensuring the team delivers a high-quality and maintainable stipend discovery platform.
+
