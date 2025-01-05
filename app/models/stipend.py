@@ -97,15 +97,12 @@ class Stipend(db.Model):
     def __repr__(self):
         return f'<Stipend {self.name}>'
 
-<<<<<<< HEAD
     def to_dict(self):
         """Convert stipend to dictionary with all relevant data."""
-=======
     def __repr__(self):
         return f'<Stipend {self.name}>'
 
     def to_dict(self):
->>>>>>> feature/version-management
         return {
             'id': self.id,
             'name': self.name,
@@ -114,7 +111,6 @@ class Stipend(db.Model):
             'homepage_url': self.homepage_url,
             'application_procedure': self.application_procedure,
             'eligibility_criteria': self.eligibility_criteria,
-<<<<<<< HEAD
             'application_deadline': (
                 self.application_deadline.strftime('%B %Y') 
                 if self.application_deadline and self.application_deadline.hour == 23 and self.application_deadline.minute == 59
@@ -133,7 +129,6 @@ class Stipend(db.Model):
                 self.application_deadline.replace(tzinfo=timezone.utc) > datetime.now(timezone.utc)
             )
         }
-=======
             'application_deadline': self.application_deadline.isoformat() if self.application_deadline else None,
             'open_for_applications': self.open_for_applications,
             'created_at': self.created_at.isoformat(),
@@ -143,4 +138,3 @@ class Stipend(db.Model):
     # Relationships
     tags = db.relationship('Tag', secondary=stipend_tag_association, back_populates='stipends')
     organizations = db.relationship('Organization', secondary=organization_stipends, back_populates='stipends')
->>>>>>> feature/version-management

@@ -3,7 +3,6 @@ import pytz
 import logging
 from datetime import datetime
 from flask_wtf import FlaskForm
-<<<<<<< HEAD
 from app.constants import FlashMessages
 from app.forms.custom_fields import CustomDateTimeField
 from app.common.utils import validate_application_deadline
@@ -132,7 +131,6 @@ class StipendForm(FlaskForm):
             
         return True
 
-=======
 from wtforms import (
     StringField, 
     PasswordField, 
@@ -156,7 +154,6 @@ class StipendForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
->>>>>>> feature/version-management
 
 class TagForm(FlaskForm):
     name = StringField('Name', validators=[

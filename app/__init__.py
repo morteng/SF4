@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import os
 import logging
 from flask import Flask
@@ -20,7 +19,6 @@ def create_app(config_name='development'):
     
     # Initialize extensions
     from app.extensions import init_extensions
-=======
 import logging
 from flask import Flask
 from app.models.user import User
@@ -48,7 +46,6 @@ def create_app(config_name='default'):
         logger.error(f"Invalid configuration name: {config_name}")
         raise ValueError(f"Invalid configuration name: {config_name}")
 
->>>>>>> feature/version-management
     init_extensions(app)
     
     # Register blueprints with proper order
@@ -92,7 +89,6 @@ def create_app(config_name='default'):
     from flask_wtf.csrf import CSRFError
     from app.constants import FlashMessages
 
-<<<<<<< HEAD
 
     with app.app_context():
         try:
@@ -201,7 +197,6 @@ def create_app(config_name='default'):
         if current_user.is_authenticated:
             return {'notification_count': get_notification_count(current_user.id)}
         return {}
-=======
 def init_extensions(app):
     """Initialize Flask extensions with proper error handling and retry logic."""
     logger = logging.getLogger(__name__)
@@ -255,4 +250,3 @@ def init_models(app):
 def init_routes(app):
     from app.routes import routes_bp
     app.register_blueprint(routes_bp)
->>>>>>> feature/version-management
