@@ -17,6 +17,15 @@
 
 # Run version management tests with coverage
 /run pytest tests/version_management/test_version.py --cov=scripts.version --cov-report=term-missing -v
+
+# Validate test database initialization
+/run scripts/init_test_db.py
+
+# Run schema validation
+/run scripts/validate_schema.py
+
+# Verify database backup
+/run scripts/create_backup.py
 ### CODE END ###
 
 # Print the current datetime to console
