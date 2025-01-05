@@ -58,29 +58,31 @@ def test_create_db_backup(test_db_path):
 
 def test_validate_version_file(tmp_path):
     """Test version file validation"""
-    # Test with valid version file
-    version_file = tmp_path / "version.txt"
-    version_file.write_text("1.2.3")
-    assert validate_version_file(str(version_file)) is True
+    # Create a valid version file
+    valid_file = tmp_path / "version.py"
+    content = """
+__version__ = "1.2.3"
+def validate_version(version: str) -> bool:
+    pass
+def bump_version(version_type="patch") -> str:
+    pass
+def create_db_backup(db_path: str) -> bool:
+    pass
+"""
+    valid_file.write_text(content)
+    assert validate_version_file(str(valid_file)) is True
     
-    # Test with invalid version file
-    invalid_file = tmp_path / "invalid.txt"
-    invalid_file.write_text("invalid")
+    # Test with missing required functions
+    invalid_file = tmp_path / "invalid.py"
+    invalid_file.write_text("__version__ = '1.2.3'")
     assert validate_version_file(str(invalid_file)) is False
     
     # Test with missing file
-    assert validate_version_file(str(tmp_path / "nonexistent.txt")) is False
+    assert validate_version_file(str(tmp_path / "nonexistent.py")) is False
     
-    # Test with missing file
-    assert validate_version_file(str(tmp_path / "nonexistent.txt")) is False
-    
-    # Test with invalid version file
-    invalid_file = tmp_path / "invalid.txt"
-    invalid_file.write_text("invalid")
+    # Test with invalid content
+    invalid_file.write_text("invalid content")
     assert validate_version_file(str(invalid_file)) is False
-    
-    # Test with missing file
-    assert validate_version_file(str(tmp_path / "nonexistent.txt")) is False
 
 def test_validate_production_environment(monkeypatch):
     """Test production environment validation"""

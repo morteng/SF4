@@ -3,6 +3,9 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
+# Fix pytest.ini merge conflict
+/run git checkout -- pytest.ini
+
 # Run version management tests with coverage
 /run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
 
@@ -12,8 +15,14 @@
 # Test database connection validation
 /run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'); assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
 
+# Test version file validation
+/run python -c "from scripts.version import validate_version_file; assert validate_version_file()"
+
 # Check alembic current version
 /run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.current(config)"
+
+# Check Git status
+/run git status
 ### CODE END ###
 
 # Print the current datetime to console
