@@ -14,32 +14,31 @@
 - [ ] Create version rollback functionality
 - [ ] Add database version validation tests
   - [x] Test connection validation with invalid paths
-  - [ ] Test connection validation with corrupted databases
-    - [ ] Test with a database file that doesn't exist.
-    - [ ] Test with a database file that is empty.
-    - [ ] Test with a database file that has an invalid schema.
+  - [ ] Test with a database file that doesn't exist
+  - [ ] Test with a database file that is empty
+  - [ ] Test with a database file that has an invalid schema
 - [ ] Add version format validation tests
   - [x] Test invalid version formats
   - [x] Test pre-release version validation
   - [x] Test build metadata validation
-    - [ ] Test with a version string that contains invalid characters.
-    - [ ] Test with a version string that is too long.
-    - [ ] Test with a version string that is too short.
+    - [ ] Test with a version string that contains invalid characters
+    - [ ] Test with a version string that is too long
+    - [ ] Test with a version string that is too short
 - [ ] Add integration tests for version bumping
   - [x] Test patch version bumps
   - [x] Test minor version bumps
   - [x] Test major version bumps
-    - [ ] Test that the version file is updated correctly.
-    - [ ] Test that the database version is updated correctly.
-    - [ ] Test that the git branch is created correctly.
-    - [ ] Test that the changes are pushed to GitHub correctly.
+    - [ ] Test that the version file is updated correctly
+    - [ ] Test that the database version is updated correctly
+    - [ ] Test that the git branch is created correctly
+    - [ ] Test that the changes are pushed to GitHub correctly
 - [ ] Add tests for GitHub push functionality
   - [x] Test branch creation
   - [x] Test commit message validation
   - [x] Test push error handling
-    - [ ] Test that the push fails gracefully if the GitHub credentials are invalid.
-    - [ ] Test that the push fails gracefully if the network connection is down.
-    - [ ] Test that the push fails gracefully if the GitHub repository is unavailable.
+    - [ ] Test that the push fails gracefully if the GitHub credentials are invalid
+    - [ ] Test that the push fails gracefully if the network connection is down
+    - [ ] Test that the push fails gracefully if the GitHub repository is unavailable
 - [ ] Add documentation for version management CLI
   - [x] Document version bump commands
   - [ ] Document rollback procedure
