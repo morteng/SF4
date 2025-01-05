@@ -18,9 +18,12 @@
 - [x] Document database backup procedure
 - [x] Fix version validation for pre-release versions
 - [ ] Add proper error handling for version management commands
-- [ ] Create app.utils module with login_required decorator
+- [x] Create app.utils module with login_required decorator
 - [ ] Fix pytest configuration warnings
-- [ ] Add missing imports in test files
+- [x] Add missing imports in test files
 - [ ] Finalize deployment documentation
+- [ ] Fix database backup functionality
+- [ ] Add comprehensive version management tests
+- [ ] Document version management procedures
 - [x] Add production environment validation
 
