@@ -1,10 +1,8 @@
 # Code Cycle Step 1
 
-# Import the format_datetime utility
-from app.utils import format_datetime
 
 # Print the current datetime to console
-print(format_datetime())
+/run scripts/print_datetime.py
 
 /read scripts/PROJECT
 /read scripts/CONVENTIONS
