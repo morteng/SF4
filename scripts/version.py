@@ -137,9 +137,13 @@ def validate_version_file(file_path: Optional[str] = None) -> bool:
         bool: True if version file is valid, False otherwise
     """
     try:
-        with open(__file__, 'r') as f:
+        path = file_path if file_path else __file__
+        with open(path, 'r') as f:
             content = f.read()
-            return '__version__' in content and 'validate_version' in content
+            return ('__version__' in content and 
+                    'validate_version' in content and
+                    'bump_version' in content and
+                    'create_db_backup' in content)
     except Exception as e:
         logging.error(f"Version file validation error: {str(e)}")
         return False

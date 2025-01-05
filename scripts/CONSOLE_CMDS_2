@@ -9,14 +9,17 @@
 # Run version management tests with coverage
 /run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
 
-# Check Git status
-/run git status
-
 # Validate database connection
 /run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s'); assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
 
 # Create database backup
 /run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
+
+# Validate version file
+/run python -c "from scripts.version import validate_version_file; assert validate_version_file()"
+
+# Check Git status
+/run git status
 ### CODE END ###
 
 # Print the current datetime to console
