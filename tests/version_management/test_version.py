@@ -1,6 +1,8 @@
 import pytest
 import sqlite3
 from scripts.version import (
+    validate_db_connection,
+    get_db_version,
     validate_version,
     parse_version,
     create_db_backup,
@@ -16,6 +18,21 @@ def test_db_path(tmp_path):
     with sqlite3.connect(db_path) as conn:
         conn.execute("CREATE TABLE test (id INTEGER PRIMARY KEY)")
     return str(db_path)
+
+def test_validate_db_connection_success(tmp_path):
+    db_path = tmp_path / "test.db"
+    with sqlite3.connect(db_path):
+        pass
+    assert validate_db_connection(str(db_path)) is True
+
+def test_validate_db_connection_failure():
+    assert validate_db_connection("/invalid/path/test.db") is False
+
+def test_get_db_version(tmp_path):
+    db_path = tmp_path / "test.db"
+    with sqlite3.connect(db_path) as conn:
+        conn.execute("PRAGMA user_version=123")
+    assert get_db_version(str(db_path)) == "123"
 
 def test_validate_version():
     """Test version validation"""
