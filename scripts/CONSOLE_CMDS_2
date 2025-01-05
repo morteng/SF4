@@ -4,10 +4,16 @@
 
 ### CODE START ###
 # Run version management tests with coverage
-/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
+/run pytest tests/version_management/ --cov=scripts.version --cov-report=term -v
 
 # Check Git status
 /run git status
+
+# Validate database connection
+/run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s'); assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
+
+# Check alembic current version
+/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.current(config)"
 ### CODE END ###
 
 # Print the current datetime to console
