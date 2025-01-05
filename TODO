@@ -4,3 +4,4 @@
 - Create schema version validation
 - Set up test coverage tracking
 - Fix pytest.ini merge conflict
+- Fix conftest.py indentation error
