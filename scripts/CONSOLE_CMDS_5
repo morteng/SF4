@@ -10,6 +10,12 @@
 /run scripts/print_datetime.py
 /run Write-Host "Code Cycle Complete"
 
+# Final updates
+# Update requests
+
+/add scripts/REQUESTS
+/add scripts/MANAGER
+/code Remove any requests from MANAGER that have been implemented or scheduled for implementation. Update DEVLOG based on this cycle. Add any requests for actions you need performed to REQUESTS. Update TODO list if needed.
 
 # Reset and start Code Cycle over again
 /reset
