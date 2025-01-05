@@ -13,3 +13,5 @@
 - Resolve conftest.py import issues
 - Fix database connection validation
 - Implement database backup functionality
+- Fix coverage reporting
+- Resolve pytest import errors
