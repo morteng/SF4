@@ -132,7 +132,7 @@ def validate_version_file() -> bool:
     try:
         with open(__file__, 'r') as f:
             content = f.read()
-            return '__version__' in content
+            return '__version__' in content and 'validate_version' in content
     except Exception as e:
         logging.error(f"Version file validation error: {str(e)}")
         return False
