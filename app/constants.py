@@ -7,20 +7,6 @@ MISSING_FIELD_ERROR = "This field is required."
 MISSING_REQUIRED_FIELD = "This field is required"
 INVALID_DATETIME_FORMAT = "Invalid date/time format. Please use YYYY-MM-DD HH:MM:SS"
 
-class NotificationType(Enum):
-    """Enum representing different types of system notifications."""
-    BOT_SUCCESS = 'bot_success'
-    BOT_ERROR = 'bot_error'
-    USER_ACTION = 'user_action'
-    SYSTEM = 'system'
-    CRUD_CREATE = 'crud_create'
-    CRUD_UPDATE = 'crud_update'
-    CRUD_DELETE = 'crud_delete'
-    AUDIT_LOG = 'audit_log'
-    USER_CREATED = 'user_created'
-    USER_UPDATED = 'user_updated'
-    USER_DELETED = 'user_deleted'
-    PASSWORD_RESET = 'password_reset'
 
 class NotificationPriority(Enum):
     LOW = 'low'

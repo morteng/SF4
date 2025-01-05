@@ -17,9 +17,6 @@
 
 # Check Git status
 /run git status
-
-# Run alembic version check
-/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.current(config)"
 ### CODE END ###
 
 # Print the current datetime to console
