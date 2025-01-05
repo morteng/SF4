@@ -3,19 +3,22 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Run version management tests
+# Initialize test database
+/run scripts/initialize_test_db.py
+
+# Validate schema against test database
+/run scripts/validate_schema.py
+
+# Run version management tests with coverage
 /run pytest tests/version_management/ -v --cov=scripts.version --cov-report=term-missing
 
-# Validate database schema
-/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.upgrade(config, 'head')"
+# Verify test database connection
+/run python -c "from scripts.version import validate_db_connection; assert validate_db_connection('instance/test_stipend.db')"
 
-# Verify database connection
-/run python -c "from scripts.version import validate_db_connection; assert validate_db_connection('instance/stipend.db')"
+# Create test backup
+/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/test_stipend.db', 'test_backup.db')"
 
-# Create test data backup
-/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db', 'test_backup.db')"
-
-# Check test coverage
+# Check coverage results
 /run coverage report -m
 ### CODE END ###
 
