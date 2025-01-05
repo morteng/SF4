@@ -76,24 +76,45 @@ def parse_version(version: str) -> Tuple[int, int, int, Optional[str]]:
     return major, minor, patch, suffix
 
 def bump_version(version_type="patch") -> str:
-    """Bump the version number and return the new version string"""
+    """Bump the version number and return the new version string
+    
+    Args:
+        version_type: Type of version bump - 'major', 'minor' or 'patch'
+    
+    Returns:
+        str: New version string in semantic version format
+        
+    Raises:
+        ValueError: If version_type is invalid
+        RuntimeError: If version bump fails
+    """
     if version_type not in ["major", "minor", "patch"]:
         raise ValueError("version_type must be 'major', 'minor' or 'patch'")
 
-    major, minor, patch, suffix = parse_version(__version__)
+    try:
+        major, minor, patch, suffix = parse_version(__version__)
 
-    if version_type == "major":
-        major += 1
-        minor = 0
-        patch = 0
-    elif version_type == "minor":
-        minor += 1
-        patch = 0
-    else:
-        patch += 1
+        if version_type == "major":
+            major += 1
+            minor = 0
+            patch = 0
+        elif version_type == "minor":
+            minor += 1 
+            patch = 0
+        else:
+            patch += 1
 
-    new_version = f"{major}.{minor}.{patch}"
-    return new_version
+        new_version = f"{major}.{minor}.{patch}"
+        
+        # Validate new version
+        if not validate_version(new_version):
+            raise RuntimeError(f"Invalid version format after bump: {new_version}")
+            
+        return new_version
+        
+    except Exception as e:
+        logging.error(f"Version bump failed: {str(e)}")
+        raise RuntimeError(f"Version bump failed: {str(e)}")
 
 def update_version_file(new_version: str) -> None:
     """Update the __version__ in the version.py file"""

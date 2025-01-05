@@ -57,6 +57,44 @@ def test_validate_version():
     assert validate_version("1.2.3+") is False
     assert validate_version("1.2.3-") is False
 
+def test_bump_version():
+    """Test version bump functionality"""
+    # Test patch bump
+    assert bump_version("patch") == "0.2.1"
+    
+    # Test minor bump
+    assert bump_version("minor") == "0.3.0"
+    
+    # Test major bump
+    assert bump_version("major") == "1.0.0"
+    
+    # Test invalid bump type
+    with pytest.raises(ValueError):
+        bump_version("invalid")
+        
+    # Test version validation after bump
+    assert validate_version(bump_version("patch"))
+
+def test_update_version_file(tmp_path):
+    """Test updating version file"""
+    # Create test version file
+    test_file = tmp_path / "test_version.py"
+    content = """__version__ = "1.2.3"
+def validate_version():
+    pass
+def bump_version():
+    pass
+def create_db_backup():
+    pass"""
+    test_file.write_text(content)
+    
+    # Update version
+    update_version_file("1.2.4")
+    
+    # Verify update
+    new_content = test_file.read_text()
+    assert '__version__ = "1.2.4"' in new_content
+
 def test_create_db_backup(test_db_path):
     """Test database backup creation"""
     backup_result = create_db_backup(test_db_path)
