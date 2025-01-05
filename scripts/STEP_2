@@ -4,15 +4,10 @@
 /run scripts/print_datetime.py
 /run Write-Host "Code Cycle Step 2 Start"
 
-# Coding step
-/architect givent the current context, update files as needed.
-
-# Edit project files
-
-# Edit console commands to run
 /add scripts/CONSOLE_CMDS_2
 
-/code update files as needed. Remove any previous console commands from CONSOLE_CMDS_2, add any new console commands you want to run before we go to STEP 3 (Coding). 
+# Coding step
+/architect Objective: Implement changes based on the analysis. Key Actions: Execute development tasks. Update code files as required. Prepare outputs for testing. Remove any previous console commands from CONSOLE_CMDS_2, add any new console commands you want to run before we go to STEP 3 (Coding). 
 
 /drop scripts/CONSOLE_CMDS_2
 
