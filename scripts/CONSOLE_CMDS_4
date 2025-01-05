@@ -29,6 +29,9 @@
 
 # Verify deployment
 /run scripts/version.py --verify-deployment
+
+# Check database version
+/run scripts/version.py --check-version
 ### CODE END ###
 
 # Print the current datetime to console
