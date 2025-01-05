@@ -10,3 +10,8 @@ Key Rules:
 5. Keep output concise
 6. Verify all changes before deployment
 7. Maintain comprehensive documentation
+
+Current Focus:
+- Fix Alembic configuration issues
+- Resolve pytest import errors
+- Implement proper test coverage setup
