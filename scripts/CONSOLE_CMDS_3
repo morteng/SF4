@@ -6,9 +6,6 @@
 # Run all tests with coverage
 /run pytest --cov=app --cov=scripts --cov-report=term-missing -v
 
-# Validate database schema version
-/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.current(config)"
-
 # Generate coverage report
 /run coverage html
 

@@ -114,10 +114,10 @@ def app():
     app.config['WTF_CSRF_ENABLED'] = False
     return app
 
-        @login_manager.user_loader
-        def load_user(user_id):
-            user = db.session.get(User, int(user_id))
-            return db.session.merge(user) if user else None
+    @login_manager.user_loader
+    def load_user(user_id):
+        user = db.session.get(User, int(user_id))
+        return db.session.merge(user) if user else None
     
     yield app
     
