@@ -32,4 +32,5 @@
 - [x] Add production environment validation
 - [x] Fix production environment validation test failure
 - [x] Improve version.py test coverage
+- [ ] Fix version file validation test
 
