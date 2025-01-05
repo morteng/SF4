@@ -3,20 +3,14 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Run version validation tests with coverage
-/run pytest tests/version_management/test_version.py --cov=scripts.version --cov-report=term-missing
+# Run all version management tests with coverage
+/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
 
-# Test database backup with logging
-/run python -c "from scripts.version import create_db_backup; import logging; logging.basicConfig(level=logging.INFO); create_db_backup('instance/stipend.db')"
+# Run database backup test
+/run python -c "from scripts.version import create_db_backup; import logging; logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'); create_db_backup('instance/stipend.db')"
 
-# Verify version file integrity
-/run python -c "from scripts.version import validate_version_file; print(f'Version file valid: {validate_version_file()}')"
-
-# Check test coverage
-/run pytest --cov=scripts.version --cov-report=term-missing
-
-# Check Git status
-/run git status
+# Verify production environment validation
+/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); print('Environment valid:', validate_production_environment())"
 ### CODE END ###
 
 # Print the current datetime to console
