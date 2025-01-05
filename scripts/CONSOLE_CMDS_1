@@ -3,17 +3,28 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
+# Verify database migrations
+/run flask db current
+
+# Check application status
+/run flask shell -c "from app import create_app; app = create_app(); print(app.config['ENV'])"
+
 # Verify form imports
 /run flask shell -c "from app.forms.admin_forms import StipendForm; print(StipendForm())"
 
 # Check form validation
 /run flask shell -c "from app.forms.admin_forms import StipendForm; form = StipendForm(); print(form.validate())"
 
-# Verify stipend routes
+# Verify core routes
 /run flask routes | findstr stipend
+/run flask routes | findstr admin
+/run flask routes | findstr user
 
-# Check test coverage for forms
-/run pytest tests/ --cov=app.forms --cov-report=term-missing
+# Check test coverage
+/run pytest tests/ --cov=app --cov-report=term-missing
+
+# Verify database connection
+/run flask shell -c "from app.models import Stipend; print(Stipend.query.first())"
 ### CODE END ###
 
 # Print the current datetime to console
