@@ -1,0 +1,3 @@
+2025-01-06 00:11:46,101 - ERROR - Database file does not exist: instance/stipend.db
+2025-01-06 00:15:31,065 - ERROR - Database file does not exist: instance/stipend.db
+2025-01-06 00:15:32,376 - INFO - Database backup created: instance/stipend.db -> backups/stipend_20250106_001532.db
