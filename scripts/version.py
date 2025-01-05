@@ -61,6 +61,15 @@ def main():
     # Log archiving command
     archive_parser = subparsers.add_parser('--archive-logs', help='Archive logs')
 
+    # Release notes command
+    release_notes_parser = subparsers.add_parser('--update-release-notes', help='Update release notes')
+    
+    # Documentation command
+    docs_parser = subparsers.add_parser('--update-docs', help='Update documentation')
+    
+    # Deployment verification command
+    deploy_parser = subparsers.add_parser('--verify-deployment', help='Verify deployment')
+
     args = parser.parse_args()
 
     if args.command == '--test-connection':
@@ -79,9 +88,71 @@ def main():
         result = archive_logs()
         print(f"Log archiving {'completed' if result else 'failed'}")
         exit(0 if result else 1)
+    elif args.command == '--update-release-notes':
+        result = update_release_notes()
+        print(f"Release notes {'updated' if result else 'failed'}")
+        exit(0 if result else 1)
+    elif args.command == '--update-docs':
+        result = update_documentation()
+        print(f"Documentation {'updated' if result else 'failed'}")
+        exit(0 if result else 1)
+    elif args.command == '--verify-deployment':
+        result = verify_deployment()
+        print(f"Deployment {'verified' if result else 'failed'}")
+        exit(0 if result else 1)
     else:
         parser.print_help()
         exit(1)
+
+def update_release_notes():
+    """Update release notes with current version information"""
+    try:
+        with open('RELEASE_NOTES.md', 'a') as f:
+            f.write(f"\n## Version {__version__} - {datetime.now().strftime('%Y-%m-%d')}\n")
+            f.write("- Initial production release\n")
+        return True
+    except Exception as e:
+        logging.error(f"Failed to update release notes: {str(e)}")
+        return False
+
+def update_documentation():
+    """Update project documentation"""
+    try:
+        # Update README
+        with open('README.md', 'r+') as f:
+            content = f.read()
+            if __version__ not in content:
+                f.write(f"\n## Current Version\n- {__version__}\n")
+        
+        # Update CONVENTIONS
+        with open('CONVENTIONS.md', 'r+') as f:
+            content = f.read()
+            if "Version Management" not in content:
+                f.write("\n## Version Management\n- Follow semantic versioning\n")
+        return True
+    except Exception as e:
+        logging.error(f"Failed to update documentation: {str(e)}")
+        return False
+
+def verify_deployment():
+    """Verify deployment status"""
+    try:
+        # Check database connection
+        if not validate_db_connection('instance/stipend.db'):
+            return False
+            
+        # Check schema version
+        if not validate_schema():
+            return False
+            
+        # Check environment variables
+        if not validate_production_environment():
+            return False
+            
+        return True
+    except Exception as e:
+        logging.error(f"Deployment verification failed: {str(e)}")
+        return False
 
 if __name__ == "__main__":
     main()

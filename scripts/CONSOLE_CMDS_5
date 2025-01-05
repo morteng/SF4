@@ -11,13 +11,13 @@
 /run coverage html
 
 # Create database backup
-/run scripts/create_db_backup.py
+/run scripts/version.py --backup instance/stipend.db stipend_backup.db
 
 # Run migrations
-/run scripts/run_migrations.py
+/run scripts/validate_schema.py
 
 # Update release notes
-/run scripts/update_release_notes.py
+/run scripts/version.py --update-release-notes
 
 # Commit changes
 /run git add .
@@ -28,13 +28,13 @@
 /run git push origin v1.0.0
 
 # Update documentation
-/run scripts/update_documentation.py
+/run scripts/version.py --update-docs
 
 # Archive logs
-/run scripts/archive_logs.py
+/run scripts/version.py --archive-logs
 
 # Verify deployment
-/run scripts/verify_deployment.py
+/run scripts/version.py --verify-deployment
 ### CODE END ###
 
 # Print the current datetime to console
