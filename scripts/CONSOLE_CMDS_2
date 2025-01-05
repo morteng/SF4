@@ -3,7 +3,29 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
+# Install core dependencies
+/run pip install flask werkzeug pytest pytest-cov
 
+# Verify installation
+/run pip show flask werkzeug pytest
+
+# Initialize Flask application
+/run flask --app app init
+
+# Initialize database migrations
+/run flask db init
+
+# Create initial migration
+/run flask db migrate -m "Initial migration"
+
+# Apply migrations
+/run flask db upgrade
+
+# Verify database setup
+/run flask db current
+
+# Run initial tests
+/run pytest tests/ --cov=app --cov-report=term-missing
 ### CODE END ###
 
 # Print the current datetime to console
