@@ -15,3 +15,5 @@
 - Implement database backup functionality
 - Fix coverage reporting
 - Resolve pytest import errors
+- Implement production environment validation
+- Add log archiving functionality
