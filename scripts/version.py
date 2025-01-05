@@ -143,9 +143,6 @@ def validate_version_file(file_path: Optional[str] = None) -> bool:
     except Exception as e:
         logging.error(f"Version file validation error: {str(e)}")
         return False
-    except Exception as e:
-        logging.error(f"Version file validation error: {str(e)}")
-        return False
 
 def create_db_backup(db_path: str) -> bool:
     """Create a timestamped backup of the database"""
