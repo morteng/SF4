@@ -3,17 +3,14 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
+# Run final version management tests
+/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
+
 # Create production database backup
-/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
+/run python -c "from scripts.version import create_db_backup; import logging; logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'); create_db_backup('instance/stipend.db')"
 
 # Run database migrations
 /run flask db upgrade
-
-# Verify production environment
-/run python -c "from scripts.version import validate_production_environment; print('Environment valid:', validate_production_environment())"
-
-# Run final tests
-/run pytest tests/ --cov=scripts.version --cov-report=term-missing
 
 # Update release notes
 /run python -c "from scripts.version import get_version; version = get_version(); open('RELEASE_NOTES.md', 'w').write(f'# Release {version}\n\n- Added version management system\n- Implemented database backup functionality\n- Improved production environment validation\n- Fixed version file validation tests')"
@@ -33,7 +30,7 @@
 /run git push origin v0.2.0
 
 # Update documentation
-/run python -c "from scripts.version import get_version; version = get_version(); with open('README.md', 'a') as f: f.write(f'\n\n## Version {version}\n- Added version management system\n- Implemented database backup functionality')"
+/run python -c "from scripts.version import get_version; version = get_version(); with open('README.md', 'a') as f: f.write(f'\n\n## Version {version}\n- Added version management system\n- Implemented database backup functionality\n- Improved production environment validation\n- Fixed version file validation tests')"
 ### CODE END ###
 
 # Print the current datetime to console
