@@ -7,35 +7,34 @@
 # Run final test suite
 /run pytest --cov=app --cov=scripts --cov-report=term-missing -v
 
-# Generate final coverage report
+# Generate coverage report
 /run coverage html
 
-# Create production database backup
-/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
+# Create database backup
+/run scripts/create_db_backup.py
 
-# Run database migrations
-/run flask db upgrade
+# Run migrations
+/run scripts/run_migrations.py
 
 # Update release notes
-/run python -c "from scripts.version import get_version; version = get_version(); open('RELEASE_NOTES.md', 'w').write(f'# Release {version}\n\n- Finalized version management system\n- Completed database backup implementation\n- Verified production environment configuration\n- Fixed all test execution issues')"
+/run scripts/update_release_notes.py
 
-# Commit and push changes
+# Commit changes
 /run git add .
 /run git commit -m "Release v1.0.0 - Initial production release"
-/run git push origin main
 
-# Create version tag
+# Create and push version tag
 /run git tag v1.0.0
 /run git push origin v1.0.0
 
 # Update documentation
-/run python -c "from scripts.version import get_version; version = get_version(); with open('README.md', 'a') as f: f.write(f'\n\n## Version {version}\n- Finalized version management system\n- Completed database backup implementation\n- Verified production environment configuration\n- Fixed all test execution issues')"
+/run scripts/update_documentation.py
 
 # Archive logs
-/run python -c "from scripts.version import archive_logs; archive_logs()"
+/run scripts/archive_logs.py
 
 # Verify deployment
-/run python -c "from scripts.version import validate_production_environment; assert validate_production_environment(); print('Environment validation test passed')"
+/run scripts/verify_deployment.py
 ### CODE END ###
 
 # Print the current datetime to console
