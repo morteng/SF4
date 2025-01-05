@@ -18,7 +18,7 @@
 /add scripts/CONSOLE_CMDS_1
 
 # run Step 1
-/ask How can we best implement Code Cycle Step 1 - Analyzis? Our objective is to  analyze the current state of the project. Instructions from management have top priority. Key Actions: Review project documentation and context. Perform problem analysis and planning. Prepare for necessary file updates. 
+/ask How can we best implement Code Cycle Step 1 - Analyzis? Our objective is to analyze the current state of the project. Instructions from management have top priority. Key Actions: Review project documentation and context. Perform problem analysis and planning. Prepare for necessary file updates. 
 
 # Edit the files
 #/code update files as needed. Remove any previous console commands from CONSOLE_CMDS_1, add any new console commands you want to run before we go to STEP 2 (Coding). Do not explain or summarize, just output the edits.
