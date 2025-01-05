@@ -1,4 +1,5 @@
 import pytest
+import sqlite3
 from scripts.version import (
     validate_version,
     parse_version,
