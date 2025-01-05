@@ -9,3 +9,5 @@
 - Test schema migration validation
 - Create deployment verification script
 - Add production environment validation tests
+- Fix pytest configuration and import errors
+- Resolve create_app import issues in tests
