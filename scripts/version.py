@@ -97,24 +97,24 @@ def main():
         result = create_db_backup(args.source_db, args.backup_path)
         print(f"Backup {'successful' if result else 'failed'}")
         exit(0 if result else 1)
-    elif args.command == '--validate-env':
+    elif args.command == 'validate-env':
         result = validate_production_environment()
         print(f"Environment validation {'passed' if result else 'failed'}")
         exit(0 if result else 1)
-    elif args.command == '--archive-logs':
-        result = archive_logs()
+    elif args.command == 'archive-logs':
+        result = archive_logs(args.force)
         print(f"Log archiving {'completed' if result else 'failed'}")
         exit(0 if result else 1)
-    elif args.command == '--update-release-notes':
-        result = update_release_notes()
+    elif args.command == 'update-release-notes':
+        result = update_release_notes(args.version)
         print(f"Release notes {'updated' if result else 'failed'}")
         exit(0 if result else 1)
-    elif args.command == '--update-docs':
-        result = update_documentation()
+    elif args.command == 'update-docs':
+        result = update_documentation(args.version)
         print(f"Documentation {'updated' if result else 'failed'}")
         exit(0 if result else 1)
-    elif args.command == '--verify-deployment':
-        result = verify_deployment()
+    elif args.command == 'verify-deployment':
+        result = verify_deployment(args.full)
         print(f"Deployment {'verified' if result else 'failed'}")
         exit(0 if result else 1)
     else:
