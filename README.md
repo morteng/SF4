@@ -16,35 +16,35 @@ The Stipend Discovery Website is a platform for exploring and filtering stipends
 ## Installation
 
 1. Clone the repository:
-   ```bash
+
    git clone https://github.com/yourusername/stipend-discovery.git
    cd stipend-discovery
-   ```
+
 
 2. Create and activate a virtual environment:
-   ```bash
+
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+
 
 3. Install dependencies:
-   ```bash
+
    pip install -r requirements.txt
-   ```
+
 
 4. Set up environment variables:
    - Copy `.env.example` to `.env`
    - Update the values in `.env` with your configuration
 
 5. Initialize the database:
-   ```bash
+
    flask db upgrade
-   ```
+
 
 6. Run the development server:
-   ```bash
+
    flask run
-   ```
+
 
 ## Usage
 
@@ -61,9 +61,9 @@ The Stipend Discovery Website is a platform for exploring and filtering stipends
 ## Testing
 
 Run tests with:
-```bash
+
 pytest --cov=app --cov-report=term-missing
-```
+
 
 We aim to maintain 80%+ test coverage. Tests include:
 - Unit tests for models and services
@@ -73,9 +73,9 @@ We aim to maintain 80%+ test coverage. Tests include:
 ## Contributing
 
 1. Create a new branch:
-   ```bash
+
    git checkout -b feature/your-feature-name
-   ```
+
 
 2. Make your changes following our [coding conventions](CONVENTIONS.md)
 
