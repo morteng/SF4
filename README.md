@@ -1,6 +1,5 @@
 # Stipend Discovery Website
 
-<<<<<<< HEAD
 ## Development Setup
 
 ### Prerequisites
@@ -61,7 +60,6 @@ To verify all dependencies are installed:
 ```bash
 pytest tests/test_dependencies.py
 ```
-=======
 [![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/flask-2.0+-blue.svg)](https://flask.palletsprojects.com/)
 
@@ -157,4 +155,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Flask and SQLAlchemy for the backend framework
 - HTMX for frontend interactivity
 - Alembic for database migrations
->>>>>>> feature/version-management
