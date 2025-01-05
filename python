@@ -60,3 +60,9 @@
 2. Fix remaining pytest import errors
 3. Implement proper test coverage
 4. Update documentation
+# Requests for Human Intervention
+
+1. Create app.factory module
+2. Fix remaining pytest import errors
+3. Implement proper test coverage
+4. Update documentation
