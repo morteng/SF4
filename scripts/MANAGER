@@ -1,5 +1,10 @@
-HI! Manager here! 
+HI! Manager here!
 
-IMPORTANT! You cannot run python code directly in console commands, instead write python files in approprite folders and then execute them with /run your_python_file.py in the appropriate code block. Take note of this. NEVER run python code directly in code sections of coding cycle.
+IMPORTANT! You cannot run python code directly in console commands, instead write python files in appropriate folders and then execute them with /run your_python_file.py in the appropriate code block. Take note of this. NEVER run python code directly in code sections of coding cycle.
 
-New info: Run as few tests as possible at a time, work on one feature at a time. and avoid dumping large amounts of debug data or generating long output from console commands as this fills up context memory and stops the cycle. We must limit output to chat at all times to avoid filling up context. Add this information to relevant documents so you always follow this instruction. Also, never run console commands that require manual input, they stop code cycle processing.
+Key Rules:
+1. Run minimal tests per cycle
+2. Work on one feature at a time  
+3. Avoid debug data dumps
+4. Never use manual input commands
+5. Keep output concise
