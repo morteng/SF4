@@ -46,3 +46,5 @@
 - Fix NotificationType import errors
 - Fix test database initialization
 - Resolve app.factory import errors
+- Fix version.py CLI argument handling
+- Add version check functionality
