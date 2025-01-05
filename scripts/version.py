@@ -1,8 +1,35 @@
 import subprocess
 import re
+import sqlite3
 from typing import Optional, Tuple
+from datetime import datetime
 
 __version__ = "0.1.0"  # Initial version
+
+def validate_db_connection(db_path: str) -> bool:
+    """Validate database connection"""
+    try:
+        conn = sqlite3.connect(db_path)
+        conn.execute("SELECT 1")
+        conn.close()
+        return True
+    except sqlite3.Error:
+        return False
+
+def get_db_version(db_path: str) -> Optional[str]:
+    """Get version from database if available"""
+    if not validate_db_connection(db_path):
+        return None
+        
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA user_version")
+        version = cursor.fetchone()[0]
+        conn.close()
+        return str(version) if version else None
+    except sqlite3.Error:
+        return None
 
 def validate_version(version: str) -> bool:
     """Validate version string format"""

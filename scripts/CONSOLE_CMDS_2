@@ -4,7 +4,13 @@
 
 ### CODE START ###
 # Verify current version
-/run python -c "from scripts.version import get_version; print(get_version())"
+/run python -c "from scripts.version import get_version; print(f'Current version: {get_version()}')"
+
+# Test database connection
+/run python -c "from scripts.version import validate_db_connection; print(f'Database connection: {validate_db_connection('instance/app.db')}')"
+
+# Get database version
+/run python -c "from scripts.version import get_db_version; print(f'Database version: {get_db_version('instance/app.db')}')"
 
 # Test version bumping
 /run python -c "from scripts.version import bump_version; print(bump_version('patch'))"
