@@ -6,7 +6,8 @@ from scripts.version import (
     validate_version,
     parse_version,
     create_db_backup,
-    validate_production_environment
+    validate_production_environment,
+    validate_version_file
 )
 import os
 from pathlib import Path
