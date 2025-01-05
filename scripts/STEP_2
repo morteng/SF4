@@ -1,0 +1,17 @@
+# Code Cycle Step 2 (Coding)
+
+# Print the current datetime to console
+/run scripts/print_datetime.py
+/run Write-Host "Code Cycle Step 2 Start"
+
+/add scripts/CONSOLE_CMDS_2
+
+# Coding step
+/architect How can we best implement Code Cycle Step 2 - Coding? Objective: Implement changes based on the analysis. Key Actions: Execute development tasks. Update code files as required. Prepare outputs for testing. 
+
+/code Implement suggested changes. Remove any previous console commands from CONSOLE_CMDS_2, add any new console commands you want to run before we go to STEP 3 (Coding). Do not explain or summarize, just output the edits.
+
+/drop scripts/CONSOLE_CMDS_2
+
+# Proceed to console commands for Step 2
+/load scripts/CONSOLE_CMDS_2

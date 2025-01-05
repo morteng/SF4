@@ -1,2 +1,0 @@
-
-HELLO! CEO HERE AGAIN! Aider commits after each edit, I want you to start taking charge of branches and versioning and pushing to github. work out a proper semantic versioning scheme and implement it. update relevant docs accordingly.

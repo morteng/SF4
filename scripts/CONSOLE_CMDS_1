@@ -1,0 +1,33 @@
+# Console Commands for Step 1
+# Do not use echo
+# Only edit the section of this document between CODE START and CODE END
+
+### CODE START ###
+# Create new branch for version management improvements
+/run git checkout -b feature/version-management
+
+# Verify database connection with enhanced logging
+/run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s'); assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
+
+# Test database schema version
+/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.current(config)"
+
+# Run version validation tests
+/run pytest tests/version_management/ -v
+
+# Check test coverage for version management
+/run pytest --cov=scripts.version --cov-report=term-missing
+
+# Check Git status
+/run git status
+### CODE END ###
+
+# Print the current datetime to console
+/run scripts/print_datetime.py
+/run Write-Host "Code Cycle Step 1 Ends"
+
+# Update TODO based on results
+/code update TODO if needed. Do not explain or summarize, just output the edit.
+
+# After running any console commands we go to STEP_2
+/load scripts/STEP_2

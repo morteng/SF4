@@ -41,10 +41,10 @@ def parse_flexible_date(date_str):
 
 class Stipend(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    summary = db.Column(db.Text, nullable=True)
-    description = db.Column(db.Text, nullable=True)
-    homepage_url = db.Column(db.String(255), nullable=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    summary = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    homepage_url = db.Column(db.String(255), nullable=False)
     application_procedure = db.Column(db.Text, nullable=True)
     eligibility_criteria = db.Column(db.Text, nullable=True)
     application_deadline = db.Column(db.DateTime, nullable=True)
@@ -97,8 +97,15 @@ class Stipend(db.Model):
     def __repr__(self):
         return f'<Stipend {self.name}>'
 
+<<<<<<< HEAD
     def to_dict(self):
         """Convert stipend to dictionary with all relevant data."""
+=======
+    def __repr__(self):
+        return f'<Stipend {self.name}>'
+
+    def to_dict(self):
+>>>>>>> feature/version-management
         return {
             'id': self.id,
             'name': self.name,
@@ -107,6 +114,7 @@ class Stipend(db.Model):
             'homepage_url': self.homepage_url,
             'application_procedure': self.application_procedure,
             'eligibility_criteria': self.eligibility_criteria,
+<<<<<<< HEAD
             'application_deadline': (
                 self.application_deadline.strftime('%B %Y') 
                 if self.application_deadline and self.application_deadline.hour == 23 and self.application_deadline.minute == 59
@@ -125,3 +133,14 @@ class Stipend(db.Model):
                 self.application_deadline.replace(tzinfo=timezone.utc) > datetime.now(timezone.utc)
             )
         }
+=======
+            'application_deadline': self.application_deadline.isoformat() if self.application_deadline else None,
+            'open_for_applications': self.open_for_applications,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }
+
+    # Relationships
+    tags = db.relationship('Tag', secondary=stipend_tag_association, back_populates='stipends')
+    organizations = db.relationship('Organization', secondary=organization_stipends, back_populates='stipends')
+>>>>>>> feature/version-management

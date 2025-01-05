@@ -1,0 +1,24 @@
+# Console Commands for Step 3
+# Do not use echo commands
+# Only edit the section of this document between CODE START and CODE END
+
+### CODE START ###
+# Run all version management tests with coverage
+/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
+
+# Run database backup test
+/run python -c "from scripts.version import create_db_backup; import logging; logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'); create_db_backup('instance/stipend.db')"
+
+# Verify production environment validation
+/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); print('Environment valid:', validate_production_environment())"
+### CODE END ###
+
+# Print the current datetime to console
+/run scripts/print_datetime.py
+/run Write-Host "Code Cycle Step 3 Ends"
+
+# Update TODO based on results
+/code update TODO if needed. Do not explain or summarize, just output the edit.
+
+# After running any console commands, go to STEP_4
+/load scripts/STEP_4

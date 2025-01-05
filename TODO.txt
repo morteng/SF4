@@ -1,7 +1,0 @@
-# Priority Tasks
-
-1. Fix test_login_invalid_credentials failure
-2. Verify flashed messages appear in response
-3. Add integration tests for complete auth flow
-4. Implement model tests for User class
-5. Add route tests for registration and logout

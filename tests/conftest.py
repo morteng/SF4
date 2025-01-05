@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # tests/conftest.py
 
 import pytest
@@ -71,6 +72,19 @@ from app.models.user import User
 from app.models.organization import Organization
 from app.models.stipend import Stipend
 from app.models.tag import Tag
+=======
+import os
+import sys
+import pytest
+from pathlib import Path
+
+# Add project root to Python path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from app import create_app
+from app.extensions import db
+from sqlalchemy.orm import scoped_session, sessionmaker
+>>>>>>> feature/version-management
 
 # Ignore SAWarnings for cleaner test output
 warnings.filterwarnings("ignore", category=SAWarning)
@@ -79,6 +93,7 @@ warnings.filterwarnings("ignore", category=SAWarning)
 def app():
     """Create and configure a new app instance for the test session."""
     app = create_app('testing')
+<<<<<<< HEAD
     # Add rate limiter config
     app.config['RATELIMIT_ENABLED'] = True
     app.config['RATELIMIT_STORAGE_URL'] = 'memory://'
@@ -97,6 +112,13 @@ def app():
         
         # Initialize database and login manager
         db.session.expire_on_commit = False
+=======
+    # Use in-memory database for tests
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app.config['TESTING'] = True
+    app.config['WTF_CSRF_ENABLED'] = False
+    return app
+>>>>>>> feature/version-management
 
         @login_manager.user_loader
         def load_user(user_id):

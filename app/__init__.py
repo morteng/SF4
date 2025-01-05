@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 import logging
 from flask import Flask
@@ -19,6 +20,35 @@ def create_app(config_name='development'):
     
     # Initialize extensions
     from app.extensions import init_extensions
+=======
+import logging
+from flask import Flask
+from app.models.user import User
+from app.extensions import db, login_manager
+
+def create_app(config_name='default'):
+    """Create and configure the Flask application."""
+    from app.config import config_by_name
+    
+    # Initialize Flask app
+    app = Flask(__name__)
+    
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    logger = logging.getLogger(__name__)
+    
+    # Load configuration
+    try:
+        app.config.from_object(config_by_name[config_name])
+        logger.info(f"Loaded {config_name} configuration successfully")
+    except KeyError:
+        logger.error(f"Invalid configuration name: {config_name}")
+        raise ValueError(f"Invalid configuration name: {config_name}")
+
+>>>>>>> feature/version-management
     init_extensions(app)
     
     # Register blueprints with proper order
@@ -62,6 +92,7 @@ def create_app(config_name='development'):
     from flask_wtf.csrf import CSRFError
     from app.constants import FlashMessages
 
+<<<<<<< HEAD
 
     with app.app_context():
         try:
@@ -170,3 +201,58 @@ def create_app(config_name='development'):
         if current_user.is_authenticated:
             return {'notification_count': get_notification_count(current_user.id)}
         return {}
+=======
+def init_extensions(app):
+    """Initialize Flask extensions with proper error handling and retry logic."""
+    logger = logging.getLogger(__name__)
+    max_retries = 3
+    retry_delay = 1  # seconds
+    
+    # Initialize database with retry logic
+    for attempt in range(max_retries):
+        try:
+            db.init_app(app)
+            logger.info("Database extension initialized successfully")
+            break
+        except Exception as e:
+            if attempt == max_retries - 1:
+                logger.error(f"Failed to initialize database after {max_retries} attempts: {str(e)}")
+                raise
+            logger.warning(f"Database initialization attempt {attempt + 1} failed, retrying in {retry_delay}s...")
+            time.sleep(retry_delay)
+    
+    # Initialize login manager
+    try:
+        login_manager.init_app(app)
+        login_manager.login_view = 'auth.login'
+        logger.info("Login manager initialized successfully")
+    except Exception as e:
+        logger.error(f"Failed to initialize login manager: {str(e)}")
+        raise
+
+def init_models(app):
+    """Initialize database models with proper context."""
+    logger = logging.getLogger(__name__)
+    
+    with app.app_context():
+        try:
+            from app.models import association_tables
+            from app.models.bot import Bot
+            from app.models.notification import Notification
+            from app.models.organization import Organization
+            from app.models.stipend import Stipend
+            from app.models.tag import Tag
+            from app.models.user import User
+            
+            # Create database tables if they don't exist
+            db.create_all()
+            logger.info("Database models initialized successfully")
+            
+        except Exception as e:
+            logger.error(f"Failed to initialize models: {str(e)}")
+            raise
+
+def init_routes(app):
+    from app.routes import routes_bp
+    app.register_blueprint(routes_bp)
+>>>>>>> feature/version-management
