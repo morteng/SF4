@@ -150,7 +150,42 @@ We aim to maintain 80%+ test coverage. Tests include:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
+## Version Management
+
+- **Versioning Policy**: The project follows semantic versioning (MAJOR.MINOR.PATCH).
+- **Current Version**: v0.2.0
+- **Release Notes**: 
+  - Added version management system
+  - Implemented database backup functionality
+  - Improved production environment validation
+  - Fixed version file validation tests
+
+## Deployment Instructions
+
+### Backup Procedures
+- To create a production database backup, run:
+  ```bash
+  python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
+  ```
+
+### Running Migrations
+- To run database migrations, execute:
+  ```bash
+  flask db upgrade
+  ```
+
+### Release Process
+1. Update release notes in `RELEASE_NOTES.md`.
+2. Commit and push changes to the main branch.
+3. Create a version tag using:
+   ```bash
+   git tag v0.2.0
+   git push origin v0.2.0
+   ```
+
+### Final Verification
+- Validate the production environment and check the database connection.
+- Verify version management and confirm backup functionality.
 
 - Flask and SQLAlchemy for the backend framework
 - HTMX for frontend interactivity
