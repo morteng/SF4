@@ -3,35 +3,23 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Run final version management tests with coverage
-/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
+# Run final test suite with coverage
+/run pytest --cov=app --cov=scripts --cov-report=term-missing -v
 
-# Verify database connection validation
-/run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'); assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
-
-# Test database backup functionality
-/run python -c "from scripts.version import create_db_backup; import logging; logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'); assert create_db_backup('instance/stipend.db'); print('Database backup test passed')"
-
-# Validate version file
-/run python -c "from scripts.version import validate_version_file; assert validate_version_file()"
-
-# Check alembic current version
+# Verify database schema version
 /run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.current(config)"
+
+# Generate final coverage report
+/run coverage html
 
 # Check Git status
 /run git status
 
-# Validate production environment
+# Verify production environment configuration
 /run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); assert validate_production_environment(); print('Environment validation test passed')"
 
-# Generate coverage report
-/run coverage html
-
-# Check version file validation
-/run python -c "from scripts.version import validate_version_file; assert validate_version_file()"
-
-# Verify logging configuration
-/run python -c "import logging; from scripts.version import validate_db_connection; validate_db_connection('instance/stipend.db'); logging.info('Logging configuration verified')"
+# Archive deployment logs
+/run python -c "from scripts.version import archive_logs; archive_logs()"
 ### CODE END ###
 
 # Print the current datetime to console
