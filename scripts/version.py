@@ -152,14 +152,30 @@ def create_db_backup(db_path: str) -> bool:
 
 def validate_production_environment() -> bool:
     """Validate production environment settings"""
-    required_vars = [
-        'DATABASE_URL',
-        'SECRET_KEY',
-        'ADMIN_EMAIL'
-    ]
-    missing_vars = [var for var in required_vars if var not in os.environ]
+    required_vars = {
+        'DATABASE_URL': str,
+        'SECRET_KEY': str,
+        'ADMIN_EMAIL': str
+    }
+    
+    missing_vars = []
+    invalid_types = []
+    
+    for var, var_type in required_vars.items():
+        if var not in os.environ:
+            missing_vars.append(var)
+        elif not isinstance(os.environ[var], var_type):
+            try:
+                var_type(os.environ[var])
+            except (ValueError, TypeError):
+                invalid_types.append(var)
     
     if missing_vars:
         logging.error(f"Missing required environment variables: {', '.join(missing_vars)}")
         return False
+        
+    if invalid_types:
+        logging.error(f"Invalid type for environment variables: {', '.join(invalid_types)}")
+        return False
+        
     return True
