@@ -140,7 +140,7 @@ We aim to maintain 80%+ test coverage. Tests include:
    git checkout -b feature/your-feature-name
 
 
-2. Make your changes following our [coding conventions](CONVENTIONS.md)
+2. Make your changes following our [coding conventions](CONVENTIONS.md.md)
 
 3. Write tests for new functionality
 

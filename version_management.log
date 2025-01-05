@@ -7,3 +7,10 @@
 2025-01-06 00:26:39,695 - ERROR - Database file does not exist: instance/test_stipend.db
 2025-01-06 00:31:31,595 - INFO - Database connection successful to instance/stipend.db
 2025-01-06 00:31:31,595 - ERROR - Database file does not exist: instance/test_stipend.db
+2025-01-06 00:42:27,746 - ERROR - Database file does not exist: instance/stipend.db
+2025-01-06 00:46:47,318 - ERROR - Database file does not exist: instance/stipend.db
+2025-01-06 00:50:35,274 - INFO - Database connection successful to instance/stipend.db
+2025-01-06 00:50:35,274 - ERROR - Database file does not exist: instance/test_stipend.db
+2025-01-06 00:53:51,804 - INFO - Database connection successful to instance/stipend.db
+2025-01-06 00:53:51,805 - ERROR - Alembic version table not found
+2025-01-06 00:53:51,805 - ERROR - Schema version verification failed

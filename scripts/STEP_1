@@ -10,8 +10,8 @@
 
 # load project docs and IO
 /read PROJECT
-/read CONVENTIONS
-/read DEVLOG
+/read CONVENTIONS.md
+/read DEVLOG.txt
 /add TODO
 /read scripts/MANAGER
 

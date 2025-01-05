@@ -15,3 +15,5 @@ Current Focus:
 - Fix Alembic configuration issues
 - Resolve pytest import errors
 - Implement proper test coverage setup
+
+Remember to import admin user from .env file if there is no admin user in database

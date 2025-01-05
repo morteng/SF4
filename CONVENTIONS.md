@@ -126,7 +126,7 @@
 2. **Inline Comments**:
    - Use for clarifying non-obvious logic.
 
-3. **README and CONVENTIONS.md**:
+3. **README and CONVENTIONS.md.md**:
    - Keep updated with any major changes to the project or standards.
 
 ---
@@ -161,23 +161,7 @@
 
 ## Example Code Structure
 
-### Directory Layout
 
-
-Project Root/
-  app/
-    models/
-    routes/
-    services/
-    templates/
-    static/
-  tests/
-  bots/
-  migrations/
-  .env.example
-  requirements.txt
-  README.md
-  CONVENTIONS.md
 
 
 ### Sample Route

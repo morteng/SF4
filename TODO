@@ -34,3 +34,4 @@
 - Resolve app.factory import errors
 - Fix version.py CLI argument handling
 - Add version check functionality
+- Add test coverage validation script
