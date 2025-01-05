@@ -86,7 +86,7 @@ def main():
 
     args = parser.parse_args()
 
-    if args.command == '--test-connection':
+    if args.command == 'test-connection':
         result = validate_db_connection(args.db_path)
         print(f"Connection {'successful' if result else 'failed'}")
         exit(0 if result else 1)

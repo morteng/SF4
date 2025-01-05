@@ -17,7 +17,7 @@
 /run scripts/version.py --update-docs
 
 # Archive logs
-/run scripts/version.py --archive-logs
+/run scripts/archive_logs.py
 
 # Verify deployment
 /run scripts/version.py --verify-deployment
