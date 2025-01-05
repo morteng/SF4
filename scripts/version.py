@@ -204,9 +204,22 @@ def verify_logging_configuration() -> bool:
         bool: True if logging is configured properly, False otherwise
     """
     try:
-        logging.info("Testing logging configuration")
-        logging.warning("This is a test warning message")
-        logging.error("This is a test error message")
+        # Test all logging levels
+        logging.debug("Debug message test")
+        logging.info("Info message test")
+        logging.warning("Warning message test")
+        logging.error("Error message test")
+        logging.critical("Critical message test")
+        
+        # Verify log file was created and contains messages
+        if not os.path.exists('version_management.log'):
+            return False
+            
+        with open('version_management.log') as f:
+            content = f.read()
+            if not all(level in content for level in ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']):
+                return False
+                
         return True
     except Exception as e:
         logging.error(f"Logging configuration verification failed: {str(e)}")

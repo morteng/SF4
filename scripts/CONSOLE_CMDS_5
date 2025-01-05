@@ -30,6 +30,18 @@
 /run git tag v0.2.0
 /run git push origin v0.2.0
 
+# Update documentation
+/run python -c "from scripts.version import get_version; version = get_version(); with open('README.md', 'a') as f: f.write(f'\n\n## Version {version}\n- Added version management system\n- Implemented database backup functionality\n- Improved production environment validation\n- Fixed version file validation tests')"
+
+# Generate coverage report
+/run coverage html
+
+# Verify deployment
+/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); assert validate_production_environment(); print('Environment validation test passed')"
+
+# Check logging configuration
+/run python -c "import logging; from scripts.version import verify_logging_configuration; assert verify_logging_configuration(); print('Logging configuration verified')"
+
 
 ### CODE END ###
 
