@@ -4,7 +4,7 @@
 
 ### CODE START ###
 # Verify versioning
-/run flask shell -c "from scripts.version import get_version; print(get_version())"
+/run flask shell -c "from scripts.version import get_version, validate_version; version = get_version(); assert validate_version(version), f'Invalid version format: {version}'; print(f'Current version: {version}')"
 
 # Check Git status
 /run git status
@@ -29,6 +29,9 @@
 
 # Check application status
 /run flask shell -c "from app import create_app; app = create_app(); print(app.config['ENV'])"
+
+# Verify version file integrity
+/run python -c "from scripts.version import get_version, parse_version; version = get_version(); parsed = parse_version(version); print(f'Parsed version: {parsed}')"
 ### CODE END ###
 
 # Print the current datetime to console
