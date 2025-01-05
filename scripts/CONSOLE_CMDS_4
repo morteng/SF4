@@ -17,6 +17,9 @@
 
 # Check Git status
 /run git status
+
+# Validate production environment
+/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); assert validate_production_environment(); print('Environment validation test passed')"
 ### CODE END ###
 
 # Print the current datetime to console
