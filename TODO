@@ -13,21 +13,37 @@
 - [x] Implement version validation in test suite
 - [ ] Create version rollback functionality
 - [ ] Add database version validation tests
-  - [ ] Test connection validation with invalid paths
+  - [x] Test connection validation with invalid paths
   - [ ] Test connection validation with corrupted databases
+    - [ ] Test with a database file that doesn't exist.
+    - [ ] Test with a database file that is empty.
+    - [ ] Test with a database file that has an invalid schema.
 - [ ] Add version format validation tests
-  - [ ] Test invalid version formats
-  - [ ] Test pre-release version validation
-  - [ ] Test build metadata validation
+  - [x] Test invalid version formats
+  - [x] Test pre-release version validation
+  - [x] Test build metadata validation
+    - [ ] Test with a version string that contains invalid characters.
+    - [ ] Test with a version string that is too long.
+    - [ ] Test with a version string that is too short.
 - [ ] Add integration tests for version bumping
-  - [ ] Test patch version bumps
-  - [ ] Test minor version bumps
-  - [ ] Test major version bumps
+  - [x] Test patch version bumps
+  - [x] Test minor version bumps
+  - [x] Test major version bumps
+    - [ ] Test that the version file is updated correctly.
+    - [ ] Test that the database version is updated correctly.
+    - [ ] Test that the git branch is created correctly.
+    - [ ] Test that the changes are pushed to GitHub correctly.
 - [ ] Add tests for GitHub push functionality
-  - [ ] Test branch creation
-  - [ ] Test commit message validation
-  - [ ] Test push error handling
+  - [x] Test branch creation
+  - [x] Test commit message validation
+  - [x] Test push error handling
+    - [ ] Test that the push fails gracefully if the GitHub credentials are invalid.
+    - [ ] Test that the push fails gracefully if the network connection is down.
+    - [ ] Test that the push fails gracefully if the GitHub repository is unavailable.
 - [ ] Add documentation for version management CLI
-  - [ ] Document version bump commands
+  - [x] Document version bump commands
   - [ ] Document rollback procedure
   - [ ] Document release process
+    - [ ] Document the steps involved in creating a release.
+    - [ ] Document the steps involved in publishing a release.
+    - [ ] Document the steps involved in updating a release.

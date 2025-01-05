@@ -12,14 +12,31 @@
 # Get database version
 /run python -c "from scripts.version import get_db_version; print(f'Database version: {get_db_version('instance/app.db')}')"
 
-# Test version bumping
-/run python -c "from scripts.version import bump_version; print(bump_version('patch'))"
+# Test version bumping (patch)
+/run python -c "import scripts.version; new_version = scripts.version.bump_version('patch'); scripts.version.update_version_file(new_version); print(f'New version: {scripts.version.get_version()}')"
 
-# Verify git branch was created
-/run git branch --show-current
+# Verify database version update after patch bump (add this)
+/run python -c "from scripts.version import get_db_version; print(f'Database version after patch bump: {get_db_version('instance/app.db')}')"
 
-# Push changes to GitHub
-/run python -c "from scripts.version import push_to_github; push_to_github('bugfix/v0.1.1', 'Bump version to 0.1.1')"
+# Test version bumping (minor)
+/run python -c "import scripts.version; new_version = scripts.version.bump_version('minor'); scripts.version.update_version_file(new_version); print(f'New version: {scripts.version.get_version()}')"
+
+# Verify database version update after minor bump (add this)
+/run python -c "from scripts.version import get_db_version; print(f'Database version after minor bump: {get_db_version('instance/app.db')}')"
+
+# Test version bumping (major)
+/run python -c "import scripts.version; new_version = scripts.version.bump_version('major'); scripts.version.update_version_file(new_version); print(f'New version: {scripts.version.get_version()}')"
+
+# Verify database version update after major bump (add this)
+/run python -c "from scripts.version import get_db_version; print(f'Database version after major bump: {get_db_version('instance/app.db')}')"
+
+
+# Create a new branch (replace hardcoded values)
+/run python -c "import scripts.version; new_version = scripts.version.bump_version('patch'); branch_name = f'bugfix/v{new_version}'; print(f'Creating branch: {branch_name}')"
+/run git checkout -b bugfix/v$(python -c "import scripts.version; print(scripts.version.bump_version('patch').replace('.', ''))")
+
+# Push changes to GitHub (replace hardcoded values)
+/run python -c "import scripts.version; new_version = scripts.version.bump_version('patch'); branch_name = f'bugfix/v{new_version}'; scripts.version.push_to_github(branch_name, f'Bump version to {new_version}')"
 
 # Verify remote branches
 /run git branch -r
