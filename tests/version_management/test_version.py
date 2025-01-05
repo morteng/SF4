@@ -55,6 +55,10 @@ def test_create_db_backup(test_db_path):
     assert backup_result is True
     assert len(list(Path(test_db_path).parent.glob("*.backup_*.db"))) == 1
 
+def test_validate_version_file():
+    """Test version file validation"""
+    assert validate_version_file() is True
+
 def test_validate_production_environment(monkeypatch):
     """Test production environment validation"""
     # Test missing environment variables

@@ -3,14 +3,8 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Run all version management tests
-/run pytest tests/version_management/ -v
-
-# Validate production environment
-/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); print('Environment valid:', validate_production_environment())"
-
-# Check test coverage
-/run pytest --cov=scripts.version --cov-report=term-missing
+# Run version management tests with coverage
+/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
 
 # Check Git status
 /run git status
