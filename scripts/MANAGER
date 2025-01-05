@@ -1,0 +1,1 @@
+Runn as few tests as possible at a time, and avoid dumping large amounts of debug data to console as this fills up context memory hand stops the cycle. add this to relevant documents.

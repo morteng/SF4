@@ -7,8 +7,7 @@
 /add scripts/CONSOLE_CMDS_4
 
 ## Testing step
-/architect Objective: Perform a final review before deployment.
-Key Actions: Ensure all implemented changes are correct and documented. Finalize updates and gather review notes. Confirm readiness for deployment. Remove any previous console commands from CONSOLE_CMDS_4, add any new console commands you want to run before we go to STEP 5 (Deployment). 
+/architect Code Cycle Step 4 - Review. Objective: Perform a final review before deployment. Key Actions: Ensure all implemented changes are correct and documented. Finalize updates and gather review notes. Confirm readiness for deployment. Remove any previous console commands from CONSOLE_CMDS_4, add any new console commands you want to run before we go to STEP 5 (Deployment). 
 
 /drop scripts/CONSOLE_CMDS_4
 

@@ -4,20 +4,22 @@
 /run scripts/print_datetime.py
 /run Write-Host "Code Cycle Step 5 Start"
 
-/add scripts/CONSOLE_CMDS_5
-
-## Testing step
-/architect Objective: Deploy the application to the designated environment. Key Actions: Execute deployment tasks. Save updates to the environment. End the cycle and prepare for the next iteration. Remove any previous console commands from CONSOLE_CMDS_5, add any new console commands you want to run before we reset and return to STEP 1. 
-
-/drop scripts/CONSOLE_CMDS_5
-
-# Update project docs
 /add CONVENTIONS
 /add PROJECT
 /add README.md
-/add TODO
 /add DEVLOG
-/code update project documentation as needed. Remove requests from MANAGER that have been implemented or scheduled. Update DEVLOG based on this cycle.
+/add scripts/CONSOLE_CMDS_5
+
+
+## Testing step
+/architect Code Cycle Step 5 - Document and deploy. Objective: Update all documentation to reflect what we have learned and done this cycle. Deploy the application to the designated environment. Key Actions: Execute deployment tasks. Save updates to the environment. End the cycle and prepare for the next iteration. Remove any previous console commands from CONSOLE_CMDS_5, add any new console commands you want to run before we reset and return to STEP 1. 
+
+/drop scripts/CONSOLE_CMDS_5
+
+# Update requests
+
+/add scripts/REQUESTS
+/code Remove any requests from MANAGER that have been implemented or scheduled. Update DEVLOG based on this cycle. Add any requests for actions you need performed to REQUESTS.
 
 
 # Proceed to console commands for Step 5

@@ -16,7 +16,7 @@
 /read scripts/MANAGER
 
 # run Step 1
-/architect Code Cycle Step 1 - Objective: Analyze the current state of the project. Key Actions: Load project documentation and context. Perform problem analysis and planning. Prepare for necessary file updates.
+/architect Code Cycle Step 1 - Analyzis. Objective: Analyze the current state of the project. Key Actions: Load project documentation and context. Perform problem analysis and planning. Prepare for necessary file updates.
 
 # Add the files we're going to edit
 /add scripts/CONSOLE_CMDS_1
