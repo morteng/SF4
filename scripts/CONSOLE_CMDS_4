@@ -3,26 +3,23 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Verify database connection
-/run python -c "from scripts.version import validate_db_connection; print(validate_db_connection('instance/app.db'))"
+# Verify version validation
+/run python -c "from scripts.version import validate_version; print('Version validation:', validate_version('1.2.3-alpha'))"
 
-# Check current version
-/run python -c "from scripts.version import get_version; print(f'Current version: {get_version()}')"
+# Check environment configuration
+/run python -c "from scripts.version import validate_production_environment; print('Environment valid:', validate_production_environment())"
 
-# Run database migrations
-/run flask db upgrade
+# Run all tests with coverage
+/run pytest tests/ --cov=scripts.version --cov-report=term-missing
 
-# Verify database state
-/run flask db current
+# Verify database backup
+/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
 
-# Run critical tests
-/run pytest tests/app/test_version.py --cov=app --cov-report=term-missing
+# Check Git status
+/run git status
 
-# Check Flask routes
-/run flask routes
-
-# Verify bot service status
-/run flask shell -c "from app.services.bot_service import get_all_bots; print(get_all_bots())"
+# Verify documentation
+/run python -c "import os; print('Backup docs exist:', os.path.exists('docs/database_backup_procedure.md'))"
 ### CODE END ###
 
 # Print the current datetime to console
