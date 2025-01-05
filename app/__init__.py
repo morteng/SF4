@@ -30,33 +30,11 @@ def create_app(config_name='development'):
         from app.extensions import init_extensions
         init_extensions(app)
         
-        # Register blueprints
+        # Register blueprints with proper order
         from app.routes import register_blueprints
-        register_blueprints(app)
-        
-        # Register admin blueprints
         from app.routes.admin import register_admin_blueprints
-        register_admin_blueprints(app)
         
-        # Verify critical routes are registered
-        with app.app_context():
-            registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
-            required_routes = [
-                'admin.admin_stipend.create',
-                'admin.dashboard.dashboard'
-            ]
-            for route in required_routes:
-                if route not in registered_routes:
-                    logger.error(f"Required route not registered: {route}")
-                    raise RuntimeError(f"Required route not registered: {route}")
-        
-        logger.info("Application initialized successfully")
-    
-    # Register blueprints with proper order
-    from app.routes import register_blueprints
-    try:
         # Register admin blueprints first
-        from app.routes.admin import register_admin_blueprints
         register_admin_blueprints(app)
         
         # Register public blueprints
@@ -69,14 +47,17 @@ def create_app(config_name='development'):
             
             # Validate critical routes
             required_routes = [
-                'admin.admin_stipend.create',  # Updated to match registered route
+                'admin.admin_stipend.create',
                 'admin.dashboard.dashboard'
             ]
             from app.common.utils import validate_blueprint_routes
             validate_blueprint_routes(app, required_routes)
+        
+        logger.info("Application initialized successfully")
+        
     except Exception as e:
-        app.logger.error(f"Failed to register blueprints: {str(e)}")
-        raise
+        logger.error(f"Failed to initialize application: {str(e)}")
+        raise RuntimeError(f"Application initialization failed: {str(e)}")
     
     # Setup logging
     logging.basicConfig(
