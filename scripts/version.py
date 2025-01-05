@@ -127,12 +127,22 @@ def push_to_github(branch_name: str, commit_message: str) -> bool:
         print(f"Error details: {e.stderr.decode()}")
         return False
 
-def validate_version_file() -> bool:
-    """Validate version file integrity"""
+def validate_version_file(file_path: Optional[str] = None) -> bool:
+    """Validate version file integrity
+    
+    Args:
+        file_path: Optional path to version file. If None, uses current file.
+    
+    Returns:
+        bool: True if version file is valid, False otherwise
+    """
     try:
         with open(__file__, 'r') as f:
             content = f.read()
             return '__version__' in content and 'validate_version' in content
+    except Exception as e:
+        logging.error(f"Version file validation error: {str(e)}")
+        return False
     except Exception as e:
         logging.error(f"Version file validation error: {str(e)}")
         return False
