@@ -8,3 +8,8 @@
 # Print the current datetime to console
 /run scripts/print_datetime.py
 /run Write-Host "Code Cycle Complete"
+
+
+# Reset and start Code Cycle over again
+/reset
+/load scripts\STEP_1

@@ -17,7 +17,7 @@
 /add scripts/CONSOLE_CMDS_1
 
 # Edit the files
-/code update files as needed, update REQUESTS with anything you need MANAGER to approve or do. Remove any previous console commands from CONSOLE_CMDS_1, add any new console commands you want to run before we go to STEP 2 (Coding). 
+/code update files as needed. Remove any previous console commands from CONSOLE_CMDS_1, add any new console commands you want to run before we go to STEP 2 (Coding). 
 
 # Drop them again
 /drop scripts/REQUESTS
