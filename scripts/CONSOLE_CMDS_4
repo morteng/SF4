@@ -26,6 +26,12 @@
 
 # Generate coverage report
 /run coverage html
+
+# Check version file validation
+/run python -c "from scripts.version import validate_version_file; assert validate_version_file()"
+
+# Verify logging configuration
+/run python -c "import logging; from scripts.version import validate_db_connection; validate_db_connection('instance/stipend.db'); logging.info('Logging configuration verified')"
 ### CODE END ###
 
 # Print the current datetime to console

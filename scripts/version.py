@@ -196,3 +196,18 @@ def validate_production_environment() -> bool:
         
     logging.info("Production environment validation passed")
     return True
+
+def verify_logging_configuration() -> bool:
+    """Verify logging configuration is working correctly
+    
+    Returns:
+        bool: True if logging is configured properly, False otherwise
+    """
+    try:
+        logging.info("Testing logging configuration")
+        logging.warning("This is a test warning message")
+        logging.error("This is a test error message")
+        return True
+    except Exception as e:
+        logging.error(f"Logging configuration verification failed: {str(e)}")
+        return False
