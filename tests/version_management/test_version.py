@@ -102,3 +102,8 @@ def test_validate_production_environment(monkeypatch):
     monkeypatch.setenv('SECRET_KEY', 'test_key')
     monkeypatch.setenv('ADMIN_EMAIL', 'test@example.com')
     assert validate_production_environment() is True
+    
+    # Test logging output
+    with open('version_management.log') as log_file:
+        log_content = log_file.read()
+        assert "Production environment validation passed" in log_content

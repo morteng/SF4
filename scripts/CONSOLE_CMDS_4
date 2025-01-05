@@ -12,6 +12,9 @@
 # Test database backup functionality
 /run python -c "from scripts.version import create_db_backup; import logging; logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'); assert create_db_backup('instance/stipend.db'); print('Database backup test passed')"
 
+# Validate version file
+/run python -c "from scripts.version import validate_version_file; assert validate_version_file()"
+
 # Check alembic current version
 /run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.current(config)"
 
@@ -20,6 +23,9 @@
 
 # Validate production environment
 /run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); assert validate_production_environment(); print('Environment validation test passed')"
+
+# Generate coverage report
+/run coverage html
 ### CODE END ###
 
 # Print the current datetime to console

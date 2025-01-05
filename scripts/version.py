@@ -163,7 +163,11 @@ def create_db_backup(db_path: str) -> bool:
         return False
 
 def validate_production_environment() -> bool:
-    """Validate production environment settings"""
+    """Validate production environment settings
+    
+    Returns:
+        bool: True if all required environment variables are present and valid, False otherwise
+    """
     required_vars = {
         'DATABASE_URL': str,
         'SECRET_KEY': str,
@@ -190,4 +194,5 @@ def validate_production_environment() -> bool:
         logging.error(f"Invalid type for environment variables: {', '.join(invalid_types)}")
         return False
         
+    logging.info("Production environment validation passed")
     return True
