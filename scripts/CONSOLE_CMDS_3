@@ -3,20 +3,20 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Verify version file functionality
-/run python -c "from scripts.version import get_version; print(get_version())"
+# Run version management tests with coverage
+/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing
 
-# Test version validation
-/run python -c "from scripts.version import validate_version; print(validate_version('1.2.3'))"
+# Verify database backup functionality
+/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
 
-# Verify database connection
-/run python -c "from scripts.version import validate_db_connection; print(validate_db_connection('instance/app.db'))"
+# Test production environment validation
+/run python -c "from scripts.version import validate_production_environment; print(f'Production environment valid: {validate_production_environment()}')"
 
-# Run basic tests with coverage
-/run pytest tests/ --cov=app --cov-report=term-missing
+# Check test coverage
+/run pytest --cov=scripts.version --cov-report=term-missing
 
-# Verify database state
-/run flask db current
+# Check Git status
+/run git status
 ### CODE END ###
 
 # Print the current datetime to console
