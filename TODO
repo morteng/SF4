@@ -13,3 +13,5 @@
 - Fix pytest import errors
 - Resolve create_app import issues
 - Add version management integration tests
+- Fix version management CLI arguments
+- Resolve git tag creation issues
