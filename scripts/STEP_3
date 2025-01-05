@@ -4,7 +4,7 @@
 /run scripts/print_datetime.py
 /run Write-Host "Code Cycle Step 3 Start"
 
-# Test changes implemented in Step 2
+# Load REQUESTS for testing
 /load scripts/REQUESTS
 
 # Run tests and log results

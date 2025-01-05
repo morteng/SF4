@@ -4,7 +4,7 @@
 /run scripts/print_datetime.py
 /run Write-Host "Code Cycle Step 5 Start"
 
-# Deploy the updated codebase
+# Load REQUESTS for deployment
 /load scripts/REQUESTS
 
 # Deploy code

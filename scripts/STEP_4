@@ -4,7 +4,7 @@
 /run scripts/print_datetime.py
 /run Write-Host "Code Cycle Step 4 Start"
 
-# Review changes and prepare for deployment
+# Load REQUESTS for review
 /load scripts/REQUESTS
 
 # Finalize changes
