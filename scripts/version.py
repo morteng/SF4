@@ -149,6 +149,16 @@ def validate_version_file(file_path: Optional[str] = None) -> bool:
         logging.error(f"Version file validation error: {str(e)}")
         return False
 
+def create_version_history(new_version: str) -> None:
+    """Create version history file"""
+    history_file = Path('VERSION_HISTORY.md')
+    if not history_file.exists():
+        history_file.write_text("# Version History\n\n")
+    
+    with history_file.open('a') as f:
+        f.write(f"## {new_version} - {datetime.now().strftime('%Y-%m-%d')}\n")
+        f.write("- Initial release\n\n")
+
 def create_db_backup(db_path: str) -> bool:
     """Create a timestamped backup of the database"""
     try:

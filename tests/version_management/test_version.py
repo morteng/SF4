@@ -89,6 +89,15 @@ def create_db_backup(db_path: str) -> bool:
     invalid_file.write_text("invalid content")
     assert validate_version_file(str(invalid_file)) is False
 
+def test_create_version_history(tmp_path):
+    """Test version history creation"""
+    version_file = tmp_path / "VERSION_HISTORY.md"
+    create_version_history("1.2.3")
+    assert version_file.exists()
+    content = version_file.read_text()
+    assert "1.2.3" in content
+    assert datetime.now().strftime('%Y-%m-%d') in content
+
 def test_validate_production_environment(monkeypatch):
     """Test production environment validation"""
     # Test missing environment variables
