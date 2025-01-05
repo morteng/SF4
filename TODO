@@ -20,3 +20,5 @@
 - Fix Python command execution in Windows shell
 - Resolve Alembic configuration issues
 - Update test import paths
+- Fix Windows shell command execution issues
+- Resolve pytest import errors
