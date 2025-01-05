@@ -3,31 +3,17 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Verify get_version functionality
-/run flask shell -c "from scripts.version import get_version; print(f'Current version: {get_version()}')"
+# Verify version file integrity
+/run python -c "from scripts.version import validate_version_file; assert validate_version_file(); print('Version file integrity check passed')"
 
-# Verify validate_version functionality
-/run flask shell -c "from scripts.version import validate_version; assert validate_version('1.0.0'); assert not validate_version('1.0'); assert not validate_version('1.0.0-alpha'); print('validate_version tests passed')"
+# Verify database connection validation
+/run python -c "from scripts.version import validate_db_connection; assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
 
-# Verify parse_version functionality
-/run flask shell -c "from scripts.version import parse_version; print(parse_version('1.0.0'))"
-/run flask shell -c "from scripts.version import parse_version; print(parse_version('1.0.0-alpha.1'))"
-/run flask shell -c "from scripts.version import parse_version; try: parse_version('1.0'); except ValueError as e: print(e)"
+# Verify version history tracking
+/run python -c "from scripts.version import get_version_history; history = get_version_history(); assert len(history) > 0; print(f'Version history: {history}')"
 
-# Verify bump_version functionality (patch)
-/run flask shell -c "from scripts.version import bump_version; print(bump_version('patch'))"
-
-# Verify bump_version functionality (minor)
-/run flask shell -c "from scripts.version import bump_version; print(bump_version('minor'))"
-
-# Verify bump_version functionality (major)
-/run flask shell -c "from scripts.version import bump_version; print(bump_version('major'))"
-
-# Verify update_version_file functionality
-/run python -c "from scripts.version import update_version_file, get_version; current_version = get_version(); update_version_file('9.9.9'); from scripts.version import get_version as get_updated_version; assert get_updated_version() == '9.9.9'; update_version_file(current_version); print('update_version_file test passed')"
-
-# Verify push_to_github functionality (mocked - actual push will fail without proper setup)
-/run python -c "from scripts.version import push_to_github; print(push_to_github('test-branch', 'Test commit message'))"
+# Verify pre-commit hooks
+/run python -c "from scripts.version import validate_version_pre_commit; assert validate_version_pre_commit(); print('Pre-commit version validation passed')"
 
 # Check Git status
 /run git status

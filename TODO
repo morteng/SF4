@@ -13,7 +13,21 @@
 - [x] Implement version validation in test suite
 - [ ] Create version rollback functionality
 - [ ] Add database version validation tests
+  - [ ] Test connection validation with invalid paths
+  - [ ] Test connection validation with corrupted databases
 - [ ] Add version format validation tests
+  - [ ] Test invalid version formats
+  - [ ] Test pre-release version validation
+  - [ ] Test build metadata validation
 - [ ] Add integration tests for version bumping
+  - [ ] Test patch version bumps
+  - [ ] Test minor version bumps
+  - [ ] Test major version bumps
 - [ ] Add tests for GitHub push functionality
+  - [ ] Test branch creation
+  - [ ] Test commit message validation
+  - [ ] Test push error handling
 - [ ] Add documentation for version management CLI
+  - [ ] Document version bump commands
+  - [ ] Document rollback procedure
+  - [ ] Document release process
