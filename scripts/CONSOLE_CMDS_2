@@ -3,19 +3,16 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Create database backup
-/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
+# Run version validation tests
+/run pytest tests/version_management/test_version.py::test_validate_version -v
 
-# Run version management tests
-/run pytest tests/version_management/ -v
+# Create database backup with logging
+/run python -c "from scripts.version import create_db_backup; import logging; logging.basicConfig(level=logging.INFO); create_db_backup('instance/stipend.db')"
 
-# Check production environment validation
-/run python -c "from scripts.version import validate_production_environment; print(f'Production environment valid: {validate_production_environment()}')"
+# Check version file integrity
+/run python -c "from scripts.version import validate_version_file; print(f'Version file valid: {validate_version_file()}')"
 
-# Bump version and commit changes
-/run python -c "from scripts.version import bump_version, update_version_file, push_to_github; new_version = bump_version('minor'); update_version_file(new_version); push_to_github('feature/version-management', f'Version management improvements - v{new_version}')"
-
-# Check test coverage
+# Check test coverage for version.py
 /run pytest --cov=scripts.version --cov-report=term-missing
 
 # Check Git status

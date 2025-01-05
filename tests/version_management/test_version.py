@@ -19,10 +19,18 @@ def test_db_path(tmp_path):
 
 def test_validate_version():
     """Test version validation"""
+    # Test valid versions
     assert validate_version("1.2.3") is True
     assert validate_version("1.2.3-alpha") is True
     assert validate_version("1.2.3+build.123") is True
+    assert validate_version("1.2.3-alpha.1+build.123") is True
+    assert validate_version("1.2.3+build.123.456") is True
+    
+    # Test invalid versions
     assert validate_version("invalid") is False
+    assert validate_version("1.2") is False
+    assert validate_version("1.2.3+") is False
+    assert validate_version("1.2.3-") is False
 
 def test_create_db_backup(test_db_path):
     """Test database backup creation"""

@@ -54,8 +54,8 @@ def get_db_version(db_path: str) -> Optional[str]:
         return None
 
 def validate_version(version: str) -> bool:
-    """Validate version string format"""
-    return bool(re.match(r"^\d+\.\d+\.\d+(-[a-z]+(\.\d+)?)?$", version))
+    """Validate version string format including build metadata"""
+    return bool(re.match(r"^\d+\.\d+\.\d+(-[a-z]+(\.\d+)?)?(\+[a-z0-9]+(\.[a-z0-9]+)*)?$", version))
 
 def get_version() -> str:
     """Get the current project version"""
