@@ -54,31 +54,35 @@ def validate_db_connection(db_path: str) -> bool:
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='Version management utilities')
-    subparsers = parser.add_subparsers(dest='command')
+    subparsers = parser.add_subparsers(dest='command', required=True)
 
     # Test connection command
-    test_conn_parser = subparsers.add_parser('--test-connection', help='Test database connection')
+    test_conn_parser = subparsers.add_parser('test-connection', help='Test database connection')
     test_conn_parser.add_argument('db_path', help='Path to database file')
 
     # Backup command
-    backup_parser = subparsers.add_parser('--backup', help='Create database backup')
+    backup_parser = subparsers.add_parser('backup', help='Create database backup')
     backup_parser.add_argument('source_db', help='Source database path')
     backup_parser.add_argument('backup_path', help='Backup destination path')
 
     # Environment validation command
-    env_parser = subparsers.add_parser('--validate-env', help='Validate production environment')
+    env_parser = subparsers.add_parser('validate-env', help='Validate production environment')
     
     # Log archiving command
-    archive_parser = subparsers.add_parser('--archive-logs', help='Archive logs')
+    archive_parser = subparsers.add_parser('archive-logs', help='Archive logs')
+    archive_parser.add_argument('--force', action='store_true', help='Force archive even if empty')
 
     # Release notes command
-    release_notes_parser = subparsers.add_parser('--update-release-notes', help='Update release notes')
+    release_notes_parser = subparsers.add_parser('update-release-notes', help='Update release notes')
+    release_notes_parser.add_argument('--version', help='Specify version number')
     
     # Documentation command
-    docs_parser = subparsers.add_parser('--update-docs', help='Update documentation')
+    docs_parser = subparsers.add_parser('update-docs', help='Update documentation')
+    docs_parser.add_argument('--version', help='Specify version number')
     
     # Deployment verification command
-    deploy_parser = subparsers.add_parser('--verify-deployment', help='Verify deployment')
+    deploy_parser = subparsers.add_parser('verify-deployment', help='Verify deployment')
+    deploy_parser.add_argument('--full', action='store_true', help='Run full verification')
 
     args = parser.parse_args()
 

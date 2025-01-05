@@ -9,7 +9,7 @@ from app import create_app
 def validate_schema():
     """Validate database schema against migrations"""
     try:
-        app = create_app('testing')
+        app = create_app('production')
         with app.app_context():
             config = Config('migrations/alembic.ini')
             command.upgrade(config, 'head')
