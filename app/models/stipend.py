@@ -125,11 +125,6 @@ class Stipend(db.Model):
                 self.application_deadline.replace(tzinfo=timezone.utc) > datetime.now(timezone.utc)
             )
         }
-            'application_deadline': self.application_deadline.isoformat() if self.application_deadline else None,
-            'open_for_applications': self.open_for_applications,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
-        }
 
     # Relationships
     tags = db.relationship('Tag', secondary=stipend_tag_association, back_populates='stipends')
