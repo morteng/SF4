@@ -8,3 +8,4 @@
 - Verify test coverage meets 80% threshold
 - Fix create_app import error in conftest.py
 - Finalize deployment documentation
+- Fix version management scripts
