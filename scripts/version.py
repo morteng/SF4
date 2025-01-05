@@ -53,7 +53,7 @@ def parse_version(version: str) -> Tuple[int, int, int, Optional[str]]:
     return major, minor, patch, suffix
 
 def bump_version(version_type="patch") -> str:
-    """Bump the version number and create appropriate git branch"""
+    """Bump the version number and return the appropriate git branch name"""
     if version_type not in ["major", "minor", "patch"]:
         raise ValueError("version_type must be 'major', 'minor' or 'patch'")
     
@@ -73,42 +73,39 @@ def bump_version(version_type="patch") -> str:
         branch_type = "bugfix"
     
     new_version = f"{major}.{minor}.{patch}"
-    
-    # Create appropriate git branch
     branch_name = f"{branch_type}/v{new_version}"
-    try:
-        subprocess.run(["git", "checkout", "-b", branch_name], check=True)
-        # Update version in this file
-        with open(__file__, 'r') as f:
-            lines = f.readlines()
-        with open(__file__, 'w') as f:
-            for line in lines:
-                if line.startswith("__version__"):
-                    f.write(f'__version__ = "{new_version}"\n')
-                else:
-                    f.write(line)
-    except subprocess.CalledProcessError as e:
-        print(f"Error creating branch: {e}")
-        raise
     
-    return new_version
+    return branch_name
+
+def update_version_file(new_version: str) -> None:
+    """Update the __version__ in the version.py file"""
+    with open(__file__, 'r') as f:
+        lines = f.readlines()
+    with open(__file__, 'w') as f:
+        for line in lines:
+            if line.startswith("__version__"):
+                f.write(f'__version__ = "{new_version}"\n')
+            else:
+                f.write(line)
 
 def push_to_github(branch_name: str, commit_message: str) -> bool:
     """Push changes to GitHub with proper validation"""
     try:
         # Verify branch exists
-        subprocess.run(["git", "rev-parse", "--verify", branch_name], check=True)
+        subprocess.run(["git", "rev-parse", "--verify", branch_name], check=True, capture_output=True)
         
         # Stage changes
-        subprocess.run(["git", "add", "."], check=True)
+        subprocess.run(["git", "add", "."], check=True, capture_output=True)
         
         # Commit with message
-        subprocess.run(["git", "commit", "-m", commit_message], check=True)
+        subprocess.run(["git", "commit", "-m", commit_message], check=True, capture_output=True)
         
         # Push to remote
-        subprocess.run(["git", "push", "origin", branch_name], check=True)
+        subprocess.run(["git", "push", "origin", branch_name], check=True, capture_output=True)
         
+        print(f"Successfully pushed branch '{branch_name}' to GitHub.")
         return True
     except subprocess.CalledProcessError as e:
         print(f"Error during git operations: {e}")
+        print(f"Error details: {e.stderr.decode()}")
         return False

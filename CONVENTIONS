@@ -131,6 +131,34 @@
 
 ---
 
+## Version Control and Branching Strategy
+
+- **Branching Conventions**:
+    - `feature/`: For new features.
+    - `bugfix/`: For bug fixes.
+    - `hotfix/`: For critical production fixes.
+    - `release/`: For release preparation.
+    - `chore/`: For maintenance tasks.
+- **Branch Names**:
+    - Branch names should be descriptive and follow the convention: `<branch_type>/<short_description>`.
+    - Example: `feature/add-user-authentication`, `bugfix/fix-login-error`.
+
+## Versioning Policy
+
+- **Semantic Versioning**:
+    - Use MAJOR.MINOR.PATCH format.
+    - **MAJOR** version for incompatible API changes.
+    - **MINOR** version for backward-compatible functionality.
+    - **PATCH** version for backward-compatible bug fixes.
+- **Pre-release Versions**:
+    - Use `-alpha`, `-beta` suffixes for pre-release versions (e.g., `1.0.0-alpha.1`).
+- **Build Metadata**:
+    - Use `+build` suffix for build metadata (e.g., `1.0.0+build.123`).
+- **Version Validation**:
+    - Version format must be validated before commit.
+
+---
+
 ## Example Code Structure
 
 ### Directory Layout
@@ -185,4 +213,3 @@ def test_get_stipends(client):
 ---
 
 This document provides a comprehensive guide to maintain coding standards and consistency across the Stipend Discovery Website project.
-

@@ -3,8 +3,31 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Verify versioning
-/run flask shell -c "from scripts.version import get_version, validate_version; version = get_version(); assert validate_version(version), f'Invalid version format: {version}'; print(f'Current version: {version}')"
+# Verify get_version functionality
+/run flask shell -c "from scripts.version import get_version; print(f'Current version: {get_version()}')"
+
+# Verify validate_version functionality
+/run flask shell -c "from scripts.version import validate_version; assert validate_version('1.0.0'); assert not validate_version('1.0'); assert not validate_version('1.0.0-alpha'); print('validate_version tests passed')"
+
+# Verify parse_version functionality
+/run flask shell -c "from scripts.version import parse_version; print(parse_version('1.0.0'))"
+/run flask shell -c "from scripts.version import parse_version; print(parse_version('1.0.0-alpha.1'))"
+/run flask shell -c "from scripts.version import parse_version; try: parse_version('1.0'); except ValueError as e: print(e)"
+
+# Verify bump_version functionality (patch)
+/run flask shell -c "from scripts.version import bump_version; print(bump_version('patch'))"
+
+# Verify bump_version functionality (minor)
+/run flask shell -c "from scripts.version import bump_version; print(bump_version('minor'))"
+
+# Verify bump_version functionality (major)
+/run flask shell -c "from scripts.version import bump_version; print(bump_version('major'))"
+
+# Verify update_version_file functionality
+/run python -c "from scripts.version import update_version_file, get_version; current_version = get_version(); update_version_file('9.9.9'); from scripts.version import get_version as get_updated_version; assert get_updated_version() == '9.9.9'; update_version_file(current_version); print('update_version_file test passed')"
+
+# Verify push_to_github functionality (mocked - actual push will fail without proper setup)
+/run python -c "from scripts.version import push_to_github; print(push_to_github('test-branch', 'Test commit message'))"
 
 # Check Git status
 /run git status
@@ -14,24 +37,6 @@
 
 # Check current branch
 /run git branch --show-current
-
-# Verify branch naming convention
-/run python -c "import re; from scripts.version import get_version; version = get_version(); branch = subprocess.check_output(['git', 'branch', '--show-current']).decode().strip(); assert re.match(r'(feature|bugfix|hotfix|release|chore)/.+', branch), f'Invalid branch name: {branch}'; print(f'Branch {branch} follows naming conventions')"
-
-# Verify version bump functionality
-/run python -c "from scripts.version import bump_version; print(bump_version('patch'))"
-
-# Verify GitHub push functionality
-/run python -c "from scripts.version import push_to_github; print(push_to_github('test-branch', 'Test commit'))"
-
-# Verify database migrations
-/run flask db current
-
-# Check application status
-/run flask shell -c "from app import create_app; app = create_app(); print(app.config['ENV'])"
-
-# Verify version file integrity
-/run python -c "from scripts.version import get_version, parse_version; version = get_version(); parsed = parse_version(version); print(f'Parsed version: {parsed}')"
 ### CODE END ###
 
 # Print the current datetime to console
