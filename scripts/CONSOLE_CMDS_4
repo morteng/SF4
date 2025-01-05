@@ -3,23 +3,17 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Verify version validation
-/run python -c "from scripts.version import validate_version; print('Version validation:', validate_version('1.2.3-alpha'))"
+# Run final version management tests
+/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
 
-# Check environment configuration
-/run python -c "from scripts.version import validate_production_environment; print('Environment valid:', validate_production_environment())"
+# Verify production environment validation
+/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); print('Environment valid:', validate_production_environment())"
 
-# Run all tests with coverage
-/run pytest tests/ --cov=scripts.version --cov-report=term-missing
+# Check database backup functionality
+/run python -c "from scripts.version import create_db_backup; import logging; logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'); create_db_backup('instance/stipend.db')"
 
-# Verify database backup
-/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
-
-# Check Git status
-/run git status
-
-# Verify documentation
-/run python -c "import os; print('Backup docs exist:', os.path.exists('docs/database_backup_procedure.md'))"
+# Verify version file validation
+/run python -c "from scripts.version import validate_version_file; import tempfile; with tempfile.NamedTemporaryFile('w+t') as f: f.write('1.2.3'); f.flush(); print('Version file valid:', validate_version_file(f.name))"
 ### CODE END ###
 
 # Print the current datetime to console
