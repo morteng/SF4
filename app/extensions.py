@@ -19,26 +19,34 @@ limiter = Limiter(
 )
 
 def init_extensions(app):
-    """Initialize all Flask extensions."""
-    # Initialize SQLAlchemy
+    """Initialize all Flask extensions with proper configuration."""
+    # Initialize SQLAlchemy with explicit configuration
     db.init_app(app)
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
-    # Initialize Flask-Login
+    # Initialize Flask-Login with proper settings
     login_manager.init_app(app)
-    login_manager.login_view = 'user.login'
+    login_manager.login_view = 'public.login'
+    login_manager.login_message_category = 'info'
     
-    # Initialize Flask-Migrate
-    migrate.init_app(app, db)
+    # Initialize Flask-Migrate with proper configuration
+    migrate.init_app(app, db, directory='migrations')
     
-    # Initialize CSRF protection
+    # Initialize CSRF protection with secure settings
     csrf.init_app(app)
+    app.config['WTF_CSRF_TIME_LIMIT'] = 3600  # 1 hour
     
-    # Initialize rate limiter
+    # Initialize rate limiter with proper configuration
     limiter.init_app(app)
+    app.config['RATELIMIT_HEADERS_ENABLED'] = True
     
-    # Setup user loader
+    # Setup user loader with proper error handling
     from app.models.user import User
     
     @login_manager.user_loader
     def load_user(user_id):
-        return db.session.get(User, int(user_id))
+        try:
+            return db.session.get(User, int(user_id))
+        except Exception as e:
+            app.logger.error(f"Error loading user: {str(e)}")
+            return None

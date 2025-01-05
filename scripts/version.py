@@ -173,23 +173,38 @@ def validate_schema(db_path: str = 'instance/stipend.db') -> bool:
         return False
 
 def verify_deployment():
-    """Verify deployment status"""
+    """Verify deployment status with comprehensive checks"""
     try:
         # Check database connection
         if not validate_db_connection('instance/stipend.db'):
+            logging.error("Database connection verification failed")
             return False
             
         # Check schema version
         if not validate_schema('instance/stipend.db'):
+            logging.error("Schema version verification failed")
             return False
             
         # Check environment variables
         if not validate_production_environment():
+            logging.error("Environment validation failed")
             return False
             
+        # Verify extensions initialization
+        from app.extensions import db, login_manager, migrate, csrf, limiter
+        if not all([db, login_manager, migrate, csrf, limiter]):
+            logging.error("Extensions initialization verification failed")
+            return False
+            
+        # Verify logging configuration
+        if not verify_logging_configuration():
+            logging.error("Logging configuration verification failed")
+            return False
+            
+        logging.info("Deployment verification completed successfully")
         return True
     except Exception as e:
-        logging.error(f"Deployment verification failed: {str(e)}")
+        logging.error(f"Deployment verification failed: {str(e)}", exc_info=True)
         return False
 
 if __name__ == "__main__":

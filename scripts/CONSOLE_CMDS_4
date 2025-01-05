@@ -9,23 +9,26 @@
 # Validate database schema
 /run scripts/validate_schema.py
 
-# Verify database connection
+# Verify database connections
 /run scripts/validate_db.py
 
-# Create test backup
+# Create production backup
 /run scripts/create_backup.py
 
-# Run all tests with coverage
-/run pytest --cov=app --cov=scripts --cov-report=term-missing -v
+# Run version management tests with coverage
+/run pytest tests/version_management/test_version.py --cov=scripts.version --cov-report=term-missing -v
 
-# Generate coverage report
+# Generate HTML coverage report
 /run coverage html
 
 # Validate production environment
 /run scripts/version.py --validate-env
 
-# Archive logs
-/run scripts/version.py --archive-logs
+# Archive current logs
+/run scripts/version.py --archive-logs --force
+
+# Verify deployment
+/run scripts/version.py --verify-deployment
 ### CODE END ###
 
 # Print the current datetime to console
