@@ -19,8 +19,10 @@ def setup_directories():
 @pytest.fixture(scope='session')
 def app(setup_directories):
     app = create_app('testing')
-    # Correct the SQLALCHEMY_DATABASE_URI to avoid duplicate 'instance' directory
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/morten/sf4/instance/site.db'
+    # Use in-memory database for tests
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app.config['TESTING'] = True
+    app.config['WTF_CSRF_ENABLED'] = False
     return app
 
 @pytest.fixture(scope='session')
