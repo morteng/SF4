@@ -10,27 +10,6 @@ def create_app(config_name='development'):
     """Create and configure the Flask application."""
     app = Flask(__name__)
     
-    # Load environment variables
-    load_dotenv()
-    
-    # Load configuration
-    from app.config import config_by_name
-    app.config.from_object(config_by_name[config_name])
-    
-    # Initialize extensions
-    from app.extensions import init_extensions
-import logging
-from flask import Flask
-from app.models.user import User
-from app.extensions import db, login_manager
-
-def create_app(config_name='default'):
-    """Create and configure the Flask application."""
-    from app.config import config_by_name
-    
-    # Initialize Flask app
-    app = Flask(__name__)
-    
     # Configure logging
     logging.basicConfig(
         level=logging.INFO,
@@ -38,15 +17,40 @@ def create_app(config_name='default'):
     )
     logger = logging.getLogger(__name__)
     
-    # Load configuration
     try:
+        # Load environment variables
+        load_dotenv()
+        
+        # Load configuration
+        from app.config import config_by_name
         app.config.from_object(config_by_name[config_name])
         logger.info(f"Loaded {config_name} configuration successfully")
-    except KeyError:
-        logger.error(f"Invalid configuration name: {config_name}")
-        raise ValueError(f"Invalid configuration name: {config_name}")
-
-    init_extensions(app)
+        
+        # Initialize extensions
+        from app.extensions import init_extensions
+        init_extensions(app)
+        
+        # Register blueprints
+        from app.routes import register_blueprints
+        register_blueprints(app)
+        
+        # Register admin blueprints
+        from app.routes.admin import register_admin_blueprints
+        register_admin_blueprints(app)
+        
+        # Verify critical routes are registered
+        with app.app_context():
+            registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
+            required_routes = [
+                'admin.admin_stipend.create',
+                'admin.dashboard.dashboard'
+            ]
+            for route in required_routes:
+                if route not in registered_routes:
+                    logger.error(f"Required route not registered: {route}")
+                    raise RuntimeError(f"Required route not registered: {route}")
+        
+        logger.info("Application initialized successfully")
     
     # Register blueprints with proper order
     from app.routes import register_blueprints
