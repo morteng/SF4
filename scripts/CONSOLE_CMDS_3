@@ -3,14 +3,14 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Run version management tests with coverage
-/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing
+# Run version validation tests with coverage
+/run pytest tests/version_management/test_version.py --cov=scripts.version --cov-report=term-missing
 
-# Verify database backup functionality
-/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
+# Test database backup with logging
+/run python -c "from scripts.version import create_db_backup; import logging; logging.basicConfig(level=logging.INFO); create_db_backup('instance/stipend.db')"
 
-# Test production environment validation
-/run python -c "from scripts.version import validate_production_environment; print(f'Production environment valid: {validate_production_environment()}')"
+# Verify version file integrity
+/run python -c "from scripts.version import validate_version_file; print(f'Version file valid: {validate_version_file()}')"
 
 # Check test coverage
 /run pytest --cov=scripts.version --cov-report=term-missing
