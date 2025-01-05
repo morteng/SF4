@@ -335,11 +335,14 @@ def create_version_history(new_version: str) -> None:
 def create_db_backup(source_db: str, backup_path: str) -> bool:
     """Create a timestamped backup of the database"""
     try:
-        backup_path = Path(db_path).with_suffix(f".backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.db")
-        conn = sqlite3.connect(db_path)
+        # Ensure backup directory exists
+        os.makedirs(os.path.dirname(backup_path), exist_ok=True)
+        
+        # Connect to source database and create backup
+        conn = sqlite3.connect(source_db)
         with conn:
             conn.execute(f"VACUUM INTO '{backup_path}'")
-        logging.info(f"Database backup created at: {backup_path}")
+        logging.info(f"Database backup created: {source_db} -> {backup_path}")
         return True
     except sqlite3.Error as e:
         logging.error(f"Database backup failed: {str(e)}")
