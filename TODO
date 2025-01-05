@@ -44,3 +44,5 @@
 - Implement version history tracking
 - Create app.factory module
 - Fix NotificationType import errors
+- Fix test database initialization
+- Resolve app.factory import errors
