@@ -12,7 +12,9 @@
 
 
 ## Testing step
-/architect Code Cycle Step 5 - Document and deploy. Objective: Update all documentation to reflect what we have learned and done this cycle. Deploy the application to the designated environment. Key Actions: Execute deployment tasks. Save updates to the environment. End the cycle and prepare for the next iteration. Remove any previous console commands from CONSOLE_CMDS_5, add any new console commands you want to run before we reset and return to STEP 1. Update TODO list if needed.
+/architect How can we best implement Code Cycle Step 5 - Document and deploy? Objective: Update all documentation to reflect what we have learned and done this cycle. Deploy the application to the designated environment. Key Actions: Execute deployment tasks. Save updates to the environment. End the cycle and prepare for the next iteration. 
+
+/code Implement suggested changes. Remove any previous console commands from CONSOLE_CMDS_5, add any new console commands you want to run before we reset and return to STEP 1. Update TODO list if needed.
 
 /drop scripts/CONSOLE_CMDS_5
 

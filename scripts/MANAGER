@@ -1,6 +1,6 @@
 HI! Manager here! 
 
-IMPORTANT! You cannot run python code directly in console commands, instead write proper python files in approprite folder and then execute them with /run your_python_file.py in the appropriate code block. Take note of this.
+IMPORTANT! You cannot run python code directly in console commands, instead write proper python files in approprite folder and then execute them with /run your_python_file.py in the appropriate code block. Take note of this. NEVER run python code directly in code sections of coding cycle.
 
 New info: Run as few tests as possible at a time, and avoid dumping large amounts of debug data to console as this fills up context memory and stops the cycle. We must limit output to chat at all times to avoid filling up context. Add this information to relevant documents so you always follow this instruction. Also, never run console commands that require manual input, they stop code cycle processing.
 
