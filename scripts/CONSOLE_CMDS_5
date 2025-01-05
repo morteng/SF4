@@ -1,5 +1,6 @@
 # Console Commands for Step 5
 # Do not use echo commands
+# Do not update or edit files using console commands.
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
@@ -29,8 +30,7 @@
 /run git tag v0.2.0
 /run git push origin v0.2.0
 
-# Update documentation
-/run python -c "from scripts.version import get_version; version = get_version(); with open('README.md', 'a') as f: f.write(f'\n\n## Version {version}\n- Added version management system\n- Implemented database backup functionality\n- Improved production environment validation\n- Fixed version file validation tests')"
+
 ### CODE END ###
 
 # Print the current datetime to console
@@ -40,7 +40,7 @@
 # Final updates
 /add scripts/REQUESTS
 /add scripts/MANAGER
-/code Final cleanup before reset. Remove requests from MANAGER that have been implemented or scheduled for implementation. write a new DEVLOG based on this cycle. Add any requests for actions you need performed by me to REQUESTS. Update TODO list if needed. Keep PROJECT, CONVENTIONS, DEVLOG and TODO as compact as possible, prune and remove what you can without losing important information. Do not explain or summarize, just output the edits.
+/code Final cleanup before reset. Remove requests from MANAGER that have been implemented or scheduled for implementation. write a new DEVLOG based on this cycle. Add any requests for actions you need performed by MANAGER to REQUESTS. Update TODO list if needed, removing items that have been comlpeted. Keep PROJECT, CONVENTIONS, DEVLOG and TODO as compact as possible, prune and remove what you can without losing important information. Do not explain or summarize, just output the edits.
 
 # Reset and restart Code Cycle
 /reset
