@@ -3,20 +3,14 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Fix pytest.ini merge conflict
-/run git checkout -- pytest.ini
+# Run all tests with coverage
+/run pytest --cov=app --cov=scripts --cov-report=term-missing -v
 
-# Run version management tests with coverage
-/run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
+# Validate database schema version
+/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.current(config)"
 
-# Validate database connection
-/run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s'); assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
-
-# Create database backup
-/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
-
-# Validate version file
-/run python -c "from scripts.version import validate_version_file; assert validate_version_file()"
+# Generate coverage report
+/run coverage html
 
 # Check Git status
 /run git status
