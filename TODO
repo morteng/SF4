@@ -3,3 +3,4 @@
 - Validate CRUD consistency
 - Create schema version validation
 - Set up test coverage tracking
+- Fix pytest.ini merge conflict
