@@ -23,7 +23,6 @@
 - Fix app import path issues
 - Resolve test database initialization errors
 - Fix scripts module import errors
-- Fix indentation error in stipend.py
 - Fix database backup function arguments
 - Create initial database file
 - Add proper error handling for archive-logs
