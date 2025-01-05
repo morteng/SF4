@@ -16,12 +16,24 @@
 /run pytest tests/ --cov=scripts.version --cov-report=term-missing
 
 # Update release notes
-/run python -c "from scripts.version import get_version; version = get_version(); open('RELEASE_NOTES.md', 'w').write(f'# Release {version}\n\n- Added version management system\n- Implemented database backup functionality\n- Improved production environment validation')"
+/run python -c "from scripts.version import get_version; version = get_version(); open('RELEASE_NOTES.md', 'w').write(f'# Release {version}\n\n- Added version management system\n- Implemented database backup functionality\n- Improved production environment validation\n- Fixed version file validation tests')"
 
 # Commit and push changes
 /run git add .
 /run git commit -m "Release v0.2.0 - Version management and backup system"
 /run git push origin feature/version-management
+
+# Merge to main branch
+/run git checkout main
+/run git merge feature/version-management
+/run git push origin main
+
+# Create version tag
+/run git tag v0.2.0
+/run git push origin v0.2.0
+
+# Update documentation
+/run python -c "from scripts.version import get_version; version = get_version(); with open('README.md', 'a') as f: f.write(f'\n\n## Version {version}\n- Added version management system\n- Implemented database backup functionality')"
 ### CODE END ###
 
 # Print the current datetime to console
