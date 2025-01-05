@@ -3,22 +3,22 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Run final test suite with coverage
+# Run all tests with coverage
 /run pytest --cov=app --cov=scripts --cov-report=term-missing -v
 
-# Generate final coverage report
+# Generate coverage report
 /run coverage html
 
-# Check test coverage
-/run coverage report
+# Verify database schema
+/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.upgrade(config, 'head')"
 
-# Check Git status
-/run git status
+# Validate production environment
+/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); assert validate_production_environment()"
 
-# Verify production environment configuration
-/run python -c "from scripts.version import validate_production_environment; import os; os.environ.update({'DATABASE_URL': 'sqlite:///:memory:', 'SECRET_KEY': 'test_key', 'ADMIN_EMAIL': 'test@example.com'}); assert validate_production_environment(); print('Environment validation test passed')"
+# Create database backup
+/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
 
-# Archive deployment logs
+# Archive logs
 /run python -c "from scripts.version import archive_logs; archive_logs()"
 
 # Create release tag
