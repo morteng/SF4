@@ -99,10 +99,6 @@ class Stipend(db.Model):
 
     def to_dict(self):
         """Convert stipend to dictionary with all relevant data."""
-    def __repr__(self):
-        return f'<Stipend {self.name}>'
-
-    def to_dict(self):
         return {
             'id': self.id,
             'name': self.name,
