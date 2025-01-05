@@ -15,3 +15,5 @@
 - Add version management test cases
 - Verify database backup functionality
 - Test schema migration validation
+- Fix Python command execution issues
+- Resolve coverage reporting problems
