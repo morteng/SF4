@@ -158,8 +158,8 @@ def update_documentation():
             if __version__ not in content:
                 f.write(f"\n## Current Version\n- {__version__}\n")
         
-        # Update CONVENTIONS
-        with open('CONVENTIONS.md', 'r+') as f:
+        # Update CONVENTIONS.md
+        with open('CONVENTIONS.md.md', 'r+') as f:
             content = f.read()
             if "Version Management" not in content:
                 f.write("\n## Version Management\n- Follow semantic versioning\n")
