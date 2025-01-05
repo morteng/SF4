@@ -32,7 +32,7 @@ python -c "from scripts.version import get_version; version = get_version(); ope
 # Final updates
 /add scripts/REQUESTS
 /add scripts/MANAGER
-/code Final cleanup before reset. Remove requests from MANAGER that have been implemented or scheduled for implementation. Update DEVLOG based on this cycle. Add any requests for actions you need performed to REQUESTS. Update TODO list if needed. Keep DEVLOG and TODO as compact as possible, prune and remove what you can.
+/code Final cleanup before reset. Remove requests from MANAGER that have been implemented or scheduled for implementation. write a new DEVLOG based on this cycle. Add any requests for actions you need performed by me to REQUESTS. Update TODO list if needed. Keep PROJECT, CONVENTIONS, DEVLOG and TODO as compact as possible, prune and remove what you can without losing important information.
 
 # Reset and restart Code Cycle
 /reset
