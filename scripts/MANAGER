@@ -8,3 +8,5 @@ Key Rules:
 3. Avoid debug data dumps
 4. Never use manual input commands
 5. Keep output concise
+6. Verify all changes before deployment
+7. Maintain comprehensive documentation
