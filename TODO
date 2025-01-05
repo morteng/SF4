@@ -31,5 +31,3 @@
 - Add deployment verification tests
 - Implement release notes automation
 - Add documentation update functionality
-- Fix Alembic duplicate section error
-- Resolve pytest import errors
