@@ -39,3 +39,6 @@
 - Add version management test coverage
 - Validate version.py CLI commands
 - Add version management integration tests
+- Fix test database initialization
+- Add schema validation tests
+- Implement backup verification
