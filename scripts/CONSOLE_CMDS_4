@@ -6,9 +6,6 @@
 # Run final test suite with coverage
 /run pytest --cov=app --cov=scripts --cov-report=term-missing -v
 
-# Verify database schema version
-/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.current(config)"
-
 # Generate final coverage report
 /run coverage html
 
@@ -20,6 +17,9 @@
 
 # Archive deployment logs
 /run python -c "from scripts.version import archive_logs; archive_logs()"
+
+# Create release tag
+/run git tag -a v1.0.0 -m "Initial release"
 ### CODE END ###
 
 # Print the current datetime to console
