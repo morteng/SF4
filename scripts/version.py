@@ -7,15 +7,22 @@ from datetime import datetime
 __version__ = "0.1.0"  # Initial version
 
 def validate_db_connection(db_path: str) -> bool:
-    """Validate database connection with better error handling"""
-    try:
-        conn = sqlite3.connect(db_path)
-        conn.execute("SELECT 1")
-        conn.close()
-        return True
-    except sqlite3.Error as e:
-        print(f"Database connection error: {str(e)}")
-        return False
+    """Validate database connection with retry logic and detailed logging"""
+    max_retries = 3
+    retry_delay = 1  # seconds
+    
+    for attempt in range(max_retries):
+        try:
+            conn = sqlite3.connect(db_path)
+            conn.execute("SELECT 1")
+            conn.close()
+            return True
+        except sqlite3.Error as e:
+            if attempt == max_retries - 1:
+                logging.error(f"Database connection failed after {max_retries} attempts: {str(e)}")
+                return False
+            logging.warning(f"Database connection attempt {attempt + 1} failed, retrying in {retry_delay}s...")
+            time.sleep(retry_delay)
 
 def get_db_version(db_path: str) -> Optional[str]:
     """Get version from database if available"""

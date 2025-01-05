@@ -1,7 +1,13 @@
 import os
+import sys
 import pytest
+from pathlib import Path
+
+# Add project root to Python path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from app import create_app
-from app.extensions import db  # Corrected import statement
+from app.extensions import db
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 @pytest.fixture(scope='session', autouse=True)

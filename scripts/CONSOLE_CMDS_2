@@ -3,43 +3,23 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Verify current version
-/run python -c "from scripts.version import get_version; print(f'Current version: {get_version()}')"
+# Test database connection with retry logic
+/run python -c "import logging; logging.basicConfig(level=logging.DEBUG); from scripts.version import validate_db_connection; print(f'Database connection: {validate_db_connection("instance/stipend.db")}')"
 
-# Test database connection
-/run python -c "from scripts.version import validate_db_connection; print(f'Database connection: {validate_db_connection('instance/app.db')}')"
+# Initialize database schema
+/run python -c "from app import create_app; app = create_app(); from app.extensions import db; with app.app_context(): db.create_all(); print('Database schema created successfully')"
 
-# Get database version
-/run python -c "from scripts.version import get_db_version; print(f'Database version: {get_db_version('instance/app.db')}')"
+# Run basic database tests
+/run pytest tests/test_database.py -v
 
-# Test version bumping (patch)
-/run python -c "import scripts.version; new_version = scripts.version.bump_version('patch'); scripts.version.update_version_file(new_version); print(f'New version: {scripts.version.get_version()}')"
+# Check test coverage
+/run pytest --cov=app --cov-report=term-missing
 
-# Verify database version update after patch bump (add this)
-/run python -c "from scripts.version import get_db_version; print(f'Database version after patch bump: {get_db_version('instance/app.db')}')"
+# Verify version management
+/run python -c "from scripts.version import validate_version; assert validate_version('1.0.0'); print('Version validation passed')"
 
-# Test version bumping (minor)
-/run python -c "import scripts.version; new_version = scripts.version.bump_version('minor'); scripts.version.update_version_file(new_version); print(f'New version: {scripts.version.get_version()}')"
-
-# Verify database version update after minor bump (add this)
-/run python -c "from scripts.version import get_db_version; print(f'Database version after minor bump: {get_db_version('instance/app.db')}')"
-
-# Test version bumping (major)
-/run python -c "import scripts.version; new_version = scripts.version.bump_version('major'); scripts.version.update_version_file(new_version); print(f'New version: {scripts.version.get_version()}')"
-
-# Verify database version update after major bump (add this)
-/run python -c "from scripts.version import get_db_version; print(f'Database version after major bump: {get_db_version('instance/app.db')}')"
-
-
-# Create a new branch (replace hardcoded values)
-/run python -c "import scripts.version; new_version = scripts.version.bump_version('patch'); branch_name = f'bugfix/v{new_version}'; print(f'Creating branch: {branch_name}')"
-/run git checkout -b bugfix/v$(python -c "import scripts.version; print(scripts.version.bump_version('patch').replace('.', ''))")
-
-# Push changes to GitHub (replace hardcoded values)
-/run python -c "import scripts.version; new_version = scripts.version.bump_version('patch'); branch_name = f'bugfix/v{new_version}'; scripts.version.push_to_github(branch_name, f'Bump version to {new_version}')"
-
-# Verify remote branches
-/run git branch -r
+# Check Git status
+/run git status
 ### CODE END ###
 
 # Print the current datetime to console

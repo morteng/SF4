@@ -37,21 +37,31 @@ def create_app(config_name='default'):
     return app
 
 def init_extensions(app):
-    """Initialize Flask extensions with proper error handling."""
+    """Initialize Flask extensions with proper error handling and retry logic."""
     logger = logging.getLogger(__name__)
+    max_retries = 3
+    retry_delay = 1  # seconds
     
+    # Initialize database with retry logic
+    for attempt in range(max_retries):
+        try:
+            db.init_app(app)
+            logger.info("Database extension initialized successfully")
+            break
+        except Exception as e:
+            if attempt == max_retries - 1:
+                logger.error(f"Failed to initialize database after {max_retries} attempts: {str(e)}")
+                raise
+            logger.warning(f"Database initialization attempt {attempt + 1} failed, retrying in {retry_delay}s...")
+            time.sleep(retry_delay)
+    
+    # Initialize login manager
     try:
-        # Initialize database
-        db.init_app(app)
-        logger.info("Database extension initialized successfully")
-        
-        # Initialize login manager
         login_manager.init_app(app)
         login_manager.login_view = 'auth.login'
         logger.info("Login manager initialized successfully")
-        
     except Exception as e:
-        logger.error(f"Failed to initialize extensions: {str(e)}")
+        logger.error(f"Failed to initialize login manager: {str(e)}")
         raise
 
 def init_models(app):
