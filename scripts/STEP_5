@@ -1,0 +1,17 @@
+# Code Cycle Step 5 (Deployment)
+
+# Print the current datetime to console
+/run scripts/print_datetime.py
+/run Write-Host "Code Cycle Step 5 Start"
+
+# Deploy the updated codebase
+/load scripts/REQUESTS
+
+# Deploy code
+/code Deploy updated application to the designated environment.
+
+# Save updates
+/drop scripts/REQUESTS
+
+# End cycle
+/run Write-Host "Code Cycle Complete"

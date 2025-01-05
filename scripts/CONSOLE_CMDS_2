@@ -1,0 +1,13 @@
+# Console Commands for Step 2
+# Only edit the section between CODE START and CODE END
+
+### CODE START ###
+
+### CODE END ###
+
+# Print the current datetime to console
+/run scripts/print_datetime.py
+/run Write-Host "Code Cycle Step 2 Start"
+
+# After running any console commands, go to STEP_3
+/load scripts/STEP_3

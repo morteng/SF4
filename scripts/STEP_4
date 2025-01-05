@@ -1,0 +1,18 @@
+# Code Cycle Step 4 (Review)
+
+# Print the current datetime to console
+/run scripts/print_datetime.py
+/run Write-Host "Code Cycle Step 4 Start"
+
+# Review changes and prepare for deployment
+/load scripts/REQUESTS
+
+# Finalize changes
+/code Ensure all implemented changes are correct and documented.
+/code Update REQUESTS with final review notes.
+
+# Save updates
+/drop scripts/REQUESTS
+
+# Proceed to console commands for Step 4
+/load scripts/CONSOLE_CMDS_4

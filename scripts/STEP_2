@@ -1,0 +1,18 @@
+# Code Cycle Step 2 (Coding)
+
+# Print the current datetime to console
+/run scripts/print_datetime.py
+/run Write-Host "Code Cycle Step 2 Start"
+
+# Analyze and implement planned changes
+/load scripts/REQUESTS
+
+# Edit project files
+/code Implement changes based on analysis in Step 1. 
+/code Update REQUESTS with changes to be reviewed by MANAGER.
+
+# Save updates
+/drop scripts/REQUESTS
+
+# Proceed to console commands for Step 2
+/load scripts/CONSOLE_CMDS_2

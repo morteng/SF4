@@ -1,0 +1,10 @@
+# Console Commands for Step 5
+# Only edit the section between CODE START and CODE END
+
+### CODE START ###
+
+### CODE END ###
+
+# Print the current datetime to console
+/run scripts/print_datetime.py
+/run Write-Host "Code Cycle Complete"
