@@ -16,5 +16,10 @@
 - [x] Create database backup script
 - [x] Add deployment validation tests
 - [x] Document database backup procedure
+- [ ] Fix version validation for pre-release versions
+- [ ] Add proper error handling for version management commands
+- [ ] Create app.utils module with login_required decorator
+- [ ] Fix pytest configuration warnings
+- [ ] Add missing imports in test files
 - [x] Add production environment validation
 
