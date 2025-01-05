@@ -144,6 +144,30 @@ def update_documentation():
         logging.error(f"Failed to update documentation: {str(e)}")
         return False
 
+def validate_schema(db_path: str = 'instance/stipend.db') -> bool:
+    """Validate database schema version against expected version"""
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Check if alembic_version table exists
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='alembic_version'")
+        if not cursor.fetchone():
+            logging.error("Alembic version table not found")
+            return False
+            
+        # Get current schema version
+        cursor.execute("SELECT version_num FROM alembic_version")
+        version = cursor.fetchone()[0]
+        
+        # TODO: Add actual version validation logic
+        logging.info(f"Current schema version: {version}")
+        return True
+        
+    except sqlite3.Error as e:
+        logging.error(f"Schema validation failed: {str(e)}")
+        return False
+
 def verify_deployment():
     """Verify deployment status"""
     try:
@@ -152,7 +176,7 @@ def verify_deployment():
             return False
             
         # Check schema version
-        if not validate_schema():
+        if not validate_schema('instance/stipend.db'):
             return False
             
         # Check environment variables
