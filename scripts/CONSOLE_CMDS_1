@@ -3,20 +3,23 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Check Python version compatibility
-/run python --version
+# Verify core dependencies
+/run pip show flask htmx werkzeug pytest
 
-# Check installed packages
-/run pip list
-
-# Run basic project health checks
+# Check test coverage
 /run pytest tests/ --cov=app --cov-report=term-missing
 
-# Check for database migrations
+# Verify database migrations status
 /run flask db current
 
-# Check for any outstanding git changes
-/run git status
+# Check for uncommitted changes
+/run git status --short
+
+# List all registered Flask routes
+/run flask routes
+
+# Check bot statuses
+/run flask shell -c "from app.services.bot_service import get_all_bots; print(get_all_bots())"
 ### CODE END ###
 
 # Print the current datetime to console
