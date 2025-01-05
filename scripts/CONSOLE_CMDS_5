@@ -44,7 +44,7 @@
 # Final updates
 /add scripts/REQUESTS
 /add scripts/MANAGER
-/code Final cleanup before reset. Remove requests from MANAGER that have been implemented or scheduled for implementation. Delete DEVLOG and replace it with a new DEVLOG based on this cycle. Add requests for any actions that are impossible for you to do to REQUESTS. Update TODO list if needed, removing items that have been verified as comlpeted. Keep documentation as compact as possible, prune and remove what you can without losing important information. Do not explain or summarize, just output the edits.
+/architect Final cleanup before reset. Remove requests from MANAGER that have been implemented or scheduled for implementation. Delete DEVLOG and replace it with a new DEVLOG based on this cycle. Add requests for any actions that are impossible for you to do to REQUESTS. Update TODO list if needed, removing items that have been verified as comlpeted. Keep documentation as compact as possible, prune and remove what you can without losing important information. Do not explain or summarize, just output the edits.
 
 # Reset and restart Code Cycle
 /reset
