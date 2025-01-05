@@ -27,6 +27,16 @@ def validate_db_connection(db_path: str) -> bool:
     max_retries = 3
     retry_delay = 1  # seconds
     
+    # Test for invalid path
+    if not db_path or not isinstance(db_path, str):
+        logging.error("Invalid database path provided")
+        return False
+        
+    # Test for non-existent file
+    if not db_path == ":memory:" and not os.path.exists(db_path):
+        logging.error(f"Database file does not exist: {db_path}")
+        return False
+    
     for attempt in range(max_retries):
         try:
             conn = sqlite3.connect(db_path)
