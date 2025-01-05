@@ -9,7 +9,9 @@ from scripts.version import (
     create_db_backup,
     validate_production_environment,
     validate_version_file,
-    create_version_history
+    create_version_history,
+    bump_version,
+    update_version_file
 )
 import os
 from pathlib import Path
