@@ -1,3 +1,4 @@
+from datetime import datetime
 
 def format_datetime(dt=None, fmt='%Y-%m-%d %H:%M:%S'):
     """Format a datetime object or the current time.
