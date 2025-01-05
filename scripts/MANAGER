@@ -1,5 +1,7 @@
 HI! Manager here! 
 
-New info: Run as few tests as possible at a time, and avoid dumping large amounts of debug data to console as this fills up context memory hand stops the cycle. add this information to relevant documents so you always follow this instruction. Also, never run console commands that require manual input, they stop code cycle processing.
+IMPORTANT! You cannot run python code directly in console commands, instead write proper python files and then execute them with /run your_python_file.py in the code block. Take note of this.
+
+New info: Run as few tests as possible at a time, and avoid dumping large amounts of debug data to console as this fills up context memory and stops the cycle. Add this information to relevant documents so you always follow this instruction. Also, never run console commands that require manual input, they stop code cycle processing.
 
 Request: Implement proper semantic versioning, proper branch handling and pushing to github when appropriate.
