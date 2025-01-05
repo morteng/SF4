@@ -6,4 +6,4 @@ New info: Run as few tests as possible at a time, and avoid dumping large amount
 
 Request: Implement proper semantic versioning, proper branch handling and pushing to github when appropriate. If you need help authenticating, ask me in scripts/REQUESTS file
 
-Request: Implement proper documentation, based on docstrings and your knowledge of the project.
+Request: Implement proper documentation, based on docstrings where applicable and your knowledge of the project.

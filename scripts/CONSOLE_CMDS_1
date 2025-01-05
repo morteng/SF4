@@ -27,7 +27,7 @@
 /run Write-Host "Code Cycle Step 1 Ends"
 
 # Update TODO based on results
-/code update TODO if needed.
+/code update TODO if needed. Do not explain or summarize, just output the edit.
 
 # After running any console commands we go to STEP_2
 /load scripts/STEP_2
