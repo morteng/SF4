@@ -6,3 +6,4 @@
 - Add production environment validation tests
 - Implement log archiving
 - Fix Python command execution in Windows shell
+- Add CLI interface for version management
