@@ -17,3 +17,6 @@
 - Add backup validation tests
 - Add production environment validation
 - Implement log archiving
+- Fix Python command execution in Windows shell
+- Resolve Alembic configuration issues
+- Update test import paths
