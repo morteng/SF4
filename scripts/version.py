@@ -192,35 +192,37 @@ def validate_schema(db_path: str = 'instance/stipend.db') -> bool:
         logging.error(f"Schema validation failed: {str(e)}")
         return False
 
-def verify_deployment():
+def verify_deployment(full=False):
     """Verify deployment status with comprehensive checks"""
     try:
-        # Check database connection
+        # Basic verification
         if not validate_db_connection('instance/stipend.db'):
             logging.error("Database connection verification failed")
             return False
             
-        # Check schema version
         if not validate_schema('instance/stipend.db'):
             logging.error("Schema version verification failed")
             return False
             
-        # Check environment variables
         if not validate_production_environment():
             logging.error("Environment validation failed")
             return False
             
-        # Verify extensions initialization
-        from app.extensions import db, login_manager, migrate, csrf, limiter
-        if not all([db, login_manager, migrate, csrf, limiter]):
-            logging.error("Extensions initialization verification failed")
-            return False
-            
-        # Verify logging configuration
-        if not verify_logging_configuration():
-            logging.error("Logging configuration verification failed")
-            return False
-            
+        # Full verification
+        if full:
+            from app.extensions import db, login_manager, migrate, csrf, limiter
+            if not all([db, login_manager, migrate, csrf, limiter]):
+                logging.error("Extensions initialization verification failed")
+                return False
+                
+            if not verify_logging_configuration():
+                logging.error("Logging configuration verification failed")
+                return False
+                
+            if not validate_version_file():
+                logging.error("Version file validation failed")
+                return False
+                
         logging.info("Deployment verification completed successfully")
         return True
     except Exception as e:

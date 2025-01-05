@@ -17,14 +17,14 @@
 /run scripts/version.py update-docs
 
 # Archive logs
-/run scripts/archive_logs.py
+/run scripts/archive_logs.py --force
 
 # Verify deployment
-/run scripts/version.py verify-deployment
+/run scripts/version.py verify-deployment --full
 
 # Commit changes
 /run git add .
-/run git commit -m "Release v1.0.0 - Initial production release"
+/run git commit -m "Release v1.0.0 - Final production release"
 
 # Create and push version tag
 /run git tag v1.0.0
@@ -32,6 +32,9 @@
 
 # Update version history
 /run scripts/version.py update-version-history
+
+# Generate final coverage report
+/run coverage html
 ### CODE END ###
 
 # Print the current datetime to console
