@@ -3,9 +3,6 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Fix pytest.ini merge conflict
-/run git checkout -- pytest.ini
-
 # Run version management tests with coverage
 /run pytest tests/version_management/ --cov=scripts.version --cov-report=term-missing -v
 
@@ -20,6 +17,9 @@
 
 # Check Git status
 /run git status
+
+# Run alembic version check
+/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.current(config)"
 ### CODE END ###
 
 # Print the current datetime to console
