@@ -15,3 +15,6 @@
 - Add version management integration tests
 - Fix version management CLI arguments
 - Resolve git tag creation issues
+- Add deployment verification tests
+- Implement release notes automation
+- Add documentation update functionality
