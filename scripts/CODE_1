@@ -1,0 +1,10 @@
+# Code Cycle Step 1
+
+#print datetime to console
+/run python -c "from datetime import datetime; print(datetime.now().strftime(\"%Y-%m-%d %H:%M:%S\"))"
+
+/read scripts/PROJECT
+/read scripts/CONVENTIONS
+/read scripts/MANAGER
+
+#/architect code ctc
