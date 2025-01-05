@@ -37,3 +37,5 @@
 - Fix indentation error in stipend.py
 - Fix database backup function arguments
 - Create initial database file
+- Fix version.py CLI argument parsing
+- Add proper error handling for archive-logs
