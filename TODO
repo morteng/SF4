@@ -6,3 +6,4 @@
 - Fix pytest.ini merge conflict
 - Fix conftest.py indentation error
 - Verify test coverage meets 80% threshold
+- Fix create_app import error in conftest.py
