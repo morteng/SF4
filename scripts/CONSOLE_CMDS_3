@@ -13,10 +13,10 @@
 /run pytest tests/version_management/ -v --cov=scripts.version --cov-report=term-missing
 
 # Verify test database connection
-/run python -c "from scripts.version import validate_db_connection; assert validate_db_connection('instance/test_stipend.db')"
+/run scripts/version.py --test-connection instance/test_stipend.db
 
 # Create test backup
-/run python -c "from scripts.version import create_db_backup; create_db_backup('instance/test_stipend.db', 'test_backup.db')"
+/run scripts/version.py --backup instance/test_stipend.db test_backup.db
 
 # Check coverage results
 /run coverage report -m

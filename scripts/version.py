@@ -41,6 +41,37 @@ def validate_db_connection(db_path: str) -> bool:
             logging.warning(f"Database connection attempt {attempt + 1} failed, retrying in {retry_delay}s...")
             time.sleep(retry_delay)
 
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description='Version management utilities')
+    subparsers = parser.add_subparsers(dest='command')
+
+    # Test connection command
+    test_conn_parser = subparsers.add_parser('--test-connection', help='Test database connection')
+    test_conn_parser.add_argument('db_path', help='Path to database file')
+
+    # Backup command
+    backup_parser = subparsers.add_parser('--backup', help='Create database backup')
+    backup_parser.add_argument('source_db', help='Source database path')
+    backup_parser.add_argument('backup_path', help='Backup destination path')
+
+    args = parser.parse_args()
+
+    if args.command == '--test-connection':
+        result = validate_db_connection(args.db_path)
+        print(f"Connection {'successful' if result else 'failed'}")
+        exit(0 if result else 1)
+    elif args.command == '--backup':
+        result = create_db_backup(args.source_db, args.backup_path)
+        print(f"Backup {'successful' if result else 'failed'}")
+        exit(0 if result else 1)
+    else:
+        parser.print_help()
+        exit(1)
+
+if __name__ == "__main__":
+    main()
+
 def get_db_version(db_path: str) -> Optional[str]:
     """Get version from database if available"""
     if not validate_db_connection(db_path):
