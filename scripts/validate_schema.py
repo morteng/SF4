@@ -11,6 +11,11 @@ def validate_schema():
     try:
         app = create_app('production')
         with app.app_context():
+            # Ensure database exists
+            if not os.path.exists('instance/stipend.db'):
+                print("Database file not found")
+                return False
+                
             config = Config('migrations/alembic.ini')
             command.upgrade(config, 'head')
             print("Schema validation successful")
