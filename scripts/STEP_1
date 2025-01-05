@@ -1,11 +1,27 @@
-# Code Cycle Step 1
-
+# Code Cycle Step 1 (Analyzing)
 
 # Print the current datetime to console
 /run scripts/print_datetime.py
+/run Write-Host "Code Cycle Step 1 Start"
 
-/read scripts/PROJECT
-/read scripts/CONVENTIONS
+# load project docs and IO
+/read PROJECT
+/read CONVENTIONS
 /read scripts/MANAGER
 
-#/architect code ctc
+# run Step 1
+/architect Code Cycle Step 1 - problem analysis and planning: Given the current codebase and documentation, what is our next step?
+
+# Add the files we're going to edit
+/add scripts/REQUESTS
+/add scripts/CONSOLE_CMDS_1
+
+# Edit the files
+/code update files as needed, update REQUESTS with anything you need MANAGER to approve or do. Remove any previous console commands from CONSOLE_CMDS_1, add any new console commands you want to run before we go to STEP 2 (Coding). 
+
+# Drop them again
+/drop scripts/REQUESTS
+/drop scripts/CONSOLE_CMDS_1
+
+# goto CONSOLE_CMDS_1
+/load scripts/CONSOLE_CMDS_1
