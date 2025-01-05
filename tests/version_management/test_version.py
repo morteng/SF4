@@ -1,5 +1,6 @@
 import pytest
 import sqlite3
+from datetime import datetime
 from scripts.version import (
     validate_db_connection,
     get_db_version,
@@ -7,7 +8,8 @@ from scripts.version import (
     parse_version,
     create_db_backup,
     validate_production_environment,
-    validate_version_file
+    validate_version_file,
+    create_version_history
 )
 import os
 from pathlib import Path
