@@ -33,3 +33,4 @@
 - Add proper test fixtures
 - Fix pytest configuration in conftest.py (in progress)
 - Add version management test coverage (completed)
+- Fix test execution issues
