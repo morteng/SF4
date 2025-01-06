@@ -20,6 +20,9 @@
 
 # Run relationship tests
 /run scripts/run_relationship_tests.py
+
+# Run version management tests
+/run scripts/run_version_tests.py
 ### CODE END ###
 
 # Print the current datetime to console
