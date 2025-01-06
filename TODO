@@ -18,14 +18,15 @@
 - Add proper deployment verification
 - Fix create_app import error in tests (completed)
 - Fix version.py validate-env command
+- Fix version.py validate-env command
 - Add version management tests (completed)
-- Run version management tests
+- Run version management tests (completed)
 - Fix test database validation
 - Fix deployment verification
 - Fix Tag model relationship with Stipend
 - Add model relationship tests
 - Verify Alembic migration chain
-- Fix version.py update-release-notes argument handling
+- Fix version.py update-release-notes argument handling (completed)
 - Add update-version-history command implementation
 - Fix validate_production_environment function definition
 - Add model relationship test coverage
