@@ -1,4 +1,5 @@
 from app.extensions import db
+from .association_tables import stipend_tag_association
 
 class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
