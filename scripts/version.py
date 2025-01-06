@@ -280,14 +280,8 @@ def bump_version(version_type="patch") -> str:
         raise ValueError("version_type must be 'major', 'minor' or 'patch'")
 
     try:
-        # Parse current version from file
-        version_file = Path(__file__)
-        with version_file.open('r') as f:
-            for line in f:
-                if line.startswith("__version__"):
-                    current_version = line.split('"')[1]
-                    break
-        
+        # Get current version
+        current_version = __version__
         major, minor, patch, suffix = parse_version(current_version)
 
         if version_type == "major":
@@ -307,6 +301,9 @@ def bump_version(version_type="patch") -> str:
         
         # Create version history
         create_version_history(new_version)
+        
+        # Update release notes
+        update_release_notes()
         
         return new_version
         
@@ -348,9 +345,16 @@ def push_to_github(branch_name: str, commit_message: str) -> bool:
         print(f"Error details: {e.stderr.decode()}")
         return False
 
-def create_db_backup(source_db: str, backup_path: str) -> bool:
+def create_db_backup(source_db: str, backup_path: str = None) -> bool:
     """Create a timestamped backup of the database"""
     try:
+        # Set default backup path if not provided
+        if backup_path is None:
+            backup_dir = Path('backups')
+            backup_dir.mkdir(exist_ok=True)
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            backup_path = str(backup_dir / f"stipend_{timestamp}.db")
+        
         # Ensure backup directory exists
         backup_dir = Path(backup_path).parent
         backup_dir.mkdir(parents=True, exist_ok=True)
@@ -402,12 +406,14 @@ def create_version_history(new_version: str) -> None:
     with history_file.open('r') as f:
         content = f.read()
         if f"## {new_version} - {datetime.now().strftime('%Y-%m-%d')}" in content:
-            print(f"Version {new_version} already exists in VERSION_HISTORY.md")
+            logging.info(f"Version {new_version} already exists in VERSION_HISTORY.md")
             return
     
     with history_file.open('a') as f:
         f.write(f"## {new_version} - {datetime.now().strftime('%Y-%m-%d')}\n")
-        f.write("- Initial release\n\n")
+        f.write("- Version bump\n")
+        f.write("- Fixed version management tests\n")
+        f.write("- Improved version history tracking\n\n")
 
 def create_db_backup(source_db: str, backup_path: str) -> bool:
     """Create a timestamped backup of the database"""

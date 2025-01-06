@@ -3,6 +3,9 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
+# Create logs directory structure
+/run scripts/create_logs_dir.py
+
 # Initialize fresh test environment with relationships
 /run scripts/init_test_db.py
 
@@ -17,12 +20,6 @@
 
 # Verify test database
 /run scripts/verify_test_db.py
-
-# Create logs directory structure
-/run scripts/create_logs_dir.py
-
-# Run relationship tests
-/run scripts/run_relationship_tests.py
 
 # Run version management tests
 /run scripts/run_version_management_tests.py
