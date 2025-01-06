@@ -43,3 +43,15 @@
 2025-01-06 01:27:03,030 - INFO - Database connection successful to instance/stipend.db
 2025-01-06 01:27:03,031 - ERROR - Alembic version table not found
 2025-01-06 01:27:03,031 - ERROR - Schema version verification failed
+2025-01-06 01:30:38,574 - INFO - Database connection successful to instance/stipend.db
+2025-01-06 01:30:38,575 - ERROR - Database file does not exist: instance/test_stipend.db
+2025-01-06 01:33:51,689 - INFO - Database connection successful to instance/stipend.db
+2025-01-06 01:33:51,689 - ERROR - Database file does not exist: instance/test_stipend.db
+2025-01-06 01:35:17,634 - INFO - Database connection successful to instance/stipend.db
+2025-01-06 01:35:17,635 - ERROR - Database file does not exist: instance/test_stipend.db
+2025-01-06 01:35:23,601 - INFO - Database connection successful to instance/stipend.db
+2025-01-06 01:35:23,602 - ERROR - Alembic version table not found
+2025-01-06 01:35:23,602 - ERROR - Schema version verification failed
+2025-01-06 01:41:40,878 - INFO - Database connection successful to instance/stipend.db
+2025-01-06 01:41:40,879 - ERROR - Alembic version table not found
+2025-01-06 01:41:40,879 - ERROR - Schema version verification failed

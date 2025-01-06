@@ -21,3 +21,7 @@ Current Focus:
 - Implement proper test coverage setup
 
 Remember to import admin user from .env file if there is no admin user in database
+
+we should also implement some sort of production system where we make the actual server on https://render.com/ pull the CEO approved version of the site go live. Please implement such a system, ask about accounts and verification and anything else you need here.
+
+And make sure we do testing on github and proper handling of all that stuff.
