@@ -8,25 +8,25 @@
 # Fix pytest configuration
 /run scripts/fix_pytest_config.py
 
-# Initialize fresh test environment
+# Initialize fresh test environment with relationships
 /run scripts/init_test_db.py
 /run scripts/update_test_config.py
 
-# Validate database state
+# Validate database state and relationships
 /run scripts/validate_schema.py
 /run scripts/verify_production.py
+/run scripts/verify_test_db.py
 
 # Create logs directory structure
 /run scripts/create_logs_dir.py
 
-# Verify test database initialization
-/run scripts/verify_test_db.py
-
-# Run core test suites
+# Run relationship tests with retry
 /run scripts/run_relationship_tests.py
+
+# Run version management tests
 /run scripts/run_version_management_tests.py
 
-# Generate coverage report
+# Generate detailed coverage report
 /run scripts/generate_coverage_report.py
 
 # Check coverage thresholds
