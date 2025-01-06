@@ -17,6 +17,12 @@
 
 # Archive test logs
 /run scripts/archive_logs.py
+
+# Validate schema
+/run scripts/validate_schema.py
+
+# Check database connection
+/run scripts/check_db_connection.py
 ### CODE END ###
 
 # Print the current datetime to console
