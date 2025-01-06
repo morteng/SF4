@@ -274,7 +274,21 @@ def get_db_version(db_path: str) -> Optional[str]:
 
 def validate_version(version: str) -> bool:
     """Validate version string format including build metadata"""
-    return bool(re.match(r"^\d+\.\d+\.\d+(-[a-z]+(\.\d+)?)?(\+[a-z0-9]+(\.[a-z0-9]+)*)?$", version))
+    if not version:
+        return False
+        
+    # Basic format validation
+    if not re.match(r"^\d+\.\d+\.\d+(-[a-z]+(\.\d+)?)?(\+[a-z0-9]+(\.[a-z0-9]+)*)?$", version):
+        return False
+        
+    # Additional semantic validation
+    try:
+        major, minor, patch = map(int, version.split('.')[:3])
+        if major < 0 or minor < 0 or patch < 0:
+            return False
+        return True
+    except (ValueError, IndexError):
+        return False
 
 def get_version() -> str:
     """Get the current project version"""
