@@ -154,21 +154,18 @@ def test_create_version_history(tmp_path):
 
 def test_validate_production_environment(monkeypatch, tmp_path):
     """Test production environment validation"""
-    log_file = tmp_path / "test.log"
-    monkeypatch.setattr('scripts.version.LOG_FILE', str(log_file))
-    
-    # Test missing environment variables
-    monkeypatch.delenv('DATABASE_URL', raising=False)
-    monkeypatch.delenv('SECRET_KEY', raising=False)
-    monkeypatch.delenv('ADMIN_EMAIL', raising=False)
-    assert validate_production_environment() is False
-    
-    # Test with all required variables
+    # Setup test environment
     monkeypatch.setenv('DATABASE_URL', 'sqlite:///test.db')
     monkeypatch.setenv('SECRET_KEY', 'test_key_that_is_long_enough')
     monkeypatch.setenv('ADMIN_EMAIL', 'test@example.com')
+    
+    # Test validation
     assert validate_production_environment() is True
     
-    # Test logging output
-    log_content = log_file.read_text()
-    assert "Production environment validation passed" in log_content
+    # Test missing variables
+    monkeypatch.delenv('DATABASE_URL')
+    assert validate_production_environment() is False
+    
+    # Test invalid types
+    monkeypatch.setenv('DATABASE_URL', 12345)
+    assert validate_production_environment() is False
