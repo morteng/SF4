@@ -6,6 +6,9 @@ class Tag(db.Model):
     category = db.Column(db.String(100), nullable=False)  # Add this if missing
     description = db.Column(db.Text)
 
+    # Ensure the relationship is defined
+    stipends = db.relationship('Stipend', secondary=stipend_tag_association, back_populates='tags')
+
     __mapper_args__ = {"confirm_deleted_rows": False}
 
     def __repr__(self):
