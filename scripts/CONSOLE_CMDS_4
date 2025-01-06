@@ -1,18 +1,18 @@
-# Console Commands for Step 4
+# Console Commands for Step 4 - Review
 # Do not use echo commands
-# Only edit the section of this document between CODE START and CODE END
+# Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Validate schema consistency
+# Validate final schema state
 /run scripts/validate_schema.py
 
-# Verify production environment
+# Verify production readiness
 /run scripts/verify_production.py
 
-# Check test coverage
+# Check final test coverage
 /run scripts/check_coverage.py
 
-# Finalize documentation
+# Finalize all documentation
 /run scripts/finalize_docs.py
 
 # Generate deployment checklist
@@ -21,19 +21,19 @@
 # Create final backup
 /run scripts/create_backup.py --final
 
-# Archive logs
+# Archive all logs
 /run scripts/archive_logs.py --force
 
-# Print current datetime
+# Print timestamp
 /run scripts/print_datetime.py
 ### CODE END ###
 
-# Print the current datetime to console
+# Print completion message
 /run scripts/print_datetime.py
-/run Write-Host "Code Cycle Step 4 Ends"
+/run Write-Host "Code Cycle Step 4 Ends - Ready for Deployment"
 
 # Update TODO based on results
-/code update TODO if needed. 
+/code update TODO if needed.
 
-# After running any console commands, go to STEP_5
+# Proceed to Step 5 - Deployment
 /load scripts/STEP_5
