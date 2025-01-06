@@ -18,3 +18,4 @@
 - Add proper deployment verification
 - Fix create_app import error in tests
 - Fix version.py validate-env command
+- Add version management tests
