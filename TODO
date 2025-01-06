@@ -1,7 +1,7 @@
 - Add missing environment variables (FLASK_ENV, FLASK_DEBUG) (high priority)
 - Fix coverage collection errors (high priority)
 - Verify Alembic migration chain
-- Add proper test fixtures
+- Add proper test fixtures (high priority)
 - Add schema validation tests
 - Add proper logging configuration
 - Fix pytest import errors (create_app missing) (high priority)
@@ -10,6 +10,8 @@
 - Verify production deployment pipeline
 - Fix Stipend-Tag relationship mapping (high priority)
 - Update version bump logic in version.py
-- Add proper database initialization tests
-- Fix test database verification
-- Add error handling for coverage collection
+- Add proper database initialization tests (high priority)
+- Fix test database verification (high priority)
+- Add error handling for coverage collection (high priority)
+- Add test cleanup procedures
+- Improve test isolation
