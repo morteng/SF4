@@ -28,6 +28,7 @@
 - Fix test database validation
 - Fix deployment verification
 - Fix Tag model relationship with Stipend (completed)
+- Fix pytest configuration in conftest.py (completed)
 - Add model relationship tests
 - Verify Alembic migration chain
 - Fix version.py update-release-notes argument handling (completed)
