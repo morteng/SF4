@@ -4,19 +4,21 @@ from datetime import datetime
 def update_release_notes():
     """Update release notes with current version information"""
     try:
+        # Get current version
+        from scripts.version import __version__
+        
         with open('RELEASE_NOTES.md', 'a') as f:
-            f.write(f"\n## Version 1.2.5 - {datetime.now().strftime('%Y-%m-%d')}\n")
-            f.write("- Fixed version bump logic\n")
-            f.write("- Improved test database initialization\n")
-            f.write("- Enhanced version history tracking\n")
-            f.write("- Fixed relationship mapping issues\n")
-            f.write("- Improved test coverage reporting (Current: 32%)\n")
-            f.write("- Finalized deployment verification process\n")
-            f.write("- Updated production environment checks\n")
-            f.write("- Completed deployment documentation\n")
-            f.write("- Verified production environment configuration\n")
-            f.write("- Fixed SECRET_KEY length validation\n")
-            f.write("- Improved error handling in version management\n")
+            f.write(f"\n## Version {__version__} - {datetime.now().strftime('%Y-%m-%d')}\n")
+            f.write("- Finalized deployment process\n")
+            f.write("- Added comprehensive deployment verification\n")
+            f.write("- Updated documentation for production readiness\n")
+            f.write("- Improved backup system with timestamping\n")
+            f.write("- Enhanced cycle time tracking with logging\n")
+            f.write("- Fixed production environment validation\n")
+            f.write("- Completed all deployment documentation\n")
+            f.write("- Verified production database schema\n")
+            f.write("- Finalized version management system\n")
+            f.write("- Improved error handling across all scripts\n")
         return True
     except Exception as e:
         print(f"Failed to update release notes: {str(e)}")
