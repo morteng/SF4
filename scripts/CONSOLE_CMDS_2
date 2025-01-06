@@ -1,55 +1,51 @@
 # Console Commands for Step 2
- # Do not use echo commands
- # Only edit the section between CODE START and CODE END
+# Do not use echo commands
+# Only edit the section between CODE START and CODE END
 
- ### CODE START ###
- # Initialize fresh test database
- /run scripts/init_test_db.py
+### CODE START ###
+# Initialize fresh test database
+/run scripts/init_test_db.py
 
- # Validate database schema
- /run scripts/validate_schema.py
+# Validate database schema
+/run scripts/validate_schema.py
 
- # Verify database connection
- /run scripts/validate_db.py
+# Verify database connection
+/run scripts/validate_db.py
 
- # Create initial backup
- /run scripts/create_backup.py
+# Create initial backup
+/run scripts/create_backup.py
 
- # Archive logs
- /run scripts/archive_logs.py
+# Archive logs
+/run scripts/archive_logs.py
 
- # Update release notes
- /run scripts/version.py update-release-notes
+# Update release notes
+/run scripts/version.py update-release-notes
 
- # Update version history
- /run scripts/version.py update-version-history
+# Update version history
+/run scripts/version.py update-version-history
 
- # Validate production environment
- /run scripts/version.py validate-env
+# Validate production environment
+/run scripts/version.py validate-env
 
- # Run model relationship tests
- /run pytest tests/models/ -v
+# Fix Tag-Stipend relationship
+/run scripts/fix_tag_stipend_relationship.py
 
- # Run test coverage
- /run pytest --cov=scripts.version --cov-report=term-missing
+# Update test configuration
+/run scripts/update_test_config.py
 
- # Fix Tag-Stipend relationship
- /run scripts/fix_tag_stipend_relationship.py
+# Add version management tests
+/run scripts/add_version_tests.py
 
- # Update test configuration
- /run scripts/update_test_config.py
+# Run version management tests
+/run pytest tests/version_management/ -v
+### CODE END ###
 
- # Add version management tests
- /run scripts/add_version_tests.py
- ### CODE END ###
+# Print the current datetime to console
+/run scripts/print_datetime.py
+/run Write-Host "Code Cycle Step 2 Ends"
 
- # Print the current datetime to console
- /run scripts/print_datetime.py
- /run Write-Host "Code Cycle Step 2 Ends"
+# Update TODO based on results
+/code update TODO if needed. Do not explain or summarize, just output the edit if you need to update the file.
 
- # Update TODO based on results
- /code update TODO if needed. Do not explain or summarize, just output the edit if you need to update the    
- file.
-
- # After running any console commands, go to STEP_3
- /load scripts/STEP_3
+# After running any console commands, go to STEP_3
+/load scripts/STEP_3
