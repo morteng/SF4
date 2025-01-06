@@ -7,4 +7,4 @@ Final backup created and logs archived.
 Please review and approve deployment to production.
 
 
-HI! MANAGER here! Great work! Deploy when testing is 80%
+HI! MANAGER here! Great work! Deploy when testing is 80% or better
