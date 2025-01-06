@@ -13,12 +13,16 @@ def update_test_config():
         
         # Update test database URI
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         
-        # Initialize extensions
-        db.init_app(app)
+        # Initialize extensions if not already initialized
+        if 'sqlalchemy' not in app.extensions:
+            db.init_app(app)
         
         # Create test client
-        test_client = app.test_client()
+        with app.app_context():
+            db.create_all()
+            test_client = app.test_client()
         
         return True
     except Exception as e:
