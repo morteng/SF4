@@ -5,6 +5,8 @@ def update_release_notes():
     """Update release notes with current version information"""
     try:
         # Get current version
+        import sys
+        sys.path.append('.')
         from scripts.version import __version__
         
         with open('RELEASE_NOTES.md', 'a') as f:

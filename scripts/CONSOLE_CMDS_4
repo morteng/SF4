@@ -38,6 +38,9 @@
 # Print final timestamp for review
 /run scripts/print_datetime.py
 
+# Update requirements
+pip freeze > requirements.txt
+
 ### CODE END ###
 
 

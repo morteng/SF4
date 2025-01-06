@@ -83,6 +83,13 @@ def verify_security_settings():
             logger.error("SECRET_KEY must contain uppercase, lowercase and numbers")
             return False
             
+        # Verify SECRET_KEY complexity
+        if not any(c.isupper() for c in secret_key) or \
+           not any(c.islower() for c in secret_key) or \
+           not any(c.isdigit() for c in secret_key):
+            logger.error("SECRET_KEY must contain uppercase, lowercase and numbers")
+            return False
+            
         return True
     except Exception as e:
         logger.error(f"Security verification error: {str(e)}")
