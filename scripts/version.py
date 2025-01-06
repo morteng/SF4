@@ -60,12 +60,12 @@ def validate_db_connection(db_path: str) -> bool:
                 conn.close()
                 logging.info(f"Database connection successful to {db_path}")
                 return True
-        except sqlite3.Error as e:
-            if attempt == max_retries - 1:
-                logging.error(f"Database connection failed after {max_retries} attempts: {str(e)}")
-                return False
-            logging.warning(f"Database connection attempt {attempt + 1} failed, retrying in {retry_delay}s...")
-            time.sleep(retry_delay)
+            except sqlite3.Error as e:
+                if attempt == max_retries - 1:
+                    logging.error(f"Database connection failed after {max_retries} attempts: {str(e)}")
+                    return False
+                logging.warning(f"Database connection attempt {attempt + 1} failed, retrying in {retry_delay}s...")
+                time.sleep(retry_delay)
 
 def main():
     import argparse
