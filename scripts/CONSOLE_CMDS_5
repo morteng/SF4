@@ -10,31 +10,11 @@
 # Validate production schema
 /run scripts/validate_schema.py
 
-# Update release notes
-/run scripts/version.py update-release-notes
-
-# Update documentation
-/run scripts/version.py update-docs
-
 # Archive logs
 /run scripts/archive_logs.py --force
 
 # Verify deployment
-/run scripts/version.py verify-deployment --full
-
-# Commit changes
-/run git add .
-/run git commit -m "Release v1.0.0 - Final production release"
-
-# Create and push version tag
-/run git tag v1.0.0
-/run git push origin v1.0.0
-
-# Update version history
-/run scripts/version.py update-version-history
-
-# Generate final coverage report
-/run coverage html
+/run scripts/version.py verify-deployment
 ### CODE END ###
 
 # Print the current datetime to console
