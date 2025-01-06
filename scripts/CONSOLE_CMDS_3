@@ -5,7 +5,7 @@
 # Initialize fresh test environment with relationships
 /run scripts/init_test_db.py
 
-# Update test configuration
+# Update test configuration with proper app context
 /run scripts/update_test_config.py
 
 # Fix pytest configuration
@@ -14,7 +14,7 @@
 # Validate database schema
 /run scripts/validate_schema.py
 
-# Verify test database
+# Verify test database initialization
 /run scripts/verify_test_db.py
 
 # Run version management tests with coverage
@@ -23,16 +23,16 @@
 # Run relationship tests
 /run scripts/run_relationship_tests.py
 
-# Generate coverage report
+# Generate detailed coverage report
 /run scripts/generate_coverage_report.py
 
 # Check coverage
 /run scripts/check_coverage.py
 
-# Validate version file
+# Validate version file integrity
 /run scripts/validate_version.py
 
-# Verify production environment
+# Verify production environment settings
 /run scripts/verify_production.py
 
 # Verify deployment readiness
@@ -41,10 +41,10 @@
 # Create database backup
 /run scripts/create_backup.py
 
-# Archive logs
+# Archive logs for this test cycle
 /run scripts/archive_logs.py
 
-# Finalize documentation
+# Finalize documentation updates
 /run scripts/finalize_docs.py
 
 # Print final timestamp
