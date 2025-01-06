@@ -5,6 +5,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from app.factory import create_app
 from app.extensions import db
 
+from pathlib import Path
+
 def fix_pytest_config():
     """Fix pytest configuration"""
     try:
