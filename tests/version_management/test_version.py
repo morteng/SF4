@@ -96,11 +96,15 @@ def create_db_backup():
     test_file.write_text(content)
     
     # Update version
-    update_version_file("1.2.4")
+    assert update_version_file("1.2.4", str(test_file)) is True
     
     # Verify update
     new_content = test_file.read_text()
     assert '__version__ = "1.2.4"' in new_content
+    # Verify other content remains unchanged
+    assert 'def validate_version()' in new_content
+    assert 'def bump_version()' in new_content
+    assert 'def create_db_backup()' in new_content
 
 def test_create_db_backup(test_db_path, tmp_path):
     """Test database backup creation"""

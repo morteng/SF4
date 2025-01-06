@@ -11,7 +11,23 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+LOG_FILE = 'version_management.log'
+
 __version__ = "1.2.4"
+```
+
+scripts/version.py
+```python
+<<<<<<< SEARCH
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('version_management.log'),
+        logging.StreamHandler()
+    ]
+)
 
 # Configure logging
 logging.basicConfig(
