@@ -5,7 +5,11 @@ from pathlib import Path
 def write_cycle_start():
     """Write current datetime to cycle_start.txt"""
     try:
-        cycle_file = Path('cycle_start.txt')
+        # Create scripts directory if it doesn't exist
+        scripts_dir = Path(__file__).parent
+        scripts_dir.mkdir(exist_ok=True)
+        
+        cycle_file = scripts_dir / 'cycle_start.txt'
         with cycle_file.open('w') as f:
             f.write(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         return True
