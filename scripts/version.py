@@ -138,19 +138,22 @@ def update_release_notes():
         logging.error(f"Failed to update release notes: {str(e)}")
         return False
 
-def update_version_history():
-    """Update version history file"""
-    try:
-        with open('VERSION_HISTORY.md', 'a') as f:
-            f.write(f"\n## {__version__} - {datetime.now().strftime('%Y-%m-%d')}\n")
-            f.write("- Initial production release\n")
-            f.write("- Fixed version management CLI arguments\n")
-            f.write("- Added proper error handling for archive-logs\n")
-            f.write("- Implemented version history tracking\n")
-        return True
-    except Exception as e:
-        logging.error(f"Failed to update version history: {str(e)}")
-        return False
+def create_version_history(new_version: str) -> None:
+    """Create version history file"""
+    history_file = Path('VERSION_HISTORY.md')
+    if not history_file.exists():
+        history_file.write_text("# Version History\n\n")
+    
+    # Check if the version already exists in the file
+    with history_file.open('r') as f:
+        content = f.read()
+        if f"## {new_version} - {datetime.now().strftime('%Y-%m-%d')}" in content:
+            logging.info(f"Version {new_version} already exists in VERSION_HISTORY.md")
+            return
+    
+    with history_file.open('a') as f:
+        f.write(f"## {new_version} - {datetime.now().strftime('%Y-%m-%d')}\n")
+        f.write("- Initial release\n\n")
 
 def update_documentation():
     """Update project documentation"""
