@@ -12,6 +12,9 @@
 # Verify production environment
 /run scripts/verify_production.py
 
+# Run version management tests
+/run scripts/run_version_management_tests.py
+
 # Generate coverage report
 /run scripts/generate_coverage_report.py
 
@@ -24,11 +27,14 @@
 # Archive logs
 /run scripts/archive_logs.py --force
 
-# Run version management tests
-/run scripts/run_version_management_tests.py
+# Verify deployment requirements
+/run scripts/verify_deployment.py
 
 # Print final timestamp
 /run scripts/print_datetime.py
+
+# Request deployment approval
+/run scripts/request_deployment_approval.py
 ### CODE END ###
 
 # Print completion message
