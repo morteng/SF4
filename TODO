@@ -46,3 +46,5 @@
 - Fix version management test coverage
 - Fix production environment validation
 - Add coverage reporting
+- Fix version.py CLI argument parsing
+- Add deployment verification tests
