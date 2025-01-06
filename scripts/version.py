@@ -8,7 +8,7 @@ from typing import Optional, Tuple
 from datetime import datetime
 from pathlib import Path
 
-__version__ = "0.2.0"  # Enhanced version management
+__version__ = "1.2.4"
 
 # Configure logging
 logging.basicConfig(
