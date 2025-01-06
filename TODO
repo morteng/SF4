@@ -1,7 +1,7 @@
-- Fix version file update test failure (high priority)
-- Improve test coverage to 80% (high priority)
-- Fix database relationship mapping issues (high priority)
-- Resolve coverage collection errors (high priority)
+- Fix version file update test failure (high priority) - in progress
+- Improve test coverage to 80% (high priority) - in progress
+- Fix database relationship mapping issues (high priority) - in progress
+- Resolve coverage collection errors (high priority) - in progress
 - Verify Alembic migration chain
 - Add proper test fixtures
 - Add schema validation tests

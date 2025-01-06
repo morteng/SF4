@@ -9,14 +9,14 @@
 
 # Validate database state
 /run scripts/validate_schema.py
-/run scripts/verify_production.py
+/run scripts/verify_test_db.py
 
 # Run core functionality tests
 /run scripts/run_relationship_tests.py
-/run scripts/run_version_tests.py
+/run scripts/run_version_management_tests.py
 
 # Check test coverage
-/run scripts/check_coverage.py
+/run scripts/generate_coverage_report.py
 
 # Archive logs and create backup
 /run scripts/archive_logs.py
