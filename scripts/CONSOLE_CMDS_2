@@ -3,11 +3,11 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
+# Create database backup before changes
+/run scripts/create_backup.py
+
 # Initialize fresh test database
 /run scripts/init_test_db.py
-
-# Update test configuration
-/run scripts/update_test_config.py
 
 # Fix Tag-Stipend relationship
 /run scripts/fix_tag_stipend_relationship.py
@@ -15,8 +15,8 @@
 # Validate schema
 /run scripts/validate_schema.py
 
-# Create database backup
-/run scripts/create_backup.py
+# Update test configuration
+/run scripts/update_test_config.py
 ### CODE END ###
 
 # Print the current datetime to console
