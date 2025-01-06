@@ -18,14 +18,8 @@
 # Finalize documentation
 /run scripts/finalize_docs.py
 
-# Run final review
-/run scripts/final_review.py
-
 # Verify production environment
 /run scripts/verify_production.py
-
-# Generate release notes
-/run scripts/generate_release_notes.py
 ### CODE END ###
 
 # Print the current datetime to console
