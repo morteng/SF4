@@ -538,6 +538,9 @@ def validate_production_environment() -> bool:
                 if not any(c.isdigit() for c in converted):
                     logging.error(f"{var} must contain numbers")
                     return False
+                if not any(c in "!@#$%^&*()_+-=[]{};':,.<>?/" for c in converted):
+                    logging.error(f"{var} must contain special characters")
+                    return False
                 
             # Additional validation for FLASK_DEBUG
             if var == 'FLASK_DEBUG' and converted.lower() not in ('0', 'false', '1', 'true'):
