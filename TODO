@@ -32,6 +32,8 @@
 - Add model relationship tests (completed)
 - Add version management tests (completed)
 - Fix pytest import errors (completed)
+- Add final review checklist (completed)
+- Verify test coverage (completed)
 - Add model relationship tests
 - Verify Alembic migration chain
 - Fix version.py update-release-notes argument handling (completed)

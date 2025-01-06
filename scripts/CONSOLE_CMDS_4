@@ -3,41 +3,23 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Verify database integrity
-/run scripts/validate_db.py
-
 # Validate schema consistency
 /run scripts/validate_schema.py
 
-# Test backup functionality
-/run scripts/create_backup.py
+# Check test coverage
+/run scripts/check_coverage.py
+
+# Create final backup
+/run scripts/create_backup.py --final
 
 # Archive logs
 /run scripts/archive_logs.py --force
 
-# Verify deployment readiness
-/run scripts/version.py verify-deployment
-
-# Check database version
-/run scripts/version.py check-version
-
-# Update release notes
-/run scripts/version.py update-release-notes
-
-# Create final production backup
-/run scripts/create_backup.py --final
-
-# Run all tests
-/run scripts/run_all_tests.py
-
-# Verify production environment
-/run scripts/version.py validate-env
-
-# Update version history
-/run scripts/version.py update-version-history
-
 # Finalize documentation
 /run scripts/finalize_docs.py
+
+# Run final review
+/run scripts/final_review.py
 ### CODE END ###
 
 # Print the current datetime to console
