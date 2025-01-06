@@ -2,9 +2,6 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Create final backup with timestamp
-/run scripts/create_backup.py --final
-
 # Validate production database schema
 /run scripts/validate_schema.py --production
 
@@ -23,13 +20,19 @@
 # Check coverage meets requirements
 /run scripts/check_coverage.py --min 80
 
+# Validate version file
+/run scripts/validate_version.py
+
 # Finalize all documentation
 /run scripts/finalize_docs.py --all
 
 # Generate comprehensive deployment checklist
 /run scripts/generate_deployment_checklist.py --detailed
 
-# Archive all logs with compression
+# Create final backup
+/run scripts/create_backup.py --final
+
+# Archive logs
 /run scripts/archive_logs.py --compress
 
 # Verify deployment readiness
