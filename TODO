@@ -1,13 +1,16 @@
-- Fix pytest import errors (create_app missing) (critical priority)
-- Initialize database connection properly (critical priority)
-- Add proper test fixtures (high priority)
-- Fix coverage collection errors (high priority)
+- Fix pytest import errors (create_app missing) (critical priority) - IN PROGRESS
+- Initialize database connection properly (critical priority) - IN PROGRESS
+- Add proper test fixtures (high priority) - IN PROGRESS
+- Fix coverage collection errors (high priority) - IN PROGRESS
 - Add missing environment variables (FLASK_ENV, FLASK_DEBUG) (high priority)
 - Verify Alembic migration chain (high priority)
 - Add schema validation tests (high priority)
 - Add proper logging configuration (high priority)
-- Update version management tests (high priority)
+- Update version management tests (high priority) - IN PROGRESS
 - Verify production deployment pipeline (medium priority)
+- Fix version.py test imports (critical priority)
+- Add proper error handling for database connection tests (high priority)
+- Update test database initialization in conftest.py (high priority)
 - Fix Stipend-Tag relationship mapping (high priority)
 - Update version bump logic in version.py (high priority)
 - Add proper database initialization tests (high priority)
