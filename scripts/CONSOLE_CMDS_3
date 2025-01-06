@@ -9,14 +9,20 @@
 # Validate database schema
 /run scripts/validate_schema.py
 
-# Verify database connections
+# Verify database connection
 /run scripts/validate_db.py
 
 # Create initial backup
 /run scripts/create_backup.py
 
-# Run version management tests with coverage
-/run pytest tests/version_management/test_version.py --cov=scripts.version --cov-report=term-missing -v
+# Run version management tests
+/run pytest tests/version_management/test_version.py -v
+
+# Check test coverage
+/run pytest --cov=scripts.version --cov-report=term-missing
+
+# Verify production environment
+/run python -c "from scripts.version import validate_production_environment; print('Environment validation:', validate_production_environment())"
 
 # Generate coverage report
 /run coverage report -m

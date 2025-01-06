@@ -42,3 +42,5 @@
 - Fix test database initialization
 - Add schema validation tests
 - Implement backup verification
+- Add production environment validation tests
+- Fix version management test coverage
