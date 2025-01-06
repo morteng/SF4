@@ -20,6 +20,12 @@
 
 # Check database version
 /run scripts/version.py check-version
+
+# Update release notes
+/run scripts/version.py update-release-notes
+
+# Create final production backup
+/run scripts/create_backup.py --final
 ### CODE END ###
 
 # Print the current datetime to console
