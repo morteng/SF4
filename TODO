@@ -1,6 +1,6 @@
-- Fix Stipend-Tag relationship mapping (critical priority) - IN PROGRESS
-- Update version bump logic in version.py (high priority) - IN PROGRESS
-- Fix test database initialization (critical priority) - IN PROGRESS
+- Fix Stipend-Tag relationship mapping (critical priority) - COMPLETED
+- Update version bump logic in version.py (high priority) - COMPLETED
+- Fix test database initialization (critical priority) - COMPLETED
 - Improve test coverage to meet 80% target (high priority) - IN PROGRESS
 - Fix coverage collection errors (high priority) - IN PROGRESS
 - Add missing environment variables (FLASK_ENV, FLASK_DEBUG) (high priority)
