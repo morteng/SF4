@@ -319,3 +319,61 @@ with app.app_context(). See the documentation for more information.
 2025-01-06 21:34:29,482 - INFO - Application initialized successfully
 2025-01-06 21:34:29,498 - ERROR - SECRET_KEY is too short (minimum 32 characters)
 2025-01-06 21:34:30,344 - ERROR - Some version management tests failed
+2025-01-06 22:32:47,448 - INFO - Test database initialized successfully
+2025-01-06 22:33:00,121 - INFO - Test database initialized successfully
+2025-01-06 22:33:01,041 - INFO - Loaded testing configuration successfully
+2025-01-06 22:33:01,092 - INFO - Application initialized successfully
+2025-01-06 22:33:01,123 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-71/test_validate_db_connection_su0/test.db
+2025-01-06 22:33:01,152 - INFO - Loaded testing configuration successfully
+2025-01-06 22:33:01,184 - INFO - Application initialized successfully
+2025-01-06 22:33:01,197 - ERROR - Database file does not exist: C:/invalid/path/test.db
+2025-01-06 22:33:01,210 - INFO - Loaded testing configuration successfully
+2025-01-06 22:33:01,244 - INFO - Application initialized successfully
+2025-01-06 22:33:01,269 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-71/test_get_db_version0/test.db
+2025-01-06 22:33:01,286 - INFO - Loaded testing configuration successfully
+2025-01-06 22:33:01,319 - INFO - Application initialized successfully
+2025-01-06 22:33:01,343 - INFO - Loaded testing configuration successfully
+2025-01-06 22:33:01,379 - INFO - Application initialized successfully
+2025-01-06 22:33:01,406 - INFO - Loaded testing configuration successfully
+2025-01-06 22:33:01,437 - INFO - Application initialized successfully
+2025-01-06 22:33:01,484 - INFO - Loaded testing configuration successfully
+2025-01-06 22:33:01,516 - INFO - Application initialized successfully
+2025-01-06 22:33:01,553 - INFO - Database backup created: C:\Users\Morten\AppData\Local\Temp\pytest-of-Morten\pytest-71\test_create_db_backup0\test.db -> C:\Users\Morten\AppData\Local\Temp\pytest-of-Morten\pytest-71\test_create_db_backup0\test_backup.db
+2025-01-06 22:33:01,565 - INFO - Loaded testing configuration successfully
+2025-01-06 22:33:01,600 - INFO - Application initialized successfully
+2025-01-06 22:33:01,627 - ERROR - Version file validation error: [Errno 2] No such file or directory: 'C:\\Users\\Morten\\AppData\\Local\\Temp\\pytest-of-Morten\\pytest-71\\test_validate_version_file0\\nonexistent.py'
+2025-01-06 22:33:01,641 - INFO - Loaded testing configuration successfully
+2025-01-06 22:33:01,675 - INFO - Application initialized successfully
+2025-01-06 22:33:01,709 - INFO - Loaded testing configuration successfully
+2025-01-06 22:33:01,757 - INFO - Application initialized successfully
+2025-01-06 22:33:01,776 - ERROR - SECRET_KEY is too short (minimum 64 characters)
+2025-01-06 22:33:02,639 - ERROR - Some version management tests failed
+2025-01-06 22:59:37,165 - INFO - Test database initialized successfully
+2025-01-06 22:59:47,839 - INFO - Test database initialized successfully
+2025-01-06 22:59:48,708 - INFO - Loaded testing configuration successfully
+2025-01-06 22:59:48,764 - INFO - Application initialized successfully
+2025-01-06 22:59:48,796 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-72/test_validate_db_connection_su0/test.db
+2025-01-06 22:59:48,825 - INFO - Loaded testing configuration successfully
+2025-01-06 22:59:48,860 - INFO - Application initialized successfully
+2025-01-06 22:59:48,875 - ERROR - Database file does not exist: C:/invalid/path/test.db
+2025-01-06 22:59:48,892 - INFO - Loaded testing configuration successfully
+2025-01-06 22:59:48,931 - INFO - Application initialized successfully
+2025-01-06 22:59:48,963 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-72/test_get_db_version0/test.db
+2025-01-06 22:59:48,977 - INFO - Loaded testing configuration successfully
+2025-01-06 22:59:49,010 - INFO - Application initialized successfully
+2025-01-06 22:59:49,038 - INFO - Loaded testing configuration successfully
+2025-01-06 22:59:49,073 - INFO - Application initialized successfully
+2025-01-06 22:59:49,104 - INFO - Loaded testing configuration successfully
+2025-01-06 22:59:49,138 - INFO - Application initialized successfully
+2025-01-06 22:59:49,186 - INFO - Loaded testing configuration successfully
+2025-01-06 22:59:49,218 - INFO - Application initialized successfully
+2025-01-06 22:59:49,253 - INFO - Database backup created: C:\Users\Morten\AppData\Local\Temp\pytest-of-Morten\pytest-72\test_create_db_backup0\test.db -> C:\Users\Morten\AppData\Local\Temp\pytest-of-Morten\pytest-72\test_create_db_backup0\test_backup.db
+2025-01-06 22:59:49,266 - INFO - Loaded testing configuration successfully
+2025-01-06 22:59:49,305 - INFO - Application initialized successfully
+2025-01-06 22:59:49,322 - ERROR - Version file validation error: [Errno 2] No such file or directory: 'C:\\Users\\Morten\\AppData\\Local\\Temp\\pytest-of-Morten\\pytest-72\\test_validate_version_file0\\nonexistent.py'
+2025-01-06 22:59:49,338 - INFO - Loaded testing configuration successfully
+2025-01-06 22:59:49,378 - INFO - Application initialized successfully
+2025-01-06 22:59:49,409 - INFO - Loaded testing configuration successfully
+2025-01-06 22:59:49,443 - INFO - Application initialized successfully
+2025-01-06 22:59:49,461 - ERROR - SECRET_KEY is too short (minimum 64 characters)
+2025-01-06 22:59:50,431 - ERROR - Some version management tests failed
