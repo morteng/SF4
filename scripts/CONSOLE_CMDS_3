@@ -7,10 +7,13 @@
 /run scripts/run_relationship_tests.py
 
 # Run version management tests
-/run pytest tests/version_management/test_version.py -v
+/run scripts/run_version_tests.py
 
 # Validate schema
 /run scripts/validate_schema.py
+
+# Check test coverage
+/run scripts/check_coverage.py
 
 # Archive test logs
 /run scripts/archive_logs.py
