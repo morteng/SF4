@@ -1,4 +1,4 @@
-- Resolve pytest import errors
+- Resolve pytest import errors (in progress)
 - Implement proper test coverage
 - Update documentation
 - Verify production deployment
@@ -6,3 +6,5 @@
 - Update release notes
 - Create production database backup
 - Validate production schema
+- Fix database connection validation
+- Fix alembic version check
