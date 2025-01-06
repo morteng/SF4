@@ -24,8 +24,6 @@
 # Generate deployment checklist
 /run scripts/generate_deployment_checklist.py
 
-# Print current datetime
-/run scripts/print_datetime.py
 ### CODE END ###
 
 # Print the current datetime to console
