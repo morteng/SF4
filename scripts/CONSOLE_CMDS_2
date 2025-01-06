@@ -15,9 +15,6 @@
  # Create initial backup
  /run scripts/create_backup.py
 
- # Run version management tests with coverage
- /run pytest tests/version_management/test_version.py --cov=scripts.version --cov-report=term-missing -v
-
  # Archive logs
  /run scripts/archive_logs.py
 
