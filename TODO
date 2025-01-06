@@ -9,8 +9,8 @@
 - Verify Alembic migration chain - completed
 - Add proper test fixtures - completed
 - Add schema validation tests - completed
-- Fix relationship test failures (high priority)
-- Add missing environment variables (FLASK_ENV, FLASK_DEBUG)
-- Fix version test indentation error
-- Improve test coverage reporting
-- Add relationship test coverage
+- Fix relationship test failures (high priority) - in progress
+- Add missing environment variables (FLASK_ENV, FLASK_DEBUG) - in progress
+- Fix version test indentation error - completed
+- Improve test coverage reporting - in progress
+- Add relationship test coverage - in progress
