@@ -31,30 +31,6 @@ LOG_FILE = configure_logging()
 
 def validate_db_connection(db_path: str) -> bool:
     """Validate database connection with retry logic and detailed logging"""
-    # Ensure logs directory exists
-    log_dir = Path('logs/version_management')
-    log_dir.mkdir(exist_ok=True, parents=True)
-    
-    # Configure logging
-    log_file = log_dir / 'connection.log'
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler(log_file),
-            logging.StreamHandler()
-        ]
-    )
-    logger = logging.getLogger(__name__)
-    
-    # Clear existing log file
-    if log_file.exists():
-        log_file.unlink()
-    
-    # Clear existing log file
-    if log_file.exists():
-        log_file.unlink()
-    
     try:
         # Convert Windows paths to forward slashes and handle relative paths
         db_path = str(Path(db_path).absolute()).replace('\\', '/')
@@ -74,7 +50,9 @@ def validate_db_connection(db_path: str) -> bool:
         for attempt in range(max_retries):
             try:
                 conn = sqlite3.connect(db_path)
-                conn.execute("SELECT 1")
+                cursor = conn.cursor()
+                cursor.execute("SELECT 1")
+                cursor.close()
                 conn.close()
                 logging.info(f"Database connection successful to {db_path}")
                 return True

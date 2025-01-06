@@ -20,6 +20,11 @@ def run_tests():
         # Initialize test database with proper app context
         app = create_app('testing')
         with app.app_context():
+            # Validate database connection first
+            if not validate_db_connection('instance/stipend.db'):
+                logging.error("Database connection validation failed")
+                return False
+                
             # Ensure extensions are initialized
             if 'sqlalchemy' not in app.extensions:
                 db.init_app(app)
