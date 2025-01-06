@@ -22,9 +22,5 @@
 /run git status
 ### CODE END ###
 
-# Print the current datetime to console
-/run scripts/print_datetime.py
-/run Write-Host "Code Cycle Step 1 Ends"
-
 # After running any console commands we go to STEP_2
 /load scripts/STEP_2

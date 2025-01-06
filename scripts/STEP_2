@@ -1,9 +1,5 @@
 # Code Cycle Step 2 (Coding)
 
-# Print the current datetime to console
-/run scripts/print_datetime.py
-/run Write-Host "Code Cycle Step 2 Start"
-
 /add scripts/CONSOLE_CMDS_2
 
 # Coding step

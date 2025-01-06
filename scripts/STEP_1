@@ -1,12 +1,11 @@
 # Code Cycle Step 1 (Analyzing)
 
+# Start the cycle
+/run scripts/scripts\start_cycle.py
+
 # Add any new or externally modified files
 /git add .
 /commit
-
-# Print the current datetime to console
-/run scripts/print_datetime.py
-/run Write-Host "Code Cycle Step 1 Start"
 
 # load project docs and IO
 /read PRD.md

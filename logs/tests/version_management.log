@@ -160,3 +160,31 @@
 2025-01-06 18:05:47,463 - ERROR - Missing required environment variables: DATABASE_URL, SECRET_KEY, ADMIN_EMAIL
 2025-01-06 18:05:47,463 - INFO - Production environment validation passed
 2025-01-06 18:05:49,777 - ERROR - Some version management tests failed
+2025-01-06 18:22:10,157 - INFO - Loaded testing configuration successfully
+2025-01-06 18:22:10,352 - INFO - Application initialized successfully
+2025-01-06 18:22:10,410 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-56/test_validate_db_connection_su0/test.db
+2025-01-06 18:22:10,424 - INFO - Loaded testing configuration successfully
+2025-01-06 18:22:10,460 - INFO - Application initialized successfully
+2025-01-06 18:22:10,473 - ERROR - Database file does not exist: C:/invalid/path/test.db
+2025-01-06 18:22:10,486 - INFO - Loaded testing configuration successfully
+2025-01-06 18:22:10,518 - INFO - Application initialized successfully
+2025-01-06 18:22:10,541 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-56/test_get_db_version0/test.db
+2025-01-06 18:22:10,553 - INFO - Loaded testing configuration successfully
+2025-01-06 18:22:10,586 - INFO - Application initialized successfully
+2025-01-06 18:22:10,611 - INFO - Loaded testing configuration successfully
+2025-01-06 18:22:10,644 - INFO - Application initialized successfully
+2025-01-06 18:22:10,841 - INFO - Loaded testing configuration successfully
+2025-01-06 18:22:10,875 - INFO - Application initialized successfully
+2025-01-06 18:22:10,933 - INFO - Loaded testing configuration successfully
+2025-01-06 18:22:10,969 - INFO - Application initialized successfully
+2025-01-06 18:22:11,020 - INFO - Loaded testing configuration successfully
+2025-01-06 18:22:11,056 - INFO - Application initialized successfully
+2025-01-06 18:22:11,080 - ERROR - Version file validation error: [Errno 2] No such file or directory: 'C:\\Users\\Morten\\AppData\\Local\\Temp\\pytest-of-Morten\\pytest-56\\test_validate_version_file0\\nonexistent.py'
+2025-01-06 18:22:11,113 - INFO - Loaded testing configuration successfully
+2025-01-06 18:22:11,163 - INFO - Application initialized successfully
+2025-01-06 18:22:11,182 - INFO - Version 1.2.3 already exists in VERSION_HISTORY.md
+2025-01-06 18:22:11,212 - INFO - Loaded testing configuration successfully
+2025-01-06 18:22:11,255 - INFO - Application initialized successfully
+2025-01-06 18:22:11,266 - ERROR - Missing required environment variables: DATABASE_URL, SECRET_KEY, ADMIN_EMAIL
+2025-01-06 18:22:11,266 - INFO - Production environment validation passed
+2025-01-06 18:22:14,013 - ERROR - Some version management tests failed

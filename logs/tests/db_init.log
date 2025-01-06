@@ -4,3 +4,68 @@
 2025-01-06 17:51:30,187 - INFO - Test database initialized successfully with relationships
 2025-01-06 18:00:11,840 - INFO - Dropping and recreating database tables
 2025-01-06 18:00:11,878 - INFO - Test database initialized successfully with relationships
+2025-01-06 18:22:00,853 - INFO - Dropping and recreating database tables
+2025-01-06 18:22:00,894 - INFO - Test database initialized successfully with relationships
+2025-01-06 18:33:41,815 - INFO - Test database initialized successfully with relationships
+2025-01-06 18:33:48,367 - INFO - Test database initialized successfully with relationships
+2025-01-06 18:33:48,924 - INFO - Loaded testing configuration successfully
+2025-01-06 18:33:48,972 - INFO - Application initialized successfully
+2025-01-06 18:33:49,002 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-57/test_validate_db_connection_su0/test.db
+2025-01-06 18:33:49,015 - INFO - Loaded testing configuration successfully
+2025-01-06 18:33:49,051 - INFO - Application initialized successfully
+2025-01-06 18:33:49,064 - ERROR - Database file does not exist: C:/invalid/path/test.db
+2025-01-06 18:33:49,077 - INFO - Loaded testing configuration successfully
+2025-01-06 18:33:49,113 - INFO - Application initialized successfully
+2025-01-06 18:33:49,144 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-57/test_get_db_version0/test.db
+2025-01-06 18:33:49,158 - INFO - Loaded testing configuration successfully
+2025-01-06 18:33:49,191 - INFO - Application initialized successfully
+2025-01-06 18:33:49,218 - INFO - Loaded testing configuration successfully
+2025-01-06 18:33:49,252 - INFO - Application initialized successfully
+2025-01-06 18:33:49,268 - INFO - Version 1.2.5 already exists in VERSION_HISTORY.md
+2025-01-06 18:33:49,309 - INFO - Loaded testing configuration successfully
+2025-01-06 18:33:49,340 - INFO - Application initialized successfully
+2025-01-06 18:33:49,392 - INFO - Loaded testing configuration successfully
+2025-01-06 18:33:49,422 - INFO - Application initialized successfully
+2025-01-06 18:33:49,472 - INFO - Loaded testing configuration successfully
+2025-01-06 18:33:49,504 - INFO - Application initialized successfully
+2025-01-06 18:33:49,522 - ERROR - Version file validation error: [Errno 2] No such file or directory: 'C:\\Users\\Morten\\AppData\\Local\\Temp\\pytest-of-Morten\\pytest-57\\test_validate_version_file0\\nonexistent.py'
+2025-01-06 18:33:49,536 - INFO - Loaded testing configuration successfully
+2025-01-06 18:33:49,568 - INFO - Application initialized successfully
+2025-01-06 18:33:49,582 - INFO - Version 1.2.3 already exists in VERSION_HISTORY.md
+2025-01-06 18:33:49,600 - INFO - Loaded testing configuration successfully
+2025-01-06 18:33:49,634 - INFO - Application initialized successfully
+2025-01-06 18:33:49,647 - ERROR - Missing required environment variables: DATABASE_URL, SECRET_KEY, ADMIN_EMAIL
+2025-01-06 18:33:49,648 - INFO - Production environment validation passed
+2025-01-06 18:33:50,859 - ERROR - Some version management tests failed
+2025-01-06 18:34:01,538 - INFO - Test database initialized successfully with relationships
+2025-01-06 18:45:38,725 - INFO - Test database initialized successfully with relationships
+2025-01-06 18:45:39,255 - INFO - Loaded testing configuration successfully
+2025-01-06 18:45:39,305 - INFO - Application initialized successfully
+2025-01-06 18:45:39,338 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-58/test_validate_db_connection_su0/test.db
+2025-01-06 18:45:39,350 - INFO - Loaded testing configuration successfully
+2025-01-06 18:45:39,384 - INFO - Application initialized successfully
+2025-01-06 18:45:39,395 - ERROR - Database file does not exist: C:/invalid/path/test.db
+2025-01-06 18:45:39,408 - INFO - Loaded testing configuration successfully
+2025-01-06 18:45:39,441 - INFO - Application initialized successfully
+2025-01-06 18:45:39,469 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-58/test_get_db_version0/test.db
+2025-01-06 18:45:39,483 - INFO - Loaded testing configuration successfully
+2025-01-06 18:45:39,517 - INFO - Application initialized successfully
+2025-01-06 18:45:39,546 - INFO - Loaded testing configuration successfully
+2025-01-06 18:45:39,580 - INFO - Application initialized successfully
+2025-01-06 18:45:39,597 - INFO - Version 1.2.5 already exists in VERSION_HISTORY.md
+2025-01-06 18:45:39,636 - INFO - Loaded testing configuration successfully
+2025-01-06 18:45:39,669 - INFO - Application initialized successfully
+2025-01-06 18:45:39,721 - INFO - Loaded testing configuration successfully
+2025-01-06 18:45:39,752 - INFO - Application initialized successfully
+2025-01-06 18:45:39,804 - INFO - Loaded testing configuration successfully
+2025-01-06 18:45:39,835 - INFO - Application initialized successfully
+2025-01-06 18:45:39,854 - ERROR - Version file validation error: [Errno 2] No such file or directory: 'C:\\Users\\Morten\\AppData\\Local\\Temp\\pytest-of-Morten\\pytest-58\\test_validate_version_file0\\nonexistent.py'
+2025-01-06 18:45:39,877 - INFO - Loaded testing configuration successfully
+2025-01-06 18:45:39,911 - INFO - Application initialized successfully
+2025-01-06 18:45:39,926 - INFO - Version 1.2.3 already exists in VERSION_HISTORY.md
+2025-01-06 18:45:39,944 - INFO - Loaded testing configuration successfully
+2025-01-06 18:45:39,977 - INFO - Application initialized successfully
+2025-01-06 18:45:39,992 - ERROR - Missing required environment variables: DATABASE_URL, SECRET_KEY, ADMIN_EMAIL
+2025-01-06 18:45:39,993 - INFO - Production environment validation passed
+2025-01-06 18:45:41,222 - ERROR - Some version management tests failed
+2025-01-06 18:45:44,216 - INFO - Test database initialized successfully with relationships

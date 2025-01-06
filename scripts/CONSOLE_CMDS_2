@@ -27,12 +27,8 @@
 # Generate coverage report
 /run scripts/generate_coverage_report.py
 
-# Print final timestamp
-/run scripts/print_datetime.py
 ### CODE END ###
 
-# Print completion message
-/run Write-Host "Code Cycle Step 2 Ends - Ready for Review"
 
 # Proceed to Step 3 - Review
 /load scripts/STEP_3
