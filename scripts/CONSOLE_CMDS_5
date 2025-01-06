@@ -29,11 +29,11 @@
 # Verify deployment requirements
 /run scripts/verify_deployment.py
 
-# Request deployment approval
-/run scripts/request_deployment.py
-
 # Print final timestamp
 /run scripts/print_datetime.py
+
+# Request deployment approval
+/run scripts/request_deployment.py
 
 # Reset and restart Code Cycle
 /reset
