@@ -1,6 +1,12 @@
 - Fix Stipend-Tag relationship mapping (critical priority) - IN PROGRESS
 - Update version bump logic in version.py (high priority) - IN PROGRESS
 - Fix test database initialization (critical priority) - IN PROGRESS
+- Fix pytest import errors (critical priority) - IN PROGRESS
+- Add proper app initialization in conftest.py (critical priority)
+- Verify version management test imports (high priority)
+- Add comprehensive test coverage for version.py (high priority)
+- Fix circular imports in app initialization (critical priority)
+- Add proper error handling for database connection tests (high priority)
 - Improve test coverage to meet 80% target (high priority) - IN PROGRESS
 - Fix coverage collection errors (high priority) - IN PROGRESS
 - Add missing environment variables (FLASK_ENV, FLASK_DEBUG) (high priority)
