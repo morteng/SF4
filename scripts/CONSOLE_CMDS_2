@@ -3,7 +3,7 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Clean up any previous test artifacts
+# Clean up test artifacts and old logs
 /run scripts/final_cleanup.py
 
 # Initialize fresh test environment
@@ -47,6 +47,10 @@
 
 # Run final cleanup
 /run scripts/final_cleanup.py
+
+# Remove duplicate test files
+del tests\test_user.py
+del tests\routes\test_public_routes.py
 
 ### CODE END ###
 

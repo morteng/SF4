@@ -12,16 +12,22 @@ import re
 __version__ = "0.2.0"
 
 # Configure logging
-LOG_FILE = 'logs/version_management.log'
-Path('logs').mkdir(exist_ok=True)
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(LOG_FILE),
-        logging.StreamHandler()
-    ]
-)
+def configure_logging():
+    log_dir = Path('logs')
+    log_dir.mkdir(exist_ok=True, parents=True)
+    LOG_FILE = log_dir / 'version_management.log'
+    
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(LOG_FILE),
+            logging.StreamHandler()
+        ]
+    )
+    return LOG_FILE
+
+LOG_FILE = configure_logging()
 
 def validate_db_connection(db_path: str) -> bool:
     """Validate database connection with retry logic and detailed logging"""
