@@ -17,6 +17,9 @@
 # Create logs directory structure
 /run scripts/create_logs_dir.py
 
+# Initialize database with retry logic
+/run scripts/db_utils.py
+
 # Run core tests
 /run scripts/run_relationship_tests.py
 /run scripts/run_version_management_tests.py
