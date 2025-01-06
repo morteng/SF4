@@ -2,37 +2,40 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Create final backup with relationships
+# Create final backup
 /run scripts/create_backup.py --final
 
-# Validate database schema and relationships
+# Validate database schema
 /run scripts/validate_schema.py
 
-# Verify production environment configuration
+# Verify production environment
 /run scripts/verify_production.py
 
-# Verify test database initialization
+# Verify test database
 /run scripts/verify_test_db.py
 
-# Run relationship tests with retry
+# Run relationship tests
 /run scripts/run_relationship_tests.py
 
 # Run version management tests
 /run scripts/run_version_management_tests.py
 
-# Generate detailed coverage report
+# Generate coverage report
 /run scripts/generate_coverage_report.py
 
-# Finalize all documentation
+# Check coverage
+/run scripts/check_coverage.py
+
+# Finalize documentation
 /run scripts/finalize_docs.py
 
 # Generate deployment checklist
 /run scripts/generate_deployment_checklist.py
 
-# Archive logs with force
-/run scripts/archive_logs.py --force
+# Archive logs
+/run scripts/archive_logs.py
 
-# Verify deployment requirements
+# Verify deployment
 /run scripts/verify_deployment.py
 
 # Print final timestamp
@@ -41,7 +44,6 @@
 
 # Print completion message
 /run Write-Host "Code Cycle Step 4 Ends - Ready for Deployment"
-
 
 # Proceed to Step 5 - Deployment
 /load scripts/STEP_5
