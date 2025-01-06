@@ -1,4 +1,8 @@
 - Fix Stipend-Tag relationship mapping (critical priority) - IN PROGRESS
+- Fix create_app import path in conftest.py (critical priority)
+- Add absolute path handling in version.py (high priority)
+- Add proper test database initialization (critical priority)
+- Fix pytest configuration conflicts (critical priority)
 - Update version bump logic in version.py (high priority) - IN PROGRESS
 - Fix test database initialization (critical priority) - IN PROGRESS
 - Fix pytest import errors (critical priority) - IN PROGRESS

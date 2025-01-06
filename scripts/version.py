@@ -22,8 +22,8 @@ logging.basicConfig(
 
 def validate_db_connection(db_path: str) -> bool:
     """Validate database connection with retry logic and detailed logging"""
-    # Convert Windows paths to forward slashes
-    db_path = db_path.replace('\\', '/')
+    # Convert Windows paths to forward slashes and handle relative paths
+    db_path = str(Path(db_path).absolute()).replace('\\', '/')
     max_retries = 3
     retry_delay = 1  # seconds
     
