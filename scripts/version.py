@@ -1,3 +1,16 @@
+from pathlib import Path
+import logging
+import os
+import sqlite3
+import time
+import subprocess
+from datetime import datetime
+from typing import Optional, Tuple
+import re
+
+# Current version
+__version__ = "0.2.0"
+
 # Configure logging
 LOG_FILE = 'logs/version_management.log'
 Path('logs').mkdir(exist_ok=True)
