@@ -14,6 +14,9 @@
 /run scripts/validate_schema.py
 /run scripts/verify_production.py
 
+# Create logs directory structure
+/run scripts/create_logs_dir.py
+
 # Run core tests
 /run scripts/run_relationship_tests.py
 /run scripts/run_version_tests.py
