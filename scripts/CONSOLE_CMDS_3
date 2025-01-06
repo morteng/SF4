@@ -15,14 +15,14 @@
 # Create initial backup
 /run scripts/create_backup.py
 
-# Run version management tests
-/run pytest tests/version_management/test_version.py -v
-
-# Check test coverage
-/run pytest --cov=scripts.version --cov-report=term-missing
+# Run version management tests with coverage
+/run pytest tests/version_management/test_version.py --cov=scripts.version --cov-report=term-missing -v
 
 # Verify production environment
-/run python -c "from scripts.version import validate_production_environment; print('Environment validation:', validate_production_environment())"
+/run scripts/version.py validate-env
+
+# Archive logs
+/run scripts/archive_logs.py
 
 # Generate coverage report
 /run coverage report -m
