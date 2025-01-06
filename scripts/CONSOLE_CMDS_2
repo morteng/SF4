@@ -40,8 +40,6 @@
 # Print completion message
 /run Write-Host "Code Cycle Step 2 Ends - Ready for Review"
 
-# Update TODO based on results
-/code update TODO if needed.
 
 # Proceed to Step 3 - Review
 /load scripts/STEP_3

@@ -1,5 +1,7 @@
 HI! Manager here!
 
+REQUEST: Create two python scripts in scripts/ the first should output code cycle start datetime to a text file and the second should read that datetime file and figure out how long time ago that was and output "cycle ends, time to complete: hh:mm:ss" to console. we will run the first at start of cycle, the other at end of cycle. 
+
 RULE: Never deploy until all tests pass and all todo items are handled. Only deploy when given permission byCEO.
 
 When you have updated functionality oar want to get approval for edits you have made, request that management checks things out by asking nicely in the scripts/REQUESTS.txt file. remember to include all information management needs to review.
@@ -49,3 +51,5 @@ Pending items:
 - Resolve version bump test failure
 
 Please review and approve deployment to production.
+
+Denied! please continue improving the codebase

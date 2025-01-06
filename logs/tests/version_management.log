@@ -1,0 +1,81 @@
+2025-01-06 17:05:52,640 - INFO - Loaded testing configuration successfully
+2025-01-06 17:05:52,830 - INFO - Application initialized successfully
+2025-01-06 17:05:52,886 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-48/test_validate_db_connection_su0/test.db
+2025-01-06 17:05:52,908 - INFO - Loaded testing configuration successfully
+2025-01-06 17:05:52,941 - INFO - Application initialized successfully
+2025-01-06 17:05:52,952 - ERROR - Database file does not exist: C:/invalid/path/test.db
+2025-01-06 17:05:52,965 - INFO - Loaded testing configuration successfully
+2025-01-06 17:05:52,998 - INFO - Application initialized successfully
+2025-01-06 17:05:53,022 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-48/test_get_db_version0/test.db
+2025-01-06 17:05:53,035 - INFO - Loaded testing configuration successfully
+2025-01-06 17:05:53,068 - INFO - Application initialized successfully
+2025-01-06 17:05:53,091 - INFO - Loaded testing configuration successfully
+2025-01-06 17:05:53,122 - INFO - Application initialized successfully
+2025-01-06 17:05:53,324 - INFO - Loaded testing configuration successfully
+2025-01-06 17:05:53,356 - INFO - Application initialized successfully
+2025-01-06 17:05:53,408 - INFO - Loaded testing configuration successfully
+2025-01-06 17:05:53,442 - INFO - Application initialized successfully
+2025-01-06 17:05:53,486 - INFO - Loaded testing configuration successfully
+2025-01-06 17:05:53,517 - INFO - Application initialized successfully
+2025-01-06 17:05:53,553 - ERROR - Version file validation error: [Errno 2] No such file or directory: 'C:\\Users\\Morten\\AppData\\Local\\Temp\\pytest-of-Morten\\pytest-48\\test_validate_version_file0\\nonexistent.py'
+2025-01-06 17:05:53,580 - INFO - Loaded testing configuration successfully
+2025-01-06 17:05:53,612 - INFO - Application initialized successfully
+2025-01-06 17:05:53,650 - INFO - Loaded testing configuration successfully
+2025-01-06 17:05:53,695 - INFO - Application initialized successfully
+2025-01-06 17:05:53,708 - ERROR - Missing required environment variables: DATABASE_URL, SECRET_KEY, ADMIN_EMAIL
+2025-01-06 17:05:53,708 - INFO - Production environment validation passed
+2025-01-06 17:05:56,188 - ERROR - Some version management tests failed
+2025-01-06 17:19:35,984 - INFO - Loaded testing configuration successfully
+2025-01-06 17:19:36,178 - INFO - Application initialized successfully
+2025-01-06 17:19:36,233 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-49/test_validate_db_connection_su0/test.db
+2025-01-06 17:19:36,247 - INFO - Loaded testing configuration successfully
+2025-01-06 17:19:36,278 - INFO - Application initialized successfully
+2025-01-06 17:19:36,290 - ERROR - Database file does not exist: C:/invalid/path/test.db
+2025-01-06 17:19:36,302 - INFO - Loaded testing configuration successfully
+2025-01-06 17:19:36,335 - INFO - Application initialized successfully
+2025-01-06 17:19:36,363 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-49/test_get_db_version0/test.db
+2025-01-06 17:19:36,377 - INFO - Loaded testing configuration successfully
+2025-01-06 17:19:36,406 - INFO - Application initialized successfully
+2025-01-06 17:19:36,429 - INFO - Loaded testing configuration successfully
+2025-01-06 17:19:36,460 - INFO - Application initialized successfully
+2025-01-06 17:19:36,643 - INFO - Loaded testing configuration successfully
+2025-01-06 17:19:36,677 - INFO - Application initialized successfully
+2025-01-06 17:19:36,711 - INFO - Loaded testing configuration successfully
+2025-01-06 17:19:36,741 - INFO - Application initialized successfully
+2025-01-06 17:19:36,786 - INFO - Loaded testing configuration successfully
+2025-01-06 17:19:36,815 - INFO - Application initialized successfully
+2025-01-06 17:19:36,838 - ERROR - Version file validation error: [Errno 2] No such file or directory: 'C:\\Users\\Morten\\AppData\\Local\\Temp\\pytest-of-Morten\\pytest-49\\test_validate_version_file0\\nonexistent.py'
+2025-01-06 17:19:36,852 - INFO - Loaded testing configuration successfully
+2025-01-06 17:19:36,883 - INFO - Application initialized successfully
+2025-01-06 17:19:36,913 - INFO - Loaded testing configuration successfully
+2025-01-06 17:19:36,943 - INFO - Application initialized successfully
+2025-01-06 17:19:36,953 - ERROR - Missing required environment variables: DATABASE_URL, SECRET_KEY, ADMIN_EMAIL
+2025-01-06 17:19:36,953 - INFO - Production environment validation passed
+2025-01-06 17:19:39,237 - ERROR - Some version management tests failed
+2025-01-06 17:34:22,621 - INFO - Loaded testing configuration successfully
+2025-01-06 17:34:22,822 - INFO - Application initialized successfully
+2025-01-06 17:34:22,879 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-50/test_validate_db_connection_su0/test.db
+2025-01-06 17:34:22,893 - INFO - Loaded testing configuration successfully
+2025-01-06 17:34:22,931 - INFO - Application initialized successfully
+2025-01-06 17:34:22,946 - ERROR - Database file does not exist: C:/invalid/path/test.db
+2025-01-06 17:34:22,962 - INFO - Loaded testing configuration successfully
+2025-01-06 17:34:22,998 - INFO - Application initialized successfully
+2025-01-06 17:34:23,021 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-50/test_get_db_version0/test.db
+2025-01-06 17:34:23,039 - INFO - Loaded testing configuration successfully
+2025-01-06 17:34:23,078 - INFO - Application initialized successfully
+2025-01-06 17:34:23,103 - INFO - Loaded testing configuration successfully
+2025-01-06 17:34:23,134 - INFO - Application initialized successfully
+2025-01-06 17:34:23,323 - INFO - Loaded testing configuration successfully
+2025-01-06 17:34:23,362 - INFO - Application initialized successfully
+2025-01-06 17:34:23,402 - INFO - Loaded testing configuration successfully
+2025-01-06 17:34:23,436 - INFO - Application initialized successfully
+2025-01-06 17:34:23,480 - INFO - Loaded testing configuration successfully
+2025-01-06 17:34:23,518 - INFO - Application initialized successfully
+2025-01-06 17:34:23,534 - ERROR - Version file validation error: [Errno 2] No such file or directory: 'C:\\Users\\Morten\\AppData\\Local\\Temp\\pytest-of-Morten\\pytest-50\\test_validate_version_file0\\nonexistent.py'
+2025-01-06 17:34:23,553 - INFO - Loaded testing configuration successfully
+2025-01-06 17:34:23,585 - INFO - Application initialized successfully
+2025-01-06 17:34:23,622 - INFO - Loaded testing configuration successfully
+2025-01-06 17:34:23,656 - INFO - Application initialized successfully
+2025-01-06 17:34:23,671 - ERROR - Missing required environment variables: DATABASE_URL, SECRET_KEY, ADMIN_EMAIL
+2025-01-06 17:34:23,671 - INFO - Production environment validation passed
+2025-01-06 17:34:26,231 - ERROR - Some version management tests failed

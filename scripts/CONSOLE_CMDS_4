@@ -42,8 +42,6 @@
 # Print completion message
 /run Write-Host "Code Cycle Step 4 Ends - Ready for Deployment"
 
-# Update TODO based on results
-/code update TODO if needed.
 
 # Proceed to Step 5 - Deployment
 /load scripts/STEP_5

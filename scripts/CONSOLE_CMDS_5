@@ -32,7 +32,7 @@
 ### CODE END ###
 
 # Update developer log
-/code Update DEVLOG.md with final cycle notes. Update TODO if needed.
+/code Write a new DEVLOG.md. Update TODO if needed, remove comleted items.
 
 # Print final timestamp
 /run scripts/print_datetime.py
@@ -40,8 +40,7 @@
 # Print completion message
 /run Write-Host "Code Cycle Step 5 Ends - Ready for Next Iteration"
 
-# Request deployment approval
-/code Update scripts/REQUESTS.txt with deployment request details
+
 
 # Push changes to GitHub
 /git add .

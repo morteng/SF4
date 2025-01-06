@@ -26,8 +26,5 @@
 /run scripts/print_datetime.py
 /run Write-Host "Code Cycle Step 1 Ends"
 
-# Update TODO based on results
-/code update TODO if needed. 
-
 # After running any console commands we go to STEP_2
 /load scripts/STEP_2
