@@ -37,6 +37,7 @@ def generate_checklist():
             f.write("- [ ] Rollback procedure tested\n")
             f.write("- [ ] Monitoring configured\n")
             f.write("- [ ] Deployment verification passed\n")
+            f.write("- [ ] Post-deployment checks completed\n")
         return True
     except Exception as e:
         print(f"Failed to generate deployment checklist: {str(e)}")

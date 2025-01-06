@@ -25,6 +25,9 @@
 
 ### CODE END ###
 
+# Print final timestamp
+/run scripts/print_datetime.py
+
 # Print completion message
 /run scripts\end_cycle.py
 
