@@ -14,8 +14,7 @@ def update_release_notes():
             f.write("- Finalized deployment verification process\n")
             f.write("- Updated production environment checks\n")
             f.write("- Completed deployment documentation\n")
-            f.write("- Finalized deployment verification process\n")
-            f.write("- Updated production environment checks\n")
+            f.write("- Verified production environment configuration\n")
         return True
     except Exception as e:
         print(f"Failed to update release notes: {str(e)}")

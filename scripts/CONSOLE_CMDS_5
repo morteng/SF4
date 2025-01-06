@@ -23,13 +23,18 @@
 # Verify deployment
 /run scripts/verify_deployment.py
 
-### CODE END ###
+# End cycle and calculate time
+/run scripts/end_cycle.py
 
 # Print final timestamp
 /run scripts/print_datetime.py
+### CODE END ###
 
 # Print completion message
-/run scripts\end_cycle.py
+/run Write-Host "Code Cycle Step 5 Ends - Ready for Next Cycle"
+
+# Request deployment approval
+/run Write-Host "Requesting deployment approval from management"
 
 # Push changes to GitHub
 /git add .
