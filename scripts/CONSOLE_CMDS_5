@@ -1,5 +1,4 @@
 # Console Commands for Step 5 - Deployment
-# Do not use echo commands
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
@@ -51,7 +50,7 @@
 # Final updates
 /add scripts/REQUESTS.txt
 /add scripts/MANAGER.txt
-/architect Final cleanup before reset. Remove requests from MANAGER.txt that have been implemented or scheduled for implementation. Delete DEVLOG.md and replace it with a new DEVLOG.md based on this cycle. Include code cycle number, cycle processing time and test coverage stats. Add requests for any actions that are impossible for you to do to REQUESTS.txt. Update TODO list if needed, removing items that have been verified as completed. Keep documentation as compact as possible, prune and remove what you can without losing important information.
+/architect Final cleanup before reset. Remove requests from MANAGER.txt that have been implemented or are in progress. Delete DEVLOG.md and replace it with a new DEVLOG.md based on this cycle. Include code cycle number, cycle processing time and test coverage stats as well as progress, current vibe and whatever else you feel should be in a developer log. Feel free to use emojis. Add requests for any actions that are impossible for you to do to REQUESTS.txt. Update TODO list if needed, removing items that have been verified as completed. Keep documentation as compact as possible, prune and remove what you can without losing important information.
 
 # Reset and restart Code Cycle
 /reset
