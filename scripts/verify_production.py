@@ -71,8 +71,16 @@ def verify_security_settings():
             logger.warning("Debug mode is enabled in production")
             return False
             
-        if len(os.getenv('SECRET_KEY', '')) < 32:
-            logger.error("SECRET_KEY is too short")
+        secret_key = os.getenv('SECRET_KEY', '')
+        if len(secret_key) < 32:
+            logger.error(f"SECRET_KEY is too short (length: {len(secret_key)}), minimum 32 characters required")
+            return False
+            
+        # Verify SECRET_KEY complexity
+        if not any(c.isupper() for c in secret_key) or \
+           not any(c.islower() for c in secret_key) or \
+           not any(c.isdigit() for c in secret_key):
+            logger.error("SECRET_KEY must contain uppercase, lowercase and numbers")
             return False
             
         return True

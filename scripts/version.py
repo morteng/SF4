@@ -458,7 +458,7 @@ def create_db_backup(source_db: str, backup_path: str = None) -> bool:
 def validate_production_environment() -> bool:
     """Validate production environment settings"""
     required_vars = {
-        'DATABASE_URL': str,
+        'SQLALCHEMY_DATABASE_URI': str,
         'SECRET_KEY': str,
         'ADMIN_EMAIL': str,
         'ADMIN_PASSWORD': str,

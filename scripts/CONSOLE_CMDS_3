@@ -38,6 +38,12 @@
 # Verify production environment
 /run scripts/verify_production.py
 
+# Verify deployment readiness
+/run scripts/verify_deployment.py
+
+# Finalize documentation
+/run scripts/finalize_docs.py
+
 # Print final timestamp
 /run scripts/print_datetime.py
 ### CODE END ###
