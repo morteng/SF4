@@ -13,6 +13,6 @@ Thank you,
 Development Team
 
 
-MANAGER: hello, things are looking good, keep up the good work! you can push to github when you want
+MANAGER.txt: hello, things are looking good, keep up the good work! you can push to github when you want
 
 we should also implement some sort of production system where we make the actual server on https://render.com/ pull the CEO approved version of the site go live. Please implement such a system, ask about accounts and verification and anything else you need here.

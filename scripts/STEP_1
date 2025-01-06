@@ -11,10 +11,11 @@
 # load project docs and IO
 /read PROJECT
 /read CONVENTIONS.md
-/read DEVLOG.txt
+/read DEVLOG.md
 /add TODO
-/add scripts/MANAGER
-/add CEO.txt
+/add scripts/MANAGER.txt
+/add scripts/CEO.txt
+/add scripts/QA.txt
 
 /add scripts/CONSOLE_CMDS_1
 
