@@ -27,3 +27,5 @@
 - Fix version.py update-release-notes argument handling
 - Add update-version-history command implementation
 - Fix validate_production_environment function definition
+- Add model relationship test coverage
+- Verify test database initialization

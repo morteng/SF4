@@ -21,11 +21,14 @@
 # Verify production environment
 /run scripts/version.py validate-env
 
-# Run test coverage
-/run pytest --cov=scripts.version --cov-report=term-missing
+# Run model relationship tests
+/run pytest tests/models/ -v
 
 # Run version management tests
 /run pytest tests/version_management/ -v
+
+# Run test coverage
+/run pytest --cov=scripts.version --cov-report=term-missing
 ### CODE END ###
 
 # Print the current datetime to console
