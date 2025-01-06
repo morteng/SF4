@@ -4,7 +4,9 @@ from pathlib import Path
 def calculate_cycle_time():
     """Calculate time since cycle start and print result"""
     try:
-        cycle_file = Path('cycle_start.txt')
+        scripts_dir = Path(__file__).parent
+        cycle_file = scripts_dir / 'cycle_start.txt'
+        
         if not cycle_file.exists():
             print("Cycle start file not found")
             return False
