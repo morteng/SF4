@@ -20,6 +20,9 @@
 
 # Verify production environment
 /run scripts/verify_production.py
+
+# Generate deployment checklist
+/run scripts/generate_deployment_checklist.py
 ### CODE END ###
 
 # Print the current datetime to console

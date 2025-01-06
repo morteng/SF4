@@ -41,7 +41,9 @@ def verify_environment_variables():
         'SQLALCHEMY_DATABASE_URI',
         'SECRET_KEY',
         'ADMIN_EMAIL',
-        'ADMIN_PASSWORD'
+        'ADMIN_PASSWORD',
+        'FLASK_ENV',
+        'FLASK_DEBUG'
     ]
     
     missing_vars = [var for var in required_vars if var not in os.environ]
@@ -49,6 +51,22 @@ def verify_environment_variables():
         print(f"Missing required environment variables: {', '.join(missing_vars)}")
         return False
     return True
+
+def verify_security_settings():
+    """Verify security-related settings"""
+    try:
+        if os.getenv('FLASK_DEBUG') == '1':
+            print("Warning: Debug mode is enabled in production")
+            return False
+            
+        if len(os.getenv('SECRET_KEY', '')) < 32:
+            print("Error: SECRET_KEY is too short")
+            return False
+            
+        return True
+    except Exception as e:
+        print(f"Security verification error: {str(e)}")
+        return False
 
 def main():
     """Main verification function"""
@@ -62,6 +80,9 @@ def main():
         
     # Run verification steps
     if not verify_environment_variables():
+        sys.exit(1)
+        
+    if not verify_security_settings():
         sys.exit(1)
         
     if not verify_database_connection(db_url):
