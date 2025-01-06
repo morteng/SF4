@@ -8,3 +8,6 @@
 - Validate production schema
 - Fix database connection validation
 - Fix alembic version check
+- Fix version.py update-release-notes command
+- Add update-version-history command to version.py
+- Implement validate_production_environment in version.py
