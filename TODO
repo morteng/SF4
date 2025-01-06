@@ -21,3 +21,6 @@
 - Add version management tests
 - Fix test database validation
 - Fix deployment verification
+- Fix Tag model relationship with Stipend
+- Add model relationship tests
+- Verify Alembic migration chain
