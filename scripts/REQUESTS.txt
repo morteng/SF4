@@ -15,6 +15,9 @@ Requests for Human Intervention:
 1. Add missing environment variables to production:
    - FLASK_ENV=production
    - FLASK_DEBUG=False
+
+REQUEST: Update .env.example with all variables you want me to put into .env file, then ask me to copy .env.example content to .env file. 
+
 2. Fix coverage collection configuration
 3. Approve deployment to main
 
