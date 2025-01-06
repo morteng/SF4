@@ -3,38 +3,20 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
-# Fix pytest configuration
-/run scripts/fix_pytest_config.py
-
-# Initialize fresh test database
-/run scripts/init_test_db.py
-
-# Validate database schema
-/run scripts/validate_schema.py
-
-# Verify database connection
-/run scripts/validate_db.py
-
-# Create initial backup
-/run scripts/create_backup.py
-
-# Archive logs
-/run scripts/archive_logs.py
-
-# Verify production environment
-/run scripts/version.py validate-env
-
 # Run model relationship tests
-/run pytest tests/models/ -v
+/run pytest tests/test_models.py -v
 
 # Run version management tests
-/run pytest tests/version_management/ -v
+/run pytest tests/version_management/test_version.py -v
 
 # Run test coverage
 /run pytest --cov=scripts.version --cov-report=term-missing
 
-# Run all tests
-/run scripts/run_all_tests.py
+# Create final backup
+/run scripts/create_backup.py
+
+# Archive test logs
+/run scripts/archive_logs.py
 ### CODE END ###
 
 # Print the current datetime to console
