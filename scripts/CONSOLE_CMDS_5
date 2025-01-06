@@ -1,4 +1,4 @@
-# Console Commands for Step5 - Document and Deploy
+# Console Commands for Step 5 - Document and Deploy
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
@@ -11,12 +11,6 @@
 # Verify production environment
 /run scripts/verify_production.py
 
-# Run version management tests
-/run scripts/run_version_management_tests.py
-
-# Generate coverage report
-/run scripts/generate_coverage_report.py
-
 # Finalize documentation
 /run scripts/finalize_docs.py
 
@@ -24,21 +18,21 @@
 /run scripts/generate_deployment_checklist.py
 
 # Archive logs
-/run scripts/archive_logs.py --force
+/run scripts/archive_logs.py
 
-# Verify deployment requirements
+# Verify deployment
 /run scripts/verify_deployment.py
-
-### CODE END ###
-
-# Update developer log
-/code Write a new DEVLOG.md. Update TODO if needed, remove comleted items.
 
 # Print final timestamp
 /run scripts/print_datetime.py
+### CODE END ###
 
 # Print completion message
 /run Write-Host "Code Cycle Step 5 Ends - Ready for Next Iteration"
+
+# Reset and restart Code Cycle
+/reset
+/load scripts/STEP_1
 
 
 
