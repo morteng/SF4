@@ -159,7 +159,7 @@ def test_create_version_history(tmp_path):
 def test_validate_production_environment(monkeypatch, tmp_path):
     """Test production environment validation"""
     # Setup test environment
-    monkeypatch.setenv('DATABASE_URL', 'sqlite:///test.db')
+    monkeypatch.setenv('SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db')  # Updated to match .env
     monkeypatch.setenv('SECRET_KEY', 'a' * 32)  # 32 character minimum
     monkeypatch.setenv('ADMIN_EMAIL', 'test@example.com')
     monkeypatch.setenv('ADMIN_PASSWORD', 'securepassword')
@@ -170,11 +170,11 @@ def test_validate_production_environment(monkeypatch, tmp_path):
     assert validate_production_environment() is True
     
     # Test missing variables
-    monkeypatch.delenv('DATABASE_URL')
+    monkeypatch.delenv('SQLALCHEMY_DATABASE_URI')  # Updated to match .env
     assert validate_production_environment() is False
     
     # Test invalid types
-    monkeypatch.setenv('DATABASE_URL', 'sqlite:///test.db')
+    monkeypatch.setenv('SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db')
     monkeypatch.setenv('SECRET_KEY', 12345)
     assert validate_production_environment() is False
     
