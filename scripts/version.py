@@ -25,6 +25,18 @@ logging.basicConfig(
 
 def validate_db_connection(db_path: str) -> bool:
     """Validate database connection with retry logic and detailed logging"""
+    # Configure logging first to ensure output is captured
+    log_file = Path('logs/version_management.log')
+    log_file.parent.mkdir(exist_ok=True)
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(log_file),
+            logging.StreamHandler()
+        ]
+    )
+    
     try:
         # Convert Windows paths to forward slashes and handle relative paths
         db_path = str(Path(db_path).absolute()).replace('\\', '/')
@@ -40,18 +52,6 @@ def validate_db_connection(db_path: str) -> bool:
         if not db_path == ":memory:" and not os.path.exists(db_path):
             logging.error(f"Database file does not exist: {db_path}")
             return False
-        
-        # Configure logging to capture output
-        log_file = Path('logs/version_management.log')
-        log_file.parent.mkdir(exist_ok=True)
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s - %(levelname)s - %(message)s',
-            handlers=[
-                logging.FileHandler(log_file),
-                logging.StreamHandler()
-            ]
-        )
         
         for attempt in range(max_retries):
             try:
@@ -518,9 +518,20 @@ def validate_production_environment() -> bool:
             converted = var_type(os.environ[var])
             
             # Additional validation for SECRET_KEY
-            if var == 'SECRET_KEY' and len(converted) < 64:
-                logging.error(f"{var} is too short (minimum 32 characters)")
-                return False
+            if var == 'SECRET_KEY':
+                if len(converted) < 64:
+                    logging.error(f"{var} is too short (minimum 64 characters)")
+                    return False
+                # Check for sufficient complexity
+                if not any(c.isupper() for c in converted):
+                    logging.error(f"{var} must contain uppercase letters")
+                    return False
+                if not any(c.islower() for c in converted):
+                    logging.error(f"{var} must contain lowercase letters")
+                    return False
+                if not any(c.isdigit() for c in converted):
+                    logging.error(f"{var} must contain numbers")
+                    return False
                 
             # Additional validation for FLASK_DEBUG
             if var == 'FLASK_DEBUG' and converted.lower() not in ('0', 'false', '1', 'true'):
