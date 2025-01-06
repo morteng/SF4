@@ -7,6 +7,10 @@ Cycle Focus:
 
 Initial Tasks:
 - Add FLASK_ENV and FLASK_DEBUG to .env.example
+
+QUESTION: What are the values and where should they be defined?
+
+
 - Create test coverage improvement plan
 - Verify production deployment configuration
 
