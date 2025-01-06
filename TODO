@@ -28,7 +28,7 @@
 - Fix test database validation
 - Fix deployment verification
 - Fix Tag model relationship with Stipend (completed)
-- Fix pytest configuration in conftest.py (completed)
+- Fix pytest configuration in conftest.py
 - Add model relationship tests (completed)
 - Add version management tests (completed)
 - Fix pytest import errors (completed)
