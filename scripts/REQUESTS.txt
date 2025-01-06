@@ -26,3 +26,5 @@ Pending items:
 - Resolve test import errors
 
 Please review and approve deployment to production.
+
+NO! FIX TESTS!!!

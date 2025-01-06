@@ -50,7 +50,8 @@
 ### CODE END ###
 
 # Request deployment approval
-/request deployment
+#/request deployment
+# This does not work, never try this. 
 
 # Push changes to GitHub
 /git add .
