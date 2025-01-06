@@ -30,15 +30,14 @@
 # Verify deployment requirements
 /run scripts/verify_deployment.py
 
-# Print final timestamp
-/run scripts/print_datetime.py
-
 # Request deployment approval
 /run scripts/request_deployment_approval.py
+
+# Print final timestamp
+/run scripts/print_datetime.py
 ### CODE END ###
 
 # Print completion message
-/run scripts/print_datetime.py
 /run Write-Host "Code Cycle Step 4 Ends - Ready for Deployment"
 
 # Update TODO based on results
