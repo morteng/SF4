@@ -29,20 +29,11 @@
 # Verify deployment requirements
 /run scripts/verify_deployment.py
 
-# Print final timestamp
-/run scripts/print_datetime.py
-
-# Request deployment approval
-/run scripts/request_deployment.py
-
-# Reset and restart Code Cycle
-/reset
-/load scripts/STEP_1
 ### CODE END ###
 
 # Print completion message
 /run scripts/print_datetime.py
-/run Write-Host "Code Cycle Complete - Ready for Deployment"
+/run Write-Host "Code Cycle Completed"
 
 # Request deployment approval
 /code Add deployment request to REQUESTS.txt
@@ -51,7 +42,10 @@
 /add scripts/REQUESTS.txt
 /add scripts/MANAGER.txt
 /add DEVLOG.md
-/code Final cleanup before reset. Remove requests from MANAGER.txt that have been implemented or are in progress. Add requests for any actions that are impossible for you to do to REQUESTS.txt. Update TODO list if needed, removing items that have been verified as completed. Keep documentation as compact as possible, prune and remove what you can without losing important information. Remove previous DEVLOG.md entry and replace it with a new DEVLOG.md based on this cycle. Include code cycle number, cycle processing time and test coverage stats as well as progress, current vibe and whatever else you feel should be in a developer log. Feel free to use emojis.
+
+/code Final cleanup before reset. Remove requests from MANAGER.txt that have been implemented or are in progress. Add requests for any actions that are impossible for you to do to REQUESTS.txt. Update TODO list if needed, removing items that have been verified as completed. Review and revise PRD, DESIGN and PROGRESS documentation in light of this code cycle. 
+
+/code Remove previous DEVLOG.md entry and replace it with a new DEVLOG.md based on this cycle. Include code cycle number, cycle processing time and test coverage stats as well as progress, current vibe and whatever else you feel should be in a developer log. Feel free to use emojis.
 
 # Reset and restart Code Cycle
 /reset

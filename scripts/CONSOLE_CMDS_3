@@ -40,7 +40,6 @@
 ### CODE END ###
 
 # Print completion message
-/run scripts/print_datetime.py
 /run Write-Host "Code Cycle Step 3 Ends - Ready for Review"
 
 # Update TODO based on results
