@@ -13,12 +13,25 @@ def fix_pytest_config():
         
         # Update test database URI
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         
-        # Initialize extensions
-        db.init_app(app)
+        # Initialize extensions if not already initialized
+        if 'sqlalchemy' not in app.extensions:
+            db.init_app(app)
         
         # Create test client
-        test_client = app.test_client()
+        with app.app_context():
+            db.create_all()
+            test_client = app.test_client()
+        
+        # Update pytest configuration
+        pytest_config = Path('pytest.ini')
+        if not pytest_config.exists():
+            pytest_config.write_text("""
+[pytest]
+testpaths = tests/
+addopts = -v --cov=app --cov=scripts --cov-report=term-missing
+""")
         
         return True
     except Exception as e:

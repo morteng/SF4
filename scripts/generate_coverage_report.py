@@ -5,10 +5,13 @@ import subprocess
 def generate_coverage():
     """Generate test coverage report"""
     try:
+        # Initialize test database
+        init_test_db()
+        
         # Run coverage
         result = subprocess.run([
             'coverage', 'run', '--source=app,scripts', 
-            '-m', 'pytest', 'tests/'
+            '--branch', '-m', 'pytest', 'tests/'
         ], capture_output=True, text=True)
         
         if result.returncode != 0:
@@ -18,6 +21,10 @@ def generate_coverage():
             
         # Generate report
         subprocess.run(['coverage', 'report', '-m'])
+        
+        # Generate HTML report
+        subprocess.run(['coverage', 'html'])
+        
         return True
         
     except Exception as e:

@@ -30,7 +30,8 @@ def init_test_db():
             
             # Create test data with proper relationships
             org = Organization(name="Test Org")
-            tag = Tag(name="Test Tag", category="Test Category")
+            tag1 = Tag(name="Test Tag 1", category="Test Category")
+            tag2 = Tag(name="Test Tag 2", category="Test Category")
             stipend = Stipend(
                 name="Test Stipend",
                 summary="Test Summary",
@@ -43,11 +44,11 @@ def init_test_db():
             )
             
             # Establish relationships
-            stipend.tags.append(tag)
+            stipend.tags.extend([tag1, tag2])
             stipend.organization = org
             
             # Add and commit
-            db.session.add_all([org, tag, stipend])
+            db.session.add_all([org, tag1, tag2, stipend])
             db.session.commit()
             
             # Verify data was inserted
@@ -55,7 +56,7 @@ def init_test_db():
             tag_count = Tag.query.count()
             stipend_count = Stipend.query.count()
             
-            if org_count == 1 and tag_count == 1 and stipend_count == 1:
+            if org_count == 1 and tag_count == 2 and stipend_count == 1:
                 logging.info("Test database initialized successfully with relationships")
                 print("Test database initialized successfully with relationships")
                 return True
