@@ -1,11 +1,10 @@
-- Fix create_app import error in tests (high priority)
-- Resolve pytest configuration issues (high priority)
-- Implement version management tests
-- Fix database connection validation
+- Fix version file update test failure (high priority)
+- Improve test coverage to 80% (high priority)
+- Fix database relationship mapping issues (high priority)
+- Resolve coverage collection errors (high priority)
 - Verify Alembic migration chain
 - Add proper test fixtures
 - Add schema validation tests
-- Add relationship test coverage
 - Add proper logging configuration
 - Verify production deployment
 - Finalize documentation updates
