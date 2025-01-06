@@ -295,7 +295,7 @@ def bump_version(version_type="patch") -> str:
             minor = 0
             patch = 0
         elif version_type == "minor":
-            minor += 1 
+            minor += 1
             patch = 0
         else:
             patch += 1
