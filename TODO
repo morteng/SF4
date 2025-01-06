@@ -12,6 +12,10 @@
 - Update version bump test assertions (high priority)
 - Improve test database verification (high priority)
 - Add proper test cleanup procedures (high priority)
+- Fix create_app import error (critical priority) - IN PROGRESS
+- Add proper test isolation (high priority)
+- Fix coverage collector assertion errors (critical priority)
+- Update test configuration handling (high priority)
 - Improve test coverage to meet 80% target (high priority) - IN PROGRESS
 - Fix coverage collection errors (high priority) - IN PROGRESS
 - Add missing environment variables (FLASK_ENV, FLASK_DEBUG) (high priority)
