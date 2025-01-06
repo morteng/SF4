@@ -15,6 +15,12 @@
 
 # Verify deployment
 /run scripts/version.py verify-deployment
+
+# Verify production environment
+/run scripts/verify_production.py
+
+# Generate cycle report
+/run scripts/generate_cycle_report.py
 ### CODE END ###
 
 # Print the current datetime to console
