@@ -1,10 +1,8 @@
-- Fix version bump test failure (high priority) - in progress
-- Resolve database relationship mapping issues (high priority) - in progress
-- Improve test coverage to 80% (high priority) - in progress
-- Fix coverage collection errors (high priority) - in progress
+- Add missing environment variables (FLASK_ENV, FLASK_DEBUG) (high priority)
+- Fix coverage collection errors (high priority)
+- Create logs directory structure (high priority)
 - Verify Alembic migration chain
 - Add proper test fixtures
 - Add schema validation tests
 - Add proper logging configuration
 - Verify production deployment
-- Finalize documentation updates
