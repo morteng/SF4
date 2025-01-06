@@ -4,6 +4,8 @@ import sqlite3
 from pathlib import Path
 import logging
 
+from app.factory import create_app
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def verify_test_db(db_path='instance/test.db'):

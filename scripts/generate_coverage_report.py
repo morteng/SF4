@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 
+from app.factory import create_app
 from init_test_db import init_test_db
 
 def generate_coverage():
