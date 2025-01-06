@@ -23,23 +23,10 @@
 # Verify deployment
 /run scripts/verify_deployment.py
 
-# Print final timestamp
-/run scripts/print_datetime.py
 ### CODE END ###
 
 # Print completion message
-/run Write-Host "Code Cycle Step 5 Ends - Ready for Next Iteration"
-
-# Push changes to GitHub
-/git add .
-/git commit -m "Cycle 6 completed - Ready for deployment"
-/git push origin main
-
-# Reset and restart Code Cycle
-/reset
-/load scripts/STEP_1
-
-
+/run scripts\end_cycle.py
 
 # Push changes to GitHub
 /git add .
