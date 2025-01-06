@@ -32,6 +32,9 @@
 # Check coverage thresholds
 /run scripts/check_coverage.py
 
+# Archive logs
+/run scripts/archive_logs.py
+
 # Print final timestamp
 /run scripts/print_datetime.py
 ### CODE END ###
