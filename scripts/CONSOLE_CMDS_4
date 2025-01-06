@@ -3,52 +3,52 @@
 
 ### CODE START ###
 # Validate production database schema
-/run scripts/validate_schema.py --production
+/run scripts/validate_schema.py
 
 # Verify production environment configuration
-/run scripts/verify_production.py --strict
+/run scripts/verify_production.py
 
 # Verify test database integrity
-/run scripts/verify_test_db.py --full
+/run scripts/verify_test_db.py
 
 # Run all test suites with coverage
-/run scripts/run_all_tests.py --cov
+/run scripts/run_all_tests.py
 
 # Generate detailed coverage report
-/run scripts/generate_coverage_report.py --html
+/run scripts/generate_coverage_report.py
 
 # Check coverage meets requirements
-/run scripts/check_coverage.py --min 80
+/run scripts/check_coverage.py
 
 # Validate version file
 /run scripts/validate_version.py
 
 # Finalize all documentation
-/run scripts/finalize_docs.py --all
+/run scripts/finalize_docs.py
 
 # Generate comprehensive deployment checklist
-/run scripts/generate_deployment_checklist.py --detailed
+/run scripts/generate_deployment_checklist.py
 
 # Create final backup
-/run scripts/create_backup.py --final
+/run scripts/create_backup.py
 
 # Archive logs
-/run scripts/archive_logs.py --compress
+/run scripts/archive_logs.py
 
 # Verify deployment readiness
-/run scripts/verify_deployment.py --full
+/run scripts/verify_deployment.py
 
 # Print final timestamp for review
 /run scripts/print_datetime.py
 
 # Update requirements
-pip freeze > requirements.txt
+/run scripts/update_requirements.py
 
 # Verify SECRET_KEY meets requirements
-/run scripts/verify_production.py --check-secret-key
+/run scripts/verify_production.py
 
 # Validate all environment variables
-/run scripts/verify_production.py --check-env
+/run scripts/verify_production.py
 
 ### CODE END ###
 
