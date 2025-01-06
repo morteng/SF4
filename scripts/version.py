@@ -272,18 +272,7 @@ def parse_version(version: str) -> Tuple[int, int, int, Optional[str]]:
     return major, minor, patch, suffix
 
 def bump_version(version_type="patch") -> str:
-    """Bump the version number and return the new version string
-    
-    Args:
-        version_type: Type of version bump - 'major', 'minor' or 'patch'
-    
-    Returns:
-        str: New version string in semantic version format
-        
-    Raises:
-        ValueError: If version_type is invalid
-        RuntimeError: If version bump fails
-    """
+    """Bump the version number and return the new version string"""
     if version_type not in ["major", "minor", "patch"]:
         raise ValueError("version_type must be 'major', 'minor' or 'patch'")
 
@@ -302,10 +291,9 @@ def bump_version(version_type="patch") -> str:
 
         new_version = f"{major}.{minor}.{patch}"
         
-        # Validate new version
-        if not validate_version(new_version):
-            raise RuntimeError(f"Invalid version format after bump: {new_version}")
-            
+        # Update version file
+        update_version_file(new_version)
+        
         return new_version
         
     except Exception as e:
@@ -417,11 +405,7 @@ def create_db_backup(source_db: str, backup_path: str) -> bool:
         return False
 
 def validate_production_environment() -> bool:
-    """Validate production environment settings
-    
-    Returns:
-        bool: True if all required environment variables are present and valid, False otherwise
-    """
+    """Validate production environment settings"""
     required_vars = {
         'DATABASE_URL': str,
         'SECRET_KEY': str,
