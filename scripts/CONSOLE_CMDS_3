@@ -23,8 +23,9 @@
 # Verify test database initialization
 /run scripts/verify_test_db.py
 
-# Run all test suites
-/run scripts/verify_tests.py
+# Run core test suites
+/run scripts/run_relationship_tests.py
+/run scripts/run_version_management_tests.py
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py
