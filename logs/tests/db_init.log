@@ -282,3 +282,40 @@ the current application. To solve this, set up an application context
 with app.app_context(). See the documentation for more information.
 2025-01-06 20:45:10,448 - INFO - Test database initialized successfully
 2025-01-06 20:48:07,917 - INFO - Test database initialized successfully
+2025-01-06 21:20:28,861 - INFO - Test database initialized successfully
+2025-01-06 21:20:42,487 - INFO - Test database initialized successfully
+2025-01-06 21:20:42,487 - ERROR - Error running version management tests: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-06 21:20:44,734 - INFO - Test database initialized successfully
+2025-01-06 21:34:19,036 - INFO - Test database initialized successfully
+2025-01-06 21:34:27,848 - INFO - Test database initialized successfully
+2025-01-06 21:34:28,732 - INFO - Loaded testing configuration successfully
+2025-01-06 21:34:28,782 - INFO - Application initialized successfully
+2025-01-06 21:34:28,813 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-69/test_validate_db_connection_su0/test.db
+2025-01-06 21:34:28,842 - INFO - Loaded testing configuration successfully
+2025-01-06 21:34:28,876 - INFO - Application initialized successfully
+2025-01-06 21:34:28,889 - ERROR - Database file does not exist: C:/invalid/path/test.db
+2025-01-06 21:34:28,905 - INFO - Loaded testing configuration successfully
+2025-01-06 21:34:28,942 - INFO - Application initialized successfully
+2025-01-06 21:34:28,979 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-69/test_get_db_version0/test.db
+2025-01-06 21:34:28,993 - INFO - Loaded testing configuration successfully
+2025-01-06 21:34:29,024 - INFO - Application initialized successfully
+2025-01-06 21:34:29,050 - INFO - Loaded testing configuration successfully
+2025-01-06 21:34:29,083 - INFO - Application initialized successfully
+2025-01-06 21:34:29,111 - INFO - Loaded testing configuration successfully
+2025-01-06 21:34:29,142 - INFO - Application initialized successfully
+2025-01-06 21:34:29,190 - INFO - Loaded testing configuration successfully
+2025-01-06 21:34:29,223 - INFO - Application initialized successfully
+2025-01-06 21:34:29,256 - INFO - Database backup created: C:\Users\Morten\AppData\Local\Temp\pytest-of-Morten\pytest-69\test_create_db_backup0\test.db -> C:\Users\Morten\AppData\Local\Temp\pytest-of-Morten\pytest-69\test_create_db_backup0\test_backup.db
+2025-01-06 21:34:29,269 - INFO - Loaded testing configuration successfully
+2025-01-06 21:34:29,309 - INFO - Application initialized successfully
+2025-01-06 21:34:29,340 - ERROR - Version file validation error: [Errno 2] No such file or directory: 'C:\\Users\\Morten\\AppData\\Local\\Temp\\pytest-of-Morten\\pytest-69\\test_validate_version_file0\\nonexistent.py'
+2025-01-06 21:34:29,362 - INFO - Loaded testing configuration successfully
+2025-01-06 21:34:29,397 - INFO - Application initialized successfully
+2025-01-06 21:34:29,448 - INFO - Loaded testing configuration successfully
+2025-01-06 21:34:29,482 - INFO - Application initialized successfully
+2025-01-06 21:34:29,498 - ERROR - SECRET_KEY is too short (minimum 32 characters)
+2025-01-06 21:34:30,344 - ERROR - Some version management tests failed
