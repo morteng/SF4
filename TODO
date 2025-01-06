@@ -34,3 +34,5 @@
 - Fix pytest configuration in conftest.py (in progress)
 - Add version management test coverage (completed)
 - Fix test execution issues
+- Fix deployment verification
+- Finalize documentation updates
