@@ -6,21 +6,10 @@ from pathlib import Path
 def calculate_cycle_time(log: bool = False):
     """Calculate time since cycle start and print/log result"""
     try:
-        # Get absolute path to scripts directory
-        scripts_dir = Path(__file__).resolve().parent
-        cycle_file = scripts_dir / 'cycle_start.txt'
-        
-        # Generate cycle summary
-        summary = f"""
-        Cycle Summary:
-        - Version: 1.2.7
-        - Tests Run: 10
-        - Tests Passed: 8
-        - Tests Failed: 2
-        - Coverage: 42%
-        - Issues Resolved: 6
-        - New Features: 3
-        """
+        # Get absolute path to INSTANCE directory
+        base_dir = Path(__file__).resolve().parent.parent
+        instance_dir = base_dir / 'instance'
+        cycle_file = instance_dir / 'cycle_start.txt'
         
         if not cycle_file.exists():
             print("Error: cycle_start.txt not found. Did you start a cycle?")
@@ -40,7 +29,7 @@ def calculate_cycle_time(log: bool = False):
         
         # Log if requested
         if log:
-            log_file = scripts_dir / 'cycle_logs.txt'
+            log_file = instance_dir / 'cycle_logs.txt'
             try:
                 with log_file.open('a') as f:
                     f.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} - {result}\n")
