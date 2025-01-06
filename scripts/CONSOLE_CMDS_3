@@ -2,14 +2,17 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
+# Create logs directory structure
+/run scripts/create_logs_dir.py
+
+# Fix pytest configuration
+/run scripts/fix_pytest_config.py
+
 # Initialize fresh test environment with relationships
 /run scripts/init_test_db.py
 
 # Update test configuration
 /run scripts/update_test_config.py
-
-# Fix pytest configuration
-/run scripts/fix_pytest_config.py
 
 # Validate database schema
 /run scripts/validate_schema.py
@@ -17,14 +20,11 @@
 # Verify test database
 /run scripts/verify_test_db.py
 
-# Create logs directory structure
-/run scripts/create_logs_dir.py
+# Run version management tests
+/run scripts/run_version_management_tests.py
 
 # Run relationship tests
 /run scripts/run_relationship_tests.py
-
-# Run version management tests
-/run scripts/run_version_management_tests.py
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py
@@ -35,6 +35,8 @@
 # Archive logs
 /run scripts/archive_logs.py
 
+# Print final timestamp
+/run scripts/print_datetime.py
 ### CODE END ###
 
 
