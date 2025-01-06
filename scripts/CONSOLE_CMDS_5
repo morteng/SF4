@@ -30,6 +30,11 @@
 # Print completion message
 /run Write-Host "Code Cycle Step 5 Ends - Ready for Next Iteration"
 
+# Push changes to GitHub
+/git add .
+/git commit -m "Cycle 6 completed - Ready for deployment"
+/git push origin main
+
 # Reset and restart Code Cycle
 /reset
 /load scripts/STEP_1
