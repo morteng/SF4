@@ -6,20 +6,11 @@
 # Create new branch for version management improvements
 /run git checkout -b feature/version-management
 
+# Fix path handling and run start_cycle
+/run python scripts/start_cycle.py
+
 # Verify database connection with enhanced logging
 /run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s'); assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
-
-# Test database schema version
-/run python -c "from alembic import command; from alembic.config import Config; config = Config('migrations/alembic.ini'); command.current(config)"
-
-# Run version validation tests
-/run pytest tests/version_management/ -v
-
-# Check test coverage for version management
-/run pytest --cov=scripts.version --cov-report=term-missing
-
-# Check Git status
-/run git status
 ### CODE END ###
 
 # After running any console commands we go to STEP_2
