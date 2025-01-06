@@ -32,6 +32,15 @@
 
  # Run test coverage
  /run pytest --cov=scripts.version --cov-report=term-missing
+
+ # Fix Tag-Stipend relationship
+ /run scripts/fix_tag_stipend_relationship.py
+
+ # Update test configuration
+ /run scripts/update_test_config.py
+
+ # Add version management tests
+ /run scripts/add_version_tests.py
  ### CODE END ###
 
  # Print the current datetime to console
