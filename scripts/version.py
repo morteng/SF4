@@ -51,6 +51,10 @@ def validate_db_connection(db_path: str) -> bool:
     if log_file.exists():
         log_file.unlink()
     
+    # Clear existing log file
+    if log_file.exists():
+        log_file.unlink()
+    
     try:
         # Convert Windows paths to forward slashes and handle relative paths
         db_path = str(Path(db_path).absolute()).replace('\\', '/')
