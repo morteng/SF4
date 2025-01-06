@@ -12,6 +12,9 @@
 # Verify production environment
 /run scripts/verify_production.py
 
+# Generate coverage report
+/run scripts/generate_coverage_report.py
+
 # Archive logs
 /run scripts/archive_logs.py --force
 
