@@ -9,14 +9,11 @@
 # Initialize fresh test database
 /run scripts/init_test_db.py
 
-# Fix Tag-Stipend relationship
-/run scripts/fix_tag_stipend_relationship.py
+# Update test configuration
+/run scripts/update_test_config.py
 
 # Validate schema
 /run scripts/validate_schema.py
-
-# Update test configuration
-/run scripts/update_test_config.py
 
 # Run relationship tests
 /run scripts/run_relationship_tests.py
