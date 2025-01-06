@@ -23,6 +23,12 @@
 
 # Run version management tests
 /run scripts/run_version_tests.py
+
+# Verify production environment
+/run scripts/verify_production.py
+
+# Print current datetime
+/run scripts/print_datetime.py
 ### CODE END ###
 
 # Print the current datetime to console
