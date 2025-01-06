@@ -17,6 +17,9 @@
 
 # Update test configuration
 /run scripts/update_test_config.py
+
+# Run relationship tests
+/run scripts/run_relationship_tests.py
 ### CODE END ###
 
 # Print the current datetime to console
