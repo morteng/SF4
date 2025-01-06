@@ -2,39 +2,38 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Create final backup
+# Create final backup with relationships
 /run scripts/create_backup.py --final
 
-# Validate database schema
+# Validate database schema and relationships
 /run scripts/validate_schema.py
 
-# Verify production environment
+# Verify production environment configuration
 /run scripts/verify_production.py
 
-# Verify test database
+# Verify test database initialization
 /run scripts/verify_test_db.py
 
-# Run core test suites
+# Run relationship tests with retry
 /run scripts/run_relationship_tests.py
+
+# Run version management tests
 /run scripts/run_version_management_tests.py
 
-# Generate coverage report
+# Generate detailed coverage report
 /run scripts/generate_coverage_report.py
 
-# Finalize documentation
+# Finalize all documentation
 /run scripts/finalize_docs.py
 
 # Generate deployment checklist
 /run scripts/generate_deployment_checklist.py
 
-# Archive logs
+# Archive logs with force
 /run scripts/archive_logs.py --force
 
 # Verify deployment requirements
 /run scripts/verify_deployment.py
-
-# Request deployment approval
-/run scripts/request_deployment_approval.py
 
 # Print final timestamp
 /run scripts/print_datetime.py
