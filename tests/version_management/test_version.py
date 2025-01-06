@@ -27,14 +27,6 @@ def test_db_path(tmp_path):
 
 def test_validate_db_connection_success(tmp_path):
     """Test successful database connection with logging verification"""
-    # Setup logging
-    log_file = tmp_path / "test.log"
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        filename=str(log_file)
-    )
-    
     # Create test database
     db_path = tmp_path / "test.db"
     with sqlite3.connect(db_path):
@@ -44,8 +36,11 @@ def test_validate_db_connection_success(tmp_path):
     assert validate_db_connection(str(db_path)) is True
     
     # Verify logging output
-    with open(log_file) as log_file:
-        log_content = log_file.read()
+    log_file = Path('logs/version_management.log')
+    assert log_file.exists()
+    
+    with log_file.open() as f:
+        log_content = f.read()
         assert "Database connection successful" in log_content
         assert str(db_path) in log_content
 
