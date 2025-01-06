@@ -8,16 +8,6 @@ logging.basicConfig(
     ]
 )
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('version_management.log'),
-        logging.StreamHandler()
-    ]
-)
-
 def validate_db_connection(db_path: str) -> bool:
     """Validate database connection with retry logic and detailed logging"""
     # Convert Windows paths to forward slashes and handle relative paths
