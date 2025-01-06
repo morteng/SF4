@@ -21,3 +21,5 @@ Required actions before deployment:
 4. Improve test coverage
 
 Please review and approve deployment to production once critical issues are resolved.
+
+denied! Fix tests first
