@@ -5,14 +5,14 @@
 # Create logs directory structure
 /run scripts/create_logs_dir.py
 
-# Fix pytest configuration
-/run scripts/fix_pytest_config.py
-
 # Initialize fresh test environment with relationships
 /run scripts/init_test_db.py
 
 # Update test configuration
 /run scripts/update_test_config.py
+
+# Fix pytest configuration
+/run scripts/fix_pytest_config.py
 
 # Validate database schema
 /run scripts/validate_schema.py
@@ -20,7 +20,7 @@
 # Verify test database
 /run scripts/verify_test_db.py
 
-# Run version management tests
+# Run version management tests with coverage
 /run scripts/run_version_management_tests.py
 
 # Run relationship tests
@@ -34,6 +34,9 @@
 
 # Archive logs
 /run scripts/archive_logs.py
+
+# Verify production environment
+/run scripts/verify_production.py
 
 # Print final timestamp
 /run scripts/print_datetime.py

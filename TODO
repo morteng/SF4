@@ -2,15 +2,15 @@
 - Fix Stipend-Tag relationship mapping **(COMPLETED)**
 - Fix create_app import path in conftest.py **(COMPLETED)**
 - Add proper test database initialization **(COMPLETED)**
-- Fix pytest configuration conflicts **(IN PROGRESS)**
-- Fix version bump logic in version.py **(IN PROGRESS)**
+- Fix pytest configuration conflicts **(COMPLETED)**
+- Fix version bump logic in version.py **(COMPLETED)**
 - Fix coverage collection errors **(IN PROGRESS)**
 - Fix circular imports in app initialization
-- Fix create_app import error **(IN PROGRESS)**
-- Fix version.py test imports
-- Fix test configuration initialization
-- Fix relationship mapping initialization
-- Fix test database initialization errors
+- Fix create_app import error **(COMPLETED)**
+- Fix version.py test imports **(COMPLETED)**
+- Fix test configuration initialization **(COMPLETED)**
+- Fix relationship mapping initialization **(COMPLETED)**
+- Fix test database initialization errors **(COMPLETED)**
 - Fix Python command execution in Windows shell **(NEW)**
 
 ---

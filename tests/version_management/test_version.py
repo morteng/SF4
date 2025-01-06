@@ -102,11 +102,12 @@ def create_db_backup():
     new_content = test_file.read_text()
     assert '__version__ = "1.2.4"' in new_content
 
-def test_create_db_backup(test_db_path):
+def test_create_db_backup(test_db_path, tmp_path):
     """Test database backup creation"""
-    backup_result = create_db_backup(test_db_path)
+    backup_path = str(tmp_path / "test_backup.db")
+    backup_result = create_db_backup(test_db_path, backup_path)
     assert backup_result is True
-    assert len(list(Path(test_db_path).parent.glob("*.backup_*.db"))) == 1
+    assert Path(backup_path).exists()
 
 def test_validate_version_file(tmp_path):
     """Test version file validation"""
