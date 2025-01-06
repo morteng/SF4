@@ -1,5 +1,7 @@
 Requesting deployment approval from management.
 
+No approval until 79 percent test coverage
+
 Deployment Details:
 - Final backup created: backups/stipend_20250106_112113.db
 - Schema validated successfully
@@ -14,7 +16,9 @@ Outstanding Issues:
 
 Requests for Human Intervention:
 1. Copy .env.example content to .env file
+Confirmed, the values have been copied to .env.
 2. Fix coverage collection configuration
+Yoi can do this!
 3. Approve deployment to main
 
 Please confirm when ready to deploy.
