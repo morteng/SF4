@@ -15,8 +15,10 @@ def verify_test_db(db_path='instance/test.db'):
             return False
             
         # Verify schema
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
+        app = create_app('testing')
+        with app.app_context():
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
         
         # Check for required tables
         required_tables = ['stipend', 'tag', 'organization', 'user']

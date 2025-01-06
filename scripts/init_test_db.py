@@ -22,7 +22,10 @@ def init_test_db():
         with app.app_context():
             # Ensure clean state
             db.session.remove()
-            db.drop_all()
+            try:
+                db.drop_all()
+            except Exception as e:
+                print(f"Warning: Could not drop all tables: {str(e)}")
             
             # Create new tables
             db.create_all()

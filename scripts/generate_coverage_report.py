@@ -8,13 +8,15 @@ def generate_coverage():
     """Generate test coverage report"""
     try:
         # Initialize test database
-        init_test_db()
-        
-        # Run coverage
-        result = subprocess.run([
-            'coverage', 'run', '--source=app,scripts', 
-            '--branch', '-m', 'pytest', 'tests/'
-        ], capture_output=True, text=True)
+        app = create_app('testing')
+        with app.app_context():
+            init_test_db()
+            
+            # Run coverage
+            result = subprocess.run([
+                'coverage', 'run', '--source=app,scripts', 
+                '--branch', '-m', 'pytest', 'tests/'
+            ], capture_output=True, text=True)
         
         if result.returncode != 0:
             print("Error running coverage tests")

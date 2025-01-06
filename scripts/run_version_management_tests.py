@@ -17,16 +17,18 @@ def run_tests():
     
     try:
         # Initialize test database
-        init_test_db()
-        
-        # Run tests with coverage
-        result = pytest.main([
-            'tests/version_management/',
-            '-v',
-            '--cov=scripts.version',
-            '--cov-report=term-missing',
-            '--cov-branch'
-        ])
+        app = create_app('testing')
+        with app.app_context():
+            init_test_db()
+            
+            # Run tests with coverage
+            result = pytest.main([
+                'tests/version_management/',
+                '-v',
+                '--cov=scripts.version',
+                '--cov-report=term-missing',
+                '--cov-branch'
+            ])
         
         if result == 0:
             logging.info("All version management tests passed")
