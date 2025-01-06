@@ -160,8 +160,11 @@ def test_validate_production_environment(monkeypatch, tmp_path):
     """Test production environment validation"""
     # Setup test environment
     monkeypatch.setenv('DATABASE_URL', 'sqlite:///test.db')
-    monkeypatch.setenv('SECRET_KEY', 'test_key_that_is_long_enough')
+    monkeypatch.setenv('SECRET_KEY', 'a' * 32)  # 32 character minimum
     monkeypatch.setenv('ADMIN_EMAIL', 'test@example.com')
+    monkeypatch.setenv('ADMIN_PASSWORD', 'securepassword')
+    monkeypatch.setenv('FLASK_ENV', 'production')
+    monkeypatch.setenv('FLASK_DEBUG', '0')
     
     # Test validation
     assert validate_production_environment() is True
@@ -171,5 +174,15 @@ def test_validate_production_environment(monkeypatch, tmp_path):
     assert validate_production_environment() is False
     
     # Test invalid types
-    monkeypatch.setenv('DATABASE_URL', 12345)
+    monkeypatch.setenv('DATABASE_URL', 'sqlite:///test.db')
+    monkeypatch.setenv('SECRET_KEY', 12345)
+    assert validate_production_environment() is False
+    
+    # Test SECRET_KEY length validation
+    monkeypatch.setenv('SECRET_KEY', 'short')
+    assert validate_production_environment() is False
+    
+    # Test FLASK_DEBUG validation
+    monkeypatch.setenv('SECRET_KEY', 'a' * 32)
+    monkeypatch.setenv('FLASK_DEBUG', 'invalid')
     assert validate_production_environment() is False

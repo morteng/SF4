@@ -460,7 +460,10 @@ def validate_production_environment() -> bool:
     required_vars = {
         'DATABASE_URL': str,
         'SECRET_KEY': str,
-        'ADMIN_EMAIL': str
+        'ADMIN_EMAIL': str,
+        'ADMIN_PASSWORD': str,
+        'FLASK_ENV': str,
+        'FLASK_DEBUG': str
     }
     
     missing_vars = []
@@ -469,11 +472,24 @@ def validate_production_environment() -> bool:
     for var, var_type in required_vars.items():
         if var not in os.environ:
             missing_vars.append(var)
-        elif not isinstance(os.environ[var], var_type):
-            try:
-                var_type(os.environ[var])
-            except (ValueError, TypeError):
-                invalid_types.append(var)
+            continue
+            
+        try:
+            # Convert and validate type
+            converted = var_type(os.environ[var])
+            
+            # Additional validation for SECRET_KEY
+            if var == 'SECRET_KEY' and len(converted) < 32:
+                logging.error(f"{var} is too short (minimum 32 characters)")
+                return False
+                
+            # Additional validation for FLASK_DEBUG
+            if var == 'FLASK_DEBUG' and converted.lower() not in ('0', 'false', '1', 'true'):
+                logging.error(f"Invalid value for {var}: must be 0/1 or true/false")
+                return False
+                
+        except (ValueError, TypeError):
+            invalid_types.append(var)
     
     if missing_vars:
         logging.error(f"Missing required environment variables: {', '.join(missing_vars)}")
