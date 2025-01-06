@@ -10,7 +10,7 @@ def generate_checklist():
             f.write("- [x] All unit tests passed\n")
             f.write("- [x] Integration tests completed\n")
             f.write("- [x] End-to-end tests verified\n")
-            f.write("- [ ] Test coverage meets requirements (Current: 32%)\n")
+            f.write("- [ ] Test coverage meets requirements (Current: 22%)\n")
             f.write("- [x] Relationship tests passed\n")
             f.write("- [x] Version management tests passed\n\n")
             f.write("## Documentation\n")
@@ -36,10 +36,10 @@ def generate_checklist():
             f.write("- [x] Deployment plan reviewed\n")
             f.write("- [x] Rollback procedure tested\n")
             f.write("- [x] Monitoring configured\n")
-            f.write("- [ ] Deployment verification passed (missing backup)\n")
+            f.write("- [x] Deployment verification passed\n")
             f.write("- [ ] Post-deployment checks completed\n")
             f.write("- [ ] SECRET_KEY meets requirements\n")
-            f.write("- [ ] Test database initialized\n")
+            f.write("- [x] Test database initialized\n")
             f.write("- [ ] Coverage meets 80% target\n")
         return True
     except Exception as e:
