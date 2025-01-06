@@ -1,9 +1,9 @@
+from .tag import Tag
+from .stipend import Stipend
 from .user import User
 from .bot import Bot
 from .notification import Notification
 from .organization import Organization
-from .stipend import Stipend
-from .tag import Tag
 from .audit_log import AuditLog
 
 def init_models(app):

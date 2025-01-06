@@ -51,7 +51,6 @@ class Stipend(db.Model):
     open_for_applications = db.Column(db.Boolean, default=True, nullable=True)
     organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'), nullable=True)
     organization = db.relationship('Organization', backref=db.backref('stipends', lazy=True))
-    tags = db.relationship('Tag', secondary=stipend_tag_association, backref='stipends')
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
     __mapper_args__ = {"confirm_deleted_rows": False}
