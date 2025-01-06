@@ -35,12 +35,8 @@
 # Archive logs
 /run scripts/archive_logs.py
 
-# Print final timestamp
-/run scripts/print_datetime.py
 ### CODE END ###
 
-# Print completion message
-/run Write-Host "Code Cycle Step 3 Ends - Ready for Review"
 
 # Proceed to Step 4 - Review
 /load scripts/STEP_4
