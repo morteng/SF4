@@ -509,7 +509,7 @@ def validate_production_environment() -> bool:
             converted = var_type(os.environ[var])
             
             # Additional validation for SECRET_KEY
-            if var == 'SECRET_KEY' and len(converted) < 32:
+            if var == 'SECRET_KEY' and len(converted) < 64:
                 logging.error(f"{var} is too short (minimum 32 characters)")
                 return False
                 
