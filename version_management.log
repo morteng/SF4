@@ -108,3 +108,6 @@
 2025-01-06 05:41:56,822 - INFO - Database connection successful to instance/stipend.db
 2025-01-06 05:41:56,823 - ERROR - Alembic version table not found
 2025-01-06 05:41:56,823 - ERROR - Schema version verification failed
+2025-01-06 06:02:33,137 - INFO - Database connection successful to instance/stipend.db
+2025-01-06 06:02:33,138 - ERROR - Alembic version table not found
+2025-01-06 06:02:33,138 - ERROR - Schema version verification failed
