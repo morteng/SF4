@@ -67,7 +67,8 @@ def validate_db_connection(db_path: str) -> bool:
                 logging.warning(f"Database connection attempt {attempt + 1} failed, retrying in {retry_delay}s...")
                 time.sleep(retry_delay)
 
-def main():
+def main() -> None:
+    """Main entry point for version management CLI"""
     import argparse
     parser = argparse.ArgumentParser(description='Version management utilities')
     subparsers = parser.add_subparsers(dest='command', required=True)
@@ -421,6 +422,10 @@ def validate_version_file(file_path: Optional[str] = None) -> bool:
     
     Returns:
         bool: True if version file is valid, False otherwise
+    
+    Raises:
+        FileNotFoundError: If version file cannot be found
+        IOError: If version file cannot be read
     """
     try:
         path = file_path if file_path else __file__

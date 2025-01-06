@@ -121,7 +121,8 @@ def test_create_db_backup(test_db_path, tmp_path):
     assert backup_result is True
     assert Path(backup_path).exists()
 
-def test_validate_version_file(tmp_path):
+def test_validate_version_file(tmp_path: Path) -> None:
+    """Test version file validation with various scenarios"""
     """Test version file validation"""
     # Create a valid version file
     valid_file = tmp_path / "version.py"
