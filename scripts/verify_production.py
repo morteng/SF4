@@ -58,6 +58,10 @@ def verify_environment_variables():
     if missing_vars:
         logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
         return False
+    
+    for var in required_vars:
+        logger.info(f"{var}: {os.environ[var]}")
+    
     return True
 
 def verify_security_settings():

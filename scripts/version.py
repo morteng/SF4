@@ -309,14 +309,15 @@ def bump_version(version_type="patch") -> str:
         return new_version
         
     except Exception as e:
-        logging.error(f"Version bump failed: {str(e)}")
+        logging.error(f"Version bump failed: {str(e)}", exc_info=True)
         raise RuntimeError(f"Version bump failed: {str(e)}")
 
 def update_version_file(new_version: str) -> None:
     """Update the __version__ in the version.py file"""
-    with open(__file__, 'r') as f:
+    version_file_path = Path(__file__)
+    with version_file_path.open('r') as f:
         lines = f.readlines()
-    with open(__file__, 'w') as f:
+    with version_file_path.open('w') as f:
         for line in lines:
             if line.startswith("__version__"):
                 f.write(f'__version__ = "{new_version}"\n')
@@ -345,6 +346,22 @@ def push_to_github(branch_name: str, commit_message: str) -> bool:
         print(f"Error details: {e.stderr.decode()}")
         return False
 
+def create_db_backup(source_db: str, backup_path: str) -> bool:
+    """Create a timestamped backup of the database"""
+    try:
+        # Ensure backup directory exists
+        os.makedirs(os.path.dirname(backup_path), exist_ok=True)
+        
+        # Connect to source database and create backup
+        conn = sqlite3.connect(source_db)
+        with conn:
+            conn.execute(f"VACUUM INTO '{backup_path}'")
+        logging.info(f"Database backup created: {source_db} -> {backup_path}")
+        return True
+    except sqlite3.Error as e:
+        logging.error(f"Database backup failed: {str(e)}")
+        return False
+
 def validate_version_file(file_path: Optional[str] = None) -> bool:
     """Validate version file integrity
     
@@ -371,6 +388,13 @@ def create_version_history(new_version: str) -> None:
     history_file = Path('VERSION_HISTORY.md')
     if not history_file.exists():
         history_file.write_text("# Version History\n\n")
+    
+    # Check if the version already exists in the file
+    with history_file.open('r') as f:
+        content = f.read()
+        if f"## {new_version} - {datetime.now().strftime('%Y-%m-%d')}" in content:
+            print(f"Version {new_version} already exists in VERSION_HISTORY.md")
+            return
     
     with history_file.open('a') as f:
         f.write(f"## {new_version} - {datetime.now().strftime('%Y-%m-%d')}\n")
