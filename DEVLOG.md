@@ -37,6 +37,3 @@
 
 ## Developer Notes 📝
 "Despite the challenges, we're seeing steady progress. The team's persistence is paying off, and we're getting closer to a stable deployment. Keep pushing!" - Lead Developer
-
-## Developer Notes 📝
-"Despite the challenges, we're seeing steady progress. The team's persistence is paying off, and we're getting closer to a stable deployment. Keep pushing!" - Lead Developer

@@ -1,95 +1,58 @@
-- Fix Stipend-Tag relationship mapping (critical priority) - IN PROGRESS
-- Fix create_app import path in conftest.py (critical priority) - COMPLETED
-- Add absolute path handling in version.py (high priority) - COMPLETED
-- Add proper test database initialization (critical priority) - IN PROGRESS
-- Fix pytest configuration conflicts (critical priority) - IN PROGRESS
-- Fix version bump logic in version.py (high priority) - IN PROGRESS
-- Add comprehensive test coverage for version.py (high priority)
-- Fix coverage collection errors (critical priority)
-- Add missing environment variables (FLASK_ENV, FLASK_DEBUG) (high priority) - COMPLETED
-- Update version bump test assertions (high priority)
-- Improve test database verification (high priority)
-- Add proper test cleanup procedures (high priority)
-- Fix factory module import error (critical priority)
-- Add proper test isolation (high priority)
-- Fix coverage collector assertion errors (critical priority)
-- Update test configuration handling (high priority)
-- Add deployment approval script (high priority)
-- Fix deployment verification (high priority)
-- Add missing backup file check (high priority)
-- Update version bump logic in version.py (high priority) - IN PROGRESS
-- Fix test database initialization (critical priority) - IN PROGRESS
-- Fix pytest import errors (critical priority) - IN PROGRESS
-- Add proper app initialization in conftest.py (critical priority)
-- Verify version management test imports (high priority)
-- Add comprehensive test coverage for version.py (high priority)
-- Fix circular imports in app initialization (critical priority)
-- Add proper error handling for database connection tests (high priority)
-- Fix coverage collection errors (critical priority) - IN PROGRESS
-- Add missing environment variables (FLASK_ENV, FLASK_DEBUG) (high priority)
-- Update version bump test assertions (high priority)
-- Improve test database verification (high priority)
-- Add proper test cleanup procedures (high priority)
-- Fix create_app import error (critical priority) - IN PROGRESS
-- Add proper test isolation (high priority)
-- Fix coverage collector assertion errors (critical priority)
-- Update test configuration handling (high priority)
-- Add deployment approval script (high priority)
-- Fix deployment verification (high priority)
-- Add missing backup file check (high priority)
-- Improve test coverage to meet 80% target (high priority) - IN PROGRESS
-- Fix coverage collection errors (high priority) - IN PROGRESS
-- Add missing environment variables (FLASK_ENV, FLASK_DEBUG) (high priority)
-- Verify Alembic migration chain (high priority)
-- Add schema validation tests (high priority)
-- Add proper logging configuration (high priority)
-- Fix circular imports in app initialization (critical priority)
-- Verify test database setup/teardown (high priority)
-- Add proper CSRF token handling in tests (high priority)
-- Fix rate limiter initialization in tests (high priority)
-- Add comprehensive test coverage for version.py (high priority)
-- Verify production deployment pipeline (medium priority)
-- Fix version.py test imports (critical priority)
-- Add proper error handling for database connection tests (high priority)
-- Update test database initialization in conftest.py (high priority)
-- Fix Stipend-Tag relationship mapping (critical priority)
-- Add test database verification (high priority)
-- Fix version bump test assertions (high priority)
-- Add proper test database cleanup (high priority)
-- Improve test isolation (high priority)
-- Fix coverage collector assertion errors (critical priority)
-- Fix test configuration initialization (critical priority)
-- Add proper test database schema validation (high priority)
-- Fix version bump logic in version.py (high priority)
-- Add comprehensive test verification (high priority)
-- Add deployment approval script (high priority)
-- Fix deployment verification (high priority)
-- Add missing backup file check (high priority)
-- Fix Stipend-Tag relationship mapping (high priority)
-- Update version bump logic in version.py (high priority)
-- Add proper database initialization tests (high priority)
-- Fix test database verification (high priority)
-- Add error handling for coverage collection (high priority)
-- Add test cleanup procedures (high priority)
-- Improve test isolation (high priority)
-- Fix version bump test assertions (high priority)
-- Add proper test database setup/teardown (high priority)
-- Add relationship mapping validation (high priority)
-- Fix version bump test failures (high priority)
-- Add deployment verification tests (medium priority)
-- Update production configuration validation (medium priority)
-- Add version management CLI tests (high priority)
-- Fix database connection validation (high priority)
-- Add proper error handling for version management (high priority)
-- Fix coverage collector assertion errors (critical priority)
-- Update version bump test expectations (high priority)
-- Add test database creation verification (high priority)
-- Fix relationship mapping initialization (critical priority)
-- Add comprehensive test verification (high priority)
-- Update test configuration handling (high priority)
-- Fix test database initialization errors (critical priority)
-- Add proper test environment setup (high priority)
-- Fix pytest configuration conflicts (critical priority)
-- Fix deployment verification script (high priority)
-- Add proper backup file verification (high priority)
-- Update deployment checklist generation (high priority)
+### **Critical Priority**
+- Fix Stipend-Tag relationship mapping **(IN PROGRESS)**
+- Fix create_app import path in conftest.py **(COMPLETED)**
+- Add proper test database initialization **(IN PROGRESS)**
+- Fix pytest configuration conflicts **(IN PROGRESS)**
+- Fix version bump logic in version.py **(IN PROGRESS)**
+- Fix coverage collection errors **(IN PROGRESS)**
+- Fix circular imports in app initialization
+- Fix create_app import error **(IN PROGRESS)**
+- Fix version.py test imports
+- Fix test configuration initialization
+- Fix relationship mapping initialization
+- Fix test database initialization errors
+- Fix Python command execution in Windows shell **(NEW)**
+
+---
+
+### **High Priority**
+- Add absolute path handling in version.py **(COMPLETED)**
+- Add missing environment variables (FLASK_ENV, FLASK_DEBUG) **(COMPLETED)**
+- Update version bump test assertions
+- Improve test database verification
+- Add proper test cleanup procedures
+- Add proper test isolation
+- Update test configuration handling
+- Add deployment approval script
+- Fix deployment verification
+- Add missing backup file check
+- Add comprehensive test coverage for version.py
+- Improve test coverage to meet 80% target **(IN PROGRESS)**
+- Verify Alembic migration chain
+- Add schema validation tests
+- Add proper logging configuration
+- Verify test database setup/teardown
+- Add proper CSRF token handling in tests
+- Fix rate limiter initialization in tests
+- Add error handling for coverage collection
+- Add proper test database schema validation
+- Add relationship mapping validation
+- Fix version bump test failures
+- Add proper database initialization tests
+- Add comprehensive test verification
+- Add version management CLI tests
+- Fix database connection validation
+- Add proper error handling for version management
+- Update test database initialization in conftest.py
+- Add proper test environment setup
+- Add Windows-compatible Python command execution **(NEW)**
+
+---
+
+### **Medium Priority**
+- Verify production deployment pipeline
+- Add deployment verification tests
+- Update production configuration validation
+- Fix deployment verification script
+- Update deployment checklist generation
+- Add Windows shell compatibility documentation **(NEW)**
