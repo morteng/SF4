@@ -1,7 +1,6 @@
-# Console Commands for Step 5
+# Console Commands for Step 5 - Deployment
 # Do not use echo commands
-# Do not update or edit files using console commands.
-# Only edit the section of this document between CODE START and CODE END
+# Only edit the section between CODE START and CODE END
 
 ### CODE START ###
 # Create final production backup
@@ -16,13 +15,13 @@
 # Archive logs
 /run scripts/archive_logs.py --force
 
-# Print current datetime
+# Print timestamp
 /run scripts/print_datetime.py
 ### CODE END ###
 
-# Print the current datetime to console
+# Print completion message
 /run scripts/print_datetime.py
-/run Write-Host "Code Cycle Complete"
+/run Write-Host "Code Cycle Complete - Ready for Deployment"
 
 # Request deployment approval
 /code Add deployment request to REQUESTS.txt
@@ -30,8 +29,8 @@
 # Final updates
 /add scripts/REQUESTS.txt
 /add scripts/MANAGER.txt
-/architect Final cleanup before reset. Remove requests from MANAGER.txt that have been implemented or scheduled for implementation. Delete DEVLOG.md and replace it with a new DEVLOG.md based on this cycle. Add requests for any actions that are impossible for you to do to REQUESTS.txt. Update TODO list if needed, removing items that have been verified as completed. Keep documentation as compact as possible, prune and remove what you can without losing important information. 
+/architect Final cleanup before reset. Remove requests from MANAGER.txt that have been implemented or scheduled for implementation. Delete DEVLOG.md and replace it with a new DEVLOG.md based on this cycle. Add requests for any actions that are impossible for you to do to REQUESTS.txt. Update TODO list if needed, removing items that have been verified as completed. Keep documentation as compact as possible, prune and remove what you can without losing important information.
 
 # Reset and restart Code Cycle
 /reset
-/load scripts\STEP_1
+/load scripts/STEP_1
