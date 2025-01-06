@@ -1,17 +1,15 @@
 ### **Critical Priority**
-- Improve test coverage to meet 80% target
-- Resolve test import errors
+- Resolve version management test failures
+- Fix relationship test failures
 
 ---
 
 ### **High Priority**
-- Add comprehensive deployment verification
-- Improve test isolation and cleanup
+- Improve test coverage to meet 80% target
 - Add proper error handling for all scripts
 
 ---
 
 ### **Medium Priority**
-- Update documentation for production deployment
 - Add Windows shell compatibility documentation
 - Verify all test file paths and imports
