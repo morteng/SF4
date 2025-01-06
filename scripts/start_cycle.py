@@ -6,13 +6,14 @@ from pathlib import Path
 def write_cycle_start():
     """Write current datetime to cycle_start.txt"""
     try:
-        # Get absolute path to scripts directory
-        scripts_dir = Path(__file__).resolve().parent
+        # Get absolute path to INSTANCE directory instead of scripts
+        base_dir = Path(__file__).resolve().parent.parent
+        instance_dir = base_dir / 'instance'
         
-        # Create scripts directory if it doesn't exist
-        scripts_dir.mkdir(exist_ok=True)
+        # Create instance directory if it doesn't exist
+        instance_dir.mkdir(exist_ok=True)
         
-        cycle_file = scripts_dir / 'cycle_start.txt'
+        cycle_file = instance_dir / 'cycle_start.txt'
         
         # Write timestamp with error handling
         try:
