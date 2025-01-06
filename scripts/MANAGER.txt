@@ -1,6 +1,6 @@
 HI! Manager here!
 
-RULE: Never deploy until all tests pass and all todo items are handled.
+RULE: Never deploy until all tests pass and all todo items are handled. Only deploy when given permission byCEO.
 
 When you have updated functionality oar want to get approval for edits you have made, request that management checks things out by asking nicely in the scripts/REQUESTS.txt file. remember to include all information management needs to review.
 
