@@ -24,3 +24,7 @@
 - Add version management CLI tests (high priority)
 - Fix database connection validation (high priority)
 - Add proper error handling for version management (high priority)
+- Fix coverage collector assertion errors (critical priority)
+- Update version bump test expectations (high priority)
+- Add test database creation verification (high priority)
+- Fix relationship mapping initialization (critical priority)
