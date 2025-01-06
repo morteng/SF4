@@ -3,6 +3,9 @@
 # Only edit the section of this document between CODE START and CODE END
 
 ### CODE START ###
+# Fix pytest configuration
+/run scripts/fix_pytest_config.py
+
 # Initialize fresh test database
 /run scripts/init_test_db.py
 
@@ -29,6 +32,9 @@
 
 # Run test coverage
 /run pytest --cov=scripts.version --cov-report=term-missing
+
+# Run all tests
+/run scripts/run_all_tests.py
 ### CODE END ###
 
 # Print the current datetime to console
