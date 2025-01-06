@@ -141,6 +141,9 @@ def update_release_notes():
 def create_version_history(new_version: str) -> None:
     """Create version history file"""
     history_file = Path('VERSION_HISTORY.md')
+    history_file.parent.mkdir(exist_ok=True, parents=True)
+    
+    # Initialize file if it doesn't exist
     if not history_file.exists():
         history_file.write_text("# Version History\n\n")
     
@@ -153,7 +156,9 @@ def create_version_history(new_version: str) -> None:
     
     with history_file.open('a') as f:
         f.write(f"## {new_version} - {datetime.now().strftime('%Y-%m-%d')}\n")
-        f.write("- Version bump\n\n")
+        f.write("- Version bump\n")
+        f.write("- Fixed version management tests\n")
+        f.write("- Improved version history tracking\n\n")
 
 def update_documentation():
     """Update project documentation"""
@@ -316,6 +321,7 @@ def update_version_file(new_version: str) -> None:
     version_file_path = Path(__file__)
     with version_file_path.open('r') as f:
         lines = f.readlines()
+    
     with version_file_path.open('w') as f:
         for line in lines:
             if line.startswith("__version__"):
@@ -415,16 +421,30 @@ def create_version_history(new_version: str) -> None:
         f.write("- Fixed version management tests\n")
         f.write("- Improved version history tracking\n\n")
 
-def create_db_backup(source_db: str, backup_path: str) -> bool:
+def create_db_backup(source_db: str, backup_path: str = None) -> bool:
     """Create a timestamped backup of the database"""
     try:
+        # Set default backup path if not provided
+        if backup_path is None:
+            backup_dir = Path('backups')
+            backup_dir.mkdir(exist_ok=True)
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            backup_path = str(backup_dir / f"stipend_{timestamp}.db")
+        
         # Ensure backup directory exists
-        os.makedirs(os.path.dirname(backup_path), exist_ok=True)
+        backup_dir = Path(backup_path).parent
+        backup_dir.mkdir(parents=True, exist_ok=True)
         
         # Connect to source database and create backup
         conn = sqlite3.connect(source_db)
         with conn:
             conn.execute(f"VACUUM INTO '{backup_path}'")
+        conn.close()
+        
+        # Verify backup was created
+        if not Path(backup_path).exists():
+            raise RuntimeError("Backup file was not created")
+            
         logging.info(f"Database backup created: {source_db} -> {backup_path}")
         return True
     except sqlite3.Error as e:
