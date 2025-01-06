@@ -3,26 +3,34 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
+# Create initial backup
+/run scripts/create_backup.py
+
 # Initialize fresh test environment
 /run scripts/init_test_db.py
 /run scripts/update_test_config.py
 
 # Validate database state
 /run scripts/validate_schema.py
-/run scripts/verify_test_db.py
+/run scripts/verify_production.py
 
-# Run core functionality tests
+# Run core tests
 /run scripts/run_relationship_tests.py
 /run scripts/run_version_management_tests.py
 
-# Check test coverage
+# Print timestamp
+/run scripts/print_datetime.py
+
+# Verify test database initialization
+/run scripts/verify_test_db.py
+
+# Run version management tests
+/run scripts/run_version_management_tests.py
+
+# Generate coverage report
 /run scripts/generate_coverage_report.py
 
-# Archive logs and create backup
-/run scripts/archive_logs.py
-/run scripts/create_backup.py
-
-# Print timestamp
+# Print final timestamp
 /run scripts/print_datetime.py
 ### CODE END ###
 
