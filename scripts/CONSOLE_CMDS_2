@@ -16,25 +16,19 @@
  /run scripts/create_backup.py
 
  # Run version management tests with coverage
- /run pytest tests/version_management/test_version.py --cov=scripts.version --cov-report=term-missing -v     
-
- # Validate test database initialization
- /run scripts/init_test_db.py
-
- # Run schema validation
- /run scripts/validate_schema.py
-
- # Verify database backup
- /run scripts/create_backup.py
-
- # Validate production environment
- /run scripts/version.py validate-env
+ /run pytest tests/version_management/test_version.py --cov=scripts.version --cov-report=term-missing -v
 
  # Archive logs
- /run scripts/version.py archive-logs
+ /run scripts/archive_logs.py
 
  # Update release notes
  /run scripts/version.py update-release-notes
+
+ # Update version history
+ /run scripts/version.py update-version-history
+
+ # Validate production environment
+ /run scripts/version.py validate-env
  ### CODE END ###
 
  # Print the current datetime to console
