@@ -43,6 +43,28 @@ def test_validate_db_connection_success(tmp_path):
         log_content = f.read()
         assert "Database connection successful" in log_content
         assert str(db_path) in log_content
+@pytest.fixture(scope="module")
+def test_db():
+    """Create and initialize a test database"""
+    db_path = "instance/test_stipend.db"
+    if os.path.exists(db_path):
+        os.remove(db_path)
+        
+    # Initialize database with schema
+    from alembic import command
+    from alembic.config import Config
+    alembic_cfg = Config("migrations/alembic.ini")
+    alembic_cfg.set_main_option("sqlalchemy.url", f"sqlite:///{db_path}")
+    
+    # Run migrations
+    command.upgrade(alembic_cfg, "head")
+    
+    yield db_path
+    
+    # Cleanup
+    if os.path.exists(db_path):
+        os.remove(db_path)
+
 
 def test_validate_db_connection_failure():
     assert validate_db_connection("/invalid/path/test.db") is False
@@ -194,4 +216,30 @@ def test_validate_production_environment(monkeypatch, tmp_path):
     # Test FLASK_DEBUG validation
     monkeypatch.setenv('SECRET_KEY', 'a' * 32)
     monkeypatch.setenv('FLASK_DEBUG', 'invalid')
+    assert validate_production_environment() is False
+
+def test_validate_production_environment_complex(monkeypatch):
+    """Test SECRET_KEY complexity requirements"""
+    # Setup valid environment
+    monkeypatch.setenv('SQLALCHEMY_DATABASE_URI', 'sqlite:///test.db')
+    monkeypatch.setenv('SECRET_KEY', 'A'*64)  # Only uppercase
+    monkeypatch.setenv('ADMIN_EMAIL', 'test@example.com')
+    monkeypatch.setenv('ADMIN_PASSWORD', 'securepassword123!')
+    monkeypatch.setenv('FLASK_ENV', 'production')
+    monkeypatch.setenv('FLASK_DEBUG', '0')
+    
+    assert validate_production_environment() is False
+    
+    # Test with valid complex key
+    monkeypatch.setenv('SECRET_KEY', 'Aa1!Bb2@Cc3#Dd4$'*4)
+    assert validate_production_environment() is True
+
+def test_validate_production_environment_lengths(monkeypatch):
+    """Test minimum length requirements"""
+    # Test SECRET_KEY too short
+    monkeypatch.setenv('SECRET_KEY', 'short')
+    assert validate_production_environment() is False
+    
+    # Test ADMIN_PASSWORD too short
+    monkeypatch.setenv('ADMIN_PASSWORD', 'short')
     assert validate_production_environment() is False

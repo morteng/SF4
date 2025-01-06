@@ -511,8 +511,15 @@ def validate_production_environment() -> bool:
         'FLASK_DEBUG': str
     }
     
+    # Add minimum length requirements
+    min_lengths = {
+        'SECRET_KEY': 64,
+        'ADMIN_PASSWORD': 12
+    }
+    
     missing_vars = []
     invalid_types = []
+    invalid_lengths = []
     
     for var, var_type in required_vars.items():
         if var not in os.environ:
@@ -520,36 +527,30 @@ def validate_production_environment() -> bool:
             continue
             
         try:
-            # Convert and validate type
-            converted = var_type(os.environ[var])
+            value = os.environ[var]
+            # Type validation
+            converted = var_type(value)
             
-            # Additional validation for SECRET_KEY
+            # Length validation
+            if var in min_lengths and len(value) < min_lengths[var]:
+                invalid_lengths.append(f"{var} (min {min_lengths[var]} chars)")
+                continue
+                
+            # Additional SECRET_KEY complexity checks
             if var == 'SECRET_KEY':
-                if len(converted) < 64:
-                    logging.error(f"{var} is too short (minimum 64 characters)")
-                    return False
-                # Check for sufficient complexity
-                if not any(c.isupper() for c in converted):
+                if not any(c.isupper() for c in value):
                     logging.error(f"{var} must contain uppercase letters")
                     return False
-                if not any(c.islower() for c in converted):
+                if not any(c.islower() for c in value):
                     logging.error(f"{var} must contain lowercase letters")
                     return False
-                if not any(c.isdigit() for c in converted):
+                if not any(c.isdigit() for c in value):
                     logging.error(f"{var} must contain numbers")
                     return False
-                if not any(c in "!@#$%^&*()_+-=[]{};':,.<>?/" for c in converted):
+                if not any(c in "!@#$%^&*()_+-=[]{};':,.<>?/" for c in value):
                     logging.error(f"{var} must contain special characters")
                     return False
-                if not any(c in "!@#$%^&*()_+-=[]{};':,.<>?/" for c in converted):
-                    logging.error(f"{var} must contain special characters")
-                    return False
-                
-            # Additional validation for FLASK_DEBUG
-            if var == 'FLASK_DEBUG' and converted.lower() not in ('0', 'false', '1', 'true'):
-                logging.error(f"Invalid value for {var}: must be 0/1 or true/false")
-                return False
-                
+                    
         except (ValueError, TypeError):
             invalid_types.append(var)
     
@@ -559,6 +560,10 @@ def validate_production_environment() -> bool:
         
     if invalid_types:
         logging.error(f"Invalid type for environment variables: {', '.join(invalid_types)}")
+        return False
+        
+    if invalid_lengths:
+        logging.error(f"Invalid length for variables: {', '.join(invalid_lengths)}")
         return False
         
     logging.info("Production environment validation passed")
