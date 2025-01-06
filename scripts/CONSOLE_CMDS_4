@@ -11,6 +11,9 @@
 # Verify production environment
 /run scripts/verify_production.py
 
+# Verify test database
+/run scripts/verify_test_db.py
+
 # Run core test suites
 /run scripts/run_relationship_tests.py
 /run scripts/run_version_management_tests.py
