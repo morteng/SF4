@@ -7,6 +7,9 @@ import os
 from typing import Optional, Tuple
 from datetime import datetime
 from pathlib import Path
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 __version__ = "1.2.4"
 

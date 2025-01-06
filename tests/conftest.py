@@ -65,7 +65,7 @@ from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import SAWarning
 from flask import url_for, current_app
 from flask_wtf.csrf import generate_csrf
-from app.factory import create_app
+from app import create_app
 from app.extensions import init_extensions
 from app.extensions import db, login_manager
 from app.models.user import User
@@ -90,7 +90,9 @@ warnings.filterwarnings("ignore", category=SAWarning)
 @pytest.fixture(scope='session')
 def app():
     """Create and configure a new app instance for the test session."""
-    app = create_app('testing')
+    app = create_app()
+    app.config['TESTING'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     # Add rate limiter config
     app.config['RATELIMIT_ENABLED'] = True
     app.config['RATELIMIT_STORAGE_URL'] = 'memory://'
@@ -109,17 +111,6 @@ def app():
         
         # Initialize database and login manager
         db.session.expire_on_commit = False
-    # Use in-memory database for tests
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['TESTING'] = True
-    app.config['WTF_CSRF_ENABLED'] = False
-    return app
-
-    @login_manager.user_loader
-    def load_user(user_id):
-        user = db.session.get(User, int(user_id))
-        return db.session.merge(user) if user else None
-    
     yield app
     
     # Clean up database after test
