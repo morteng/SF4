@@ -5,6 +5,11 @@
 - Add schema validation tests
 - Add proper logging configuration
 - Fix pytest import errors (create_app missing) (high priority)
-- Initialize database connection properly
-- Update version management tests
+- Initialize database connection properly (high priority)
+- Update version management tests (high priority)
 - Verify production deployment pipeline
+- Fix Stipend-Tag relationship mapping (high priority)
+- Update version bump logic in version.py
+- Add proper database initialization tests
+- Fix test database verification
+- Add error handling for coverage collection
