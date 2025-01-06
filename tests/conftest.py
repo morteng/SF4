@@ -259,6 +259,13 @@ def test_user(db_session, app):
         user.set_password('TestPass123!')
         db_session.add(user)
         db_session.commit()
+        
+        # Verify user creation
+        assert user.id is not None
+        assert user.username == f'testuser_{unique_id}'
+        assert user.email == f'testuser_{unique_id}@example.com'
+        assert user.check_password('TestPass123!')
+        
         # Yield the user within the app context
         yield user
         # Clean up user and related records
