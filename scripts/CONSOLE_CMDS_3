@@ -9,20 +9,17 @@
 # Run version management tests
 /run pytest tests/version_management/test_version.py -v
 
-# Run test coverage
+# Check test coverage
 /run pytest --cov=scripts.version --cov-report=term-missing
-
-# Create final backup
-/run scripts/create_backup.py
-
-# Archive test logs
-/run scripts/archive_logs.py
 
 # Validate schema
 /run scripts/validate_schema.py
 
-# Check database connection
-/run scripts/check_db_connection.py
+# Archive test logs
+/run scripts/archive_logs.py
+
+# Create final backup
+/run scripts/create_backup.py
 ### CODE END ###
 
 # Print the current datetime to console
