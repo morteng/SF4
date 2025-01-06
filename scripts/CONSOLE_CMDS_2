@@ -10,9 +10,13 @@
 /run scripts/init_test_db.py
 /run scripts/update_test_config.py
 
+# Fix pytest configuration
+/run scripts/fix_pytest_config.py
+
 # Validate database state
 /run scripts/validate_schema.py
 /run scripts/verify_production.py
+/run scripts/verify_test_db.py
 
 # Create logs directory structure
 /run scripts/create_logs_dir.py
@@ -23,9 +27,6 @@
 # Run core tests
 /run scripts/run_relationship_tests.py
 /run scripts/run_version_management_tests.py
-
-# Verify test database initialization
-/run scripts/verify_test_db.py
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py
