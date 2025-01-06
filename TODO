@@ -20,3 +20,4 @@
 - Fix version.py validate-env command
 - Add version management tests
 - Fix test database validation
+- Fix deployment verification
