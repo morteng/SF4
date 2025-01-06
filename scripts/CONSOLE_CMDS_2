@@ -17,6 +17,12 @@
 
 # Validate schema
 /run scripts/validate_schema.py
+
+# Run version management tests
+/run pytest tests/version_management/test_version.py -v
+
+# Check test coverage
+/run pytest --cov=scripts.version --cov-report=term-missing
 ### CODE END ###
 
 # Print the current datetime to console
