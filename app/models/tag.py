@@ -8,7 +8,12 @@ class Tag(db.Model):
     description = db.Column(db.Text)
 
     # Define bidirectional relationship with Stipend
-    stipends = db.relationship('Stipend', secondary=stipend_tag_association, back_populates='tags', lazy='dynamic')
+    stipends = db.relationship(
+        'Stipend',
+        secondary=stipend_tag_association,
+        back_populates='tags',
+        lazy='dynamic'
+    )
 
     __mapper_args__ = {"confirm_deleted_rows": False}
 

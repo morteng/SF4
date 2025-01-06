@@ -153,7 +153,7 @@ def create_version_history(new_version: str) -> None:
     
     with history_file.open('a') as f:
         f.write(f"## {new_version} - {datetime.now().strftime('%Y-%m-%d')}\n")
-        f.write("- Initial release\n\n")
+        f.write("- Version bump\n\n")
 
 def update_documentation():
     """Update project documentation"""
@@ -280,7 +280,15 @@ def bump_version(version_type="patch") -> str:
         raise ValueError("version_type must be 'major', 'minor' or 'patch'")
 
     try:
-        major, minor, patch, suffix = parse_version(__version__)
+        # Parse current version from file
+        version_file = Path(__file__)
+        with version_file.open('r') as f:
+            for line in f:
+                if line.startswith("__version__"):
+                    current_version = line.split('"')[1]
+                    break
+        
+        major, minor, patch, suffix = parse_version(current_version)
 
         if version_type == "major":
             major += 1
@@ -296,6 +304,9 @@ def bump_version(version_type="patch") -> str:
         
         # Update version file
         update_version_file(new_version)
+        
+        # Create version history
+        create_version_history(new_version)
         
         return new_version
         
@@ -341,12 +352,19 @@ def create_db_backup(source_db: str, backup_path: str) -> bool:
     """Create a timestamped backup of the database"""
     try:
         # Ensure backup directory exists
-        os.makedirs(os.path.dirname(backup_path), exist_ok=True)
+        backup_dir = Path(backup_path).parent
+        backup_dir.mkdir(parents=True, exist_ok=True)
         
         # Connect to source database and create backup
         conn = sqlite3.connect(source_db)
         with conn:
             conn.execute(f"VACUUM INTO '{backup_path}'")
+        conn.close()
+        
+        # Verify backup was created
+        if not Path(backup_path).exists():
+            raise RuntimeError("Backup file was not created")
+            
         logging.info(f"Database backup created: {source_db} -> {backup_path}")
         return True
     except sqlite3.Error as e:
