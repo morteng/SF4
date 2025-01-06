@@ -38,9 +38,12 @@
 # Verify deployment
 /run scripts/verify_deployment.py
 
+# Print final timestamp
+/run scripts/print_datetime.py
 ### CODE END ###
 
-
+# Print completion message
+/run Write-Host "Code Cycle Step 4 Ends - Ready for Deployment"
 
 # Proceed to Step 5 - Deployment
 /load scripts/STEP_5
