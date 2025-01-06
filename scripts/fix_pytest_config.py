@@ -8,7 +8,7 @@ from app.extensions import db
 from pathlib import Path
 
 def fix_pytest_config():
-    """Fix pytest configuration"""
+    """Fix pytest configuration with proper test isolation"""
     try:
         # Create test app
         app = create_app('testing')
@@ -17,22 +17,41 @@ def fix_pytest_config():
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         
-        # Initialize extensions if not already initialized
-        if 'sqlalchemy' not in app.extensions:
-            db.init_app(app)
-        
-        # Create test client
+        # Initialize extensions with proper cleanup
         with app.app_context():
-            db.create_all()
+            if 'sqlalchemy' not in app.extensions:
+                db.init_app(app)
+                db.create_all()
+            
+            # Create test client
             test_client = app.test_client()
         
-        # Update pytest configuration
+        # Update pytest configuration with proper isolation
         pytest_config = Path('pytest.ini')
-        if not pytest_config.exists():
-            pytest_config.write_text("""
+        pytest_config.write_text("""
 [pytest]
 testpaths = tests/
 addopts = -v --cov=app --cov=scripts --cov-report=term-missing
+norecursedirs = .venv .git migrations instance .pytest_cache
+pythonpath = .
+minversion = 7.0
+python_files = test_*.py *_tests.py
+python_classes = Test* *Test
+python_functions = test_* *_test
+filterwarnings =
+    ignore::pytest.PytestConfigWarning
+    ignore::DeprecationWarning
+    ignore::ResourceWarning
+    ignore::sqlalchemy.exc.SAWarning
+    ignore::pytest.PytestUnknownMarkWarning
+asyncio_mode = auto
+
+markers =
+    csrf: CSRF token related tests
+    auth: Authentication related tests
+    version: Version management tests
+    db: Database related tests
+    slow: marks tests as slow (deselect with '-m "not slow"')
 """)
         
         return True

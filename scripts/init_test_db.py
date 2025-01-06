@@ -23,8 +23,8 @@ def init_test_db():
             # Ensure database directory exists
             os.makedirs('instance', exist_ok=True)
             
-            # Drop and create all tables
-            logging.info("Dropping and recreating database tables")
+            # Drop and create all tables with proper cleanup
+            db.session.remove()
             db.drop_all()
             db.create_all()
             
@@ -47,9 +47,13 @@ def init_test_db():
             stipend.tags.extend([tag1, tag2])
             stipend.organization = org
             
-            # Add and commit
-            db.session.add_all([org, tag1, tag2, stipend])
-            db.session.commit()
+            # Add and commit with proper session management
+            try:
+                db.session.add_all([org, tag1, tag2, stipend])
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                raise e
             
             # Verify data was inserted
             org_count = Organization.query.count()
