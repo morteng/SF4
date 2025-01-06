@@ -1,30 +1,9 @@
-import subprocess
-import re
-import sqlite3
-import logging
-import time
-import os
-from typing import Optional, Tuple
-from datetime import datetime
-from pathlib import Path
-import sys
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-LOG_FILE = 'version_management.log'
-
-__version__ = "1.2.4"
-```
-
-scripts/version.py
-```python
-<<<<<<< SEARCH
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('version_management.log'),
+        logging.FileHandler(LOG_FILE),
         logging.StreamHandler()
     ]
 )
