@@ -9,7 +9,7 @@
 # Testing step
 /ask How can we best implement Code Cycle Step 3 - Testing? Objective: Validate the changes made during coding. Key Actions: Load testing-specific configurations or logic. Execute tests to verify functionality. Identify and resolve any detected issues. 
 
-/code Implement suggested changes. Remove any previous console commands from CONSOLE_CMDS_3, add any new console commands you want to run before we go to STEP 4 (Review). Do not edit files using console commands. Do not run python code using console commands, instead create code files and run them using the "/run your_python_file.py" approach. Update TODO list if needed. Do not explain or summarize, just output the edits.
+/code Implement suggested changes. Remove any previous console commands from CONSOLE_CMDS_3, add any new console commands you want to run before we go to STEP 4 (Review). Do not edit files using console commands. Do not run python code using console commands, instead create code files and run them using the "/run your_python_file.py" approach. Update TODO list if needed. 
 
 /drop scripts/CONSOLE_CMDS_3
 

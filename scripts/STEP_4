@@ -9,7 +9,7 @@
 ## Testing step
 /ask How can we best implement Code Cycle Step 4 - Review? Objective: Perform a final review before deployment. Key Actions: Ensure all implemented changes are correct and documented. Finalize updates and gather review notes. Confirm readiness for deployment. 
 
-/code Implement suggested changes. Remove any previous console commands from CONSOLE_CMDS_4, add any new console commands you want to run before we go to STEP 5 (Deployment). Do not edit files using console commands. Do not run python code using console commands, instead create code files and run them using the "/run your_python_file.py" approach. Do not explain or summarize, just output the edits.
+/code Implement suggested changes. Remove any previous console commands from CONSOLE_CMDS_4, add any new console commands you want to run before we go to STEP 5 (Deployment). Do not edit files using console commands. Do not run python code using console commands, instead create code files and run them using the "/run your_python_file.py" approach. 
 
 /drop scripts/CONSOLE_CMDS_4
 

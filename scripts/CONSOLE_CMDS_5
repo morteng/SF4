@@ -30,7 +30,7 @@
 # Final updates
 /add scripts/REQUESTS.txt
 /add scripts/MANAGER.txt
-/architect Final cleanup before reset. Remove requests from MANAGER.txt that have been implemented or scheduled for implementation. Delete DEVLOG.md and replace it with a new DEVLOG.md based on this cycle. Add requests for any actions that are impossible for you to do to REQUESTS.txt. Update TODO list if needed, removing items that have been verified as comlpeted. Keep documentation as compact as possible, prune and remove what you can without losing important information. Do not explain or summarize, just output the edits.
+/architect Final cleanup before reset. Remove requests from MANAGER.txt that have been implemented or scheduled for implementation. Delete DEVLOG.md and replace it with a new DEVLOG.md based on this cycle. Add requests for any actions that are impossible for you to do to REQUESTS.txt. Update TODO list if needed, removing items that have been verified as comlpeted. Keep documentation as compact as possible, prune and remove what you can without losing important information. 
 
 # Reset and restart Code Cycle
 /reset
