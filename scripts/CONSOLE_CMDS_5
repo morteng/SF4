@@ -15,8 +15,17 @@
 # Archive logs
 /run scripts/archive_logs.py --force
 
+# Update documentation
+/run scripts/finalize_docs.py
+
+# Generate deployment checklist
+/run scripts/generate_deployment_checklist.py
+
 # Print timestamp
 /run scripts/print_datetime.py
+
+# Request deployment approval
+/code Add deployment request to REQUESTS.txt
 ### CODE END ###
 
 # Print completion message
