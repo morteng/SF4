@@ -33,6 +33,9 @@
 # Verify production environment
 /run scripts/verify_production.py
 
+# Verify deployment readiness
+/run scripts/verify_deployment.py
+
 ### CODE END ###
 
 

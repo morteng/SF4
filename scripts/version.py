@@ -1,4 +1,6 @@
 # Configure logging
+LOG_FILE = 'logs/version_management.log'
+Path('logs').mkdir(exist_ok=True)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -298,18 +300,23 @@ def bump_version(version_type="patch", current_version=None) -> str:
         logging.error(f"Version bump failed: {str(e)}", exc_info=True)
         raise RuntimeError(f"Version bump failed: {str(e)}")
 
-def update_version_file(new_version: str, file_path: str = None) -> None:
+def update_version_file(new_version: str, file_path: str = None) -> bool:
     """Update the __version__ in the version.py file"""
-    version_file_path = Path(file_path) if file_path else Path(__file__)
-    with version_file_path.open('r') as f:
-        lines = f.readlines()
-    
-    with version_file_path.open('w') as f:
-        for line in lines:
-            if line.startswith("__version__"):
-                f.write(f'__version__ = "{new_version}"\n')
-            else:
-                f.write(line)
+    try:
+        version_file_path = Path(file_path) if file_path else Path(__file__)
+        with version_file_path.open('r') as f:
+            lines = f.readlines()
+        
+        with version_file_path.open('w') as f:
+            for line in lines:
+                if line.startswith("__version__"):
+                    f.write(f'__version__ = "{new_version}"\n')
+                else:
+                    f.write(line)
+        return True
+    except Exception as e:
+        logging.error(f"Failed to update version file: {str(e)}")
+        return False
 
 def push_to_github(branch_name: str, commit_message: str) -> bool:
     """Push changes to GitHub with proper validation"""
