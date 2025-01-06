@@ -2,7 +2,7 @@
 
 def check_deployment():
     """Run deployment checks with proper error handling"""
-    from scripts.version import validate_db_connection, validate_production_environment
+    from scripts.version import validate_db_connection, validate_production_environment, validate_version_file
     
     print("Running deployment checks...")
     

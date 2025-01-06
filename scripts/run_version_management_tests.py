@@ -5,6 +5,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.factory import create_app
 from init_test_db import init_test_db
+from scripts.version import validate_db_connection
+from app.extensions import db
 
 import pytest
 
