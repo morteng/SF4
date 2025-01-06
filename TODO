@@ -15,6 +15,9 @@
 - Add error handling for coverage collection (high priority)
 - Add test cleanup procedures (high priority)
 - Improve test isolation (high priority)
-- Fix version bump test assertions
-- Add proper test database setup/teardown
-- Add relationship mapping validation
+- Fix version bump test assertions (high priority)
+- Add proper test database setup/teardown (high priority)
+- Add relationship mapping validation (high priority)
+- Fix version bump test failures
+- Add deployment verification tests
+- Update production configuration validation
