@@ -14,7 +14,7 @@ Outstanding Issues:
 - Version bump test failures
 
 Requests for Human Intervention:
-1. Copy .env.example content to .env file - DONE!
+1. Copy .env.example content to .env file
 2. Fix coverage collection configuration
 3. Approve deployment to main
 
