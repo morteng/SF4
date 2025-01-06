@@ -1,5 +1,9 @@
 HI! Manager here!
 
+When you have updated functionality oar want to get approval for edits you have made, request that management checks things out by asking nicely in the scripts/REQUESTS file. remember to include all information management needs to review.
+
+IMPORTANT! Ensure we read in values from .env file for database name (it's defined there as SQLALCHEMY_DATABASE_URI=sqlite:///instance/site.db) and other variables like admin user name, password and email. you can see the info in .env file in .env.example file (the actual .env file is hidden from edit view for you because it is in .gitignore file).
+
 IMPORTANT! You cannot run python code directly with console commands, instead write python files in appropriate folders and then execute them with /run your_python_file.py in the appropriate code block. Take note of this. NEVER run python code directly in code sections of coding cycle.
 
 Key Rules:
