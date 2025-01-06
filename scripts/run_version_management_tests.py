@@ -9,7 +9,7 @@ from init_test_db import init_test_db
 import pytest
 
 def run_tests():
-    """Run version management tests with enhanced logging"""
+    """Run version management tests with enhanced logging and proper app context"""
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s',
@@ -17,9 +17,13 @@ def run_tests():
     )
     
     try:
-        # Initialize test database
+        # Initialize test database with proper app context
         app = create_app('testing')
         with app.app_context():
+            # Ensure extensions are initialized
+            if 'sqlalchemy' not in app.extensions:
+                db.init_app(app)
+                
             init_test_db()
             
             # Run tests with coverage

@@ -9,12 +9,14 @@ from app.factory import create_app
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def verify_test_db(db_path='instance/test.db'):
-    """Verify test database initialization"""
+    """Verify test database initialization with proper app context"""
     try:
-        # Check if test database exists
-        if not os.path.exists(db_path):
-            logging.error(f"Test database not found at {db_path}")
-            return False
+        app = create_app('testing')
+        with app.app_context():
+            # Check if test database exists
+            if not os.path.exists(db_path):
+                logging.error(f"Test database not found at {db_path}")
+                return False
             
         # Verify schema
         app = create_app('testing')

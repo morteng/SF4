@@ -25,7 +25,11 @@ def init_test_db():
             try:
                 db.drop_all()
             except Exception as e:
-                print(f"Warning: Could not drop all tables: {str(e)}")
+                logging.warning(f"Could not drop all tables: {str(e)}")
+            
+            # Initialize extensions
+            if 'sqlalchemy' not in app.extensions:
+                db.init_app(app)
             
             # Create new tables
             db.create_all()
