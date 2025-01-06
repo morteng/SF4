@@ -1,8 +1,6 @@
 - Add missing environment variables (FLASK_ENV, FLASK_DEBUG) (high priority)
 - Fix coverage collection errors (high priority)
-- Create logs directory structure (high priority)
 - Verify Alembic migration chain
 - Add proper test fixtures
 - Add schema validation tests
 - Add proper logging configuration
-- Verify production deployment
