@@ -265,3 +265,20 @@
 2025-01-06 20:20:06,355 - INFO - All version management tests passed
 2025-01-06 20:20:16,669 - INFO - Test database initialized successfully with relationships
 2025-01-06 20:23:10,612 - INFO - Test database initialized successfully with relationships
+2025-01-06 20:41:35,826 - INFO - Test database initialized successfully
+2025-01-06 20:41:57,056 - INFO - Test database initialized successfully
+2025-01-06 20:41:57,056 - ERROR - Error running version management tests: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-06 20:41:59,872 - INFO - Test database initialized successfully
+2025-01-06 20:44:47,267 - INFO - Test database initialized successfully
+2025-01-06 20:44:59,264 - INFO - Test database initialized successfully
+2025-01-06 20:44:59,264 - ERROR - Error running version management tests: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-06 20:45:10,448 - INFO - Test database initialized successfully
+2025-01-06 20:48:07,917 - INFO - Test database initialized successfully
