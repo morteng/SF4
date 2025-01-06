@@ -377,3 +377,77 @@ with app.app_context(). See the documentation for more information.
 2025-01-06 22:59:49,443 - INFO - Application initialized successfully
 2025-01-06 22:59:49,461 - ERROR - SECRET_KEY is too short (minimum 64 characters)
 2025-01-06 22:59:50,431 - ERROR - Some version management tests failed
+2025-01-06 23:29:10,128 - INFO - Test database initialized successfully
+2025-01-06 23:29:23,639 - INFO - Test database initialized successfully
+2025-01-06 23:29:24,580 - INFO - Loaded testing configuration successfully
+2025-01-06 23:29:24,632 - INFO - Application initialized successfully
+2025-01-06 23:29:24,668 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-74/test_validate_db_connection_su0/test.db
+2025-01-06 23:29:24,710 - INFO - Loaded testing configuration successfully
+2025-01-06 23:29:24,747 - INFO - Application initialized successfully
+2025-01-06 23:29:24,761 - ERROR - Database file does not exist: C:/invalid/path/test.db
+2025-01-06 23:29:24,773 - INFO - Loaded testing configuration successfully
+2025-01-06 23:29:24,811 - INFO - Application initialized successfully
+2025-01-06 23:29:24,846 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-74/test_get_db_version0/test.db
+2025-01-06 23:29:24,861 - INFO - Loaded testing configuration successfully
+2025-01-06 23:29:24,899 - INFO - Application initialized successfully
+2025-01-06 23:29:24,924 - INFO - Loaded testing configuration successfully
+2025-01-06 23:29:24,960 - INFO - Application initialized successfully
+2025-01-06 23:29:24,988 - INFO - Loaded testing configuration successfully
+2025-01-06 23:29:25,064 - INFO - Application initialized successfully
+2025-01-06 23:29:25,181 - INFO - Loaded testing configuration successfully
+2025-01-06 23:29:25,223 - INFO - Application initialized successfully
+2025-01-06 23:29:25,249 - INFO - Database backup created: C:\Users\Morten\AppData\Local\Temp\pytest-of-Morten\pytest-74\test_create_db_backup0\test.db -> C:\Users\Morten\AppData\Local\Temp\pytest-of-Morten\pytest-74\test_create_db_backup0\test_backup.db
+2025-01-06 23:29:25,265 - INFO - Loaded testing configuration successfully
+2025-01-06 23:29:25,303 - INFO - Application initialized successfully
+2025-01-06 23:29:25,341 - ERROR - Version file validation error: [Errno 2] No such file or directory: 'C:\\Users\\Morten\\AppData\\Local\\Temp\\pytest-of-Morten\\pytest-74\\test_validate_version_file0\\nonexistent.py'
+2025-01-06 23:29:25,359 - INFO - Loaded testing configuration successfully
+2025-01-06 23:29:25,402 - INFO - Application initialized successfully
+2025-01-06 23:29:25,451 - INFO - Loaded testing configuration successfully
+2025-01-06 23:29:25,488 - INFO - Application initialized successfully
+2025-01-06 23:29:25,502 - ERROR - SECRET_KEY must contain uppercase letters
+2025-01-06 23:29:25,527 - INFO - Loaded testing configuration successfully
+2025-01-06 23:29:25,617 - INFO - Application initialized successfully
+2025-01-06 23:29:25,628 - ERROR - SECRET_KEY must contain lowercase letters
+2025-01-06 23:29:25,629 - INFO - Production environment validation passed
+2025-01-06 23:29:25,642 - INFO - Loaded testing configuration successfully
+2025-01-06 23:29:25,680 - INFO - Application initialized successfully
+2025-01-06 23:29:25,694 - ERROR - Invalid length for variables: SECRET_KEY (min 32 chars), ADMIN_PASSWORD (min 12 chars)
+2025-01-06 23:29:25,694 - ERROR - Invalid length for variables: SECRET_KEY (min 32 chars), ADMIN_PASSWORD (min 12 chars)
+2025-01-06 23:29:26,563 - ERROR - Some version management tests failed
+2025-01-06 23:47:56,503 - INFO - Test database initialized successfully
+2025-01-06 23:48:08,752 - INFO - Test database initialized successfully
+2025-01-06 23:48:09,622 - INFO - Loaded testing configuration successfully
+2025-01-06 23:48:09,672 - INFO - Application initialized successfully
+2025-01-06 23:48:09,704 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-75/test_validate_db_connection_su0/test.db
+2025-01-06 23:48:09,743 - INFO - Loaded testing configuration successfully
+2025-01-06 23:48:09,777 - INFO - Application initialized successfully
+2025-01-06 23:48:09,791 - ERROR - Database file does not exist: C:/invalid/path/test.db
+2025-01-06 23:48:09,805 - INFO - Loaded testing configuration successfully
+2025-01-06 23:48:09,843 - INFO - Application initialized successfully
+2025-01-06 23:48:09,873 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-75/test_get_db_version0/test.db
+2025-01-06 23:48:09,887 - INFO - Loaded testing configuration successfully
+2025-01-06 23:48:09,924 - INFO - Application initialized successfully
+2025-01-06 23:48:09,952 - INFO - Loaded testing configuration successfully
+2025-01-06 23:48:09,991 - INFO - Application initialized successfully
+2025-01-06 23:48:10,020 - INFO - Loaded testing configuration successfully
+2025-01-06 23:48:10,054 - INFO - Application initialized successfully
+2025-01-06 23:48:10,107 - INFO - Loaded testing configuration successfully
+2025-01-06 23:48:10,138 - INFO - Application initialized successfully
+2025-01-06 23:48:10,176 - INFO - Database backup created: C:\Users\Morten\AppData\Local\Temp\pytest-of-Morten\pytest-75\test_create_db_backup0\test.db -> C:\Users\Morten\AppData\Local\Temp\pytest-of-Morten\pytest-75\test_create_db_backup0\test_backup.db
+2025-01-06 23:48:10,189 - INFO - Loaded testing configuration successfully
+2025-01-06 23:48:10,225 - INFO - Application initialized successfully
+2025-01-06 23:48:10,250 - ERROR - Version file validation error: [Errno 2] No such file or directory: 'C:\\Users\\Morten\\AppData\\Local\\Temp\\pytest-of-Morten\\pytest-75\\test_validate_version_file0\\nonexistent.py'
+2025-01-06 23:48:10,265 - INFO - Loaded testing configuration successfully
+2025-01-06 23:48:10,297 - INFO - Application initialized successfully
+2025-01-06 23:48:10,330 - INFO - Loaded testing configuration successfully
+2025-01-06 23:48:10,367 - INFO - Application initialized successfully
+2025-01-06 23:48:10,389 - ERROR - SECRET_KEY must contain uppercase letters
+2025-01-06 23:48:10,418 - INFO - Loaded testing configuration successfully
+2025-01-06 23:48:10,509 - INFO - Application initialized successfully
+2025-01-06 23:48:10,520 - ERROR - SECRET_KEY must contain lowercase letters
+2025-01-06 23:48:10,520 - INFO - Production environment validation passed
+2025-01-06 23:48:10,533 - INFO - Loaded testing configuration successfully
+2025-01-06 23:48:10,564 - INFO - Application initialized successfully
+2025-01-06 23:48:10,579 - ERROR - Invalid length for variables: SECRET_KEY (min 32 chars), ADMIN_PASSWORD (min 12 chars)
+2025-01-06 23:48:10,579 - ERROR - Invalid length for variables: SECRET_KEY (min 32 chars), ADMIN_PASSWORD (min 12 chars)
+2025-01-06 23:48:11,352 - ERROR - Some version management tests failed

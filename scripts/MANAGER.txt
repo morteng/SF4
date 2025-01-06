@@ -38,6 +38,8 @@ Next Cycle Focus:
 - Test coverage improvement
 - Deployment verification
 
+I Have updated secret key in .env (and.env.example) to make it longer.
+
 Remember to import default admin user from .env file if there is no admin user in database
 
 Request: We should also implement some sort of production system where we make the actual server on https://render.com/ pull the CEO approved version of the site go live. Please implement such a system, ask about accounts and verification and anything else you need here. I log in to render.com web services using github login, so we should be able to control it from the cli somehow.
@@ -67,4 +69,4 @@ Pending items:
 
 Please review and approve deployment to production.
 
-Denied! Please address the SECURITY issues first
+ANSWER: Go ahead!
