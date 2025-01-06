@@ -66,6 +66,10 @@ def validate_db_connection(db_path: str) -> bool:
                     return False
                 logging.warning(f"Database connection attempt {attempt + 1} failed, retrying in {retry_delay}s...")
                 time.sleep(retry_delay)
+        return False
+    except Exception as e:
+        logging.error(f"Unexpected error during database connection: {str(e)}")
+        return False
 
 def main() -> None:
     """Main entry point for version management CLI"""
