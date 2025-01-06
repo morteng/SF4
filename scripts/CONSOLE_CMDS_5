@@ -2,7 +2,7 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Create final timestamped backup
+# Create final backup with timestamp
 /run scripts/create_backup.py --final --timestamped
 
 # Validate production database schema
@@ -31,10 +31,12 @@
 
 ### CODE END ###
 
+# Request deployment approval
+/request deployment
 
 # Push changes to GitHub
 /git add .
-/git commit -m "Cycle 6 completed - Ready for deployment"
+/git commit -m "Cycle 7 completed - Ready for deployment"
 /git push origin main
 
 # Reset and restart Code Cycle
