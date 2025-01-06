@@ -14,11 +14,8 @@
 # Verify test database
 /run scripts/verify_test_db.py
 
-# Run relationship tests
-/run scripts/run_relationship_tests.py
-
-# Run version management tests
-/run scripts/run_version_management_tests.py
+# Run all tests
+/run scripts/run_all_tests.py
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py

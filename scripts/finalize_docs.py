@@ -10,11 +10,13 @@ def update_release_notes():
             f.write("- Improved test database initialization\n")
             f.write("- Enhanced version history tracking\n")
             f.write("- Fixed relationship mapping issues\n")
-            f.write("- Improved test coverage reporting\n")
+            f.write("- Improved test coverage reporting (Current: 32%)\n")
             f.write("- Finalized deployment verification process\n")
             f.write("- Updated production environment checks\n")
             f.write("- Completed deployment documentation\n")
             f.write("- Verified production environment configuration\n")
+            f.write("- Fixed SECRET_KEY length validation\n")
+            f.write("- Improved error handling in version management\n")
         return True
     except Exception as e:
         print(f"Failed to update release notes: {str(e)}")
