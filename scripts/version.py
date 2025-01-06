@@ -25,28 +25,41 @@ logging.basicConfig(
 
 def validate_db_connection(db_path: str) -> bool:
     """Validate database connection with retry logic and detailed logging"""
-    # Convert Windows paths to forward slashes and handle relative paths
-    db_path = str(Path(db_path).absolute()).replace('\\', '/')
-    max_retries = 3
-    retry_delay = 1  # seconds
-    
-    # Test for invalid path
-    if not db_path or not isinstance(db_path, str):
-        logging.error("Invalid database path provided")
-        return False
+    try:
+        # Convert Windows paths to forward slashes and handle relative paths
+        db_path = str(Path(db_path).absolute()).replace('\\', '/')
+        max_retries = 3
+        retry_delay = 1  # seconds
         
-    # Test for non-existent file
-    if not db_path == ":memory:" and not os.path.exists(db_path):
-        logging.error(f"Database file does not exist: {db_path}")
-        return False
-    
-    for attempt in range(max_retries):
-        try:
-            conn = sqlite3.connect(db_path)
-            conn.execute("SELECT 1")
-            conn.close()
-            logging.info(f"Database connection successful to {db_path}")
-            return True
+        # Test for invalid path
+        if not db_path or not isinstance(db_path, str):
+            logging.error("Invalid database path provided")
+            return False
+            
+        # Test for non-existent file
+        if not db_path == ":memory:" and not os.path.exists(db_path):
+            logging.error(f"Database file does not exist: {db_path}")
+            return False
+        
+        # Configure logging to capture output
+        log_file = Path('logs/version_management.log')
+        log_file.parent.mkdir(exist_ok=True)
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler(log_file),
+                logging.StreamHandler()
+            ]
+        )
+        
+        for attempt in range(max_retries):
+            try:
+                conn = sqlite3.connect(db_path)
+                conn.execute("SELECT 1")
+                conn.close()
+                logging.info(f"Database connection successful to {db_path}")
+                return True
         except sqlite3.Error as e:
             if attempt == max_retries - 1:
                 logging.error(f"Database connection failed after {max_retries} attempts: {str(e)}")
