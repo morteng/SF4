@@ -7,6 +7,11 @@
 - Add schema validation tests (high priority)
 - Add proper logging configuration (high priority)
 - Update version management tests (high priority) - IN PROGRESS
+- Fix circular imports in app initialization (critical priority)
+- Verify test database setup/teardown (high priority)
+- Add proper CSRF token handling in tests (high priority)
+- Fix rate limiter initialization in tests (high priority)
+- Add comprehensive test coverage for version.py (high priority)
 - Verify production deployment pipeline (medium priority)
 - Fix version.py test imports (critical priority)
 - Add proper error handling for database connection tests (high priority)
