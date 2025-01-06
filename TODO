@@ -1,4 +1,4 @@
-- Resolve pytest import errors (high priority) - create_app import error (completed)
+- Resolve pytest import errors (high priority) - create_app import error
 - Implement proper test coverage
 - Update documentation
 - Verify production deployment
@@ -18,7 +18,7 @@
 - Fix validate_production_environment implementation
 - Fix alembic version table creation
 - Add proper deployment verification
-- Fix create_app import error in tests (completed)
+- Fix create_app import error in tests
 - Fix version.py validate-env command (completed)
 - Fix pytest configuration errors (completed)
 - Fix pytest import errors (completed)
