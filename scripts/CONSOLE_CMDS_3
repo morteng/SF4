@@ -2,34 +2,34 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Create initial backup
-/run scripts/create_backup.py
+# Initialize fresh test database
+/run scripts/init_test_db.py
+
+# Update test configuration
+/run scripts/update_test_config.py
 
 # Fix pytest configuration
 /run scripts/fix_pytest_config.py
 
-# Initialize fresh test environment with relationships
-/run scripts/init_test_db.py
-/run scripts/update_test_config.py
-
-# Validate database state and relationships
+# Validate database schema
 /run scripts/validate_schema.py
-/run scripts/verify_production.py
+
+# Verify test database
 /run scripts/verify_test_db.py
 
 # Create logs directory structure
 /run scripts/create_logs_dir.py
 
-# Run relationship tests with retry
+# Run relationship tests
 /run scripts/run_relationship_tests.py
 
 # Run version management tests
 /run scripts/run_version_management_tests.py
 
-# Generate detailed coverage report
+# Generate coverage report
 /run scripts/generate_coverage_report.py
 
-# Check coverage thresholds
+# Check coverage
 /run scripts/check_coverage.py
 
 # Archive logs
@@ -41,8 +41,6 @@
 
 # Print completion message
 /run Write-Host "Code Cycle Step 3 Ends - Ready for Review"
-
-
 
 # Proceed to Step 4 - Review
 /load scripts/STEP_4
