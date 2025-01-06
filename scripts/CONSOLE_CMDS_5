@@ -40,6 +40,13 @@ pip freeze > requirements.txt
 # Request deployment approval
 /request deployment
 
+# Notify management
+/notify management "Deployment ready for review"
+
+# Prepare for next cycle
+/reset
+/load scripts/STEP_1
+
 ### CODE END ###
 
 # Request deployment approval
