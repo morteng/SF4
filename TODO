@@ -16,3 +16,4 @@
 - Fix validate_production_environment implementation
 - Fix alembic version table creation
 - Add proper deployment verification
+- Fix create_app import error in tests
