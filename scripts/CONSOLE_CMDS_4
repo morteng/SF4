@@ -10,7 +10,7 @@
 /run scripts/verify_production.py
 
 # Check final test coverage
-/run scripts/check_coverage.py
+/run scripts/generate_coverage_report.py
 
 # Finalize all documentation
 /run scripts/finalize_docs.py
