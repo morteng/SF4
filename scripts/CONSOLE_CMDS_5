@@ -2,35 +2,35 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Create final backup with timestamp
-/run scripts/create_backup.py --final --timestamped
+# Create final backup
+/run scripts/create_backup.py
 
 # Validate production database schema
-/run scripts/validate_schema.py --production
+/run scripts/validate_schema.py
 
 # Verify production environment configuration
-/run scripts/verify_production.py --strict
+/run scripts/verify_production.py
 
-# Finalize all documentation
-/run scripts/finalize_docs.py --all
+# Finalize documentation
+/run scripts/finalize_docs.py
 
-# Generate comprehensive deployment checklist
-/run scripts/generate_deployment_checklist.py --detailed
+# Generate deployment checklist
+/run scripts/generate_deployment_checklist.py
 
-# Archive logs with compression
-/run scripts/archive_logs.py --compress
+# Archive logs
+/run scripts/archive_logs.py
 
-# Perform full deployment verification
-/run scripts/verify_deployment.py --full
+# Verify deployment readiness
+/run scripts/verify_deployment.py
 
 # End cycle and calculate time
-/run scripts/end_cycle.py --log
+/run scripts/end_cycle.py
 
 # Print final timestamp
 /run scripts/print_datetime.py
 
 # Update requirements
-pip freeze > requirements.txt
+/run scripts/update_requirements.py
 
 # Push changes to GitHub
 /git add .
