@@ -1,39 +1,33 @@
-# Console Commands for Step 2
+# Console Commands for Step 2 - Coding
 # Do not use echo commands
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Create database backup before changes
+# Create initial backup
 /run scripts/create_backup.py
 
-# Initialize fresh test database
+# Initialize fresh test environment
 /run scripts/init_test_db.py
-
-# Update test configuration
 /run scripts/update_test_config.py
 
-# Validate schema
+# Validate database state
 /run scripts/validate_schema.py
-
-# Run relationship tests
-/run scripts/run_relationship_tests.py
-
-# Run version management tests
-/run scripts/run_version_tests.py
-
-# Verify production environment
 /run scripts/verify_production.py
 
-# Print current datetime
+# Run core tests
+/run scripts/run_relationship_tests.py
+/run scripts/run_version_tests.py
+
+# Print timestamp
 /run scripts/print_datetime.py
 ### CODE END ###
 
-# Print the current datetime to console
+# Print completion message
 /run scripts/print_datetime.py
-/run Write-Host "Code Cycle Step 2 Ends"
+/run Write-Host "Code Cycle Step 2 Ends - Ready for Review"
 
 # Update TODO based on results
-/code update TODO if needed. 
+/code update TODO if needed.
 
-# After running any console commands, go to STEP_3
+# Proceed to Step 3 - Review
 /load scripts/STEP_3
