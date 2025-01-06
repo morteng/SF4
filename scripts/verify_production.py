@@ -74,9 +74,9 @@ def verify_security_settings():
             
         # Verify SECRET_KEY
         secret_key = os.getenv('SECRET_KEY', '')
-        if len(secret_key) < 32:
-            logger.error(f"SECRET_KEY is too short (length: {len(secret_key)}), minimum 32 characters required")
-            logger.error("Please generate a new SECRET_KEY with at least 32 characters")
+        if len(secret_key) < 64:  # Changed from 32 to 64 per requirements
+            logger.error(f"SECRET_KEY is too short (length: {len(secret_key)}), minimum 64 characters required")
+            logger.error("Please generate a new SECRET_KEY with at least 64 characters")
             return False
             
         # Verify SECRET_KEY complexity

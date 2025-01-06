@@ -48,10 +48,6 @@
 # Run final cleanup
 /run scripts/final_cleanup.py
 
-# Remove duplicate test files
-del tests\test_user.py
-del tests\routes\test_public_routes.py
-
 ### CODE END ###
 
 
