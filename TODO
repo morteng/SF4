@@ -10,6 +10,10 @@
 - Update version bump test assertions (high priority)
 - Improve test database verification (high priority)
 - Add proper test cleanup procedures (high priority)
+- Fix factory module import error (critical priority)
+- Add proper test isolation (high priority)
+- Fix coverage collector assertion errors (critical priority)
+- Update test configuration handling (high priority)
 - Update version bump logic in version.py (high priority) - IN PROGRESS
 - Fix test database initialization (critical priority) - IN PROGRESS
 - Fix pytest import errors (critical priority) - IN PROGRESS
