@@ -3,9 +3,6 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Create logs directory structure
-/run scripts/create_logs_dir.py
-
 # Initialize fresh test environment with relationships
 /run scripts/init_test_db.py
 
@@ -35,6 +32,15 @@
 
 # Verify deployment readiness
 /run scripts/verify_deployment.py
+
+# Finalize documentation updates
+/run scripts/finalize_docs.py
+
+# Create database backup
+/run scripts/create_backup.py
+
+# Archive logs
+/run scripts/archive_logs.py
 
 ### CODE END ###
 
