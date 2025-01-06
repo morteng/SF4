@@ -11,3 +11,5 @@
 - Fix version.py update-release-notes command
 - Add update-version-history command to version.py
 - Implement validate_production_environment in version.py
+- Fix test database initialization
+- Add test coverage reporting

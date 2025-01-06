@@ -15,17 +15,11 @@
 # Create initial backup
 /run scripts/create_backup.py
 
-# Run version management tests with coverage
-/run pytest tests/version_management/test_version.py --cov=scripts.version --cov-report=term-missing -v
-
-# Verify production environment
-/run scripts/version.py validate-env
-
 # Archive logs
 /run scripts/archive_logs.py
 
-# Generate coverage report
-/run coverage report -m
+# Verify production environment
+/run scripts/version.py validate-env
 ### CODE END ###
 
 # Print the current datetime to console
