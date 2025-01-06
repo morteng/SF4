@@ -60,23 +60,27 @@ def test_validate_version():
     assert validate_version("1.2.3+") is False
     assert validate_version("1.2.3-") is False
 
-def test_bump_version():
+def test_bump_version(tmp_path):
     """Test version bump functionality"""
+    # Setup test version file
+    version_file = tmp_path / "test_version.py"
+    version_file.write_text('__version__ = "0.2.0"\n')
+    
     # Test patch bump
-    assert bump_version("patch") == "0.2.1"
+    assert bump_version("patch", current_version="0.2.0") == "0.2.1"
     
     # Test minor bump
-    assert bump_version("minor") == "0.3.0"
+    assert bump_version("minor", current_version="0.2.0") == "0.3.0"
     
     # Test major bump
-    assert bump_version("major") == "1.0.0"
+    assert bump_version("major", current_version="0.2.0") == "1.0.0"
     
     # Test invalid bump type
     with pytest.raises(ValueError):
         bump_version("invalid")
         
     # Test version validation after bump
-    assert validate_version(bump_version("patch"))
+    assert validate_version(bump_version("patch", current_version="0.2.0"))
 
 def test_update_version_file(tmp_path):
     """Test updating version file"""
@@ -135,14 +139,23 @@ def create_db_backup(db_path: str) -> bool:
 def test_create_version_history(tmp_path):
     """Test version history creation"""
     version_file = tmp_path / "VERSION_HISTORY.md"
-    create_version_history("1.2.3")
+    create_version_history("1.2.3", history_path=str(version_file))
+    
     assert version_file.exists()
+    content = version_file.read_text()
+    assert "## 1.2.3 - " in content
+    assert "- Version bump" in content
+    assert "- Fixed version management tests" in content
+    assert "- Improved version history tracking" in content
     content = version_file.read_text()
     assert "1.2.3" in content
     assert datetime.now().strftime('%Y-%m-%d') in content
 
-def test_validate_production_environment(monkeypatch):
+def test_validate_production_environment(monkeypatch, tmp_path):
     """Test production environment validation"""
+    log_file = tmp_path / "test.log"
+    monkeypatch.setattr('scripts.version.LOG_FILE', str(log_file))
+    
     # Test missing environment variables
     monkeypatch.delenv('DATABASE_URL', raising=False)
     monkeypatch.delenv('SECRET_KEY', raising=False)
@@ -151,11 +164,10 @@ def test_validate_production_environment(monkeypatch):
     
     # Test with all required variables
     monkeypatch.setenv('DATABASE_URL', 'sqlite:///test.db')
-    monkeypatch.setenv('SECRET_KEY', 'test_key')
+    monkeypatch.setenv('SECRET_KEY', 'test_key_that_is_long_enough')
     monkeypatch.setenv('ADMIN_EMAIL', 'test@example.com')
     assert validate_production_environment() is True
     
     # Test logging output
-    with open('version_management.log') as log_file:
-        log_content = log_file.read()
-        assert "Production environment validation passed" in log_content
+    log_content = log_file.read_text()
+    assert "Production environment validation passed" in log_content
