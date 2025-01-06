@@ -6,6 +6,9 @@ We have completed all development and testing tasks for this cycle. The applicat
 2. Validate production schema
 3. Archive logs
 4. Verify deployment
+5. Update production environment
+6. Deploy application
+7. Verify production deployment
 
 All changes have been tested and verified. Please let us know if you need any additional information or if we should proceed with deployment.
 
