@@ -9,12 +9,13 @@ Deployment Details:
 
 Outstanding Issues:
 - Missing environment variables (FLASK_ENV, FLASK_DEBUG)
-- Production verification failed due to missing variables
+- Coverage collection errors
 
 Requests for Human Intervention:
 1. Add missing environment variables to production:
    - FLASK_ENV=production
    - FLASK_DEBUG=False
-2. Approve deployment to main
+2. Fix coverage collection configuration
+3. Approve deployment to main
 
 Please confirm when ready to deploy.
