@@ -19,16 +19,10 @@
 
 # Run core tests
 /run scripts/run_relationship_tests.py
-/run scripts/run_version_tests.py
-
-# Print timestamp
-/run scripts/print_datetime.py
+/run scripts/run_version_management_tests.py
 
 # Verify test database initialization
 /run scripts/verify_test_db.py
-
-# Run version management tests
-/run scripts/run_version_management_tests.py
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py
