@@ -36,7 +36,7 @@
 /run Write-Host "Code Cycle Step 3 Ends"
 
 # Update TODO based on results
-/code update TODO if needed. Do not explain or summarize, just output the edit if you need to update the file.
+/code update TODO if needed. 
 
 # After running any console commands, go to STEP_4
 /load scripts/STEP_4
