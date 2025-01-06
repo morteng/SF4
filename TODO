@@ -4,3 +4,7 @@
 - Add proper test fixtures
 - Add schema validation tests
 - Add proper logging configuration
+- Fix pytest import errors (create_app missing) (high priority)
+- Initialize database connection properly
+- Update version management tests
+- Verify production deployment pipeline
