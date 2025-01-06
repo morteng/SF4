@@ -29,6 +29,9 @@
 # Check coverage
 /run scripts/check_coverage.py
 
+# Validate version file
+/run scripts/validate_version.py
+
 # Verify production environment
 /run scripts/verify_production.py
 
