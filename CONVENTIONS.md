@@ -159,10 +159,6 @@
 
 ---
 
-## Example Code Structure
-
-
-
 
 ### Sample Route
 

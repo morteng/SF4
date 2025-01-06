@@ -9,3 +9,5 @@ All pre-deployment checks completed successfully:
 - Logs archived
 
 Please review and approve deployment to production.
+
+Denied! Test coverage is below 80%

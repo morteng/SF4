@@ -22,8 +22,10 @@ Current Focus:
 - Resolve pytest import errors
 - Implement proper test coverage setup
 
-Remember to import admin user from .env file if there is no admin user in database
+Remember to import default admin user from .env file if there is no admin user in database
 
 we should also implement some sort of production system where we make the actual server on https://render.com/ pull the CEO approved version of the site go live. Please implement such a system, ask about accounts and verification and anything else you need here. I log in to render.com web services using github login, so we should be able to control it from the cli somehow.
 
 And make sure we do testing on github and proper handling of all that stuff.
+
+Regarding backups: delete older backups and ensure we're backing up site.db properly
