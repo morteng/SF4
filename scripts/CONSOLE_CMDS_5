@@ -29,6 +29,17 @@
 # Print final timestamp
 /run scripts/print_datetime.py
 
+# Update requirements
+pip freeze > requirements.txt
+
+# Push changes to GitHub
+/git add .
+/git commit -m "Cycle 7 completed - Ready for deployment"
+/git push origin main
+
+# Request deployment approval
+/request deployment
+
 ### CODE END ###
 
 # Request deployment approval
