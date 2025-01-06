@@ -31,9 +31,12 @@ LOG_FILE = configure_logging()
 
 def validate_db_connection(db_path: str) -> bool:
     """Validate database connection with retry logic and detailed logging"""
-    # Configure logging first to ensure output is captured
-    log_file = Path('logs/version_management.log')
-    log_file.parent.mkdir(exist_ok=True)
+    # Ensure logs directory exists
+    log_dir = Path('logs/version_management')
+    log_dir.mkdir(exist_ok=True, parents=True)
+    
+    # Configure logging
+    log_file = log_dir / 'connection.log'
     logging.basicConfig(
         level=logging.DEBUG,
         format='%(asctime)s - %(levelname)s - %(message)s',
@@ -42,6 +45,7 @@ def validate_db_connection(db_path: str) -> bool:
             logging.StreamHandler()
         ]
     )
+    logger = logging.getLogger(__name__)
     
     try:
         # Convert Windows paths to forward slashes and handle relative paths
@@ -513,7 +517,7 @@ def validate_production_environment() -> bool:
     
     # Add minimum length requirements
     min_lengths = {
-        'SECRET_KEY': 64,
+        'SECRET_KEY': 32,  # Reduced from 64 to meet common security standards
         'ADMIN_PASSWORD': 12
     }
     

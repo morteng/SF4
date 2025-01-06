@@ -31,17 +31,19 @@ def test_validate_db_connection_success(tmp_path):
     db_path = tmp_path / "test.db"
     with sqlite3.connect(db_path):
         pass
-        
+    
     # Test connection
     assert validate_db_connection(str(db_path)) is True
     
     # Verify logging output
-    log_file = Path('logs/version_management.log')
+    log_dir = Path('logs/version_management')
+    log_file = log_dir / 'connection.log'
     assert log_file.exists()
     
     with log_file.open() as f:
         log_content = f.read()
         assert "Database connection successful" in log_content
+        assert str(db_path) in log_content
         assert str(db_path) in log_content
 @pytest.fixture(scope="module")
 def test_db():
