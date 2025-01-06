@@ -1,7 +1,8 @@
 import pytest
 import logging
 import re
-from datetime import datetime, UTC
+from datetime import datetime
+from datetime import timezone
 from flask import url_for
 from app.services.user_service import get_all_users
 from flask_login import current_user

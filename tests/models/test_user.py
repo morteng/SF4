@@ -53,3 +53,7 @@ def test_user_duplicate_email(db_session):
     
     with pytest.raises(Exception):
         db_session.commit()
+```
+```python
+tests\models\test_user_model.py
+<<<<<<< SEARCH
