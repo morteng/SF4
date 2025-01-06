@@ -41,6 +41,12 @@
 # Update requirements
 pip freeze > requirements.txt
 
+# Verify SECRET_KEY meets requirements
+/run scripts/verify_production.py --check-secret-key
+
+# Validate all environment variables
+/run scripts/verify_production.py --check-env
+
 ### CODE END ###
 
 

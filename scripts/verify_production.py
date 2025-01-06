@@ -67,20 +67,40 @@ def verify_environment_variables():
 def verify_security_settings():
     """Verify security-related settings"""
     try:
+        # Check debug mode
         if os.getenv('FLASK_DEBUG') == '1':
             logger.warning("Debug mode is enabled in production")
             return False
             
+        # Verify SECRET_KEY
         secret_key = os.getenv('SECRET_KEY', '')
         if len(secret_key) < 32:
             logger.error(f"SECRET_KEY is too short (length: {len(secret_key)}), minimum 32 characters required")
             return False
             
         # Verify SECRET_KEY complexity
-        if not any(c.isupper() for c in secret_key) or \
-           not any(c.islower() for c in secret_key) or \
-           not any(c.isdigit() for c in secret_key):
-            logger.error("SECRET_KEY must contain uppercase, lowercase and numbers")
+        if not any(c.isupper() for c in secret_key):
+            logger.error("SECRET_KEY must contain at least one uppercase letter")
+            return False
+        if not any(c.islower() for c in secret_key):
+            logger.error("SECRET_KEY must contain at least one lowercase letter")
+            return False
+        if not any(c.isdigit() for c in secret_key):
+            logger.error("SECRET_KEY must contain at least one digit")
+            return False
+        if not any(c in "!@#$%^&*()_+-=[]{};':,.<>?/" for c in secret_key):
+            logger.error("SECRET_KEY must contain at least one special character")
+            return False
+            
+        # Verify admin credentials
+        admin_email = os.getenv('ADMIN_EMAIL')
+        if not admin_email or '@' not in admin_email:
+            logger.error("Invalid ADMIN_EMAIL format")
+            return False
+            
+        admin_password = os.getenv('ADMIN_PASSWORD')
+        if not admin_password or len(admin_password) < 12:
+            logger.error("ADMIN_PASSWORD must be at least 12 characters long")
             return False
             
         # Verify SECRET_KEY complexity
