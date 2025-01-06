@@ -6,14 +6,14 @@
 # Create initial backup
 /run scripts/create_backup.py
 
-# Initialize fresh test environment
+# Initialize fresh test environment with relationships
 /run scripts/init_test_db.py
 /run scripts/update_test_config.py
 
 # Fix pytest configuration
 /run scripts/fix_pytest_config.py
 
-# Validate database state
+# Validate database state and relationships
 /run scripts/validate_schema.py
 /run scripts/verify_production.py
 /run scripts/verify_test_db.py
@@ -24,8 +24,10 @@
 # Initialize database with retry logic
 /run scripts/db_utils.py
 
-# Run core tests
+# Run relationship tests
 /run scripts/run_relationship_tests.py
+
+# Run version management tests
 /run scripts/run_version_management_tests.py
 
 # Generate coverage report
