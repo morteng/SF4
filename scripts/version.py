@@ -313,10 +313,17 @@ def bump_version(version_type="patch", current_version=None) -> str:
         logging.error(f"Version bump failed: {str(e)}", exc_info=True)
         raise RuntimeError(f"Version bump failed: {str(e)}")
 
+import shutil
+
 def update_version_file(new_version: str, file_path: str = None) -> bool:
-    """Update the __version__ in the version.py file"""
+    """Update the __version__ in the version.py file with proper error handling"""
     try:
         version_file_path = Path(file_path) if file_path else Path(__file__)
+        
+        # Create backup before modifying
+        backup_path = version_file_path.with_suffix('.bak')
+        shutil.copy(version_file_path, backup_path)
+        
         with version_file_path.open('r') as f:
             lines = f.readlines()
         
@@ -326,9 +333,19 @@ def update_version_file(new_version: str, file_path: str = None) -> bool:
                     f.write(f'__version__ = "{new_version}"\n')
                 else:
                     f.write(line)
+                    
+        # Verify update was successful
+        with version_file_path.open('r') as f:
+            content = f.read()
+            if f'__version__ = "{new_version}"' not in content:
+                raise RuntimeError("Version update verification failed")
+                
         return True
     except Exception as e:
         logging.error(f"Failed to update version file: {str(e)}")
+        # Restore from backup if update failed
+        if backup_path.exists():
+            shutil.copy(backup_path, version_file_path)
         return False
 
 def push_to_github(branch_name: str, commit_message: str) -> bool:

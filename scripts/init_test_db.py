@@ -16,19 +16,18 @@ logging.basicConfig(
 )
 
 def init_test_db():
-    """Initialize a fresh test database with proper relationships and validation"""
+    """Initialize a fresh test database with proper cleanup"""
     try:
         app = create_app('testing')
         with app.app_context():
-            # Ensure database directory exists
-            os.makedirs('instance', exist_ok=True)
-            
-            # Drop and create all tables with proper cleanup
+            # Ensure clean state
             db.session.remove()
             db.drop_all()
+            
+            # Create new tables
             db.create_all()
             
-            # Create test data with proper relationships
+            # Create test data
             org = Organization(name="Test Org")
             tag1 = Tag(name="Test Tag 1", category="Test Category")
             tag2 = Tag(name="Test Tag 2", category="Test Category")
@@ -47,32 +46,25 @@ def init_test_db():
             stipend.tags.extend([tag1, tag2])
             stipend.organization = org
             
-            # Add and commit with proper session management
-            try:
-                db.session.add_all([org, tag1, tag2, stipend])
-                db.session.commit()
-            except Exception as e:
-                db.session.rollback()
-                raise e
+            # Add and commit
+            db.session.add_all([org, tag1, tag2, stipend])
+            db.session.commit()
             
-            # Verify data was inserted
-            org_count = Organization.query.count()
-            tag_count = Tag.query.count()
-            stipend_count = Stipend.query.count()
+            # Verify data
+            assert Organization.query.count() == 1
+            assert Tag.query.count() == 2
+            assert Stipend.query.count() == 1
             
-            if org_count == 1 and tag_count == 2 and stipend_count == 1:
-                logging.info("Test database initialized successfully with relationships")
-                print("Test database initialized successfully with relationships")
-                return True
-            else:
-                logging.error("Test data verification failed")
-                print("Test data verification failed")
-                return False
-                
+            logging.info("Test database initialized successfully")
+            return True
+            
     except Exception as e:
         logging.error(f"Test database initialization failed: {str(e)}")
-        print(f"Test database initialization failed: {str(e)}")
+        db.session.rollback()
         return False
+    finally:
+        # Ensure proper cleanup
+        db.session.remove()
 
 if __name__ == "__main__":
     init_test_db()
