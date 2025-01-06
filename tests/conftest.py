@@ -65,7 +65,7 @@ from werkzeug.security import generate_password_hash
 from sqlalchemy.exc import SAWarning
 from flask import url_for, current_app
 from flask_wtf.csrf import generate_csrf
-from app.factory import create_app
+from app import create_app
 from app.extensions import init_extensions
 from app.extensions import db, login_manager
 from app.models.user import User
@@ -80,7 +80,7 @@ from pathlib import Path
 # Add project root to Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.factory import create_app
+from app import create_app
 from app.extensions import db
 from sqlalchemy.orm import scoped_session, sessionmaker
 
