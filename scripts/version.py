@@ -279,15 +279,15 @@ def parse_version(version: str) -> Tuple[int, int, int, Optional[str]]:
 
     return major, minor, patch, suffix
 
-def bump_version(version_type="patch") -> str:
+def bump_version(version_type="patch", current_version=None) -> str:
     """Bump the version number and return the new version string"""
     if version_type not in ["major", "minor", "patch"]:
         raise ValueError("version_type must be 'major', 'minor' or 'patch'")
 
     try:
         # Get current version
-        current_version = __version__
-        major, minor, patch, suffix = parse_version(current_version)
+        version_to_bump = current_version if current_version else __version__
+        major, minor, patch, suffix = parse_version(version_to_bump)
 
         if version_type == "major":
             major += 1
@@ -301,14 +301,11 @@ def bump_version(version_type="patch") -> str:
 
         new_version = f"{major}.{minor}.{patch}"
         
-        # Update version file
-        update_version_file(new_version)
-        
-        # Create version history
-        create_version_history(new_version)
-        
-        # Update release notes
-        update_release_notes()
+        # Update version file if not testing
+        if not current_version:
+            update_version_file(new_version)
+            create_version_history(new_version)
+            update_release_notes()
         
         return new_version
         
@@ -316,9 +313,9 @@ def bump_version(version_type="patch") -> str:
         logging.error(f"Version bump failed: {str(e)}", exc_info=True)
         raise RuntimeError(f"Version bump failed: {str(e)}")
 
-def update_version_file(new_version: str) -> None:
+def update_version_file(new_version: str, file_path: str = None) -> None:
     """Update the __version__ in the version.py file"""
-    version_file_path = Path(__file__)
+    version_file_path = Path(file_path) if file_path else Path(__file__)
     with version_file_path.open('r') as f:
         lines = f.readlines()
     
@@ -377,7 +374,7 @@ def create_db_backup(source_db: str, backup_path: str = None) -> bool:
             
         logging.info(f"Database backup created: {source_db} -> {backup_path}")
         return True
-    except sqlite3.Error as e:
+    except Exception as e:
         logging.error(f"Database backup failed: {str(e)}")
         return False
 
@@ -402,9 +399,11 @@ def validate_version_file(file_path: Optional[str] = None) -> bool:
         logging.error(f"Version file validation error: {str(e)}")
         return False
 
-def create_version_history(new_version: str) -> None:
+def create_version_history(new_version: str, history_path: str = None) -> None:
     """Create version history file"""
-    history_file = Path('VERSION_HISTORY.md')
+    history_file = Path(history_path) if history_path else Path('VERSION_HISTORY.md')
+    history_file.parent.mkdir(parents=True, exist_ok=True)
+    
     if not history_file.exists():
         history_file.write_text("# Version History\n\n")
     
@@ -412,7 +411,7 @@ def create_version_history(new_version: str) -> None:
     with history_file.open('r') as f:
         content = f.read()
         if f"## {new_version} - {datetime.now().strftime('%Y-%m-%d')}" in content:
-            logging.info(f"Version {new_version} already exists in VERSION_HISTORY.md")
+            logging.info(f"Version {new_version} already exists in {history_file}")
             return
     
     with history_file.open('a') as f:

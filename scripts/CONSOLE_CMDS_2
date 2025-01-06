@@ -21,11 +21,17 @@
 # Verify test database
 /run scripts/verify_test_db.py
 
-# Run version management tests
+# Run version management tests with coverage
 /run scripts/run_version_management_tests.py
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py
+
+# Validate version file
+/run scripts/validate_version.py
+
+# Verify production environment
+/run scripts/verify_production.py
 
 ### CODE END ###
 
