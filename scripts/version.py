@@ -39,7 +39,12 @@ def validate_db_connection(db_path: str) -> bool:
         
         # Test for invalid path
         if not db_path or not isinstance(db_path, str):
-            logging.error("Invalid database path provided")
+            logging.error("Invalid database path")
+            return False
+            
+        # Add check for .env configuration
+        if not os.getenv('SQLALCHEMY_DATABASE_URI'):
+            logging.error("Database URI not configured in .env")
             return False
             
         # Test for non-existent file
