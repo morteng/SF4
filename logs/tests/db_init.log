@@ -505,3 +505,11 @@ with app.app_context(). See the documentation for more information.
 2025-01-07 01:49:45,590 - INFO - Test database initialized successfully
 2025-01-07 01:49:45,610 - ERROR - Test database not found at instance/test.db
 2025-01-07 01:49:45,610 - ERROR - Test database verification failed
+2025-01-07 02:15:49,993 - INFO - Test database initialized successfully
+2025-01-07 02:16:00,013 - INFO - Test database initialized successfully
+2025-01-07 02:16:00,014 - ERROR - No tables found in database
+2025-01-07 02:16:00,014 - ERROR - Database connection validation failed
+2025-01-07 02:23:06,810 - INFO - Test database initialized successfully
+2025-01-07 02:23:16,407 - INFO - Test database initialized successfully
+2025-01-07 02:23:16,408 - ERROR - No tables found in database
+2025-01-07 02:23:16,408 - ERROR - Database connection validation failed
