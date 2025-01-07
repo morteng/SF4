@@ -552,3 +552,27 @@ Traceback (most recent call last):
   File "C:\github\SF4\.venv\lib\site-packages\flask\ctx.py", line 261, in pop
     raise AssertionError(
 AssertionError: Popped wrong app context. (<flask.ctx.AppContext object at 0x00000145356D2850> instead of <flask.ctx.AppContext object at 0x00000145351F7B80>)
+2025-01-07 07:12:06,081 - ERROR - Test database initialization failed: 'Organization' object has no attribute 'validate'
+2025-01-07 07:12:17,904 - ERROR - Test database initialization failed: 'Organization' object has no attribute 'validate'
+2025-01-07 07:12:17,905 - ERROR - Failed to initialize test database
+2025-01-07 07:12:17,905 - ERROR - Error running version management tests: Popped wrong app context. (<flask.ctx.AppContext object at 0x0000020C37FD3850> instead of <flask.ctx.AppContext object at 0x0000020C37B17B80>)
+Traceback (most recent call last):
+  File "C:\github\SF4\scripts\run_version_management_tests.py", line 50, in run_tests
+    return False
+  File "C:\github\SF4\.venv\lib\site-packages\flask\ctx.py", line 277, in __exit__
+    self.pop(exc_value)
+  File "C:\github\SF4\.venv\lib\site-packages\flask\ctx.py", line 261, in pop
+    raise AssertionError(
+AssertionError: Popped wrong app context. (<flask.ctx.AppContext object at 0x0000020C37FD3850> instead of <flask.ctx.AppContext object at 0x0000020C37B17B80>)
+2025-01-07 07:26:28,216 - ERROR - Test database initialization failed: 'Organization' object has no attribute 'validate'
+2025-01-07 07:26:39,664 - ERROR - Test database initialization failed: 'Organization' object has no attribute 'validate'
+2025-01-07 07:26:39,665 - ERROR - Failed to initialize test database
+2025-01-07 07:26:39,665 - ERROR - Error running version management tests: Popped wrong app context. (<flask.ctx.AppContext object at 0x000002555D9DE850> instead of <flask.ctx.AppContext object at 0x000002555D527B80>)
+Traceback (most recent call last):
+  File "C:\github\SF4\scripts\run_version_management_tests.py", line 50, in run_tests
+    return False
+  File "C:\github\SF4\.venv\lib\site-packages\flask\ctx.py", line 277, in __exit__
+    self.pop(exc_value)
+  File "C:\github\SF4\.venv\lib\site-packages\flask\ctx.py", line 261, in pop
+    raise AssertionError(
+AssertionError: Popped wrong app context. (<flask.ctx.AppContext object at 0x000002555D9DE850> instead of <flask.ctx.AppContext object at 0x000002555D527B80>)
