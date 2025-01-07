@@ -78,9 +78,6 @@ def verify_deployment():
             'migrations/alembic.ini'
         ]
         
-        # Initialize logger
-        logger = logging.getLogger(__name__)
-        
         # Check for latest backup or any timestamped backup
         backup_files = list(Path('backups').glob('stipend_*.db'))
         if not backup_files:

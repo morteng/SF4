@@ -18,9 +18,6 @@
 # Run comprehensive test suite
 /run scripts/run_tests.py
 
-# Deploy to render.com (requires approval)
-/run scripts/deploy_to_render.py
-
 ### CODE END ###
 
 
