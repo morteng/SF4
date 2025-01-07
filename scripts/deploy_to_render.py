@@ -25,10 +25,11 @@ def deploy_to_render():
     try:
         # Verify deployment checklist
         from scripts.verify_deployment import verify_deployment
-        logger = logging.getLogger(__name__)
+        logger.info("Starting deployment verification")
         if not verify_deployment():
             logger.error("Deployment verification failed")
             return False
+        logger.info("Deployment verification passed")
             
         # Verify version file
         from scripts.version import validate_version
