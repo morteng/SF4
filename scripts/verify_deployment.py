@@ -57,9 +57,16 @@ def verify_security_settings():
 
 def verify_deployment():
     """Verify all deployment requirements are met"""
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
+    logger = logging.getLogger(__name__)
+    
     try:
         # Verify security settings first
         if not verify_security_settings():
+            logger.error("Security settings verification failed")
             return False
             
         # Check required files exist

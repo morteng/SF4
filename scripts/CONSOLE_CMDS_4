@@ -42,6 +42,9 @@
 # Verify deployment readiness
 /run scripts/verify_deployment.py
 
+# Deploy to render.com
+/run scripts/deploy_to_render.py
+
 ### CODE END ###
 
 

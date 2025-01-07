@@ -78,6 +78,12 @@ def verify_security_settings():
             logger.error(f"SECRET_KEY is too short (length: {len(secret_key)}), minimum 64 characters required")
             return False
             
+        # Verify ADMIN_PASSWORD
+        admin_password = os.getenv('ADMIN_PASSWORD', '')
+        if len(admin_password) < 12:
+            logger.error("ADMIN_PASSWORD must be at least 12 characters long")
+            return False
+            
         # Verify SECRET_KEY complexity
         complexity_checks = [
             (any(c.isupper() for c in secret_key), "uppercase letter"),
