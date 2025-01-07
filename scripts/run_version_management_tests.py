@@ -15,6 +15,7 @@ from scripts.version import (
     validate_production_environment
 )
 from app.extensions import db
+from scripts.verify_test_db import verify_test_db
 
 def configure_logging():
     """Configure logging for version management tests"""
