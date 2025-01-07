@@ -6,14 +6,17 @@
 # Initialize logging system
 /run scripts/init_logging.py
 
-# Verify admin user exists
-/run scripts/ensure_admin_user.py
+# Verify and initialize admin user
+/run scripts/startup/init_admin.py
 
 # Verify database configuration
 /run scripts/verify_db_config.py
 
-# Run deployment verification
+# Verify deployment requirements
 /run scripts/verify_deployment.py
+
+# Initialize database schema
+/run scripts/startup/init_db.py
 
 ### CODE END ###
 
