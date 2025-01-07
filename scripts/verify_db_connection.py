@@ -25,6 +25,14 @@ def verify_db_connection():
             logger.error("SQLALCHEMY_DATABASE_URI not set in environment variables")
             return False
             
+        # Log database type for debugging
+        if db_uri.startswith('sqlite'):
+            logger.info("Using SQLite database")
+        elif db_uri.startswith('postgresql'):
+            logger.info("Using PostgreSQL database")
+        else:
+            logger.warning(f"Using unknown database type: {db_uri.split(':')[0]}")
+            
         # Create engine and test connection
         engine = create_engine(db_uri)
         with engine.connect() as connection:

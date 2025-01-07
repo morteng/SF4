@@ -12,11 +12,11 @@
 # Create admin user if missing
 /run scripts/startup/init_admin.py
 
-# Verify deployment requirements
-/run scripts/verify_deployment.py
-
 # Verify database connection
 /run scripts/verify_db_connection.py
+
+# Verify deployment requirements
+/run scripts/verify_deployment.py
 
 # Final deployment to Render
 /run scripts/deploy_to_render.py

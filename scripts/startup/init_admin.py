@@ -22,6 +22,13 @@ def initialize_admin_user():
     """Initialize admin user from environment variables"""
     logger = configure_logger()
     try:
+        # Verify required environment variables exist
+        required_vars = ['ADMIN_USERNAME', 'ADMIN_EMAIL', 'ADMIN_PASSWORD']
+        missing_vars = [var for var in required_vars if not os.getenv(var)]
+        if missing_vars:
+            logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
+            return False
+            
         # Verify ADMIN_PASSWORD length
         admin_password = os.getenv('ADMIN_PASSWORD')
         if len(admin_password) < 12:
