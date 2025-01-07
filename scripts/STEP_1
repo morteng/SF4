@@ -1,7 +1,7 @@
 # Code Cycle Step 1 (Analyzing)
 
 # Start the cycle
-/run scripts/scripts\start_cycle.py
+/run scripts/start_cycle.py
 
 # Add any new or externally modified files
 /git add .
