@@ -1,42 +1,4 @@
-2025-01-07 11:48:21,854 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 11:51:16,382 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 12:11:37,132 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 12:27:16,505 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 12:43:32,837 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 12:58:41,963 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 13:17:49,096 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 13:28:42,066 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 13:34:56,877 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 14:15:56,653 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 14:24:16,754 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 14:24:17,605 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 14:24:17,605 - ERROR - Deployment verification failed
-2025-01-07 14:28:24,949 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 14:28:25,427 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 14:28:25,427 - ERROR - Deployment verification failed
-2025-01-07 14:40:37,383 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 14:40:39,979 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 14:40:39,979 - ERROR - Deployment verification failed
-2025-01-07 14:48:41,791 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 14:48:41,791 - ERROR - Deployment verification failed
-2025-01-07 14:49:42,801 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 14:49:43,264 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 14:49:43,264 - ERROR - Deployment verification failed
-2025-01-07 14:53:29,433 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 14:58:47,180 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 15:10:12,026 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 15:10:16,353 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 15:10:16,354 - ERROR - Deployment verification failed
-2025-01-07 15:21:24,471 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 15:21:24,471 - ERROR - Deployment verification failed
-2025-01-07 15:34:42,588 - ERROR - No tables found in database
-2025-01-07 15:34:43,037 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 15:34:43,476 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 15:34:43,476 - ERROR - Deployment verification failed
-2025-01-07 15:41:27,726 - ERROR - No tables found in database
-2025-01-07 15:41:28,181 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 15:52:22,091 - ERROR - No tables found in database
-2025-01-07 15:52:22,555 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 16:06:38,946 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 16:06:43,662 - ERROR - Deployment verification failed: name 'logger' is not defined
-2025-01-07 16:06:43,662 - ERROR - Deployment verification failed
+2025-01-07 16:23:19,218 - ERROR - No tables found in database
+2025-01-07 16:23:19,777 - ERROR - Deployment verification failed: name 'logger' is not defined
+2025-01-07 16:29:13,376 - ERROR - Deployment verification failed: name 'logger' is not defined
+2025-01-07 16:45:04,495 - ERROR - Deployment verification failed: name 'logger' is not defined
