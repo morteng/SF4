@@ -26,17 +26,8 @@
 # Verify test results
 /run scripts/verify_tests.py --full
 
-# Run security verification
-/run scripts/verify_deployment.py --check-security --test
-
-# Run environment verification
-/run scripts/verify_deployment.py --check-env --test
-
-# Run version verification
-/run scripts/verify_deployment.py --check-version --test
-
-# Verify deployment process
-/run scripts/deploy_to_render.py --test
+# Run comprehensive deployment verification
+/run scripts/verify_deployment.py --full --test
 
 ### CODE END ###
 

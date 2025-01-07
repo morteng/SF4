@@ -23,14 +23,24 @@ if scripts_dir not in sys.path:
 
 def verify_security_settings():
     """Verify security-related settings with enhanced checks"""
-    global logger
-    logger = logging.getLogger(__name__)
-    if not logger.handlers:
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
+    try:
+        secret_key = os.getenv('SECRET_KEY')
+        if not secret_key or len(secret_key) < 64:
+            logger.error("SECRET_KEY must be at least 64 characters")
+            return False
+            
+        # Check for required character types
+        complexity_checks = [
+            (any(c.isupper() for c in secret_key), "uppercase letter"),
+            (any(c.islower() for c in secret_key), "lowercase letter"),
+            (any(c.isdigit() for c in secret_key), "digit"),
+            (any(c in '!@#$%^&*()_+-=[]{};:,.<>?/' for c in secret_key), "special character")
+        ]
+        
+        for check, requirement in complexity_checks:
+            if not check:
+                logger.error(f"SECRET_KEY must contain at least one {requirement}")
+                return False
     secret_key = os.getenv('SECRET_KEY')
     
     # Verify version file
