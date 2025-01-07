@@ -1,5 +1,7 @@
 ### **Instructions**
 
+IMPORTANT NEW INFO! I have added a RENDER_API_KEY to .env file in project root folder. Using this you should be able to authenticate and programmatically control the deployment of the app to render.com.
+
 **General Guidelines:**
 1. **Folder and File Operations:** Use temporary scripts to create/move files or folders. Execute them with `/run your_script.py` in the relevant console command step.
 2. **Python Execution:** Write Python scripts in proper folders and execute them with `/run your_script.py`. Never run Python code directly in console commands.
