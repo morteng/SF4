@@ -22,9 +22,20 @@ logger = configure_logger()
 
 from scripts.version import validate_db_connection
 
+def configure_logger():
+    """Configure the logger consistently across the module"""
+    logger = logging.getLogger(__name__)
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+    return logger
+
 def verify_security_settings():
     """Verify security-related settings with enhanced checks"""
-    logger = logging.getLogger(__name__)
+    logger = configure_logger()
     secret_key = os.getenv('SECRET_KEY')
     
     # Verify version file

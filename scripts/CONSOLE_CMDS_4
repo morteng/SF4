@@ -5,22 +5,31 @@
 # Initialize logging system first
 /run scripts/init_logging.py
 
-# Verify test environment
+# Set up test environment with proper Python paths
 /run scripts/setup_test_env.py
 
-# Verify database configuration
+# Initialize test database
 /run scripts/startup/init_db.py
 
-# Verify admin user setup
+# Initialize admin user
 /run scripts/startup/init_admin.py
 
-# Run final test verification
+# Verify database connection
+/run scripts/verify_db_connection.py
+
+# Run comprehensive test suite with coverage
+/run scripts/run_tests.py
+
+# Verify test results
 /run scripts/verify_tests.py
 
-# Verify deployment requirements
+# Verify test coverage
+/run scripts/verify_test_coverage.py
+
+# Verify deployment configuration
 /run scripts/verify_deployment.py
 
-# Generate final documentation
+# Finalize documentation
 /run scripts/finalize_docs.py
 
 # Generate deployment checklist

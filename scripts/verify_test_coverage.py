@@ -7,7 +7,7 @@ def configure_coverage_logging():
     """Configure logging for coverage verification"""
     logger = logging.getLogger('coverage')
     if not logger.handlers:
-        handler = logging.FileHandler('logs/coverage.log')
+        handler = logging.StreamHandler()
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
         logger.addHandler(handler)
@@ -19,6 +19,11 @@ def verify_coverage():
     logger = configure_coverage_logging()
     
     try:
+        # Add project root to Python path
+        project_root = str(Path(__file__).parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+        
         # Run coverage report
         result = subprocess.run(
             ['coverage', 'report', '--fail-under=80'],
@@ -31,6 +36,7 @@ def verify_coverage():
             return False
             
         logger.info("Coverage verification passed")
+        logger.info(result.stdout)
         return True
         
     except Exception as e:

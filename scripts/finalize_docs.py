@@ -25,7 +25,11 @@ def update_release_notes():
         from pathlib import Path
         sys.path.insert(0, str(Path(__file__).parent.parent))
         
-        from version import __version__
+        # Ensure proper version import
+        try:
+            from version import __version__
+        except ImportError:
+            from scripts.version import __version__
         
         with open('RELEASE_NOTES.md', 'r') as f:
             content = f.read()
