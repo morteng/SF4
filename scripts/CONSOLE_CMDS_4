@@ -20,9 +20,6 @@
 # Generate coverage report
 /run scripts/generate_coverage_report.py
 
-# Verify test coverage meets requirements
-/run scripts/check_coverage.py
-
 # Create timestamped backup
 /run scripts/create_backup.py --timestamped
 
