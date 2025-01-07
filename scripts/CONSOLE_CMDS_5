@@ -2,12 +2,21 @@
 # IMPORTANT! ONLY edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Verify deployment readiness
+# Verify deployment settings
 /run scripts/verify_deployment.py
+
+# Verify backup integrity
+/run scripts/verify_backup.py
+
+# Verify log archives
+/run scripts/verify_logs.py
+
+# Finalize documentation
+/run scripts/finalize_docs.py
 
 # Push changes to version control
 /git add .
-/git commit -m "Cycle 14 completed - Ready for deployment"
+/git commit -m "Cycle 15 completed - Ready for deployment"
 /git push origin main
 
 # Deploy to Render (only if approved)
