@@ -19,6 +19,10 @@ def verify_db_connection():
     """Verify database connection using SQLALCHEMY_DATABASE_URI"""
     logger = configure_logger()
     
+    # Configure logger at module level
+    global logger
+    logger = configure_logger()
+    
     try:
         db_uri = os.getenv('SQLALCHEMY_DATABASE_URI')
         if not db_uri:

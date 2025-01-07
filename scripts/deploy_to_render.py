@@ -18,6 +18,9 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
+# Configure logger at module level
+logger = configure_logger()
+
 def deploy_to_render():
     """Deploy the application to render.com"""
     logger = configure_logger()
