@@ -3,55 +3,35 @@
 
 ### CODE START ###
 # Clean up test environment
-/run scripts/final_cleanup.py --deep
+/run scripts/final_cleanup.py
 
-# Initialize fresh test database with enhanced validation
+# Initialize fresh test database with validation
 /run scripts/init_test_db.py
 
 # Update test configuration with security settings
 /run scripts/update_test_config.py
 
-# Fix pytest configuration with coverage settings
-/run scripts/fix_pytest_config.py
-
-# Validate database schema with foreign key checks
+# Validate database schema and relationships
 /run scripts/validate_schema.py
 
-# Verify test database integrity
-/run scripts/verify_test_db.py
-
-# Run comprehensive version management tests
-/run scripts/run_version_management_tests.py --coverage
+# Run version management tests with coverage
+/run scripts/run_version_management_tests.py
 
 # Run relationship tests with detailed reporting
-/run scripts/run_relationship_tests.py --verbose
+/run scripts/run_relationship_tests.py
 
-# Generate detailed coverage report
-/run scripts/generate_coverage_report.py --html
-
-# Check coverage meets 80% target
+# Generate coverage report and check minimum coverage
+/run scripts/generate_coverage_report.py
 /run scripts/check_coverage.py --min-coverage=80
 
-# Validate version file format and content
-/run scripts/validate_version.py --strict
+# Verify production environment settings
+/run scripts/verify_production.py
 
-# Verify production environment security
-/run scripts/verify_production.py --security
-
-# Verify deployment readiness with all checks
-/run scripts/verify_deployment.py --full
+# Verify deployment readiness
+/run scripts/verify_deployment.py
 
 # Finalize documentation with version history
-/run scripts/finalize_docs.py --release
-
-# Create timestamped database backup
-/run scripts/create_backup.py --timestamped
-
-# Archive logs with compression
-/run scripts/archive_logs.py --compress
-
-# Final cleanup after testing
-/run scripts/final_cleanup.py --deep
+/run scripts/finalize_docs.py
 
 ### CODE END ###
 
