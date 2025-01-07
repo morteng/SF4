@@ -4,9 +4,33 @@ from pathlib import Path
 import logging
 from scripts.version import validate_db_connection
 
+def verify_security_settings():
+    """Verify security-related settings"""
+    secret_key = os.getenv('SECRET_KEY')
+    if not secret_key or len(secret_key) < 64:
+        logging.error("SECRET_KEY must be at least 64 characters")
+        return False
+    if not any(c.isupper() for c in secret_key):
+        logging.error("SECRET_KEY must contain uppercase letters")
+        return False
+    if not any(c.islower() for c in secret_key):
+        logging.error("SECRET_KEY must contain lowercase letters")
+        return False
+    if not any(c.isdigit() for c in secret_key):
+        logging.error("SECRET_KEY must contain numbers")
+        return False
+    if not any(c in '!@#$%^&*()' for c in secret_key):
+        logging.error("SECRET_KEY must contain special characters")
+        return False
+    return True
+
 def verify_deployment():
     """Verify all deployment requirements are met"""
     try:
+        # Verify security settings first
+        if not verify_security_settings():
+            return False
+            
         # Check required files exist
         required_files = [
             'DEPLOYMENT_CHECKLIST.md',

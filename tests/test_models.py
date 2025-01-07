@@ -68,5 +68,28 @@ class TestStipendModel(unittest.TestCase):
         with self.assertRaises(ValueError):
             Stipend.create(data)
 
+    def test_stipend_validation(self):
+        # Test valid stipend
+        valid_data = {
+            'name': 'Valid Stipend',
+            'summary': 'Test Summary',
+            'description': 'Test Description',
+            'homepage_url': 'http://test.com',
+            'application_procedure': 'Test Procedure',
+            'eligibility_criteria': 'Test Criteria',
+            'application_deadline': '2023-12-31',
+            'open_for_applications': True
+        }
+        stipend = Stipend.create(valid_data)
+        self.assertTrue(stipend.validate())
+
+        # Test invalid stipend (missing required fields)
+        invalid_data = {
+            'name': '',  # Empty name
+            'summary': 'Test Summary'
+        }
+        with self.assertRaises(ValueError):
+            Stipend.create(invalid_data)
+
 if __name__ == '__main__':
     unittest.main()
