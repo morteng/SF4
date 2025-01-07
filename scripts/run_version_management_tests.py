@@ -59,14 +59,14 @@ def run_tests():
         finally:
             # Ensure proper application context
             with app.app_context():
-            # Initialize extensions if not already initialized
-            if 'sqlalchemy' not in app.extensions:
-                db.init_app(app)
-                
-            # Initialize test database
-            if not init_test_db():
-                logger.error("Test database initialization failed")
-                return False
+                # Initialize extensions if not already initialized
+                if 'sqlalchemy' not in app.extensions:
+                    db.init_app(app)
+                    
+                # Initialize test database
+                if not init_test_db():
+                    logger.error("Test database initialization failed")
+                    return False
                 
             # Verify database connection
             if not validate_db_connection('instance/stipend.db'):
