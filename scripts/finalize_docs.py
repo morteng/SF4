@@ -21,6 +21,7 @@ def update_release_notes():
     """Update release notes with current version information"""
     try:
         # Configure logger
+        global logger
         logger = logging.getLogger(__name__)
         if not logger.handlers:
             handler = logging.StreamHandler()

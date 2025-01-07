@@ -19,9 +19,6 @@
 /run scripts/generate_coverage_report.py
 /run scripts/verify_tests.py
 
-# Verify deployment configuration
-/run scripts/verify_deployment.py --full
-
 # Generate deployment checklist
 /run scripts/generate_deployment_checklist.py
 
@@ -39,6 +36,9 @@
 
 # Verify version file
 /run scripts/verify_deployment.py --check-version
+
+# Run final deployment verification
+/run scripts/verify_deployment.py --full
 
 ### CODE END ###
 

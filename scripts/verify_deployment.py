@@ -79,6 +79,7 @@ def verify_security_settings():
 
 def verify_deployment(*args, **kwargs):
     """Verify all deployment requirements are met"""
+    global logger
     logger = logging.getLogger(__name__)
     if not logger.handlers:
         handler = logging.StreamHandler()
