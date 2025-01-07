@@ -153,6 +153,19 @@ def verify_environment():
         return False
     return True
 
+def verify_version():
+    """Verify version file exists and is valid"""
+    try:
+        from scripts.version import validate_version, get_version
+        version = get_version()
+        if not validate_version(version):
+            logging.error("Version validation failed")
+            return False
+        return True
+    except Exception as e:
+        logging.error(f"Version verification failed: {str(e)}")
+        return False
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     if verify_deployment():
