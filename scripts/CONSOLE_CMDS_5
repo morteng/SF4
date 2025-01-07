@@ -17,6 +17,9 @@
 # Verify deployment readiness
 /run scripts/verify_deployment.py
 
+# Request deployment approval
+/run scripts/request_deployment_approval.py
+
 # Update requirements
 /run scripts/update_requirements.py
 
@@ -35,9 +38,6 @@
 /git add .
 /git commit -m "Cycle 7 completed - Version 1.2.11 deployed"
 /git push origin main
-
-# Deploy to production if granted permission by CEO
-/run scripts/deploy_to_render.py
 
 # Reset and prepare for next cycle
 /reset
