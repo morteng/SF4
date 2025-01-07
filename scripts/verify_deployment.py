@@ -2,6 +2,7 @@ import sys
 import os
 from pathlib import Path
 import logging
+from scripts.version import validate_db_connection
 
 def verify_deployment():
     """Verify all deployment requirements are met"""

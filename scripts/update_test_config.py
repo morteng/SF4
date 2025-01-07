@@ -17,7 +17,7 @@ def update_test_config():
             'SQLALCHEMY_TRACK_MODIFICATIONS': False,
             'TESTING': True,
             'WTF_CSRF_ENABLED': False,
-            'SECRET_KEY': 'test-secret-key',
+            'SECRET_KEY': os.getenv('TEST_SECRET_KEY', 'test-secure-key-64chars-Abc123!@#Abc123!@#Abc123!@#Abc123!@#Abc123!@#'),
             'DEBUG': False
         })
         
@@ -28,6 +28,12 @@ def update_test_config():
         # Verify configuration
         if not app.config['TESTING']:
             raise RuntimeError("Test configuration not properly set")
+        
+        # Validate database connection
+        db_uri = os.getenv('SQLALCHEMY_DATABASE_URI').replace('sqlite:///', '')
+        if not validate_db_connection(db_uri):
+            logging.error("Database connection validation failed")
+            return False
         
         # Create test client
         with app.app_context():
