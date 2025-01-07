@@ -2,23 +2,25 @@
 # IMPORTANT! ONLY edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Verify deployment readiness
-/run scripts/verify_deployment.py
+# Initialize logging system
+/run scripts/init_logging.py
+
+# Generate deployment checklist
+/run scripts/generate_deployment_checklist.py
+
+# Verify backup integrity
 /run scripts/verify_backup.py
+
+# Verify log archives
 /run scripts/verify_logs.py
 
-# Finalize documentation
-/run scripts/finalize_docs.py
-
-# Commit and push changes
-/git add .
-/git commit -m "Cycle 17 - Final deployment preparation"
-/git push origin main
+# Verify deployment configuration
+/run scripts/verify_deployment.py
 
 # Deploy to production
 /run scripts/deploy_to_render.py
 
-# End cycle
+# End development cycle
 /run scripts/end_cycle.py
 
 ### CODE END ###
