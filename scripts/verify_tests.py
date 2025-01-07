@@ -14,8 +14,8 @@ def configure_test_logging():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_tests():
-    """Verify all tests pass with proper configuration"""
+def configure_logger():
+    """Configure the logger for test verification"""
     logger = logging.getLogger('test_verification')
     if not logger.handlers:
         handler = logging.StreamHandler()
@@ -23,11 +23,15 @@ def verify_tests():
         handler.setFormatter(formatter)
         logger.addHandler(handler)
         logger.setLevel(logging.INFO)
+    return logger
+
+def verify_tests():
+    """Verify all tests pass with proper configuration"""
+    # Configure logger at module level
+    global logger
+    logger = configure_logger()
     
     try:
-        # Configure logger
-        global logger
-        logger = configure_logger()
         
         # Add project root to Python path
         root_dir = Path(__file__).parent.parent
