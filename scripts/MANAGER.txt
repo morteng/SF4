@@ -1,10 +1,10 @@
 HI! Manager here!
 
-PRIORITY ULTRA: at startup, import default admin user from .env file if there is no admin user registered in database.
+PRIORITY ULTRA: at application startup, import default admin user from .env file if there is no admin user registered in database. I have added a lowercase letter and a special character to default admin password in .env and .env.example. It is now: ADMIN_PASSWORD=Aa1234567812345678? so should be ok.
 
 IMPORTANT! Make sure you overwrite files like RELEASE_NOTES.md and VERSION_HISTORY.md when updating them, so they don't grow indefinetly.
 
-REQUEST: Please tidy up the root project folder and scripts folder, put the files that don't belong there in their appropriate subfolders. I'd also like you to organize the scripts/ folder better.
+REQUEST: Please tidy up the root project folder and scripts folder, put the scripts in their appropriate subfolders. I'd also like you to organize the scripts/ folder better.
 RULE: Never deploy until all tests pass and all todo items are handled. Only deploy when given permission byCEO.
 
 IMPORTANT! Ensure we read in values from .env file for database name (it's defined there as SQLALCHEMY_DATABASE_URI=sqlite:///instance/site.db) and other variables like admin user name, password and email. you can see the info in .env file in .env.example file (the actual .env file is hidden from edit view for you because it is in .gitignore file).
