@@ -2,6 +2,12 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
+# Verify test results
+/run scripts/verify_tests.py
+
+# Generate coverage report
+/run scripts/generate_coverage_report.py
+
 # Finalize documentation
 /run scripts/finalize_docs.py
 
