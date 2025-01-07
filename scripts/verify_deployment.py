@@ -5,23 +5,44 @@ import logging
 from scripts.version import validate_db_connection
 
 def verify_security_settings():
-    """Verify security-related settings"""
+    """Verify security-related settings with enhanced checks"""
     secret_key = os.getenv('SECRET_KEY')
+    
+    # Validate SECRET_KEY length and complexity
     if not secret_key or len(secret_key) < 64:
         logging.error("SECRET_KEY must be at least 64 characters")
         return False
-    if not any(c.isupper() for c in secret_key):
-        logging.error("SECRET_KEY must contain uppercase letters")
+        
+    # Check for required character types
+    complexity_checks = [
+        (any(c.isupper() for c in secret_key), "uppercase letter"),
+        (any(c.islower() for c in secret_key), "lowercase letter"),
+        (any(c.isdigit() for c in secret_key), "digit"),
+        (any(c in '!@#$%^&*()_+-=[]{};:,.<>?/' for c in secret_key), "special character")
+    ]
+    
+    for check, requirement in complexity_checks:
+        if not check:
+            logging.error(f"SECRET_KEY must contain at least one {requirement}")
+            return False
+            
+    # Check for common insecure patterns
+    insecure_patterns = [
+        'password', '123456', 'qwerty', 'admin',
+        'secret', 'stipend', 'flask', 'render'
+    ]
+    
+    if any(pattern.lower() in secret_key.lower() for pattern in insecure_patterns):
+        logging.error("SECRET_KEY contains insecure patterns")
         return False
-    if not any(c.islower() for c in secret_key):
-        logging.error("SECRET_KEY must contain lowercase letters")
-        return False
-    if not any(c.isdigit() for c in secret_key):
-        logging.error("SECRET_KEY must contain numbers")
-        return False
-    if not any(c in '!@#$%^&*()' for c in secret_key):
-        logging.error("SECRET_KEY must contain special characters")
-        return False
+        
+    # Verify SECRET_KEY rotation
+    if os.path.exists('.secret_key_history'):
+        with open('.secret_key_history') as f:
+            if secret_key in f.read():
+                logging.error("SECRET_KEY has not been rotated recently")
+                return False
+                
     return True
 
 def verify_deployment():
