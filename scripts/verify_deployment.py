@@ -1,7 +1,11 @@
 import sys
 import os
-from pathlib import Path
 import logging
+from pathlib import Path
+
+# Add scripts directory to Python path
+sys.path.append(str(Path(__file__).parent.parent))
+
 from scripts.version import validate_db_connection
 
 def verify_security_settings():

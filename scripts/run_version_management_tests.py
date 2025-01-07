@@ -40,53 +40,22 @@ def run_tests():
     logger = logging.getLogger(__name__)
     
     try:
-        # Initialize test database with proper app context
+        # Create test app and establish context
         app = create_app('testing')
         
+        # Initialize extensions within app context
         with app.app_context():
-            # Initialize extensions
             if 'sqlalchemy' not in app.extensions:
                 db.init_app(app)
-        
-        try:
-            # Ensure test database is initialized
-            from scripts.init_test_db import init_test_db
+            
+            # Initialize test database
             if not init_test_db():
-                logger.error("Failed to initialize test database")
+                logger.error("Test database initialization failed")
                 return False
-        except Exception as e:
-            logger.error(f"Error initializing test database: {str(e)}")
-            return False
-        finally:
-            # Ensure proper application context
-            with app.app_context():
-                # Initialize extensions if not already initialized
-                if 'sqlalchemy' not in app.extensions:
-                    db.init_app(app)
-                    
-                # Initialize test database
-                if not init_test_db():
-                    logger.error("Test database initialization failed")
-                    return False
                 
             # Verify database connection
             if not validate_db_connection('instance/stipend.db'):
                 logger.error("Database connection validation failed")
-                return False
-                
-            # Validate database connection first
-            if not validate_db_connection('instance/stipend.db'):
-                logger.error("Database connection validation failed")
-                return False
-                
-            # Ensure extensions are initialized
-            if 'sqlalchemy' not in app.extensions:
-                db.init_app(app)
-                
-            # Initialize and verify test database
-            init_test_db()
-            if not verify_test_db():
-                logger.error("Test database verification failed")
                 return False
                 
             # Run tests with coverage
@@ -99,6 +68,10 @@ def run_tests():
                 '--durations=10',
                 '--junitxml=logs/tests/version_management.xml'
             ])
+            
+            # Clean up database
+            db.session.remove()
+            db.drop_all()
         
         if result == 0:
             logger.info("All version management tests passed")
