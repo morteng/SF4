@@ -51,6 +51,16 @@ def validate_db_connection(db_path: str) -> bool:
             try:
                 conn = sqlite3.connect(db_path)
                 cursor = conn.cursor()
+                
+                # Verify basic database operations
+                cursor.execute("PRAGMA foreign_keys = ON")
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+                tables = cursor.fetchall()
+                
+                if not tables:
+                    logging.error("No tables found in database")
+                    return False
+                    
                 cursor.execute("SELECT 1")
                 cursor.close()
                 conn.close()

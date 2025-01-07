@@ -7,6 +7,11 @@ from pathlib import Path
 def create_db_backup(source_db: str, backup_path: str = None, timestamped: bool = False) -> bool:
     """Create a backup of the database with optional timestamp"""
     try:
+        # Validate source database exists
+        if not Path(source_db).exists():
+            print(f"Source database not found: {source_db}")
+            return False
+            
         # Set backup path with timestamp if requested
         if timestamped:
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -15,16 +20,29 @@ def create_db_backup(source_db: str, backup_path: str = None, timestamped: bool 
             backup_path = 'backups/stipend_latest.db'
             
         # Ensure backup directory exists
-        os.makedirs(os.path.dirname(backup_path), exist_ok=True)
+        backup_dir = Path(backup_path).parent
+        backup_dir.mkdir(parents=True, exist_ok=True)
         
         # Connect to source database and create backup
         conn = sqlite3.connect(source_db)
         with conn:
+            # Enable foreign key constraints
+            conn.execute("PRAGMA foreign_keys = ON")
+            # Create backup using VACUUM INTO
             conn.execute(f"VACUUM INTO '{backup_path}'")
             
-        # Verify backup was created
+        # Verify backup was created and is valid
         if not Path(backup_path).exists():
             raise RuntimeError("Backup file was not created")
+            
+        # Verify backup integrity
+        try:
+            backup_conn = sqlite3.connect(backup_path)
+            backup_conn.execute("PRAGMA integrity_check")
+            backup_conn.close()
+        except sqlite3.Error as e:
+            print(f"Backup integrity check failed: {str(e)}")
+            return False
             
         print(f"Database backup created: {source_db} -> {backup_path}")
         return True
