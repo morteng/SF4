@@ -21,6 +21,9 @@
 # Verify deployment readiness
 /run scripts/verify_deployment.py
 
+# Create database backup
+/run scripts/create_backup.py --timestamped
+
 ### CODE END ###
 
 

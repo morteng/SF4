@@ -309,19 +309,25 @@ def get_db_version(db_path: str) -> Optional[str]:
 def validate_version(version: str) -> bool:
     """Validate version string format including build metadata"""
     if not version:
+        logger.error("No version provided")
         return False
         
     # Basic format validation
     if not re.match(r"^\d+\.\d+\.\d+(-[a-z]+(\.\d+)?)?(\+[a-z0-9]+(\.[a-z0-9]+)*)?$", version):
+        logger.error(f"Invalid version format: {version}")
         return False
         
     # Additional semantic validation
     try:
         major, minor, patch = map(int, version.split('.')[:3])
         if major < 0 or minor < 0 or patch < 0:
+            logger.error(f"Version components must be positive: {version}")
             return False
+            
+        logger.info(f"Version validation passed: {version}")
         return True
-    except (ValueError, IndexError):
+    except (ValueError, IndexError) as e:
+        logger.error(f"Version parsing error: {str(e)}")
         return False
 
 def get_version() -> str:

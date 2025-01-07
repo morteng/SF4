@@ -43,9 +43,10 @@ def run_tests():
         # Initialize test database with proper app context
         app = create_app('testing')
         
-        # Push app context
-        ctx = app.app_context()
-        ctx.push()
+        with app.app_context():
+            # Initialize extensions
+            if 'sqlalchemy' not in app.extensions:
+                db.init_app(app)
         
         try:
             # Ensure test database is initialized
