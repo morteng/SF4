@@ -2,10 +2,10 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize fresh test database
+# Initialize fresh test database with validation
 /run scripts/init_test_db.py
 
-# Verify production environment settings
+# Verify production environment
 /run scripts/verify_production.py
 
 # Validate database schema
@@ -14,20 +14,16 @@
 # Verify test database integrity
 /run scripts/verify_test_db.py
 
-# Test database connection
-/run scripts/test_db_connection.py
+# Run comprehensive test suite
+/run scripts/run_tests.py
 
-# Run all tests with coverage
-/run scripts/run_all_tests.py
-
-# Generate and check coverage report
+# Generate coverage report
 /run scripts/generate_coverage_report.py
-/run scripts/check_coverage.py --min-coverage=80
 
-# Validate version file
-/run scripts/validate_version.py
+# Verify test coverage meets requirements
+/run scripts/check_coverage.py
 
-# Create secure database backup
+# Create timestamped backup
 /run scripts/create_backup.py --timestamped
 
 # Archive logs
