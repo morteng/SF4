@@ -6,8 +6,14 @@ from scripts.verify_deployment import verify_deployment
 
 def run_startup_checks():
     """Run all required startup checks"""
+    # Configure logger if not already configured
     logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
     
     try:
         # Verify database connection
