@@ -33,6 +33,7 @@ def validate_password(password):
 
 def verify_admin_user():
     """Ensure admin user exists, create from .env if missing"""
+    logger = logging.getLogger(__name__)
     try:
         # Check required environment variables
         required_vars = ['ADMIN_USERNAME', 'ADMIN_EMAIL', 'ADMIN_PASSWORD']
@@ -40,6 +41,8 @@ def verify_admin_user():
         if missing_vars:
             logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
             return False
+            
+        logger.info("All required environment variables present")
             
         # Validate password
         if not validate_password(os.getenv('ADMIN_PASSWORD')):

@@ -3,11 +3,11 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Verify deployment settings
-/run scripts/verify_deployment.py
-
-# Verify admin user exists
+# Verify security settings
 /run scripts/security/verify_admin.py
+
+# Verify deployment configuration
+/run scripts/verify_deployment.py
 
 # Test deployment process
 /run scripts/deploy_to_render.py
