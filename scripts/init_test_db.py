@@ -66,7 +66,7 @@ def init_test_db():
             test_data[-1].organization = test_data[0]
             
             # Commit data
-            db.session.add_all([org, tag1, tag2, stipend])
+            db.session.add_all(test_data)
             db.session.commit()
             
             # Verify data integrity
@@ -77,17 +77,20 @@ def init_test_db():
             logging.info("Test database initialized successfully")
             return True
             
+        except Exception as e:
+            logging.error(f"Test database initialization failed: {str(e)}")
+            db.session.rollback()
+            return False
+        finally:
+            if 'sqlalchemy' in app.extensions:
+                try:
+                    with app.app_context():
+                        db.session.remove()
+                except RuntimeError:
+                    pass
     except Exception as e:
-        logging.error(f"Test database initialization failed: {str(e)}")
-        db.session.rollback()
+        logging.error(f"Application context error: {str(e)}")
         return False
-    finally:
-        if 'sqlalchemy' in app.extensions:
-            try:
-                with app.app_context():
-                    db.session.remove()
-            except RuntimeError:
-                pass
 
 if __name__ == "__main__":
     init_test_db()
