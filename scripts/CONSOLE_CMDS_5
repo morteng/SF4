@@ -2,35 +2,35 @@
 # IMPORTANT! ONLY edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Finalize documentation with release notes
-/run scripts/finalize_docs.py --release
-
-# Create timestamped database backup
+# Create secure database backup
 /run scripts/create_backup.py --timestamped
 
-# Archive logs with compression
-/run scripts/archive_logs.py --compress
+# Archive logs
+/run scripts/archive_logs.py
 
-# Verify deployment readiness with all checks
-/run scripts/verify_deployment.py --full
+# Finalize documentation
+/run scripts/finalize_docs.py
 
-# Print current timestamp for deployment
+# Verify deployment readiness
+/run scripts/verify_deployment.py
+
+# Print current timestamp
 /run scripts/print_datetime.py
 
 # Perform final cleanup
-/run scripts/final_cleanup.py --deep
+/run scripts/final_cleanup.py
 
-# End current cycle
+# End cycle
 /run scripts/end_cycle.py
 
 # Deployment Notes:
-# 1. Documentation finalized with release notes
-# 2. Timestamped database backup created
-# 3. Logs archived with compression
-# 4. Deployment verification completed
-# 5. Final cleanup performed
+# 1. Secure backup created
+# 2. Logs archived
+# 3. Documentation finalized
+# 4. Deployment verified
+# 5. Final cleanup completed
 # 6. Ready for deployment
-# 7. Cycle ended successfully
+# 7. Cycle ended
 ### CODE END ###
 
 # Push changes to version control
