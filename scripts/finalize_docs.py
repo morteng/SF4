@@ -20,10 +20,15 @@ if project_root not in sys.path:
 def update_release_notes():
     """Update release notes with current version information"""
     try:
+        # Configure logger
+        logger = logging.getLogger(__name__)
+        
         # Add project root to Python path
         import sys
         from pathlib import Path
-        sys.path.insert(0, str(Path(__file__).parent.parent))
+        project_root = str(Path(__file__).parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
         
         # Ensure proper version import
         try:

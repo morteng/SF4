@@ -6,7 +6,10 @@ def generate_checklist():
     """Generate deployment checklist with detailed items"""
     logger = configure_logger()
     try:
-        with open('DEPLOYMENT_CHECKLIST.md', 'w') as f:
+        # Create deployment directory if it doesn't exist
+        Path('deployment').mkdir(exist_ok=True)
+        
+        with open('deployment/DEPLOYMENT_CHECKLIST.md', 'w') as f:
             logger.info("Generating deployment checklist")
             # Add version and timestamp
             from scripts.version import get_version

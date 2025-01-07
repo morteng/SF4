@@ -18,7 +18,7 @@
 /run scripts/generate_coverage_report.py
 
 # Verify deployment configuration
-/run scripts/verify_deployment.py
+/run scripts/verify_deployment.py --full
 
 # Generate deployment checklist
 /run scripts/generate_deployment_checklist.py
