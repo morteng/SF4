@@ -26,6 +26,10 @@ git push origin main
 # End development cycle
 /run scripts/end_cycle.py
 
+# Reset and start new cycle
+/reset
+/load scripts/STEP_1
+
 ### CODE END ###
 
 
