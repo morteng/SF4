@@ -35,6 +35,9 @@
 # Run version verification
 /run scripts/verify_deployment.py --check-version --test
 
+# Verify deployment process
+/run scripts/deploy_to_render.py --test
+
 ### CODE END ###
 
 

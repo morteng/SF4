@@ -17,20 +17,33 @@ def configure_test_logging():
 def setup_test_paths():
     """Configure Python paths for testing and deployment"""
     try:
+        # Get project root
         project_root = str(Path(__file__).parent.parent)
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
-            
+        
+        # Clear existing paths and add project root first
+        sys.path = [p for p in sys.path if not p.startswith(project_root)]
+        sys.path.insert(0, project_root)
+        
         # Add all necessary directories
-        for dir_name in ['app', 'scripts', 'tests', 'migrations']:
-            dir_path = str(Path(__file__).parent.parent / dir_name)
+        required_dirs = ['app', 'scripts', 'tests', 'migrations']
+        for dir_name in required_dirs:
+            dir_path = str(Path(project_root) / dir_name)
             if dir_path not in sys.path:
                 sys.path.insert(0, dir_path)
                 
         # Verify paths
         logger = logging.getLogger(__name__)
         logger.info(f"Configured Python paths: {sys.path}")
-        return True
+        
+        # Verify imports work
+        try:
+            from app import db
+            from app.models import User
+            return True
+        except ImportError as e:
+            logger.error(f"Import verification failed: {str(e)}")
+            return False
+            
     except Exception as e:
         logger.error(f"Failed to setup test paths: {str(e)}")
         return False
