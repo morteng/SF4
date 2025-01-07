@@ -53,9 +53,12 @@ def run_tests():
             if not init_test_db():
                 logger.error("Failed to initialize test database")
                 return False
-        
-        # Ensure proper application context
-        with app.app_context():
+        except Exception as e:
+            logger.error(f"Error initializing test database: {str(e)}")
+            return False
+        finally:
+            # Ensure proper application context
+            with app.app_context():
             # Initialize extensions if not already initialized
             if 'sqlalchemy' not in app.extensions:
                 db.init_app(app)
