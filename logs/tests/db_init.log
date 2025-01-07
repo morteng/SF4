@@ -451,3 +451,46 @@ with app.app_context(). See the documentation for more information.
 2025-01-06 23:48:10,579 - ERROR - Invalid length for variables: SECRET_KEY (min 32 chars), ADMIN_PASSWORD (min 12 chars)
 2025-01-06 23:48:10,579 - ERROR - Invalid length for variables: SECRET_KEY (min 32 chars), ADMIN_PASSWORD (min 12 chars)
 2025-01-06 23:48:11,352 - ERROR - Some version management tests failed
+2025-01-07 00:57:11,806 - INFO - Test database initialized successfully
+2025-01-07 00:57:24,373 - INFO - Database connection successful to C:/github/SF4/instance/stipend.db
+2025-01-07 00:57:24,432 - INFO - Test database initialized successfully
+2025-01-07 00:57:25,327 - INFO - Loaded testing configuration successfully
+2025-01-07 00:57:25,374 - INFO - Application initialized successfully
+2025-01-07 00:57:25,405 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-76/test_validate_db_connection_su0/test.db
+2025-01-07 00:57:25,444 - INFO - Loaded testing configuration successfully
+2025-01-07 00:57:25,474 - INFO - Application initialized successfully
+2025-01-07 00:57:25,487 - ERROR - Database file does not exist: C:/invalid/path/test.db
+2025-01-07 00:57:25,500 - INFO - Loaded testing configuration successfully
+2025-01-07 00:57:25,534 - INFO - Application initialized successfully
+2025-01-07 00:57:25,562 - INFO - Database connection successful to C:/Users/Morten/AppData/Local/Temp/pytest-of-Morten/pytest-76/test_get_db_version0/test.db
+2025-01-07 00:57:25,576 - INFO - Loaded testing configuration successfully
+2025-01-07 00:57:25,608 - INFO - Application initialized successfully
+2025-01-07 00:57:25,643 - INFO - Loaded testing configuration successfully
+2025-01-07 00:57:25,674 - INFO - Application initialized successfully
+2025-01-07 00:57:25,702 - INFO - Loaded testing configuration successfully
+2025-01-07 00:57:25,735 - INFO - Application initialized successfully
+2025-01-07 00:57:25,781 - INFO - Loaded testing configuration successfully
+2025-01-07 00:57:25,816 - INFO - Application initialized successfully
+2025-01-07 00:57:25,845 - INFO - Database backup created: C:\Users\Morten\AppData\Local\Temp\pytest-of-Morten\pytest-76\test_create_db_backup0\test.db -> C:\Users\Morten\AppData\Local\Temp\pytest-of-Morten\pytest-76\test_create_db_backup0\test_backup.db
+2025-01-07 00:57:25,859 - INFO - Loaded testing configuration successfully
+2025-01-07 00:57:25,890 - INFO - Application initialized successfully
+2025-01-07 00:57:25,915 - ERROR - Version file validation error: [Errno 2] No such file or directory: 'C:\\Users\\Morten\\AppData\\Local\\Temp\\pytest-of-Morten\\pytest-76\\test_validate_version_file0\\nonexistent.py'
+2025-01-07 00:57:25,930 - INFO - Loaded testing configuration successfully
+2025-01-07 00:57:25,962 - INFO - Application initialized successfully
+2025-01-07 00:57:26,005 - INFO - Loaded testing configuration successfully
+2025-01-07 00:57:26,036 - INFO - Application initialized successfully
+2025-01-07 00:57:26,054 - ERROR - SECRET_KEY must contain uppercase letters
+2025-01-07 00:57:26,119 - INFO - Loaded testing configuration successfully
+2025-01-07 00:57:26,153 - INFO - Application initialized successfully
+2025-01-07 00:57:26,165 - ERROR - SECRET_KEY must contain lowercase letters
+2025-01-07 00:57:26,165 - INFO - Production environment validation passed
+2025-01-07 00:57:26,178 - INFO - Loaded testing configuration successfully
+2025-01-07 00:57:26,208 - INFO - Application initialized successfully
+2025-01-07 00:57:26,219 - ERROR - Invalid length for variables: SECRET_KEY (min 32 chars), ADMIN_PASSWORD (min 12 chars)
+2025-01-07 00:57:26,220 - ERROR - Invalid length for variables: SECRET_KEY (min 32 chars), ADMIN_PASSWORD (min 12 chars)
+2025-01-07 00:57:27,002 - ERROR - Some version management tests failed
+2025-01-07 01:11:23,923 - INFO - Test database initialized successfully
+2025-01-07 01:11:36,144 - INFO - Database connection successful to C:/github/SF4/instance/stipend.db
+2025-01-07 01:11:36,205 - INFO - Test database initialized successfully
+2025-01-07 01:11:36,224 - ERROR - Test database not found at instance/test.db
+2025-01-07 01:11:36,225 - ERROR - Test database verification failed
