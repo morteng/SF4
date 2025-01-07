@@ -29,7 +29,7 @@ def cleanup():
             try:
                 if not os.listdir(dir_path):
                     os.rmdir(dir_path)
-                    print(f"Removed empty directory: {dir_path}")
+                    #print(f"Removed empty directory: {dir_path}")
             except OSError:
                 pass
 
