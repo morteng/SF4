@@ -21,6 +21,9 @@
 # Final deployment to Render
 /run scripts/deploy_to_render.py
 
+# Verify successful deployment
+/run scripts/verify_deployment.py
+
 ### CODE END ###
 
 

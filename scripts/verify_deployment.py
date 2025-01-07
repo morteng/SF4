@@ -3,35 +3,17 @@ import os
 import logging
 from pathlib import Path
 
-def configure_logger():
-    """Configure the logger consistently across the module"""
-    logger = logging.getLogger(__name__)
-    if not logger.handlers:
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
-    return logger
+# Configure module logger
+logger = logging.getLogger(__name__)
+if not logger.handlers:
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
 
 # Add scripts directory to Python path
 sys.path.append(str(Path(__file__).parent.parent))
-
-# Configure module logger
-logger = configure_logger()
-
-from scripts.version import validate_db_connection
-
-def configure_logger():
-    """Configure the logger consistently across the module"""
-    logger = logging.getLogger(__name__)
-    if not logger.handlers:
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
-    return logger
 
 def verify_security_settings():
     """Verify security-related settings with enhanced checks"""
