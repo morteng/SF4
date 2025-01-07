@@ -2,14 +2,20 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Fix backup schema validation
+# Verify admin user exists
+/run scripts/security/verify_admin.py
+
+# Verify deployment settings
+/run scripts/verify_deployment.py
+
+# Test deployment process
+/run scripts/deploy_to_render.py
+
+# Verify backup integrity
 /run scripts/verify_backup.py
 
-# Resolve missing log files
+# Verify log archives
 /run scripts/verify_logs.py
-
-# Verify production environment
-/run scripts/verify_production.py
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py
