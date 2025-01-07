@@ -1,9 +1,11 @@
 import sys
 import os
+import logging
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.factory import create_app
 from app.extensions import db
+from scripts.version import validate_db_connection
 
 def update_test_config():
     """Update test configuration"""
