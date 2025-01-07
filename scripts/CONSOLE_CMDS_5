@@ -5,8 +5,14 @@
 # Initialize logging system first
 /run scripts/init_logging.py
 
+# Create final backup
+/run scripts/create_backup.py
+
 # Verify backup integrity
 /run scripts/verify_backup.py
+
+# Archive logs
+/run scripts/archive_logs.py
 
 # Verify log archives
 /run scripts/verify_logs.py
@@ -24,6 +30,9 @@ git push origin main
 
 # Deploy to production
 /run scripts/deploy_to_render.py
+
+# Verify successful deployment
+/run scripts/verify_deployment.py
 
 # Perform final cleanup
 /run scripts/final_cleanup.py
