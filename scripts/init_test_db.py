@@ -19,10 +19,14 @@ def init_test_db():
     """Initialize a fresh test database with proper cleanup"""
     try:
         app = create_app('testing')
+        
+        # Ensure proper application context
         with app.app_context():
+            # Initialize extensions if not already initialized
+            if 'sqlalchemy' not in app.extensions:
+                db.init_app(app)
+                
             # Ensure clean state
-            if db.session:
-                db.session.remove()
             try:
                 db.drop_all()
             except Exception as e:

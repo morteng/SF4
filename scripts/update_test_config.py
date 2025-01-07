@@ -11,13 +11,23 @@ def update_test_config():
         # Create test app
         app = create_app('testing')
         
-        # Update test database URI
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        # Update test configuration
+        app.config.update({
+            'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
+            'SQLALCHEMY_TRACK_MODIFICATIONS': False,
+            'TESTING': True,
+            'WTF_CSRF_ENABLED': False,
+            'SECRET_KEY': 'test-secret-key',
+            'DEBUG': False
+        })
         
         # Initialize extensions if not already initialized
         if 'sqlalchemy' not in app.extensions:
             db.init_app(app)
+            
+        # Verify configuration
+        if not app.config['TESTING']:
+            raise RuntimeError("Test configuration not properly set")
         
         # Create test client
         with app.app_context():
