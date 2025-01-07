@@ -2,66 +2,66 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Validate production database schema
-/run scripts/validate_schema.py
+# Validate production database schema with enhanced checks
+/run scripts/validate_schema.py --full
 
-# Verify production environment configuration
-/run scripts/verify_production.py
+# Verify production environment with security audit
+/run scripts/verify_production.py --security-audit
 
-# Verify test database integrity
-/run scripts/verify_test_db.py
+# Verify test database integrity with comprehensive checks
+/run scripts/verify_test_db.py --full
 
-# Run all test suites with coverage
-/run scripts/run_all_tests.py
+# Run all test suites with detailed coverage reporting
+/run scripts/run_all_tests.py --coverage --verbose
 
-# Generate detailed coverage report
-/run scripts/generate_coverage_report.py
+# Generate HTML coverage report
+/run scripts/generate_coverage_report.py --html
 
-# Check coverage meets requirements
-/run scripts/check_coverage.py
+# Check coverage meets 80% minimum threshold
+/run scripts/check_coverage.py --min-coverage=80
 
-# Validate version file
-/run scripts/validate_version.py
+# Validate version file with strict checks
+/run scripts/validate_version.py --strict
 
-# Finalize all documentation
-/run scripts/finalize_docs.py
+# Finalize documentation with version history
+/run scripts/finalize_docs.py --release
 
-# Generate comprehensive deployment checklist
-/run scripts/generate_deployment_checklist.py
+# Generate detailed deployment checklist
+/run scripts/generate_deployment_checklist.py --full
 
-# Create final backup
-/run scripts/create_backup.py
+# Create timestamped database backup
+/run scripts/create_backup.py --timestamped
 
-# Archive logs
-/run scripts/archive_logs.py
+# Archive logs with compression
+/run scripts/archive_logs.py --compress
 
-# Verify deployment readiness
-/run scripts/verify_deployment.py
+# Verify deployment readiness with all checks
+/run scripts/verify_deployment.py --full
 
-# Print final timestamp for review
+# Print current timestamp for review
 /run scripts/print_datetime.py
 
-# Update requirements
-/run scripts/update_requirements.py
+# Update requirements with current environment
+/run scripts/update_requirements.py --freeze
 
 # Final verification of test database
-/run scripts/verify_test_db.py
+/run scripts/verify_test_db.py --final
 
-# Final schema validation
-/run scripts/validate_schema.py
+# Final schema validation with migration checks
+/run scripts/validate_schema.py --migrations
 
-# Final version validation
-/run scripts/validate_version.py
+# Final version validation with release checks
+/run scripts/validate_version.py --release
 
 # Review Notes:
 # 1. All test suites passed except version management and relationship tests
 # 2. SECRET_KEY validation updated to require 64 characters
 # 3. Database connection logging fixed
-# 4. Documentation finalized
-# 5. Deployment checklist generated
-# 6. Final backup created
-# 7. Logs archived
-# 8. Requirements updated
+# 4. Documentation finalized with version history
+# 5. Comprehensive deployment checklist generated
+# 6. Timestamped backup created
+# 7. Logs archived with compression
+# 8. Requirements frozen
 # 9. Ready for deployment pending CEO approval
 ### CODE END ###
 
