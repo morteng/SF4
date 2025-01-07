@@ -15,6 +15,8 @@ if not logger.handlers:
 # Add scripts directory to Python path
 sys.path.append(str(Path(__file__).parent.parent))
 
+# Remove duplicate logger configuration
+
 from scripts.version import validate_db_connection
 
 def verify_security_settings():

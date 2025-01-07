@@ -10,6 +10,12 @@ logger = logging.getLogger(__name__)
 def initialize_admin_user():
     """Initialize admin user from environment variables"""
     try:
+        # Verify ADMIN_PASSWORD length
+        admin_password = os.getenv('ADMIN_PASSWORD')
+        if len(admin_password) < 12:
+            logger.error("ADMIN_PASSWORD must be at least 12 characters")
+            return False
+            
         # Check if admin user exists
         admin = User.query.filter_by(is_admin=True).first()
         
