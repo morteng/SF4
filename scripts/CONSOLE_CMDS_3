@@ -11,6 +11,12 @@
 # Initialize test database
 /run scripts/init_test_db.py
 
+# Verify admin user exists
+/run scripts/ensure_admin_user.py
+
+# Verify database configuration
+/run scripts/verify_db_config.py
+
 # Run comprehensive test suite
 /run scripts/run_tests.py
 
@@ -22,9 +28,6 @@
 
 # Verify deployment configuration
 /run scripts/verify_deployment.py
-
-# Run startup checks
-/run scripts/startup_checks.py
 
 ### CODE END ###
 
