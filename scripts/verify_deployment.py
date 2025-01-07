@@ -3,24 +3,28 @@ import os
 import logging
 from pathlib import Path
 
-# Configure logger at module level
-logger = logging.getLogger(__name__)
-if not logger.handlers:
-    handler = logging.StreamHandler()
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    logger.setLevel(logging.INFO)
+def configure_logger():
+    """Configure the logger consistently across the module"""
+    logger = logging.getLogger(__name__)
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+    return logger
 
 # Add scripts directory to Python path
 sys.path.append(str(Path(__file__).parent.parent))
 
-# Remove duplicate logger configuration
+# Configure module logger
+logger = configure_logger()
 
 from scripts.version import validate_db_connection
 
 def verify_security_settings():
     """Verify security-related settings with enhanced checks"""
+    logger = configure_logger()
     secret_key = os.getenv('SECRET_KEY')
     
     # Verify version file
@@ -68,14 +72,7 @@ def verify_security_settings():
 
 def verify_deployment():
     """Verify all deployment requirements are met"""
-    # Configure logger if not already configured
-    logger = logging.getLogger(__name__)
-    if not logger.handlers:
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
+    logger = configure_logger()
     
     try:
         # Verify security settings first

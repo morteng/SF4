@@ -18,6 +18,9 @@
 # Verify deployment requirements
 /run scripts/verify_deployment.py
 
+# Test deployment process
+/run scripts/deploy_to_render.py
+
 ### CODE END ###
 
 

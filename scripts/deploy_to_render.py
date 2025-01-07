@@ -7,9 +7,8 @@ from pathlib import Path
 # Add scripts directory to Python path
 sys.path.append(str(Path(__file__).parent.parent))
 
-def deploy_to_render():
-    """Deploy the application to render.com"""
-    # Configure logger at module level
+def configure_logger():
+    """Configure the logger consistently across the module"""
     logger = logging.getLogger(__name__)
     if not logger.handlers:
         handler = logging.StreamHandler()
@@ -17,6 +16,11 @@ def deploy_to_render():
         handler.setFormatter(formatter)
         logger.addHandler(handler)
         logger.setLevel(logging.INFO)
+    return logger
+
+def deploy_to_render():
+    """Deploy the application to render.com"""
+    logger = configure_logger()
     
     try:
         # Verify deployment checklist
