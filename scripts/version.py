@@ -84,7 +84,16 @@ def main() -> None:
 
         # Add check-version command
         check_parser = subparsers.add_parser('check-version', help='Check current version')
-
+        
+        # Add version bump command
+        bump_parser = subparsers.add_parser('bump-version', help='Bump version number')
+        bump_parser.add_argument('type', choices=['major', 'minor', 'patch'], 
+                               help='Version type to bump')
+        
+        # Add validate command
+        validate_parser = subparsers.add_parser('validate', 
+                                              help='Validate version and environment')
+        
         # Test connection command
         test_conn_parser = subparsers.add_parser('test-connection', help='Test database connection')
         test_conn_parser.add_argument('db_path', help='Path to database file')
@@ -115,7 +124,20 @@ def main() -> None:
 
         args = parser.parse_args()
 
-        if args.command == 'test-connection':
+        if args.command == 'check-version':
+            print(f"Current version: {__version__}")
+        elif args.command == 'bump-version':
+            new_version = bump_version(args.type)
+            print(f"Version bumped to: {new_version}")
+        elif args.command == 'validate':
+            if not validate_version(__version__):
+                print("Version format is invalid")
+                exit(1)
+            if not validate_production_environment():
+                print("Environment validation failed")
+                exit(1)
+            print("Validation successful")
+        elif args.command == 'test-connection':
             result = validate_db_connection(args.db_path)
             print(f"Connection {'successful' if result else 'failed'}")
             exit(0 if result else 1)

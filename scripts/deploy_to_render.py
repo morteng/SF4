@@ -11,6 +11,18 @@ def deploy_to_render():
     logger = logging.getLogger(__name__)
     
     try:
+        # Verify deployment checklist
+        from scripts.deployment.checklist import check_deployment
+        if not check_deployment():
+            logger.error("Deployment checklist failed")
+            return False
+            
+        # Verify version file
+        from scripts.validate_version import validate_version_file
+        if not validate_version_file():
+            logger.error("Version file validation failed")
+            return False
+            
         # Verify git remote exists
         remotes = subprocess.run(["git", "remote"], capture_output=True).stdout.decode()
         if "render" not in remotes:
