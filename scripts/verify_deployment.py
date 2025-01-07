@@ -10,7 +10,9 @@ def verify_deployment():
         required_files = [
             'DEPLOYMENT_CHECKLIST.md',
             'RELEASE_NOTES.md',
-            'VERSION_HISTORY.md'
+            'VERSION_HISTORY.md',
+            'requirements.txt',
+            'migrations/alembic.ini'
         ]
         
         # Check for latest backup or any timestamped backup

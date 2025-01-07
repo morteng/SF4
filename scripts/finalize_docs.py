@@ -7,6 +7,12 @@ def update_release_notes():
         # Get current version
         from version import __version__
         
+        # Check if version already exists
+        with open('RELEASE_NOTES.md', 'r') as f:
+            content = f.read()
+            if f"## Version {__version__}" in content:
+                return True
+                
         with open('RELEASE_NOTES.md', 'a') as f:
             f.write(f"\n## Version {__version__} - {datetime.now().strftime('%Y-%m-%d')}\n")
             f.write("- Finalized deployment process\n")
