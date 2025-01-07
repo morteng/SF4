@@ -23,12 +23,19 @@ def verify_tests():
         root_dir = Path(__file__).parent.parent
         sys.path.append(str(root_dir))
         
+        # Verify test environment
+        from scripts.setup_test_env import setup_test_paths
+        setup_test_paths()
+        
         # Run core test suites
         test_suites = [
             'tests/models/test_relationships.py',
-            'tests/version_management/test_version.py'
+            'tests/version_management/test_version.py',
+            'tests/services/test_admin_creation.py',
+            'tests/deployment/test_deployment_verification.py'
         ]
         
+        # Run each test suite
         for suite in test_suites:
             logger.info(f"Running test suite: {suite}")
             result = subprocess.run(
@@ -42,7 +49,13 @@ def verify_tests():
                 logger.error(result.stderr)
                 return False
                 
-        logger.info("All test suites passed")
+        # Verify coverage
+        from scripts.verify_test_coverage import verify_coverage
+        if not verify_coverage():
+            logger.error("Test coverage below required threshold")
+            return False
+            
+        logger.info("All test suites passed and coverage requirements met")
         return True
     except Exception as e:
         logger.error(f"Test verification failed: {str(e)}")
