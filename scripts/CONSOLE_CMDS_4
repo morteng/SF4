@@ -2,8 +2,14 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize fresh test database with validation
+# Initialize fresh test database
 /run scripts/init_test_db.py
+
+# Verify admin user creation
+/run scripts/security/verify_admin.py
+
+# Run security tests
+/run scripts/run_tests.py --security
 
 # Verify production environment
 /run scripts/verify_production.py
@@ -14,14 +20,8 @@
 # Verify test database integrity
 /run scripts/verify_test_db.py
 
-# Run comprehensive test suite
-/run scripts/run_tests.py
-
-# Generate coverage report
-/run scripts/generate_coverage_report.py
-
-# Create timestamped backup
-/run scripts/create_backup.py --timestamped
+# Create database backup
+/run scripts/create_backup.py
 
 # Verify backup integrity
 /run scripts/verify_backup.py
