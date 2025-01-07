@@ -20,7 +20,7 @@ def configure_logger():
 
 def deploy_to_render():
     """Deploy the application to render.com"""
-    logger = logging.getLogger(__name__)
+    logger = configure_logger()
     
     try:
         # Verify deployment checklist
@@ -30,6 +30,20 @@ def deploy_to_render():
             logger.error("Deployment verification failed")
             return False
         logger.info("Deployment verification passed")
+        
+        # Verify database connection
+        from scripts.verify_db_connection import verify_db_connection
+        if not verify_db_connection():
+            logger.error("Database connection verification failed")
+            return False
+        logger.info("Database connection verified")
+        
+        # Verify admin user exists
+        from scripts.startup.init_admin import initialize_admin_user
+        if not initialize_admin_user():
+            logger.error("Admin user verification failed")
+            return False
+        logger.info("Admin user verified")
             
         # Verify version file
         from scripts.version import validate_version
