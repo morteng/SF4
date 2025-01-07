@@ -33,10 +33,6 @@ def init_test_db():
                 logging.warning(f"Could not drop all tables: {str(e)}")
                 db.session.rollback()
             
-            # Initialize extensions
-            if 'sqlalchemy' not in app.extensions:
-                db.init_app(app)
-            
             # Create new tables
             db.create_all()
             
@@ -77,7 +73,8 @@ def init_test_db():
         return False
     finally:
         # Ensure proper cleanup
-        db.session.remove()
+        if 'sqlalchemy' in app.extensions:
+            db.session.remove()
 
 if __name__ == "__main__":
     init_test_db()

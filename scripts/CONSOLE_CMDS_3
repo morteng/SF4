@@ -5,7 +5,7 @@
 # Clean up test environment
 /run scripts/final_cleanup.py
 
-# Initialize fresh test database with validation
+# Initialize fresh test database with proper app context
 /run scripts/init_test_db.py
 
 # Update test configuration with security settings
@@ -14,7 +14,7 @@
 # Validate database schema and relationships
 /run scripts/validate_schema.py
 
-# Run version management tests with coverage
+# Run version management tests with enhanced coverage
 /run scripts/run_version_management_tests.py
 
 # Run relationship tests with detailed reporting
