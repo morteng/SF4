@@ -16,19 +16,24 @@ def configure_test_logging():
 
 def setup_test_paths():
     """Configure Python paths for testing and deployment"""
-    project_root = str(Path(__file__).parent.parent)
-    if project_root not in sys.path:
-        sys.path.insert(0, project_root)
-        
-    # Add all necessary directories
-    for dir_name in ['app', 'scripts', 'tests', 'migrations']:
-        dir_path = str(Path(__file__).parent.parent / dir_name)
-        if dir_path not in sys.path:
-            sys.path.insert(0, dir_path)
+    try:
+        project_root = str(Path(__file__).parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
             
-    # Verify paths
-    logger = logging.getLogger(__name__)
-    logger.info(f"Configured Python paths: {sys.path}")
+        # Add all necessary directories
+        for dir_name in ['app', 'scripts', 'tests', 'migrations']:
+            dir_path = str(Path(__file__).parent.parent / dir_name)
+            if dir_path not in sys.path:
+                sys.path.insert(0, dir_path)
+                
+        # Verify paths
+        logger = logging.getLogger(__name__)
+        logger.info(f"Configured Python paths: {sys.path}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to setup test paths: {str(e)}")
+        return False
 
 def configure_test_environment():
     """Set up test environment variables"""

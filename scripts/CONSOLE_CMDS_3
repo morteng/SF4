@@ -6,34 +6,34 @@
 /run scripts/init_logging.py
 
 # Set up test environment with proper paths
-/run scripts/setup_test_env.py
+/run scripts/setup_test_env.py --verify
 
 # Initialize test database
-/run scripts/startup/init_db.py
+/run scripts/startup/init_db.py --test
 
 # Initialize admin user
-/run scripts/startup/init_admin.py
+/run scripts/startup/init_admin.py --test
 
 # Verify database connection
-/run scripts/verify_db_connection.py
+/run scripts/verify_db_connection.py --test
 
 # Run core test suites
-/run scripts/run_tests.py
+/run scripts/run_tests.py --full
 
 # Generate coverage report
-/run scripts/generate_coverage_report.py
+/run scripts/generate_coverage_report.py --verify
 
 # Verify test results
-/run scripts/verify_tests.py
+/run scripts/verify_tests.py --full
 
 # Run security verification
-/run scripts/verify_deployment.py --check-security
+/run scripts/verify_deployment.py --check-security --test
 
 # Run environment verification
-/run scripts/verify_deployment.py --check-env
+/run scripts/verify_deployment.py --check-env --test
 
 # Run version verification
-/run scripts/verify_deployment.py --check-version
+/run scripts/verify_deployment.py --check-version --test
 
 ### CODE END ###
 
