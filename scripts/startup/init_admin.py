@@ -20,9 +20,10 @@ def configure_logger():
 
 def initialize_admin_user():
     """Initialize admin user from environment variables"""
-    # Configure logger at module level
-    global logger
-    logger = configure_logger()
+    try:
+        # Configure logger at module level
+        global logger
+        logger = configure_logger()
     try:
         # Verify required environment variables exist
         required_vars = ['ADMIN_USERNAME', 'ADMIN_EMAIL', 'ADMIN_PASSWORD']

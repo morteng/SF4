@@ -10,16 +10,16 @@
 /run scripts/startup/init_db.py
 
 # Create admin user if missing
-/run scripts/startup/init_admin.py
+/run scripts/startup/init_admin.py --verify
 
 # Verify database connection
-/run scripts/verify_db_connection.py
+/run scripts/verify_db_connection.py --full
 
 # Run comprehensive deployment verification
-/run scripts/verify_deployment.py --full
+/run scripts/verify_deployment.py --full --check-security
 
 # Final deployment to Render
-/run scripts/deploy_to_render.py
+/run scripts/deploy_to_render.py --verify
 
 ### CODE END ###
 

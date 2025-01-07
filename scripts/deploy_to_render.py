@@ -23,6 +23,8 @@ logger = configure_logger()
 
 def deploy_to_render():
     """Deploy the application to render.com"""
+    # Configure logger at module level
+    global logger
     logger = configure_logger()
     
     try:
