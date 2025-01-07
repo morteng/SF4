@@ -2,7 +2,12 @@ import logging
 from pathlib import Path
 from alembic import command
 from alembic.config import Config
-from app import db
+try:
+    from app import db
+except ImportError:
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from app import db
 
 logger = logging.getLogger(__name__)
 

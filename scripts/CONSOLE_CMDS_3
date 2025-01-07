@@ -5,8 +5,11 @@
 # Initialize logging system
 /run scripts/init_logging.py
 
-# Set up test environment and initialize test database
+# Set up test environment with proper Python paths
 /run scripts/setup_test_env.py
+
+# Initialize test database
+/run scripts/startup/init_db.py
 
 # Run comprehensive test suite with coverage
 /run scripts/run_tests.py
