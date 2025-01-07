@@ -30,6 +30,9 @@
 # Verify production environment settings
 /run scripts/verify_production.py
 
+# Create timestamped database backup
+/run scripts/create_backup.py --timestamped
+
 # Verify deployment readiness
 /run scripts/verify_deployment.py
 

@@ -2,6 +2,7 @@
 - Fix SECRET_KEY length and complexity (minimum 64 chars)
 - Resolve test database initialization context issues
 - Fix deployment verification file requirements
+- Fix test_db_connection.py module import error
 
 ---
 
