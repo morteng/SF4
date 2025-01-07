@@ -17,8 +17,6 @@ def configure_logger():
 
 def verify_db_connection():
     """Verify database connection using SQLALCHEMY_DATABASE_URI"""
-    logger = configure_logger()
-    
     # Configure logger at module level
     global logger
     logger = configure_logger()

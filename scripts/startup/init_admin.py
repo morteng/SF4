@@ -20,8 +20,6 @@ def configure_logger():
 
 def initialize_admin_user():
     """Initialize admin user from environment variables"""
-    logger = configure_logger()
-    
     # Configure logger at module level
     global logger
     logger = configure_logger()
