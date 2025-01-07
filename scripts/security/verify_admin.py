@@ -31,6 +31,8 @@ def validate_password(password):
         return False
     return True
 
+from werkzeug.security import generate_password_hash
+
 def verify_admin_user():
     """Ensure admin user exists, create from .env if missing"""
     logger = logging.getLogger(__name__)
@@ -56,7 +58,7 @@ def verify_admin_user():
             admin = User(
                 username=os.getenv('ADMIN_USERNAME'),
                 email=os.getenv('ADMIN_EMAIL'),
-                password=os.getenv('ADMIN_PASSWORD'),
+                password=generate_password_hash(os.getenv('ADMIN_PASSWORD')),
                 is_admin=True
             )
             db.session.add(admin)

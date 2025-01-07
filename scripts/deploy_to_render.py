@@ -21,6 +21,7 @@ def deploy_to_render():
     try:
         # Verify deployment checklist
         from scripts.verify_deployment import verify_deployment
+        logger = logging.getLogger(__name__)
         if not verify_deployment():
             logger.error("Deployment verification failed")
             return False
