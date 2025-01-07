@@ -38,3 +38,5 @@
 2025-01-07 15:52:22,091 - ERROR - No tables found in database
 2025-01-07 15:52:22,555 - ERROR - Deployment verification failed: name 'logger' is not defined
 2025-01-07 16:06:38,946 - ERROR - Deployment verification failed: name 'logger' is not defined
+2025-01-07 16:06:43,662 - ERROR - Deployment verification failed: name 'logger' is not defined
+2025-01-07 16:06:43,662 - ERROR - Deployment verification failed
