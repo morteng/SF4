@@ -28,7 +28,7 @@ def deploy_to_render():
         # Push to render.com
         logger.info("Pushing to render.com")
         result = subprocess.run(["git", "push", "render", "main"], capture_output=True)
-        if result.retcode != 0:
+        if result.returncode != 0:
             logger.error(f"Push failed: {result.stderr.decode()}")
             return False
         

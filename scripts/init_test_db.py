@@ -72,7 +72,11 @@ def init_test_db():
         return False
     finally:
         if 'sqlalchemy' in app.extensions:
-            db.session.remove()
+            try:
+                with app.app_context():
+                    db.session.remove()
+            except RuntimeError:
+                pass
 
 if __name__ == "__main__":
     init_test_db()
