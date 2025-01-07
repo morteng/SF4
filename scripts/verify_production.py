@@ -74,9 +74,23 @@ def verify_security_settings():
             
         # Verify SECRET_KEY
         secret_key = os.getenv('SECRET_KEY', '')
-        if len(secret_key) < 64:  # Changed from 32 to 64 per requirements
+        if len(secret_key) < 64:
             logger.error(f"SECRET_KEY is too short (length: {len(secret_key)}), minimum 64 characters required")
             logger.error("Please generate a new SECRET_KEY with at least 64 characters")
+            return False
+            
+        # Verify SECRET_KEY complexity
+        if not any(c.isupper() for c in secret_key):
+            logger.error("SECRET_KEY must contain at least one uppercase letter")
+            return False
+        if not any(c.islower() for c in secret_key):
+            logger.error("SECRET_KEY must contain at least one lowercase letter")
+            return False
+        if not any(c.isdigit() for c in secret_key):
+            logger.error("SECRET_KEY must contain at least one digit")
+            return False
+        if not any(c in "!@#$%^&*()_+-=[]{};':,.<>?/" for c in secret_key):
+            logger.error("SECRET_KEY must contain at least one special character")
             return False
             
         # Verify SECRET_KEY rotation

@@ -51,8 +51,10 @@ def verify_test_db(db_path='instance/test.db'):
             # Verify test data
             cursor.execute("SELECT COUNT(*) FROM stipend")
             stipend_count = cursor.fetchone()[0]
-            if stipend_count < 10:
-                logging.error(f"Test data insufficient - only {stipend_count} stipends found")
+            cursor.execute("SELECT COUNT(*) FROM tag")
+            tag_count = cursor.fetchone()[0]
+            if stipend_count < 10 or tag_count < 5:
+                logging.error(f"Test data insufficient - {stipend_count} stipends and {tag_count} tags found")
                 return False
                 
             logging.info(f"Test database verified successfully at {db_path}")

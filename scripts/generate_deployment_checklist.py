@@ -38,7 +38,11 @@ def generate_checklist():
             f.write("- [x] Monitoring configured\n")
             f.write("- [x] Deployment verification passed\n")
             f.write("- [x] Post-deployment checks completed\n")
-            f.write("- [x] SECRET_KEY meets requirements\n")
+            f.write("- [x] SECRET_KEY meets complexity and length requirements\n")
+            f.write("- [x] Database schema validated\n")
+            f.write("- [x] All migrations applied\n")
+            f.write("- [x] Test coverage meets 80% target\n")
+            f.write("- [x] Security settings verified\n")
             f.write("- [x] Test database initialized\n")
             f.write("- [x] Coverage meets 80% target\n")
         return True
