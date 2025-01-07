@@ -6,9 +6,6 @@
 # Initialize fresh test database with validation
 /run scripts/init_test_db.py
 
-# Run version management tests with coverage
-/run scripts/run_version_management_tests.py
-
 # Verify production environment settings
 /run scripts/verify_production.py
 
@@ -18,7 +15,10 @@
 # Verify deployment readiness
 /run scripts/verify_deployment.py
 
-# Deploy to render.com
+# Run comprehensive test suite
+/run scripts/run_tests.py
+
+# Deploy to render.com (requires approval)
 /run scripts/deploy_to_render.py
 
 ### CODE END ###
