@@ -35,24 +35,31 @@ def init_test_db():
             # Create schema
             db.create_all()
             
-            # Create test data
-            org = Organization(name="Test Org")
-            tag1 = Tag(name="Test Tag 1", category="Test Category")
-            tag2 = Tag(name="Test Tag 2", category="Test Category")
-            stipend = Stipend(
-                name="Test Stipend",
-                summary="Test Summary",
-                description="Test Description",
-                homepage_url="http://test.com",
-                application_procedure="Test Procedure",
-                eligibility_criteria="Test Criteria",
-                application_deadline=datetime.utcnow(),
-                open_for_applications=True
-            )
+            # Create test data with validation
+            test_data = [
+                Organization(name="Test Org"),
+                Tag(name="Test Tag 1", category="Test Category"),
+                Tag(name="Test Tag 2", category="Test Category"),
+                Stipend(
+                    name="Test Stipend",
+                    summary="Test Summary",
+                    description="Test Description",
+                    homepage_url="http://test.com",
+                    application_procedure="Test Procedure",
+                    eligibility_criteria="Test Criteria",
+                    application_deadline=datetime.utcnow(),
+                    open_for_applications=True
+                )
+            ]
+            
+            # Validate test data
+            for obj in test_data:
+                if not obj.validate():
+                    raise ValueError(f"Invalid test data: {obj}")
             
             # Set relationships
-            stipend.tags.extend([tag1, tag2])
-            stipend.organization = org
+            test_data[-1].tags.extend(test_data[1:3])
+            test_data[-1].organization = test_data[0]
             
             # Commit data
             db.session.add_all([org, tag1, tag2, stipend])
