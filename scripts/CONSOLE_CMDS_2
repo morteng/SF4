@@ -9,8 +9,8 @@
 # Verify admin user exists
 /run scripts/security/verify_admin.py
 
-# Run security tests
-/run scripts/tests/security_tests.py
+# Test deployment process
+/run scripts/deploy_to_render.py
 
 ### CODE END ###
 
