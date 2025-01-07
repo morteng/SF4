@@ -16,7 +16,13 @@ def configure_test_logging():
 
 def verify_tests():
     """Verify all tests pass with proper configuration"""
-    logger = configure_test_logging()
+    logger = logging.getLogger('test_verification')
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
     
     try:
         # Add project root to Python path
