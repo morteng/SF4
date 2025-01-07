@@ -1,5 +1,5 @@
 # Code Cycle Step 5 (Deployment)
-
+/git add .
 /add PRD.md
 /add DESIGN.md
 /add PROGRESS.md
@@ -9,7 +9,7 @@
 
 
 ## Testing step
-/ask How can we best implement Code Cycle Step 5 - Document and deploy? Objective: Update all documentation and i/o-files like CEO.txt, MANAGER.txt and any others. What else must be done now? Show edits as unified diffs.
+/ask How can we best implement Code Cycle Step 5 - Document and deploy? Objective: Update all documentation and i/o-files like CEO.txt, MANAGER.txt and any others. What else must be done now?
 
 /code Implement suggested changes. Remove any previous console commands from CONSOLE_CMDS_5, add any new console commands you want to run before we reset and return to Step 1. Ready to deploy? Ask management in the scripts/REQUESTS.txt file for permission and run deployment script only if permission has been granted. Push to github when appropriate. Do not edit files using console commands. Do not run python code using console commands, instead create code files and run them using the "/run your_python_file.py" approach. Only edit the parts between code start and code end, don't do anything too ambitious, simple console commands only.
 

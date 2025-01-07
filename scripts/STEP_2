@@ -1,9 +1,9 @@
 # Code Cycle Step 2 (Coding)
-
+/git add .
 /add scripts/CONSOLE_CMDS_2
 
 # Coding step
-/ask How can we best implement Code Cycle Step 2 - Coding? Objective: Implement changes based on the analysis. Key Actions: Execute development tasks. Update code files as required. Prepare outputs for testing. Show edits as unified diffs.
+/ask How can we best implement Code Cycle Step 2 - Coding? Objective: Implement changes based on the analysis. Key Actions: Execute development tasks. Update code files as required. Prepare outputs for testing.
 
 /code Implement suggested changes. Remove any previous console commands from CONSOLE_CMDS_2, add any new console commands you want to run before we go to STEP 3 (Coding). Do not edit files using console commands. Do not run python code using console commands, instead create code files and run them using the "/run your_python_file.py" approach. 
 

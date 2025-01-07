@@ -1,14 +1,11 @@
 HI! Manager here!
 
-I HAVE FIXED SECRET KEY, IT'S LONG ENOUGH NOW!
+PRIORITY ULTRA: at startup, import default admin user from .env file if there is no admin user registered in database.
 
-Very IMPORTANT! Make sure you overwrite files like RELEASE_NOTES.md and VERSION_HISTORY.md when updating them, so they don't grow indefinetly.
-
+IMPORTANT! Make sure you overwrite files like RELEASE_NOTES.md and VERSION_HISTORY.md when updating them, so they don't grow indefinetly.
 
 REQUEST: Please tidy up the root project folder and scripts folder, put the files that don't belong there in their appropriate subfolders. I'd also like you to organize the scripts/ folder better.
 RULE: Never deploy until all tests pass and all todo items are handled. Only deploy when given permission byCEO.
-
-When you have updated functionality or want to get approval for edits you have made, request that management checks things out by asking nicely in the scripts/REQUESTS.txt file. remember to include all information management needs to review.
 
 IMPORTANT! Ensure we read in values from .env file for database name (it's defined there as SQLALCHEMY_DATABASE_URI=sqlite:///instance/site.db) and other variables like admin user name, password and email. you can see the info in .env file in .env.example file (the actual .env file is hidden from edit view for you because it is in .gitignore file).
 
@@ -27,7 +24,7 @@ Key Rules:
 
 I Have updated secret key in .env (and.env.example) to make it longer.
 
-Remember to import default admin user from .env file if there is no admin user in database
+
 
 Request: We should also implement some sort of production system where we make the actual server on https://render.com/ pull the CEO approved version of the site go live. Please implement such a system, ask about accounts and verification and anything else you need here. I log in to render.com web services using github login, so we should be able to control it from the cli somehow.
 
