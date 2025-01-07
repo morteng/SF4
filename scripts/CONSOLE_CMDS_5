@@ -5,9 +5,6 @@
 # Initialize logging system
 /run scripts/init_logging.py
 
-# Generate deployment checklist
-/run scripts/generate_deployment_checklist.py
-
 # Verify backup integrity
 /run scripts/verify_backup.py
 
@@ -16,6 +13,9 @@
 
 # Verify deployment configuration
 /run scripts/verify_deployment.py
+
+# Generate final documentation
+/run scripts/finalize_docs.py
 
 # Deploy to production
 /run scripts/deploy_to_render.py
