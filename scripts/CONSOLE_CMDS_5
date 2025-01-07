@@ -17,6 +17,9 @@
 # Generate final documentation
 /run scripts/finalize_docs.py
 
+# Push changes to GitHub
+git push origin main
+
 # Deploy to production
 /run scripts/deploy_to_render.py
 
