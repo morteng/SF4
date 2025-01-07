@@ -18,6 +18,9 @@
 # Validate database schema and relationships
 /run scripts/validate_schema.py
 
+# Test database connection
+/run scripts/test_db_connection.py
+
 # Run version management tests with coverage
 /run scripts/run_version_management_tests.py
 
