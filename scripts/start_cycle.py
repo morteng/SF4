@@ -7,8 +7,8 @@ def write_cycle_start():
     """Write current datetime to cycle_start.txt"""
     try:
         # Get absolute path to INSTANCE directory
-        base_dir = Path(__file__).resolve().parent.parent  # Go up one level
-        instance_dir = base_dir / 'instance'
+        base_dir = Path(__file__).resolve().parent  # Stay at scripts level
+        instance_dir = base_dir.parent / 'instance'  # Go up one level
         
         # Create instance directory if it doesn't exist
         instance_dir.mkdir(exist_ok=True)
