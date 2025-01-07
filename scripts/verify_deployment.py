@@ -8,6 +8,12 @@ def verify_security_settings():
     """Verify security-related settings with enhanced checks"""
     secret_key = os.getenv('SECRET_KEY')
     
+    # Verify version file
+    from scripts.version import validate_version, get_version
+    if not validate_version(get_version()):
+        logging.error("Version validation failed")
+        return False
+        
     # Validate SECRET_KEY length and complexity
     if not secret_key or len(secret_key) < 64:
         logging.error("SECRET_KEY must be at least 64 characters")
