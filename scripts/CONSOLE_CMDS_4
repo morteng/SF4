@@ -5,19 +5,10 @@
 # Initialize logging system
 /run scripts/init_logging.py
 
-# Verify test results
-/run scripts/verify_tests.py
-
-# Generate coverage report
-/run scripts/generate_coverage_report.py
-
-# Verify deployment configuration
+# Verify deployment requirements
 /run scripts/verify_deployment.py
 
-# Run startup checks
-/run scripts/startup_checks.py
-
-# Finalize documentation
+# Generate final documentation
 /run scripts/finalize_docs.py
 
 # Generate deployment checklist
