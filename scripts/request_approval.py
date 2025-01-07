@@ -1,11 +1,27 @@
 import os
+import logging
 from datetime import datetime
+from pathlib import Path
+
+def configure_logger():
+    """Configure the logger for approval requests"""
+    logger = logging.getLogger('approval')
+    if not logger.handlers:
+        handler = logging.FileHandler('logs/approval.log')
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+    return logger
 
 def request_approval():
     """Request deployment approval from management"""
+    logger = configure_logger()
     try:
         with open('scripts/REQUESTS.txt', 'a') as f:
-            f.write(f"\nDeployment Request - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
+            f.write(f"\nDeployment Request - {timestamp}\n")
+            logger.info(f"Created deployment request at {timestamp}")
             f.write("Version 1.2.11 is ready for deployment pending final verification.\n")
             f.write("Please review and approve deployment to production.\n")
             f.write("Key details:\n")

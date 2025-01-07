@@ -4,10 +4,13 @@ from datetime import datetime
 
 def generate_checklist():
     """Generate deployment checklist with detailed items"""
-    logger = logging.getLogger(__name__)
+    logger = configure_logger()
     try:
         with open('DEPLOYMENT_CHECKLIST.md', 'w') as f:
             logger.info("Generating deployment checklist")
+            # Add version and timestamp
+            from scripts.version import get_version
+            version = get_version()
             f.write("# Deployment Checklist\n")
             f.write("## Version: 1.2.11\n")
             f.write("## Date: {}\n\n".format(datetime.now().strftime('%Y-%m-%d %H:%M')))
