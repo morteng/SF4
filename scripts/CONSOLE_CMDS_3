@@ -20,6 +20,9 @@
 # Run comprehensive test suite with coverage
 /run scripts/run_tests.py
 
+# Generate coverage report
+/run scripts/generate_coverage_report.py
+
 # Verify test results
 /run scripts/verify_tests.py
 
