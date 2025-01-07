@@ -16,7 +16,7 @@
 /run scripts/verify_db_connection.py
 
 # Verify security settings
-/run scripts/verify_deployment.py
+/run scripts/verify_deployment.py --check-security
 
 # Verify environment variables
 /run scripts/verify_deployment.py --check-env
@@ -24,11 +24,11 @@
 # Verify version file
 /run scripts/verify_deployment.py --check-version
 
+# Run full deployment verification
+/run scripts/verify_deployment.py --full
+
 # Final deployment to Render
 /run scripts/deploy_to_render.py
-
-# Verify successful deployment
-/run scripts/verify_deployment.py --full
 
 ### CODE END ###
 

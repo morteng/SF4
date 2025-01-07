@@ -76,14 +76,22 @@ def verify_security_settings():
                 
     return True
 
-def verify_deployment():
+def verify_deployment(*args, **kwargs):
     """Verify all deployment requirements are met"""
+    check_type = kwargs.get('check_type', 'full')
     
     try:
-        # Verify security settings first
-        if not verify_security_settings():
-            logger.error("Security settings verification failed")
-            return False
+        if check_type == 'check-security':
+            return verify_security_settings()
+        elif check_type == 'check-env':
+            return verify_environment()
+        elif check_type == 'check-version':
+            return verify_version()
+        else:
+            # Full verification
+            return (verify_security_settings() and 
+                    verify_environment() and 
+                    verify_version())
             
         # Check required files exist
         required_files = [
@@ -128,6 +136,22 @@ def verify_deployment():
     except Exception as e:
         logging.error(f"Deployment verification failed: {str(e)}")
         return False
+
+def verify_environment():
+    """Verify environment variables"""
+    required_vars = [
+        'FLASK_ENV',
+        'FLASK_DEBUG', 
+        'SQLALCHEMY_DATABASE_URI',
+        'SECRET_KEY',
+        'RENDER_API_KEY'
+    ]
+    
+    missing_vars = [var for var in required_vars if var not in os.environ]
+    if missing_vars:
+        logging.error(f"Missing environment variables: {', '.join(missing_vars)}")
+        return False
+    return True
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
