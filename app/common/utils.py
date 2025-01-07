@@ -64,6 +64,59 @@ def validate_blueprint_routes(app, required_routes):
             )
             raise RuntimeError(error_msg)
 
+import os
+import re
+from app.models.user import User
+from werkzeug.security import generate_password_hash
+from app.models.audit_log import AuditLog
+
+def init_admin_user():
+    """Initialize admin user from environment variables with validation."""
+    # Check required environment variables
+    required_vars = ['ADMIN_USERNAME', 'ADMIN_EMAIL', 'ADMIN_PASSWORD']
+    missing_vars = [var for var in required_vars if not os.environ.get(var)]
+    
+    if missing_vars:
+        logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
+        return
+        
+    # Validate email format
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", os.environ.get('ADMIN_EMAIL')):
+        logger.error("Invalid admin email format")
+        return
+        
+    # Check if admin user already exists
+    if User.query.filter_by(is_admin=True).first():
+        logger.info("Admin user already exists")
+        return
+        
+    # Create admin user
+    try:
+        admin = User(
+            username=os.environ.get('ADMIN_USERNAME'),
+            email=os.environ.get('ADMIN_EMAIL'),
+            password_hash=generate_password_hash(os.environ.get('ADMIN_PASSWORD')),
+            is_admin=True
+        )
+        
+        db.session.add(admin)
+        db.session.commit()
+        
+        logger.info("Admin user created successfully")
+        
+        # Create audit log entry
+        AuditLog.create(
+            user_id=admin.id,
+            action='admin_user_created',
+            details='Initial admin user created from environment variables',
+            object_type='User',
+            object_id=admin.id
+        )
+        
+    except Exception as e:
+        logger.error(f"Failed to create admin user: {str(e)}")
+        db.session.rollback()
+
 def validate_application_deadline(field):
     """Validate that the application deadline is a future date."""
     if not isinstance(field.data, (str, datetime)):
