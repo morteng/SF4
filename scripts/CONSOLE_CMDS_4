@@ -5,40 +5,31 @@
 # Initialize logging system
 /run scripts/init_logging.py
 
-# Set up environment with proper paths
-/run scripts/setup_test_env.py
+# Set up environment with proper paths and dependencies
+/run scripts/setup_test_env.py --full
 
 # Verify database connection
-/run scripts/verify_db_connection.py
+/run scripts/verify_db_connection.py --test
 
 # Initialize admin user
-/run scripts/startup/init_admin.py
+/run scripts/startup/init_admin.py --test
 
 # Run all tests and verify coverage
-/run scripts/run_tests.py
-/run scripts/generate_coverage_report.py
-/run scripts/verify_tests.py
+/run scripts/run_tests.py --full
+/run scripts/generate_coverage_report.py --verify
+/run scripts/verify_tests.py --full
 
 # Generate deployment checklist
-/run scripts/generate_deployment_checklist.py
+/run scripts/generate_deployment_checklist.py --overwrite
 
 # Finalize documentation
-/run scripts/finalize_docs.py
+/run scripts/finalize_docs.py --overwrite
 
 # Request deployment approval
 /run scripts/request_approval.py
 
-# Verify security settings
-/run scripts/verify_deployment.py --check-security
-
-# Verify environment variables
-/run scripts/verify_deployment.py --check-env
-
-# Verify version file
-/run scripts/verify_deployment.py --check-version
-
-# Run final deployment verification
-/run scripts/verify_deployment.py --full
+# Run comprehensive deployment verification
+/run scripts/verify_deployment.py --full --test
 
 ### CODE END ###
 

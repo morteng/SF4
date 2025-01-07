@@ -178,7 +178,7 @@ def verify_environment():
     
     missing_vars = [var for var in required_vars if var not in os.environ]
     if missing_vars:
-        logging.error(f"Missing environment variables: {', '.join(missing_vars)}")
+        logger.error(f"Missing environment variables: {', '.join(missing_vars)}")
         return False
     return True
 

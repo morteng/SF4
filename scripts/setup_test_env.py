@@ -50,14 +50,26 @@ def setup_test_paths():
 
 def configure_test_environment():
     """Set up test environment variables"""
-    os.environ.update({
-        'FLASK_ENV': 'testing',
-        'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
-        'ADMIN_USERNAME': 'testadmin',
-        'ADMIN_EMAIL': 'test@example.com',
-        'ADMIN_PASSWORD': 'TestPassword123!',
-        'SECRET_KEY': 'TestSecretKey1234567890!@#$%^&*()'
-    })
+    try:
+        # Install required packages
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
+        
+        # Set environment variables
+        os.environ.update({
+            'FLASK_ENV': 'testing',
+            'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
+            'ADMIN_USERNAME': 'testadmin',
+            'ADMIN_EMAIL': 'test@example.com',
+            'ADMIN_PASSWORD': 'TestPassword123!',
+            'SECRET_KEY': 'TestSecretKey1234567890!@#$%^&*()'
+        })
+        
+        # Verify Flask installation
+        import flask
+        return True
+    except Exception as e:
+        logger.error(f"Failed to configure test environment: {str(e)}")
+        return False
 
 if __name__ == "__main__":
     logger = configure_test_logging()
