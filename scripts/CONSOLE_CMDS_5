@@ -36,7 +36,7 @@
 /git commit -m "Cycle 7 completed - Version 1.2.11 deployed"
 /git push origin main
 
-# Deploy to production
+# Deploy to production if granted permission by CEO
 /run scripts/deploy_to_render.py
 
 # Reset and prepare for next cycle

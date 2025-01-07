@@ -576,3 +576,16 @@ Traceback (most recent call last):
   File "C:\github\SF4\.venv\lib\site-packages\flask\ctx.py", line 261, in pop
     raise AssertionError(
 AssertionError: Popped wrong app context. (<flask.ctx.AppContext object at 0x000002555D9DE850> instead of <flask.ctx.AppContext object at 0x000002555D527B80>)
+2025-01-07 08:51:48,655 - ERROR - Test database initialization failed: 'Organization' object has no attribute 'validate'
+2025-01-07 08:51:50,866 - ERROR - Test database initialization failed: 'Organization' object has no attribute 'validate'
+2025-01-07 08:51:50,866 - ERROR - Failed to initialize test database
+2025-01-07 08:51:50,866 - ERROR - Error running version management tests: Popped wrong app context. (<flask.ctx.AppContext object at 0x000002520A44D8B0> instead of <flask.ctx.AppContext object at 0x0000025209F23B80>)
+Traceback (most recent call last):
+  File "C:\github\SF4\scripts\run_version_management_tests.py", line 50, in run_tests
+    return False
+  File "C:\github\SF4\.venv\lib\site-packages\flask\ctx.py", line 277, in __exit__
+    self.pop(exc_value)
+  File "C:\github\SF4\.venv\lib\site-packages\flask\ctx.py", line 261, in pop
+    raise AssertionError(
+AssertionError: Popped wrong app context. (<flask.ctx.AppContext object at 0x000002520A44D8B0> instead of <flask.ctx.AppContext object at 0x0000025209F23B80>)
+2025-01-07 09:01:18,387 - ERROR - Test database initialization failed: 'Organization' object has no attribute 'validate'

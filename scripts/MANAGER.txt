@@ -4,7 +4,7 @@ Very IMPORTANT! Make sure you overwrite files like RELEASE_NOTES.md and VERSION_
 
 Important! Don't print all these "Removed empty directory: .\.venv\Lib\site-packages\mako\ext\__pycache__"-statements when deleting stuff, just delete the folders and summarize at the end. Strive to keep context memory free for more important things. Also, you're running in powershell on a win10 pc.
 
-REQUEST: Please tidy up the root folder, put the files that don't belong there in their appropriate subfolders. I'd also like you to organize the scripts/ folder better.
+REQUEST: Please tidy up the root project folder and scripts folder, put the files that don't belong there in their appropriate subfolders. I'd also like you to organize the scripts/ folder better.
 RULE: Never deploy until all tests pass and all todo items are handled. Only deploy when given permission byCEO.
 
 When you have updated functionality or want to get approval for edits you have made, request that management checks things out by asking nicely in the scripts/REQUESTS.txt file. remember to include all information management needs to review.
