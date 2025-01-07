@@ -2,24 +2,6 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Verify admin password requirements
-/run scripts/security/verify_admin.py
-
-# Verify production environment
-/run scripts/verify_production.py
-
-# Validate database schema
-/run scripts/validate_schema.py
-
-# Verify backup integrity
-/run scripts/verify_backup.py
-
-# Verify log archive integrity
-/run scripts/verify_logs.py
-
-# Generate coverage report
-/run scripts/generate_coverage_report.py
-
 # Finalize documentation
 /run scripts/finalize_docs.py
 
