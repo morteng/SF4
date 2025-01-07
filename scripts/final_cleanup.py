@@ -15,12 +15,12 @@ def cleanup():
     for temp_dir in temp_dirs:
         if os.path.exists(temp_dir):
             shutil.rmtree(temp_dir)
-            print(f"Removed {temp_dir} directory")
+            #print(f"Removed {temp_dir} directory")
 
     # Remove .pyc files
     for pyc_file in Path('.').rglob('*.pyc'):
         pyc_file.unlink()
-        print(f"Removed {pyc_file}")
+        #print(f"Removed {pyc_file}")
 
     # Remove empty directories
     for root, dirs, files in os.walk('.', topdown=False):
