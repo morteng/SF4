@@ -20,6 +20,11 @@ if project_root not in sys.path:
 def update_release_notes():
     """Update release notes with current version information"""
     try:
+        # Add project root to Python path
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).parent.parent))
+        
         from version import __version__
         
         with open('RELEASE_NOTES.md', 'r') as f:
