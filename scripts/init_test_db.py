@@ -16,24 +16,23 @@ logging.basicConfig(
 )
 
 def init_test_db():
-    """Initialize a fresh test database with proper cleanup"""
+    """Initialize test database with comprehensive validation"""
     try:
         app = create_app('testing')
         
-        # Ensure proper application context
         with app.app_context():
-            # Initialize extensions if not already initialized
+            # Initialize extensions
             if 'sqlalchemy' not in app.extensions:
                 db.init_app(app)
                 
-            # Ensure clean state
+            # Clean existing data
             try:
                 db.drop_all()
             except Exception as e:
                 logging.warning(f"Could not drop all tables: {str(e)}")
                 db.session.rollback()
             
-            # Create new tables
+            # Create schema
             db.create_all()
             
             # Create test data
@@ -51,15 +50,15 @@ def init_test_db():
                 open_for_applications=True
             )
             
-            # Establish relationships
+            # Set relationships
             stipend.tags.extend([tag1, tag2])
             stipend.organization = org
             
-            # Add and commit
+            # Commit data
             db.session.add_all([org, tag1, tag2, stipend])
             db.session.commit()
             
-            # Verify data
+            # Verify data integrity
             assert Organization.query.count() == 1
             assert Tag.query.count() == 2
             assert Stipend.query.count() == 1
@@ -72,7 +71,6 @@ def init_test_db():
         db.session.rollback()
         return False
     finally:
-        # Ensure proper cleanup
         if 'sqlalchemy' in app.extensions:
             db.session.remove()
 

@@ -30,34 +30,26 @@ def configure_logging():
 LOG_FILE = configure_logging()
 
 def validate_db_connection(db_path: str) -> bool:
-    """Validate database connection with retry logic and detailed logging"""
+    """Validate database connection with enhanced error handling"""
     try:
-        # Convert Windows paths to forward slashes and handle relative paths
+        # Convert Windows paths and handle relative paths
         db_path = str(Path(db_path).absolute()).replace('\\', '/')
-        max_retries = 3
-        retry_delay = 1  # seconds
         
-        # Test for invalid path
-        if not db_path or not isinstance(db_path, str):
-            logging.error("Invalid database path")
-            return False
-            
-        # Add check for .env configuration
+        # Check if database URI is configured
         if not os.getenv('SQLALCHEMY_DATABASE_URI'):
             logging.error("Database URI not configured in .env")
             return False
             
-        # Test for non-existent file
-        if not db_path == ":memory:" and not os.path.exists(db_path):
-            logging.error(f"Database file does not exist: {db_path}")
-            return False
+        # Test connection with retries
+        max_retries = 3
+        retry_delay = 1
         
         for attempt in range(max_retries):
             try:
                 conn = sqlite3.connect(db_path)
                 cursor = conn.cursor()
                 
-                # Verify basic database operations
+                # Verify basic operations
                 cursor.execute("PRAGMA foreign_keys = ON")
                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
                 tables = cursor.fetchall()
@@ -69,15 +61,16 @@ def validate_db_connection(db_path: str) -> bool:
                 cursor.execute("SELECT 1")
                 cursor.close()
                 conn.close()
-                logging.info(f"Database connection successful to {db_path}")
                 return True
+                
             except sqlite3.Error as e:
                 if attempt == max_retries - 1:
                     logging.error(f"Database connection failed after {max_retries} attempts: {str(e)}")
                     return False
-                logging.warning(f"Database connection attempt {attempt + 1} failed, retrying in {retry_delay}s...")
                 time.sleep(retry_delay)
+                
         return False
+        
     except Exception as e:
         logging.error(f"Unexpected error during database connection: {str(e)}")
         return False
