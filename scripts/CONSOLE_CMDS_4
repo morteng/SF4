@@ -2,20 +2,22 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize logging system first
+# Initialize logging system
 /run scripts/init_logging.py
 
-# Set up proper Python paths
+# Set up environment with proper paths
 /run scripts/setup_test_env.py
 
 # Verify database connection
 /run scripts/verify_db_connection.py
 
-# Verify admin user setup
+# Initialize admin user
 /run scripts/startup/init_admin.py
 
-# Verify test coverage
+# Run all tests and verify coverage
+/run scripts/run_tests.py
 /run scripts/generate_coverage_report.py
+/run scripts/verify_tests.py
 
 # Verify deployment configuration
 /run scripts/verify_deployment.py --full
@@ -28,6 +30,15 @@
 
 # Request deployment approval
 /run scripts/request_approval.py
+
+# Verify security settings
+/run scripts/verify_deployment.py --check-security
+
+# Verify environment variables
+/run scripts/verify_deployment.py --check-env
+
+# Verify version file
+/run scripts/verify_deployment.py --check-version
 
 ### CODE END ###
 

@@ -16,7 +16,13 @@ def configure_logger():
 
 def request_approval():
     """Request deployment approval from management"""
-    logger = configure_logger()
+    logger = logging.getLogger('approval')
+    if not logger.handlers:
+        handler = logging.FileHandler('logs/approval.log')
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
     try:
         with open('scripts/REQUESTS.txt', 'a') as f:
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
