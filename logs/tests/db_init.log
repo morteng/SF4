@@ -494,3 +494,14 @@ with app.app_context(). See the documentation for more information.
 2025-01-07 01:11:36,205 - INFO - Test database initialized successfully
 2025-01-07 01:11:36,224 - ERROR - Test database not found at instance/test.db
 2025-01-07 01:11:36,225 - ERROR - Test database verification failed
+2025-01-07 01:46:09,286 - INFO - Test database initialized successfully
+2025-01-07 01:46:19,287 - INFO - Database connection successful to C:/github/SF4/instance/stipend.db
+2025-01-07 01:46:19,348 - INFO - Test database initialized successfully
+2025-01-07 01:46:19,368 - ERROR - Test database not found at instance/test.db
+2025-01-07 01:46:19,368 - ERROR - Test database verification failed
+2025-01-07 01:49:35,739 - INFO - Test database initialized successfully
+2025-01-07 01:49:45,550 - INFO - Test database initialized successfully
+2025-01-07 01:49:45,551 - INFO - Database connection successful to C:/github/SF4/instance/stipend.db
+2025-01-07 01:49:45,590 - INFO - Test database initialized successfully
+2025-01-07 01:49:45,610 - ERROR - Test database not found at instance/test.db
+2025-01-07 01:49:45,610 - ERROR - Test database verification failed
