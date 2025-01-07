@@ -2,8 +2,8 @@
 # IMPORTANT! ONLY edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Create secure database backup
-/run scripts/create_backup.py --timestamped
+# Create database backup
+/run scripts/create_backup.py
 
 # Verify backup integrity
 /run scripts/verify_backup.py
@@ -29,9 +29,6 @@
 # Update requirements
 /run scripts/update_requirements.py
 
-# Print current timestamp
-/run scripts/print_datetime.py
-
 # Perform final cleanup
 /run scripts/final_cleanup.py
 
@@ -51,7 +48,7 @@
 
 
 # Write a new devlog
-/code remove previous DEVLOG.txt entry and write a new one based on this cocde cycle. Update TODO.txt if needed.
+/code remove previous DEVLOG.txt entry and write a new one based on this code cycle. Update TODO.txt if needed.
 
 # Reset and start new cycle
 /reset
