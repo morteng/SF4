@@ -6,6 +6,11 @@
 
 ---
 
+### **Critical Priority**
+- [ ] Fix deployment verification logger error
+
+---
+
 ### **High Priority**
 - [ ] Improve test coverage to meet 80% target (current: 41%)
 
