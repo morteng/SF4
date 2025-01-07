@@ -24,6 +24,7 @@ if scripts_dir not in sys.path:
 
 def verify_security_settings():
     """Verify security-related settings with enhanced checks"""
+    global logger
     logger = logging.getLogger(__name__)
     if not logger.handlers:
         handler = logging.StreamHandler()

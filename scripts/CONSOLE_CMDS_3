@@ -5,7 +5,7 @@
 # Initialize logging system
 /run scripts/init_logging.py
 
-# Set up test environment
+# Set up test environment with proper paths
 /run scripts/setup_test_env.py
 
 # Initialize test database
@@ -17,7 +17,7 @@
 # Verify database connection
 /run scripts/verify_db_connection.py
 
-# Run all test suites
+# Run core test suites
 /run scripts/run_tests.py
 
 # Generate coverage report
@@ -26,8 +26,14 @@
 # Verify test results
 /run scripts/verify_tests.py
 
-# Run deployment verification
-/run scripts/verify_deployment.py --full
+# Run security verification
+/run scripts/verify_deployment.py --check-security
+
+# Run environment verification
+/run scripts/verify_deployment.py --check-env
+
+# Run version verification
+/run scripts/verify_deployment.py --check-version
 
 ### CODE END ###
 
