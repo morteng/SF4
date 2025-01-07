@@ -18,8 +18,14 @@
 # Run comprehensive deployment verification
 /run scripts/verify_deployment.py --full --check-security
 
+# Verify environment variables
+/run scripts/verify_deployment.py --check-env
+
+# Verify version compatibility
+/run scripts/verify_deployment.py --check-version
+
 # Final deployment to Render
-/run scripts/deploy_to_render.py --verify
+/run scripts/deploy_to_render.py
 
 ### CODE END ###
 

@@ -18,8 +18,26 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-# Configure logger at module level
+# Configure logger at module level before any functions
 logger = configure_logger()
+
+def verify_deployment_checks():
+    """Run all deployment verification checks"""
+    try:
+        from scripts.verify_deployment import verify_deployment
+        if not verify_deployment('--check-security'):
+            logger.error("Security verification failed")
+            return False
+        if not verify_deployment('--check-env'):
+            logger.error("Environment verification failed")
+            return False
+        if not verify_deployment('--check-version'):
+            logger.error("Version verification failed")
+            return False
+        return True
+    except Exception as e:
+        logger.error(f"Deployment verification failed: {str(e)}")
+        return False
 
 def deploy_to_render():
     """Deploy the application to render.com"""
