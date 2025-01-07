@@ -23,8 +23,14 @@
 # Create timestamped backup
 /run scripts/create_backup.py --timestamped
 
+# Verify backup integrity
+/run scripts/verify_backup.py
+
 # Archive logs
 /run scripts/archive_logs.py
+
+# Verify log archive integrity
+/run scripts/verify_logs.py
 
 # Update requirements
 /run scripts/update_requirements.py
@@ -37,6 +43,9 @@
 
 # Verify deployment readiness
 /run scripts/verify_deployment.py
+
+# Request deployment approval
+/run scripts/request_approval.py
 
 ### CODE END ###
 
