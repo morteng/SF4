@@ -6,39 +6,39 @@
 /run scripts/init_logging.py
 
 # Create final backup
-/run scripts/create_backup.py
+/run scripts/create_backup.py --timestamped
 
 # Verify backup integrity
-/run scripts/verify_backup.py
+/run scripts/verify_backup.py --full
 
 # Archive logs
-/run scripts/archive_logs.py
+/run scripts/archive_logs.py --force
 
 # Verify log archives
-/run scripts/verify_logs.py
+/run scripts/verify_logs.py --strict
 
 # Verify deployment configuration
-/run scripts/verify_deployment.py
+/run scripts/verify_deployment.py --full
 
 # Generate final documentation
-/run scripts/finalize_docs.py
+/run scripts/finalize_docs.py --overwrite
 
 # Push changes to GitHub
 git add .
-git commit -m "Final deployment preparation"
+git commit -m "Final deployment preparation v1.2.11"
 git push origin main
 
 # Deploy to production
-/run scripts/deploy_to_render.py
+/run scripts/deploy_to_render.py --confirm
 
 # Verify successful deployment
-/run scripts/verify_deployment.py
+/run scripts/verify_deployment.py --post-deploy
 
 # Perform final cleanup
-/run scripts/final_cleanup.py
+/run scripts/final_cleanup.py --all
 
 # End development cycle
-/run scripts/end_cycle.py
+/run scripts/end_cycle.py --log
 
 # Reset and start new cycle
 /reset

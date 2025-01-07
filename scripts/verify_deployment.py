@@ -25,6 +25,12 @@ if scripts_dir not in sys.path:
 def verify_security_settings():
     """Verify security-related settings with enhanced checks"""
     logger = logging.getLogger(__name__)
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
     secret_key = os.getenv('SECRET_KEY')
     
     # Verify version file

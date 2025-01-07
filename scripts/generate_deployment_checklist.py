@@ -9,6 +9,10 @@ def generate_checklist():
         # Create deployment directory if it doesn't exist
         Path('deployment').mkdir(exist_ok=True)
         
+        # Get version info
+        from scripts.version import get_version
+        version = get_version()
+        
         with open('deployment/DEPLOYMENT_CHECKLIST.md', 'w') as f:
             logger.info("Generating deployment checklist")
             # Add version and timestamp
