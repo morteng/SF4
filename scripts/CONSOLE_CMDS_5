@@ -17,15 +17,6 @@
 # Print current timestamp for deployment
 /run scripts/print_datetime.py
 
-# Update environment configuration files
-/update .env.example
-/update .gitignore
-
-# Update management documentation
-/update scripts/REQUESTS.txt
-/update scripts/CEO.txt
-/update scripts/MANAGER.txt
-
 # Perform final cleanup
 /run scripts/final_cleanup.py --deep
 
@@ -37,11 +28,9 @@
 # 2. Timestamped database backup created
 # 3. Logs archived with compression
 # 4. Deployment verification completed
-# 5. Environment files updated
-# 6. Management documentation updated
-# 7. Final cleanup performed
-# 8. Ready for deployment
-# 9. Cycle ended successfully
+# 5. Final cleanup performed
+# 6. Ready for deployment
+# 7. Cycle ended successfully
 ### CODE END ###
 
 # Push changes to version control
