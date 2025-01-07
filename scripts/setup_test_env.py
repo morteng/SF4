@@ -1,6 +1,7 @@
 import os
 import sys
 import logging
+import subprocess
 from pathlib import Path
 
 def configure_test_logging():
