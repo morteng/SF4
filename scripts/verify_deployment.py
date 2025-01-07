@@ -41,7 +41,11 @@ def verify_security_settings():
             if not check:
                 logger.error(f"SECRET_KEY must contain at least one {requirement}")
                 return False
-    secret_key = os.getenv('SECRET_KEY')
+                
+        return True
+    except Exception as e:
+        logger.error(f"Security verification failed: {str(e)}")
+        return False
     
     # Verify version file
     from scripts.version import validate_version, get_version
