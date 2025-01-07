@@ -2,13 +2,19 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Verify security settings
+# Verify admin user functionality
+/run scripts/security/verify_admin.py
+
+# Verify database connection
+/run scripts/version.py test-connection instance/stipend.db
+
+# Verify deployment configuration
 /run scripts/verify_deployment.py
 
-# Verify backup integrity
+# Verify backup system
 /run scripts/verify_backup.py
 
-# Verify log archives
+# Verify log system
 /run scripts/verify_logs.py
 
 # Finalize documentation
