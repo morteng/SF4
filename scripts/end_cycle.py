@@ -23,7 +23,7 @@ def calculate_cycle_time(log: bool = False):
         except (IOError, ValueError) as e:
             print(f"Error reading cycle file: {str(e)}")
             return False
-            
+            # update this to also output current datetime for reference. AI!
         duration = datetime.now() - start_time
         result = f"Cycle ends, time to complete: {str(duration)}"
         

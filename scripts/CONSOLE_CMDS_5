@@ -48,7 +48,7 @@
 
 
 # Write a new devlog
-/code remove previous DEVLOG.txt entry and write a new one based on this code cycle. Update TODO.txt if needed.
+/code remove previous DEVLOG.md entry and write a new one based on this code cycle. Update TODO if needed.
 
 # Reset and start new cycle
 /reset
