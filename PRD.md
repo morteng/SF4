@@ -16,7 +16,7 @@ This document outlines the objectives, target audience, and key features for the
 6. **Semantic Version Management**: Follows semantic versioning guidelines with a clear branching strategy.
 
 ## 4. Functional Requirements
-1. **Real-Time Updates**: Integrate HTMX (or similar technology) to fetch updated stipend data without full page reloads.  
+1. **Real-Time Updates**: Integrate HTMX to fetch updated stipend data without full page reloads.  
 2. **Database Management**: Utilize SQLAlchemy for ORM and Alembic for schema migrations.  
 3. **Versioning**: Employ semantic versioning (MAJOR.MINOR.PATCH) across releases.  
 4. **Backup & Log Archiving**: Automated database backups and log management to prevent data loss.  
