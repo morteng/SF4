@@ -2,7 +2,7 @@
 # IMPORTANT! ONLY edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize logging system first
+# Initialize logging system
 /run scripts/init_logging.py
 
 # Create final backup
@@ -25,7 +25,7 @@
 
 # Push changes to GitHub
 git add .
-git commit -m "Final deployment preparation v1.2.11"
+git commit -m "Final deployment v1.2.11"
 git push origin main
 
 # Deploy to production
