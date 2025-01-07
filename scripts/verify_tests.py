@@ -25,13 +25,19 @@ def verify_tests():
         logger.setLevel(logging.INFO)
     
     try:
+        # Configure logger
+        global logger
+        logger = configure_logger()
+        
         # Add project root to Python path
         root_dir = Path(__file__).parent.parent
         sys.path.append(str(root_dir))
         
         # Verify test environment
         from scripts.setup_test_env import setup_test_paths
-        setup_test_paths()
+        if not setup_test_paths():
+            logger.error("Failed to setup test paths")
+            return False
         
         # Run core test suites
         test_suites = [
