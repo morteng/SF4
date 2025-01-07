@@ -1,4 +1,5 @@
 import sys
+import logging
 from datetime import datetime
 
 def generate_checklist():
