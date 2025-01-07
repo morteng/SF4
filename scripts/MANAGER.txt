@@ -1,39 +1,50 @@
-HI! Manager here!
+### **Instructions**
 
-If you want to create folders, or move files to folders or other operations like this, write a temporary script that does it and run it using /run in the appropriate console command step.
-
-PRIORITY ULTRA: at application startup, import default admin user from .env file if there is no admin user registered in database. I have added a lowercase letter and a special character to default admin password in .env and .env.example. It is now: ADMIN_PASSWORD=Aa1234567812345678? so should be ok.
-
-IMPORTANT! Make sure you overwrite files like RELEASE_NOTES.md and VERSION_HISTORY.md when updating them, so they don't grow indefinetly.
-
-REQUEST: Please tidy up the scripts folder, put the scripts in their appropriate subfolders. 
-
-RULE: Never deploy until all tests pass and all todo items are handled. Only deploy when given permission by CEO.
-
-IMPORTANT! Ensure we read in values from .env file for database name (it's defined there as SQLALCHEMY_DATABASE_URI=sqlite:///instance/site.db) and other variables like admin user name, password and email. you can see the info in .env file in .env.example file (the actual .env file is hidden from edit view for you because it is in .gitignore file).
-
-IMPORTANT! You cannot run python code directly with console commands, instead write python files in appropriate folders and then execute them with /run your_python_file.py in the appropriate code block. Take note of this. NEVER run python code directly in code sections of coding cycle.
-
-Key Rules:
-1. Run minimal tests per cycle
-2. Work on one feature at a time  
-3. Avoid debug data dumps
-4. Never use manual input commands
-5. Keep output concise
-6. Verify all changes before deployment
-7. Maintain comprehensive documentation
-
-
-
-I Have updated secret key in .env (and.env.example) to make it longer.
-
-
-
-Request: We should also implement some sort of production system where we make the actual server on https://render.com/ pull the CEO approved version of the site go live. Please implement such a system, ask about accounts and verification and anything else you need here. I log in to render.com web services using github login, so we should be able to control it from the cli somehow.
-
-And make sure we do testing on github and proper handling of all that stuff.
-
-Regarding backups: delete older backups and ensure we're backing up site.db properly
+**General Guidelines:**
+1. **Folder and File Operations:** Use temporary scripts to create/move files or folders. Execute them with `/run your_script.py` in the relevant console command step.
+2. **Python Execution:** Write Python scripts in proper folders and execute them with `/run your_script.py`. Never run Python code directly in console commands.
+3. **Deployment:** Deploy only when:
+   - All tests pass.
+   - All TODO items are resolved.
+   - Explicit CEO approval is received.
+4. **Testing:** Perform minimal tests per cycle and maintain concise outputs. No debug data dumps or manual inputs.
 
 ---
-ANSWER: Go ahead!
+
+### **Priorities**
+
+1. **Ultra Priority (Critical):**
+   - At application startup, automatically import the default admin user from `.env` if no admin user exists in the database.  
+   - The updated `ADMIN_PASSWORD` in `.env` and `.env.example` is:  
+     `ADMIN_PASSWORD=Aa1234567812345678?`
+
+2. **High Priority:**
+   - Remove all references to `stipends.db`. Ensure variables like `admin`, `database name`, and other configurations are read from `.env`.  
+     Refer to `.env.example` for structure:  
+     `SQLALCHEMY_DATABASE_URI=sqlite:///instance/site.db`.
+   - Implement a system for the production server (on [Render](https://render.com)) to pull the CEO-approved version of the site and go live.  
+     Use CLI for Render control (login via GitHub).
+
+---
+
+### **Requests**
+1. **File Maintenance:**
+   - Overwrite files like `RELEASE_NOTES.md` and `VERSION_HISTORY.md` during updates to prevent indefinite growth.
+   - Organize the `scripts` folder, moving files into appropriate subfolders.
+   - Handle backups by:
+     - Deleting older backups.
+     - Ensuring `site.db` is backed up correctly.
+
+2. **Documentation and Testing:**
+   - Maintain comprehensive documentation. Update `README.md`, `DESIGN.md`, and other relevant files per cycle.
+   - Ensure proper GitHub testing integration and handle all related configurations effectively.
+
+---
+
+### **Rules**
+- Work on **one feature at a time**.
+- **Verify all changes** before deployment.
+- Keep **outputs concise** and avoid unnecessary logs or inputs.
+- Ensure all configuration values (admin credentials, database name, etc.) are dynamically loaded from `.env`.
+
+---
