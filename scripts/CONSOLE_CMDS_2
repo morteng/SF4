@@ -4,25 +4,28 @@
 
 ### CODE START ###
 # Initialize fresh test database with validation
-/run scripts/init_test_db.py
+/run scripts/database/init_test_db.py
+
+# Verify admin user exists
+/run scripts/security/verify_admin.py
 
 # Verify production environment settings
-/run scripts/verify_production.py
+/run scripts/deployment/verify_production.py
 
 # Create timestamped database backup
-/run scripts/create_backup.py --timestamped
+/run scripts/database/create_backup.py --timestamped
 
 # Verify deployment readiness with enhanced checks
-/run scripts/verify_deployment.py
+/run scripts/deployment/verify_deployment.py
 
 # Run comprehensive test suite
-/run scripts/run_tests.py
+/run scripts/tests/run_tests.py
 
 # Verify backup integrity
-/run scripts/verify_backup.py
+/run scripts/database/verify_backup.py
 
 # Verify log archive integrity
-/run scripts/verify_logs.py
+/run scripts/deployment/verify_logs.py
 
 ### CODE END ###
 
