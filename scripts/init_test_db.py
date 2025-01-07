@@ -20,7 +20,11 @@ def init_test_db():
     app = create_app('testing')
     
     try:
-        with app.app_context():
+        # Ensure proper application context
+        ctx = app.app_context()
+        ctx.push()
+        
+        try:
             # Initialize extensions
             if 'sqlalchemy' not in app.extensions:
                 db.init_app(app)

@@ -7,11 +7,17 @@ from scripts.version import validate_db_connection
 
 def test_db_connection():
     """Test database connection with various scenarios"""
+    app = create_app('testing')
+    
     logging.basicConfig(
         level=logging.DEBUG,
         format='%(asctime)s - %(levelname)s - %(message)s'
     )
     logger = logging.getLogger(__name__)
+    
+    # Ensure proper application context
+    ctx = app.app_context()
+    ctx.push()
     
     test_cases = [
         ('instance/stipend.db', True),
