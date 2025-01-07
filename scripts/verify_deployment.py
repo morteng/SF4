@@ -17,7 +17,6 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 def verify_security_settings():
     """Verify security-related settings with enhanced checks"""
-    logger = configure_logger()
     secret_key = os.getenv('SECRET_KEY')
     
     # Verify version file
@@ -65,7 +64,6 @@ def verify_security_settings():
 
 def verify_deployment():
     """Verify all deployment requirements are met"""
-    logger = configure_logger()
     
     try:
         # Verify security settings first
