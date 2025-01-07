@@ -16,13 +16,7 @@
 /run scripts/verify_db_connection.py --full
 
 # Run comprehensive deployment verification
-/run scripts/verify_deployment.py --full --check-security
-
-# Verify environment variables
-/run scripts/verify_deployment.py --check-env
-
-# Verify version compatibility
-/run scripts/verify_deployment.py --check-version
+/run scripts/verify_deployment.py --full
 
 # Final deployment to Render
 /run scripts/deploy_to_render.py

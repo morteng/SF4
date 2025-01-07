@@ -3,19 +3,13 @@ import os
 import logging
 from pathlib import Path
 
-def configure_logger():
-    """Configure the logger for deployment verification"""
-    logger = logging.getLogger(__name__)
-    if not logger.handlers:
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
-    return logger
-
 # Configure logger at module level
-logger = configure_logger()
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 # Add project root to Python path
 project_root = str(Path(__file__).parent.parent)
