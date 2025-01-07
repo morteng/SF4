@@ -72,11 +72,14 @@ def verify_deployment():
         # Check required files exist
         required_files = [
             'DEPLOYMENT_CHECKLIST.md',
-            'RELEASE_NOTES.md',
+            'RELEASE_NOTES.md', 
             'VERSION_HISTORY.md',
             'requirements.txt',
             'migrations/alembic.ini'
         ]
+        
+        # Initialize logger
+        logger = logging.getLogger(__name__)
         
         # Check for latest backup or any timestamped backup
         backup_files = list(Path('backups').glob('stipend_*.db'))

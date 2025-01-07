@@ -2,6 +2,9 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
+# Initialize fresh test database
+/run scripts/init_test_db.py
+
 # Verify production environment settings
 /run scripts/verify_production.py
 
@@ -41,9 +44,6 @@
 
 # Verify deployment readiness
 /run scripts/verify_deployment.py
-
-# Deploy to render.com
-/run scripts/deploy_to_render.py
 
 ### CODE END ###
 

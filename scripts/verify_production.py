@@ -82,7 +82,21 @@ def verify_security_settings():
         admin_password = os.getenv('ADMIN_PASSWORD', '')
         if len(admin_password) < 12:
             logger.error("ADMIN_PASSWORD must be at least 12 characters long")
+            logger.info("Please update ADMIN_PASSWORD in .env file")
             return False
+            
+        # Verify password complexity
+        complexity_checks = [
+            (any(c.isupper() for c in admin_password), "uppercase letter"),
+            (any(c.islower() for c in admin_password), "lowercase letter"),
+            (any(c.isdigit() for c in admin_password), "digit"),
+            (any(c in '!@#$%^&*()_+-=[]{};:,.<>?/' for c in admin_password), "special character")
+        ]
+        
+        for check, requirement in complexity_checks:
+            if not check:
+                logger.error(f"ADMIN_PASSWORD must contain at least one {requirement}")
+                return False
             
         # Verify SECRET_KEY complexity
         complexity_checks = [
