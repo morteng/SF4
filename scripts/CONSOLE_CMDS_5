@@ -5,8 +5,14 @@
 # Create secure database backup
 /run scripts/create_backup.py --timestamped
 
+# Verify backup integrity
+/run scripts/verify_backup.py
+
 # Archive logs
 /run scripts/archive_logs.py
+
+# Verify log archive integrity
+/run scripts/verify_logs.py
 
 # Finalize documentation
 /run scripts/finalize_docs.py
@@ -18,7 +24,7 @@
 /run scripts/verify_deployment.py
 
 # Request deployment approval
-/run scripts/request_deployment_approval.py
+/run scripts/request_approval.py
 
 # Update requirements
 /run scripts/update_requirements.py
@@ -33,6 +39,9 @@
 /git add .
 /git commit -m "Cycle 7 completed - Version 1.2.11 deployed"
 /git push origin main
+
+# Deploy to Render (only if approved)
+/run scripts/deploy_to_render.py
 
 # End cycle
 /run scripts/end_cycle.py
