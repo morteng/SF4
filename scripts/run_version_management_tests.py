@@ -3,10 +3,13 @@ import os
 import logging
 import pytest
 from pathlib import Path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Add project root to Python path
+sys.path.append(str(Path(__file__).parent.parent))
 
 from app.factory import create_app
-from init_test_db import init_test_db
+from app.extensions import db
+from scripts.init_test_db import init_test_db
 from scripts.version import (
     validate_db_connection,
     bump_version,
@@ -14,8 +17,6 @@ from scripts.version import (
     create_db_backup,
     validate_production_environment
 )
-from app.extensions import db
-from scripts.verify_test_db import verify_test_db
 
 def configure_logging():
     """Configure logging for version management tests"""

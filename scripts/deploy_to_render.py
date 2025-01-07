@@ -1,6 +1,11 @@
 import os
 import subprocess
 import logging
+import sys
+from pathlib import Path
+
+# Add scripts directory to Python path
+sys.path.append(str(Path(__file__).parent.parent))
 
 def deploy_to_render():
     """Deploy the application to render.com"""
@@ -12,22 +17,25 @@ def deploy_to_render():
     
     try:
         # Verify deployment checklist
-        from scripts.deployment.checklist import check_deployment
-        if not check_deployment():
-            logger.error("Deployment checklist failed")
+        from scripts.verify_deployment import verify_deployment
+        if not verify_deployment():
+            logger.error("Deployment verification failed")
             return False
             
         # Verify version file
-        from scripts.validate_version import validate_version_file
-        if not validate_version_file():
-            logger.error("Version file validation failed")
+        from scripts.version import validate_version
+        if not validate_version():
+            logger.error("Version validation failed")
             return False
             
         # Verify git remote exists
-        remotes = subprocess.run(["git", "remote"], capture_output=True).stdout.decode()
+        remotes = subprocess.run(["git", "remote"], capture_output=True, text=True).stdout
         if "render" not in remotes:
             logger.info("Adding render remote")
-            subprocess.run(["git", "remote", "add", "render", "https://github.com/morteng/SF4"], check=True)
+            subprocess.run(
+                ["git", "remote", "add", "render", "https://github.com/morteng/SF4"], 
+                check=True
+            )
         
         # Ensure we are on the correct branch
         logger.info("Checking out main branch")
@@ -39,24 +47,27 @@ def deploy_to_render():
         
         # Push to render.com
         logger.info("Pushing to render.com")
-        result = subprocess.run(["git", "push", "render", "main"], capture_output=True)
-        if result.returncode != 0:
-            logger.error(f"Push failed: {result.stderr.decode()}")
-            return False
+        result = subprocess.run(
+            ["git", "push", "render", "main"], 
+            capture_output=True, 
+            text=True
+        )
         
+        if result.returncode != 0:
+            logger.error(f"Push failed: {result.stderr}")
+            return False
+            
         logger.info("Deployment to render.com completed successfully.")
         return True
+        
     except subprocess.CalledProcessError as e:
         logger.error(f"Error during deployment: {e}")
         if e.stderr:
-            logger.error(f"Error details: {e.stderr.decode()}")
+            logger.error(f"Error details: {e.stderr}")
         return False
     except Exception as e:
         logger.error(f"Unexpected error: {str(e)}")
         return False
 
 if __name__ == "__main__":
-    deploy_to_render()
-
-if __name__ == "__main__":
-    deploy_to_render()
+    sys.exit(0 if deploy_to_render() else 1)
