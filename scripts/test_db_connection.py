@@ -2,16 +2,13 @@ import logging
 from scripts.version import validate_db_connection
 
 def test_db_connection():
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(asctime)s - %(levelname)s - %(message)s'
-    )
-    
+    """Test database connection with various scenarios"""
     test_cases = [
         ('instance/stipend.db', True),
         ('nonexistent.db', False),
         ('', False),
-        (None, False)
+        (None, False),
+        ('invalid/path.db', False)
     ]
     
     for db_path, expected in test_cases:
@@ -20,4 +17,8 @@ def test_db_connection():
         logging.info(f"Test passed for {db_path}")
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
     test_db_connection()
