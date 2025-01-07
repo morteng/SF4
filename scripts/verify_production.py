@@ -94,6 +94,19 @@ def verify_security_settings():
         # Verify SECRET_KEY complexity
         complexity_checks = [
             (any(c.isupper() for c in secret_key), "uppercase letter"),
+            (any(c.islower() for c in secret_key), "lowercase letter"),
+            (any(c.isdigit() for c in secret_key), "digit"),
+            (any(c in "!@#$%^&*()_+-=[]{};':,.<>?/" for c in secret_key), "special character")
+        ]
+        
+        for check, requirement in complexity_checks:
+            if not check:
+                logger.error(f"SECRET_KEY must contain at least one {requirement}")
+                return False
+            
+        # Verify SECRET_KEY complexity
+        complexity_checks = [
+            (any(c.isupper() for c in secret_key), "uppercase letter"),
             (any(c.islower() for c in secret_key), "lowercase letter"), 
             (any(c.isdigit() for c in secret_key), "digit"),
             (any(c in "!@#$%^&*()_+-=[]{};':,.<>?/" for c in secret_key), "special character")
