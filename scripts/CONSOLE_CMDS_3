@@ -2,10 +2,10 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize logging system first
+# Initialize logging system
 /run scripts/init_logging.py
 
-# Set up test environment with proper Python paths
+# Set up test environment
 /run scripts/setup_test_env.py
 
 # Initialize test database
@@ -17,10 +17,8 @@
 # Verify database connection
 /run scripts/verify_db_connection.py
 
-# Run core test suites
-/run scripts/run_tests.py tests/models/test_relationships.py
-/run scripts/run_tests.py tests/version_management/test_version.py
-/run scripts/run_tests.py tests/services/test_admin_creation.py
+# Run all test suites
+/run scripts/run_tests.py
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py
@@ -28,7 +26,7 @@
 # Verify test results
 /run scripts/verify_tests.py
 
-# Verify deployment configuration
+# Run deployment verification
 /run scripts/verify_deployment.py --full
 
 ### CODE END ###
