@@ -3,23 +3,14 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize fresh test database
-/run scripts/database/init_test_db.py
+# Verify deployment settings
+/run scripts/verify_deployment.py
 
-# Create default admin user
-/run scripts/startup/create_admin.py
-
-# Verify admin user creation
+# Verify admin user exists
 /run scripts/security/verify_admin.py
 
 # Run security tests
 /run scripts/tests/security_tests.py
-
-# Create database backup
-/run scripts/database/create_backup.py
-
-# Run deployment verification
-/run scripts/deployment/verify_deployment.py
 
 ### CODE END ###
 

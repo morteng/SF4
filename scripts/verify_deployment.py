@@ -3,6 +3,14 @@ import os
 import logging
 from pathlib import Path
 
+# Configure logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
 # Add scripts directory to Python path
 sys.path.append(str(Path(__file__).parent.parent))
 
@@ -15,12 +23,12 @@ def verify_security_settings():
     # Verify version file
     from scripts.version import validate_version, get_version
     if not validate_version(get_version()):
-        logging.error("Version validation failed")
+        logger.error("Version validation failed")
         return False
         
     # Validate SECRET_KEY length and complexity
     if not secret_key or len(secret_key) < 64:
-        logging.error("SECRET_KEY must be at least 64 characters")
+        logger.error("SECRET_KEY must be at least 64 characters")
         return False
         
     # Check for required character types
