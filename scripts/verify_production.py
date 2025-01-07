@@ -79,6 +79,13 @@ def verify_security_settings():
             logger.error("Please generate a new SECRET_KEY with at least 64 characters")
             return False
             
+        # Verify SECRET_KEY rotation
+        if os.path.exists('.secret_key_history'):
+            with open('.secret_key_history') as f:
+                if secret_key in f.read():
+                    logger.error("SECRET_KEY has not been rotated recently")
+                    return False
+            
         # Verify SECRET_KEY complexity
         if not any(c.isupper() for c in secret_key):
             logger.error("SECRET_KEY must contain at least one uppercase letter")

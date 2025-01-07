@@ -48,6 +48,13 @@ def verify_test_db(db_path='instance/test.db'):
                 logging.error(f"Missing required indexes: {', '.join(missing_indexes)}")
                 return False
                 
+            # Verify test data
+            cursor.execute("SELECT COUNT(*) FROM stipend")
+            stipend_count = cursor.fetchone()[0]
+            if stipend_count < 10:
+                logging.error(f"Test data insufficient - only {stipend_count} stipends found")
+                return False
+                
             logging.info(f"Test database verified successfully at {db_path}")
             return True
             

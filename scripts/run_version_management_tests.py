@@ -50,8 +50,12 @@ def run_tests():
             if 'sqlalchemy' not in app.extensions:
                 db.init_app(app)
                 
+            # Initialize and verify test database
             init_test_db()
-            
+            if not verify_test_db():
+                logger.error("Test database verification failed")
+                return False
+                
             # Run tests with coverage
             result = pytest.main([
                 'tests/version_management/',
@@ -59,7 +63,8 @@ def run_tests():
                 '--cov=scripts.version',
                 '--cov-report=term-missing',
                 '--cov-branch',
-                '--durations=10'
+                '--durations=10',
+                '--junitxml=logs/tests/version_management.xml'
             ])
         
         if result == 0:
