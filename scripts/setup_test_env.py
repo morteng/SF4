@@ -3,32 +3,40 @@ import sys
 import logging
 from pathlib import Path
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('logs/tests.log'),
-        logging.StreamHandler()
-    ]
-)
+def configure_test_logging():
+    """Configure logging for tests"""
+    logger = logging.getLogger('tests')
+    if not logger.handlers:
+        handler = logging.FileHandler('logs/tests.log')
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+    return logger
 
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent)
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
-    
-# Add app directory to Python path
-app_dir = str(Path(__file__).parent.parent / 'app')
-if app_dir not in sys.path:
-    sys.path.insert(0, app_dir)
+def setup_test_paths():
+    """Configure Python paths for testing"""
+    project_root = str(Path(__file__).parent.parent)
+    if project_root not in sys.path:
+        sys.path.insert(0, project_root)
+        
+    app_dir = str(Path(__file__).parent.parent / 'app')
+    if app_dir not in sys.path:
+        sys.path.insert(0, app_dir)
 
-# Set test environment variables
-os.environ['FLASK_ENV'] = 'testing'
-os.environ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-os.environ['ADMIN_USERNAME'] = 'testadmin'
-os.environ['ADMIN_EMAIL'] = 'test@example.com'
-os.environ['ADMIN_PASSWORD'] = 'TestPassword123!'
-os.environ['SECRET_KEY'] = 'TestSecretKey1234567890!@#$%^&*()'
+def configure_test_environment():
+    """Set up test environment variables"""
+    os.environ.update({
+        'FLASK_ENV': 'testing',
+        'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
+        'ADMIN_USERNAME': 'testadmin',
+        'ADMIN_EMAIL': 'test@example.com',
+        'ADMIN_PASSWORD': 'TestPassword123!',
+        'SECRET_KEY': 'TestSecretKey1234567890!@#$%^&*()'
+    })
 
-print("Test environment configured successfully")
+if __name__ == "__main__":
+    logger = configure_test_logging()
+    setup_test_paths()
+    configure_test_environment()
+    logger.info("Test environment configured successfully")

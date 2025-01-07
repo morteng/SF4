@@ -1,9 +1,23 @@
 import sys
 import subprocess
+import logging
 from pathlib import Path
+
+def configure_test_logging():
+    """Configure logging for test verification"""
+    logger = logging.getLogger('test_verification')
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+    return logger
 
 def verify_tests():
     """Verify all tests pass with proper configuration"""
+    logger = configure_test_logging()
+    
     try:
         # Add project root to Python path
         root_dir = Path(__file__).parent.parent
@@ -16,6 +30,7 @@ def verify_tests():
         ]
         
         for suite in test_suites:
+            logger.info(f"Running test suite: {suite}")
             result = subprocess.run(
                 ['pytest', '-v', suite],
                 capture_output=True,
@@ -23,15 +38,14 @@ def verify_tests():
             )
             
             if result.returncode != 0:
-                print(f"Test suite failed: {suite}")
-                print(result.stdout)
-                print(result.stderr)
+                logger.error(f"Test suite failed: {suite}")
+                logger.error(result.stderr)
                 return False
                 
-        print("All test suites passed")
+        logger.info("All test suites passed")
         return True
     except Exception as e:
-        print(f"Test verification failed: {str(e)}")
+        logger.error(f"Test verification failed: {str(e)}")
         return False
 
 if __name__ == "__main__":
