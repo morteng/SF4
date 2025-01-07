@@ -18,6 +18,8 @@
 /run scripts/finalize_docs.py
 
 # Push changes to GitHub
+git add .
+git commit -m "Final deployment preparation"
 git push origin main
 
 # Deploy to production
