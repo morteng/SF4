@@ -69,73 +69,77 @@ def validate_db_connection(db_path: str) -> bool:
 
 def main() -> None:
     """Main entry point for version management CLI"""
-    import argparse
-    parser = argparse.ArgumentParser(description='Version management utilities')
-    subparsers = parser.add_subparsers(dest='command', required=True)
+    try:
+        import argparse
+        parser = argparse.ArgumentParser(description='Version management utilities')
+        subparsers = parser.add_subparsers(dest='command', required=True)
 
-    # Add check-version command
-    check_parser = subparsers.add_parser('check-version', help='Check current version')
+        # Add check-version command
+        check_parser = subparsers.add_parser('check-version', help='Check current version')
 
-    # Test connection command
-    test_conn_parser = subparsers.add_parser('test-connection', help='Test database connection')
-    test_conn_parser.add_argument('db_path', help='Path to database file')
+        # Test connection command
+        test_conn_parser = subparsers.add_parser('test-connection', help='Test database connection')
+        test_conn_parser.add_argument('db_path', help='Path to database file')
 
-    # Backup command
-    backup_parser = subparsers.add_parser('backup', help='Create database backup')
-    backup_parser.add_argument('source_db', help='Source database path')
-    backup_parser.add_argument('backup_path', help='Backup destination path')
+        # Backup command
+        backup_parser = subparsers.add_parser('backup', help='Create database backup')
+        backup_parser.add_argument('source_db', help='Source database path')
+        backup_parser.add_argument('backup_path', help='Backup destination path')
 
-    # Environment validation command
-    env_parser = subparsers.add_parser('validate-env', help='Validate production environment')
-    
-    # Log archiving command
-    archive_parser = subparsers.add_parser('archive-logs', help='Archive logs')
-    archive_parser.add_argument('--force', action='store_true', help='Force archive even if empty')
+        # Environment validation command
+        env_parser = subparsers.add_parser('validate-env', help='Validate production environment')
+        
+        # Log archiving command
+        archive_parser = subparsers.add_parser('archive-logs', help='Archive logs')
+        archive_parser.add_argument('--force', action='store_true', help='Force archive even if empty')
 
-    # Release notes command
-    release_notes_parser = subparsers.add_parser('update-release-notes', help='Update release notes')
-    release_notes_parser.add_argument('--version', help='Specify version number')
-    
-    # Documentation command
-    docs_parser = subparsers.add_parser('update-docs', help='Update documentation')
-    docs_parser.add_argument('--version', help='Specify version number')
-    
-    # Deployment verification command
-    deploy_parser = subparsers.add_parser('verify-deployment', help='Verify deployment')
-    deploy_parser.add_argument('--full', action='store_true', help='Run full verification')
+        # Release notes command
+        release_notes_parser = subparsers.add_parser('update-release-notes', help='Update release notes')
+        release_notes_parser.add_argument('--version', help='Specify version number')
+        
+        # Documentation command
+        docs_parser = subparsers.add_parser('update-docs', help='Update documentation')
+        docs_parser.add_argument('--version', help='Specify version number')
+        
+        # Deployment verification command
+        deploy_parser = subparsers.add_parser('verify-deployment', help='Verify deployment')
+        deploy_parser.add_argument('--full', action='store_true', help='Run full verification')
 
-    args = parser.parse_args()
+        args = parser.parse_args()
 
-    if args.command == 'test-connection':
-        result = validate_db_connection(args.db_path)
-        print(f"Connection {'successful' if result else 'failed'}")
-        exit(0 if result else 1)
-    elif args.command == 'backup':
-        result = create_db_backup(args.source_db, args.backup_path)
-        print(f"Backup {'successful' if result else 'failed'}")
-        exit(0 if result else 1)
-    elif args.command == 'validate-env':
-        result = validate_production_environment()
-        print(f"Environment validation {'passed' if result else 'failed'}")
-        exit(0 if result else 1)
-    elif args.command == 'archive-logs':
-        result = archive_logs(args.force)
-        print(f"Log archiving {'completed' if result else 'failed'}")
-        exit(0 if result else 1)
-    elif args.command == 'update-release-notes':
-        result = update_release_notes(args.version)
-        print(f"Release notes {'updated' if result else 'failed'}")
-        exit(0 if result else 1)
-    elif args.command == 'update-docs':
-        result = update_documentation(args.version)
-        print(f"Documentation {'updated' if result else 'failed'}")
-        exit(0 if result else 1)
-    elif args.command == 'verify-deployment':
-        result = verify_deployment(args.full)
-        print(f"Deployment {'verified' if result else 'failed'}")
-        exit(0 if result else 1)
-    else:
-        parser.print_help()
+        if args.command == 'test-connection':
+            result = validate_db_connection(args.db_path)
+            print(f"Connection {'successful' if result else 'failed'}")
+            exit(0 if result else 1)
+        elif args.command == 'backup':
+            result = create_db_backup(args.source_db, args.backup_path)
+            print(f"Backup {'successful' if result else 'failed'}")
+            exit(0 if result else 1)
+        elif args.command == 'validate-env':
+            result = validate_production_environment()
+            print(f"Environment validation {'passed' if result else 'failed'}")
+            exit(0 if result else 1)
+        elif args.command == 'archive-logs':
+            result = archive_logs(args.force)
+            print(f"Log archiving {'completed' if result else 'failed'}")
+            exit(0 if result else 1)
+        elif args.command == 'update-release-notes':
+            result = update_release_notes(args.version)
+            print(f"Release notes {'updated' if result else 'failed'}")
+            exit(0 if result else 1)
+        elif args.command == 'update-docs':
+            result = update_documentation(args.version)
+            print(f"Documentation {'updated' if result else 'failed'}")
+            exit(0 if result else 1)
+        elif args.command == 'verify-deployment':
+            result = verify_deployment(args.full)
+            print(f"Deployment {'verified' if result else 'failed'}")
+            exit(0 if result else 1)
+        else:
+            parser.print_help()
+            exit(1)
+    except Exception as e:
+        logging.error(f"Error in version management: {str(e)}")
         exit(1)
 
 def update_release_notes():
