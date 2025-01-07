@@ -5,8 +5,17 @@
 # Initialize logging system
 /run scripts/init_logging.py
 
-# Set up test environment
+# Verify test environment
 /run scripts/setup_test_env.py
+
+# Verify database configuration
+/run scripts/startup/init_db.py
+
+# Verify admin user setup
+/run scripts/startup/init_admin.py
+
+# Run final test verification
+/run scripts/verify_tests.py
 
 # Verify deployment requirements
 /run scripts/verify_deployment.py
@@ -19,6 +28,9 @@
 
 # Request deployment approval
 /run scripts/request_approval.py
+
+# Test deployment process
+/run scripts/deploy_to_render.py
 
 ### CODE END ###
 
