@@ -15,7 +15,7 @@ def configure_test_logging():
     return logger
 
 def setup_test_paths():
-    """Configure Python paths for testing"""
+    """Configure Python paths for testing and deployment"""
     project_root = str(Path(__file__).parent.parent)
     if project_root not in sys.path:
         sys.path.insert(0, project_root)
@@ -23,6 +23,10 @@ def setup_test_paths():
     app_dir = str(Path(__file__).parent.parent / 'app')
     if app_dir not in sys.path:
         sys.path.insert(0, app_dir)
+        
+    scripts_dir = str(Path(__file__).parent)
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
 
 def configure_test_environment():
     """Set up test environment variables"""

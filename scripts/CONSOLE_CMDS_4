@@ -5,14 +5,20 @@
 # Initialize logging system first
 /run scripts/init_logging.py
 
+# Set up proper Python paths
+/run scripts/setup_test_env.py
+
 # Verify database connection
 /run scripts/verify_db_connection.py
 
+# Verify admin user setup
+/run scripts/startup/init_admin.py
+
+# Verify test coverage
+/run scripts/generate_coverage_report.py
+
 # Verify deployment configuration
 /run scripts/verify_deployment.py
-
-# Generate coverage report
-/run scripts/generate_coverage_report.py
 
 # Generate deployment checklist
 /run scripts/generate_deployment_checklist.py
