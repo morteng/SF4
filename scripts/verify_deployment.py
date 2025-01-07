@@ -10,11 +10,21 @@ def verify_deployment():
         required_files = [
             'DEPLOYMENT_CHECKLIST.md',
             'RELEASE_NOTES.md',
-            'VERSION_HISTORY.md',
-            'backups/stipend_latest.db',
-            'logs/archive_latest.zip'
+            'VERSION_HISTORY.md'
         ]
         
+        # Check for latest backup or any timestamped backup
+        backup_files = list(Path('backups').glob('stipend_*.db'))
+        if not backup_files:
+            logging.error("No database backups found")
+            return False
+            
+        # Check for latest log archive or any timestamped archive
+        log_files = list(Path('logs').glob('archive_*.zip'))
+        if not log_files:
+            logging.error("No log archives found")
+            return False
+            
         for file in required_files:
             if not Path(file).exists():
                 logging.error(f"Required file missing: {file}")

@@ -21,11 +21,13 @@ def init_test_db():
         app = create_app('testing')
         with app.app_context():
             # Ensure clean state
-            db.session.remove()
+            if db.session:
+                db.session.remove()
             try:
                 db.drop_all()
             except Exception as e:
                 logging.warning(f"Could not drop all tables: {str(e)}")
+                db.session.rollback()
             
             # Initialize extensions
             if 'sqlalchemy' not in app.extensions:

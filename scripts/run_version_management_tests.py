@@ -42,6 +42,11 @@ def run_tests():
         # Initialize test database with proper app context
         app = create_app('testing')
         with app.app_context():
+            # Initialize test database
+            if not init_test_db():
+                logger.error("Test database initialization failed")
+                return False
+                
             # Validate database connection first
             if not validate_db_connection('instance/stipend.db'):
                 logger.error("Database connection validation failed")
