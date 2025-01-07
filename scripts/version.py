@@ -527,17 +527,11 @@ def validate_production_environment() -> bool:
     """Validate production environment settings"""
     required_vars = {
         'SQLALCHEMY_DATABASE_URI': str,
-        'SECRET_KEY': str,
+        'SECRET_KEY': str,  # Minimum 64 chars
         'ADMIN_EMAIL': str,
-        'ADMIN_PASSWORD': str,
+        'ADMIN_PASSWORD': str,  # Minimum 12 chars
         'FLASK_ENV': str,
         'FLASK_DEBUG': str
-    }
-    
-    # Add minimum length requirements
-    min_lengths = {
-        'SECRET_KEY': 32,  # Reduced from 64 to meet common security standards
-        'ADMIN_PASSWORD': 12
     }
     
     missing_vars = []
@@ -555,8 +549,11 @@ def validate_production_environment() -> bool:
             converted = var_type(value)
             
             # Length validation
-            if var in min_lengths and len(value) < min_lengths[var]:
-                invalid_lengths.append(f"{var} (min {min_lengths[var]} chars)")
+            if var == 'SECRET_KEY' and len(value) < 64:
+                invalid_lengths.append(f"{var} (min 64 chars)")
+                continue
+            if var == 'ADMIN_PASSWORD' and len(value) < 12:
+                invalid_lengths.append(f"{var} (min 12 chars)")
                 continue
                 
             # Additional SECRET_KEY complexity checks
