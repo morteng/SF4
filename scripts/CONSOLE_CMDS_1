@@ -10,7 +10,10 @@
 /run python scripts/start_cycle.py
 
 # Verify database connection with enhanced logging
-/run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s'); assert validate_db_connection('instance/stipend.db'); print('Database connection validation passed')"
+/run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s'); import os; db_uri = os.getenv('SQLALCHEMY_DATABASE_URI').replace('sqlite:///', ''); assert validate_db_connection(db_uri); print('Database connection validation passed')"
+
+# Deploy to render.com
+/run python scripts/deploy_to_render.py
 ### CODE END ###
 
 # After running any console commands we go to STEP_2
