@@ -24,7 +24,7 @@ from scripts.version import validate_db_connection
 
 def verify_security_settings():
     """Verify security-related settings with enhanced checks"""
-    logger = configure_logger()
+    logger = logging.getLogger(__name__)
     secret_key = os.getenv('SECRET_KEY')
     
     # Verify version file

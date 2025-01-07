@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 def initialize_admin_user():
     """Initialize admin user from environment variables"""
+    logger = logging.getLogger(__name__)
     try:
         # Verify ADMIN_PASSWORD length
         admin_password = os.getenv('ADMIN_PASSWORD')

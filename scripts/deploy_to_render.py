@@ -20,7 +20,7 @@ def configure_logger():
 
 def deploy_to_render():
     """Deploy the application to render.com"""
-    logger = configure_logger()
+    logger = logging.getLogger(__name__)
     
     try:
         # Verify deployment checklist
