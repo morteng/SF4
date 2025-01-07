@@ -589,3 +589,49 @@ Traceback (most recent call last):
     raise AssertionError(
 AssertionError: Popped wrong app context. (<flask.ctx.AppContext object at 0x000002520A44D8B0> instead of <flask.ctx.AppContext object at 0x0000025209F23B80>)
 2025-01-07 09:01:18,387 - ERROR - Test database initialization failed: 'Organization' object has no attribute 'validate'
+2025-01-07 09:36:32,045 - ERROR - Test database initialization failed: 'Organization' object has no attribute 'validate'
+2025-01-07 09:36:34,071 - ERROR - Test database initialization failed: 'Organization' object has no attribute 'validate'
+2025-01-07 09:36:34,071 - ERROR - Failed to initialize test database
+2025-01-07 09:36:34,095 - ERROR - Test database initialization failed: 'Organization' object has no attribute 'validate'
+2025-01-07 09:36:34,096 - ERROR - Test database initialization failed
+2025-01-07 09:36:34,096 - ERROR - Error running version management tests: Popped wrong app context. (<flask.ctx.AppContext object at 0x000001CE5118AAF0> instead of <flask.ctx.AppContext object at 0x000001CE5109E910>)
+Traceback (most recent call last):
+  File "C:\github\SF4\scripts\run_version_management_tests.py", line 69, in run_tests
+    return False
+  File "C:\github\SF4\.venv\lib\site-packages\flask\ctx.py", line 277, in __exit__
+    self.pop(exc_value)
+  File "C:\github\SF4\.venv\lib\site-packages\flask\ctx.py", line 261, in pop
+    raise AssertionError(
+AssertionError: Popped wrong app context. (<flask.ctx.AppContext object at 0x000001CE5118AAF0> instead of <flask.ctx.AppContext object at 0x000001CE5109E910>)
+2025-01-07 10:08:35,809 - WARNING - Could not drop all tables: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-07 10:08:35,809 - ERROR - Test database initialization failed: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-07 10:08:35,809 - ERROR - Application context error: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-07 10:08:37,967 - ERROR - Test database initialization failed: 'Organization' object has no attribute 'validate'
+2025-01-07 10:08:37,967 - ERROR - Test database initialization failed
+2025-01-07 10:44:46,991 - WARNING - Could not drop all tables: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-07 10:44:46,991 - ERROR - Test database initialization failed: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-07 10:44:46,992 - ERROR - Application context error: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.

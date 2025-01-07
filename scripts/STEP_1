@@ -20,7 +20,7 @@
 /add scripts/CONSOLE_CMDS_1
 
 # run Step 1
-/architect How can we best implement Code Cycle Step 1 - Analyzis? Read PRD to understand requirements, check design doc for current architecture, and continue from where we left off in the progress tree. Instructions from management have top priority. Key Actions: Review project documentation and context. Perform problem analysis and planning. Prepare for necessary file updates. Show edits as unified diffs.
+/ask How can we best implement Code Cycle Step 1 - Analyzis? Read PRD to understand requirements, check design doc for current architecture, and continue from where we left off in the progress tree. Instructions from management have top priority. Key Actions: Review project documentation and context. Perform problem analysis and planning. Prepare for necessary file updates. Show edits as unified diffs.
 
 # Edit the files
 #/code Implement the suggested changes. Update files as needed. Remove any previous console commands from CONSOLE_CMDS_1, add any new console commands you want to run before we go to STEP 2 (Coding). Do not edit files using console commands. Do not edit files using console commands. Do not run python code using console commands, instead create code files and run them using the "/run your_python_file.py" approach. 

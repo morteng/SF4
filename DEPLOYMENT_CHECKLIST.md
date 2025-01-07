@@ -1,4 +1,4 @@
-# Deployment Checklist - 2025-01-07 07:39
+# Deployment Checklist - 2025-01-07 11:12
 
 ## Testing
 - [ ] All unit tests passed
@@ -37,7 +37,9 @@
 - [x] Monitoring configured
 - [x] Deployment verification passed
 - [ ] Post-deployment checks completed
-- [ ] SECRET_KEY meets complexity and length requirements
+- [ ] SECRET_KEY meets complexity and length requirements (64+ chars)
+- [ ] ADMIN_PASSWORD meets length requirements (12+ chars)
+- [ ] Debug mode is disabled in production
 - [x] Database schema validated
 - [x] All migrations applied
 - [ ] Test coverage meets 80% target

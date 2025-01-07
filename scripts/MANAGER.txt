@@ -1,5 +1,7 @@
 HI! Manager here!
 
+I HAVE FIXED SECRET KEY, IT'S LONG ENOUGH NOW!
+
 Very IMPORTANT! Make sure you overwrite files like RELEASE_NOTES.md and VERSION_HISTORY.md when updating them, so they don't grow indefinetly.
 
 Important! Don't print all these "Removed empty directory: .\.venv\Lib\site-packages\mako\ext\__pycache__"-statements when deleting stuff, just delete the folders and summarize at the end. Strive to keep context memory free for more important things. Also, you're running in powershell on a win10 pc.
