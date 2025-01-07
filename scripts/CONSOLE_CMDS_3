@@ -2,19 +2,22 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Verify admin user exists
+# Set up test environment
+/run scripts/setup_test_env.py
+
+# Run all unit tests
+/run scripts/run_tests.py
+
+# Verify admin user functionality
 /run scripts/security/verify_admin.py
 
-# Verify deployment settings
+# Verify deployment configuration
 /run scripts/verify_deployment.py
 
-# Test deployment process
-/run scripts/deploy_to_render.py
-
-# Verify backup integrity
+# Verify backup system
 /run scripts/verify_backup.py
 
-# Verify log archives
+# Verify log system
 /run scripts/verify_logs.py
 
 # Generate coverage report
