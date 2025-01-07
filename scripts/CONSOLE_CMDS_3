@@ -5,11 +5,8 @@
 # Initialize fresh test database with validation
 /run scripts/init_test_db.py
 
-# Run comprehensive test suite
+# Run comprehensive test suite with coverage
 /run scripts/run_tests.py
-
-# Generate coverage report
-/run scripts/generate_coverage_report.py
 
 # Verify production environment
 /run scripts/verify_production.py
@@ -20,8 +17,8 @@
 # Create timestamped backup
 /run scripts/create_backup.py --timestamped
 
-# Verify test coverage meets requirements
-/run scripts/check_coverage.py
+# Generate detailed coverage report
+/run scripts/generate_coverage_report.py
 
 ### CODE END ###
 

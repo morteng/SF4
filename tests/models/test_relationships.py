@@ -1,5 +1,5 @@
 import pytest
-from app.models import Stipend, Tag
+from app.models import Stipend, Tag, Organization
 from app.extensions import db
 
 @pytest.fixture
@@ -12,7 +12,8 @@ def init_db():
 def test_stipend_tag_relationship(init_db):
     """Test Stipend-Tag many-to-many relationship"""
     # Create test data
-    stipend = Stipend(name="Test Stipend")
+    org = Organization(name="Test Org")
+    stipend = Stipend(name="Test Stipend", organization=org)
     tag1 = Tag(name="Test Tag 1")
     tag2 = Tag(name="Test Tag 2")
     
@@ -20,7 +21,7 @@ def test_stipend_tag_relationship(init_db):
     stipend.tags.append(tag1)
     stipend.tags.append(tag2)
     
-    db.session.add(stipend)
+    db.session.add_all([org, stipend, tag1, tag2])
     db.session.commit()
     
     # Verify relationships
@@ -29,6 +30,7 @@ def test_stipend_tag_relationship(init_db):
     assert tag2 in stipend.tags
     assert stipend in tag1.stipends
     assert stipend in tag2.stipends
+    assert stipend.organization == org
 
 def test_tag_stipend_relationship(init_db):
     """Test Tag-Stipend many-to-many relationship"""
