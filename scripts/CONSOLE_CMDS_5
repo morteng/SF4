@@ -2,39 +2,12 @@
 # IMPORTANT! ONLY edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Create database backup
-/run scripts/create_backup.py
-
-# Verify backup integrity
-/run scripts/verify_backup.py
-
-# Archive logs
-/run scripts/archive_logs.py
-
-# Verify log archive integrity
-/run scripts/verify_logs.py
-
-# Finalize documentation
-/run scripts/finalize_docs.py
-
-# Generate deployment checklist
-/run scripts/generate_deployment_checklist.py
-
 # Verify deployment readiness
 /run scripts/verify_deployment.py
 
-# Request deployment approval
-/run scripts/request_approval.py
-
-# Update requirements
-/run scripts/update_requirements.py
-
-# Perform final cleanup
-/run scripts/final_cleanup.py
-
 # Push changes to version control
 /git add .
-/git commit -m "Cycle 7 completed - Version 1.2.11 deployed"
+/git commit -m "Cycle 13 completed - Ready for deployment"
 /git push origin main
 
 # Deploy to Render (only if approved)
