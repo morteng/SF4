@@ -11,11 +11,20 @@
 # Initialize test database
 /run scripts/startup/init_db.py
 
+# Initialize admin user
+/run scripts/startup/init_admin.py
+
 # Run comprehensive test suite with coverage
 /run scripts/run_tests.py
 
+# Verify test results
+/run scripts/verify_tests.py
+
 # Verify deployment configuration
 /run scripts/verify_deployment.py
+
+# Test deployment process
+/run scripts/deploy_to_render.py
 
 ### CODE END ###
 
