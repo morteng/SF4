@@ -6,7 +6,12 @@ def check_coverage():
     """Check test coverage meets requirements"""
     try:
         result = subprocess.run(
-            ['pytest', '--cov=scripts.version', '--cov-report=term-missing'],
+            ['pytest', 
+             '--cov=app',
+             '--cov=scripts',
+             '--cov-report=term-missing',
+             '--cov-branch',
+             '--cov-fail-under=80'],
             capture_output=True,
             text=True
         )

@@ -42,6 +42,13 @@ def run_tests():
         # Initialize test database with proper app context
         app = create_app('testing')
         
+        # Ensure test database is initialized
+        from scripts.init_test_db import init_test_db
+        with app.app_context():
+            if not init_test_db():
+                logger.error("Failed to initialize test database")
+                return False
+        
         # Ensure proper application context
         with app.app_context():
             # Initialize extensions if not already initialized

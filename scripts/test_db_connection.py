@@ -21,6 +21,13 @@ def test_db_connection():
         ('invalid/path.db', False)
     ]
     
+    # Ensure test database exists and is initialized
+    from scripts.init_test_db import init_test_db
+    from app.factory import create_app
+    app = create_app('testing')
+    with app.app_context():
+        init_test_db()
+    
     for db_path, expected in test_cases:
         try:
             result = validate_db_connection(db_path)
