@@ -1,5 +1,7 @@
 ### **Instructions**
 
+We need to create end to end tests for all admin use cases, from login to registering a new stipend in db.
+
 No need to encrypt log archives, leave 'em plain text.
 
 IMPORTANT NEW INFO! I have added a RENDER_API_KEY to .env file in project root folder. Using this you should be able to authenticate and programmatically control the deployment of the app to render.com.
