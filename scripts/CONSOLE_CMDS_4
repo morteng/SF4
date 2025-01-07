@@ -11,6 +11,9 @@
 # Verify test database integrity
 /run scripts/verify_test_db.py
 
+# Test database connection
+/run scripts/test_db_connection.py
+
 # Run all tests with coverage
 /run scripts/run_all_tests.py
 
@@ -27,6 +30,9 @@
 # Archive logs
 /run scripts/archive_logs.py
 
+# Update requirements
+/run scripts/update_requirements.py
+
 # Finalize documentation
 /run scripts/finalize_docs.py
 
@@ -35,9 +41,6 @@
 
 # Verify deployment readiness
 /run scripts/verify_deployment.py
-
-# Update requirements
-/run scripts/update_requirements.py
 
 # Review Notes:
 # 1. Production environment verified
