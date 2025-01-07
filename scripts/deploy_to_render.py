@@ -25,11 +25,24 @@ def deploy_to_render():
     try:
         # Verify deployment checklist
         from scripts.verify_deployment import verify_deployment
-        logger.info("Starting deployment verification")
-        if not verify_deployment():
-            logger.error("Deployment verification failed")
+        logger.info("Starting full deployment verification")
+        
+        # Run security checks
+        if not verify_deployment('--check-security'):
+            logger.error("Security verification failed")
             return False
-        logger.info("Deployment verification passed")
+            
+        # Run environment checks
+        if not verify_deployment('--check-env'):
+            logger.error("Environment verification failed")
+            return False
+            
+        # Run version checks
+        if not verify_deployment('--check-version'):
+            logger.error("Version verification failed")
+            return False
+            
+        logger.info("All deployment verifications passed")
         
         # Verify database connection
         from scripts.verify_db_connection import verify_db_connection

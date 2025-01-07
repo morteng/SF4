@@ -24,6 +24,7 @@ if scripts_dir not in sys.path:
 
 def verify_security_settings():
     """Verify security-related settings with enhanced checks"""
+    logger = logging.getLogger(__name__)
     secret_key = os.getenv('SECRET_KEY')
     
     # Verify version file
@@ -64,7 +65,7 @@ def verify_security_settings():
     if os.path.exists('.secret_key_history'):
         with open('.secret_key_history') as f:
             if secret_key in f.read():
-                logging.error("SECRET_KEY has not been rotated recently")
+                logger.error("SECRET_KEY has not been rotated recently")
                 return False
                 
     return True

@@ -15,14 +15,20 @@
 # Verify database connection
 /run scripts/verify_db_connection.py
 
-# Verify deployment requirements
+# Verify security settings
 /run scripts/verify_deployment.py
+
+# Verify environment variables
+/run scripts/verify_deployment.py --check-env
+
+# Verify version file
+/run scripts/verify_deployment.py --check-version
 
 # Final deployment to Render
 /run scripts/deploy_to_render.py
 
 # Verify successful deployment
-/run scripts/verify_deployment.py
+/run scripts/verify_deployment.py --full
 
 ### CODE END ###
 
