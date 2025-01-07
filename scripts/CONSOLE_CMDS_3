@@ -8,14 +8,11 @@
 # Initialize test database
 /run scripts/init_test_db.py
 
-# Run core tests
+# Run comprehensive test suite
 /run scripts/run_tests.py
 
-# Verify key components
-/run scripts/security/verify_admin.py
-/run scripts/verify_backup.py
-/run scripts/verify_logs.py
-/run scripts/verify_deployment.py
+# Verify test results
+/run scripts/verify_tests.py
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py
