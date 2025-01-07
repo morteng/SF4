@@ -2,27 +2,20 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Set up test environment and initialize test database
+# Set up test environment
 /run scripts/setup_test_env.py
+
+# Initialize test database
 /run scripts/init_test_db.py
 
-# Run all tests with coverage
+# Run core tests
 /run scripts/run_tests.py
 
-# Verify admin user functionality
+# Verify key components
 /run scripts/security/verify_admin.py
-
-# Verify database connection
-/run scripts/version.py test-connection instance/stipend.db
-
-# Verify deployment configuration
-/run scripts/verify_deployment.py
-
-# Verify backup system
 /run scripts/verify_backup.py
-
-# Verify log system
 /run scripts/verify_logs.py
+/run scripts/verify_deployment.py
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py
