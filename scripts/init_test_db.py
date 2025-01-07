@@ -17,9 +17,9 @@ logging.basicConfig(
 
 def init_test_db():
     """Initialize test database with comprehensive validation"""
+    app = create_app('testing')
+    
     try:
-        app = create_app('testing')
-        
         with app.app_context():
             # Initialize extensions
             if 'sqlalchemy' not in app.extensions:
