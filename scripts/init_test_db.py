@@ -2,11 +2,16 @@ import os
 import sys
 import logging
 from datetime import datetime
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from pathlib import Path
+
+# Add project root to Python path
+project_root = str(Path(__file__).parent.parent)
+if project_root not in sys.path:
+    sys.path.append(project_root)
 
 from app.factory import create_app
 from app.extensions import db
-from app.models import Stipend, Tag, Organization
+from app.models import Stipend, Tag, Organization, User
 
 # Configure logging
 logging.basicConfig(
