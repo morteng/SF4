@@ -17,11 +17,10 @@
 # Verify database connection
 /run scripts/verify_db_connection.py
 
-# Run model relationship tests
+# Run core test suites
 /run scripts/run_tests.py tests/models/test_relationships.py
-
-# Run version management tests  
 /run scripts/run_tests.py tests/version_management/test_version.py
+/run scripts/run_tests.py tests/services/test_admin_creation.py
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py
@@ -30,7 +29,7 @@
 /run scripts/verify_tests.py
 
 # Verify deployment configuration
-/run scripts/verify_deployment.py
+/run scripts/verify_deployment.py --full
 
 ### CODE END ###
 

@@ -20,13 +20,15 @@ def setup_test_paths():
     if project_root not in sys.path:
         sys.path.insert(0, project_root)
         
-    app_dir = str(Path(__file__).parent.parent / 'app')
-    if app_dir not in sys.path:
-        sys.path.insert(0, app_dir)
-        
-    scripts_dir = str(Path(__file__).parent)
-    if scripts_dir not in sys.path:
-        sys.path.insert(0, scripts_dir)
+    # Add all necessary directories
+    for dir_name in ['app', 'scripts', 'tests', 'migrations']:
+        dir_path = str(Path(__file__).parent.parent / dir_name)
+        if dir_path not in sys.path:
+            sys.path.insert(0, dir_path)
+            
+    # Verify paths
+    logger = logging.getLogger(__name__)
+    logger.info(f"Configured Python paths: {sys.path}")
 
 def configure_test_environment():
     """Set up test environment variables"""

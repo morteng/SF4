@@ -2,9 +2,14 @@ import subprocess
 
 def run_tests():
     try:
-        # Setup test environment first
-        from scripts.setup_test_env import setup_test_paths
+        # Configure logging
+        from scripts.init_logging import configure_logger
+        logger = configure_logger()
+        
+        # Setup test environment
+        from scripts.setup_test_env import setup_test_paths, configure_test_environment
         setup_test_paths()
+        configure_test_environment()
         
         # Run tests with coverage
         subprocess.run([
