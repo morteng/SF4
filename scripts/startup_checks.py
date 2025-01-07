@@ -29,8 +29,12 @@ def run_startup_checks():
             return False
             
         # Verify admin user
-        if not verify_admin_user():
-            logger.error("Admin user verification failed")
+        try:
+            if not verify_admin_user():
+                logger.error("Admin user verification failed")
+                return False
+        except Exception as e:
+            logger.error(f"Admin user verification error: {str(e)}")
             return False
             
         # Verify deployment configuration
