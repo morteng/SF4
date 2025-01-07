@@ -2,6 +2,9 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
+# Initialize logging system
+/run scripts/init_logging.py
+
 # Set up test environment
 /run scripts/setup_test_env.py
 
@@ -16,6 +19,12 @@
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py
+
+# Verify deployment configuration
+/run scripts/verify_deployment.py
+
+# Run startup checks
+/run scripts/startup_checks.py
 
 ### CODE END ###
 

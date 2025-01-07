@@ -1,8 +1,14 @@
 import logging
 import os
-from scripts.security.verify_admin import verify_admin_user
-from scripts.version import validate_db_connection
-from scripts.verify_deployment import verify_deployment
+import sys
+from pathlib import Path
+
+# Add scripts directory to Python path
+sys.path.append(str(Path(__file__).parent.parent))
+
+from security.verify_admin import verify_admin_user
+from version import validate_db_connection
+from verify_deployment import verify_deployment
 
 def run_startup_checks():
     """Run all required startup checks"""
