@@ -2,7 +2,7 @@
 # IMPORTANT! ONLY edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize logging system
+# Initialize logging system first
 /run scripts/init_logging.py
 
 # Verify backup integrity
@@ -22,6 +22,9 @@ git push origin main
 
 # Deploy to production
 /run scripts/deploy_to_render.py
+
+# Perform final cleanup
+/run scripts/final_cleanup.py
 
 # End development cycle
 /run scripts/end_cycle.py
