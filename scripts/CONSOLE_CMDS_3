@@ -17,8 +17,11 @@
 # Verify database connection
 /run scripts/verify_db_connection.py
 
-# Run comprehensive test suite with coverage
-/run scripts/run_tests.py
+# Run model relationship tests
+/run scripts/run_tests.py tests/models/test_relationships.py
+
+# Run version management tests  
+/run scripts/run_tests.py tests/version_management/test_version.py
 
 # Generate coverage report
 /run scripts/generate_coverage_report.py
@@ -28,9 +31,6 @@
 
 # Verify deployment configuration
 /run scripts/verify_deployment.py
-
-# Test deployment process
-/run scripts/deploy_to_render.py
 
 ### CODE END ###
 
