@@ -2,65 +2,53 @@
 # IMPORTANT! ONLY edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Finalize all documentation
-/run scripts/finalize_docs.py
+# Finalize documentation with release notes
+/run scripts/finalize_docs.py --release
 
-# Create final backup
-/run scripts/create_backup.py
+# Create timestamped database backup
+/run scripts/create_backup.py --timestamped
 
-# Archive logs
-/run scripts/archive_logs.py
+# Archive logs with compression
+/run scripts/archive_logs.py --compress
 
-# Verify deployment readiness
-/run scripts/verify_deployment.py
+# Verify deployment readiness with all checks
+/run scripts/verify_deployment.py --full
 
-# Print final timestamp
+# Print current timestamp for deployment
 /run scripts/print_datetime.py
 
-# Update environment files
+# Update environment configuration files
 /update .env.example
 /update .gitignore
 
-# Update management files
+# Update management documentation
 /update scripts/REQUESTS.txt
 /update scripts/CEO.txt
 /update scripts/MANAGER.txt
 
-# Final cleanup
-/run scripts/final_cleanup.py
+# Perform final cleanup
+/run scripts/final_cleanup.py --deep
 
-# End cycle
+# End current cycle
 /run scripts/end_cycle.py
 
 # Deployment Notes:
-# 1. Documentation finalized
-# 2. Final backup created
-# 3. Logs archived
-# 4. Requirements updated
+# 1. Documentation finalized with release notes
+# 2. Timestamped database backup created
+# 3. Logs archived with compression
+# 4. Deployment verification completed
 # 5. Environment files updated
-# 6. Management files updated
-# 7. Ready for deployment
-# 8. Cycle ended successfully
-### CODE END ###
-# 6. Management files updated
-# 7. Ready for deployment
-# 8. Cycle ended successfully
-
+# 6. Management documentation updated
+# 7. Final cleanup performed
+# 8. Ready for deployment
+# 9. Cycle ended successfully
 ### CODE END ###
 
-
-# Request deployment approval
-# This does not work, never try this. 
-#/request deployment
-
-
-/code update DEVLOG.txt with your experiences from this code cycle. Update TODO if you need to.
-
-# Push changes to GitHub
+# Push changes to version control
 /git add .
 /git commit -m "Cycle 7 completed - Ready for deployment"
 /git push origin main
 
-# Reset and restart Code Cycle
+# Reset and prepare for next cycle
 /reset
 /load scripts/STEP_1

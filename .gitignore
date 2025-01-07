@@ -1,12 +1,16 @@
 # Python files
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
 # Virtual environment
 .venv/
+venv/
 
 # Environment variables
 .env
+.env.*
 .aider*
 .coverage*
 .pytest_cache/
@@ -15,6 +19,21 @@ __pycache__/
 
 # Databases
 instance/site.db
+instance/*.db
+backups/*.db
 
+# Deployment artifacts
+deploy/
+build/
+dist/
+*.egg-info/
+*.log
+*.sqlite3
+
+# Node modules
 node_modules/
+
+# System files
+.DS_Store
+Thumbs.db
 
