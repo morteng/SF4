@@ -78,6 +78,14 @@ def verify_security_settings():
 
 def verify_deployment(*args, **kwargs):
     """Verify all deployment requirements are met"""
+    logger = logging.getLogger(__name__)
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+        
     check_type = kwargs.get('check_type', 'full')
     
     try:
