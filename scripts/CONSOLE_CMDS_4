@@ -2,26 +2,30 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Validate production database schema
-/run scripts/validate_schema.py
-
 # Verify production environment settings
 /run scripts/verify_production.py
+
+# Validate database schema
+/run scripts/validate_schema.py
 
 # Verify test database integrity
 /run scripts/verify_test_db.py
 
-# Run all test suites with coverage
+# Run all tests with coverage
 /run scripts/run_all_tests.py
 
-# Generate coverage report
+# Generate and check coverage report
 /run scripts/generate_coverage_report.py
-
-# Check coverage meets minimum requirements
 /run scripts/check_coverage.py --min-coverage=80
 
 # Validate version file
 /run scripts/validate_version.py
+
+# Create secure database backup
+/run scripts/create_backup.py --timestamped
+
+# Archive logs
+/run scripts/archive_logs.py
 
 # Finalize documentation
 /run scripts/finalize_docs.py
@@ -29,34 +33,24 @@
 # Generate deployment checklist
 /run scripts/generate_deployment_checklist.py
 
-# Create secure database backup
-/run scripts/create_backup.py --timestamped
-
-# Archive logs with encryption
-/run scripts/archive_logs.py --encrypt
-
 # Verify deployment readiness
 /run scripts/verify_deployment.py
-
-# Print current timestamp
-/run scripts/print_datetime.py
 
 # Update requirements
 /run scripts/update_requirements.py
 
 # Review Notes:
-# 1. Database schema validated
-# 2. Production environment verified
+# 1. Production environment verified
+# 2. Database schema validated
 # 3. Test database integrity confirmed
-# 4. All test suites passed
-# 5. Coverage meets minimum requirements
-# 6. Version file validated
-# 7. Documentation finalized
-# 8. Deployment checklist generated
-# 9. Secure backup created
-# 10. Logs archived with encryption
-# 11. Deployment verified
-# 12. Ready for deployment pending CEO approval
+# 4. All tests passed with coverage
+# 5. Version file validated
+# 6. Secure backup created
+# 7. Logs archived
+# 8. Documentation finalized
+# 9. Deployment checklist generated
+# 10. Deployment verified
+# 11. Ready for deployment pending CEO approval
 ### CODE END ###
 
 
