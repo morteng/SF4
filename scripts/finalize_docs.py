@@ -50,6 +50,23 @@ def update_release_notes():
 def update_version_history():
     """Update version history file"""
     try:
+        # Clean up duplicate entries
+        with open('VERSION_HISTORY.md', 'r') as f:
+            lines = f.readlines()
+        
+        # Keep only unique entries
+        unique_lines = []
+        seen = set()
+        for line in lines:
+            if line not in seen:
+                seen.add(line)
+                unique_lines.append(line)
+        
+        # Write cleaned version history
+        with open('VERSION_HISTORY.md', 'w') as f:
+            f.writelines(unique_lines)
+            
+        # Add new entry
         with open('VERSION_HISTORY.md', 'a') as f:
             f.write(f"\n## 1.2.11 - {datetime.now().strftime('%Y-%m-%d')}\n")
             f.write("- Fixed deployment verification logging\n")

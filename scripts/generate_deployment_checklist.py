@@ -3,8 +3,13 @@ from datetime import datetime
 
 def generate_checklist():
     """Generate deployment checklist with detailed items"""
+    logger = logging.getLogger(__name__)
     try:
         with open('DEPLOYMENT_CHECKLIST.md', 'w') as f:
+            logger.info("Generating deployment checklist")
+            f.write("# Deployment Checklist\n")
+            f.write("## Version: 1.2.11\n")
+            f.write("## Date: {}\n\n".format(datetime.now().strftime('%Y-%m-%d %H:%M')))
             f.write(f"# Deployment Checklist - {datetime.now().strftime('%Y-%m-%d %H:%M')}\n\n")
             f.write("## Testing\n")
             f.write("- [ ] All unit tests passed\n")
