@@ -3,7 +3,10 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize logging system first
+# Configure Python paths first
+/run scripts/path_config.py
+
+# Initialize logging system
 /run scripts/init_logging.py
 
 # Verify database configuration

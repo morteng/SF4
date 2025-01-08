@@ -6,10 +6,11 @@ from pathlib import Path
 from flask import Flask
 from app import create_app
 
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent)
-if project_root not in sys.path:
-    sys.path.append(project_root)
+# Configure paths first
+from scripts.path_config import configure_paths
+if not configure_paths():
+    logger.error("Path configuration failed")
+    exit(1)
 
 from scripts.version import validate_version, get_version
 
