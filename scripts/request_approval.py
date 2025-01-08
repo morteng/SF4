@@ -25,10 +25,18 @@ def request_approval():
         logger.setLevel(logging.INFO)
         
     # Get verification status
-    from scripts.verify_deployment_readiness import verify_deployment_requirements
-    if not verify_deployment_requirements():
-        logger.error("Cannot request approval - deployment requirements not met")
+    from scripts.verify_review import verify_review
+    if not verify_review():
+        logger.error("Cannot request approval - review verification failed")
         return False
+        
+    # Get deployment checklist status
+    with open('deployment/DEPLOYMENT_CHECKLIST.md') as f:
+        checklist = f.read()
+        
+    # Get test coverage
+    from scripts.verify_test_coverage import verify_coverage
+    coverage = verify_coverage(threshold=80, critical=True)
     try:
         with open('scripts/REQUESTS.txt', 'a') as f:
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
