@@ -9,7 +9,21 @@ logger = logging.getLogger(__name__)
 def ensure_admin_user():
     """Ensure admin user exists in database"""
     try:
-        print("Checking for admin user...")
+        print("\n=== ADMIN USER CHECK START ===")
+        
+        # Verify database connection
+        print("Verifying database connection...")
+        db.engine.execute("SELECT 1")  # Simple test query
+        print("Database connection verified")
+        
+        # Check if users table exists
+        print("Checking for users table...")
+        if 'user' not in db.engine.table_names():
+            print("Users table does not exist!")
+            return False
+            
+        # Check if admin user exists
+        print("Checking for existing admin user...")
         admin = User.query.filter_by(is_admin=True).first()
         
         if not admin:
@@ -44,6 +58,7 @@ def ensure_admin_user():
         else:
             print(f"Admin user already exists (username: {admin.username})")
             
+        print("=== ADMIN USER CHECK COMPLETE ===")
         return True
         
     except Exception as e:

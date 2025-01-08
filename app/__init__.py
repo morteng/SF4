@@ -11,6 +11,8 @@ logger = logging.getLogger(__name__)
 def create_app(config_name='development'):
     """Create and configure the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
+    print("\n=== APPLICATION STARTING ===")
+    print("Initializing with config:", config_name)
     app.config.from_pyfile('config.py', silent=True)
     
     # Configure logging
@@ -96,14 +98,17 @@ def create_app(config_name='development'):
             # Only initialize admin user if not in test mode and after migrations
             if not app.config.get('TESTING') and os.path.exists(env_path):
                 try:
+                    print("\n=== CHECKING ADMIN USER ===")
                     print("ADMIN_USERNAME:", os.getenv('ADMIN_USERNAME'))
                     print("ADMIN_EMAIL:", os.getenv('ADMIN_EMAIL'))
                     print("ADMIN_PASSWORD:", os.getenv('ADMIN_PASSWORD'))
                     
-                    print("Attempting to ensure admin user exists...")
+                    print("\nAttempting to ensure admin user exists...")
                     if not ensure_admin_user():
-                        print("Failed to ensure admin user exists")
+                        print("\n!!! FAILED TO CREATE ADMIN USER !!!")
                         raise RuntimeError("Admin user initialization failed")
+                    else:
+                        print("\nAdmin user check completed successfully")
                 except Exception as e:
                     print(f"Admin user initialization failed: {str(e)}")
                     raise RuntimeError(f"Admin user initialization failed: {str(e)}")
