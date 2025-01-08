@@ -309,11 +309,13 @@ def get_db_version(db_path: str) -> Optional[str]:
     except sqlite3.Error:
         return None
 
-def validate_version(version: str) -> bool:
+def validate_version(version: str = None) -> bool:
     """Validate version string format"""
     if not version:
-        logger.error("No version provided")
-        return False
+        version = get_version()  # Get current version if none provided
+        if not version:
+            logger.error("No version provided")
+            return False
         
     # Basic format validation
     if not re.match(r"^\d+\.\d+\.\d+(-[a-z]+(\.\d+)?)?(\+[a-z0-9]+(\.[a-z0-9]+)*)?$", version):

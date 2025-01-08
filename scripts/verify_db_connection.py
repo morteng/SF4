@@ -21,11 +21,13 @@ def verify_db_connection():
     global logger
     logger = configure_logger()
     
-    try:
-        db_uri = os.getenv('SQLALCHEMY_DATABASE_URI')
-        if not db_uri:
-            logger.error("SQLALCHEMY_DATABASE_URI not set in environment variables")
-            return False
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            db_uri = os.getenv('SQLALCHEMY_DATABASE_URI')
+            if not db_uri:
+                logger.error("SQLALCHEMY_DATABASE_URI not set in environment variables")
+                return False
             
         # Log database type for debugging
         if db_uri.startswith('sqlite'):
@@ -41,12 +43,16 @@ def verify_db_connection():
             logger.info("Successfully connected to database")
             return True
             
-    except SQLAlchemyError as e:
-        logger.error(f"Database connection failed: {str(e)}")
-        return False
-    except Exception as e:
-        logger.error(f"Unexpected error verifying database connection: {str(e)}")
-        return False
+        except SQLAlchemyError as e:
+            if attempt == max_retries - 1:
+                logger.error(f"Database connection failed after {max_retries} attempts: {str(e)}")
+                return False
+            time.sleep(1)  # Wait before retrying
+        except Exception as e:
+            if attempt == max_retries - 1:
+                logger.error(f"Unexpected error verifying database connection: {str(e)}")
+                return False
+            time.sleep(1)  # Wait before retrying
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

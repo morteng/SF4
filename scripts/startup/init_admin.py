@@ -38,11 +38,14 @@ def initialize_admin_user():
             logger.error("ADMIN_PASSWORD must be at least 12 characters")
             return False
             
-        # Check if admin user exists
+        # Check if admin exists with proper credentials
         admin = User.query.filter_by(is_admin=True).first()
-        
         if admin:
-            logger.info("Admin user already exists")
+            # Verify password matches
+            if not admin.check_password(os.getenv('ADMIN_PASSWORD')):
+                logger.error("Admin password mismatch")
+                return False
+            logger.info("Admin user already exists with valid credentials")
             return True
             
         # Create new admin user from environment variables
