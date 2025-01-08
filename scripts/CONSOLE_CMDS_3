@@ -8,6 +8,9 @@
 # Set up test environment with proper paths and context
 /run scripts/setup_test_env.py --full
 
+# Install test dependencies
+/run scripts/install_test_dependencies.py
+
 # Initialize test database
 /run scripts/startup/init_db.py --test
 

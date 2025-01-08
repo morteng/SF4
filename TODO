@@ -33,6 +33,8 @@
 - [x] Implement proper application context for tests
 - [x] Add test-specific environment variables
 - [x] Verify test database migrations
+- [x] Add test dependency installation script
+- [x] Update test execution sequence
 
 ---
 

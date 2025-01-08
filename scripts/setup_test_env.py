@@ -43,12 +43,18 @@ def setup_test_paths():
         
         # Verify imports work
         try:
+            # Add app to path explicitly
+            app_dir = str(Path(project_root) / 'app')
+            if app_dir not in sys.path:
+                sys.path.insert(0, app_dir)
+                
             from app import db
             from app.models import User
             from scripts.version import validate_version
             return True
         except ImportError as e:
             logger.error(f"Import verification failed: {str(e)}")
+            logger.error(f"Current sys.path: {sys.path}")
             return False
             
     except Exception as e:
