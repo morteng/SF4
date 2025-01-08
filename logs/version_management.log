@@ -1720,3 +1720,112 @@ with app.app_context(). See the documentation for more information.
 2025-01-08 20:21:27,203 - INFO - Pulling latest changes from origin
 2025-01-08 20:21:27,831 - INFO - Pushing to render.com
 2025-01-08 20:21:29,507 - INFO - Deployment to render.com completed successfully.
+2025-01-08 20:22:48,391 - DEBUG - Created admin blueprint
+2025-01-08 20:22:48,428 - DEBUG - Created stipend blueprint: admin_stipend
+2025-01-08 20:22:48,428 - DEBUG - URL prefix: /stipends
+2025-01-08 20:22:48,428 - DEBUG - Import name: app.routes.admin.stipend_routes
+2025-01-08 20:22:48,510 - DEBUG - Registered stipend blueprint: admin_stipend
+2025-01-08 20:22:48,510 - DEBUG - Registered dashboard blueprint: dashboard
+2025-01-08 20:22:48,525 - DEBUG - Registered admin blueprint with app
+2025-01-08 20:22:48,525 - DEBUG - Registered routes:
+2025-01-08 20:22:48,526 - DEBUG - Route: static
+2025-01-08 20:22:48,526 - DEBUG - Route: admin.admin_stipend.create
+2025-01-08 20:22:48,526 - DEBUG - Route: admin.admin_stipend.edit
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.admin_stipend.delete
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.admin_stipend.index
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.admin_stipend.paginate
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.dashboard.dashboard
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.user.create
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.user.edit
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.user.delete
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.user.reset_password
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.user.toggle_active
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.user.edit_profile
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.user.index
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.bot.create
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.bot.delete
+2025-01-08 20:22:48,527 - DEBUG - Route: admin.bot.index
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.bot.run
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.bot.schedule
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.bot.edit
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.organization.create
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.organization.delete
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.organization.index
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.organization.paginate
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.organization.view
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.organization.edit
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.tag.create
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.tag.edit
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.tag.delete
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.tag.index
+2025-01-08 20:22:48,528 - DEBUG - Route: admin.tag.paginate
+2025-01-08 20:22:48,529 - DEBUG - Validating required routes: ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+2025-01-08 20:22:48,529 - DEBUG - Registered routes: ['static', 'admin.admin_stipend.create', 'admin.admin_stipend.edit', 'admin.admin_stipend.delete', 'admin.admin_stipend.index', 'admin.admin_stipend.paginate', 'admin.dashboard.dashboard', 'admin.user.create', 'admin.user.edit', 'admin.user.delete', 'admin.user.reset_password', 'admin.user.toggle_active', 'admin.user.edit_profile', 'admin.user.index', 'admin.bot.create', 'admin.bot.delete', 'admin.bot.index', 'admin.bot.run', 'admin.bot.schedule', 'admin.bot.edit', 'admin.organization.create', 'admin.organization.delete', 'admin.organization.index', 'admin.organization.paginate', 'admin.organization.view', 'admin.organization.edit', 'admin.tag.create', 'admin.tag.edit', 'admin.tag.delete', 'admin.tag.index', 'admin.tag.paginate']
+2025-01-08 20:22:48,529 - DEBUG - Required routes: ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+2025-01-08 20:22:48,567 - INFO - Application initialized successfully
+2025-01-08 20:22:48,570 - INFO - Starting full deployment verification
+2025-01-08 20:22:48,571 - INFO - Version validation passed: 0.2.0
+2025-01-08 20:22:48,571 - INFO - Version validation passed: 0.2.0
+2025-01-08 20:22:48,572 - INFO - Version validation passed: 0.2.0
+2025-01-08 20:22:48,572 - INFO - Version validation passed: 0.2.0
+2025-01-08 20:22:48,572 - INFO - Version validation passed: 0.2.0
+2025-01-08 20:22:48,572 - INFO - Version validation passed: 0.2.0
+2025-01-08 20:22:48,572 - INFO - All deployment verifications passed
+2025-01-08 20:22:48,577 - INFO - Using SQLite database
+2025-01-08 20:22:48,579 - INFO - Successfully connected to database
+2025-01-08 20:22:48,579 - INFO - Database connection verified
+2025-01-08 20:22:48,990 - INFO - Admin user already exists with valid credentials
+2025-01-08 20:22:48,990 - INFO - Admin user verified
+2025-01-08 20:22:48,990 - INFO - Version validation passed: 0.2.0
+2025-01-08 20:22:49,025 - INFO - Checking out main branch
+2025-01-08 20:22:49,078 - INFO - Pulling latest changes from origin
+2025-01-08 20:22:49,697 - INFO - Pushing to render.com
+2025-01-08 20:22:51,802 - INFO - Deployment to render.com completed successfully.
+2025-01-08 20:29:25,407 - ERROR - Failed to configure test environment: Command '['C:\\github\\SF4\\.venv\\Scripts\\python.exe', '-m', 'pip', 'install', '-r', 'requirements-test.txt']' returned non-zero exit status 1.
+2025-01-08 20:29:25,408 - INFO - Test environment configured successfully
+2025-01-08 20:39:34,457 - DEBUG - Created admin blueprint
+2025-01-08 20:39:34,466 - DEBUG - Created stipend blueprint: admin_stipend
+2025-01-08 20:39:34,466 - DEBUG - URL prefix: /stipends
+2025-01-08 20:39:34,466 - DEBUG - Import name: app.routes.admin.stipend_routes
+2025-01-08 20:39:34,476 - DEBUG - Registered stipend blueprint: admin_stipend
+2025-01-08 20:39:34,476 - DEBUG - Registered dashboard blueprint: dashboard
+2025-01-08 20:39:34,490 - DEBUG - Registered admin blueprint with app
+2025-01-08 20:39:34,491 - DEBUG - Registered routes:
+2025-01-08 20:39:34,491 - DEBUG - Route: static
+2025-01-08 20:39:34,491 - DEBUG - Route: admin.admin_stipend.create
+2025-01-08 20:39:34,491 - DEBUG - Route: admin.admin_stipend.edit
+2025-01-08 20:39:34,491 - DEBUG - Route: admin.admin_stipend.delete
+2025-01-08 20:39:34,491 - DEBUG - Route: admin.admin_stipend.index
+2025-01-08 20:39:34,491 - DEBUG - Route: admin.admin_stipend.paginate
+2025-01-08 20:39:34,492 - DEBUG - Route: admin.dashboard.dashboard
+2025-01-08 20:39:34,492 - DEBUG - Route: admin.user.create
+2025-01-08 20:39:34,492 - DEBUG - Route: admin.user.edit
+2025-01-08 20:39:34,492 - DEBUG - Route: admin.user.delete
+2025-01-08 20:39:34,492 - DEBUG - Route: admin.user.reset_password
+2025-01-08 20:39:34,492 - DEBUG - Route: admin.user.toggle_active
+2025-01-08 20:39:34,492 - DEBUG - Route: admin.user.edit_profile
+2025-01-08 20:39:34,492 - DEBUG - Route: admin.user.index
+2025-01-08 20:39:34,492 - DEBUG - Route: admin.bot.create
+2025-01-08 20:39:34,492 - DEBUG - Route: admin.bot.delete
+2025-01-08 20:39:34,492 - DEBUG - Route: admin.bot.index
+2025-01-08 20:39:34,492 - DEBUG - Route: admin.bot.run
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.bot.schedule
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.bot.edit
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.organization.create
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.organization.delete
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.organization.index
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.organization.paginate
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.organization.view
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.organization.edit
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.tag.create
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.tag.edit
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.tag.delete
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.tag.index
+2025-01-08 20:39:34,493 - DEBUG - Route: admin.tag.paginate
+2025-01-08 20:39:34,494 - DEBUG - Validating required routes: ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+2025-01-08 20:39:34,494 - DEBUG - Registered routes: ['static', 'admin.admin_stipend.create', 'admin.admin_stipend.edit', 'admin.admin_stipend.delete', 'admin.admin_stipend.index', 'admin.admin_stipend.paginate', 'admin.dashboard.dashboard', 'admin.user.create', 'admin.user.edit', 'admin.user.delete', 'admin.user.reset_password', 'admin.user.toggle_active', 'admin.user.edit_profile', 'admin.user.index', 'admin.bot.create', 'admin.bot.delete', 'admin.bot.index', 'admin.bot.run', 'admin.bot.schedule', 'admin.bot.edit', 'admin.organization.create', 'admin.organization.delete', 'admin.organization.index', 'admin.organization.paginate', 'admin.organization.view', 'admin.organization.edit', 'admin.tag.create', 'admin.tag.edit', 'admin.tag.delete', 'admin.tag.index', 'admin.tag.paginate']
+2025-01-08 20:39:34,494 - DEBUG - Required routes: ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+2025-01-08 20:39:34,527 - INFO - Application initialized successfully
+2025-01-08 20:39:34,589 - ERROR - Uncommitted changes detected
+2025-01-08 20:39:34,590 - ERROR - Git state verification failed
+2025-01-08 20:39:34,590 - ERROR - Deployment requirements not met
