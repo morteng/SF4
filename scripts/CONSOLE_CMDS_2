@@ -7,8 +7,8 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Verify git state and sync
-/run scripts/verify_git_state.py --pull --retry=3
+# Verify and sync git state with auto-resolve
+/run scripts/verify_git_state.py --pull --retry=3 --auto-resolve
 
 # Verify database setup
 /run scripts/verify_db_config.py
@@ -27,9 +27,9 @@
 /run scripts/backup_rotation.py --max-backups=5
 /run scripts/verify_deployment.py --final-check
 
-# Verify final state
-/run scripts/verify_git_state.py
-/run scripts/deploy_to_render.py
+# Verify final state and deploy
+/run scripts/verify_git_state.py --auto-resolve
+/run scripts/deploy_to_render.py --auto-resolve
 
 ### CODE END ###
 

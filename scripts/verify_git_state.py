@@ -20,13 +20,22 @@ def verify_git_state(pull=False, retry=3, auto_resolve=False):
             if auto_resolve:
                 # Try to stash changes automatically
                 stash_result = subprocess.run(
-                    ["git", "stash", "save", "--include-untracked"],
+                    ["git", "stash", "save", "--include-untracked", "--quiet"],
                     capture_output=True,
                     text=True
                 )
                 if stash_result.returncode == 0:
-                    logger.info("Successfully stashed uncommitted changes")
-                    return True
+                    logger.info("Successfully stashed uncommitted changes automatically")
+                    # Verify stash was successful
+                    status_after = subprocess.run(
+                        ["git", "status", "--porcelain"],
+                        capture_output=True,
+                        text=True
+                    )
+                    if not status_after.stdout.strip():
+                        return True
+                    logger.error("Failed to fully stash changes")
+                    return False
                 else:
                     logger.error("Failed to stash changes automatically")
                     logger.info("Please resolve manually: git stash save --include-untracked")
