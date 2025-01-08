@@ -3,7 +3,7 @@
 
 ### CODE START ###
 # Initialize core systems
-/run scripts/path_config.py
+/run scripts/path_config.py --test
 /run scripts/init_logging.py
 
 # Verify environment state
@@ -15,7 +15,7 @@
 /run scripts/verify_backup.py
 
 # Archive and verify logs
-/run scripts/archive_logs.py
+/run scripts/archive_logs.py --force
 /run scripts/verify_logs.py
 
 # Finalize documentation
@@ -23,7 +23,7 @@
 /run scripts/generate_deployment_checklist.py
 
 # Verify deployment readiness
-/run scripts/verify_deployment.py --full
+/run scripts/verify_deployment.py --full --validate-admin
 
 # Deploy to production
 /run scripts/deploy_to_render.py
