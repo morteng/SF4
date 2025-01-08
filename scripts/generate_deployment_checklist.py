@@ -2,6 +2,20 @@ import sys
 import logging
 from datetime import datetime
 
+import logging
+from pathlib import Path
+
+def configure_logger():
+    """Configure the logger for checklist generation"""
+    logger = logging.getLogger(__name__)
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+    return logger
+
 def generate_checklist():
     """Generate deployment checklist with detailed items"""
     logger = configure_logger()
