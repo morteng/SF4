@@ -22,7 +22,9 @@ def update_release_notes():
     """Update release notes with current version information"""
     try:
         # Configure logger
-        logger = configure_logger()
+        from scripts.init_logging import configure_logging
+        configure_logging()
+        logger = logging.getLogger(__name__)
         
         # Get version info
         from scripts.version import get_version
