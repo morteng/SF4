@@ -22,9 +22,15 @@ def update_release_notes():
     """Update release notes with current version information"""
     try:
         # Configure logger
-        from scripts.init_logging import configure_logging
-        configure_logging()
+        logging.basicConfig(level=logging.INFO)
         logger = logging.getLogger(__name__)
+        
+        # Add project root to Python path
+        import sys
+        from pathlib import Path
+        project_root = str(Path(__file__).parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
         
         # Get version info
         from scripts.version import get_version
