@@ -3,11 +3,11 @@
 
 ### CODE START ###
 # Initialize core systems
-/run scripts/path_config.py
+/run scripts/path_config.py --test
 /run scripts/init_logging.py
 
 # Verify environment state
-/run scripts/verify_git_state.py
+/run scripts/verify_git_state.py --sync --pull
 /run scripts/verify_db_config.py
 /run scripts/verify_db_connection.py
 
@@ -15,27 +15,28 @@
 /run scripts/startup/init_db.py --test
 /run scripts/startup/init_admin.py --test
 
-# Run core test suites
-/run scripts/run_tests.py --unit
-/run scripts/run_tests.py --integration
-/run scripts/run_tests.py --e2e
+# Run comprehensive test suites
+/run scripts/run_tests.py --unit --critical
+/run scripts/run_tests.py --integration --critical
+/run scripts/run_tests.py --e2e --critical
 
 # Generate and verify coverage
-/run scripts/generate_coverage_report.py
-/run scripts/verify_test_coverage.py
+/run scripts/generate_coverage_report.py --critical
+/run scripts/verify_test_coverage.py --critical
 
 # Finalize documentation
 /run scripts/finalize_docs.py
 /run scripts/generate_deployment_checklist.py
 
 # Verify deployment readiness
-/run scripts/verify_deployment.py --full
+/run scripts/verify_deployment.py --full --validate-admin
 
 # Request deployment approval
 /run scripts/request_approval.py
 
-# Final verification
+# Run final verification
 /run scripts/verify_tests.py --final
+/run scripts/verify_test_coverage.py --critical-modules
 
 ### CODE END ###
 

@@ -31,6 +31,13 @@ def update_release_notes():
             logger.addHandler(handler)
             logger.setLevel(logging.INFO)
             
+        # Get test coverage
+        from scripts.verify_test_coverage import get_coverage
+        coverage = get_coverage()
+        if not coverage:
+            logger.error("Could not get test coverage")
+            return False
+            
         # Verify git state first
         from scripts.verify_git_state import verify_git_state
         if not verify_git_state():
