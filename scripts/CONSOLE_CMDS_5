@@ -6,24 +6,36 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Fix security permissions
-/run scripts/fix_security_permissions.py --strict --verify
-/run scripts/verify_security.py --check-env --validate-keys
+# Fix remaining security issues
+/run scripts/fix_security_permissions.py --strict --verify --check-all
+/run scripts/verify_security.py --check-env --validate-keys --verify-permissions
 
 # Commit pending changes
-/run scripts/commit_changes.py --message "Final documentation updates and security fixes"
+/run scripts/commit_changes.py --message "Final deployment preparation"
 
-# Finalize documentation
-/run scripts/finalize_docs.py --strict --validate
+# Finalize documentation with coverage reports
+/run scripts/finalize_docs.py --strict --validate --with-coverage
 
 # Generate deployment checklist
 /run scripts/generate_deployment_checklist.py --validate --strict
+
+# Verify git state is clean
+/run scripts/verify_git_state.py --pull --retry=3 --auto-resolve
 
 # Verify deployment requirements
 /run scripts/verify_deployment_requirements.py --check-env --validate-keys
 
 # Create fresh backup
 /run scripts/backup_rotation.py --max-backups=5 --compress --verify
+
+# Final deployment verification
+/run scripts/verify_deployment.py --test --check-security
+
+# Request final approval
+/run scripts/request_approval.py --final --validate
+
+# Deploy to production
+/run scripts/deploy_to_render.py --final --validate
 
 # Perform final cleanup
 /run scripts/final_cleanup.py --strict --validate
