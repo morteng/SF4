@@ -38,26 +38,6 @@ def verify_coverage(threshold=80):
             
         logger.info(f"Coverage meets {threshold}% requirement")
         logger.info(result.stdout)
-        return True
-        
-        # Verify critical modules if requested
-        if critical:
-            critical_modules = {
-                'app/models': 90,
-                'app/services': 90,
-                'app/routes': 85,
-                'app/controllers': 85
-            }
-            
-            for module, min_coverage in critical_modules.items():
-                if module in result.stdout:
-                    coverage_line = next(line for line in result.stdout.splitlines() 
-                                       if module in line)
-                    coverage_pct = int(coverage_line.split()[-1].rstrip('%'))
-                    if coverage_pct < min_coverage:
-                        logger.error(f"{module} coverage {coverage_pct}% < {min_coverage}%")
-                        return False
-        
         # Verify critical modules have required coverage
         critical_modules = {
             'app/models': 90,
@@ -74,29 +54,7 @@ def verify_coverage(threshold=80):
                 if coverage_pct < min_coverage:
                     logger.error(f"{module} coverage {coverage_pct}% < {min_coverage}%")
                     return False
-        
-        # Verify minimum coverage per module
-        module_coverage = {
-            'app': 80,
-            'scripts': 90,
-            'tests': 95
-        }
-        
-        for module, min_coverage in module_coverage.items():
-            if f"{module}/" in result.stdout:
-                coverage_line = next(line for line in result.stdout.splitlines() 
-                                   if f"{module}/" in line)
-                coverage_pct = int(coverage_line.split()[-1].rstrip('%'))
-                if coverage_pct < min_coverage:
-                    logger.error(f"{module} coverage {coverage_pct}% < {min_coverage}%")
-                    return False
-        
-        if result.returncode != 0:
-            logger.error(f"Coverage verification failed: {result.stderr}")
-            return False
-            
-        logger.info("Coverage verification passed")
-        logger.info(result.stdout)
+                    
         return True
         
     except Exception as e:
