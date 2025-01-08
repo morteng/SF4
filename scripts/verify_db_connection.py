@@ -38,10 +38,10 @@ def verify_db_connection():
                 logger.warning(f"Using unknown database type: {db_uri.split(':')[0]}")
             
             # Create engine and test connection
-        engine = create_engine(db_uri)
-        with engine.connect() as connection:
-            logger.info("Successfully connected to database")
-            return True
+            engine = create_engine(db_uri)
+            with engine.connect() as connection:
+                logger.info("Successfully connected to database")
+                return True
             
         except SQLAlchemyError as e:
             if attempt == max_retries - 1:
