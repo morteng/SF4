@@ -99,6 +99,11 @@ def verify_deployment(*args, **kwargs):
     if not validate_version():
         logger.error("Version validation failed")
         return False
+        
+    # Verify admin user if requested
+    if kwargs.get('check_type') == 'check-admin':
+        from scripts.verify_admin import verify_admin_user
+        return verify_admin_user()
     if not logger.handlers:
         handler = logging.StreamHandler()
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
