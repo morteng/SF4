@@ -231,3 +231,65 @@ def main():
 
 if __name__ == "__main__":
     main()
+import os
+import logging
+import requests
+from pathlib import Path
+
+def configure_logger():
+    """Configure logging for production verification"""
+    logger = logging.getLogger('production')
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+    return logger
+
+def verify_production():
+    """Verify production environment is ready"""
+    logger = configure_logger()
+    
+    try:
+        # Verify required environment variables
+        required_vars = [
+            'FLASK_ENV',
+            'SQLALCHEMY_DATABASE_URI',
+            'SECRET_KEY',
+            'RENDER_API_KEY',
+            'RENDER_SERVICE_ID'
+        ]
+        
+        missing_vars = [var for var in required_vars if not os.getenv(var)]
+        if missing_vars:
+            logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
+            return False
+            
+        # Verify database connection
+        from scripts.verify_db_connection import verify_db_connection
+        if not verify_db_connection():
+            logger.error("Database connection verification failed")
+            return False
+            
+        # Verify Render service
+        from scripts.verify_render_ready import verify_render_ready
+        if not verify_render_ready():
+            logger.error("Render service verification failed")
+            return False
+            
+        logger.info("Production environment verified successfully")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Production verification failed: {str(e)}")
+        return False
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+    if verify_production():
+        print("Production verification passed")
+        exit(0)
+    else:
+        print("Production verification failed")
+        exit(1)
