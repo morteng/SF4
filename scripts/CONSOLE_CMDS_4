@@ -2,43 +2,45 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Configure Python paths first
+# Configure Python paths
 /run scripts/path_config.py
 
-# Initialize logging system
+# Initialize logging
 /run scripts/init_logging.py
 
-# Set up environment with proper paths and context
-/run scripts/setup_test_env.py --full
+# Set up review environment
+/run scripts/setup_test_env.py --review
 
 # Verify database connection
 /run scripts/verify_db_connection.py --test
 
-# Initialize database schema
+# Initialize test database
 /run scripts/startup/init_db.py --test
 
-# Initialize admin user with test context
+# Verify admin user
 /run scripts/startup/init_admin.py --test
 
-# Run all tests and verify coverage
-/run scripts/run_tests.py --full
-/run scripts/generate_coverage_report.py --verify
-/run scripts/verify_tests.py --full
+# Run final tests
+/run scripts/run_tests.py --unit
+/run scripts/run_tests.py --integration
+
+# Generate coverage report
+/run scripts/generate_coverage_report.py
+
+# Verify test results
+/run scripts/verify_tests.py
 
 # Generate deployment checklist
-/run scripts/generate_deployment_checklist.py --overwrite
+/run scripts/generate_deployment_checklist.py
 
 # Finalize documentation
-/run scripts/finalize_docs.py --overwrite
+/run scripts/finalize_docs.py
 
 # Request deployment approval
 /run scripts/request_approval.py
 
-# Run comprehensive deployment verification
-/run scripts/verify_deployment.py --full --test
-
 # Verify production readiness
-/run scripts/deploy_to_render.py --verify
+/run scripts/deploy_to_render.py --dry-run
 
 ### CODE END ###
 

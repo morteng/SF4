@@ -31,6 +31,17 @@ def update_release_notes():
             logger.addHandler(handler)
             logger.setLevel(logging.INFO)
             
+        # Get version info
+        from scripts.version import get_version
+        version = get_version()
+        if not version:
+            logger.error("Could not determine current version")
+            return False
+            
+        # Get test coverage
+        from scripts.generate_coverage_report import get_coverage
+        coverage = get_coverage()
+            
         # Add project root to Python path
         import sys
         from pathlib import Path
