@@ -6,33 +6,34 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Fix security permissions
-/run scripts/fix_security_permissions.py
+# Fix critical security issues
+/run scripts/fix_security_permissions.py --strict --verify
+/run scripts/verify_security.py --full-scan
 
-# Setup clean test environment
-/run scripts/setup_test_env.py --clean --with-context
+# Setup clean test environment with Render config
+/run scripts/setup_test_env.py --clean --with-context --render
 
 # Install test dependencies
 /run scripts/install_test_dependencies.py --test --strict
 
-# Initialize test database
-/run scripts/startup/init_db.py --validate-schema --test --migrate
+# Initialize test database with enhanced validation
+/run scripts/startup/init_db.py --validate-schema --test --migrate --backup-first
 
-# Run comprehensive test suites
-/run scripts/run_tests.py --unit --integration --e2e --coverage --retry=3
+# Run focused test suites
+/run scripts/run_tests.py --unit --integration --security --render
 
-# Generate coverage reports
-/run scripts/generate_coverage_report.py --html --xml --show-missing
+# Generate detailed coverage reports
+/run scripts/generate_coverage_report.py --html --xml --show-missing --critical
 
-# Verify coverage
-/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90
+# Verify coverage with module-specific thresholds
+/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90,app/security:95
 
-# Verify test cleanup
+# Verify test cleanup and environment reset
 /run scripts/verify_test_cleanup.py --strict --validate
 
-# Final verification
+# Final verification with deployment checks
 /run scripts/verify_tests.py --final --validate-all
-/run scripts/verify_deployment.py --test --check-security
+/run scripts/verify_deployment.py --test --check-security --check-render
 
 ### CODE END ###
 
