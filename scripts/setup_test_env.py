@@ -56,7 +56,7 @@ def setup_test_paths():
         return False
 
 def configure_test_environment():
-    """Set up test environment variables"""
+    """Set up test environment variables and application context"""
     try:
         # Install required packages
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
@@ -68,11 +68,15 @@ def configure_test_environment():
             'ADMIN_USERNAME': 'testadmin',
             'ADMIN_EMAIL': 'test@example.com',
             'ADMIN_PASSWORD': 'TestPassword123!',
-            'SECRET_KEY': 'TestSecretKey1234567890!@#$%^&*()'
+            'SECRET_KEY': 'TestSecretKey1234567890!@#$%^&*()',
+            'TESTING': 'true'
         })
         
-        # Verify Flask installation
-        import flask
+        # Create and push application context
+        from app.factory import create_app
+        app = create_app('testing')
+        app.app_context().push()
+        
         return True
     except Exception as e:
         logger.error(f"Failed to configure test environment: {str(e)}")

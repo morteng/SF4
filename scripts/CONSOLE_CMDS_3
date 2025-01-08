@@ -5,13 +5,13 @@
 # Initialize logging system
 /run scripts/init_logging.py
 
-# Set up test environment with proper paths
-/run scripts/setup_test_env.py --verify
+# Set up test environment with proper paths and context
+/run scripts/setup_test_env.py --full
 
 # Initialize test database
 /run scripts/startup/init_db.py --test
 
-# Initialize admin user
+# Initialize admin user with test context
 /run scripts/startup/init_admin.py --test
 
 # Verify database connection
