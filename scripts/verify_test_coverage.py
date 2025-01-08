@@ -14,7 +14,7 @@ def configure_coverage_logging():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_coverage(threshold=80):
+def verify_coverage(threshold=80, critical=False):
     """Verify test coverage meets requirements with enhanced checks"""
     logger = configure_coverage_logging()
     
@@ -35,6 +35,24 @@ def verify_coverage(threshold=80):
             capture_output=True,
             text=True
         )
+        
+        # Verify critical modules if requested
+        if critical:
+            critical_modules = {
+                'app/models': 90,
+                'app/services': 90,
+                'app/routes': 85,
+                'app/controllers': 85
+            }
+            
+            for module, min_coverage in critical_modules.items():
+                if module in result.stdout:
+                    coverage_line = next(line for line in result.stdout.splitlines() 
+                                       if module in line)
+                    coverage_pct = int(coverage_line.split()[-1].rstrip('%'))
+                    if coverage_pct < min_coverage:
+                        logger.error(f"{module} coverage {coverage_pct}% < {min_coverage}%")
+                        return False
         
         # Verify critical modules have required coverage
         critical_modules = {
