@@ -48,6 +48,11 @@ def setup_test_paths():
             if app_dir not in sys.path:
                 sys.path.insert(0, app_dir)
                 
+            # Add .venv site-packages to path
+            venv_path = str(Path(project_root) / '.venv' / 'Lib' / 'site-packages')
+            if venv_path not in sys.path:
+                sys.path.insert(0, venv_path)
+                
             from app import db
             from app.models import User
             from scripts.version import validate_version

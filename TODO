@@ -35,6 +35,8 @@
 - [x] Verify test database migrations
 - [x] Add test dependency installation script
 - [x] Update test execution sequence
+- [x] Add venv site-packages to Python path
+- [x] Update final review checklist
 
 ---
 
