@@ -19,9 +19,14 @@ def verify_coverage(threshold=80):
     logger = configure_coverage_logging()
     
     try:
-        # Run coverage report
+        # Add project root to Python path
+        project_root = str(Path(__file__).parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+        
+        # Run coverage report with detailed output
         result = subprocess.run(
-            ['coverage', 'report', f'--fail-under={threshold}'],
+            ['coverage', 'report', f'--fail-under={threshold}', '--show-missing', '--skip-covered'],
             capture_output=True,
             text=True
         )
@@ -34,19 +39,6 @@ def verify_coverage(threshold=80):
         logger.info(f"Coverage meets {threshold}% requirement")
         logger.info(result.stdout)
         return True
-    
-    try:
-        # Add project root to Python path
-        project_root = str(Path(__file__).parent.parent)
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
-        
-        # Run coverage report with detailed output
-        result = subprocess.run(
-            ['coverage', 'report', f'--fail-under={threshold}', '--show-missing', '--skip-covered'],
-            capture_output=True,
-            text=True
-        )
         
         # Verify critical modules if requested
         if critical:
