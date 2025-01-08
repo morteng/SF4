@@ -6,29 +6,31 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Setup clean test environment
-/run scripts/setup_test_env.py --clean
-/run scripts/install_test_dependencies.py --test
+# Setup clean test environment with proper context
+/run scripts/setup_test_env.py --clean --with-context
+/run scripts/install_test_dependencies.py --test --strict
 
-# Initialize test database and admin
-/run scripts/startup/init_db.py --validate-schema --test
-/run scripts/startup/init_admin.py --verify-email --check-password --test
+# Initialize test database with schema validation
+/run scripts/startup/init_db.py --validate-schema --test --migrate
 
-# Run all test suites with coverage
-/run scripts/run_tests.py --unit --coverage
-/run scripts/run_tests.py --integration --coverage
-/run scripts/run_tests.py --e2e --coverage
+# Initialize admin user with strict validation
+/run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity --test
 
-# Generate and verify coverage
-/run scripts/generate_coverage_report.py --html --xml
-/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules
+# Run comprehensive test suites
+/run scripts/run_tests.py --unit --integration --e2e --coverage --retry=3
 
-# Verify test cleanup
-/run scripts/verify_test_cleanup.py --strict
+# Generate detailed coverage reports
+/run scripts/generate_coverage_report.py --html --xml --show-missing
 
-# Final verification
-/run scripts/verify_tests.py --final
-/run scripts/verify_deployment.py --test
+# Verify coverage with module thresholds
+/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90
+
+# Verify test environment cleanup
+/run scripts/verify_test_cleanup.py --strict --validate
+
+# Final verification with deployment checks
+/run scripts/verify_tests.py --final --validate-all
+/run scripts/verify_deployment.py --test --check-security
 
 ### CODE END ###
 
