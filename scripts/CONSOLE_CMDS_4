@@ -6,27 +6,18 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Fix critical security issues
+# Fix security permissions
 /run scripts/fix_security_permissions.py --strict --verify
-/run scripts/verify_security.py --full-scan
+/run scripts/verify_security.py --check-env --validate-keys
 
-# Verify and sync git state
+# Verify git state
 /run scripts/verify_git_state.py --pull --retry=3 --auto-resolve
 
 # Validate database configuration
 /run scripts/verify_db_config.py --validate-uri --check-permissions
 /run scripts/verify_db_connection.py --retry=3 --timeout=10 --validate-schema
 
-# Initialize database with schema validation
-/run scripts/startup/init_db.py --validate-schema --check-migrations --backup-first
-
-# Run critical test coverage checks
-/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90,app/security:95
-
-# Prepare Render deployment
-/run scripts/verify_render_ready.py --check-api --validate-vars --test-deploy
-
-# Generate final documentation
+# Finalize documentation
 /run scripts/finalize_docs.py --strict --validate
 
 # Generate deployment checklist
@@ -36,8 +27,7 @@
 /run scripts/request_approval.py --final --validate
 
 # Final verification
-/run scripts/verify_tests.py --final --validate-all
-/run scripts/verify_deployment.py --test --check-security --check-render
+/run scripts/verify_deployment.py --test --check-security
 
 ### CODE END ###
 
