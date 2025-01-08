@@ -1,8 +1,15 @@
 # Final cleanup
 
+/ask are there issues with the code or tests we should fix here at the end of the cycle?
+
+/code implement the suggested changes
+
 /add TODO
+
+/run scripts/end_cycle.py
+
 # Write a new devlog
-/code remove previous DEVLOG.md entry and write a new one based on this code cycle. Remove all completed todo items.
+/code remove previous DEVLOG.md entry and write a new one based on this code cycle. Remove all completed todo items. Review and revise MANAGER.txt, remove instructions that have been implemented or added to TODO
 
 # Reset and start new cycle
 /reset
