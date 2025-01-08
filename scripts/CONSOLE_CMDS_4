@@ -25,6 +25,9 @@
 # Run comprehensive test suite
 /run scripts/run_tests.py --unit --integration --e2e --coverage --retry=3
 
+# Fix test coverage reporting
+/run scripts/fix_coverage_reporting.py
+
 # Generate detailed coverage reports
 /run scripts/generate_coverage_report.py --html --xml --show-missing
 
