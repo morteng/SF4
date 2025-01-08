@@ -12,10 +12,11 @@ if not logger.handlers:
     logger.addHandler(handler)
     logger.setLevel(logging.INFO)
 
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent)
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
+# Configure paths first
+from scripts.path_config import configure_paths
+if not configure_paths():
+    logger.error("Path configuration failed")
+    exit(1)
 
 def update_release_notes():
     """Update release notes with current version information"""
