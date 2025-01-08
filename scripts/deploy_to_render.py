@@ -3,6 +3,12 @@ import subprocess
 import logging
 import sys
 from pathlib import Path
+
+# Add project root to Python path
+project_root = str(Path(__file__).parent.parent)
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
 from scripts.version import validate_version, get_version
 
 # Configure logger at module level
