@@ -72,11 +72,16 @@ def setup_test_paths():
         logger.error(f"Failed to setup test paths: {str(e)}")
         return False
 
-def configure_test_environment():
-    """Set up test environment variables and application context"""
+def configure_test_environment(mode: str = 'test'):
+    """Set up environment variables and application context"""
     try:
-        # Install required packages
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
+        # Install appropriate packages
+        if mode == 'review':
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements-review.txt"])
+        elif mode == 'test':
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements-test.txt"])
+        else:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
         
         # Set environment variables
         os.environ.update({
