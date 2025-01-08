@@ -20,9 +20,12 @@
 # Generate final documentation
 /run scripts/finalize_docs.py
 
+# Update progress tracking
+/run scripts/update_progress.py
+
 # Commit and push changes
 /run git add .
-/run git commit -m "Final deployment v1.2.11"
+/run git commit -m "Release v1.2.11"
 /run git push origin main
 
 # Deploy to production
