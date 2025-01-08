@@ -89,6 +89,24 @@ def verify_security_settings():
                 
     return True
 
+def verify_db_connection():
+    """Verify database connection"""
+    try:
+        from scripts.verify_db_connection import verify_db_connection as verify_db
+        return verify_db()
+    except Exception as e:
+        logger.error(f"Database connection verification failed: {str(e)}")
+        return False
+
+def verify_test_coverage():
+    """Verify test coverage meets requirements"""
+    try:
+        from scripts.verify_test_coverage import verify_coverage
+        return verify_coverage()
+    except Exception as e:
+        logger.error(f"Test coverage verification failed: {str(e)}")
+        return False
+
 def verify_deployment(*args, **kwargs):
     """Verify all deployment requirements are met"""
     global logger
