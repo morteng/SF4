@@ -25,7 +25,7 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_tests():
+def verify_tests(final=False):
     """Verify all tests pass with proper configuration"""
     # Configure logger at module level
     global logger
@@ -37,11 +37,19 @@ def verify_tests():
         if not setup_test_paths():
             raise RuntimeError("Failed to setup test paths")
         
-        # Verify test environment
-        from scripts.setup_test_env import setup_test_paths
-        if not setup_test_paths():
-            logger.error("Failed to setup test paths")
-            return False
+        # Additional verification for final check
+        if final:
+            # Verify git state
+            from scripts.verify_git_state import verify_git_state
+            if not verify_git_state():
+                logger.error("Git state verification failed")
+                return False
+                
+            # Verify test coverage
+            from scripts.verify_test_coverage import verify_coverage
+            if not verify_coverage():
+                logger.error("Test coverage verification failed")
+                return False
         
         # Run core test suites
         test_suites = [

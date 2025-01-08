@@ -14,21 +14,30 @@
 /run scripts/startup/init_db.py --test
 /run scripts/verify_db_connection.py --test
 
-# Initialize test admin user
+# Initialize test admin user with enhanced security
 /run scripts/startup/init_admin.py --test
 
-# Run comprehensive test suite including new backup tests
+# Run comprehensive test suite
 /run scripts/run_tests.py --all
 
-# Generate and verify coverage report
+# Generate detailed coverage report
 /run scripts/generate_coverage_report.py
+
+# Verify test results and coverage
 /run scripts/verify_tests.py
+/run scripts/verify_test_coverage.py
 
 # Run security and deployment verification
 /run scripts/verify_deployment.py --full
 
 # Verify backup rotation functionality
 /run scripts/backup_rotation.py --test
+
+# Verify git state is clean
+/run scripts/verify_git_state.py
+
+# Final test verification
+/run scripts/verify_tests.py --final
 
 ### CODE END ###
 

@@ -15,7 +15,7 @@ def configure_coverage_logging():
     return logger
 
 def verify_coverage():
-    """Verify test coverage meets requirements"""
+    """Verify test coverage meets requirements with enhanced checks"""
     logger = configure_coverage_logging()
     
     try:
@@ -26,10 +26,26 @@ def verify_coverage():
         
         # Run coverage report with detailed output
         result = subprocess.run(
-            ['coverage', 'report', '--fail-under=80', '--show-missing'],
+            ['coverage', 'report', '--fail-under=80', '--show-missing', '--skip-covered'],
             capture_output=True,
             text=True
         )
+        
+        # Verify critical modules have 90%+ coverage
+        critical_modules = {
+            'app/models': 90,
+            'app/services': 90,
+            'app/routes': 85
+        }
+        
+        for module, min_coverage in critical_modules.items():
+            if module in result.stdout:
+                coverage_line = next(line for line in result.stdout.splitlines() 
+                                   if module in line)
+                coverage_pct = int(coverage_line.split()[-1].rstrip('%'))
+                if coverage_pct < min_coverage:
+                    logger.error(f"{module} coverage {coverage_pct}% < {min_coverage}%")
+                    return False
         
         # Verify minimum coverage per module
         module_coverage = {
