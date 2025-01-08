@@ -4,12 +4,15 @@ from pathlib import Path
 
 def cleanup():
     """Perform final cleanup tasks before deployment"""
-    # Remove temporary files
-    temp_dirs = [
+    # Remove temporary files and directories
+    temp_items = [
         'tmp',
         'build',
         'dist',
-        '__pycache__'
+        '__pycache__',
+        '.pytest_cache',
+        '.coverage',
+        'htmlcov'
     ]
     
     for temp_dir in temp_dirs:

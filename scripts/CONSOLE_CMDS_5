@@ -2,17 +2,15 @@
 # IMPORTANT! ONLY edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Configure Python paths and logging
+# Initialize core systems
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Verify git state is clean
+# Verify environment state
 /run scripts/verify_git_state.py
+/run scripts/verify_db_connection.py
 
-# Verify deployment readiness
-/run scripts/verify_deployment.py --full
-
-# Create final backup and verify
+# Create and verify backup
 /run scripts/create_backup.py --timestamped
 /run scripts/verify_backup.py
 
@@ -22,17 +20,16 @@
 
 # Finalize documentation
 /run scripts/finalize_docs.py
-
-# Generate deployment checklist
 /run scripts/generate_deployment_checklist.py
+
+# Verify deployment readiness
+/run scripts/verify_deployment.py --full
 
 # Deploy to production
 /run scripts/deploy_to_render.py
 
-# Perform final cleanup
+# Final cleanup and cycle end
 /run scripts/final_cleanup.py
-
-# End development cycle
 /run scripts/end_cycle.py
 
 # Push changes to GitHub
