@@ -1,6 +1,6 @@
 ### **Instructions**
 
-We need to create end to end tests for all admin use cases, from login to registering a new stipend in db.
+We need to create end to end tests for all admin use cases, from login to registering a new stipend in db, creating auser, all other admin functionality.
 
 No need to encrypt log archives, leave 'em plain text.
 
@@ -19,12 +19,7 @@ IMPORTANT NEW INFO! I have added a RENDER_API_KEY to .env file in project root f
 
 ### **Priorities**
 
-1. **Ultra Priority (Critical):**
-   - At application startup, automatically import the default admin user from `.env` if no admin user exists in the database.  
-   - The updated `ADMIN_PASSWORD` in `.env` and `.env.example` is:  
-     `ADMIN_PASSWORD=Aa1234567812345678?`
-
-2. **High Priority:**
+1. **High Priority:**
    - Remove all references to `stipends.db`. Ensure variables like `admin`, `database name`, and other configurations are read from `.env`.  
      Refer to `.env.example` for structure:  
      `SQLALCHEMY_DATABASE_URI=sqlite:///instance/site.db`.
