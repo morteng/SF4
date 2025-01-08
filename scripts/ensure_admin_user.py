@@ -15,28 +15,32 @@ def ensure_admin_user():
         if not admin:
             logger.info("Creating default admin user")
             admin = User(
-                username=os.getenv('ADMIN_USERNAME'),
-                email=os.getenv('ADMIN_EMAIL'),
-                is_admin=True
+                username=os.getenv('ADMIN_USERNAME', 'admin'),
+                email=os.getenv('ADMIN_EMAIL', 'admin@example.com'),
+                is_admin=True,
+                is_active=True  # Ensure admin is active
             )
-            admin.set_password(os.getenv('ADMIN_PASSWORD'))
+            admin.set_password(os.getenv('ADMIN_PASSWORD', 'admin'))
             db.session.add(admin)
             
             # Log the creation
             AuditLog.create(
                 user_id=0,  # System user
                 action="create_admin_user",
-                details="Created default admin user from .env"
+                details="Created default admin user from .env",
+                object_type="User",
+                object_id=admin.id
             )
             db.session.commit()
-            logger.info("Admin user created successfully")
+            logger.info(f"Admin user created successfully with username: {admin.username}")
         else:
-            logger.info("Admin user already exists")
+            logger.info(f"Admin user already exists (username: {admin.username})")
             
         return True
         
     except Exception as e:
         logger.error(f"Error creating admin user: {str(e)}")
+        db.session.rollback()
         return False
 
 if __name__ == "__main__":

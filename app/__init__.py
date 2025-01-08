@@ -4,6 +4,7 @@ import logging
 from flask import Flask
 from dotenv import load_dotenv
 from app.extensions import db, login_manager, migrate, csrf, limiter
+from scripts.ensure_admin_user import ensure_admin_user
 
 logger = logging.getLogger(__name__)
 
@@ -95,10 +96,13 @@ def create_app(config_name='development'):
             # Only initialize admin user if not in test mode and after migrations
             if not app.config.get('TESTING') and os.path.exists(env_path):
                 try:
-                    init_admin_user()  # Now the tables exist
+                    # Ensure admin user exists after migrations
+                    if not ensure_admin_user():
+                        logger.error("Failed to ensure admin user exists")
+                        raise RuntimeError("Admin user initialization failed")
                 except Exception as e:
-                    logger.warning(f"Admin user initialization failed: {str(e)}")
-                    logger.warning("This is normal during initial setup. Run 'flask db upgrade' to create the database tables.")
+                    logger.error(f"Admin user initialization failed: {str(e)}")
+                    raise RuntimeError(f"Admin user initialization failed: {str(e)}")
             
             # Register blueprints
             from app.routes.admin import register_admin_blueprints
