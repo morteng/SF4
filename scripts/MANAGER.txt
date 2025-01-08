@@ -1,11 +1,5 @@
 ### **Instructions**
 
-VERY IMPORTANT: We need to create end to end tests for all admin use cases, from login to registering a new stipend in db, creating a user, unsing all other admin functionality, via the web interface.
-
-No need to encrypt log archives, leave 'em plain text.
-
-IMPORTANT NEW INFO! I have added a RENDER_API_KEY to .env file in project root folder. Using this you should be able to authenticate and programmatically control the deployment of the app to render.com.
-
 **General Guidelines:**
 1. **Folder and File Operations:** Use temporary scripts to create/move files or folders. Execute them with `/run your_script.py` in the relevant console command step.
 2. **Python Execution:** Write Python scripts in proper folders and execute them with `/run your_script.py`. Never run Python code directly in console commands.
@@ -17,28 +11,17 @@ IMPORTANT NEW INFO! I have added a RENDER_API_KEY to .env file in project root f
 
 ---
 
-### **Priorities**
+### **Current Priorities**
 
-1. **High Priority:**
-   - Remove all references to `stipends.db`. Ensure variables like `admin`, `database name`, and other configurations are read from `.env`.  
-     Refer to `.env.example` for structure:  
-     `SQLALCHEMY_DATABASE_URI=sqlite:///instance/site.db`.
-   - Implement a system for the production server (on [Render](https://render.com)) to pull the CEO-approved version of the site and go live.  
-     Use CLI for Render control (login via GitHub).
+1. **Test Coverage:**
+   - Implement module-specific coverage thresholds
+   - Add end-to-end admin tests
+   - Fix coverage reporting issues
 
----
-
-### **Requests**
-1. **File Maintenance:**
-   - Overwrite files like `RELEASE_NOTES.md` and `VERSION_HISTORY.md` during updates to prevent indefinite growth.
-   - Organize the `scripts` folder, moving files into appropriate subfolders.
-   - Handle backups by:
-     - Deleting older backups.
-     - Ensuring `site.db` is backed up correctly.
-
-2. **Documentation and Testing:**
-   - Maintain comprehensive documentation. Update `README.md`, `DESIGN.md`, and other relevant files per cycle.
-   - Ensure proper GitHub testing integration and handle all related configurations effectively.
+2. **Deployment Preparation:**
+   - Verify all environment variables
+   - Test deployment rollback procedure
+   - Finalize security verification
 
 ---
 
@@ -46,6 +29,7 @@ IMPORTANT NEW INFO! I have added a RENDER_API_KEY to .env file in project root f
 - Work on **one feature at a time**.
 - **Verify all changes** before deployment.
 - Keep **outputs concise** and avoid unnecessary logs or inputs.
-- Ensure all configuration values (admin credentials, database name, etc.) are dynamically loaded from `.env`.
+- Ensure all configuration values are dynamically loaded from `.env`.
+- Maintain 80%+ test coverage for all critical modules.
 
 ---
