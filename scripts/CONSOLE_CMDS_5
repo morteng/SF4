@@ -6,39 +6,37 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Create and verify final backup
-/run scripts/create_backup.py --timestamped
-/run scripts/verify_backup.py --full
+# Verify git state is clean
+/run scripts/verify_git_state.py
 
-# Archive and verify logs
-/run scripts/archive_logs.py --force
-/run scripts/verify_logs.py --strict
-
-# Final deployment verification
+# Verify deployment readiness
 /run scripts/verify_deployment.py --full
 
-# Generate final documentation
+# Create final backup and verify
+/run scripts/create_backup.py --timestamped
+/run scripts/verify_backup.py
+
+# Archive and verify logs
+/run scripts/archive_logs.py
+/run scripts/verify_logs.py
+
+# Finalize documentation
 /run scripts/finalize_docs.py
 
-# Update progress tracking
-/run scripts/update_progress.py
-
-# Commit and push changes
-/run git add .
-/run git commit -m "Release v1.2.11"
-/run git push origin main
+# Generate deployment checklist
+/run scripts/generate_deployment_checklist.py
 
 # Deploy to production
 /run scripts/deploy_to_render.py
-
-# Verify deployment
-/run scripts/verify_deployment.py --post-deploy
 
 # Perform final cleanup
 /run scripts/final_cleanup.py
 
 # End development cycle
 /run scripts/end_cycle.py
+
+# Push changes to GitHub
+/run git push origin main
 
 ### CODE END ###
 
