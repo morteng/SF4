@@ -40,9 +40,9 @@ git push origin main
 # End development cycle
 /run scripts/end_cycle.py --log
 
-# Reset and start new cycle
-/reset
-/load scripts/STEP_1
+# Reset and start new cyclen - never do this inside code block, this part belongs outside code block!
+# /reset
+# /load scripts/STEP_1
 
 ### CODE END ###
 
