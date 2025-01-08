@@ -29,6 +29,17 @@ except ImportError as e:
     logger.error(f"Failed to import required modules: {str(e)}")
     exit(1)
 
+def configure_logger():
+    """Configure logger for documentation scripts"""
+    logger = logging.getLogger(__name__)
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+    return logger
+
 def update_release_notes():
     """Update release notes with current version information"""
     logger = configure_logger()
@@ -54,6 +65,12 @@ def update_release_notes():
             f.write("- Updated documentation\n")
             f.write("- Verified deployment requirements\n")
             f.write("- Finalized version history\n")
+            
+        logger.info("Release notes updated successfully")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to update release notes: {str(e)}")
+        return False
         
         # Get version info
         from scripts.version import get_version
