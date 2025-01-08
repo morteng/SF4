@@ -36,6 +36,9 @@ node_modules/
 # System files
 .DS_Store
 Thumbs.db
-
+*.zip
 htmlcov/
 backups/*.zip
+
+logs/
+logs/*.*
