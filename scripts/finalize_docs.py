@@ -31,6 +31,18 @@ def update_release_notes():
             logger.addHandler(handler)
             logger.setLevel(logging.INFO)
             
+        # Verify git state first
+        from scripts.verify_git_state import verify_git_state
+        if not verify_git_state():
+            logger.error("Cannot update docs with uncommitted changes")
+            return False
+            
+        # Get test coverage
+        from scripts.verify_test_coverage import verify_coverage
+        if not verify_coverage():
+            logger.error("Cannot update docs with incomplete test coverage")
+            return False
+            
         # Get test coverage
         from scripts.verify_test_coverage import get_coverage
         coverage = get_coverage()

@@ -4,7 +4,7 @@
 ### CODE START ###
 # Initialize core systems
 /run scripts/path_config.py --test
-/run scripts/init_logging.py
+/run scripts/init_logging.py --test
 
 # Verify environment state
 /run scripts/verify_git_state.py --sync --pull
@@ -37,6 +37,8 @@
 # Run final verification
 /run scripts/verify_tests.py --final
 /run scripts/verify_test_coverage.py --critical-modules
+/run scripts/verify_review.py
+/run scripts/verify_test_cleanup.py
 
 ### CODE END ###
 
