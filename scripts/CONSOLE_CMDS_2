@@ -7,27 +7,27 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Verify git state and sync with remote
-/run scripts/verify_git_state.py --sync --pull
+# Verify and sync git state
+/run scripts/verify_git_state.py --sync --pull --retry=3
 
-# Verify database configuration and connection
+# Verify database configuration
 /run scripts/verify_db_config.py
-/run scripts/verify_db_connection.py
+/run scripts/verify_db_connection.py --retry=3 --timeout=10
 
 # Initialize database and admin user
-/run scripts/startup/init_db.py
-/run scripts/startup/init_admin.py --update
+/run scripts/startup/init_db.py --validate-schema
+/run scripts/startup/init_admin.py --update --verify-email
 
 # Run comprehensive pre-deployment checks
-/run scripts/verify_test_coverage.py --critical
-/run scripts/verify_deployment.py --full --validate-admin
-/run scripts/backup_rotation.py --max-backups=7
+/run scripts/verify_test_coverage.py --critical --min-coverage=80
+/run scripts/verify_deployment.py --full --validate-admin --check-render
+/run scripts/backup_rotation.py --max-backups=7 --verify-integrity
 
 # Verify Render environment readiness
-/run scripts/verify_render_ready.py --validate-api
+/run scripts/verify_render_ready.py --validate-api --check-service
 
 # Run final deployment verification
-/run scripts/verify_deployment.py --final-check
+/run scripts/verify_deployment.py --final-check --validate-schema
 
 ### CODE END ###
 
