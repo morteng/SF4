@@ -7,29 +7,30 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Verify and sync git state with auto-resolve
-/run scripts/verify_git_state.py --pull --retry=3 --auto-resolve
+# Commit pending changes
+/run scripts/commit_changes.py
 
-# Verify database setup with enhanced checks
+# Verify and sync git state
+/run scripts/verify_git_state.py --pull --retry=3
+
+# Initialize database with enhanced checks
 /run scripts/verify_db_config.py --validate-uri
 /run scripts/verify_db_connection.py --retry=3 --timeout=10
-
-# Initialize database with schema validation
 /run scripts/startup/init_db.py --validate-schema --check-migrations
 
 # Initialize admin user with strict validation
 /run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity
 
 # Run comprehensive security checks
-/run scripts/verify_deployment.py --check-security --validate-env
+/run scripts/verify_security.py --full-scan
 
-# Verify test coverage with module-specific thresholds
+# Verify test coverage
 /run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90
 
-# Prepare Render deployment environment
+# Prepare Render deployment
 /run scripts/verify_render_ready.py --check-api --validate-vars
 
-# Rotate backups before deployment
+# Rotate backups
 /run scripts/backup_rotation.py --max-backups=5 --compress
 
 # Final deployment verification
