@@ -47,6 +47,12 @@ def verify_deployment_checks():
     app = create_app()  # Create application instance
     with app.app_context():  # Establish application context
         try:
+            # Verify test coverage
+            from scripts.verify_test_coverage import verify_coverage
+            if not verify_coverage():
+                logger.error("Test coverage verification failed")
+                return False
+                
             # Verify version
             version = get_version()
             if not validate_version(version):

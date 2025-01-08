@@ -24,12 +24,28 @@ def verify_coverage():
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
         
-        # Run coverage report
+        # Run coverage report with detailed output
         result = subprocess.run(
-            ['coverage', 'report', '--fail-under=80'],
+            ['coverage', 'report', '--fail-under=80', '--show-missing'],
             capture_output=True,
             text=True
         )
+        
+        # Verify minimum coverage per module
+        module_coverage = {
+            'app': 80,
+            'scripts': 90,
+            'tests': 95
+        }
+        
+        for module, min_coverage in module_coverage.items():
+            if f"{module}/" in result.stdout:
+                coverage_line = next(line for line in result.stdout.splitlines() 
+                                   if f"{module}/" in line)
+                coverage_pct = int(coverage_line.split()[-1].rstrip('%'))
+                if coverage_pct < min_coverage:
+                    logger.error(f"{module} coverage {coverage_pct}% < {min_coverage}%")
+                    return False
         
         if result.returncode != 0:
             logger.error(f"Coverage verification failed: {result.stderr}")
