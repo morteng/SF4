@@ -18,27 +18,21 @@ def verify_test_cleanup():
     logger = configure_logger()
     
     try:
-        # Check for leftover test files
-        test_files = list(Path('tests').rglob('*.tmp'))
-        if test_files:
-            logger.error(f"Found leftover test files: {len(test_files)}")
-            return False
-            
-        # Check test database cleanup
-        test_db = Path('instance/test.db')
-        if test_db.exists():
-            logger.error("Test database not cleaned up")
-            return False
-            
-        # Check test logs cleanup
-        test_logs = list(Path('logs').glob('test_*.log'))
-        if test_logs:
-            logger.error(f"Found leftover test logs: {len(test_logs)}")
-            return False
-            
-        # Verify environment variables reset
+        # Check for leftover files
+        cleanup_checks = [
+            (list(Path('tests').rglob('*.tmp')), "test files"),
+            ([Path('instance/test.db')], "test database"),
+            (list(Path('logs').glob('test_*.log')), "test logs")
+        ]
+        
+        for files, description in cleanup_checks:
+            if any(f.exists() for f in files):
+                logger.error(f"Found leftover {description}")
+                return False
+                
+        # Verify environment reset
         if os.getenv('TESTING') == 'true':
-            logger.error("Testing environment variables not cleared")
+            logger.error("Testing environment not reset")
             return False
             
         logger.info("Test environment cleanup verified")
