@@ -10,26 +10,30 @@
 # Verify and sync git state with auto-resolve
 /run scripts/verify_git_state.py --pull --retry=3 --auto-resolve
 
-# Verify database setup
-/run scripts/verify_db_config.py
-/run scripts/verify_db_connection.py --retry=3
+# Verify database setup with enhanced checks
+/run scripts/verify_db_config.py --validate-uri
+/run scripts/verify_db_connection.py --retry=3 --timeout=10
 
-# Initialize database and admin user
-/run scripts/startup/init_db.py --validate-schema
-/run scripts/startup/init_admin.py --verify-email --check-password
+# Initialize database with schema validation
+/run scripts/startup/init_db.py --validate-schema --check-migrations
 
-# Run security and coverage checks
-/run scripts/verify_test_coverage.py --min-coverage=80
-/run scripts/verify_deployment.py --check-security
-/run scripts/verify_render_ready.py
+# Initialize admin user with strict validation
+/run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity
 
-# Prepare for deployment
-/run scripts/backup_rotation.py --max-backups=5
-/run scripts/verify_deployment.py --final-check
+# Run comprehensive security checks
+/run scripts/verify_deployment.py --check-security --validate-env
 
-# Verify final state and deploy
-/run scripts/verify_git_state.py --auto-resolve
-/run scripts/deploy_to_render.py --auto-resolve
+# Verify test coverage with module-specific thresholds
+/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90
+
+# Prepare Render deployment environment
+/run scripts/verify_render_ready.py --check-api --validate-vars
+
+# Rotate backups before deployment
+/run scripts/backup_rotation.py --max-backups=5 --compress
+
+# Final deployment verification
+/run scripts/verify_deployment.py --final-check --validate-all
 
 ### CODE END ###
 
