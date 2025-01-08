@@ -1,5 +1,6 @@
 import sys
 import logging
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -12,10 +13,20 @@ if not logger.handlers:
     logger.addHandler(handler)
     logger.setLevel(logging.INFO)
 
-# Configure paths first
-from scripts.path_config import configure_paths
-if not configure_paths():
-    logger.error("Path configuration failed")
+# Add project root to Python path
+project_root = str(Path(__file__).parent.parent)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+# Import local modules after path configuration
+try:
+    from scripts.path_config import configure_paths
+    from scripts.version import get_version
+    if not configure_paths():
+        logger.error("Path configuration failed")
+        exit(1)
+except ImportError as e:
+    logger.error(f"Failed to import required modules: {str(e)}")
     exit(1)
 
 def update_release_notes():
