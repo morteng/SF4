@@ -23,6 +23,12 @@ def request_approval():
         handler.setFormatter(formatter)
         logger.addHandler(handler)
         logger.setLevel(logging.INFO)
+        
+    # Get verification status
+    from scripts.verify_deployment_readiness import verify_deployment_requirements
+    if not verify_deployment_requirements():
+        logger.error("Cannot request approval - deployment requirements not met")
+        return False
     try:
         with open('scripts/REQUESTS.txt', 'a') as f:
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')

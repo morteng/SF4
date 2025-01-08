@@ -128,11 +128,24 @@ def update_version_history():
 
 def finalize_docs():
     """Finalize all documentation updates"""
-    if not update_release_notes():
+    try:
+        # Update release notes
+        if not update_release_notes():
+            return False
+            
+        # Update version history
+        if not update_version_history():
+            return False
+            
+        # Generate deployment checklist
+        from scripts.generate_deployment_checklist import generate_checklist
+        if not generate_checklist():
+            return False
+            
+        return True
+    except Exception as e:
+        logger.error(f"Documentation finalization failed: {str(e)}")
         return False
-    if not update_version_history():
-        return False
-    return True
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
