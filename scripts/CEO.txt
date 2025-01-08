@@ -1,3 +1,0 @@
-HI! CEO HERE!
-
-We must have a way to log in to the system, so there must always be an admin user in the site database. We must have a system in place that checks database at startup to see if admin user is defined, and if it is not reads default admin user info like username, password and email from the .env file and adds default admin user to user table in database so admin can login.
