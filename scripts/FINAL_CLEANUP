@@ -1,7 +1,8 @@
 # Final cleanup
 
+/add TODO
 # Write a new devlog
-/code remove previous DEVLOG.md entry and write a new one based on this code cycle. Update TODO if needed.
+/code remove previous DEVLOG.md entry and write a new one based on this code cycle. Remove all completed todo items.
 
 # Reset and start new cycle
 /reset
