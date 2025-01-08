@@ -4,10 +4,10 @@
 ### CODE START ###
 # Initialize core systems
 /run scripts/path_config.py --test
-/run scripts/init_logging.py
+/run scripts/init_logging.py --test
 
 # Verify environment state
-/run scripts/verify_git_state.py
+/run scripts/verify_git_state.py --sync --pull
 /run scripts/verify_db_connection.py
 
 # Create and verify backup
@@ -34,6 +34,9 @@
 
 # Push changes to GitHub
 /run git push origin main
+
+# Update TODO list
+/run scripts/update_todo.py
 
 ### CODE END ###
 
