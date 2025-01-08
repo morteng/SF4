@@ -33,6 +33,9 @@
 # Verify critical modules coverage
 /run scripts/verify_test_coverage.py --critical-modules
 
+# Verify git state after testing
+/run scripts/verify_git_state.py --retry=3
+
 ### CODE END ###
 
 # Proceed to Step 4 - Review
