@@ -3,12 +3,12 @@
 
 ### CODE START ###
 # Initialize core testing systems
-/run scripts/path_config.py
-/run scripts/init_logging.py
+/run scripts/path_config.py --test
+/run scripts/init_logging.py --test
 
 # Setup test environment
 /run scripts/setup_test_env.py --test
-/run scripts/install_test_dependencies.py
+/run scripts/install_test_dependencies.py --test
 
 # Initialize test database and admin
 /run scripts/startup/init_db.py --test
@@ -26,6 +26,9 @@
 # Run final test verification
 /run scripts/verify_tests.py --final
 /run scripts/verify_deployment.py --test
+
+# Verify test environment cleanup
+/run scripts/verify_test_cleanup.py
 
 # Verify critical test coverage
 /run scripts/verify_test_coverage.py --critical-modules
