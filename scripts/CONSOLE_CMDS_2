@@ -8,32 +8,35 @@
 /run scripts/init_logging.py
 
 # Commit pending changes with deployment message
-/run scripts/commit_changes.py --message "Pre-deployment fixes: Database validation and test coverage improvements"
+/run scripts/commit_changes.py --message "Pre-deployment fixes: Security and verification improvements"
 
-# Verify git state and sync
+# Verify git state is clean
 /run scripts/verify_git_state.py --pull --retry=3 --auto-resolve
 
-# Validate database configuration
+# Validate database configuration and connection
 /run scripts/verify_db_config.py --validate-uri --check-permissions
 /run scripts/verify_db_connection.py --retry=3 --timeout=10 --validate-schema
 
 # Initialize database with schema validation
 /run scripts/startup/init_db.py --validate-schema --check-migrations --backup-first
 
-# Verify security settings
-/run scripts/verify_security.py --check-env --validate-keys
+# Verify security settings with enhanced checks
+/run scripts/verify_security.py --check-env --validate-keys --verify-permissions
 
-# Run critical test coverage checks
+# Verify test coverage meets requirements
 /run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90
 
 # Verify deployment requirements
 /run scripts/verify_deployment_requirements.py --check-env --validate-keys
 
-# Prepare Render deployment
+# Verify Render deployment readiness
 /run scripts/verify_render_ready.py --check-api --validate-vars --test-deploy
 
-# Create fresh backup before deployment
+# Create fresh backup with rotation
 /run scripts/backup_rotation.py --max-backups=5 --compress --verify
+
+# Final deployment verification
+/run scripts/verify_deployment.py --check-type=final-check
 
 ### CODE END ###
 
