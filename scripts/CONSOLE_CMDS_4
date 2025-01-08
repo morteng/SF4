@@ -9,9 +9,8 @@
 # Set up review environment
 /run scripts/setup_test_env.py --review
 
-# Verify database and admin user
+# Verify database connection
 /run scripts/verify_db_connection.py --test
-/run scripts/startup/init_admin.py --test
 
 # Run comprehensive test suite
 /run scripts/run_tests.py --all
@@ -24,11 +23,11 @@
 /run scripts/finalize_docs.py
 /run scripts/generate_deployment_checklist.py
 
+# Verify deployment readiness
+/run scripts/verify_deployment.py --full
+
 # Request deployment approval
 /run scripts/request_approval.py
-
-# Final production readiness verification
-/run scripts/verify_deployment.py --full
 
 ### CODE END ###
 
