@@ -16,9 +16,15 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def generate_checklist():
-    """Generate deployment checklist with detailed items"""
+def generate_checklist(validate=False):
+    """Generate deployment checklist with enhanced validation"""
     logger = configure_logger()
+    
+    # Verify git state first
+    from scripts.verify_git_state import verify_git_state
+    if not verify_git_state():
+        logger.error("Cannot generate checklist with uncommitted changes")
+        return False
     try:
         # Verify git state first
         from scripts.verify_git_state import verify_git_state

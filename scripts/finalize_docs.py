@@ -18,12 +18,18 @@ if not configure_paths():
     logger.error("Path configuration failed")
     exit(1)
 
-def update_release_notes():
-    """Update release notes with current version information"""
+def update_release_notes(strict=False):
+    """Update release notes with current version information and enhanced validation"""
     try:
-        # Configure logger
+        # Configure logger with enhanced settings
         global logger
-        logger = logging.getLogger(__name__)
+        logger = configure_logger()
+        
+        # Verify git state first
+        from scripts.verify_git_state import verify_git_state
+        if not verify_git_state():
+            logger.error("Cannot update docs with uncommitted changes")
+            return False
         if not logger.handlers:
             handler = logging.StreamHandler()
             formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
