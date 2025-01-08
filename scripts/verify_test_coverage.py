@@ -14,9 +14,14 @@ def configure_coverage_logging():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_coverage():
+def verify_coverage(threshold=80):
     """Verify test coverage meets requirements with enhanced checks"""
     logger = configure_coverage_logging()
+    
+    # Verify minimum coverage threshold
+    if threshold < 80:
+        logger.error(f"Coverage threshold {threshold}% is below minimum required 80%")
+        return False
     
     try:
         # Add project root to Python path

@@ -8,11 +8,18 @@ logger = logging.getLogger(__name__)
 def cleanup_test_environment():
     """Clean up test artifacts and environment"""
     try:
-        # Remove test database
-        test_db = Path('instance/test.db')
-        if test_db.exists():
-            test_db.unlink()
-            logger.info("Removed test database")
+        # Remove test databases
+        for db_file in Path('instance').glob('*.db'):
+            if db_file.exists():
+                db_file.unlink()
+                logger.info(f"Removed test database: {db_file}")
+                
+        # Remove isolated test directories
+        if os.getenv('TEST_ISOLATED') == 'true':
+            test_dir = Path(os.getenv('TEST_DIR', 'tests/temp_env'))
+            if test_dir.exists():
+                shutil.rmtree(test_dir)
+                logger.info(f"Removed isolated test directory: {test_dir}")
             
         # Remove coverage files
         for cov_file in Path('.').glob('.coverage*'):
