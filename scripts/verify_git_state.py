@@ -4,8 +4,8 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-def verify_git_state(sync=False, pull=False):
-    """Verify git repository is in clean state"""
+def verify_git_state(pull=False, retry=3):
+    """Verify git repository state is clean and up-to-date"""
     try:
         # Check for uncommitted changes
         status = subprocess.run(
@@ -36,33 +36,45 @@ def verify_git_state(sync=False, pull=False):
             return False
             
         # Fetch latest from origin
-        subprocess.run(
-            ["git", "fetch", "origin"],
-            check=True
-        )
+        for attempt in range(retry):
+            try:
+                subprocess.run(
+                    ["git", "fetch", "origin"],
+                    check=True,
+                    capture_output=True,
+                    text=True
+                )
+                break
+            except subprocess.CalledProcessError as e:
+                if attempt == retry - 1:
+                    logger.error(f"Failed to fetch from origin after {retry} attempts")
+                    return False
+                time.sleep(1)
         
         # Compare local and remote branches
         local_hash = subprocess.run(
-            ["git", "rev-parse", current_branch],
+            ["git", "rev-parse", "@"],
             capture_output=True,
             text=True
         ).stdout.strip()
         
         remote_hash = subprocess.run(
-            ["git", "rev-parse", f"origin/{current_branch}"],
+            ["git", "rev-parse", "@{u}"],
             capture_output=True,
             text=True
         ).stdout.strip()
         
         if local_hash != remote_hash:
             if pull:
-                logger.info("Local branch not up to date, pulling changes...")
+                logger.info("Local branch not up-to-date, pulling changes")
                 subprocess.run(
                     ["git", "pull", "origin", current_branch],
-                    check=True
+                    check=True,
+                    capture_output=True,
+                    text=True
                 )
                 return True
-            logger.error("Local branch is not up to date with remote")
+            logger.error("Local branch is not up-to-date with remote")
             return False
             
         return True
