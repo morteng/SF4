@@ -11,7 +11,9 @@ logger = logging.getLogger(__name__)
 def create_app(config_name='development'):
     """Create and configure the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
+    app.debug = True  # Force debug mode
     print("\n=== APPLICATION STARTING ===")
+    print(f"Debug mode: {app.debug}")
     print("Initializing with config:", config_name)
     app.config.from_pyfile('config.py', silent=True)
     
@@ -95,23 +97,28 @@ def create_app(config_name='development'):
                 from flask_migrate import upgrade
                 upgrade()  # Apply migrations only if env.py exists
             
-            # Only initialize admin user if not in test mode and after migrations
-            if not app.config.get('TESTING') and os.path.exists(env_path):
-                try:
-                    print("\n=== CHECKING ADMIN USER ===")
-                    print("ADMIN_USERNAME:", os.getenv('ADMIN_USERNAME'))
-                    print("ADMIN_EMAIL:", os.getenv('ADMIN_EMAIL'))
-                    print("ADMIN_PASSWORD:", os.getenv('ADMIN_PASSWORD'))
-                    
-                    print("\nAttempting to ensure admin user exists...")
-                    if not ensure_admin_user():
-                        print("\n!!! FAILED TO CREATE ADMIN USER !!!")
-                        raise RuntimeError("Admin user initialization failed")
-                    else:
-                        print("\nAdmin user check completed successfully")
-                except Exception as e:
-                    print(f"Admin user initialization failed: {str(e)}")
-                    raise RuntimeError(f"Admin user initialization failed: {str(e)}")
+            print("\n=== CHECKING MIGRATIONS ===")
+            migrations_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'migrations')
+            env_path = os.path.join(migrations_dir, 'env.py')
+            print(f"Migrations path: {env_path}")
+            print(f"Migrations exist: {os.path.exists(env_path)}")
+
+            # Always check for admin user, regardless of migrations
+            print("\n=== CHECKING ADMIN USER ===")
+            print("ADMIN_USERNAME:", os.getenv('ADMIN_USERNAME'))
+            print("ADMIN_EMAIL:", os.getenv('ADMIN_EMAIL'))
+            print("ADMIN_PASSWORD:", os.getenv('ADMIN_PASSWORD'))
+
+            try:
+                print("\nAttempting to ensure admin user exists...")
+                if not ensure_admin_user():
+                    print("\n!!! FAILED TO CREATE ADMIN USER !!!")
+                    raise RuntimeError("Admin user initialization failed")
+                else:
+                    print("\nAdmin user check completed successfully")
+            except Exception as e:
+                print(f"\n!!! ADMIN USER INITIALIZATION FAILED: {str(e)} !!!")
+                raise RuntimeError(f"Admin user initialization failed: {str(e)}")
             
             # Register blueprints
             from app.routes.admin import register_admin_blueprints
