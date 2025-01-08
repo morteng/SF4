@@ -78,11 +78,28 @@ def verify_deployment_checks():
             logger.error(f"Deployment verification failed: {str(e)}")
             return False
 
+def handle_render_api_errors(response):
+    """Handle Render API specific errors"""
+    if response.status_code == 401:
+        logger.error("Render API authentication failed - check RENDER_API_KEY")
+        return False
+    elif response.status_code == 429:
+        logger.error("Render API rate limit exceeded")
+        return False
+    elif response.status_code >= 500:
+        logger.error("Render API server error")
+        return False
+    return True
+
 def deploy_to_render():
     """Deploy the application to render.com"""
     app = create_app()  # Create application instance
     
     try:
+        # Verify we have API key
+        if not os.getenv('RENDER_API_KEY'):
+            logger.error("RENDER_API_KEY not found in environment variables")
+            return False
         # Verify deployment checklist
         from scripts.verify_deployment import verify_deployment
         logger.info("Starting full deployment verification")

@@ -19,6 +19,9 @@
 # Initialize and verify admin user with enhanced security
 /run scripts/startup/init_admin.py
 
+# Rotate old backups
+/run scripts/backup_rotation.py
+
 # Comprehensive deployment verification
 /run scripts/verify_deployment.py --full
 
