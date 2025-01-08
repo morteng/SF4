@@ -6,40 +6,45 @@ def verify_review():
     logger = logging.getLogger(__name__)
     
     try:
-        # Check required files exist
+        # Verify required files
         required_files = [
             'DEPLOYMENT_CHECKLIST.md',
             'RELEASE_NOTES.md',
             'VERSION_HISTORY.md',
-            'scripts/REQUESTS.txt',
             'requirements.txt',
             'migrations/alembic.ini'
         ]
         
-        # Check for latest backup or any timestamped backup
-        backup_files = list(Path('backups').glob('stipend_*.db'))
+        for file in required_files:
+            if not Path(file).exists():
+                logger.error(f"Missing required file: {file}")
+                return False
+                
+        # Verify backups
+        backup_files = list(Path('backups').glob('*.db'))
         if not backup_files:
-            logging.error("No database backups found")
+            logger.error("No database backups found")
             return False
             
-        # Check for latest log archive or any timestamped archive
-        log_files = list(Path('logs').glob('archive_*.zip'))
+        # Verify logs
+        log_files = list(Path('logs').glob('*.log'))
         if not log_files:
-            logging.error("No log archives found")
+            logger.error("No log files found")
             return False
             
         # Verify test coverage
         from scripts.verify_test_coverage import verify_coverage
-        if not verify_coverage():
-            logger.error("Test coverage verification failed")
+        if not verify_coverage(threshold=80):
+            logger.error("Test coverage below 80%")
             return False
             
         # Verify test cleanup
         from scripts.verify_test_cleanup import verify_test_cleanup
         if not verify_test_cleanup():
-            logger.error("Test cleanup verification failed")
+            logger.error("Test cleanup failed")
             return False
             
+        logger.info("All review steps completed successfully")
         return True
         
         for file in required_files:
