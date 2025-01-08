@@ -3,6 +3,15 @@ import subprocess
 import logging
 import sys
 from pathlib import Path
+from scripts.version import validate_version, get_version
+
+# Configure logger at module level
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 # Add scripts directory to Python path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -18,16 +27,32 @@ logger.setLevel(logging.INFO)
 def verify_deployment_checks():
     """Run all deployment verification checks"""
     try:
-        from scripts.verify_deployment import verify_deployment
-        if not verify_deployment('--check-security'):
-            logger.error("Security verification failed")
-            return False
-        if not verify_deployment('--check-env'):
-            logger.error("Environment verification failed")
-            return False
-        if not verify_deployment('--check-version'):
+        # Verify version
+        version = get_version()
+        if not validate_version(version):
             logger.error("Version verification failed")
             return False
+            
+        # Verify environment variables
+        required_vars = [
+            'SQLALCHEMY_DATABASE_URI',
+            'SECRET_KEY',
+            'ADMIN_USERNAME',
+            'ADMIN_PASSWORD',
+            'RENDER_API_KEY'
+        ]
+        
+        missing_vars = [var for var in required_vars if not os.getenv(var)]
+        if missing_vars:
+            logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
+            return False
+            
+        # Verify SECRET_KEY complexity
+        secret_key = os.getenv('SECRET_KEY')
+        if len(secret_key) < 64:
+            logger.error("SECRET_KEY must be at least 64 characters")
+            return False
+            
         return True
     except Exception as e:
         logger.error(f"Deployment verification failed: {str(e)}")

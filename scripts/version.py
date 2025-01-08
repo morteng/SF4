@@ -11,6 +11,9 @@ import re
 # Current version
 __version__ = "0.2.0"
 
+# Configure logger at module level
+logger = logging.getLogger(__name__)
+
 # Configure logging
 def configure_logging():
     log_dir = Path('logs')
@@ -307,7 +310,7 @@ def get_db_version(db_path: str) -> Optional[str]:
         return None
 
 def validate_version(version: str) -> bool:
-    """Validate version string format including build metadata"""
+    """Validate version string format"""
     if not version:
         logger.error("No version provided")
         return False
