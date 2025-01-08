@@ -5,19 +5,36 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-def verify_git_state(pull=False, retry=3):
-    """Verify git repository state is clean and up-to-date"""
+def verify_git_state(pull=False, retry=3, auto_resolve=False):
+    """Verify git repository state is clean and up-to-date with enhanced conflict resolution"""
     try:
-        # Check for uncommitted changes
+        # Check for uncommitted changes with detailed output
         status = subprocess.run(
-            ["git", "status", "--porcelain"],
+            ["git", "status", "--porcelain", "--branch"],
             capture_output=True,
             text=True
         )
+        
         if status.stdout.strip():
-            logger.error("Uncommitted changes detected")
-            logger.info("Please commit or stash changes before proceeding")
-            return False
+            logger.info("Git status:\n" + status.stdout)
+            if auto_resolve:
+                # Try to stash changes automatically
+                stash_result = subprocess.run(
+                    ["git", "stash", "save", "--include-untracked"],
+                    capture_output=True,
+                    text=True
+                )
+                if stash_result.returncode == 0:
+                    logger.info("Successfully stashed uncommitted changes")
+                    return True
+                else:
+                    logger.error("Failed to stash changes automatically")
+                    logger.info("Please resolve manually: git stash save --include-untracked")
+                    return False
+            else:
+                logger.error("Uncommitted changes detected")
+                logger.info("Please commit or stash changes before proceeding")
+                return False
             
         # Get current branch name
         current_branch = subprocess.run(
