@@ -1,6 +1,6 @@
 ### **Instructions**
 
-VERY IMPORTANT: We need to create end to end tests for all admin use cases, from login to registering a new stipend in db, creating a user, unsing all other admin functionality.
+VERY IMPORTANT: We need to create end to end tests for all admin use cases, from login to registering a new stipend in db, creating a user, unsing all other admin functionality, via the web interface.
 
 No need to encrypt log archives, leave 'em plain text.
 
