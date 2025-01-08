@@ -102,15 +102,21 @@ def deploy_to_render():
     app = create_app()  # Create application instance
     
     try:
-        # Verify Render environment
-        from scripts.verify_render_ready import verify_render_ready
-        if not verify_render_ready():
-            logger.error("Render environment verification failed")
+        # Verify deployment requirements
+        from scripts.verify_deployment_readiness import verify_deployment_requirements
+        if not verify_deployment_requirements():
+            logger.error("Deployment requirements not met")
             return False
             
-        # Verify deployment checklist
-        from scripts.verify_deployment import verify_deployment
-        logger.info("Starting full deployment verification")
+        # Verify Render environment
+        if not os.getenv('RENDER_API_KEY'):
+            logger.error("RENDER_API_KEY not found in environment variables")
+            return False
+            
+        # Verify service ID
+        if not os.getenv('RENDER_SERVICE_ID'):
+            logger.error("RENDER_SERVICE_ID not found in environment variables")
+            return False
         # Verify deployment checklist
         from scripts.verify_deployment import verify_deployment
         logger.info("Starting full deployment verification")
