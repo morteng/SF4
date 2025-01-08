@@ -42,6 +42,5 @@
 
 ### CODE END ###
 
-# Reset and start new cycle
-/reset
-/load scripts/STEP_1
+# Go to final cleanup
+/load scripts/FINAL_CLEANUP
