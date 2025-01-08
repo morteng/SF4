@@ -3,6 +3,7 @@ from flask import url_for
 from app.models.user import User
 from app.models.audit_log import AuditLog
 from app.models.notification import Notification
+from tests.conftest import extract_csrf_token
 
 def test_admin_create_user_success(logged_in_admin, db_session, client):
     """Test successful user creation through admin interface"""
