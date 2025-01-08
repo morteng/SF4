@@ -1,9 +1,19 @@
 import os
 import logging
 from pathlib import Path
-from app.models.user import User
-from app.models.audit_log import AuditLog
-from app import db
+try:
+    from app.models.user import User
+    from app.models.audit_log import AuditLog
+    from app import db
+except ImportError:
+    import sys
+    from pathlib import Path
+    # Add both app and scripts directories to path
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))  # Project root
+    sys.path.insert(0, str(Path(__file__).parent.parent))  # Scripts dir
+    from app.models.user import User
+    from app.models.audit_log import AuditLog
+    from app import db
 
 logger = logging.getLogger(__name__)
 
