@@ -9,15 +9,21 @@
 # Set up review environment
 /run scripts/setup_test_env.py --review
 
+# Verify git state is clean
+/run scripts/verify_git_state.py
+
 # Verify database connection
 /run scripts/verify_db_connection.py --test
 
 # Run comprehensive test suite
 /run scripts/run_tests.py --all
 
-# Generate and verify coverage report
+# Generate detailed coverage report
 /run scripts/generate_coverage_report.py
+
+# Verify test results and coverage
 /run scripts/verify_tests.py
+/run scripts/verify_test_coverage.py
 
 # Finalize documentation and checklist
 /run scripts/finalize_docs.py
@@ -28,6 +34,9 @@
 
 # Request deployment approval
 /run scripts/request_approval.py
+
+# Final review verification
+/run scripts/verify_tests.py --final
 
 ### CODE END ###
 

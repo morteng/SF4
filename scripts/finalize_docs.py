@@ -31,6 +31,12 @@ def update_release_notes():
             logger.addHandler(handler)
             logger.setLevel(logging.INFO)
             
+        # Verify git state first
+        from scripts.verify_git_state import verify_git_state
+        if not verify_git_state():
+            logger.error("Cannot update docs with uncommitted changes")
+            return False
+            
         # Get version info
         from scripts.version import get_version
         version = get_version()
