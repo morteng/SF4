@@ -6,26 +6,28 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Finalize documentation
-/run scripts/finalize_docs.py --strict --validate
+# Finalize documentation with Render details
+/run scripts/finalize_docs.py --strict --validate --render
 
-# Run final verification
+# Verify deployment readiness
 /run scripts/verify_deployment.py --final-check --validate-all
-/run scripts/verify_render_ready.py --strict --validate-vars
 
-# Prepare for deployment
-/run scripts/backup_rotation.py --max-backups=5 --compress
-/run scripts/final_cleanup.py
+# Verify git state and commit changes
+/run scripts/verify_git_state.py --pull --retry=3 --auto-resolve
 
-# Push to GitHub
-/run git add .
-/run git commit -m "Final deployment preparation"
-/run git push origin main
+# Create fresh backup before deployment
+/run scripts/backup_rotation.py --max-backups=5 --compress --verify
+
+# Verify Render configuration
+/run scripts/verify_render_ready.py --check-api --validate-vars --test-deploy
 
 # Deploy to Render
 /run scripts/deploy_to_render.py
 
+# Final cleanup
+/run scripts/final_cleanup.py --strict --validate
+
 ### CODE END ###
 
-# Proceed to Final Cleanup
+# Reset and start new cycle
 /load scripts/FINAL_CLEANUP
