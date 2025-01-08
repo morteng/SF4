@@ -19,10 +19,23 @@ def verify_coverage(threshold=80):
     logger = configure_coverage_logging()
     
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
         # Add project root to Python path
         project_root = str(Path(__file__).parent.parent)
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
+            
+        # Verify imports
+        try:
+            import app
+            import tests
+        except ImportError as e:
+            logger.error(f"Import error: {str(e)}")
+            return False
         
         # Run coverage report with detailed output
         result = subprocess.run(

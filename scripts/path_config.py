@@ -13,7 +13,14 @@ def configure_paths():
             project_root,
             str(Path(project_root) / 'app'),
             str(Path(project_root) / 'scripts'),
+            str(Path(project_root) / 'tests')
         ]
+        
+        # Add venv site-packages
+        venv_path = os.getenv('VIRTUAL_ENV')
+        if venv_path:
+            site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
+            paths_to_add.append(site_packages)
         
         # Add venv site-packages if exists
         venv_path = os.getenv('VIRTUAL_ENV')
