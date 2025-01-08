@@ -15,10 +15,25 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
+def validate_db_connection(db_uri):
+    """Validate database connection with proper path handling"""
+    logger = configure_logger()
+    
+    try:
+        if db_uri.startswith('sqlite:///'):
+            db_path = db_uri.replace('sqlite:///', '')
+            if not Path(db_path).exists():
+                logger.error(f"SQLite database file not found: {db_path}")
+                return False
+                
+        # Verify connection using existing logic
+        return verify_db_connection()
+    except Exception as e:
+        logger.error(f"Database validation failed: {str(e)}")
+        return False
+
 def verify_db_connection():
     """Verify database connection using SQLALCHEMY_DATABASE_URI"""
-    # Configure logger at module level
-    global logger
     logger = configure_logger()
     
     max_retries = 3
