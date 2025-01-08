@@ -1,29 +1,14 @@
-### **Instructions**
-
-**General Guidelines:**
-1. **Post-Deployment:**
-   - Monitor production logs
-   - Verify backup rotation
-   - Check system performance
-
-2. **Code Quality:**
-   - Maintain clean git history
-   - Write comprehensive tests
-   - Document all changes
-
----
-
 ### **Current Priorities**
 
-1. **Production Monitoring:**
-   - Set up performance alerts
-   - Configure log rotation
-   - Verify backup integrity
+1. **Production Deployment:**
+   - Final security verification
+   - Execute deployment checklist
+   - Monitor initial production traffic
 
-2. **Documentation:**
-   - Archive old documentation
-   - Update version history
-   - Finalize deployment notes
+2. **Post-Deployment:**
+   - Verify backup rotation
+   - Check system performance
+   - Review production logs
 
 ---
 
