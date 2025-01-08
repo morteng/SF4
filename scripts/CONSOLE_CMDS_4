@@ -12,17 +12,17 @@
 /run scripts/verify_db_connection.py
 
 # Initialize database and admin
-/run scripts/startup/init_db.py --test
-/run scripts/startup/init_admin.py --test
+/run scripts/startup/init_db.py --validate-schema
+/run scripts/startup/init_admin.py --verify-email
 
 # Run comprehensive test suites
-/run scripts/run_tests.py --unit --critical
-/run scripts/run_tests.py --integration --critical
-/run scripts/run_tests.py --e2e --critical
+/run scripts/run_tests.py --unit
+/run scripts/run_tests.py --integration
+/run scripts/run_tests.py --e2e
 
 # Generate and verify coverage
-/run scripts/generate_coverage_report.py --critical
-/run scripts/verify_test_coverage.py --critical
+/run scripts/generate_coverage_report.py
+/run scripts/verify_test_coverage.py --critical --min-coverage=80
 
 # Finalize documentation
 /run scripts/finalize_docs.py
@@ -39,6 +39,9 @@
 /run scripts/verify_test_coverage.py --critical-modules
 /run scripts/verify_review.py
 /run scripts/verify_test_cleanup.py
+
+# Verify git state after review
+/run scripts/verify_git_state.py --retry=3
 
 ### CODE END ###
 
