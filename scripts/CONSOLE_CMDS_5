@@ -31,6 +31,9 @@
 # Final cleanup
 /run scripts/final_cleanup.py
 /run scripts/end_cycle.py
+
+# Verify git state after deployment
+/run scripts/verify_git_state.py --retry=3
 ### CODE END ###
 
 # Go to final cleanup
