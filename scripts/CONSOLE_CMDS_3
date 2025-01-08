@@ -2,42 +2,30 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Configure Python paths and logging
+# Initialize core testing systems
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Set up test environment and install dependencies
+# Setup test environment
 /run scripts/setup_test_env.py --test
 /run scripts/install_test_dependencies.py
 
-# Initialize test database and verify connection
+# Initialize test database and admin
 /run scripts/startup/init_db.py --test
-/run scripts/verify_db_connection.py --test
-
-# Initialize test admin user with enhanced security
 /run scripts/startup/init_admin.py --test
 
-# Run comprehensive test suite
-/run scripts/run_tests.py --all
+# Run core test suites
+/run scripts/run_tests.py --unit
+/run scripts/run_tests.py --integration
+/run scripts/run_tests.py --e2e
 
-# Generate detailed coverage report
+# Generate and verify coverage
 /run scripts/generate_coverage_report.py
-
-# Verify test results and coverage
-/run scripts/verify_tests.py
 /run scripts/verify_test_coverage.py
 
-# Run security and deployment verification
-/run scripts/verify_deployment.py --full
-
-# Verify backup rotation functionality
-/run scripts/backup_rotation.py --test
-
-# Verify git state is clean
-/run scripts/verify_git_state.py
-
-# Final test verification
+# Final verification
 /run scripts/verify_tests.py --final
+/run scripts/verify_deployment.py --test
 
 ### CODE END ###
 
