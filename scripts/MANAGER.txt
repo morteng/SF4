@@ -1,35 +1,37 @@
 ### **Instructions**
 
 **General Guidelines:**
-1. **Folder and File Operations:** Use temporary scripts to create/move files or folders. Execute them with `/run your_script.py` in the relevant console command step.
-2. **Python Execution:** Write Python scripts in proper folders and execute them with `/run your_script.py`. Never run Python code directly in console commands.
-3. **Deployment:** Deploy only when:
-   - All tests pass.
-   - All TODO items are resolved.
-   - Explicit CEO approval is received.
-4. **Testing:** Perform minimal tests per cycle and maintain concise outputs. No debug data dumps or manual inputs.
+1. **Deployment Process:**
+   - Verify test coverage meets 80% threshold
+   - Complete Render configuration
+   - Finalize database initialization
+   - Get CEO approval before deployment
+
+2. **Code Quality:**
+   - Maintain clean git history
+   - Write comprehensive tests
+   - Document all changes
 
 ---
 
 ### **Current Priorities**
 
 1. **Test Coverage:**
-   - Implement module-specific coverage thresholds
    - Add end-to-end admin tests
-   - Fix coverage reporting issues
+   - Implement relationship tests
+   - Fix coverage reporting
 
-2. **Deployment Preparation:**
-   - Verify all environment variables
-   - Test deployment rollback procedure
-   - Finalize security verification
+2. **Deployment Readiness:**
+   - Test rollback procedure
+   - Verify production database
+   - Finalize security checks
 
 ---
 
 ### **Rules**
-- Work on **one feature at a time**.
-- **Verify all changes** before deployment.
-- Keep **outputs concise** and avoid unnecessary logs or inputs.
-- Ensure all configuration values are dynamically loaded from `.env`.
-- Maintain 80%+ test coverage for all critical modules.
+- Maintain 80%+ test coverage
+- Verify all environment variables
+- Document all deployment steps
+- Get explicit approval before production deployment
 
 ---
