@@ -75,30 +75,29 @@ def setup_test_paths():
 def configure_test_environment(mode: str = 'test'):
     """Set up environment variables and application context"""
     try:
-        # Install appropriate packages
-        if mode == 'review':
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements-review.txt"])
-        elif mode == 'test':
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements-test.txt"])
-        else:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
-        
-        # Set environment variables
+        # Add project root to sys.path
+        project_root = str(Path(__file__).parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            
+        # Set testing environment variables
         os.environ.update({
             'FLASK_ENV': 'testing',
             'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
-            'ADMIN_USERNAME': 'testadmin',
-            'ADMIN_EMAIL': 'test@example.com',
-            'ADMIN_PASSWORD': 'TestPassword123!',
-            'SECRET_KEY': 'TestSecretKey1234567890!@#$%^&*()',
             'TESTING': 'true'
         })
         
         # Create and push application context
         from app.factory import create_app
         app = create_app('testing')
-        app.app_context().push()
+        app_context = app.app_context()
+        app_context.push()
         
+        # Initialize database within context
+        from scripts.startup.init_db import initialize_database
+        if not initialize_database(validate_schema=True):
+            raise RuntimeError("Failed to initialize test database")
+            
         return True
     except Exception as e:
         logger.error(f"Failed to configure test environment: {str(e)}")
