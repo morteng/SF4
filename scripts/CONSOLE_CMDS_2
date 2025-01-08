@@ -9,19 +9,16 @@
 # Verify database configuration
 /run scripts/verify_db_config.py
 
-# Initialize database schema
+# Initialize database schema with app context
 /run scripts/startup/init_db.py
 
 # Verify database connection
 /run scripts/verify_db_connection.py --full
 
-# Initialize admin user
-/run scripts/startup/init_admin.py --verify
-
-# Verify deployment configuration
+# Verify deployment configuration with app context
 /run scripts/deploy_to_render.py --verify
 
-# Final deployment to Render
+# Final deployment to Render with app context
 /run scripts/deploy_to_render.py
 
 ### CODE END ###
