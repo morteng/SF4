@@ -17,7 +17,7 @@
 # Initialize test admin user
 /run scripts/startup/init_admin.py --test
 
-# Run comprehensive test suite
+# Run comprehensive test suite including new backup tests
 /run scripts/run_tests.py --all
 
 # Generate and verify coverage report
@@ -26,6 +26,9 @@
 
 # Run security and deployment verification
 /run scripts/verify_deployment.py --full
+
+# Verify backup rotation functionality
+/run scripts/backup_rotation.py --test
 
 ### CODE END ###
 
