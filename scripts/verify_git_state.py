@@ -4,7 +4,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-def verify_git_state():
+def verify_git_state(sync=False):
     """Verify git repository is in clean state"""
     try:
         # Check for uncommitted changes
@@ -18,19 +18,14 @@ def verify_git_state():
             return False
             
         # Verify branch is up to date
-        subprocess.run(["git", "fetch"], check=True)
-        local = subprocess.run(
-            ["git", "rev-parse", "@"],
-            capture_output=True,
-            text=True
-        ).stdout.strip()
-        remote = subprocess.run(
-            ["git", "rev-parse", "@{u}"],
-            capture_output=True,
-            text=True
-        ).stdout.strip()
-        
-        if local != remote:
+        from scripts.git_sync import verify_sync, sync_branch
+        if not verify_sync():
+            if sync:
+                logger.info("Attempting to sync with remote")
+                if not sync_branch():
+                    logger.error("Failed to sync with remote")
+                    return False
+                return True
             logger.error("Local branch is not up to date with remote")
             return False
             

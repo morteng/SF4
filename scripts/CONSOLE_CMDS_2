@@ -7,22 +7,24 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Verify environment state
-/run scripts/verify_git_state.py
+# Verify and sync git state
+/run scripts/verify_git_state.py --sync
+
+# Verify database configuration
 /run scripts/verify_db_config.py
 /run scripts/verify_db_connection.py
 
 # Initialize database and admin
 /run scripts/startup/init_db.py
-/run scripts/startup/init_admin.py
+/run scripts/startup/init_admin.py --update
 
-# Run pre-deployment checks
-/run scripts/verify_test_coverage.py
-/run scripts/verify_deployment.py --full
-/run scripts/backup_rotation.py
+# Run comprehensive pre-deployment checks
+/run scripts/verify_test_coverage.py --critical
+/run scripts/verify_deployment.py --full --validate-admin
+/run scripts/backup_rotation.py --max-backups=7
 
 # Final verification before deployment
-/run scripts/verify_render_ready.py
+/run scripts/verify_render_ready.py --validate-api
 
 ### CODE END ###
 
