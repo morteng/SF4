@@ -288,3 +288,5 @@ M  logs/version_management.log
 2025-01-09 00:36:52,292 - INFO - Please commit or stash changes before proceeding
 2025-01-09 00:36:52,292 - ERROR - Cannot generate checklist with uncommitted changes
 2025-01-09 00:36:52,292 - ERROR - Documentation finalization failed
+2025-01-09 00:40:04,039 - ERROR - Documentation finalization failed: name 'configure_logger' is not defined
+2025-01-09 00:40:04,040 - ERROR - Documentation finalization failed
