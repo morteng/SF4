@@ -16,23 +16,22 @@ def configure_logger():
 
 def request_approval():
     """Request deployment approval from management"""
-    logger = logging.getLogger('approval')
-    if not logger.handlers:
-        handler = logging.FileHandler('logs/approval.log')
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
-        
-    # Get verification status
-    from scripts.verify_review import verify_review
-    if not verify_review():
-        logger.error("Cannot request approval - review verification failed")
-        return False
-        
-    # Get deployment checklist status
-    with open('deployment/DEPLOYMENT_CHECKLIST.md') as f:
-        checklist = f.read()
+    logger = configure_logger()
+    
+    try:
+        # Verify deployment requirements first
+        from scripts.verify_deployment import verify_deployment
+        if not verify_deployment():
+            logger.error("Cannot request approval - deployment verification failed")
+            return False
+            
+        # Get deployment checklist status
+        with open('deployment/DEPLOYMENT_CHECKLIST.md') as f:
+            checklist = f.read()
+            
+        # Get test coverage
+        from scripts.verify_test_coverage import verify_coverage
+        coverage = verify_coverage(threshold=80, critical=True)
         
     # Get test coverage
     from scripts.verify_test_coverage import verify_coverage
