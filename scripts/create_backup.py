@@ -4,12 +4,18 @@ import sqlite3
 from datetime import datetime
 from pathlib import Path
 
-def create_db_backup(source_db: str, backup_path: str = None, timestamped: bool = False) -> bool:
-    """Create a backup of the database with optional timestamp"""
+def create_db_backup(source_db: str, backup_path: str = None, timestamped: bool = False, verify: bool = False) -> bool:
+    """Create a backup of the database with enhanced validation"""
     try:
         # Validate source database exists
         if not Path(source_db).exists():
-            print(f"Source database not found: {source_db}")
+            logger.error(f"Source database not found: {source_db}")
+            return False
+            
+        # Verify git state first
+        from scripts.verify_git_state import verify_git_state
+        if not verify_git_state():
+            logger.error("Cannot create backup with uncommitted changes")
             return False
             
         # Set backup path with timestamp if requested

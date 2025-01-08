@@ -97,8 +97,17 @@ def handle_render_api_errors(response):
         return False
     return True
 
-def deploy_to_render():
-    """Deploy the application to render.com"""
+def deploy_to_render(status=False):
+    """Deploy the application to render.com with status tracking"""
+    # Configure logger first
+    logger = configure_logger()
+    
+    # Verify git state
+    from scripts.verify_git_state import verify_git_state
+    if not verify_git_state():
+        logger.error("Cannot deploy with uncommitted changes")
+        return False
+        
     app = create_app()  # Create application instance
     
     try:
