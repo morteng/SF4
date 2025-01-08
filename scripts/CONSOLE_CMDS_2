@@ -3,36 +3,26 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Configure Python paths and verify configuration
+# Initialize core systems
 /run scripts/path_config.py
-
-# Initialize logging system with enhanced error handling
 /run scripts/init_logging.py
 
-# Verify git repository state
+# Verify environment state
 /run scripts/verify_git_state.py
-
-# Verify test coverage meets requirements
-/run scripts/verify_test_coverage.py
-
-# Verify database configuration and connection
 /run scripts/verify_db_config.py
 /run scripts/verify_db_connection.py
 
-# Initialize database with retry logic
+# Initialize database and admin
 /run scripts/startup/init_db.py
-
-# Initialize and verify admin user with enhanced security
 /run scripts/startup/init_admin.py
 
-# Rotate old backups
+# Run pre-deployment checks
+/run scripts/verify_test_coverage.py
+/run scripts/verify_deployment.py --full
 /run scripts/backup_rotation.py
 
-# Comprehensive deployment verification
-/run scripts/verify_deployment.py --full
-
-# Render deployment preparation
-/run scripts/deploy_to_render.py --verify
+# Final verification before deployment
+/run scripts/verify_render_ready.py
 
 ### CODE END ###
 
