@@ -32,10 +32,10 @@ def verify_tests():
     logger = configure_logger()
     
     try:
-        
-        # Add project root to Python path
-        root_dir = Path(__file__).parent.parent
-        sys.path.append(str(root_dir))
+        # Setup test environment first
+        from scripts.setup_test_env import setup_test_paths
+        if not setup_test_paths():
+            raise RuntimeError("Failed to setup test paths")
         
         # Verify test environment
         from scripts.setup_test_env import setup_test_paths

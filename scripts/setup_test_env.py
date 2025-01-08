@@ -32,6 +32,11 @@ def setup_test_paths():
             if dir_path not in sys.path:
                 sys.path.insert(0, dir_path)
                 
+        # Add scripts directory explicitly
+        scripts_dir = str(Path(__file__).parent)
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+                
         # Verify paths
         logger = logging.getLogger(__name__)
         logger.info(f"Configured Python paths: {sys.path}")
@@ -40,6 +45,7 @@ def setup_test_paths():
         try:
             from app import db
             from app.models import User
+            from scripts.version import validate_version
             return True
         except ImportError as e:
             logger.error(f"Import verification failed: {str(e)}")

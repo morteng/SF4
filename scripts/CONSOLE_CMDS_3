@@ -29,6 +29,9 @@
 # Run comprehensive deployment verification
 /run scripts/verify_deployment.py --full --test
 
+# Verify production readiness
+/run scripts/deploy_to_render.py --verify
+
 ### CODE END ###
 
 
