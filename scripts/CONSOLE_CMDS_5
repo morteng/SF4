@@ -35,8 +35,8 @@
 # Push changes to GitHub
 /run git push origin main
 
-# Update TODO list
-/run scripts/update_todo.py
+# Update TODO list - you do not do this programmatically. Use your words in FINAL CLEANUP.
+# /run scripts/update_todo.py
 
 ### CODE END ###
 
