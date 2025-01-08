@@ -290,3 +290,9 @@ M  logs/version_management.log
 2025-01-09 00:36:52,292 - ERROR - Documentation finalization failed
 2025-01-09 00:40:04,039 - ERROR - Documentation finalization failed: name 'configure_logger' is not defined
 2025-01-09 00:40:04,040 - ERROR - Documentation finalization failed
+2025-01-09 00:53:49,391 - INFO - Git status:
+## main...origin/main [ahead 27]
+
+2025-01-09 00:53:49,392 - ERROR - Uncommitted changes detected
+2025-01-09 00:53:49,392 - INFO - Please commit or stash changes before proceeding
+2025-01-09 00:53:49,392 - ERROR - Cannot deploy with uncommitted changes
