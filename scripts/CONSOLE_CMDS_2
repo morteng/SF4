@@ -29,6 +29,9 @@
 # Final deployment verification
 /run scripts/verify_deployment.py --final-check --validate-schema
 
+# Verify git state again after all changes
+/run scripts/verify_git_state.py --retry=3
+
 ### CODE END ###
 
 # Proceed to Step 3 - Review

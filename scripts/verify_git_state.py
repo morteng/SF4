@@ -16,6 +16,7 @@ def verify_git_state(pull=False, retry=3):
         )
         if status.stdout.strip():
             logger.error("Uncommitted changes detected")
+            logger.info("Please commit or stash changes before proceeding")
             return False
             
         # Get current branch name
@@ -34,6 +35,7 @@ def verify_git_state(pull=False, retry=3):
         
         if "origin" not in remotes:
             logger.error("Origin remote not found")
+            logger.info("Please add origin remote: git remote add origin <url>")
             return False
             
         # Fetch latest from origin
@@ -49,6 +51,7 @@ def verify_git_state(pull=False, retry=3):
             except subprocess.CalledProcessError as e:
                 if attempt == retry - 1:
                     logger.error(f"Failed to fetch from origin after {retry} attempts")
+                    logger.info("Check your network connection and remote URL")
                     return False
                 time.sleep(1)
         
@@ -68,16 +71,34 @@ def verify_git_state(pull=False, retry=3):
         if local_hash != remote_hash:
             if pull:
                 logger.info("Local branch not up-to-date, pulling changes")
-                subprocess.run(
-                    ["git", "pull", "origin", current_branch],
-                    check=True,
-                    capture_output=True,
-                    text=True
-                )
-                return True
+                try:
+                    subprocess.run(
+                        ["git", "pull", "origin", current_branch],
+                        check=True,
+                        capture_output=True,
+                        text=True
+                    )
+                    # Verify again after pull
+                    local_hash = subprocess.run(
+                        ["git", "rev-parse", "@"],
+                        capture_output=True,
+                        text=True
+                    ).stdout.strip()
+                    
+                    if local_hash != remote_hash:
+                        logger.error("Failed to sync with remote after pull")
+                        logger.info("Please resolve any merge conflicts manually")
+                        return False
+                    return True
+                except subprocess.CalledProcessError as e:
+                    logger.error(f"Failed to pull changes: {str(e)}")
+                    logger.info("Please resolve any merge conflicts manually")
+                    return False
             logger.error("Local branch is not up-to-date with remote")
+            logger.info("Run with --pull flag to sync with remote")
             return False
             
+        logger.info("Git state verified successfully")
         return True
     except Exception as e:
         logger.error(f"Git state verification failed: {str(e)}")
