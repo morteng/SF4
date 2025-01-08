@@ -1,0 +1,70 @@
+2025-01-08 12:36:26,916 - INFO - Starting full deployment verification
+2025-01-08 12:36:26,916 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:36:26,917 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:36:26,917 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:36:26,917 - INFO - All deployment verifications passed
+2025-01-08 12:36:27,234 - INFO - Using SQLite database
+2025-01-08 12:36:27,246 - INFO - Successfully connected to database
+2025-01-08 12:36:27,246 - INFO - Database connection verified
+2025-01-08 12:36:30,196 - ERROR - Error initializing admin user: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-08 12:36:30,200 - ERROR - Admin user verification failed
+2025-01-08 12:36:30,810 - INFO - Starting full deployment verification
+2025-01-08 12:36:30,812 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:36:30,812 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:36:30,812 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:36:30,812 - INFO - All deployment verifications passed
+2025-01-08 12:36:31,091 - INFO - Using SQLite database
+2025-01-08 12:36:31,103 - INFO - Successfully connected to database
+2025-01-08 12:36:31,103 - INFO - Database connection verified
+2025-01-08 12:36:32,063 - ERROR - Error initializing admin user: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-08 12:36:32,064 - ERROR - Admin user verification failed
+2025-01-08 12:38:31,339 - INFO - Starting full deployment verification
+2025-01-08 12:38:31,341 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:38:31,341 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:38:31,341 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:38:31,341 - INFO - All deployment verifications passed
+2025-01-08 12:38:31,604 - INFO - Using SQLite database
+2025-01-08 12:38:31,616 - INFO - Successfully connected to database
+2025-01-08 12:38:31,616 - INFO - Database connection verified
+2025-01-08 12:38:32,651 - ERROR - Error initializing admin user: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-08 12:38:32,652 - ERROR - Admin user verification failed
+2025-01-08 12:40:27,691 - INFO - Starting full deployment verification
+2025-01-08 12:40:27,692 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:40:27,693 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:40:27,693 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:40:27,693 - INFO - All deployment verifications passed
+2025-01-08 12:40:27,984 - INFO - Using SQLite database
+2025-01-08 12:40:28,034 - INFO - Successfully connected to database
+2025-01-08 12:40:28,035 - INFO - Database connection verified
+2025-01-08 12:40:29,095 - ERROR - Error initializing admin user: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-08 12:40:29,095 - ERROR - Admin user verification failed
+2025-01-08 12:44:42,706 - INFO - Starting full deployment verification
+2025-01-08 12:44:42,708 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:44:42,708 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:44:42,709 - INFO - Version validation passed: 0.2.0
+2025-01-08 12:44:42,709 - INFO - All deployment verifications passed
+2025-01-08 12:44:43,000 - INFO - Using SQLite database
+2025-01-08 12:44:43,016 - INFO - Successfully connected to database
+2025-01-08 12:44:43,016 - INFO - Database connection verified
+2025-01-08 12:44:44,052 - ERROR - Error initializing admin user: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-01-08 12:44:44,052 - ERROR - Admin user verification failed
