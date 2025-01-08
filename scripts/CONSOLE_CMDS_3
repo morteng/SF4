@@ -14,18 +14,21 @@
 /run scripts/startup/init_db.py --test
 /run scripts/startup/init_admin.py --test
 
-# Run core test suites
-/run scripts/run_tests.py --unit
-/run scripts/run_tests.py --integration
-/run scripts/run_tests.py --e2e
+# Run comprehensive test suites
+/run scripts/run_tests.py --unit --critical
+/run scripts/run_tests.py --integration --critical
+/run scripts/run_tests.py --e2e --critical
 
 # Generate and verify coverage
-/run scripts/generate_coverage_report.py
-/run scripts/verify_test_coverage.py
+/run scripts/generate_coverage_report.py --critical
+/run scripts/verify_test_coverage.py --critical
 
-# Final verification
+# Run final test verification
 /run scripts/verify_tests.py --final
 /run scripts/verify_deployment.py --test
+
+# Verify critical test coverage
+/run scripts/verify_test_coverage.py --critical-modules
 
 ### CODE END ###
 
