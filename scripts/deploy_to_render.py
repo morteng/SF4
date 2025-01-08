@@ -2,45 +2,33 @@ import os
 import subprocess
 import logging
 import sys
+import time
 from pathlib import Path
+import requests
 
-# Configure paths first
+def configure_logger():
+    """Configure consistent logging for deployment"""
+    logger = logging.getLogger(__name__)
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+    return logger
+
+# Configure paths and logger first
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from scripts.path_config import configure_paths
 if not configure_paths():
     print("Path configuration failed")
     exit(1)
 
-# Now we can safely import app modules
-from flask import Flask
-from app import create_app
-
-# Configure logger at module level
-logger = logging.getLogger(__name__)
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.INFO)
-
-# Configure paths first
-from scripts.path_config import configure_paths
-if not configure_paths():
-    logger.error("Path configuration failed")
-    exit(1)
+logger = configure_logger()
 
 # Now we can safely import app modules
 from app import create_app
-
 from scripts.version import validate_version, get_version
-
-# Configure logger at module level
-logger = logging.getLogger(__name__)
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.INFO)
 
 def verify_deployment_checks():
     """Run all deployment verification checks"""

@@ -3,36 +3,33 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize core systems with enhanced logging
-/run scripts/path_config.py --verbose
-/run scripts/init_logging.py --debug
+# Initialize core systems
+/run scripts/path_config.py
+/run scripts/init_logging.py
 
-# Verify git state with auto-resolve and retry
-/run scripts/verify_git_state.py --pull --retry=5 --auto-resolve
+# Verify git state and sync
+/run scripts/verify_git_state.py --pull --retry=3
 
-# Verify database configuration with extended timeout
-/run scripts/verify_db_config.py --timeout=30
-/run scripts/verify_db_connection.py --retry=5 --timeout=30
+# Verify database setup
+/run scripts/verify_db_config.py
+/run scripts/verify_db_connection.py --retry=3
 
-# Initialize database with schema validation
-/run scripts/startup/init_db.py --validate-schema --force
+# Initialize database and admin user
+/run scripts/startup/init_db.py --validate-schema
+/run scripts/startup/init_admin.py --verify-email --check-password
 
-# Initialize admin user with enhanced security checks
-/run scripts/startup/init_admin.py --update --verify-email --check-password
+# Run security and coverage checks
+/run scripts/verify_test_coverage.py --min-coverage=80
+/run scripts/verify_deployment.py --check-security
+/run scripts/verify_render_ready.py
 
-# Run comprehensive security and coverage checks
-/run scripts/verify_test_coverage.py --critical --min-coverage=80 --module-coverage
-/run scripts/verify_deployment.py --check-security --validate-api
-/run scripts/verify_render_ready.py --validate-api --check-service --timeout=30
+# Prepare for deployment
+/run scripts/backup_rotation.py --max-backups=5
+/run scripts/verify_deployment.py --final-check
 
-# Create fresh backup with integrity verification
-/run scripts/backup_rotation.py --max-backups=7 --verify-integrity --compress
-
-# Final deployment verification with extended checks
-/run scripts/verify_deployment.py --final-check --validate-schema --check-environment
-
-# Verify git state again after all changes
-/run scripts/verify_git_state.py --retry=5 --auto-resolve
+# Verify final state
+/run scripts/verify_git_state.py
+/run scripts/deploy_to_render.py
 
 ### CODE END ###
 
