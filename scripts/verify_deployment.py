@@ -104,6 +104,17 @@ def verify_deployment(*args, **kwargs):
     if kwargs.get('check_type') == 'check-admin':
         from scripts.verify_admin import verify_admin_user
         return verify_admin_user()
+        
+    # Final deployment check
+    if kwargs.get('check_type') == 'final-check':
+        checks = [
+            verify_security_settings(),
+            verify_environment(),
+            verify_version(),
+            verify_db_connection(),
+            verify_test_coverage()
+        ]
+        return all(checks)
     if not logger.handlers:
         handler = logging.StreamHandler()
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
