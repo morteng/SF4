@@ -9,23 +9,21 @@
 # Initialize logging system with enhanced error handling
 /run scripts/init_logging.py
 
-# Verify and initialize database with proper validation
+# Verify database configuration and connection
 /run scripts/verify_db_config.py
-/run scripts/startup/init_db.py
 /run scripts/verify_db_connection.py
+
+# Initialize database with retry logic
+/run scripts/startup/init_db.py
 
 # Initialize and verify admin user with enhanced security
 /run scripts/startup/init_admin.py
 
 # Comprehensive deployment verification
-/run scripts/verify_deployment.py --check-security
-/run scripts/verify_deployment.py --check-env
-/run scripts/verify_deployment.py --check-version
-/run scripts/verify_deployment.py --check-admin
+/run scripts/verify_deployment.py --full
 
 # Render deployment preparation
 /run scripts/deploy_to_render.py --verify
-/run scripts/deploy_to_render.py --dry-run
 
 ### CODE END ###
 
