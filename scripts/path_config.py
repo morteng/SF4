@@ -1,4 +1,5 @@
 import sys
+import os
 from pathlib import Path
 
 def configure_paths():
@@ -14,6 +15,18 @@ def configure_paths():
         if app_dir not in sys.path:
             sys.path.insert(0, app_dir)
             
+        # Add scripts directory to Python path
+        scripts_dir = str(Path(__file__).parent)
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+            
+        # Add venv site-packages if exists
+        venv_path = os.getenv('VIRTUAL_ENV')
+        if venv_path:
+            site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
+            if site_packages not in sys.path:
+                sys.path.insert(0, site_packages)
+                
         return True
     except Exception as e:
         print(f"Path configuration failed: {str(e)}")

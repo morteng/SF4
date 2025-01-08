@@ -18,10 +18,16 @@
 # Verify database connection
 /run scripts/verify_db_connection.py --full
 
-# Verify deployment configuration with app context
+# Initialize admin user
+/run scripts/startup/init_admin.py
+
+# Verify deployment configuration
+/run scripts/verify_deployment.py --full
+
+# Verify Render deployment configuration
 /run scripts/deploy_to_render.py --verify
 
-# Final deployment to Render with app context
+# Final deployment to Render
 /run scripts/deploy_to_render.py
 
 ### CODE END ###
