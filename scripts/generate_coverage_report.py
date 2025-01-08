@@ -18,15 +18,17 @@ def configure_logger():
 from app.factory import create_app
 from init_test_db import init_test_db
 
-def generate_coverage():
-    """Generate test coverage report"""
+def generate_coverage(html=False, xml=False):
+    """Generate test coverage report with multiple output formats"""
     logger = configure_logger()
     try:
-        # Initialize test database
+        # Initialize test database with proper context
+        from app.factory import create_app
         app = create_app('testing')
         with app.app_context():
-            init_test_db()
-            logger.info("Test database initialized")
+            from scripts.startup.init_db import initialize_database
+            initialize_database(validate_schema=True)
+            logger.info("Test database initialized with schema validation")
             
             # Run coverage
             result = subprocess.run([

@@ -25,11 +25,18 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_tests(final=False):
-    """Verify all tests pass with proper configuration"""
+def verify_tests(final=False, validate_schema=False):
+    """Verify all tests pass with proper configuration and schema validation"""
     # Configure logger at module level
     global logger
     logger = configure_logger()
+    
+    # Setup test environment first
+    from scripts.setup_test_env import setup_test_paths, configure_test_environment
+    if not setup_test_paths():
+        raise RuntimeError("Failed to setup test paths")
+    if not configure_test_environment():
+        raise RuntimeError("Failed to configure test environment")
     
     try:
         # Setup test environment first

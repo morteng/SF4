@@ -2,39 +2,39 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize core systems
-/run scripts/path_config.py
-/run scripts/init_logging.py
+# Initialize core systems with enhanced logging
+/run scripts/path_config.py --verbose
+/run scripts/init_logging.py --debug
 
-# Setup test environment
-/run scripts/setup_test_env.py --test
-/run scripts/install_test_dependencies.py --test
+# Setup test environment with proper app context
+/run scripts/setup_test_env.py --test --app-context
+/run scripts/install_test_dependencies.py --test --retry=3
 
-# Initialize test database and admin
-/run scripts/startup/init_db.py --validate-schema
-/run scripts/startup/init_admin.py --verify-email
+# Initialize test database with schema validation
+/run scripts/startup/init_db.py --validate-schema --force
+/run scripts/startup/init_admin.py --verify-email --check-password --app-context
 
-# Run comprehensive test suites
-/run scripts/run_tests.py --unit
-/run scripts/run_tests.py --integration
-/run scripts/run_tests.py --e2e
+# Run comprehensive test suites with coverage
+/run scripts/run_tests.py --unit --cov
+/run scripts/run_tests.py --integration --cov
+/run scripts/run_tests.py --e2e --cov
 
-# Generate and verify coverage
-/run scripts/generate_coverage_report.py
-/run scripts/verify_test_coverage.py --critical --min-coverage=80
+# Generate and verify coverage with module breakdown
+/run scripts/generate_coverage_report.py --html
+/run scripts/verify_test_coverage.py --critical --min-coverage=80 --module-coverage
 
-# Run final test verification
-/run scripts/verify_tests.py --final
-/run scripts/verify_deployment.py --test
+# Run final test verification with extended checks
+/run scripts/verify_tests.py --final --validate-schema
+/run scripts/verify_deployment.py --test --check-environment
 
-# Verify test environment cleanup
-/run scripts/verify_test_cleanup.py
+# Verify test environment cleanup with extended checks
+/run scripts/verify_test_cleanup.py --strict
 
-# Verify critical modules coverage
-/run scripts/verify_test_coverage.py --critical-modules
+# Verify critical modules coverage with extended thresholds
+/run scripts/verify_test_coverage.py --critical-modules --min-coverage=85
 
-# Verify git state after testing
-/run scripts/verify_git_state.py --retry=3
+# Verify git state after testing with auto-resolve
+/run scripts/verify_git_state.py --retry=5 --auto-resolve
 
 ### CODE END ###
 
