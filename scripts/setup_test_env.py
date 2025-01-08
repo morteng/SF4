@@ -18,12 +18,13 @@ def configure_test_logging():
 def setup_test_paths():
     """Configure Python paths for testing and deployment"""
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
         # Get project root
         project_root = str(Path(__file__).parent.parent)
-        
-        # Clear existing paths and add project root first
-        sys.path = [p for p in sys.path if not p.startswith(project_root)]
-        sys.path.insert(0, project_root)
         
         # Add all necessary directories
         required_dirs = ['app', 'scripts', 'tests', 'migrations']
