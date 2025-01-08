@@ -33,9 +33,6 @@
 /run scripts/final_cleanup.py
 /run scripts/end_cycle.py
 
-# Update TODO list - you do not do this programmatically. Use your words in FINAL CLEANUP.
-# /run scripts/update_todo.py
-
 ### CODE END ###
 
 # Go to final cleanup
