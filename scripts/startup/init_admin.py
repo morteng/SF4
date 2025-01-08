@@ -18,7 +18,7 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def initialize_admin_user():
+def initialize_admin_user(verify_email=False):
     """Initialize admin user from environment variables"""
     try:
         # Configure logger at module level
@@ -31,6 +31,14 @@ def initialize_admin_user():
         if missing_vars:
             logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
             return False
+            
+        # Verify email format if requested
+        if verify_email:
+            import re
+            email = os.getenv('ADMIN_EMAIL')
+            if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                logger.error(f"Invalid email format: {email}")
+                return False
             
         # Verify ADMIN_PASSWORD complexity
         admin_password = os.getenv('ADMIN_PASSWORD')

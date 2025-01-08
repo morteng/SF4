@@ -11,7 +11,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-def initialize_database():
+def initialize_database(validate_schema=False):
     """Initialize database schema and run migrations"""
     try:
         # Verify database file exists
@@ -25,6 +25,13 @@ def initialize_database():
         alembic_cfg = Config("migrations/alembic.ini")
         command.upgrade(alembic_cfg, 'head')
         
+        # Validate schema if requested
+        if validate_schema:
+            from scripts.verify_db_schema import validate_schema
+            if not validate_schema():
+                logger.error("Schema validation failed")
+                return False
+                
         logger.info("Database initialization completed")
         return True
         
