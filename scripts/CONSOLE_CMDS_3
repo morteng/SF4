@@ -2,26 +2,26 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize core testing systems
-/run scripts/path_config.py --test
-/run scripts/init_logging.py --test
+# Initialize core systems
+/run scripts/path_config.py
+/run scripts/init_logging.py
 
 # Setup test environment
 /run scripts/setup_test_env.py --test
 /run scripts/install_test_dependencies.py --test
 
 # Initialize test database and admin
-/run scripts/startup/init_db.py --test
-/run scripts/startup/init_admin.py --test
+/run scripts/startup/init_db.py --validate-schema
+/run scripts/startup/init_admin.py --verify-email
 
 # Run comprehensive test suites
-/run scripts/run_tests.py --unit --critical
-/run scripts/run_tests.py --integration --critical
-/run scripts/run_tests.py --e2e --critical
+/run scripts/run_tests.py --unit
+/run scripts/run_tests.py --integration
+/run scripts/run_tests.py --e2e
 
 # Generate and verify coverage
-/run scripts/generate_coverage_report.py --critical
-/run scripts/verify_test_coverage.py --critical
+/run scripts/generate_coverage_report.py
+/run scripts/verify_test_coverage.py --critical --min-coverage=80
 
 # Run final test verification
 /run scripts/verify_tests.py --final
@@ -30,7 +30,7 @@
 # Verify test environment cleanup
 /run scripts/verify_test_cleanup.py
 
-# Verify critical test coverage
+# Verify critical modules coverage
 /run scripts/verify_test_coverage.py --critical-modules
 
 ### CODE END ###

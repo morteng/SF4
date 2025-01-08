@@ -36,6 +36,11 @@ def verify_test_cleanup():
             logger.error(f"Found leftover test logs: {len(test_logs)}")
             return False
             
+        # Verify environment variables reset
+        if os.getenv('TESTING') == 'true':
+            logger.error("Testing environment variables not cleared")
+            return False
+            
         logger.info("Test environment cleanup verified")
         return True
         
