@@ -28,6 +28,10 @@ class User(db.Model):
         self.updated_at = db.func.current_timestamp()
 
     def set_password(self, password):
+        if not password:
+            raise ValueError("Password cannot be empty")
+        if len(password) < 8:
+            raise ValueError("Password must be at least 8 characters")
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):

@@ -11,15 +11,17 @@ logger = logging.getLogger(__name__)
 def create_app(config_name='development'):
     """Create and configure the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
-    app.debug = True  # Force debug mode
-    print("\n=== APPLICATION STARTING ===")
-    print(f"Debug mode: {app.debug}")
-    print("Initializing with config:", config_name)
-    app.config.from_pyfile('config.py', silent=True)
+    
+    # Load configuration first
+    from app.config import config_by_name
+    app.config.from_object(config_by_name[config_name])
+    
+    # Set debug mode based on config
+    app.debug = app.config.get('DEBUG', False)
     
     # Configure logging
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.DEBUG if app.debug else logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
     logger = logging.getLogger(__name__)
@@ -28,38 +30,45 @@ def create_app(config_name='development'):
         # Load environment variables
         load_dotenv()
         
-        # Load configuration
-        from app.config import config_by_name
-        app.config.from_object(config_by_name[config_name])
-        logger.info(f"Loaded {config_name} configuration successfully")
-        
         # Initialize extensions
         from app.extensions import init_extensions
         init_extensions(app)
         
-        # Register blueprints with proper order
+        # Register blueprints
         from app.routes import register_blueprints
         from app.routes.admin import register_admin_blueprints
-        
-        # Register admin blueprints first
         register_admin_blueprints(app)
-        
-        # Register public blueprints
         register_blueprints(app)
         
-        # Verify all routes are registered
+        # Ensure admin user exists
         with app.app_context():
-            registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
-            app.logger.debug(f"Registered routes: {registered_routes}")
+            from app.models.user import User
+            from app.extensions import db
             
-            # Validate critical routes
-            required_routes = [
-                'admin.admin_stipend.create',
-                'admin.dashboard.dashboard'
-            ]
-            from app.common.utils import validate_blueprint_routes
-            validate_blueprint_routes(app, required_routes)
-        
+            # Check if any admin exists
+            if not User.query.filter_by(is_admin=True).first():
+                logger.info("No admin user found, creating default admin...")
+                
+                # Get admin credentials from .env
+                admin_username = os.getenv('ADMIN_USERNAME')
+                admin_email = os.getenv('ADMIN_EMAIL')
+                admin_password = os.getenv('ADMIN_PASSWORD')
+                
+                if not all([admin_username, admin_email, admin_password]):
+                    raise ValueError("Missing admin credentials in .env file")
+                
+                # Create admin user
+                admin_user = User(
+                    username=admin_username,
+                    email=admin_email,
+                    password=admin_password,
+                    is_admin=True
+                )
+                
+                db.session.add(admin_user)
+                db.session.commit()
+                logger.info(f"Created default admin user: {admin_username}")
+                
         logger.info("Application initialized successfully")
         
     except Exception as e:
