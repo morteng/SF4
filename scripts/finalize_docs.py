@@ -29,6 +29,13 @@ def update_release_notes():
             handler.setFormatter(formatter)
             logger.addHandler(handler)
             logger.setLevel(logging.INFO)
+            
+        # Add project root to Python path
+        import sys
+        from pathlib import Path
+        project_root = str(Path(__file__).parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
         
         # Add project root to Python path
         import sys
