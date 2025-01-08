@@ -96,12 +96,16 @@ def create_app(config_name='development'):
             # Only initialize admin user if not in test mode and after migrations
             if not app.config.get('TESTING') and os.path.exists(env_path):
                 try:
-                    # Ensure admin user exists after migrations
+                    print("ADMIN_USERNAME:", os.getenv('ADMIN_USERNAME'))
+                    print("ADMIN_EMAIL:", os.getenv('ADMIN_EMAIL'))
+                    print("ADMIN_PASSWORD:", os.getenv('ADMIN_PASSWORD'))
+                    
+                    print("Attempting to ensure admin user exists...")
                     if not ensure_admin_user():
-                        logger.error("Failed to ensure admin user exists")
+                        print("Failed to ensure admin user exists")
                         raise RuntimeError("Admin user initialization failed")
                 except Exception as e:
-                    logger.error(f"Admin user initialization failed: {str(e)}")
+                    print(f"Admin user initialization failed: {str(e)}")
                     raise RuntimeError(f"Admin user initialization failed: {str(e)}")
             
             # Register blueprints
