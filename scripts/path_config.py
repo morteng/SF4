@@ -40,6 +40,18 @@ def configure_paths():
         print(f"Path configuration failed: {str(e)}")
         return False
 
+def verify_path_config():
+    """Verify path configuration is correct"""
+    try:
+        # Check if app can be imported
+        import app
+        # Check if scripts can be imported
+        import scripts
+        return True
+    except ImportError as e:
+        print(f"Path verification failed: {str(e)}")
+        return False
+
 if __name__ == "__main__":
     if configure_paths():
         print("Path configuration successful")

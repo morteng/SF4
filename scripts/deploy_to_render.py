@@ -3,10 +3,17 @@ import subprocess
 import logging
 import sys
 from pathlib import Path
+
+# Configure paths first
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from scripts.path_config import configure_paths
+if not configure_paths():
+    print("Path configuration failed")
+    exit(1)
+
+# Now we can safely import app modules
 from flask import Flask
 from app import create_app
-
-import logging
 
 # Configure logger at module level
 logger = logging.getLogger(__name__)
