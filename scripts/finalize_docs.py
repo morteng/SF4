@@ -138,6 +138,10 @@ def update_release_notes():
 def update_version_history():
     """Update version history file"""
     try:
+        # Get current version
+        from scripts.version import get_version
+        version = get_version()
+        
         # Clean up duplicate entries
         with open('VERSION_HISTORY.md', 'r') as f:
             lines = f.readlines()
@@ -146,7 +150,7 @@ def update_version_history():
         unique_lines = []
         seen = set()
         for line in lines:
-            if line not in seen:
+            if line not in seen and not line.startswith(f"## {version}"):
                 seen.add(line)
                 unique_lines.append(line)
         
