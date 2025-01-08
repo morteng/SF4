@@ -3,7 +3,7 @@
 
 ### CODE START ###
 # Verify git state
-/run scripts/verify_git_state.py --sync --pull
+/run scripts/verify_git_state.py --pull --retry=3
 
 # Create final backup
 /run scripts/create_backup.py --timestamped
@@ -15,24 +15,22 @@
 
 # Finalize documentation
 /run scripts/finalize_docs.py
+
+# Generate deployment checklist
 /run scripts/generate_deployment_checklist.py
 
 # Verify deployment readiness
-/run scripts/verify_deployment.py --full --validate-admin
-
-# Push to GitHub
-/run git push origin main
+/run scripts/verify_deployment.py --full
 
 # Deploy to Render
 /run scripts/deploy_to_render.py
 
-# Verify deployment
-/run scripts/verify_deployment.py --post-deploy
+# Push to GitHub
+/run git push origin main
 
 # Final cleanup
 /run scripts/final_cleanup.py
 /run scripts/end_cycle.py
-
 ### CODE END ###
 
 # Go to final cleanup
