@@ -31,16 +31,17 @@ def verify_coverage(threshold=80):
         
         # Run coverage report with detailed output
         result = subprocess.run(
-            ['coverage', 'report', '--fail-under=80', '--show-missing', '--skip-covered'],
+            ['coverage', 'report', f'--fail-under={threshold}', '--show-missing', '--skip-covered'],
             capture_output=True,
             text=True
         )
         
-        # Verify critical modules have 90%+ coverage
+        # Verify critical modules have required coverage
         critical_modules = {
             'app/models': 90,
             'app/services': 90,
-            'app/routes': 85
+            'app/routes': 85,
+            'app/controllers': 85
         }
         
         for module, min_coverage in critical_modules.items():
