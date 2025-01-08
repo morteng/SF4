@@ -17,19 +17,13 @@ logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
 # Configure paths first
-import sys
-from pathlib import Path
-
-# Add project root to Python path
-project_root = str(Path(__file__).parent.parent)
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
-
-# Configure paths
 from scripts.path_config import configure_paths
 if not configure_paths():
     logger.error("Path configuration failed")
     exit(1)
+
+# Now we can safely import app modules
+from app import create_app
 
 from scripts.version import validate_version, get_version
 

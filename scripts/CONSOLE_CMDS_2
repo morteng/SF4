@@ -27,7 +27,7 @@
 /run scripts/verify_deployment.py --check-version
 
 # Verify Render deployment configuration
-/run scripts/deploy_to_render.py
+/run scripts/deploy_to_render.py --dry-run
 
 ### CODE END ###
 

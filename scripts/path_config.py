@@ -5,29 +5,37 @@ from pathlib import Path
 def configure_paths():
     """Configure Python paths for the project"""
     try:
-        # Add project root to Python path
+        # Get project root (two levels up from this script)
         project_root = str(Path(__file__).parent.parent)
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
-            
-        # Add app directory to Python path
-        app_dir = str(Path(__file__).parent.parent / 'app')
-        if app_dir not in sys.path:
-            sys.path.insert(0, app_dir)
-            
-        # Add scripts directory to Python path
-        scripts_dir = str(Path(__file__).parent)
-        if scripts_dir not in sys.path:
-            sys.path.insert(0, scripts_dir)
-            
+        
+        # Add paths in order of priority
+        paths_to_add = [
+            project_root,
+            str(Path(project_root) / 'app'),
+            str(Path(project_root) / 'scripts'),
+        ]
+        
         # Add venv site-packages if exists
         venv_path = os.getenv('VIRTUAL_ENV')
         if venv_path:
             site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
-            if site_packages not in sys.path:
-                sys.path.insert(0, site_packages)
+            paths_to_add.append(site_packages)
+            
+        # Add paths to sys.path if not already present
+        for path in paths_to_add:
+            if path not in sys.path:
+                sys.path.insert(0, path)
+                print(f"Added to Python path: {path}")
                 
-        return True
+        # Verify app can be imported
+        try:
+            import app
+            print("Successfully imported app module")
+            return True
+        except ImportError as e:
+            print(f"Failed to import app module: {str(e)}")
+            return False
+            
     except Exception as e:
         print(f"Path configuration failed: {str(e)}")
         return False
