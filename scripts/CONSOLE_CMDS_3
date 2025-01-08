@@ -6,29 +6,29 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Setup test environment
-/run scripts/setup_test_env.py
-/run scripts/install_test_dependencies.py
+# Setup clean test environment
+/run scripts/setup_test_env.py --clean
+/run scripts/install_test_dependencies.py --test
 
 # Initialize test database and admin
-/run scripts/startup/init_db.py --validate-schema
-/run scripts/startup/init_admin.py --verify-email --check-password
+/run scripts/startup/init_db.py --validate-schema --test
+/run scripts/startup/init_admin.py --verify-email --check-password --test
 
-# Run all test suites
-/run scripts/run_tests.py --unit
-/run scripts/run_tests.py --integration
-/run scripts/run_tests.py --e2e
+# Run all test suites with coverage
+/run scripts/run_tests.py --unit --coverage
+/run scripts/run_tests.py --integration --coverage
+/run scripts/run_tests.py --e2e --coverage
 
-# Generate coverage reports
-/run scripts/generate_coverage_report.py
-/run scripts/verify_test_coverage.py --min-coverage=80
+# Generate and verify coverage
+/run scripts/generate_coverage_report.py --html --xml
+/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules
 
 # Verify test cleanup
-/run scripts/verify_test_cleanup.py
+/run scripts/verify_test_cleanup.py --strict
 
 # Final verification
-/run scripts/verify_tests.py
-/run scripts/verify_deployment.py
+/run scripts/verify_tests.py --final
+/run scripts/verify_deployment.py --test
 
 ### CODE END ###
 
