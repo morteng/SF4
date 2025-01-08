@@ -8,10 +8,10 @@
 
 # Fix security permissions first
 /run scripts/fix_security_permissions.py --strict --verify
-/run scripts/verify_security.py --check-env --validate-keys
+/run scripts/verify_security.py --check-env --validate-keys --verify-permissions
 
 # Setup clean test environment
-/run scripts/setup_test_env.py --clean --with-context
+/run scripts/setup_test_env.py --clean --with-context --test-db
 
 # Install test dependencies
 /run scripts/install_test_dependencies.py --test --strict
@@ -19,11 +19,11 @@
 # Initialize test database with enhanced validation
 /run scripts/startup/init_db.py --validate-schema --test --migrate --backup-first
 
-# Run core test suites
-/run scripts/run_tests.py --unit --integration --security
+# Run comprehensive test suites
+/run scripts/run_tests.py --unit --integration --security --coverage
 
-# Generate coverage reports
-/run scripts/generate_coverage_report.py --html --xml --show-missing
+# Generate detailed coverage reports
+/run scripts/generate_coverage_report.py --html --xml --show-missing --skip-covered
 
 # Verify coverage with module thresholds
 /run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90
@@ -34,6 +34,9 @@
 # Final verification
 /run scripts/verify_tests.py --final --validate-all
 /run scripts/verify_deployment.py --test --check-security
+
+# Verify Render deployment readiness
+/run scripts/verify_render_ready.py --check-api --validate-vars --test-deploy
 
 ### CODE END ###
 
