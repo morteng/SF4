@@ -2,19 +2,14 @@
 # IMPORTANT! ONLY edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize core systems
-/run scripts/path_config.py --test
-/run scripts/init_logging.py --test
-
-# Verify environment state
+# Verify git state
 /run scripts/verify_git_state.py --sync --pull
-/run scripts/verify_db_connection.py
 
-# Create and verify backup
+# Create final backup
 /run scripts/create_backup.py --timestamped
 /run scripts/verify_backup.py
 
-# Archive and verify logs
+# Archive logs
 /run scripts/archive_logs.py --force
 /run scripts/verify_logs.py
 
@@ -25,15 +20,18 @@
 # Verify deployment readiness
 /run scripts/verify_deployment.py --full --validate-admin
 
-# Deploy to production
+# Push to GitHub
+/run git push origin main
+
+# Deploy to Render
 /run scripts/deploy_to_render.py
 
-# Final cleanup and cycle end
+# Verify deployment
+/run scripts/verify_deployment.py --post-deploy
+
+# Final cleanup
 /run scripts/final_cleanup.py
 /run scripts/end_cycle.py
-
-# Push changes to GitHub
-/run git push origin main
 
 # Update TODO list - you do not do this programmatically. Use your words in FINAL CLEANUP.
 # /run scripts/update_todo.py
