@@ -2,44 +2,30 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Configure Python paths
+# Configure Python paths and logging
 /run scripts/path_config.py
-
-# Initialize logging
 /run scripts/init_logging.py
 
-# Set up test environment
+# Set up test environment and install dependencies
 /run scripts/setup_test_env.py --test
-
-# Install test dependencies
 /run scripts/install_test_dependencies.py
 
-# Initialize test database
+# Initialize test database and verify connection
 /run scripts/startup/init_db.py --test
-
-# Verify database connection
 /run scripts/verify_db_connection.py --test
 
-# Initialize admin user
+# Initialize test admin user
 /run scripts/startup/init_admin.py --test
 
-# Run unit tests
-/run scripts/run_tests.py --unit
+# Run comprehensive test suite
+/run scripts/run_tests.py --all
 
-# Run integration tests  
-/run scripts/run_tests.py --integration
-
-# Generate coverage report
+# Generate and verify coverage report
 /run scripts/generate_coverage_report.py
-
-# Verify test results
 /run scripts/verify_tests.py
 
-# Run security tests
-/run scripts/verify_deployment.py --check-security
-
-# Verify production readiness
-/run scripts/deploy_to_render.py --dry-run
+# Run security and deployment verification
+/run scripts/verify_deployment.py --full
 
 ### CODE END ###
 
