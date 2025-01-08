@@ -5,8 +5,8 @@
 # Initialize logging system
 /run scripts/init_logging.py
 
-# Set up environment with proper paths and dependencies
-/run scripts/setup_test_env.py --full
+# Set up environment with proper paths
+/run scripts/setup_test_env.py --verify
 
 # Verify database connection
 /run scripts/verify_db_connection.py --test
@@ -30,6 +30,9 @@
 
 # Run comprehensive deployment verification
 /run scripts/verify_deployment.py --full --test
+
+# Verify production readiness
+/run scripts/deploy_to_render.py --verify
 
 ### CODE END ###
 

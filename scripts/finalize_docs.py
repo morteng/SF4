@@ -37,6 +37,11 @@ def update_release_notes():
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
         
+        # Add scripts directory
+        scripts_dir = str(Path(__file__).parent)
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+        
         # Ensure proper version import
         try:
             from version import __version__
