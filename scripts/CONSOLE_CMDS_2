@@ -7,34 +7,30 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Commit pending changes
-/run scripts/commit_changes.py
+# Commit pending changes with deployment message
+/run scripts/commit_changes.py --message "Pre-deployment fixes: Database validation and test coverage improvements"
 
-# Verify and sync git state
-/run scripts/verify_git_state.py --pull --retry=3
+# Verify git state and sync
+/run scripts/verify_git_state.py --pull --retry=3 --auto-resolve
 
-# Initialize database with enhanced checks
-/run scripts/verify_db_config.py --validate-uri
-/run scripts/verify_db_connection.py --retry=3 --timeout=10
-/run scripts/startup/init_db.py --validate-schema --check-migrations
+# Validate database configuration
+/run scripts/verify_db_config.py --validate-uri --check-permissions
+/run scripts/verify_db_connection.py --retry=3 --timeout=10 --validate-schema
 
-# Initialize admin user with strict validation
-/run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity
+# Initialize database with schema validation
+/run scripts/startup/init_db.py --validate-schema --check-migrations --backup-first
 
-# Run comprehensive security checks
-/run scripts/verify_security.py --full-scan
+# Verify security settings
+/run scripts/verify_security.py --check-env --validate-keys
 
-# Verify test coverage
+# Run critical test coverage checks
 /run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90
 
 # Prepare Render deployment
-/run scripts/verify_render_ready.py --check-api --validate-vars
+/run scripts/verify_render_ready.py --check-api --validate-vars --test-deploy
 
-# Rotate backups
-/run scripts/backup_rotation.py --max-backups=5 --compress
-
-# Final deployment verification
-/run scripts/verify_deployment.py --final-check --validate-all
+# Create fresh backup before deployment
+/run scripts/backup_rotation.py --max-backups=5 --compress --verify
 
 ### CODE END ###
 
