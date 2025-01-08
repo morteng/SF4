@@ -6,3 +6,25 @@ M  scripts/MANAGER.txt
 2025-01-08 23:33:08,980 - ERROR - Uncommitted changes detected
 2025-01-08 23:33:08,980 - INFO - Please commit or stash changes before proceeding
 2025-01-08 23:33:08,980 - ERROR - Cannot deploy with uncommitted changes
+2025-01-08 23:34:25,435 - INFO - Git status:
+## main...origin/main [ahead 2]
+
+2025-01-08 23:34:25,436 - ERROR - Uncommitted changes detected
+2025-01-08 23:34:25,436 - INFO - Please commit or stash changes before proceeding
+2025-01-08 23:34:25,436 - ERROR - Cannot deploy with uncommitted changes
+2025-01-08 23:36:57,859 - INFO - Git status:
+## main...origin/main [ahead 3]
+M  logs/version_management.log
+
+2025-01-08 23:36:57,860 - ERROR - Uncommitted changes detected
+2025-01-08 23:36:57,860 - INFO - Please commit or stash changes before proceeding
+2025-01-08 23:36:57,860 - ERROR - Cannot deploy with uncommitted changes
+2025-01-08 23:39:12,239 - ERROR - Failed to configure test environment: Command '['C:\\github\\SF4\\.venv\\Scripts\\python.exe', '-m', 'pip', 'install', '-r', 'requirements-test.txt']' returned non-zero exit status 1.
+2025-01-08 23:39:12,239 - INFO - Test environment configured successfully
+2025-01-08 23:47:23,045 - INFO - Git status:
+## main...origin/main [ahead 7]
+M  logs/version_management.log
+
+2025-01-08 23:47:23,045 - ERROR - Uncommitted changes detected
+2025-01-08 23:47:23,045 - INFO - Please commit or stash changes before proceeding
+2025-01-08 23:47:23,045 - ERROR - Cannot deploy with uncommitted changes
