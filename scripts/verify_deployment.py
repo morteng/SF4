@@ -93,6 +93,12 @@ def verify_deployment(*args, **kwargs):
     """Verify all deployment requirements are met"""
     global logger
     logger = logging.getLogger(__name__)
+    
+    # Verify version
+    from scripts.version import validate_version
+    if not validate_version():
+        logger.error("Version validation failed")
+        return False
     if not logger.handlers:
         handler = logging.StreamHandler()
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
