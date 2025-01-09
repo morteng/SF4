@@ -26,9 +26,16 @@ def verify_security_settings():
             
         # Check password complexity
         admin_password = os.getenv('ADMIN_PASSWORD')
-        if admin_password and len(admin_password) < 12:
-            logger.error("ADMIN_PASSWORD must be at least 12 characters")
-            return False
+        if admin_password:
+            if len(admin_password) < 12:
+                logger.error("ADMIN_PASSWORD must be at least 12 characters")
+                return False
+            # Check for password complexity
+            if (not any(c.isupper() for c in admin_password) or
+                not any(c.islower() for c in admin_password) or
+                not any(c.isdigit() for c in admin_password)):
+                logger.error("ADMIN_PASSWORD must contain uppercase, lowercase and numbers")
+                return False
             
         # Verify debug mode is disabled in production
         if os.getenv('FLASK_ENV') == 'production' and os.getenv('FLASK_DEBUG') == '1':
