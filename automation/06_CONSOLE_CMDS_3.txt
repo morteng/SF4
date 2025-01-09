@@ -26,16 +26,16 @@
 
 # Verify admin functionality
 /run scripts/verification/verify_htmx_integration.py --full --test-all-crud --admin-only
-/run scripts/verification/verify_security.py --full-audit --admin-only
+/run scripts/verification/verify_security.py --full-audit --admin-only --validate-keys --htmx
 /run scripts/verification/verify_db_schema.py --strict --admin-tables --verify-relations
 /run scripts/verification/verify_test_coverage.py --threshold=85 --admin-only --critical-paths
 
 # Verify core systems
 /run scripts/verification/verify_db_connection.py --retry=5 --timeout=30 --strict
-/run scripts/verification/verify_backup.py --retention=7 --verify-integrity
-/run scripts/verification/verify_monitoring.py --production --alert-thresholds
-/run scripts/verification/verify_logs.py --check-rotation --verify-archives
-/run scripts/verification/verify_config.py --production --validate-env
+/run scripts/verification/verify_backup.py --retention=7 --verify-integrity --test-restore
+/run scripts/verification/verify_monitoring.py --production --alert-thresholds --detailed-metrics
+/run scripts/verification/verify_logs.py --check-rotation --verify-archives --admin-actions
+/run scripts/verification/verify_config.py --production --validate-env --strict
 
 # Commit test results with verification
 /run scripts/commit_changes.py --message "Testing cycle completed" --verify --strict
