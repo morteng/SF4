@@ -122,8 +122,11 @@ class StipendController(BaseCrudController):
 
     def _prepare_update_data(self, form):
         data = self._prepare_create_data(form)
-        data['organization_id'] = form.organization_id.data
-        data['tags'] = form.tags.data
+        data.update({
+            'organization_id': form.organization_id.data,
+            'tags': form.tags.data,
+            'updated_by': current_user.id
+        })
         return data
 
 stipend_controller = StipendController()
@@ -170,7 +173,31 @@ def create():
 @login_required
 @admin_required
 def edit(id):
-    return stipend_controller.edit(id)
+    """Handle stipend edit requests."""
+    logger.debug(f"Processing edit request for stipend {id}")
+    
+    stipend = Stipend.query.get_or_404(id)
+    form = StipendForm(obj=stipend)
+    
+    # Populate organization and tags
+    form.organization_id.data = stipend.organization_id
+    form.tags.data = [tag.id for tag in stipend.tags]
+    
+    if request.method == 'POST' and form.validate():
+        try:
+            # Use the service layer for update
+            form_data = stipend_controller._prepare_update_data(form)
+            updated_stipend = stipend_controller.service.update(id, form_data, current_user.id)
+            
+            flash(FlashMessages.UPDATE_SUCCESS.value, 'success')
+            return redirect(url_for('admin.admin_stipend.index'))
+        except Exception as e:
+            logger.error(f"Error updating stipend {id}: {str(e)}")
+            flash(FlashMessages.UPDATE_ERROR.value, 'error')
+    
+    return render_template('admin/stipends/edit.html', 
+                         form=form, 
+                         stipend=stipend)
 
 
 @admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])

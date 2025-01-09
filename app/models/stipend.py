@@ -73,6 +73,13 @@ class Stipend(db.Model):
         """Update stipend fields with audit logging and validation"""
         from app.services.stipend_service import StipendService
         service = StipendService()
+        
+        # Handle tags separately
+        tags = data.pop('tags', None)
+        if tags is not None:
+            from app.models.tag import Tag
+            self.tags = [Tag.query.get(tag_id) for tag_id in tags]
+        
         return service.update(self.id, data, user_id=user_id)
 
     @staticmethod

@@ -94,14 +94,21 @@ class StipendForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
         # Initialize organization choices
         self.organization_id.choices = [
             (org.id, org.name) for org in Organization.query.order_by(Organization.name).all()
         ]
+        
         # Initialize tag choices
         self.tags.choices = [
             (tag.id, tag.name) for tag in Tag.query.order_by(Tag.name).all()
         ]
+        
+        # Set default values for existing stipend
+        if kwargs.get('obj'):
+            self.tags.data = [tag.id for tag in kwargs['obj'].tags]
+            self.organization_id.data = kwargs['obj'].organization_id
 
 
     def validate_open_for_applications(self, field):
