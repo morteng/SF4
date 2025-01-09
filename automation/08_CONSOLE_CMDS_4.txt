@@ -9,40 +9,32 @@
 # Initialize logging with production settings
 /run scripts/init_logging.py --production --verbose
 
-# Verify security with full audit and daily checks
-/run scripts/verification/verify_security.py --full-audit --daily --validate-keys
+# Verify admin functionality
+/run scripts/verification/verify_htmx_integration.py --full --test-all-crud --admin-only
+/run scripts/verification/verify_security.py --full-audit --admin-only --validate-keys
+/run scripts/verification/verify_db_schema.py --strict --admin-tables --verify-relations
+/run scripts/verification/verify_test_coverage.py --threshold=85 --admin-only --critical-paths
 
-# Verify database connection with retry and timeout
+# Verify core systems
 /run scripts/verification/verify_db_connection.py --retry=5 --timeout=30 --strict
-
-# Verify database schema integrity with relation validation
-/run scripts/verification/verify_db_schema.py --strict --validate-relations
-
-# Verify backup integrity with retention policy
-/run scripts/verification/verify_backup.py --retention=7 --verify-integrity
-
-# Verify monitoring configuration with alert thresholds
-/run scripts/verification/verify_monitoring.py --production --alert-thresholds
-
-# Verify test coverage with critical paths
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --module-thresholds
-
-# Verify logging configuration
-/run scripts/verification/verify_logs.py --check-rotation --verify-archives --allow-empty-bots
-
-# Finalize documentation with version info
-/run scripts/finalize_docs.py --version --validate
-
-# Generate deployment checklist
-/run scripts/generate_deployment_checklist.py --strict --validate
-
-# Request final approval with detailed report
-/run scripts/request_approval.py --detailed --verify
+/run scripts/verification/verify_backup.py --retention=7 --verify-integrity --test-restore
+/run scripts/verification/verify_monitoring.py --production --alert-thresholds --detailed-metrics
+/run scripts/verification/verify_logs.py --check-rotation --verify-archives --admin-actions
+/run scripts/verification/verify_config.py --production --validate-env --strict
 
 # Verify production readiness
 /run scripts/verification/verify_production_ready.py --full --strict
 
-# Commit final changes with verification
+# Finalize documentation
+/run scripts/finalize_docs.py --version --validate --admin
+
+# Generate deployment checklist
+/run scripts/generate_deployment_checklist.py --strict --validate --admin
+
+# Request final approval
+/run scripts/request_approval.py --detailed --verify --admin
+
+# Commit final changes
 /run scripts/commit_changes.py --message "Final review completed" --verify --strict
 
 ### CODE END ###
