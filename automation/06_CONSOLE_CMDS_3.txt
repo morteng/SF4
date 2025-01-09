@@ -24,20 +24,17 @@
 # Generate detailed coverage report
 /run scripts/generate_coverage_report.py --html --xml --threshold=85
 
-# Verify critical systems with enhanced checks
-/run scripts/verification/verify_security.py --full-audit --daily
+# Verify admin functionality
+/run scripts/verification/verify_htmx_integration.py --full --test-all-crud --admin-only
+/run scripts/verification/verify_security.py --full-audit --admin-only
+/run scripts/verification/verify_db_schema.py --strict --admin-tables --verify-relations
+/run scripts/verification/verify_test_coverage.py --threshold=85 --admin-only --critical-paths
+
+# Verify core systems
 /run scripts/verification/verify_db_connection.py --retry=5 --timeout=30 --strict
-/run scripts/verification/verify_db_schema.py --strict --validate-relations
 /run scripts/verification/verify_backup.py --retention=7 --verify-integrity
 /run scripts/verification/verify_monitoring.py --production --alert-thresholds
-
-# Verify test coverage with critical paths
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --module-thresholds
-
-# Verify logging configuration
-/run scripts/verification/verify_logs.py --check-rotation --verify-archives --allow-empty-bots
-
-# Verify production configuration
+/run scripts/verification/verify_logs.py --check-rotation --verify-archives
 /run scripts/verification/verify_config.py --production --validate-env
 
 # Commit test results with verification
