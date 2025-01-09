@@ -508,3 +508,18 @@ M  logs/version_management.log
 2025-01-09 01:25:06,603 - INFO - Please commit or stash changes before proceeding
 2025-01-09 01:25:06,603 - ERROR - Cannot update docs with uncommitted changes
 2025-01-09 01:25:06,603 - ERROR - Documentation finalization failed
+2025-01-09 01:29:05,193 - INFO - Git status:
+## main...origin/main [ahead 5]
+
+2025-01-09 01:29:05,193 - ERROR - Uncommitted changes detected
+2025-01-09 01:29:05,194 - INFO - Please commit or stash changes before proceeding
+2025-01-09 01:29:05,194 - ERROR - Cannot update docs with uncommitted changes
+2025-01-09 01:29:05,194 - ERROR - Documentation finalization failed
+2025-01-09 01:29:08,445 - INFO - Git status:
+## main...origin/main [ahead 5]
+ M logs/version_management.log
+
+2025-01-09 01:29:08,445 - ERROR - Uncommitted changes detected
+2025-01-09 01:29:08,446 - INFO - Please commit or stash changes before proceeding
+2025-01-09 01:29:08,446 - ERROR - Git state verification failed
+2025-01-09 01:29:08,446 - ERROR - Deployment requirements not met
