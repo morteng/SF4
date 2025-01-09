@@ -25,8 +25,7 @@ def commit_changes(message, push=False):
         if not configure_paths():
             logger.error("Path configuration failed")
             return False
-    
-    try:
+
         # Verify git status first
         status = subprocess.run(
             ['git', 'status', '--porcelain'],
@@ -54,6 +53,9 @@ def commit_changes(message, push=False):
         return True
     except subprocess.CalledProcessError as e:
         logger.error(f"Commit failed: {str(e)}")
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error during commit: {str(e)}")
         return False
 
 if __name__ == "__main__":
