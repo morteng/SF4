@@ -6,21 +6,10 @@
 /add docs/DEPLOYMENT_CHECKLIST.md
 /add automation/10_CONSOLE_CMDS_5.txt
 
-/ask "How can we best implement Code Cycle Step 5 - Document, demo, and deploy?
-Objective:
- - Update all relevant documentation (README, DESIGN, PRD, PROGRESS, etc.)
- - Remove completed items from TODO
- - Prepare a demo and evaluate final deployment readiness
- - Decide if we are ready to push to production
-Any final tasks left?
-"
+/ask How can we best implement Code Cycle Step 5 - Document, demo, and deploy? Objective: - Update all relevant documentation (README, DESIGN, PRD, PROGRESS, etc.) - Remove completed items from TODO - Prepare a demo and evaluate final deployment readiness - Decide if we are ready to push to production. Any final tasks left?
 
-/code "Implement documentation updates. 
- - Remove old console commands from 10_CONSOLE_CMDS_5.txt 
- - Add any new commands needed to finalize or run the app 
- - Deploy if ready, push to GitHub when appropriate 
- - Remember: simple console commands only
-"
+/code Implement documentation updates.  - Remove old console commands from 10_CONSOLE_CMDS_5.txt  - Add any new commands needed to finalize or run the app  - Deploy if ready, push to GitHub when appropriate  - Remember: simple console commands only
+
 
 # Step 5 over, go to 10_CONSOLE_CMDS_5.txt
 /load automation/10_CONSOLE_CMDS_5.txt
