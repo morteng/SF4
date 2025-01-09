@@ -4,8 +4,8 @@
 ### CODE START ###
 
 # Initialize test environment
-/run scripts/path_config.py --strict
-/run scripts/init_logging.py --test
+/run scripts/path_config.py --strict --verify --test
+/run scripts/init_logging.py --test --verbose
 /run scripts/setup_test_env.py --test
 
 # Initialize test database
@@ -15,18 +15,18 @@
 /run scripts/testing/run_tests.py --unit --integration --e2e
 
 # Verify HTMX functionality
-/run scripts/verification/verify_htmx_integration.py --full --admin-only
+/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates
 
 # Verify database operations
-/run scripts/verification/verify_db_schema.py --strict --admin-tables
-/run scripts/verification/verify_db_connection.py --strict --admin
+/run scripts/verification/verify_db_schema.py --strict --tables=stipend --verify-relations
+/run scripts/verification/verify_db_connection.py --strict
 
 # Verify security settings
-/run scripts/verification/verify_security.py --full-audit --admin-only
+/run scripts/verification/verify_security.py --full-audit --validate-keys --check-stipends-security
 
 # Generate and verify coverage
 /run scripts/generate_coverage_report.py --html --xml
-/run scripts/verification/verify_test_coverage.py --threshold=85 --admin-only
+/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95
 
 # Finalize testing
 /run scripts/commit_changes.py --message "Testing cycle completed" --verify
