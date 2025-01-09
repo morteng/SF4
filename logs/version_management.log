@@ -2488,3 +2488,9 @@ M  logs/version_management.log
 2025-01-09 18:40:01,503 - ERROR - Database initialization failed: name 'os' is not defined
 2025-01-09 18:40:01,504 - ERROR - Failed to configure test environment: Failed to initialize test database
 2025-01-09 18:40:01,504 - INFO - Test environment configured successfully
+2025-01-09 18:42:56,256 - INFO - Logging system initialized successfully
+2025-01-09 18:42:56,257 - INFO - Logging system initialized successfully
+2025-01-09 18:42:56,258 - INFO - Logging system initialized successfully
+2025-01-09 18:42:56,382 - ERROR - Database initialization failed: name 'os' is not defined
+2025-01-09 18:42:56,382 - ERROR - Failed to configure test environment: Failed to initialize test database
+2025-01-09 18:42:56,382 - INFO - Test environment configured successfully
