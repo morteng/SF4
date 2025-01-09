@@ -3,6 +3,9 @@
 
 ### CODE START ###
 
+# Fix path configuration first
+/run scripts/path_config.py --strict --verify --fix-paths
+
 # Verify production readiness
 /run scripts/verification/verify_production_ready.py --full --strict
 
