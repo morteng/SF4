@@ -18,6 +18,11 @@ def verify_security_settings(full_audit=False):
     logger = configure_logger()
     
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
         # Enhanced SECRET_KEY validation
         secret_key = os.getenv('SECRET_KEY')
         if not secret_key or len(secret_key) < 64:

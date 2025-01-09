@@ -10,6 +10,11 @@ logger = logging.getLogger(__name__)
 def validate_schema():
     """Validate database schema against expected structure"""
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
         # Get expected tables from models
         expected_tables = {
             'user': ['id', 'username', 'email', 'password_hash'],

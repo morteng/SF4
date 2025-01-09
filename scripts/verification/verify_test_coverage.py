@@ -18,18 +18,13 @@ def verify_coverage(threshold=80, critical_paths=False):
     """Enhanced coverage verification with critical path analysis"""
     logger = configure_coverage_logging()
     
-    # Add project root to Python path
-    project_root = str(Path(__file__).parent.parent)
-    if project_root not in sys.path:
-        sys.path.insert(0, project_root)
-            
-    # Add app directory explicitly
-    app_dir = str(Path(project_root) / 'app')
-    if app_dir not in sys.path:
-        sys.path.insert(0, app_dir)
-            
-    # Verify imports
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
+        # Verify imports
         import app
         import tests
     except ImportError as e:

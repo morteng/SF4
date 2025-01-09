@@ -18,6 +18,11 @@ def verify_config():
     logger = configure_logger()
     
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
         from app.config import Config, ProductionConfig
         
         # Verify SECRET_KEY
