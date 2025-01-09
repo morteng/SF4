@@ -1083,3 +1083,60 @@ M  logs/version_management.log
 2025-01-09 01:55:08,506 - INFO - Please commit or stash changes before proceeding
 2025-01-09 01:55:08,506 - ERROR - Git state verification failed
 2025-01-09 01:55:08,506 - ERROR - Deployment requirements not met
+2025-01-09 01:55:45,496 - DEBUG - Created admin blueprint
+2025-01-09 01:55:45,500 - DEBUG - Created stipend blueprint: admin_stipend
+2025-01-09 01:55:45,500 - DEBUG - URL prefix: /stipends
+2025-01-09 01:55:45,500 - DEBUG - Import name: app.routes.admin.stipend_routes
+2025-01-09 01:55:45,510 - DEBUG - Registered stipend blueprint: admin_stipend
+2025-01-09 01:55:45,510 - DEBUG - Registered dashboard blueprint: dashboard
+2025-01-09 01:55:45,528 - DEBUG - Registered admin blueprint with app
+2025-01-09 01:55:45,531 - DEBUG - Registered routes:
+2025-01-09 01:55:45,532 - DEBUG - Route: static
+2025-01-09 01:55:45,532 - DEBUG - Route: user.profile
+2025-01-09 01:55:45,533 - DEBUG - Route: user.edit_profile
+2025-01-09 01:55:45,533 - DEBUG - Route: public.login
+2025-01-09 01:55:45,533 - DEBUG - Route: public.index
+2025-01-09 01:55:45,533 - DEBUG - Route: public.filter_stipends
+2025-01-09 01:55:45,533 - DEBUG - Route: public.logout
+2025-01-09 01:55:45,533 - DEBUG - Route: public.register
+2025-01-09 01:55:45,533 - DEBUG - Route: admin.admin_stipend.create
+2025-01-09 01:55:45,533 - DEBUG - Route: admin.admin_stipend.edit
+2025-01-09 01:55:45,534 - DEBUG - Route: admin.admin_stipend.delete
+2025-01-09 01:55:45,534 - DEBUG - Route: admin.admin_stipend.index
+2025-01-09 01:55:45,534 - DEBUG - Route: admin.admin_stipend.paginate
+2025-01-09 01:55:45,534 - DEBUG - Route: admin.dashboard.dashboard
+2025-01-09 01:55:45,534 - DEBUG - Route: admin.user.create
+2025-01-09 01:55:45,534 - DEBUG - Route: admin.user.edit
+2025-01-09 01:55:45,534 - DEBUG - Route: admin.user.delete
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.user.reset_password
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.user.toggle_active
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.user.edit_profile
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.user.index
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.bot.create
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.bot.delete
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.bot.index
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.bot.run
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.bot.schedule
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.bot.edit
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.organization.create
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.organization.delete
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.organization.index
+2025-01-09 01:55:45,535 - DEBUG - Route: admin.organization.paginate
+2025-01-09 01:55:45,536 - DEBUG - Route: admin.organization.view
+2025-01-09 01:55:45,536 - DEBUG - Route: admin.organization.edit
+2025-01-09 01:55:45,536 - DEBUG - Route: admin.tag.create
+2025-01-09 01:55:45,536 - DEBUG - Route: admin.tag.edit
+2025-01-09 01:55:45,536 - DEBUG - Route: admin.tag.delete
+2025-01-09 01:55:45,536 - DEBUG - Route: admin.tag.index
+2025-01-09 01:55:45,536 - DEBUG - Route: admin.tag.paginate
+2025-01-09 01:55:45,536 - DEBUG - Validating required routes: ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+2025-01-09 01:55:45,536 - DEBUG - Registered routes: ['static', 'user.profile', 'user.edit_profile', 'public.login', 'public.index', 'public.filter_stipends', 'public.logout', 'public.register', 'admin.admin_stipend.create', 'admin.admin_stipend.edit', 'admin.admin_stipend.delete', 'admin.admin_stipend.index', 'admin.admin_stipend.paginate', 'admin.dashboard.dashboard', 'admin.user.create', 'admin.user.edit', 'admin.user.delete', 'admin.user.reset_password', 'admin.user.toggle_active', 'admin.user.edit_profile', 'admin.user.index', 'admin.bot.create', 'admin.bot.delete', 'admin.bot.index', 'admin.bot.run', 'admin.bot.schedule', 'admin.bot.edit', 'admin.organization.create', 'admin.organization.delete', 'admin.organization.index', 'admin.organization.paginate', 'admin.organization.view', 'admin.organization.edit', 'admin.tag.create', 'admin.tag.edit', 'admin.tag.delete', 'admin.tag.index', 'admin.tag.paginate']
+2025-01-09 01:55:45,536 - DEBUG - Required routes: ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+2025-01-09 01:56:15,768 - INFO - Git status:
+## main...origin/main [ahead 37]
+M  logs/version_management.log
+
+2025-01-09 01:56:15,768 - ERROR - Uncommitted changes detected
+2025-01-09 01:56:15,768 - INFO - Please commit or stash changes before proceeding
+2025-01-09 01:56:15,768 - ERROR - Cannot update docs with uncommitted changes
+2025-01-09 01:56:15,768 - ERROR - Documentation finalization failed
