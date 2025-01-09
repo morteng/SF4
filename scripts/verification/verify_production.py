@@ -247,6 +247,8 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
+from scripts.verification.verify_db_connection import verify_db_connection
+
 def verify_production():
     """Enhanced production verification with comprehensive checks"""
     try:

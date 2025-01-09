@@ -107,6 +107,17 @@ def verify_test_coverage():
         logger.error(f"Test coverage verification failed: {str(e)}")
         return False
 
+def configure_logger():
+    """Configure logger for deployment verification"""
+    logger = logging.getLogger(__name__)
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+    return logger
+
 def verify_deployment(*args, **kwargs):
     """Enhanced deployment verification with proper error handling"""
     try:
