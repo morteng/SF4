@@ -33,19 +33,27 @@ def request_approval():
         from scripts.verify_test_coverage import verify_coverage
         coverage = verify_coverage(threshold=80, critical=True)
         
-    # Get test coverage
-    from scripts.verify_test_coverage import verify_coverage
-    coverage = verify_coverage(threshold=80, critical=True)
     try:
+        # Import coverage verification if available
+        try:
+            from scripts.verify_test_coverage import verify_coverage
+            coverage = verify_coverage(threshold=80, critical=True)
+        except ImportError:
+            logger.warning("Test coverage verification module not found")
+            coverage = "Unknown"
+            
+        # Write deployment request
         with open('scripts/REQUESTS.txt', 'a') as f:
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
             f.write(f"\nDeployment Request - {timestamp}\n")
             logger.info(f"Created deployment request at {timestamp}")
+            
+            # Write deployment details
             f.write("Version 1.2.11 is ready for deployment pending final verification.\n")
             f.write("Please review and approve deployment to production.\n")
             f.write("Key details:\n")
-            f.write("- Version: 1.2.11\n")
-            f.write("- Test coverage: 82% (target: 80%)\n")
+            f.write(f"- Version: 1.2.11\n")
+            f.write(f"- Test coverage: {coverage} (target: 80%)\n")
             f.write("- Production environment verification: Passed\n")
             f.write("- Final backup: Created (stipend_20250108_195941.db)\n")
             f.write("- Log archive: Created (archive_20250108_195941.zip)\n")
@@ -55,6 +63,8 @@ def request_approval():
             f.write("- Security settings: Verified\n")
             f.write("- Admin user: Verified\n")
             f.write("- Database connection: Verified\n\n")
+            
+            # Write changes implemented
             f.write("Changes implemented:\n")
             f.write("1. Fixed database connection issues\n")
             f.write("2. Updated SECRET_KEY validation\n")
@@ -64,9 +74,13 @@ def request_approval():
             f.write("6. Enhanced log archiving\n")
             f.write("7. Updated requirements\n")
             f.write("8. Added comprehensive deployment verification\n\n")
+            
+            # Write pending items
             f.write("Pending items:\n")
             f.write("- Improve test coverage to meet 80% target\n")
             f.write("- Resolve test import errors\n\n")
+            
+            # Final approval request
             f.write("Please review and approve deployment to production.\n")
             f.write("ANSWER: ")
         return True
