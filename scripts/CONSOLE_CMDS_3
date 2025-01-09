@@ -6,37 +6,37 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Fix security permissions first
-/run scripts/fix_security_permissions.py --strict --verify
-/run scripts/verify_security.py --check-env --validate-keys --verify-permissions
+# Fix critical security issues
+/run scripts/fix_security_permissions.py --strict --verify --reset
+/run scripts/verify_security.py --check-env --validate-keys --verify-permissions --check-rotation
 
 # Setup clean test environment
-/run scripts/setup_test_env.py --clean --with-context --test-db
+/run scripts/setup_test_env.py --clean --with-context --test-db --reset
 
-# Install test dependencies
-/run scripts/install_test_dependencies.py --test --strict
+# Install test dependencies with strict verification
+/run scripts/install_test_dependencies.py --test --strict --verify
 
 # Initialize test database with enhanced validation
-/run scripts/startup/init_db.py --validate-schema --test --migrate --backup-first
+/run scripts/startup/init_db.py --validate-schema --test --migrate --backup-first --reset
 
 # Run comprehensive test suites
-/run scripts/run_tests.py --unit --integration --security --coverage
+/run scripts/run_tests.py --unit --integration --security --coverage --critical
 
 # Generate detailed coverage reports
-/run scripts/generate_coverage_report.py --html --xml --show-missing --skip-covered
+/run scripts/generate_coverage_report.py --html --xml --show-missing --skip-covered --critical
 
 # Verify coverage with module thresholds
-/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90
+/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90,app/routes:85
 
 # Verify test cleanup
-/run scripts/verify_test_cleanup.py --strict --validate
+/run scripts/verify_test_cleanup.py --strict --validate --reset
 
 # Final verification
-/run scripts/verify_tests.py --final --validate-all
-/run scripts/verify_deployment.py --test --check-security
+/run scripts/verify_tests.py --final --validate-all --critical
+/run scripts/verify_deployment.py --test --check-security --verify-backups
 
 # Verify Render deployment readiness
-/run scripts/verify_render_ready.py --check-api --validate-vars --test-deploy
+/run scripts/verify_render_ready.py --check-api --validate-vars --test-deploy --critical
 
 ### CODE END ###
 
