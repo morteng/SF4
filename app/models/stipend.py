@@ -126,6 +126,27 @@ class Stipend(db.Model):
     def __repr__(self):
         return f'<Stipend {self.name}>'
 
+    def validate(self):
+        """Validate stipend data"""
+        errors = {}
+        
+        if not self.name:
+            errors['name'] = 'Name is required'
+        if not self.summary:
+            errors['summary'] = 'Summary is required'
+        if not self.description:
+            errors['description'] = 'Description is required'
+        if not self.homepage_url:
+            errors['homepage_url'] = 'Homepage URL is required'
+            
+        # Validate organization exists
+        if self.organization_id:
+            from app.models.organization import Organization
+            if not Organization.query.get(self.organization_id):
+                errors['organization_id'] = 'Invalid organization'
+                
+        return errors
+
     def to_dict(self):
         """Convert stipend to dictionary with all relevant data."""
         return {
