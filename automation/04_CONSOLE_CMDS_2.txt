@@ -13,35 +13,35 @@
 # Initialize database with enhanced schema validation
 /run scripts/startup/init_db.py --validate-schema --retry=5 --strict
 
-# Verify security settings with full audit
-/run scripts/verification/verify_security.py --full-audit --validate-keys
+# Verify security settings with full audit and daily checks
+/run scripts/verification/verify_security.py --full-audit --daily --validate-keys
 
 # Initialize admin user with strict password checks
 /run scripts/startup/init_admin.py --verify-email --strict-password
 
 # Verify database connection with retry logic
-/run scripts/verification/verify_db_connection.py --retry=5 --strict
+/run scripts/verification/verify_db_connection.py --retry=5 --timeout=30 --strict
 
-# Verify database schema integrity
-/run scripts/verification/verify_db_schema.py --strict --verify-relations
+# Verify database schema integrity with relation validation
+/run scripts/verification/verify_db_schema.py --strict --validate-relations
 
 # Verify test coverage with critical path analysis
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --module-thresholds
 
 # Verify backup integrity with retention policy
-/run scripts/verification/verify_backup.py --retention=7 --verify-size
+/run scripts/verification/verify_backup.py --retention=7 --verify-integrity
 
-# Verify monitoring configuration
-/run scripts/verification/verify_monitoring.py --production --verify-alerts
+# Verify monitoring configuration with alert thresholds
+/run scripts/verification/verify_monitoring.py --production --alert-thresholds
 
 # Verify logging configuration
 /run scripts/verification/verify_logs.py --check-rotation --verify-archives
 
+# Verify production configuration
+/run scripts/verification/verify_config.py --production --validate-env
+
 # Commit changes with verification summary
 /run scripts/commit_changes.py --message "Step 2 verification completed" --verify
-
-# Run application for management review
-/run flask run --host=0.0.0.0 --port=5000
 
 ### CODE END ###
 
