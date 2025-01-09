@@ -8,7 +8,7 @@
 - [ ] All unit tests passed
 - [ ] Integration tests completed
 - [ ] End-to-end tests verified
-- [ ] Test coverage meets requirements (Current: 16.66%)
+- [ ] Test coverage meets 85% target (Current: 16.66%)
 - [ ] Relationship tests passed
 - [ ] Version management tests passed
 

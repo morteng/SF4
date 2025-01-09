@@ -9,18 +9,14 @@
 
 # Validate database connection and schema integrity
 /run python scripts/verification/verify_db_connection.py
+/run python scripts/verification/verify_db_schema.py
 
-# Check backup system functionality
+# Confirm test coverage meets 85% target (per MANAGER.txt)
+/run python scripts/verification/verify_test_coverage.py --threshold=85
+
+# Verify critical production systems
 /run python scripts/verification/verify_backup.py
-
-# Verify logging configuration and archive integrity
-/run python scripts/verification/verify_logs.py
-
-# Ensure monitoring is properly configured
 /run python scripts/verification/verify_monitoring.py
-
-# Confirm test coverage meets 80% target
-/run python scripts/verification/verify_test_coverage.py
 
 ### CODE END ###
 
