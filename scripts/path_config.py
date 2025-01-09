@@ -9,6 +9,20 @@ def configure_paths():
         project_root = str(Path(__file__).parent.parent.parent)
         
         # Add project root to sys.path
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            
+        # Add app directory explicitly
+        app_dir = str(Path(project_root) / 'app')
+        if app_dir not in sys.path:
+            sys.path.insert(0, app_dir)
+            
+        # Add scripts directory
+        scripts_dir = str(Path(__file__).parent)
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+        
+        # Add project root to sys.path
         import sys
         if project_root not in sys.path:
             sys.path.insert(0, project_root)

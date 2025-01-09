@@ -18,14 +18,20 @@ def verify_monitoring_setup():
     logger = configure_logger()
     
     try:
-        # Verify required monitoring environment variables
-        required_vars = [
-            'MONITORING_ENABLED',
-            'METRICS_ENDPOINT',
-            'ALERTING_ENABLED',
-            'MONITORING_INTERVAL',
-            'ALERT_THRESHOLDS'
-        ]
+        # Verify required monitoring environment variables with defaults
+        required_vars = {
+            'MONITORING_ENABLED': 'true',
+            'METRICS_ENDPOINT': '/metrics',
+            'ALERTING_ENABLED': 'true',
+            'MONITORING_INTERVAL': '60',
+            'ALERT_THRESHOLDS': 'cpu:90,memory:90,disk:90'
+        }
+        
+        # Set default values if not present
+        for var, default in required_vars.items():
+            if not os.getenv(var):
+                os.environ[var] = default
+                logger.info(f"Set default value for {var}: {default}")
         
         missing_vars = [var for var in required_vars if not os.getenv(var)]
         if missing_vars:

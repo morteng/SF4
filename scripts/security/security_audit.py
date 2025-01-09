@@ -18,8 +18,14 @@ def security_audit():
     logger = configure_logger()
     
     try:
+        # Configure paths first
+        from path_config import configure_paths
+        if not configure_paths():
+            logger.error("Path configuration failed")
+            return False
+            
         # Verify environment variables
-        from scripts.verification.verify_security import verify_security_settings
+        from verification.verify_security import verify_security_settings
         if not verify_security_settings():
             logger.error("Security settings verification failed")
             return False

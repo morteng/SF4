@@ -69,8 +69,9 @@ def verify_security_settings():
     try:
         # Check debug mode
         if os.getenv('FLASK_DEBUG') == '1':
-            logger.warning("Debug mode is enabled in production")
-            return False
+            logger.error("Debug mode must be disabled in production")
+            os.environ['FLASK_DEBUG'] = '0'
+            logger.info("Debug mode has been disabled")
             
         # Verify SECRET_KEY
         secret_key = os.getenv('SECRET_KEY', '')

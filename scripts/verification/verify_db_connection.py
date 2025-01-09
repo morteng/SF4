@@ -56,13 +56,15 @@ def verify_db_connection():
                     
             engine = create_engine(db_uri)
             with engine.connect() as conn:
-                # Verify schema version
+                # Verify schema version for SQLite
                 if db_uri.startswith('sqlite'):
-                    result = conn.execute("PRAGMA schema_version")
-                    version = result.scalar()
+                    cursor = conn.connection.cursor()
+                    cursor.execute("PRAGMA schema_version")
+                    version = cursor.fetchone()[0]
                     if version < 1:
                         logger.error("Invalid schema version")
                         return False
+                    cursor.close()
                         
                 # Verify core tables exist
                 required_tables = ['stipend', 'tag', 'organization', 'user']
