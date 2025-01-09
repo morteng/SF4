@@ -40,6 +40,9 @@
 # Commit changes with verification summary
 /run scripts/commit_changes.py --message "Step 2 verification completed" --verify
 
+# Run application for management review
+/run flask run
+
 ### CODE END ###
 
 # Console commands done, we go on to 05_STEP_3.txt
