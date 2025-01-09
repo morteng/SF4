@@ -2,30 +2,33 @@ import sys
 import os
 from pathlib import Path
 
-import sys
-import os
-from pathlib import Path
-
 def configure_paths():
     """Enhanced path configuration with proper error handling"""
     try:
         # Get project root (three levels up from this script)
         project_root = str(Path(__file__).parent.parent.parent)
         
-        # Add project root to sys.path
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
-            
-        # Add app directory explicitly
-        app_dir = str(Path(project_root) / 'app')
-        if app_dir not in sys.path:
-            sys.path.insert(0, app_dir)
-            
-        # Add scripts directory
-        scripts_dir = str(Path(__file__).parent)
-        if scripts_dir not in sys.path:
-            sys.path.insert(0, scripts_dir)
-            
+        # Add project directories in correct order
+        paths_to_add = [
+            project_root,
+            str(Path(project_root) / 'app'),
+            str(Path(project_root) / 'scripts'),
+            str(Path(project_root) / 'tests'),
+            str(Path(__file__).parent)
+        ]
+        
+        # Add venv site-packages if exists
+        venv_path = os.getenv('VIRTUAL_ENV')
+        if venv_path:
+            site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
+            paths_to_add.append(site_packages)
+        
+        # Add paths to sys.path if not already present
+        for path in paths_to_add:
+            if path not in sys.path:
+                sys.path.insert(0, path)
+                print(f"Added to Python path: {path}")
+                
         # Verify critical imports
         try:
             import app
@@ -36,16 +39,6 @@ def configure_paths():
             print(f"Import verification failed: {str(e)}")
             print(f"Current sys.path: {sys.path}")
             return False
-            
-        # Add app directory explicitly
-        app_dir = str(Path(project_root) / 'app')
-        if app_dir not in sys.path:
-            sys.path.insert(0, app_dir)
-            
-        # Add scripts directory
-        scripts_dir = str(Path(__file__).parent)
-        if scripts_dir not in sys.path:
-            sys.path.insert(0, scripts_dir)
         
         # Add project root to sys.path
         import sys
