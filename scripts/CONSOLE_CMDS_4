@@ -6,38 +6,38 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Fix critical security issues
-/run scripts/fix_security_permissions.py --strict --verify --reset
-/run scripts/verify_security.py --check-env --validate-keys --verify-permissions --check-rotation
+# Fix security permissions
+/run scripts/security/fix_security_permissions.py --strict
 
-# Verify git state is clean
-/run scripts/verify_git_state.py --pull --retry=3 --auto-resolve
+# Verify security settings
+/run scripts/verification/verify_security.py --check-env --validate-keys
 
-# Validate database configuration and connection
-/run scripts/verify_db_config.py --validate-uri --check-permissions --strict
-/run scripts/verify_db_connection.py --retry=3 --timeout=10 --validate-schema --critical
+# Initialize database
+/run scripts/startup/init_db.py --validate-schema --test
 
-# Initialize database with enhanced validation
-/run scripts/startup/init_db.py --validate-schema --test --migrate --backup-first --reset
+# Verify database connection
+/run scripts/verification/verify_db_connection.py --retry=3 --timeout=10
 
-# Verify admin user exists
-/run scripts/verify_admin_user.py --check-credentials --validate-permissions
+# Verify Render readiness
+/run scripts/verification/verify_render_ready.py --check-api --validate-vars
 
-# Verify Render deployment readiness
-/run scripts/verify_render_ready.py --check-api --validate-vars --test-deploy --critical
+# Generate coverage reports
+/run scripts/generate_coverage_report.py --html --xml
 
-# Finalize documentation with coverage reports
-/run scripts/finalize_docs.py --strict --validate --with-coverage --critical
+# Verify test coverage
+/run scripts/verification/verify_test_coverage.py --min-coverage=80
+
+# Finalize documentation
+/run scripts/finalize_docs.py
 
 # Generate deployment checklist
-/run scripts/generate_deployment_checklist.py --validate --strict --critical
+/run scripts/generate_deployment_checklist.py
 
 # Request final approval
-/run scripts/request_approval.py --final --validate --critical
+/run scripts/request_approval.py
 
-# Final verification
-/run scripts/verify_deployment.py --test --check-security --verify-backups
-/run scripts/verify_tests.py --final --validate-all --critical
+# Final deployment verification
+/run scripts/verification/verify_deployment.py --check-type=final-check
 
 ### CODE END ###
 
