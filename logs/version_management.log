@@ -2527,3 +2527,12 @@ M  logs/version_management.log
 2025-01-09 19:16:36,435 - INFO - Please commit or stash changes before proceeding
 2025-01-09 19:16:36,436 - ERROR - Cannot update docs with uncommitted changes
 2025-01-09 19:16:36,436 - ERROR - Documentation finalization failed
+2025-01-09 19:19:32,960 - INFO - Successfully committed changes: Pre-commit before release notes update
+2025-01-09 19:19:33,033 - INFO - Git status:
+## main...origin/main [ahead 203]
+ M RELEASE_NOTES.md
+
+2025-01-09 19:19:33,033 - ERROR - Uncommitted changes detected
+2025-01-09 19:19:33,033 - INFO - Please commit or stash changes before proceeding
+2025-01-09 19:19:33,034 - ERROR - Cannot update docs with uncommitted changes
+2025-01-09 19:19:33,034 - ERROR - Documentation finalization failed
