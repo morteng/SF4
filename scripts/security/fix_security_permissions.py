@@ -18,6 +18,13 @@ def fix_permissions():
             'logs/': 0o750,
             'scripts/': 0o750
         }
+
+        # Ensure files exist before setting permissions
+        for file, target_mode in sensitive_files.items():
+            path = Path(file)
+            if not path.exists():
+                logger.warning(f"File not found: {file}")
+                continue
         
         # Set secure permissions
         for file, target_mode in sensitive_files.items():

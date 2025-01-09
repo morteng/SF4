@@ -45,8 +45,12 @@ def update_release_notes():
     logger = configure_logger()
     
     try:
-        # Verify git state first
-        from scripts.verify_git_state import verify_git_state
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        configure_paths()
+        
+        # Verify git state
+        from scripts.verification.verify_git_state import verify_git_state
         if not verify_git_state():
             logger.error("Cannot update docs with uncommitted changes")
             return False

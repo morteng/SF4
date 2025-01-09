@@ -21,8 +21,8 @@ def initialize_database(validate_schema=False):
         db_path = Path('instance/site.db')
         if not db_path.exists():
             logger.info("Creating new database file")
-            db_path.parent.mkdir(exist_ok=True)
-            db_path.touch()
+            db_path.parent.mkdir(exist_ok=True, parents=True)
+            db_path.touch(mode=0o600)  # Set secure permissions
             
         # Run Alembic migrations
         alembic_cfg = Config("migrations/alembic.ini")

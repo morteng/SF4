@@ -13,7 +13,8 @@ def configure_paths():
             project_root,
             str(Path(project_root) / 'app'),
             str(Path(project_root) / 'scripts'),
-            str(Path(project_root) / 'tests')
+            str(Path(project_root) / 'tests'),
+            str(Path(__file__).parent)  # Add scripts directory itself
         ]
         
         # Add venv site-packages
