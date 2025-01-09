@@ -1,0 +1,15 @@
+# Final cleanup step after deployment
+
+/ask "Are there any remaining issues or tests we should fix at the end of the cycle?
+"
+
+/code "Implement final fixes or notes here."
+
+# timestamp cycle ends
+/run automation/end_cycle.py
+
+# New devlog entry
+/code "Remove the previous devlog entry in docs/DEVLOG.md, write a new summary of this cycle's changes, and remove completed items from TODO. Also review and revise MANAGER.txt, removing instructions that are now integrated."
+
+/Cycle over, we reset and start over.
+/reset/load automation/00_CYCLE_START.txt

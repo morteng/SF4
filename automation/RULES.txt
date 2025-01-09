@@ -1,0 +1,5 @@
+Global Rules:
+1. Do not run Python code directly with console commands; always create or update .py files, then /run them.
+2. Add or remove console commands only by editing the indicated "CODE START" and "CODE END" sections.
+3. Manager instructions have top priority.
+4. Only use /ask for reasoning or questions, /code for making code changes, and /architect for structural or top-level planning.

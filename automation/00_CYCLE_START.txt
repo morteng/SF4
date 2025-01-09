@@ -1,0 +1,23 @@
+# Code Cycle Startup
+
+# Output cycle start timestamp
+/run scripts/automation/start_cycle.py
+
+# Add any new or externally modified files
+/git add .
+/commit
+
+# load project docs and IO
+/read scripts/automation/RULES.txt
+
+/read docs/PRD.md
+/read docs/Design_Documentation.md
+/read docs/Planning_and_Progress.md
+/read docs/DEVLOG.md
+/read docs/DEPLOYMENT_CHECKLIST.md
+
+/add automation/TODO.txt
+/add automation/MANAGER.txt
+
+# Startup is done, go to first Code Cycle step
+/load automation/01_STEP_1.txt
