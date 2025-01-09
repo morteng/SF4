@@ -3,7 +3,6 @@
 
 /git add .
 
-/add docs/DEPLOYMENT_CHECKLIST.md
 /add automation/10_CONSOLE_CMDS_5.txt
 
 /ask How can we best implement Code Cycle Step 5 - Document, demo, and deploy? Objective: - Update all relevant documentation (README, DESIGN, PRD, PROGRESS, etc.) - Remove completed items from TODO - Prepare a demo and evaluate final deployment readiness - Decide if we are ready to push to production. Any final tasks left?
