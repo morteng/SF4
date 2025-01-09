@@ -17,8 +17,16 @@ logger = logging.getLogger(__name__)
 def initialize_database(validate_schema=False):
     """Initialize database schema and run migrations"""
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
         # Verify database file exists
         db_path = Path('instance/site.db')
+        
+        # Ensure debug mode is disabled
+        os.environ['FLASK_DEBUG'] = '0'
         if not db_path.exists():
             logger.info("Creating new database file")
             db_path.parent.mkdir(exist_ok=True, parents=True)

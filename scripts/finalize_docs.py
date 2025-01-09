@@ -44,6 +44,15 @@ def update_release_notes():
     """Enhanced release notes with deployment details"""
     logger = configure_logger()
     
+    # Configure paths first
+    from scripts.path_config import configure_paths
+    if not configure_paths():
+        logger.error("Path configuration failed")
+        return False
+        
+    # Ensure debug mode is disabled
+    os.environ['FLASK_DEBUG'] = '0'
+    
     try:
         # Configure paths first
         from scripts.path_config import configure_paths

@@ -6,9 +6,17 @@ from pathlib import Path
 def fix_permissions():
     """Fix security permissions for sensitive files with strict mode"""
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
         # Configure logging
         logging.basicConfig(level=logging.INFO)
         logger = logging.getLogger(__name__)
+        
+        # Ensure debug mode is disabled
+        os.environ['FLASK_DEBUG'] = '0'
         
         # Files to secure with target permissions
         sensitive_files = {

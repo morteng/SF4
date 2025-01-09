@@ -5,8 +5,17 @@ from pathlib import Path
 def configure_paths():
     """Enhanced path configuration with proper error handling"""
     try:
-        # Get project root (three levels up from this script)
-        project_root = str(Path(__file__).parent.parent.parent)
+        # Get project root (two levels up from this script)
+        project_root = str(Path(__file__).parent.parent)
+        
+        # Add project root to sys.path if not present
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            
+        # Add scripts directory
+        scripts_dir = str(Path(__file__).parent)
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
         
         # Add venv site-packages explicitly
         venv_path = os.getenv('VIRTUAL_ENV')
