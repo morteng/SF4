@@ -6,11 +6,14 @@
 /run scripts/path_config.py --verify
 /run scripts/init_logging.py --test
 
+# Setup test environment with proper application context
+/run scripts/setup_test_env.py --clean --with-context --test-db --validate
+
 # Fix security permissions with strict mode
 /run scripts/security/fix_security_permissions.py --strict --verify
 
 # Verify security settings with comprehensive checks
-/run scripts/verification/verify_security.py --check-env --validate-keys --verify-permissions
+/run scripts/verification/verify_security.py --check-env --validate-keys --verify-permissions --disable-debug
 
 # Initialize database with schema validation
 /run scripts/startup/init_db.py --validate-schema --test --check-migrations
@@ -25,7 +28,10 @@
 /run scripts/generate_coverage_report.py --html --xml --verify
 
 # Verify test coverage meets requirements
-/run scripts/verification/verify_test_coverage.py --min-coverage=80 --critical-paths
+/run scripts/verification/verify_test_coverage.py --min-coverage=80 --critical-paths --verify-imports
+
+# Verify backup system integrity
+/run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables
 
 # Finalize documentation with deployment details
 /run scripts/finalize_docs.py --include-deployment
