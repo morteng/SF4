@@ -15,11 +15,18 @@ from app.constants import FlashMessages, FlashCategory
 from flask_login import current_user
 
 def get_user_by_id(user_id):
-    """Get user by ID with error handling"""
-    user = db.session.get(User, user_id)
-    if not user:
-        raise ValueError(FlashMessages.USER_NOT_FOUND.value)
-    return user
+    """Get user by ID with proper validation and error handling"""
+    if not user_id or not isinstance(user_id, int):
+        raise ValueError("Invalid user ID")
+        
+    try:
+        user = db.session.get(User, user_id)
+        if not user:
+            raise ValueError(FlashMessages.USER_NOT_FOUND.value)
+        return user
+    except Exception as e:
+        logger.error(f"Error getting user {user_id}: {str(e)}")
+        raise ValueError(f"Error retrieving user: {str(e)}")
 
 def delete_user(user):
     """Delete user with proper error handling and logging"""
@@ -131,50 +138,35 @@ def create_user(form_data, current_user_id):
         db.session.rollback()
         raise ValueError(f"{FlashMessages.CREATE_USER_ERROR.value}: {str(e)}")
 
-    with caplog.at_level(logging.INFO):
-        response = logged_in_admin.post('/admin/users/create', data={
-            'username': 'testuser',
-            'email': 'test@example.com',
-            'password': 'validpassword',
-            'is_admin': False
-        })
-        assert response.status_code == 302
-        assert 'Attempting to create user: testuser' in caplog.text
-        assert 'Successfully created user: testuser' in caplog.text
-
-def test_user_creation_error_logging(logged_in_admin, caplog):
-    with caplog.at_level(logging.ERROR):
-        response = logged_in_admin.post('/admin/users/create', data={
-            'username': '',  # Invalid
-            'email': 'invalid-email',
-            'password': 'short'
-        })
-        assert response.status_code == 200
-        assert 'Error creating user' in caplog.text
-
 def update_user(user, form_data):
-    logger.info(f"Attempting to update user {user.id} with data: {form_data}")
-    new_username = form_data['username']
-    
-    # Check for duplicate username
-    if new_username != user.username:
-        existing_user = User.query.filter_by(username=new_username).first()
-        if existing_user:
-            logger.warning(f"Username {new_username} already exists")
-            raise ValueError(FlashMessages.USERNAME_ALREADY_EXISTS.value)
-    
-    user.username = new_username
-    user.email = form_data['email']
-    if 'password' in form_data and form_data['password']:
-        user.set_password(form_data['password'])
-    user.is_admin = form_data.get('is_admin', False)
-    
+    logger = logging.getLogger(__name__)
     try:
-        with db_session_scope() as session:
-            session.add(user)
+        logger.info(f"Attempting to update user {user.id} with data: {form_data}")
+        
+        # Validate input
+        if not user or not form_data:
+            raise ValueError("Invalid user or form data")
+            
+        # Check for duplicate username
+        new_username = form_data.get('username')
+        if new_username and new_username != user.username:
+            existing_user = User.query.filter_by(username=new_username).first()
+            if existing_user:
+                logger.warning(f"Username {new_username} already exists")
+                raise ValueError(FlashMessages.USERNAME_ALREADY_EXISTS.value)
+        
+        # Update user fields
+        user.username = form_data.get('username', user.username)
+        user.email = form_data.get('email', user.email)
+        if 'password' in form_data and form_data['password']:
+            user.set_password(form_data['password'])
+        user.is_admin = form_data.get('is_admin', user.is_admin)
+        
+        db.session.commit()
         logger.info(f"Successfully updated user {user.id}")
-        flash_message(FlashMessages.PROFILE_UPDATE_SUCCESS, FlashCategory.SUCCESS)
+        return user
+        
     except Exception as e:
-        logger.error(f"Failed to update user {user.id}: {str(e)}")
-        flash_message(FlashMessages.PROFILE_UPDATE_FAILED, FlashCategory.ERROR)
+        logger.error(f"Failed to update user {user.id if user else 'unknown'}: {str(e)}")
+        db.session.rollback()
         raise ValueError(f"Failed to update user: {str(e)}")
