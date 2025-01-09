@@ -6,10 +6,7 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py --test
 
-# Fix security permissions with strict mode
-/run scripts/security/fix_security_permissions.py --strict --verify
-
-# Setup test environment with application context
+# Setup test environment with proper application context
 /run scripts/setup_test_env.py --clean --with-context --test-db --validate
 
 # Install test dependencies with verification
@@ -17,6 +14,9 @@
 
 # Initialize test database with schema validation
 /run scripts/startup/init_db.py --validate-schema --test --check-migrations
+
+# Fix security permissions with strict mode
+/run scripts/security/fix_security_permissions.py --strict --verify
 
 # Run core test suites with coverage
 /run scripts/testing/run_tests.py --unit --integration --security --coverage
