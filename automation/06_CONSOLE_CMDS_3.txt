@@ -33,8 +33,17 @@
 # Verify backup system integrity
 /run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables
 
+# Verify logging configuration
+/run scripts/verification/verify_logs.py --check-rotation --verify-archives
+
+# Verify monitoring configuration
+/run scripts/verification/verify_monitoring.py --check-vars --verify-files
+
 # Initialize admin user with enhanced validation
 /run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity
+
+# Verify security settings
+/run scripts/verification/verify_security.py --check-env --validate-keys --verify-permissions
 
 # Commit test results with verification summary
 /run scripts/commit_changes.py --message "Testing cycle completed with coverage verification"
