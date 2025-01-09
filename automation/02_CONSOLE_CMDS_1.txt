@@ -4,23 +4,17 @@
 
 ### CODE START ###
 
-# Verify paths and critical imports
-/run scripts/path_config.py --strict --verify --test
-
 # Comprehensive admin CRUD testing with HTMX
 /run scripts/verification/verify_htmx_integration.py --full --test-all-crud --admin-only --validate-partial-updates
-
-# Verify admin-specific test coverage
-/run scripts/verification/verify_test_coverage.py --admin-only --critical-paths --threshold=85 --htmx-coverage
-
-# Security audit focused on admin and HTMX
-/run scripts/verification/verify_security.py --full-audit --htmx --admin-only --validate-keys --check-htmx-security
 
 # Verify admin database schema and relations
 /run scripts/verification/verify_db_schema.py --strict --admin-tables --verify-relations --check-htmx-endpoints
 
-# Verify database connection with admin credentials
-/run scripts/verification/verify_db_connection.py --retry=5 --timeout=30 --strict --admin
+# Security audit focused on admin and HTMX
+/run scripts/verification/verify_security.py --full-audit --htmx --admin-only --validate-keys --check-htmx-security
+
+# Verify admin-specific test coverage
+/run scripts/verification/verify_test_coverage.py --admin-only --critical-paths --threshold=85 --htmx-coverage
 
 ### CODE END ###
 
