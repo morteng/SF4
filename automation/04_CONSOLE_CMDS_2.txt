@@ -28,6 +28,12 @@
 # Verify backup integrity with schema validation
 /run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables --retry=3
 
+# Verify logging configuration
+/run scripts/verification/verify_logs.py --check-rotation --verify-archives
+
+# Verify monitoring configuration
+/run scripts/verification/verify_monitoring.py --check-vars --verify-files
+
 # Verify Render deployment readiness
 /run scripts/verification/verify_render_ready.py --check-api --validate-vars --verify-backup
 
