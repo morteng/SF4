@@ -1,4 +1,5 @@
 import logging
+import sys
 from pathlib import Path
 from alembic import command
 from alembic.config import Config
