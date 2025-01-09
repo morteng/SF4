@@ -1234,3 +1234,10 @@ M  logs/version_management.log
 2025-01-09 01:58:18,874 - INFO - Please commit or stash changes before proceeding
 2025-01-09 01:58:18,874 - ERROR - Git state verification failed
 2025-01-09 01:58:18,874 - ERROR - Deployment requirements not met
+2025-01-09 01:58:29,324 - INFO - Git status:
+## main...origin/main [ahead 44]
+
+2025-01-09 01:58:29,325 - ERROR - Uncommitted changes detected
+2025-01-09 01:58:29,325 - INFO - Please commit or stash changes before proceeding
+2025-01-09 01:58:29,325 - ERROR - Git state verification failed
+2025-01-09 01:58:29,325 - ERROR - Deployment requirements not met
