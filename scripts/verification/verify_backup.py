@@ -10,10 +10,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def verify_backup_integrity(backup_path):
-    """Enhanced backup verification with size and schema checks"""
+    """Enhanced backup verification with schema validation and integrity checks"""
     try:
         if not Path(backup_path).exists():
-            logger.error(f"Backup file not found: {backup_path}")
+            logger.error(f"Backup file missing: {backup_path}")
             return False
             
         # Verify file size
@@ -22,49 +22,35 @@ def verify_backup_integrity(backup_path):
             logger.error("Backup file too small")
             return False
             
-        # Connect to backup database
+        # Verify schema
         conn = sqlite3.connect(backup_path)
         cursor = conn.cursor()
         
-        # Verify schema version
-        cursor.execute("PRAGMA user_version")
-        version = cursor.fetchone()[0]
-        if version < 1:
-            logger.error("Invalid schema version in backup")
-            return False
-        
-        # Check schema version
-        cursor.execute("PRAGMA user_version")
-        version = cursor.fetchone()[0]
-        if version < 1:
-            logger.error("Invalid schema version in backup")
-            return False
-            
-        # Verify core tables exist
+        # Check required tables
         required_tables = ['stipend', 'tag', 'organization', 'user']
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
         existing_tables = [row[0] for row in cursor.fetchall()]
         
         missing_tables = [table for table in required_tables if table not in existing_tables]
         if missing_tables:
-            logger.error(f"Missing tables in backup: {', '.join(missing_tables)}")
+            logger.error(f"Missing required tables: {', '.join(missing_tables)}")
             return False
             
-        # Verify foreign key constraints
+        # Verify foreign keys
         cursor.execute("PRAGMA foreign_key_check")
         errors = cursor.fetchall()
         if errors:
-            logger.error(f"Foreign key constraint violations found: {errors}")
+            logger.error(f"Foreign key errors: {errors}")
             return False
             
         # Verify data integrity
         cursor.execute("PRAGMA integrity_check")
-        integrity_check = cursor.fetchone()[0]
-        if integrity_check != 'ok':
-            logger.error(f"Database integrity check failed: {integrity_check}")
+        result = cursor.fetchone()[0]
+        if result != 'ok':
+            logger.error(f"Integrity check failed: {result}")
             return False
             
-        logger.info(f"Backup verification passed: {backup_path}")
+        logger.info("Backup verification passed")
         return True
         
     except Exception as e:

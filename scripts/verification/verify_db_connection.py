@@ -34,7 +34,7 @@ def validate_db_connection(db_uri):
         return False
 
 def verify_db_connection():
-    """Verify database connection using SQLALCHEMY_DATABASE_URI"""
+    """Enhanced database verification with retry logic and schema validation"""
     logger = configure_logger()
     
     max_retries = 3
@@ -44,35 +44,37 @@ def verify_db_connection():
         try:
             db_uri = os.getenv('SQLALCHEMY_DATABASE_URI')
             if not db_uri:
-                logger.error("SQLALCHEMY_DATABASE_URI not set in environment variables")
+                logger.error("SQLALCHEMY_DATABASE_URI not set")
                 return False
-            
-            # Log database type for debugging
+                
+            # Verify SQLite file exists
             if db_uri.startswith('sqlite'):
-                logger.info("Using SQLite database")
-                # Verify SQLite file exists
                 db_path = db_uri.replace('sqlite:///', '')
                 if not Path(db_path).exists():
-                    logger.error(f"SQLite database file not found: {db_path}")
+                    logger.error(f"Database file not found: {db_path}")
                     return False
-            elif db_uri.startswith('postgresql'):
-                logger.info("Using PostgreSQL database")
-            else:
-                logger.warning(f"Using unknown database type: {db_uri.split(':')[0]}")
-            
-            # Create engine and test connection
+                    
             engine = create_engine(db_uri)
-            with engine.connect() as connection:
+            with engine.connect() as conn:
                 # Verify schema version
                 if db_uri.startswith('sqlite'):
-                    result = connection.execute("PRAGMA schema_version;")
-                    schema_version = result.scalar()
-                    if schema_version == 0:
-                        logger.error("Database schema not initialized")
+                    result = conn.execute("PRAGMA schema_version")
+                    version = result.scalar()
+                    if version < 1:
+                        logger.error("Invalid schema version")
                         return False
-                    logger.info(f"Database schema version: {schema_version}")
+                        
+                # Verify core tables exist
+                required_tables = ['stipend', 'tag', 'organization', 'user']
+                result = conn.execute("SELECT name FROM sqlite_master WHERE type='table'")
+                existing_tables = [row[0] for row in result.fetchall()]
                 
-                logger.info("Successfully connected to database")
+                missing_tables = [table for table in required_tables if table not in existing_tables]
+                if missing_tables:
+                    logger.error(f"Missing required tables: {', '.join(missing_tables)}")
+                    return False
+                    
+                logger.info("Database connection and schema validation successful")
                 return True
             
         except SQLAlchemyError as e:
