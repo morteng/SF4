@@ -2482,3 +2482,9 @@ M  logs/version_management.log
 2025-01-09 18:26:48,254 - INFO - Please commit or stash changes before proceeding
 2025-01-09 18:26:48,255 - ERROR - Cannot update docs with uncommitted changes
 2025-01-09 18:26:48,255 - ERROR - Documentation finalization failed
+2025-01-09 18:40:01,390 - INFO - Logging system initialized successfully
+2025-01-09 18:40:01,391 - INFO - Logging system initialized successfully
+2025-01-09 18:40:01,392 - INFO - Logging system initialized successfully
+2025-01-09 18:40:01,503 - ERROR - Database initialization failed: name 'os' is not defined
+2025-01-09 18:40:01,504 - ERROR - Failed to configure test environment: Failed to initialize test database
+2025-01-09 18:40:01,504 - INFO - Test environment configured successfully
