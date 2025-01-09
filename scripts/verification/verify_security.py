@@ -23,11 +23,12 @@ def verify_login_attempts():
     # TODO: Implement actual login attempt verification
     return True
 
-def verify_security_settings(full_audit=False, daily=False):
+def verify_security_settings(full_audit=False, daily=False, admin_only=False):
     """Verify security-related settings with enhanced checks
     Args:
         full_audit (bool): Perform comprehensive security audit
         daily (bool): Perform daily security checks
+        admin_only (bool): Focus only on admin functionality
     """
     logger = configure_logger()
     

@@ -14,11 +14,12 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_htmx_crud(base_url, test_all_crud=False):
+def verify_htmx_crud(base_url, test_all_crud=False, admin_only=False):
     """Verify CRUD operations through HTMX interface
     Args:
         base_url (str): Base URL of application
         test_all_crud (bool): Whether to test all CRUD operations
+        admin_only (bool): Focus only on admin functionality
     """
     logger = configure_logger()
     
@@ -71,8 +72,10 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     parser.add_argument('--full', action='store_true', help='Run full verification')
-    parser.add_argument('--test-all-crud', action='store_true', 
+    parser.add_argument('--test-all-crud', action='store_true',
                        help='Test all CRUD operations across entities')
+    parser.add_argument('--admin-only', action='store_true',
+                       help='Focus only on admin functionality')
     args = parser.parse_args()
     
     base_url = os.getenv('BASE_URL', 'http://localhost:5000')

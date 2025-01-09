@@ -14,8 +14,13 @@ def configure_coverage_logging():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_coverage(threshold=80, critical_paths=False):
-    """Enhanced coverage verification with critical path analysis"""
+def verify_coverage(threshold=80, critical_paths=False, admin_only=False):
+    """Enhanced coverage verification with critical path analysis
+    Args:
+        threshold (int): Minimum coverage percentage
+        critical_paths (bool): Verify critical paths coverage
+        admin_only (bool): Focus only on admin functionality
+    """
     logger = configure_coverage_logging()
     
     try:
