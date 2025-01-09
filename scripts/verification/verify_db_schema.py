@@ -58,6 +58,12 @@ def validate_schema():
                 logger.error(f"Missing columns in {table}: {', '.join(missing_columns)}")
                 return False
                 
+        # Verify foreign key relationships
+        if validate_relations:
+            if not verify_foreign_keys():
+                logger.error("Foreign key validation failed")
+                return False
+                
         logger.info("Schema validation passed")
         return True
         

@@ -13,8 +13,12 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_security_settings(full_audit=False):
-    """Verify security-related settings with enhanced checks"""
+def verify_security_settings(full_audit=False, daily=False):
+    """Verify security-related settings with enhanced checks
+    Args:
+        full_audit (bool): Perform comprehensive security audit
+        daily (bool): Perform daily security checks
+    """
     logger = configure_logger()
     
     try:
@@ -89,6 +93,18 @@ def verify_security_settings(full_audit=False):
                     logger.error(f"Insecure permissions on {file}: {oct(mode)} (expected {oct(expected_mode)})")
                     return False
                     
+        # Additional daily checks
+        if daily:
+            # Verify recent security patches
+            if not verify_security_patches():
+                logger.error("Security patches verification failed")
+                return False
+                
+            # Verify recent login attempts
+            if not verify_login_attempts():
+                logger.error("Suspicious login attempts detected")
+                return False
+                
         return True
     except Exception as e:
         logger.error(f"Security verification failed: {str(e)}")
