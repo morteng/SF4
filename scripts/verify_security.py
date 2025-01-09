@@ -44,18 +44,20 @@ def verify_security_settings():
             logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
             return False
             
-        # Verify file permissions
+        # Verify file permissions strictly
         sensitive_files = {
             '.env': 0o600,
             'instance/site.db': 0o600,
-            'migrations/': 0o700
+            'migrations/': 0o700,
+            'logs/': 0o750,
+            'scripts/': 0o750
         }
         
         for file, expected_mode in sensitive_files.items():
             path = Path(file)
             if path.exists():
-                mode = path.stat().st_mode
-                if mode & 0o077:  # Check for world-readable/writable
+                mode = path.stat().st_mode & 0o777
+                if mode != expected_mode:
                     logger.error(f"Insecure permissions on {file}: {oct(mode)} (expected {oct(expected_mode)})")
                     return False
                     

@@ -37,7 +37,10 @@ def commit_changes(message):
         # Commit with message
         subprocess.run(['git', 'commit', '-m', message], check=True)
         
-        logger.info(f"Successfully committed changes: {message}")
+        # Push changes
+        subprocess.run(['git', 'push'], check=True)
+        
+        logger.info(f"Successfully committed and pushed changes: {message}")
         return True
     except subprocess.CalledProcessError as e:
         logger.error(f"Commit failed: {str(e)}")

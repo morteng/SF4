@@ -4,28 +4,33 @@ import logging
 from pathlib import Path
 
 def fix_permissions():
-    """Fix security permissions for sensitive files"""
+    """Fix security permissions for sensitive files with strict mode"""
     try:
         # Configure logging
         logging.basicConfig(level=logging.INFO)
         logger = logging.getLogger(__name__)
         
-        # Files to secure
-        sensitive_files = [
-            '.env',
-            'instance/site.db',
-            'migrations/'
-        ]
+        # Files to secure with target permissions
+        sensitive_files = {
+            '.env': 0o600,
+            'instance/site.db': 0o600,
+            'migrations/': 0o700,
+            'logs/': 0o750,
+            'scripts/': 0o750
+        }
         
         # Set secure permissions
-        for file in sensitive_files:
+        for file, target_mode in sensitive_files.items():
             path = Path(file)
             if path.exists():
-                # Remove world-readable/writable permissions
-                current_mode = path.stat().st_mode
-                new_mode = current_mode & ~stat.S_IWOTH & ~stat.S_IROTH
-                path.chmod(new_mode)
-                logger.info(f"Fixed permissions for {file}: {oct(new_mode)}")
+                # Set exact permissions
+                path.chmod(target_mode)
+                # Verify
+                actual_mode = path.stat().st_mode & 0o777
+                if actual_mode != target_mode:
+                    logger.error(f"Failed to set permissions for {file}: {oct(actual_mode)} (expected {oct(target_mode)})")
+                    return False
+                logger.info(f"Fixed permissions for {file}: {oct(target_mode)}")
                 
         return True
     except Exception as e:
