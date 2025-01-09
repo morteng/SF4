@@ -85,22 +85,8 @@ def handle_render_api_errors(response):
         return False
     return True
 
-def deploy_to_render(status=False, auto_resolve=False):
-    """Deploy the application to render.com with status tracking"""
-    # Configure logger first
-    logger = configure_logger()
-    
-    # Verify git state with auto-resolve option
-    from scripts.verify_git_state import verify_git_state
-    if not verify_git_state(auto_resolve=auto_resolve):
-        if auto_resolve:
-            logger.error("Failed to automatically resolve git state")
-        else:
-            logger.error("Cannot deploy with uncommitted changes")
-        return False
-        
-    app = create_app()  # Create application instance
-    
+def deploy_to_render():
+    """Deploy application to Render with enhanced validation"""
     try:
         # Verify deployment requirements
         from scripts.verify_deployment_readiness import verify_deployment_requirements
@@ -108,15 +94,37 @@ def deploy_to_render(status=False, auto_resolve=False):
             logger.error("Deployment requirements not met")
             return False
             
-        # Verify Render environment
-        if not os.getenv('RENDER_API_KEY'):
-            logger.error("RENDER_API_KEY not found in environment variables")
+        # Verify Render environment variables
+        required_vars = [
+            'RENDER_API_KEY',
+            'RENDER_SERVICE_ID',
+            'DEPLOYMENT_ENV',
+            'BACKUP_RETENTION_DAYS'
+        ]
+        
+        missing_vars = [var for var in required_vars if not os.getenv(var)]
+        if missing_vars:
+            logger.error(f"Missing required Render variables: {', '.join(missing_vars)}")
             return False
             
-        # Verify service ID
-        if not os.getenv('RENDER_SERVICE_ID'):
-            logger.error("RENDER_SERVICE_ID not found in environment variables")
+        # Verify git state
+        from scripts.verify_git_state import verify_git_state
+        if not verify_git_state():
+            logger.error("Cannot deploy with uncommitted changes")
             return False
+            
+        # Push to Render
+        logger.info("Pushing to Render...")
+        subprocess.run(['git', 'push', 'render', 'main'], check=True)
+        
+        # Verify deployment
+        from scripts.verify_deployment import verify_deployment
+        if not verify_deployment():
+            logger.error("Deployment verification failed")
+            return False
+            
+        logger.info("Deployment to Render completed successfully")
+        return True
         # Verify deployment checklist
         from scripts.verify_deployment import verify_deployment
         logger.info("Starting full deployment verification")
