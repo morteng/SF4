@@ -3,42 +3,45 @@
 
 ### CODE START ###
 
-# Configure paths with strict verification
-/run scripts/path_config.py --strict --verify
+# Configure paths with enhanced verification
+/run scripts/path_config.py --strict --verify --test
 
 # Initialize logging with test settings
-/run scripts/init_logging.py --test
+/run scripts/init_logging.py --test --verbose
 
 # Setup test environment with schema validation
-/run scripts/setup_test_env.py --test --validate-schema
+/run scripts/setup_test_env.py --test --validate-schema --retry=3
 
 # Install test dependencies with retry
-/run scripts/install_test_dependencies.py --retry=3
+/run scripts/install_test_dependencies.py --retry=3 --strict
 
 # Initialize test database with strict mode
-/run scripts/startup/init_db.py --test --strict --retry=5
+/run scripts/startup/init_db.py --test --strict --retry=5 --validate
 
-# Run comprehensive test suites
-/run scripts/testing/run_tests.py --unit --integration --e2e
+# Run comprehensive test suites with coverage
+/run scripts/testing/run_tests.py --unit --integration --e2e --cov
 
 # Generate detailed coverage report
-/run scripts/generate_coverage_report.py --html --xml
+/run scripts/generate_coverage_report.py --html --xml --threshold=85
 
 # Verify critical systems with enhanced checks
-/run scripts/verification/verify_security.py --full-audit
-/run scripts/verification/verify_db_connection.py --retry=5 --strict
-/run scripts/verification/verify_db_schema.py --strict --verify-relations
-/run scripts/verification/verify_backup.py --retention=7 --verify-size
-/run scripts/verification/verify_monitoring.py --production --verify-alerts
+/run scripts/verification/verify_security.py --full-audit --daily
+/run scripts/verification/verify_db_connection.py --retry=5 --timeout=30 --strict
+/run scripts/verification/verify_db_schema.py --strict --validate-relations
+/run scripts/verification/verify_backup.py --retention=7 --verify-integrity
+/run scripts/verification/verify_monitoring.py --production --alert-thresholds
 
 # Verify test coverage with critical paths
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --module-thresholds
 
 # Verify logging configuration
-/run scripts/verification/verify_logs.py --check-rotation --verify-archives
+/run scripts/verification/verify_logs.py --check-rotation --verify-archives --allow-empty-bots
+
+# Verify production configuration
+/run scripts/verification/verify_config.py --production --validate-env
 
 # Commit test results with verification
-/run scripts/commit_changes.py --message "Testing cycle completed" --verify
+/run scripts/commit_changes.py --message "Testing cycle completed" --verify --strict
 
 ### CODE END ###
 
