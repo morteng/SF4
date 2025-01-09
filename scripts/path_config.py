@@ -2,6 +2,10 @@ import sys
 import os
 from pathlib import Path
 
+import sys
+import os
+from pathlib import Path
+
 def configure_paths():
     """Enhanced path configuration with proper error handling"""
     try:
@@ -11,6 +15,27 @@ def configure_paths():
         # Add project root to sys.path
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
+            
+        # Add app directory explicitly
+        app_dir = str(Path(project_root) / 'app')
+        if app_dir not in sys.path:
+            sys.path.insert(0, app_dir)
+            
+        # Add scripts directory
+        scripts_dir = str(Path(__file__).parent)
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+            
+        # Verify critical imports
+        try:
+            import app
+            import scripts
+            print("Successfully imported app and scripts modules")
+            return True
+        except ImportError as e:
+            print(f"Import verification failed: {str(e)}")
+            print(f"Current sys.path: {sys.path}")
+            return False
             
         # Add app directory explicitly
         app_dir = str(Path(project_root) / 'app')

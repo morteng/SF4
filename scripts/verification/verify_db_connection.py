@@ -68,8 +68,8 @@ def verify_db_connection():
                         
                 # Verify core tables exist
                 required_tables = ['stipend', 'tag', 'organization', 'user']
-                result = conn.execute("SELECT name FROM sqlite_master WHERE type='table'")
-                existing_tables = [row[0] for row in result.fetchall()]
+                result = conn.execute("SELECT name FROM sqlite_master WHERE type='table';")
+                existing_tables = [row[0] for row in result]
                 
                 missing_tables = [table for table in required_tables if table not in existing_tables]
                 if missing_tables:

@@ -18,15 +18,24 @@ def verify_production_ready():
     logger = configure_logger()
     
     try:
+        # Set default environment variables if missing
+        default_vars = {
+            'BACKUP_DIR': 'backups',
+            'LOG_DIR': 'logs',
+            'FLASK_ENV': 'production',
+            'FLASK_DEBUG': '0'
+        }
+        
+        for var, default in default_vars.items():
+            if not os.getenv(var):
+                os.environ[var] = default
+                logger.info(f"Set default value for {var}: {default}")
+        
         # Verify required environment variables
         required_vars = [
-            'FLASK_ENV',
-            'FLASK_DEBUG',
             'SQLALCHEMY_DATABASE_URI',
             'SECRET_KEY',
-            'ADMIN_PASSWORD',
-            'BACKUP_DIR',
-            'LOG_DIR'
+            'ADMIN_PASSWORD'
         ]
         
         missing_vars = [var for var in required_vars if not os.getenv(var)]

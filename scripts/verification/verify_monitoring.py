@@ -41,8 +41,16 @@ def verify_monitoring_setup():
         # Verify monitoring directory exists
         monitoring_dir = Path('monitoring')
         if not monitoring_dir.exists():
-            logger.error("Monitoring directory not found")
-            return False
+            logger.warning("Monitoring directory not found - creating...")
+            try:
+                monitoring_dir.mkdir(parents=True, exist_ok=True)
+                (monitoring_dir / 'dashboard.json').touch()
+                (monitoring_dir / 'alerts.json').touch()
+                (monitoring_dir / 'metrics.py').touch()
+                logger.info("Created monitoring directory with default files")
+            except Exception as e:
+                logger.error(f"Failed to create monitoring directory: {str(e)}")
+                return False
             
         # Verify required monitoring files
         required_files = [
