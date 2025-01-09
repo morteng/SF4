@@ -33,6 +33,10 @@ def request_approval():
         from scripts.verify_test_coverage import verify_coverage
         coverage = verify_coverage(threshold=80, critical=True)
         
+    except Exception as e:
+        logger.error(f"Failed to verify deployment requirements: {str(e)}")
+        return False
+        
     try:
         # Import coverage verification if available
         try:
