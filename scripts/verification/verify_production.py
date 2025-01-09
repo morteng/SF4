@@ -252,7 +252,20 @@ from scripts.verification.verify_db_connection import verify_db_connection
 def verify_production():
     """Enhanced production verification with comprehensive checks"""
     try:
+        # Add project root to sys.path
+        import sys
+        import os
+        from pathlib import Path
+        project_root = str(Path(__file__).parent.parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            
         logger = configure_logger()
+        
+        # Ensure debug mode is disabled
+        if os.getenv('FLASK_DEBUG') == '1':
+            logger.error("Debug mode is enabled in production")
+            return False
         
         # Verify environment variables
         if not verify_environment_variables():
