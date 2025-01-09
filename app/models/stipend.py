@@ -1,6 +1,9 @@
+import logging
 from .association_tables import stipend_tag_association, organization_stipends
 from app.extensions import db
 from .organization import Organization
+
+logger = logging.getLogger(__name__)
 from datetime import datetime, timezone
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
