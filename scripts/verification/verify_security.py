@@ -24,12 +24,13 @@ def verify_login_attempts():
     # TODO: Implement actual login attempt verification
     return True
 
-def verify_security_settings(full_audit=False, daily=False, admin_only=False):
+def verify_security_settings(full_audit=False, daily=False, admin_only=False, check_htmx_security=False):
     """Verify security-related settings with enhanced checks
     Args:
         full_audit (bool): Perform comprehensive security audit
         daily (bool): Perform daily security checks
         admin_only (bool): Focus only on admin functionality
+        check_htmx_security (bool): Verify HTMX-specific security measures
     """
     # Add project root to sys.path
     project_root = str(Path(__file__).parent.parent.parent)

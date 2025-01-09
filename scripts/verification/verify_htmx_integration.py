@@ -15,12 +15,13 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_htmx_crud(base_url, test_all_crud=False, admin_only=False):
-    """Verify CRUD operations through HTMX interface
+def verify_htmx_crud(base_url, test_all_crud=False, admin_only=False, validate_partial_updates=False):
+    """Verify CRUD operations through HTMX interface with enhanced admin checks
     Args:
         base_url (str): Base URL of application
         test_all_crud (bool): Whether to test all CRUD operations
         admin_only (bool): Focus only on admin functionality
+        validate_partial_updates (bool): Verify HTMX partial page updates
     """
     # Add project root to sys.path
     project_root = str(Path(__file__).parent.parent.parent)
