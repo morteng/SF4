@@ -2500,3 +2500,12 @@ M  logs/version_management.log
 2025-01-09 18:46:23,866 - ERROR - Database initialization failed: name 'os' is not defined
 2025-01-09 18:46:23,866 - ERROR - Failed to configure test environment: Failed to initialize test database
 2025-01-09 18:46:23,866 - INFO - Test environment configured successfully
+2025-01-09 18:46:36,321 - INFO - Successfully committed changes: Pre-commit before release notes update
+2025-01-09 18:46:36,375 - INFO - Git status:
+## main...origin/main [ahead 186]
+ M RELEASE_NOTES.md
+
+2025-01-09 18:46:36,375 - ERROR - Uncommitted changes detected
+2025-01-09 18:46:36,375 - INFO - Please commit or stash changes before proceeding
+2025-01-09 18:46:36,375 - ERROR - Cannot update docs with uncommitted changes
+2025-01-09 18:46:36,375 - ERROR - Documentation finalization failed
