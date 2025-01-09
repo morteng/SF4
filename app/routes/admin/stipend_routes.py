@@ -123,7 +123,7 @@ class StipendController(BaseCrudController):
         )
         
     def _prepare_create_data(self, form):
-        return {
+        data = {
             'name': form.name.data,
             'summary': form.summary.data,
             'description': form.description.data,
@@ -131,8 +131,11 @@ class StipendController(BaseCrudController):
             'application_procedure': form.application_procedure.data,
             'eligibility_criteria': form.eligibility_criteria.data,
             'application_deadline': form.application_deadline.data,
-            'open_for_applications': form.open_for_applications.data
+            'open_for_applications': form.open_for_applications.data,
+            'organization_id': form.organization_id.data,
+            'tags': form.tags.data
         }
+        return data
 
     def _prepare_update_data(self, form):
         data = self._prepare_create_data(form)

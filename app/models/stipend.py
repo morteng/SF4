@@ -66,7 +66,8 @@ class Stipend(db.Model):
             service = StipendService()
             
             # Validate required fields
-            required_fields = ['name', 'summary', 'description', 'homepage_url']
+            required_fields = ['name', 'summary', 'description', 'homepage_url', 
+                             'organization_id', 'tags']
             for field in required_fields:
                 if field not in data or not data[field]:
                     raise ValueError(f"Missing required field: {field}")
@@ -111,15 +112,16 @@ class Stipend(db.Model):
         return service.delete(stipend_id, user_id=user_id)
 
     def __init__(self, **kwargs):
+        # Initialize tags properly
+        tags = kwargs.pop('tags', [])
         # Filter out non-model fields
         model_fields = {k: v for k, v in kwargs.items() if hasattr(self, k)}
         super().__init__(**model_fields)
         
-        # Handle tags separately since they need to be Tag instances
-        if 'tags' in kwargs:
+        if tags:
             from app.models.tag import Tag
             self.tags = [Tag.query.get(tag_id) if isinstance(tag_id, int) else tag_id 
-                        for tag_id in kwargs['tags']]
+                        for tag_id in tags]
 
     def __repr__(self):
         return f'<Stipend {self.name}>'

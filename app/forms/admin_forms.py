@@ -130,10 +130,15 @@ class StipendForm(FlaskForm):
 
     def validate(self):
         logger.debug("Validating StipendForm")
-        result = super().validate()
         
-        if not result:
-            logger.warning(f"Form validation failed with errors: {self.errors}")
+        # Add validation for required relationships
+        if not self.organization_id.data:
+            self.organization_id.errors.append("Organization is required")
+            return False
+            
+        # Validate tags
+        if not self.tags.data:
+            self.tags.errors.append("At least one tag is required")
             return False
             
         # Additional custom validation
@@ -141,7 +146,7 @@ class StipendForm(FlaskForm):
             self.application_deadline.errors.append("Deadline must be in the future")
             return False
             
-        return True
+        return super().validate()
 
 
 class TagForm(FlaskForm):
