@@ -7,27 +7,27 @@
 # Core system verification
 /run scripts/path_config.py --strict --verify --test
 /run scripts/init_logging.py --production --verbose
-/run scripts/startup/init_db.py --validate-schema
-/run scripts/startup/init_admin.py --strict-password
+/run scripts/startup/init_db.py --validate-schema --check-constraints
+/run scripts/startup/init_admin.py --strict-password --verify-email
 
 # Security and configuration verification
-/run scripts/verification/verify_security.py --full-audit --validate-keys --check-stipends-security
-/run scripts/verification/verify_config.py --production --strict
+/run scripts/verification/verify_security.py --full-audit --validate-keys --check-stipends-security --verify-permissions
+/run scripts/verification/verify_config.py --production --strict --validate-env
 
 # Database verification
-/run scripts/verification/verify_db_connection.py --strict
-/run scripts/verification/verify_db_schema.py --strict --tables=stipend --verify-relations
+/run scripts/verification/verify_db_connection.py --strict --retry
+/run scripts/verification/verify_db_schema.py --strict --tables=stipend --verify-relations --check-constraints
 
 # Test coverage and HTMX verification
-/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95
-/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates
+/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95 --critical-paths
+/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates --check-htmx-security
 
 # Backup and monitoring verification
-/run scripts/verification/verify_backup.py --verify-integrity
-/run scripts/verification/verify_monitoring.py --production
+/run scripts/verification/verify_backup.py --verify-integrity --check-retention
+/run scripts/verification/verify_monitoring.py --production --validate-alerts
 
 # Finalize changes
-/run scripts/commit_changes.py --message "Step 2 verification completed" --verify
+/run scripts/commit_changes.py --message "Step 2 verification completed" --verify --push
 
 ### CODE END ###
 
