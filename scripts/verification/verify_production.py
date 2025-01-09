@@ -248,8 +248,30 @@ def configure_logger():
     return logger
 
 def verify_production():
-    """Verify production environment is ready"""
-    logger = configure_logger()
+    """Enhanced production verification with comprehensive checks"""
+    try:
+        logger = configure_logger()
+        
+        # Verify environment variables
+        if not verify_environment_variables():
+            logger.error("Environment variables verification failed")
+            return False
+            
+        # Verify database connection
+        if not verify_db_connection():
+            logger.error("Database connection verification failed")
+            return False
+            
+        # Verify security settings
+        if not verify_security_settings():
+            logger.error("Security settings verification failed")
+            return False
+            
+        logger.info("Production environment verified successfully")
+        return True
+    except Exception as e:
+        logger.error(f"Production verification failed: {str(e)}")
+        return False
     
     try:
         # Verify required environment variables

@@ -108,14 +108,31 @@ def verify_test_coverage():
         return False
 
 def verify_deployment(*args, **kwargs):
-    """Verify all deployment requirements are met"""
-    global logger
-    logger = logging.getLogger(__name__)
-    
-    # Verify version
-    from scripts.version import validate_version
-    if not validate_version():
-        logger.error("Version validation failed")
+    """Enhanced deployment verification with proper error handling"""
+    try:
+        # Configure logging
+        logger = configure_logger()
+        
+        # Verify version
+        from scripts.version import validate_version
+        if not validate_version():
+            logger.error("Version validation failed")
+            return False
+            
+        # Verify security settings
+        if not verify_security_settings():
+            logger.error("Security verification failed")
+            return False
+            
+        # Verify database connection
+        if not verify_db_connection():
+            logger.error("Database connection verification failed")
+            return False
+            
+        logger.info("Deployment verification passed")
+        return True
+    except Exception as e:
+        logger.error(f"Deployment verification failed: {str(e)}")
         return False
         
     # Verify admin user if requested
