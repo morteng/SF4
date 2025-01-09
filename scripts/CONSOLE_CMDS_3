@@ -2,39 +2,39 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize core systems
+# Initialize core systems with enhanced logging
 /run scripts/path_config.py
-/run scripts/init_logging.py
+/run scripts/init_logging.py --test
 
-# Fix security permissions
-/run scripts/security/fix_security_permissions.py --strict
+# Fix security permissions with strict mode
+/run scripts/security/fix_security_permissions.py --strict --verify
 
-# Setup clean test environment
-/run scripts/setup_test_env.py --clean --with-context --test-db
+# Setup clean test environment with context
+/run scripts/setup_test_env.py --clean --with-context --test-db --validate
 
-# Install test dependencies
-/run scripts/install_test_dependencies.py --test
+# Install test dependencies with verification
+/run scripts/install_test_dependencies.py --test --verify
 
-# Initialize test database
-/run scripts/startup/init_db.py --validate-schema --test
+# Initialize test database with schema validation
+/run scripts/startup/init_db.py --validate-schema --test --check-migrations
 
-# Run core test suites
-/run scripts/testing/run_tests.py --unit --integration --security
+# Run comprehensive test suites
+/run scripts/testing/run_tests.py --unit --integration --security --coverage
 
-# Generate coverage reports
-/run scripts/generate_coverage_report.py --html --xml
+# Generate detailed coverage reports
+/run scripts/generate_coverage_report.py --html --xml --verify
 
-# Verify test coverage
-/run scripts/verification/verify_test_coverage.py --min-coverage=80
+# Verify test coverage meets requirements
+/run scripts/verification/verify_test_coverage.py --min-coverage=80 --critical-paths
 
-# Verify database connection
-/run scripts/verification/verify_db_connection.py --retry=3 --timeout=10
+# Verify database connection with retries
+/run scripts/verification/verify_db_connection.py --retry=5 --timeout=15 --validate
 
-# Verify Render readiness
-/run scripts/verification/verify_render_ready.py --check-api --validate-vars
+# Verify Render readiness with full checks
+/run scripts/verification/verify_render_ready.py --check-api --validate-vars --verify-backup
 
-# Verify admin user
-/run scripts/startup/init_admin.py --verify-email
+# Verify admin user with enhanced validation
+/run scripts/startup/init_admin.py --verify-email --check-password --validate
 
 ### CODE END ###
 

@@ -15,8 +15,17 @@ def configure_coverage_logging():
     return logger
 
 def verify_coverage(threshold=80):
-    """Verify test coverage meets requirements"""
+    """Enhanced coverage verification with critical path checks"""
     logger = configure_coverage_logging()
+    
+    # Setup test environment first
+    from scripts.setup_test_env import setup_test_paths, configure_test_environment
+    if not setup_test_paths():
+        logger.error("Failed to setup test paths")
+        return False
+    if not configure_test_environment():
+        logger.error("Failed to configure test environment")
+        return False
     
     try:
         # Configure paths first

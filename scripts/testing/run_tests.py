@@ -1,11 +1,18 @@
 import subprocess
 
 def run_tests(test_type='all'):
-    """Run tests with proper configuration and cleanup"""
+    """Enhanced test runner with proper environment setup"""
     try:
         # Configure logging
         from scripts.init_logging import configure_logging
         configure_logging()
+        
+        # Setup test environment
+        from scripts.setup_test_env import setup_test_paths, configure_test_environment
+        if not setup_test_paths():
+            raise RuntimeError("Failed to setup test paths")
+        if not configure_test_environment():
+            raise RuntimeError("Failed to configure test environment")
         
         # Setup test environment
         from scripts.setup_test_env import setup_test_paths, configure_test_environment

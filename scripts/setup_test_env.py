@@ -74,7 +74,7 @@ def setup_test_paths():
         return False
 
 def configure_test_environment(mode: str = 'test'):
-    """Set up environment variables and application context"""
+    """Enhanced test environment setup with proper application context"""
     try:
         # Add project root to sys.path
         project_root = str(Path(__file__).parent.parent)
@@ -85,8 +85,25 @@ def configure_test_environment(mode: str = 'test'):
         os.environ.update({
             'FLASK_ENV': 'testing',
             'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
-            'TESTING': 'true'
+            'TESTING': 'true',
+            'WTF_CSRF_ENABLED': 'False',  # Disable CSRF for testing
+            'SECRET_KEY': 'test-secret-key'  # Required for testing
         })
+        
+        # Create and configure test app
+        from app.factory import create_app
+        app = create_app('testing')
+        
+        # Push application context
+        app_context = app.app_context()
+        app_context.push()
+        
+        # Initialize test database
+        from scripts.startup.init_db import initialize_database
+        if not initialize_database(validate_schema=True):
+            raise RuntimeError("Failed to initialize test database")
+            
+        return True
         
         # Create and push application context
         from app.factory import create_app
