@@ -136,6 +136,11 @@ class StipendForm(FlaskForm):
             logger.warning(f"Form validation failed with errors: {self.errors}")
             return False
             
+        # Additional custom validation
+        if self.application_deadline.data and self.application_deadline.data < datetime.now():
+            self.application_deadline.errors.append("Deadline must be in the future")
+            return False
+            
         return True
 
 

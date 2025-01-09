@@ -176,6 +176,7 @@ def create():
             flash(FlashMessages.CREATE_SUCCESS.value, 'success')
             return redirect(url_for('admin.admin_stipend.index'))
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error creating stipend: {str(e)}")
             flash(FlashMessages.CREATE_ERROR.value, 'error')
             return render_template('admin/stipends/create.html', form=form)

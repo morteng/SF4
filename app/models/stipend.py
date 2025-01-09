@@ -84,13 +84,24 @@ class Stipend(db.Model):
         from app.services.stipend_service import StipendService
         service = StipendService()
         
-        # Handle tags separately
-        tags = data.pop('tags', None)
-        if tags is not None:
-            from app.models.tag import Tag
-            self.tags = [Tag.query.get(tag_id) for tag_id in tags]
-        
-        return service.update(self.id, data, user_id=user_id)
+        try:
+            # Handle tags separately
+            tags = data.pop('tags', None)
+            if tags is not None:
+                from app.models.tag import Tag
+                self.tags = [Tag.query.get(tag_id) for tag_id in tags]
+            
+            # Update other fields
+            for key, value in data.items():
+                if hasattr(self, key):
+                    setattr(self, key, value)
+            
+            db.session.commit()
+            return self
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error updating stipend {self.id}: {str(e)}")
+            raise
 
     @staticmethod
     def delete(stipend_id, user_id=None):
