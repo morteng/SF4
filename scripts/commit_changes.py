@@ -20,6 +20,13 @@ def commit_changes(message, push=False):
     logger = configure_logging()
     
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            logger.error("Path configuration failed")
+            return False
+    
+    try:
         # Verify git status first
         status = subprocess.run(
             ['git', 'status', '--porcelain'],

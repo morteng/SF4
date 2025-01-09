@@ -27,6 +27,18 @@ def generate_checklist(validate=False):
             logger.error("Path configuration failed")
             return False
             
+        # Verify critical imports
+        try:
+            from scripts.version import get_version
+            from scripts.verification import (
+                verify_git_state,
+                verify_coverage,
+                verify_deployment
+            )
+        except ImportError as e:
+            logger.error(f"Import verification failed: {str(e)}")
+            return False
+            
         # Verify git state
         from scripts.verification.verify_git_state import verify_git_state
         if not verify_git_state():

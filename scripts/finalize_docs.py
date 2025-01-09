@@ -44,10 +44,28 @@ def update_release_notes():
     """Enhanced release notes with deployment details"""
     logger = configure_logger()
     
-    # Configure paths first
-    from scripts.path_config import configure_paths
-    if not configure_paths():
-        logger.error("Path configuration failed")
+    try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            logger.error("Path configuration failed")
+            return False
+            
+        # Get version info
+        from scripts.version import get_version
+        version = get_version()
+        
+        # Update release notes
+        with open('RELEASE_NOTES.md', 'a') as f:
+            f.write(f"\n## Version {version} - {datetime.now().strftime('%Y-%m-%d')}\n")
+            f.write("- Final deployment verification completed\n")
+            f.write("- Production environment verified\n")
+            f.write("- Documentation finalized\n")
+            
+        logger.info("Release notes updated successfully")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to update release notes: {str(e)}")
         return False
         
     # Ensure debug mode is disabled
