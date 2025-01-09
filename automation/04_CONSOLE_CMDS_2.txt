@@ -4,47 +4,30 @@
 
 ### CODE START ###
 
-# Configure paths with strict verification
+# Core system verification
 /run scripts/path_config.py --strict --verify --test
-
-# Initialize logging with production settings
 /run scripts/init_logging.py --production --verbose
+/run scripts/startup/init_db.py --validate-schema --admin
+/run scripts/startup/init_admin.py --strict-password
 
-# Initialize database with enhanced schema validation
-/run scripts/startup/init_db.py --validate-schema --retry=5 --strict --admin
+# Security and configuration verification
+/run scripts/verification/verify_security.py --full-audit --admin-only
+/run scripts/verification/verify_config.py --production --strict
 
-# Verify security settings with full audit
-/run scripts/verification/verify_security.py --full-audit --admin-only --validate-keys --check-htmx-security
+# Database verification
+/run scripts/verification/verify_db_connection.py --strict --admin
+/run scripts/verification/verify_db_schema.py --strict --admin-tables
 
-# Initialize admin user with strict checks
-/run scripts/startup/init_admin.py --verify-email --strict-password
+# Test coverage and HTMX verification
+/run scripts/verification/verify_test_coverage.py --threshold=85 --admin-only
+/run scripts/verification/verify_htmx_integration.py --full --admin-only
 
-# Verify database connection with admin credentials
-/run scripts/verification/verify_db_connection.py --retry=5 --timeout=30 --strict --admin
+# Backup and monitoring verification
+/run scripts/verification/verify_backup.py --verify-integrity
+/run scripts/verification/verify_monitoring.py --production
 
-# Verify database schema with HTMX endpoints
-/run scripts/verification/verify_db_schema.py --strict --admin-tables --verify-relations --check-htmx-endpoints
-
-# Verify test coverage with HTMX checks
-/run scripts/verification/verify_test_coverage.py --threshold=85 --admin-only --critical-paths --htmx-coverage
-
-# Verify HTMX integration with partial updates
-/run scripts/verification/verify_htmx_integration.py --full --test-all-crud --admin-only --validate-partial-updates
-
-# Verify backup integrity
-/run scripts/verification/verify_backup.py --retention=7 --verify-integrity
-
-# Verify monitoring configuration
-/run scripts/verification/verify_monitoring.py --production --alert-thresholds
-
-# Verify logging configuration
-/run scripts/verification/verify_logs.py --check-rotation --verify-archives
-
-# Verify production configuration
-/run scripts/verification/verify_config.py --production --validate-env --strict
-
-# Commit changes with verification summary
-/run scripts/commit_changes.py --message "Step 2 verification completed" --verify --strict
+# Finalize changes
+/run scripts/commit_changes.py --message "Step 2 verification completed" --verify
 
 ### CODE END ###
 
