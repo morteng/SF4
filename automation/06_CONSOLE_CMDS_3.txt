@@ -3,33 +3,33 @@
 
 ### CODE START ###
 
-# Initialize test environment
-/run scripts/path_config.py --strict --verify --test
-/run scripts/init_logging.py --test --verbose
-/run scripts/setup_test_env.py --test
+# Fix path configuration first
+/run scripts/path_config.py --strict --verify --fix-paths
 
-# Initialize test database
-/run scripts/startup/init_db.py --test --validate-schema
+# Initialize test environment
+/run scripts/init_logging.py --test --verbose
+/run scripts/setup_test_env.py --test --validate-paths
+
+# Initialize test database with required tables
+/run scripts/startup/init_db.py --test --validate-schema --check-constraints
+
+# Verify core functionality
+/run scripts/verification/verify_db_connection.py --strict --retry
+/run scripts/verification/verify_db_schema.py --strict --tables=stipend --verify-relations --check-constraints
+/run scripts/verification/verify_security.py --full-audit --validate-keys --check-stipends-security --verify-permissions
 
 # Run core test suites
 /run scripts/testing/run_tests.py --unit --integration --e2e
 
 # Verify HTMX functionality
-/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates
-
-# Verify database operations
-/run scripts/verification/verify_db_schema.py --strict --tables=stipend --verify-relations
-/run scripts/verification/verify_db_connection.py --strict
-
-# Verify security settings
-/run scripts/verification/verify_security.py --full-audit --validate-keys --check-stipends-security
+/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates --check-htmx-security
 
 # Generate and verify coverage
 /run scripts/generate_coverage_report.py --html --xml
-/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95
+/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95 --critical-paths
 
 # Finalize testing
-/run scripts/commit_changes.py --message "Testing cycle completed" --verify
+/run scripts/commit_changes.py --message "Testing cycle completed" --verify --push
 
 ### CODE END ###
 
