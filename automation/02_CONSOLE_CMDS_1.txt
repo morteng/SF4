@@ -4,20 +4,20 @@
 
 ### CODE START ###
 
-# Verify path configuration and imports
-/run scripts/verification/verify_imports.py --full --validate-paths
+# Verify and fix path configuration
+/run scripts/verification/verify_imports.py --full --validate-paths --fix-paths
 
 # Comprehensive stipends CRUD testing with HTMX
-/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates
+/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates --check-htmx-security
 
 # Verify stipends database schema and relations
-/run scripts/verification/verify_db_schema.py --strict --tables=stipend --verify-relations
+/run scripts/verification/verify_db_schema.py --strict --tables=stipend --verify-relations --check-constraints
 
 # Security audit focused on stipends management
-/run scripts/verification/verify_security.py --full-audit --validate-keys --check-stipends-security
+/run scripts/verification/verify_security.py --full-audit --validate-keys --check-stipends-security --verify-permissions
 
-# Verify stipends test coverage
-/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95
+# Verify test coverage for critical paths
+/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95 --critical-paths
 
 ### CODE END ###
 
