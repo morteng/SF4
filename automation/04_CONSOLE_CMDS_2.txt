@@ -3,21 +3,24 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize core systems
+# Initialize core systems with enhanced path configuration
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Verify git state
+# Verify git state with conflict resolution
 /run scripts/verification/verify_git_state.py --pull --retry=3 --auto-resolve
 
-# Initialize database with enhanced validation
+# Initialize database with schema validation
 /run scripts/startup/init_db.py --validate-schema --check-migrations --verify-tables
 
-# Verify security settings
-/run scripts/verification/verify_security.py --check-env --validate-keys --verify-permissions
+# Verify security settings with production checks
+/run scripts/verification/verify_security.py --check-env --validate-keys --verify-permissions --check-production
 
-# Verify database connection with schema validation
+# Verify database connection with retry logic
 /run scripts/verification/verify_db_connection.py --retry=5 --timeout=15 --verify-schema
+
+# Verify test coverage meets requirements
+/run scripts/verification/verify_test_coverage.py --threshold=80 --critical-modules
 
 # Verify backup integrity with schema validation
 /run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables
@@ -25,11 +28,11 @@
 # Verify Render deployment readiness
 /run scripts/verification/verify_render_ready.py --check-api --validate-vars --verify-backup
 
-# Initialize admin user with password validation
+# Initialize admin user with enhanced validation
 /run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity
 
 # Commit changes with verification summary
-/run scripts/commit_changes.py --message "Enhanced verification and validation completed"
+/run scripts/commit_changes.py --message "Step 2 verification and validation completed"
 
 ### CODE END ###
 
