@@ -4,6 +4,11 @@ from pathlib import Path
 def configure_logging():
     """Configure logging system with proper error handling"""
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
         # Create logs directory with proper permissions
         log_dir = Path('logs')
         log_dir.mkdir(exist_ok=True, mode=0o755)
@@ -17,6 +22,17 @@ def configure_logging():
                 logging.StreamHandler()
             ]
         )
+        
+        # Configure log rotation
+        from logging.handlers import RotatingFileHandler
+        handler = RotatingFileHandler(
+            'logs/app.log',
+            maxBytes=1024*1024,  # 1MB
+            backupCount=5
+        )
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        logging.getLogger().addHandler(handler)
         
         # Verify logging setup
         logging.getLogger(__name__).info("Logging system initialized successfully")

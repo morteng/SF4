@@ -15,9 +15,14 @@ def configure_logger():
 
 def verify_production_ready():
     """Verify production readiness with comprehensive checks"""
-    logger = configure_logger()
-    
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
+        logger = configure_logger()
+        
         # Set default environment variables if missing
         default_vars = {
             'BACKUP_DIR': 'backups',
@@ -30,6 +35,11 @@ def verify_production_ready():
             if not os.getenv(var):
                 os.environ[var] = default
                 logger.info(f"Set default value for {var}: {default}")
+                
+        # Ensure debug mode is disabled
+        if os.getenv('FLASK_DEBUG', '0').lower() in ('1', 'true', 'yes'):
+            logger.error("Debug mode must be disabled in production")
+            return False
         
         # Verify required environment variables
         required_vars = [

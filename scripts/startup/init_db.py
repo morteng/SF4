@@ -17,23 +17,23 @@ logger = logging.getLogger(__name__)
 def initialize_database(validate_schema=False):
     """Initialize database schema and run migrations"""
     try:
-        # Add project root to sys.path
-        import sys
-        import os
-        from pathlib import Path
-        project_root = str(Path(__file__).parent.parent.parent)
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
-            
-        # Configure logging
-        import logging
-        logging.basicConfig(level=logging.INFO)
-        logger = logging.getLogger(__name__)
-        
-        # Ensure debug mode is disabled
-        os.environ['FLASK_DEBUG'] = '0'
+        # Configure paths first
+        from scripts.path_config import configure_paths
         if not configure_paths():
             raise RuntimeError("Failed to configure paths")
+            
+        # Configure logging
+        from scripts.init_logging import configure_logging
+        configure_logging()
+        logger = logging.getLogger(__name__)
+        
+        # Create and configure test app
+        from app.factory import create_app
+        app = create_app('testing')
+        
+        # Push application context
+        app_context = app.app_context()
+        app_context.push()
             
         # Verify database file exists
         db_path = Path('instance/site.db')
