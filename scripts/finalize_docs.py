@@ -31,6 +31,11 @@ except ImportError as e:
 
 def configure_logger():
     """Configure logger for documentation scripts"""
+    # Add project root to sys.path
+    project_root = str(Path(__file__).parent.parent.parent)
+    if project_root not in sys.path:
+        sys.path.insert(0, project_root)
+        
     logger = logging.getLogger(__name__)
     if not logger.handlers:
         handler = logging.StreamHandler()
