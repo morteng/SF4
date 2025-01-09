@@ -23,6 +23,9 @@
 # Validate production configuration
 /run python scripts/verification/verify_config.py --production
 
+# Run application for CEO review
+/run flask run
+
 ### CODE END ###
 
 # Console commands done, we go on to 03_STEP_2.txt
