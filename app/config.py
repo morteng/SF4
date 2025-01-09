@@ -53,13 +53,32 @@ class TestConfig(Config):
     RATELIMIT_IN_MEMORY_FALLBACK_ENABLED = True
     RATELIMIT_STRATEGY = 'fixed-window-elastic-expiry'
     
-    # Enable detailed error logging for tests
-    LOGGING_LEVEL = 'DEBUG'
-    LOGGING_FORMAT = '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
-    
-    # Enable detailed error logging for tests
-    LOGGING_LEVEL = 'DEBUG'
-    LOGGING_FORMAT = '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+    # Logging configuration
+    LOGGING_CONFIG = {
+        'version': 1,
+        'formatters': {
+            'standard': {
+                'format': '%(asctime)s - %(levelname)s - %(message)s'
+            },
+        },
+        'handlers': {
+            'file': {
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': 'logs/app.log',
+                'maxBytes': 10485760,  # 10MB
+                'backupCount': 5,
+                'formatter': 'standard'
+            },
+            'console': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard'
+            }
+        },
+        'root': {
+            'level': 'INFO',
+            'handlers': ['file', 'console']
+        }
+    }
     
     # Notification settings
     NOTIFICATION_MAX_COUNT = 1000  # Increase for testing

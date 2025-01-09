@@ -52,11 +52,26 @@ def verify_render_api():
         return False
 
 def verify_render_ready():
-    """Main verification function"""
+    """Enhanced deployment verification"""
+    # Verify environment variables
     if not verify_render_environment():
+        logger.error("Render environment verification failed")
         return False
         
+    # Verify API connectivity
     if not verify_render_api():
+        logger.error("Render API verification failed")
+        return False
+        
+    # Verify git state
+    if not verify_git_state():
+        logger.error("Cannot deploy with uncommitted changes")
+        return False
+        
+    # Verify backup system
+    backup_files = sorted(Path('backups').glob('stipend_*.db'), reverse=True)
+    if not backup_files or not verify_backup_integrity(backup_files[0]):
+        logger.error("Backup verification failed")
         return False
         
     logger.info("Render environment is ready for deployment")
