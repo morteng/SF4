@@ -45,6 +45,12 @@
 # Final deployment verification with full checks
 /run scripts/verification/verify_deployment.py --check-type=final-check --validate
 
+# Verify production readiness
+/run scripts/verification/verify_production_ready.py --check-config --validate-vars
+
+# Final security audit
+/run scripts/security/security_audit.py --full --verify
+
 ### CODE END ###
 
 # Console commands done, we go on to 09_STEP_5.txt
