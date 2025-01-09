@@ -5,8 +5,18 @@ from pathlib import Path
 def configure_paths():
     """Enhanced path configuration with proper error handling"""
     try:
-        # Get project root (two levels up from this script)
-        project_root = str(Path(__file__).parent.parent)
+        # Get project root (three levels up from this script)
+        project_root = str(Path(__file__).parent.parent.parent)
+        
+        # Add project root to sys.path
+        import sys
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            
+        # Configure logging
+        import logging
+        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger(__name__)
         
         # Add project root to sys.path if not present
         if project_root not in sys.path:

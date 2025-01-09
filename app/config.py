@@ -121,6 +121,12 @@ class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath(os.path.join('instance', 'site.db'))}"
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or SECRET_KEY
+    SESSION_COOKIE_SECURE = True
+    REMEMBER_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
 
 config_by_name = {
     'development': DevelopmentConfig,
