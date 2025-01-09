@@ -21,11 +21,22 @@ def generate_checklist(validate=False):
     logger = configure_logger()
     
     try:
-        # Configure paths first
+        # Clear any existing incorrect paths
+        sys.path = [p for p in sys.path if not p.startswith('C:\\github')]
+        
+        # Add correct paths
+        project_root = str(Path(__file__).parent.parent.parent)
+        sys.path.insert(0, project_root)
+        sys.path.insert(0, str(Path(project_root) / 'scripts'))
+        
+        # Configure paths
         from scripts.path_config import configure_paths
         if not configure_paths():
             logger.error("Path configuration failed")
             return False
+            
+        # Create deployment directory if it doesn't exist
+        Path('deployment').mkdir(exist_ok=True)
             
         # Verify critical imports
         try:

@@ -7,13 +7,13 @@
 /run scripts/verification/verify_production_ready.py --full --strict
 
 # Finalize documentation
-/run scripts/finalize_docs.py --version --validate --admin --final
+/run scripts/finalize_docs.py --version --validate --final
 
 # Generate deployment checklist
-/run scripts/generate_deployment_checklist.py --strict --validate --admin --final
+/run scripts/generate_deployment_checklist.py --strict --validate --final
 
 # Request final approval
-/run scripts/request_approval.py --detailed --verify --admin --final
+/run scripts/request_approval.py --detailed --verify --final
 
 # Commit final changes
 /run scripts/commit_changes.py --message "Final deployment updates" --verify --strict

@@ -266,11 +266,24 @@ def update_release_notes():
 def update_version_history():
     """Update version history file"""
     try:
-        # Configure paths first
+        # Clear any existing incorrect paths
+        sys.path = [p for p in sys.path if not p.startswith('C:\\github')]
+        
+        # Add correct paths
+        project_root = str(Path(__file__).parent.parent.parent)
+        sys.path.insert(0, project_root)
+        sys.path.insert(0, str(Path(project_root) / 'scripts'))
+        
+        # Configure paths
         from scripts.path_config import configure_paths
         if not configure_paths():
             logger.error("Path configuration failed")
             return False
+            
+        # Create version history file if it doesn't exist
+        if not Path('VERSION_HISTORY.md').exists():
+            with open('VERSION_HISTORY.md', 'w') as f:
+                f.write("# Version History\n\n")
             
         # Get current version
         from scripts.version import get_version
