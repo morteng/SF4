@@ -24,7 +24,7 @@ def verify_login_attempts():
     # TODO: Implement actual login attempt verification
     return True
 
-def verify_security_settings(full_audit=False, daily=False, admin_only=False, check_htmx_security=False):
+def verify_security_settings(full_audit=False, daily=False, validate_keys=False, check_stipends_security=False):
     """Verify security-related settings with enhanced checks
     Args:
         full_audit (bool): Perform comprehensive security audit

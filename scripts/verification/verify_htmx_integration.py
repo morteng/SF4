@@ -110,10 +110,10 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
     parser.add_argument('--full', action='store_true', help='Run full verification')
-    parser.add_argument('--test-all-crud', action='store_true',
-                       help='Test all CRUD operations across entities')
-    parser.add_argument('--admin-only', action='store_true',
-                       help='Focus only on admin functionality')
+    parser.add_argument('--test-stipends-crud', action='store_true',
+                       help='Test stipends CRUD operations')
+    parser.add_argument('--validate-partial-updates', action='store_true',
+                       help='Verify HTMX partial page updates')
     args = parser.parse_args()
     
     base_url = os.getenv('BASE_URL', 'http://localhost:5000')
