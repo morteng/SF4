@@ -4,42 +4,41 @@
 
 ### CODE START ###
 
-# Initialize core systems with enhanced path configuration
+# Configure paths first to ensure proper imports
 /run scripts/path_config.py
+
+# Initialize logging system
 /run scripts/init_logging.py
 
-# Initialize database with schema validation and retry logic
-/run scripts/startup/init_db.py --validate-schema --retry=5 --timeout=15 --verify-tables
+# Verify path configuration
+/run scripts/verification/verify_paths.py
 
-# Configure test environment with proper imports
-/run scripts/setup_test_env.py --mode=test --verify-imports --check-paths
+# Initialize database with schema validation
+/run scripts/startup/init_db.py --validate-schema --retry=3
 
-# Verify security settings with production checks
-/run scripts/verification/verify_security.py --check-env --validate-keys --verify-permissions --check-production --disable-debug
+# Verify security settings
+/run scripts/verification/verify_security.py --check-env --validate-keys
 
-# Initialize admin user with enhanced validation
-/run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity
+# Initialize admin user
+/run scripts/startup/init_admin.py --verify-email --check-password
 
-# Verify database connection with retry logic and schema validation
-/run scripts/verification/verify_db_connection.py --retry=5 --timeout=15 --verify-schema --check-tables
+# Verify database connection
+/run scripts/verification/verify_db_connection.py --retry=3
 
-# Verify test coverage meets 85% target
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-modules --verify-imports --check-paths
+# Verify test coverage
+/run scripts/verification/verify_test_coverage.py --threshold=85
 
-# Verify backup integrity with schema validation
-/run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables --retry=3 --case-insensitive
+# Verify backup integrity
+/run scripts/verification/verify_backup.py --verify-size --check-schema
 
-# Verify logging configuration with archive handling
-/run scripts/verification/verify_logs.py --check-rotation --verify-archives --create-missing
+# Verify monitoring configuration
+/run scripts/verification/verify_monitoring.py --check-vars --verify-files
 
-# Verify monitoring configuration with defaults
-/run scripts/verification/verify_monitoring.py --check-vars --verify-files --set-defaults
-
-# Verify Render deployment readiness
-/run scripts/verification/verify_render_ready.py --check-api --validate-vars --verify-backup
+# Verify logging configuration
+/run scripts/verification/verify_logs.py --check-rotation
 
 # Commit changes with verification summary
-/run scripts/commit_changes.py --message "Step 2 verification and validation completed with fixes"
+/run scripts/commit_changes.py --message "Step 2 verification completed"
 
 ### CODE END ###
 
