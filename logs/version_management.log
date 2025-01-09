@@ -2425,3 +2425,12 @@ M  logs/version_management.log
 2025-01-09 17:48:06,384 - INFO - Logging system initialized successfully
 2025-01-09 17:48:06,385 - INFO - Logging system initialized successfully
 2025-01-09 17:48:06,386 - INFO - Logging system initialized successfully
+2025-01-09 17:48:17,584 - INFO - Successfully committed changes: Preparing release notes update
+2025-01-09 17:48:17,633 - INFO - Git status:
+## main...origin/main [ahead 158]
+?? RELEASE_NOTES.md
+
+2025-01-09 17:48:17,634 - ERROR - Uncommitted changes detected
+2025-01-09 17:48:17,634 - INFO - Please commit or stash changes before proceeding
+2025-01-09 17:48:17,634 - ERROR - Cannot update docs with uncommitted changes
+2025-01-09 17:48:17,634 - ERROR - Documentation finalization failed
