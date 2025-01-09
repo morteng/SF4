@@ -1,8 +1,7 @@
 import pytest
 import logging
 import re
-from datetime import datetime
-from datetime import timezone
+from datetime import datetime, timezone
 from flask import url_for
 from app.services.user_service import get_all_users
 from flask_login import current_user
@@ -629,19 +628,19 @@ def test_get_all_users_sorting(db_session):
     user1 = User(
         username='user1',
         email='user1@example.com',
-        created_at=datetime(2024, 1, 1, tzinfo=UTC),
+        created_at=datetime(2024, 1, 1, tzinfo=timezone.utc),
         password_hash='hash1'
     )
     user2 = User(
         username='user2',
         email='user2@example.com',
-        created_at=datetime(2024, 1, 2, tzinfo=UTC),
+        created_at=datetime(2024, 1, 2, tzinfo=timezone.utc),
         password_hash='hash2'
     )
     user3 = User(
         username='user3',
         email='user3@example.com',
-        created_at=datetime(2024, 1, 3, tzinfo=UTC),
+        created_at=datetime(2024, 1, 3, tzinfo=timezone.utc),
         password_hash='hash3'
     )
     db_session.add_all([user1, user2, user3])
