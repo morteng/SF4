@@ -2,6 +2,8 @@ import os
 import logging
 import requests
 from pathlib import Path
+from scripts.verification.verify_git_state import verify_git_state
+from scripts.verification.verify_backup import verify_backup_integrity
 
 logger = logging.getLogger(__name__)
 
