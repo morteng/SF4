@@ -13,6 +13,14 @@
 - [x] Implement enhanced security verification
 - [x] Add database connection retry logic
 
+### **Current Testing Priorities**
+- [ ] Verify HTMX CRUD operations
+- [ ] Test database schema migrations
+- [ ] Validate security settings
+- [ ] Verify test coverage thresholds
+- [ ] Test monitoring integration
+- [ ] Verify backup/restore functionality
+
 ### **Post-Deployment Tasks**
 - [ ] Monitor production performance
 - [ ] Gather user feedback
