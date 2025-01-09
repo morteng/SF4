@@ -58,15 +58,22 @@ class Stipend(db.Model):
     @staticmethod
     def create(data, user_id=None):
         """Add debug logging to creation process"""
-        print(f"\nCreating stipend with data: {data}")
-        from app.services.stipend_service import StipendService
-        service = StipendService()
         try:
+            from app.services.stipend_service import StipendService
+            service = StipendService()
+            
+            # Validate required fields
+            required_fields = ['name', 'summary', 'description', 'homepage_url']
+            for field in required_fields:
+                if field not in data or not data[field]:
+                    raise ValueError(f"Missing required field: {field}")
+                    
+            # Create the stipend
             result = service.create(data, user_id)
-            print("Stipend created successfully")
+            logger.info(f"Stipend created successfully: {result.id}")
             return result
         except Exception as e:
-            print(f"Error creating stipend: {str(e)}")
+            logger.error(f"Error creating stipend: {str(e)}")
             raise
 
     def update(self, data, user_id=None):

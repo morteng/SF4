@@ -3,6 +3,20 @@ from flask import (
     Blueprint, request, redirect, url_for, 
     render_template, current_app, render_template_string, flash, abort
 )
+from flask_login import login_required, current_user
+from sqlalchemy.exc import IntegrityError
+from wtforms import ValidationError
+from app.extensions import limiter, db
+from app.controllers.base_crud_controller import BaseCrudController
+from app.services.stipend_service import StipendService
+from app.forms.admin_forms import StipendForm
+from app.utils import (
+    admin_required, flash_message, 
+    log_audit, create_notification,
+    format_error_message
+)
+from app.models import Stipend, Organization, Tag
+from app.constants import FlashMessages, FlashCategory
 
 logger = logging.getLogger(__name__)
 from flask_login import login_required, current_user
@@ -205,19 +219,40 @@ def edit(id):
 @login_required
 @admin_required
 def delete(id):
-    return stipend_controller.delete(id)
+    try:
+        stipend = Stipend.query.get_or_404(id)
+        db.session.delete(stipend)
+        db.session.commit()
+        flash(FlashMessages.DELETE_SUCCESS.value, 'success')
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Error deleting stipend {id}: {str(e)}")
+        flash(FlashMessages.DELETE_ERROR.value, 'error')
+    return redirect(url_for('admin.admin_stipend.index'))
 
 
 @admin_stipend_bp.route('/', methods=['GET'])
 @login_required
 @admin_required
 def index():
-    page = request.args.get('page', 1, type=int)
-    stipends = Stipend.query.paginate(page=page, per_page=10, error_out=False)
-    return render_template('admin/stipends/index.html', 
-                         stipends=stipends,
-                         current_page=stipends.page,
-                         total_pages=stipends.pages)
+    try:
+        page = request.args.get('page', 1, type=int)
+        per_page = 10
+        stipends = Stipend.query.paginate(page=page, per_page=per_page, error_out=False)
+        
+        if not stipends.items and page > 1:
+            # Redirect to last page if page is out of range
+            last_page = stipends.pages or 1
+            return redirect(url_for('admin.admin_stipend.index', page=last_page))
+            
+        return render_template('admin/stipends/index.html', 
+                            stipends=stipends,
+                            current_page=stipends.page,
+                            total_pages=stipends.pages)
+    except Exception as e:
+        logger.error(f"Error loading stipend index: {str(e)}")
+        flash('Error loading stipends', 'error')
+        return redirect(url_for('admin.index'))
 
 
 @admin_stipend_bp.route('/paginate', methods=['GET'])
