@@ -15,7 +15,7 @@ def configure_logging():
     )
     return logging.getLogger(__name__)
 
-def commit_changes(message):
+def commit_changes(message, push=False):
     """Commit pending changes with provided message"""
     logger = configure_logging()
     
@@ -37,10 +37,13 @@ def commit_changes(message):
         # Commit with message
         subprocess.run(['git', 'commit', '-m', message], check=True)
         
-        # Push changes
-        subprocess.run(['git', 'push'], check=True)
-        
-        logger.info(f"Successfully committed and pushed changes: {message}")
+        # Push changes if requested
+        if push:
+            subprocess.run(['git', 'push'], check=True)
+            logger.info(f"Successfully committed and pushed changes: {message}")
+        else:
+            logger.info(f"Successfully committed changes: {message}")
+            
         return True
     except subprocess.CalledProcessError as e:
         logger.error(f"Commit failed: {str(e)}")
