@@ -4,17 +4,17 @@
 
 ### CODE START ###
 
-# Verify security settings meet production requirements
+# Verify production security settings with enhanced checks
 /run python scripts/verification/verify_security.py
 
-# Validate database connection and schema integrity
+# Validate database connection and schema integrity with retry logic
 /run python scripts/verification/verify_db_connection.py
 /run python scripts/verification/verify_db_schema.py
 
-# Confirm test coverage meets 85% target (per MANAGER.txt)
+# Confirm test coverage meets 85% target with critical path checks
 /run python scripts/verification/verify_test_coverage.py --threshold=85
 
-# Verify critical production systems
+# Verify backup integrity and monitoring configuration
 /run python scripts/verification/verify_backup.py
 /run python scripts/verification/verify_monitoring.py
 
