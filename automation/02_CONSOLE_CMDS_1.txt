@@ -4,15 +4,14 @@
 
 ### CODE START ###
 
-# Do not run scripts/start_cycle here, it has already been run in previous script
+# Verify database connection and schema
+/run python scripts/verification/verify_db_connection.py
 
-# write a python script that does this and run it here with /run command instead of trying to run python code directly AI
+# Verify security settings and permissions
+/run python scripts/verification/verify_security.py
 
-# Verify database connection with enhanced logging
-/run python -c "from scripts.version import validate_db_connection; import logging; logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s'); import os; db_uri = os.getenv('SQLALCHEMY_DATABASE_URI').replace('sqlite:///', ''); assert validate_db_connection(db_uri); print('Database connection validation passed')"
-
-# Deploy to render.com
-/run python scripts/deploy_to_render.py
+# Verify test coverage meets requirements
+/run python scripts/verification/verify_test_coverage.py
 
 ### CODE END ###
 

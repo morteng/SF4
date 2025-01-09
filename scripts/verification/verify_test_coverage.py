@@ -68,10 +68,11 @@ def verify_coverage(threshold=80):
         logger.info(result.stdout)
         # Verify critical modules have required coverage
         critical_modules = {
-            'app/models': 90,
-            'app/services': 90,
-            'app/routes': 85,
-            'app/controllers': 85
+            'app/models': 95,
+            'app/services': 95,
+            'app/routes': 90,
+            'app/controllers': 90,
+            'app/security': 95
         }
         
         for module, min_coverage in critical_modules.items():

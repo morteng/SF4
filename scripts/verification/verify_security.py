@@ -30,13 +30,20 @@ def verify_security_settings():
             logger.error("ADMIN_PASSWORD must be at least 12 characters")
             return False
             
+        # Verify debug mode is disabled in production
+        if os.getenv('FLASK_ENV') == 'production' and os.getenv('FLASK_DEBUG') == '1':
+            logger.error("Debug mode must be disabled in production")
+            return False
+            
         # Verify environment variables
         required_vars = [
             'FLASK_ENV',
             'FLASK_DEBUG',
             'SQLALCHEMY_DATABASE_URI',
             'SECRET_KEY',
-            'ADMIN_PASSWORD'
+            'ADMIN_PASSWORD',
+            'BACKUP_DIR',
+            'LOG_DIR'
         ]
         
         missing_vars = [var for var in required_vars if not os.getenv(var)]
