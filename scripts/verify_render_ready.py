@@ -18,6 +18,19 @@ def verify_render_environment():
     if missing_vars:
         logger.error(f"Missing required Render variables: {', '.join(missing_vars)}")
         return False
+        
+    # Verify API key format
+    api_key = os.getenv('RENDER_API_KEY')
+    if not api_key or len(api_key) < 64:
+        logger.error("RENDER_API_KEY must be at least 64 characters")
+        return False
+        
+    # Verify service ID format
+    service_id = os.getenv('RENDER_SERVICE_ID')
+    if not service_id or len(service_id) < 32:
+        logger.error("RENDER_SERVICE_ID must be at least 32 characters")
+        return False
+        
     return True
 
 def verify_render_api():

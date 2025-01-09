@@ -20,6 +20,9 @@
 # Initialize database with enhanced validation
 /run scripts/startup/init_db.py --validate-schema --test --migrate --backup-first --reset
 
+# Verify admin user exists
+/run scripts/verify_admin_user.py --check-credentials --validate-permissions
+
 # Verify Render deployment readiness
 /run scripts/verify_render_ready.py --check-api --validate-vars --test-deploy --critical
 
