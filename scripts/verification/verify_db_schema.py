@@ -17,8 +17,24 @@ def validate_schema():
             'tag': ['id', 'name']
         }
         
-        # Get actual schema
-        from app import db
+        # Add project root to Python path
+        project_root = str(Path(__file__).parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            
+        # Add app directory explicitly
+        app_dir = str(Path(project_root) / 'app')
+        if app_dir not in sys.path:
+            sys.path.insert(0, app_dir)
+            
+        # Verify imports
+        try:
+            from app import db
+        except ImportError as e:
+            logger.error(f"Import error: {str(e)}")
+            logger.error(f"Current sys.path: {sys.path}")
+            return False
+            
         inspector = inspect(db.engine)
         actual_tables = inspector.get_table_names()
         

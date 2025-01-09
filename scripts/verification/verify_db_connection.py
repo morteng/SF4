@@ -47,11 +47,15 @@ def verify_db_connection():
                 logger.error("SQLALCHEMY_DATABASE_URI not set")
                 return False
                 
-            # Verify SQLite file exists
+            # Verify SQLite file exists with proper path handling
             if db_uri.startswith('sqlite'):
                 db_path = db_uri.replace('sqlite:///', '')
+                # Handle Windows paths
+                if os.name == 'nt':
+                    db_path = db_path.lstrip('/')
                 if not Path(db_path).exists():
                     logger.error(f"Database file not found: {db_path}")
+                    logger.error(f"Current working directory: {os.getcwd()}")
                     return False
                     
             engine = create_engine(db_uri)
