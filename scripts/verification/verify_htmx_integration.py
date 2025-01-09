@@ -21,6 +21,10 @@ def verify_htmx_crud(base_url, test_all_crud=False, admin_only=False):
         test_all_crud (bool): Whether to test all CRUD operations
         admin_only (bool): Focus only on admin functionality
     """
+    # Add project root to sys.path
+    project_root = str(Path(__file__).parent.parent.parent)
+    if project_root not in sys.path:
+        sys.path.insert(0, project_root)
     logger = configure_logger()
     
     try:

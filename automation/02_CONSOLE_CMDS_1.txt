@@ -4,17 +4,35 @@
 
 ### CODE START ###
 
+# Configure paths with enhanced verification
+/run scripts/path_config.py --strict --verify --test
+
 # Comprehensive admin CRUD testing
 /run scripts/verification/verify_htmx_integration.py --full --test-all-crud --admin-only
 
 # Admin-specific test coverage verification
-/run scripts/verification/verify_test_coverage.py --admin-only --critical-paths
+/run scripts/verification/verify_test_coverage.py --admin-only --critical-paths --threshold=85
 
 # Admin security audit with HTMX checks
-/run scripts/verification/verify_security.py --full-audit --htmx --admin-only
+/run scripts/verification/verify_security.py --full-audit --htmx --admin-only --validate-keys
 
 # Admin database schema validation
 /run scripts/verification/verify_db_schema.py --strict --admin-tables --verify-relations
+
+# Verify database connection
+/run scripts/verification/verify_db_connection.py --retry=5 --timeout=30 --strict
+
+# Verify backup system
+/run scripts/verification/verify_backup.py --retention=7 --verify-integrity
+
+# Verify monitoring configuration
+/run scripts/verification/verify_monitoring.py --production --alert-thresholds
+
+# Verify logging configuration
+/run scripts/verification/verify_logs.py --check-rotation --verify-archives
+
+# Verify production configuration
+/run scripts/verification/verify_config.py --production --validate-env
 
 ### CODE END ###
 

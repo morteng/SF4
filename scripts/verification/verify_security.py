@@ -30,6 +30,10 @@ def verify_security_settings(full_audit=False, daily=False, admin_only=False):
         daily (bool): Perform daily security checks
         admin_only (bool): Focus only on admin functionality
     """
+    # Add project root to sys.path
+    project_root = str(Path(__file__).parent.parent.parent)
+    if project_root not in sys.path:
+        sys.path.insert(0, project_root)
     logger = configure_logger()
     
     try:
