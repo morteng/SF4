@@ -4,20 +4,20 @@
 ### CODE START ###
 
 # Initialize review environment
-/run scripts/path_config.py --strict
-/run scripts/init_logging.py --production
+/run scripts/path_config.py --strict --verify --test
+/run scripts/init_logging.py --production --verbose
 
 # Verify core functionality
-/run scripts/verification/verify_htmx_integration.py --full --admin-only
-/run scripts/verification/verify_db_schema.py --strict --admin-tables
-/run scripts/verification/verify_db_connection.py --strict --admin
+/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates
+/run scripts/verification/verify_db_schema.py --strict --tables=stipend --verify-relations
+/run scripts/verification/verify_db_connection.py --strict
 
 # Verify security and configuration
-/run scripts/verification/verify_security.py --full-audit --admin-only
+/run scripts/verification/verify_security.py --full-audit --validate-keys --check-stipends-security
 /run scripts/verification/verify_config.py --production --strict
 
 # Verify test coverage
-/run scripts/verification/verify_test_coverage.py --threshold=85 --admin-only
+/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95
 
 # Verify backup and monitoring
 /run scripts/verification/verify_backup.py --verify-integrity
