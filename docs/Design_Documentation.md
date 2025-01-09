@@ -32,7 +32,8 @@
 - **Coverage Target**: Maintain at least **80%** code coverage overall.
 
 ## 6. Logging & Backups
-- **Logging**: Standard, centralized logs for debugging and auditing.  
-- **Backup Strategy**: Automated database backups and periodic log archiving.  
-- **Environment Variables**: Store sensitive data (e.g., credentials) securely, verified at runtime.
+- **Logging**: Standard, centralized logs for debugging and auditing with proper rotation and archiving
+- **Backup Strategy**: Automated database backups with retention policy and integrity checks
+- **Environment Variables**: Store sensitive data (e.g., credentials) securely, verified at runtime
+- **Monitoring**: Comprehensive production monitoring with alert thresholds
 
