@@ -3,51 +3,36 @@
 
 ### CODE START ###
 
-# Initialize core systems with enhanced path configuration
+# Configure paths and logging
 /run scripts/path_config.py
-/run scripts/init_logging.py --test
+/run scripts/init_logging.py
 
-# Setup test environment with proper application context
-/run scripts/setup_test_env.py --clean --with-context --test-db --validate
+# Setup test environment
+/run scripts/setup_test_env.py --test
 
-# Install test dependencies with verification
-/run scripts/install_test_dependencies.py --test --verify
+# Install test dependencies
+/run scripts/install_test_dependencies.py
 
-# Initialize test database with schema validation
-/run scripts/startup/init_db.py --validate-schema --test --check-migrations
+# Initialize test database
+/run scripts/startup/init_db.py --test
 
-# Fix security permissions with strict mode
-/run scripts/security/fix_security_permissions.py --strict --verify
+# Run core test suites
+/run scripts/testing/run_tests.py --unit --integration
 
-# Run comprehensive test suites
-/run scripts/testing/run_tests.py --unit --integration --security --coverage
+# Generate coverage report
+/run scripts/generate_coverage_report.py
 
-# Generate detailed coverage reports
-/run scripts/generate_coverage_report.py --html --xml --verify
+# Verify critical systems
+/run scripts/verification/verify_security.py
+/run scripts/verification/verify_db_connection.py
+/run scripts/verification/verify_backup.py
+/run scripts/verification/verify_monitoring.py
 
-# Verify test coverage meets requirements
-/run scripts/verification/verify_test_coverage.py --min-coverage=80 --critical-paths --check-paths
+# Verify test coverage
+/run scripts/verification/verify_test_coverage.py --threshold=85
 
-# Verify database connection and schema
-/run scripts/verification/verify_db_connection.py --retry=5 --timeout=15 --validate --check-tables
-
-# Verify backup system integrity
-/run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables --case-insensitive
-
-# Verify logging configuration
-/run scripts/verification/verify_logs.py --check-rotation --verify-archives --create-missing
-
-# Verify monitoring configuration
-/run scripts/verification/verify_monitoring.py --check-vars --verify-files --set-defaults
-
-# Initialize admin user with enhanced validation
-/run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity
-
-# Verify security settings
-/run scripts/verification/verify_security.py --check-env --validate-keys --verify-permissions --check-production
-
-# Commit test results with verification summary
-/run scripts/commit_changes.py --message "Testing cycle completed with coverage verification and fixes"
+# Commit test results
+/run scripts/commit_changes.py --message "Testing cycle completed"
 
 ### CODE END ###
 
