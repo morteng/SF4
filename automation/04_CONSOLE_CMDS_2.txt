@@ -23,8 +23,8 @@
 # Verify database connection with retry logic and schema validation
 /run scripts/verification/verify_db_connection.py --retry=5 --timeout=15 --verify-schema --check-tables
 
-# Verify test coverage meets requirements
-/run scripts/verification/verify_test_coverage.py --threshold=80 --critical-modules --verify-imports --check-paths
+# Verify test coverage meets 85% target
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-modules --verify-imports --check-paths
 
 # Verify backup integrity with schema validation
 /run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables --retry=3 --case-insensitive
