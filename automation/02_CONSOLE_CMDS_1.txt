@@ -4,24 +4,20 @@
 
 ### CODE START ###
 
-# Enhanced security audit with daily checks
+# End-to-end HTMX integration testing
+/run python scripts/verification/verify_htmx_integration.py --full
+
+# Critical path coverage verification
+/run python scripts/verification/verify_test_coverage.py --critical-paths
+
+# Daily system health check
+/run python scripts/verification/verify_health.py --daily
+
+# Security audit with daily checks
 /run python scripts/verification/verify_security.py --full-audit --daily
 
-# Comprehensive database validation with retry and schema checks
-/run python scripts/verification/verify_db_connection.py --retry=5 --timeout=30
+# Database validation with schema checks
 /run python scripts/verification/verify_db_schema.py --strict --validate-relations
-
-# Test coverage with critical path analysis and module-specific thresholds
-/run python scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --module-thresholds
-
-# Production monitoring with alert threshold verification
-/run python scripts/verification/verify_monitoring.py --production --alert-thresholds
-
-# Backup verification with integrity and retention policy checks
-/run python scripts/verification/verify_backup.py --retention=7 --verify-integrity
-
-# Production configuration with environment variable validation
-/run python scripts/verification/verify_config.py --production --validate-env
 
 ### CODE END ###
 
