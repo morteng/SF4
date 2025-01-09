@@ -40,68 +40,23 @@ def configure_paths():
             print(f"Current sys.path: {sys.path}")
             return False
         
-        # Add project root to sys.path
-        import sys
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
-            
-        # Configure logging
-        import logging
-        logging.basicConfig(level=logging.INFO)
-        logger = logging.getLogger(__name__)
+        # Define required paths in priority order
+        required_paths = [
+            project_root,
+            str(Path(project_root) / 'app'),
+            str(Path(project_root) / 'scripts'),
+            str(Path(project_root) / 'tests'),
+            str(Path(__file__).parent)
+        ]
         
-        # Add project root to sys.path if not present
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
-            
-        # Add scripts directory
-        scripts_dir = str(Path(__file__).parent)
-        if scripts_dir not in sys.path:
-            sys.path.insert(0, scripts_dir)
-        
-        # Add venv site-packages explicitly
+        # Add venv site-packages if exists
         venv_path = os.getenv('VIRTUAL_ENV')
         if venv_path:
             site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
-            if site_packages not in sys.path:
-                sys.path.insert(0, site_packages)
-        
-        # Add project directories in correct order
-        paths_to_add = [
-            project_root,
-            str(Path(project_root) / 'app'),
-            str(Path(project_root) / 'scripts'),
-            str(Path(project_root) / 'tests'),
-            str(Path(__file__).parent)
-        ]
-        
+            required_paths.append(site_packages)
+            
         # Add paths to sys.path if not already present
-        for path in paths_to_add:
-            if path not in sys.path:
-                sys.path.insert(0, path)
-                print(f"Added to Python path: {path}")
-                
-        # Add project directories
-        paths_to_add = [
-            project_root,
-            str(Path(project_root) / 'app'),
-            str(Path(project_root) / 'scripts'),
-            str(Path(project_root) / 'tests'),
-            str(Path(__file__).parent)
-        ]
-        
-        # Add paths in order of priority
-        paths_to_add = [
-            project_root,
-            str(Path(project_root) / 'app'),
-            str(Path(project_root) / 'scripts'),
-            str(Path(project_root) / 'tests'),
-            str(Path(__file__).parent),  # Add scripts directory itself
-            str(Path(project_root) / '.venv' / 'Lib' / 'site-packages')
-        ]
-        
-        # Add paths to sys.path if not already present
-        for path in paths_to_add:
+        for path in required_paths:
             if path not in sys.path:
                 sys.path.insert(0, path)
                 print(f"Added to Python path: {path}")
@@ -116,33 +71,6 @@ def configure_paths():
             print(f"Import verification failed: {str(e)}")
             print(f"Current sys.path: {sys.path}")
             return False
-        
-        # Add venv site-packages
-        venv_path = os.getenv('VIRTUAL_ENV')
-        if venv_path:
-            site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
-            paths_to_add.append(site_packages)
-        
-        # Add venv site-packages if exists
-        venv_path = os.getenv('VIRTUAL_ENV')
-        if venv_path:
-            site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
-            paths_to_add.append(site_packages)
-            
-        # Add paths to sys.path if not already present
-        for path in paths_to_add:
-            if path not in sys.path:
-                sys.path.insert(0, path)
-                print(f"Added to Python path: {path}")
-                
-        # Verify app can be imported
-        try:
-            import app
-            print("Successfully imported app module")
-            return True
-        except ImportError as e:
-            print(f"Failed to import app module: {str(e)}")
-            return False
             
     except Exception as e:
         print(f"Path configuration failed: {str(e)}")
@@ -151,13 +79,30 @@ def configure_paths():
 def verify_path_config():
     """Verify path configuration is correct"""
     try:
-        # Check if app can be imported
+        # Check critical imports
         import app
-        # Check if scripts can be imported
         import scripts
+        from scripts.verification import verify_db_connection
+        from scripts.verification import verify_security
+        
+        # Verify paths are in correct order
+        project_root = str(Path(__file__).parent.parent.parent)
+        if sys.path[0] != project_root:
+            print(f"Project root not first in sys.path: {sys.path[0]}")
+            return False
+            
+        # Verify venv path if exists
+        venv_path = os.getenv('VIRTUAL_ENV')
+        if venv_path:
+            site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
+            if site_packages not in sys.path:
+                print(f"Missing site-packages: {site_packages}")
+                return False
+                
         return True
     except ImportError as e:
         print(f"Path verification failed: {str(e)}")
+        print(f"Current sys.path: {sys.path}")
         return False
 
 if __name__ == "__main__":

@@ -16,10 +16,12 @@ def configure_logger():
 def verify_production_ready():
     """Verify production readiness with comprehensive checks"""
     try:
-        # Configure paths first
-        from scripts.path_config import configure_paths
+        # Configure and verify paths
+        from scripts.path_config import configure_paths, verify_path_config
         if not configure_paths():
             raise RuntimeError("Failed to configure paths")
+        if not verify_path_config():
+            raise RuntimeError("Path configuration verification failed")
             
         logger = configure_logger()
         
