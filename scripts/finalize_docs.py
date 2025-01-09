@@ -41,8 +41,33 @@ def configure_logger():
     return logger
 
 def update_release_notes():
-    """Update release notes with current version information"""
+    """Enhanced release notes with deployment details"""
     logger = configure_logger()
+    
+    try:
+        # Get version info
+        from scripts.version import get_version
+        version = get_version()
+        
+        # Get test coverage
+        from scripts.verification.verify_test_coverage import verify_coverage
+        coverage = verify_coverage(threshold=80)
+        
+        # Get deployment status
+        from scripts.verification.verify_deployment import verify_deployment
+        deployment_status = verify_deployment()
+        
+        # Update release notes
+        with open('RELEASE_NOTES.md', 'a') as f:
+            f.write(f"\n## Version {version} - {datetime.now().strftime('%Y-%m-%d')}\n")
+            f.write("- Fixed path configuration issues\n")
+            f.write("- Enhanced documentation generation\n")
+            f.write(f"- Test coverage: {coverage}%\n")
+            f.write(f"- Deployment status: {'Passed' if deployment_status else 'Failed'}\n")
+            f.write("- Added comprehensive review process\n")
+            
+        logger.info("Release notes updated successfully")
+        return True
     
     try:
         # Configure paths first

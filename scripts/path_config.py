@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 def configure_paths():
-    """Configure Python paths for the project"""
+    """Enhanced path configuration with proper error handling"""
     try:
         # Get project root (two levels up from this script)
         project_root = str(Path(__file__).parent.parent)
@@ -14,8 +14,26 @@ def configure_paths():
             str(Path(project_root) / 'app'),
             str(Path(project_root) / 'scripts'),
             str(Path(project_root) / 'tests'),
-            str(Path(__file__).parent)  # Add scripts directory itself
+            str(Path(__file__).parent),  # Add scripts directory itself
+            str(Path(project_root) / '.venv' / 'Lib' / 'site-packages')
         ]
+        
+        # Add paths to sys.path if not already present
+        for path in paths_to_add:
+            if path not in sys.path:
+                sys.path.insert(0, path)
+                print(f"Added to Python path: {path}")
+                
+        # Verify critical imports
+        try:
+            import app
+            import scripts
+            print("Successfully imported app and scripts modules")
+            return True
+        except ImportError as e:
+            print(f"Import verification failed: {str(e)}")
+            print(f"Current sys.path: {sys.path}")
+            return False
         
         # Add venv site-packages
         venv_path = os.getenv('VIRTUAL_ENV')
