@@ -4,17 +4,17 @@
 
 ### CODE START ###
 
-# Configure paths with enhanced error handling
-/run scripts/path_config.py --strict --verify
+# Configure paths with enhanced verification
+/run scripts/path_config.py --strict --verify --test
 
 # Initialize logging with production settings
-/run scripts/init_logging.py --production
+/run scripts/init_logging.py --production --verbose
 
 # Initialize database with enhanced schema validation
 /run scripts/startup/init_db.py --validate-schema --retry=5 --strict
 
 # Verify security settings with full audit and admin focus
-/run scripts/verification/verify_security.py --full-audit --admin-only --validate-keys
+/run scripts/verification/verify_security.py --full-audit --admin-only --validate-keys --htmx
 
 # Initialize admin user with strict password checks
 /run scripts/startup/init_admin.py --verify-email --strict-password
@@ -32,19 +32,19 @@
 /run scripts/verification/verify_htmx_integration.py --full --test-all-crud --admin-only
 
 # Verify backup integrity with retention policy
-/run scripts/verification/verify_backup.py --retention=7 --verify-integrity
+/run scripts/verification/verify_backup.py --retention=7 --verify-integrity --test-restore
 
 # Verify monitoring configuration with alert thresholds
-/run scripts/verification/verify_monitoring.py --production --alert-thresholds
+/run scripts/verification/verify_monitoring.py --production --alert-thresholds --detailed-metrics
 
 # Verify logging configuration
-/run scripts/verification/verify_logs.py --check-rotation --verify-archives
+/run scripts/verification/verify_logs.py --check-rotation --verify-archives --admin-actions
 
 # Verify production configuration
-/run scripts/verification/verify_config.py --production --validate-env
+/run scripts/verification/verify_config.py --production --validate-env --strict
 
 # Commit changes with verification summary
-/run scripts/commit_changes.py --message "Step 2 verification completed" --verify
+/run scripts/commit_changes.py --message "Step 2 verification completed" --verify --strict
 
 ### CODE END ###
 
