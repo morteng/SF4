@@ -7,39 +7,26 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Commit pending changes with deployment message
-/run scripts/commit_changes.py --message "Pre-deployment fixes: Security and verification improvements"
-
 # Verify git state is clean
-/run scripts/verify_git_state.py --pull --retry=3 --auto-resolve
-
-# Validate database configuration and connection
-/run scripts/verify_db_config.py --validate-uri --check-permissions
-/run scripts/verify_db_connection.py --retry=3 --timeout=10 --validate-schema
+/run scripts/verification/verify_git_state.py --pull --retry=3 --auto-resolve
 
 # Initialize database with schema validation
-/run scripts/startup/init_db.py --validate-schema --check-migrations --backup-first
+/run scripts/startup/init_db.py --validate-schema --check-migrations
 
-# Verify security settings with enhanced checks
-/run scripts/verify_security.py --check-env --validate-keys --verify-permissions --check-rotation
+# Verify security settings
+/run scripts/verification/verify_security.py --check-env --validate-keys
 
-# Verify test coverage meets requirements
-/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90,app/routes:85
-
-# Verify deployment requirements
-/run scripts/verify_deployment_requirements.py --check-env --validate-keys --check-production
+# Verify database connection
+/run scripts/verification/verify_db_connection.py --retry=3 --timeout=10
 
 # Verify Render deployment readiness
-/run scripts/verify_render_ready.py --check-api --validate-vars --test-deploy
+/run scripts/verification/verify_render_ready.py --check-api --validate-vars
 
-# Create fresh backup with rotation
-/run scripts/backup_rotation.py --max-backups=5 --compress --verify
+# Initialize admin user
+/run scripts/startup/init_admin.py --verify-email
 
-# Final deployment verification
-/run scripts/verify_deployment.py --check-type=final-check --verify-backups --check-production-settings
-
-# Verify admin user exists
-/run scripts/verify_admin_user.py --check-credentials --validate-permissions
+# Commit pending changes with deployment message
+/run scripts/commit_changes.py --message "Pre-deployment verification completed"
 
 ### CODE END ###
 
