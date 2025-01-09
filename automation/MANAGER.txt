@@ -13,7 +13,7 @@
 ---
 
 ### **Rules**
-- Maintain 80%+ test coverage
+- Maintain 85%+ test coverage
 - Document all changes thoroughly
 - Conduct weekly security reviews
 - Plan next development cycle
