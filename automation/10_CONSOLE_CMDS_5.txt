@@ -3,17 +3,17 @@
 
 ### CODE START ###
 
-# Final documentation updates
+# Verify production readiness
+/run scripts/verification/verify_production_ready.py --full --strict
+
+# Finalize documentation
 /run scripts/finalize_docs.py --version --validate --admin --final
 
-# Generate final deployment checklist
+# Generate deployment checklist
 /run scripts/generate_deployment_checklist.py --strict --validate --admin --final
 
 # Request final approval
 /run scripts/request_approval.py --detailed --verify --admin --final
-
-# Verify production readiness
-/run scripts/verification/verify_production_ready.py --full --strict
 
 # Commit final changes
 /run scripts/commit_changes.py --message "Final deployment updates" --verify --strict
