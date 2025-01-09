@@ -76,6 +76,11 @@ def setup_test_paths():
 def configure_test_environment(mode: str = 'test'):
     """Enhanced test environment setup with proper application context"""
     try:
+        # Configure logging first
+        from scripts.init_logging import configure_logging
+        configure_logging()
+        logger = logging.getLogger(__name__)
+        
         # Add project root to sys.path
         project_root = str(Path(__file__).parent.parent)
         if project_root not in sys.path:
@@ -86,8 +91,11 @@ def configure_test_environment(mode: str = 'test'):
             'FLASK_ENV': 'testing',
             'SQLALCHEMY_DATABASE_URI': 'sqlite:///:memory:',
             'TESTING': 'true',
-            'WTF_CSRF_ENABLED': 'False',  # Disable CSRF for testing
-            'SECRET_KEY': 'test-secret-key'  # Required for testing
+            'WTF_CSRF_ENABLED': 'False',
+            'SECRET_KEY': 'test-secret-key-1234567890',
+            'ADMIN_USERNAME': 'testadmin',
+            'ADMIN_EMAIL': 'admin@test.com',
+            'ADMIN_PASSWORD': 'TestPass123!'
         })
         
         # Create and configure test app
@@ -98,11 +106,21 @@ def configure_test_environment(mode: str = 'test'):
         app_context = app.app_context()
         app_context.push()
         
-        # Initialize test database
+        # Initialize test database with schema validation
         from scripts.startup.init_db import initialize_database
         if not initialize_database(validate_schema=True):
             raise RuntimeError("Failed to initialize test database")
             
+        # Verify core tables exist
+        from app import db
+        required_tables = ['stipend', 'tag', 'organization', 'user']
+        existing_tables = db.engine.table_names()
+        missing_tables = [table for table in required_tables if table not in existing_tables]
+        if missing_tables:
+            logger.error(f"Missing required tables: {', '.join(missing_tables)}")
+            return False
+            
+        logger.info("Test environment configured successfully")
         return True
         
         # Create and push application context

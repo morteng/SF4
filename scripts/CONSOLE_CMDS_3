@@ -2,39 +2,42 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize core systems with enhanced logging
+# Initialize core systems
 /run scripts/path_config.py
 /run scripts/init_logging.py --test
 
-# Fix security permissions with strict mode
+# Fix security permissions
 /run scripts/security/fix_security_permissions.py --strict --verify
 
-# Setup clean test environment with context
+# Setup test environment with context
 /run scripts/setup_test_env.py --clean --with-context --test-db --validate
 
-# Install test dependencies with verification
+# Install test dependencies
 /run scripts/install_test_dependencies.py --test --verify
 
-# Initialize test database with schema validation
+# Initialize test database
 /run scripts/startup/init_db.py --validate-schema --test --check-migrations
 
-# Run comprehensive test suites
+# Run core test suites
 /run scripts/testing/run_tests.py --unit --integration --security --coverage
 
-# Generate detailed coverage reports
+# Generate coverage reports
 /run scripts/generate_coverage_report.py --html --xml --verify
 
-# Verify test coverage meets requirements
+# Verify test coverage
 /run scripts/verification/verify_test_coverage.py --min-coverage=80 --critical-paths
 
-# Verify database connection with retries
+# Verify database connection
 /run scripts/verification/verify_db_connection.py --retry=5 --timeout=15 --validate
 
-# Verify Render readiness with full checks
-/run scripts/verification/verify_render_ready.py --check-api --validate-vars --verify-backup
+# Verify backup system
+/run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables
 
-# Verify admin user with enhanced validation
-/run scripts/startup/init_admin.py --verify-email --check-password --validate
+# Verify admin user
+/run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity
+
+# Commit test results
+/run scripts/commit_changes.py --message "Testing cycle completed with coverage verification"
 
 ### CODE END ###
 
