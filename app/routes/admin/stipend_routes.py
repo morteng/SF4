@@ -136,7 +136,6 @@ def create():
     """Handle stipend creation requests."""
     logger.debug("Processing stipend creation request")
     
-    # Verify admin status
     if not current_user.is_admin:
         logger.warning(f"Non-admin user {current_user.id} attempted to access stipend creation")
         abort(403)
@@ -153,21 +152,14 @@ def create():
             return render_template('admin/stipends/create.html', form=form)
             
         try:
-            # Verify CSRF token
-            if not form.csrf_token.validate(form):
-                logger.warning("Invalid CSRF token in stipend creation")
-                flash(FlashMessages.INVALID_CSRF.value, 'error')
-                return render_template('admin/stipends/create.html', form=form)
-                
-            form_data = request.form.to_dict()
-            # Process form data
-            stipend = Stipend.create(form_data, current_user.id)
-            db.session.commit()
+            # Use the service layer instead of direct database operations
+            form_data = stipend_controller._prepare_create_data(form)
+            stipend = stipend_controller.service.create(form_data, current_user.id)
+            
             flash(FlashMessages.CREATE_SUCCESS.value, 'success')
             return redirect(url_for('admin.admin_stipend.index'))
         except Exception as e:
-            db.session.rollback()
-            logger.error(f"Database error creating stipend: {str(e)}")
+            logger.error(f"Error creating stipend: {str(e)}")
             flash(FlashMessages.CREATE_ERROR.value, 'error')
             return render_template('admin/stipends/create.html', form=form)
     
