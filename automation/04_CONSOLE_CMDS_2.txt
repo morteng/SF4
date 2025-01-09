@@ -7,29 +7,29 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Verify git state with conflict resolution
-/run scripts/verification/verify_git_state.py --pull --retry=3 --auto-resolve
+# Initialize database with schema validation and retry logic
+/run scripts/startup/init_db.py --validate-schema --retry=5 --timeout=15 --verify-tables
 
-# Initialize database with schema validation
-/run scripts/startup/init_db.py --validate-schema --check-migrations --verify-tables
+# Configure test environment with proper imports
+/run scripts/setup_test_env.py --mode=test --verify-imports --check-paths
 
 # Verify security settings with production checks
-/run scripts/verification/verify_security.py --check-env --validate-keys --verify-permissions --check-production
+/run scripts/verification/verify_security.py --check-env --validate-keys --verify-permissions --check-production --disable-debug
+
+# Initialize admin user with enhanced validation
+/run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity
 
 # Verify database connection with retry logic
 /run scripts/verification/verify_db_connection.py --retry=5 --timeout=15 --verify-schema
 
 # Verify test coverage meets requirements
-/run scripts/verification/verify_test_coverage.py --threshold=80 --critical-modules
+/run scripts/verification/verify_test_coverage.py --threshold=80 --critical-modules --verify-imports
 
 # Verify backup integrity with schema validation
-/run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables
+/run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables --retry=3
 
 # Verify Render deployment readiness
 /run scripts/verification/verify_render_ready.py --check-api --validate-vars --verify-backup
-
-# Initialize admin user with enhanced validation
-/run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity
 
 # Commit changes with verification summary
 /run scripts/commit_changes.py --message "Step 2 verification and validation completed"
