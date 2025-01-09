@@ -2464,3 +2464,12 @@ M  logs/version_management.log
 2025-01-09 18:20:54,047 - ERROR - Missing required table: stipend
 2025-01-09 18:20:54,047 - ERROR - Failed to configure test environment: Failed to initialize test database
 2025-01-09 18:20:54,047 - INFO - Test environment configured successfully
+2025-01-09 18:21:05,131 - INFO - Successfully committed changes: Pre-commit before release notes update
+2025-01-09 18:21:05,180 - INFO - Git status:
+## main...origin/main [ahead 172]
+ M RELEASE_NOTES.md
+
+2025-01-09 18:21:05,180 - ERROR - Uncommitted changes detected
+2025-01-09 18:21:05,181 - INFO - Please commit or stash changes before proceeding
+2025-01-09 18:21:05,181 - ERROR - Cannot update docs with uncommitted changes
+2025-01-09 18:21:05,181 - ERROR - Documentation finalization failed
