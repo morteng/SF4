@@ -14,8 +14,12 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_htmx_crud(base_url):
-    """Verify CRUD operations through HTMX interface"""
+def verify_htmx_crud(base_url, test_all_crud=False):
+    """Verify CRUD operations through HTMX interface
+    Args:
+        base_url (str): Base URL of application
+        test_all_crud (bool): Whether to test all CRUD operations
+    """
     logger = configure_logger()
     
     try:
@@ -62,9 +66,17 @@ def verify_htmx_crud(base_url):
 
 if __name__ == "__main__":
     import os
+    import argparse
     logging.basicConfig(level=logging.INFO)
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--full', action='store_true', help='Run full verification')
+    parser.add_argument('--test-all-crud', action='store_true', 
+                       help='Test all CRUD operations across entities')
+    args = parser.parse_args()
+    
     base_url = os.getenv('BASE_URL', 'http://localhost:5000')
-    if verify_htmx_crud(base_url):
+    if verify_htmx_crud(base_url, args.test_all_crud):
         print("HTMX integration verification passed")
         exit(0)
     else:
