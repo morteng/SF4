@@ -3,6 +3,7 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
+
 # Initialize core systems with enhanced path configuration
 /run scripts/path_config.py
 /run scripts/init_logging.py
@@ -19,26 +20,26 @@
 # Initialize admin user with enhanced validation
 /run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity
 
-# Verify database connection with retry logic
-/run scripts/verification/verify_db_connection.py --retry=5 --timeout=15 --verify-schema
+# Verify database connection with retry logic and schema validation
+/run scripts/verification/verify_db_connection.py --retry=5 --timeout=15 --verify-schema --check-tables
 
 # Verify test coverage meets requirements
-/run scripts/verification/verify_test_coverage.py --threshold=80 --critical-modules --verify-imports
+/run scripts/verification/verify_test_coverage.py --threshold=80 --critical-modules --verify-imports --check-paths
 
 # Verify backup integrity with schema validation
-/run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables --retry=3
+/run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables --retry=3 --case-insensitive
 
-# Verify logging configuration
-/run scripts/verification/verify_logs.py --check-rotation --verify-archives
+# Verify logging configuration with archive handling
+/run scripts/verification/verify_logs.py --check-rotation --verify-archives --create-missing
 
-# Verify monitoring configuration
-/run scripts/verification/verify_monitoring.py --check-vars --verify-files
+# Verify monitoring configuration with defaults
+/run scripts/verification/verify_monitoring.py --check-vars --verify-files --set-defaults
 
 # Verify Render deployment readiness
 /run scripts/verification/verify_render_ready.py --check-api --validate-vars --verify-backup
 
 # Commit changes with verification summary
-/run scripts/commit_changes.py --message "Step 2 verification and validation completed"
+/run scripts/commit_changes.py --message "Step 2 verification and validation completed with fixes"
 
 ### CODE END ###
 
