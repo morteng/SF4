@@ -7,8 +7,33 @@ from sqlalchemy import inspect
 
 logger = logging.getLogger(__name__)
 
-def validate_schema():
-    """Validate database schema against expected structure"""
+def verify_foreign_keys():
+    """Verify foreign key relationships in the database"""
+    try:
+        from app import db
+        inspector = inspect(db.engine)
+        
+        # Verify foreign key constraints
+        for table in inspector.get_table_names():
+            fks = inspector.get_foreign_keys(table)
+            if not fks:
+                continue
+                
+            for fk in fks:
+                if not fk.get('constrained_columns'):
+                    logger.error(f"Invalid foreign key in {table}")
+                    return False
+                    
+        return True
+    except Exception as e:
+        logger.error(f"Foreign key verification failed: {str(e)}")
+        return False
+
+def validate_schema(validate_relations=False):
+    """Validate database schema against expected structure
+    Args:
+        validate_relations (bool): Whether to validate foreign key relationships
+    """
     try:
         # Configure paths first
         from scripts.path_config import configure_paths
