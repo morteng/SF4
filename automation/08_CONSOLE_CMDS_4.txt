@@ -3,36 +3,47 @@
 
 ### CODE START ###
 
-# Configure paths and logging
-/run scripts/path_config.py
-/run scripts/init_logging.py
+# Configure paths with strict verification
+/run scripts/path_config.py --strict --verify
 
-# Verify security settings
-/run scripts/verification/verify_security.py
+# Initialize logging with production settings
+/run scripts/init_logging.py --production
 
-# Verify database connection
-/run scripts/verification/verify_db_connection.py
+# Verify security with full audit
+/run scripts/verification/verify_security.py --full-audit --validate-keys
 
-# Verify backup integrity
-/run scripts/verification/verify_backup.py
+# Verify database connection with retry
+/run scripts/verification/verify_db_connection.py --retry=5 --strict
+
+# Verify database schema integrity
+/run scripts/verification/verify_db_schema.py --strict --verify-relations
+
+# Verify backup integrity with retention
+/run scripts/verification/verify_backup.py --retention=7 --verify-size
 
 # Verify monitoring configuration
-/run scripts/verification/verify_monitoring.py
+/run scripts/verification/verify_monitoring.py --production --verify-alerts
 
-# Finalize documentation
-/run scripts/finalize_docs.py
+# Verify test coverage with critical paths
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
+
+# Verify logging configuration
+/run scripts/verification/verify_logs.py --check-rotation --verify-archives
+
+# Finalize documentation with version info
+/run scripts/finalize_docs.py --version
 
 # Generate deployment checklist
-/run scripts/generate_deployment_checklist.py
+/run scripts/generate_deployment_checklist.py --strict
 
-# Request final approval
-/run scripts/request_approval.py
+# Request final approval with detailed report
+/run scripts/request_approval.py --detailed
 
 # Verify production readiness
-/run scripts/verification/verify_production_ready.py
+/run scripts/verification/verify_production_ready.py --full
 
-# Commit final changes
-/run scripts/commit_changes.py --message "Final review completed"
+# Commit final changes with verification
+/run scripts/commit_changes.py --message "Final review completed" --verify
 
 ### CODE END ###
 
