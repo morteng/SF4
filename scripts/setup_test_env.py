@@ -59,7 +59,8 @@ def setup_test_paths():
             if venv_path not in sys.path:
                 sys.path.insert(0, venv_path)
                 
-            from app import db
+            # Verify critical imports
+            import app
             from app.models import User
             from scripts.version import validate_version
             return True

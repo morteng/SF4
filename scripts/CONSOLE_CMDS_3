@@ -31,6 +31,9 @@
 # Verify test cleanup
 /run scripts/verify_test_cleanup.py --strict --validate --reset
 
+# Verify admin user exists
+/run scripts/verify_admin_user.py --check-credentials --validate-permissions
+
 # Final verification
 /run scripts/verify_tests.py --final --validate-all --critical
 /run scripts/verify_deployment.py --test --check-security --verify-backups

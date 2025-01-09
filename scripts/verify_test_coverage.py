@@ -29,12 +29,18 @@ def verify_coverage(threshold=80):
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
             
+        # Add app directory explicitly
+        app_dir = str(Path(project_root) / 'app')
+        if app_dir not in sys.path:
+            sys.path.insert(0, app_dir)
+            
         # Verify imports
         try:
             import app
             import tests
         except ImportError as e:
             logger.error(f"Import error: {str(e)}")
+            logger.error(f"Current sys.path: {sys.path}")
             return False
         
         # Run coverage report with detailed output
