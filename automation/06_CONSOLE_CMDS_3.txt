@@ -2,6 +2,7 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
+
 # Initialize core systems with enhanced path configuration
 /run scripts/path_config.py
 /run scripts/init_logging.py --test
@@ -18,35 +19,35 @@
 # Fix security permissions with strict mode
 /run scripts/security/fix_security_permissions.py --strict --verify
 
-# Run core test suites with coverage
+# Run comprehensive test suites
 /run scripts/testing/run_tests.py --unit --integration --security --coverage
 
-# Generate coverage reports with verification
+# Generate detailed coverage reports
 /run scripts/generate_coverage_report.py --html --xml --verify
 
 # Verify test coverage meets requirements
-/run scripts/verification/verify_test_coverage.py --min-coverage=80 --critical-paths
+/run scripts/verification/verify_test_coverage.py --min-coverage=80 --critical-paths --check-paths
 
-# Verify database connection with retries
-/run scripts/verification/verify_db_connection.py --retry=5 --timeout=15 --validate
+# Verify database connection and schema
+/run scripts/verification/verify_db_connection.py --retry=5 --timeout=15 --validate --check-tables
 
 # Verify backup system integrity
-/run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables
+/run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables --case-insensitive
 
 # Verify logging configuration
-/run scripts/verification/verify_logs.py --check-rotation --verify-archives
+/run scripts/verification/verify_logs.py --check-rotation --verify-archives --create-missing
 
 # Verify monitoring configuration
-/run scripts/verification/verify_monitoring.py --check-vars --verify-files
+/run scripts/verification/verify_monitoring.py --check-vars --verify-files --set-defaults
 
 # Initialize admin user with enhanced validation
 /run scripts/startup/init_admin.py --verify-email --check-password --validate-complexity
 
 # Verify security settings
-/run scripts/verification/verify_security.py --check-env --validate-keys --verify-permissions
+/run scripts/verification/verify_security.py --check-env --validate-keys --verify-permissions --check-production
 
 # Commit test results with verification summary
-/run scripts/commit_changes.py --message "Testing cycle completed with coverage verification"
+/run scripts/commit_changes.py --message "Testing cycle completed with coverage verification and fixes"
 
 ### CODE END ###
 
