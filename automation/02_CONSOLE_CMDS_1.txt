@@ -4,14 +4,20 @@
 
 ### CODE START ###
 
-# Verify database connection and schema
+# Verify database connection and schema integrity
 /run python scripts/verification/verify_db_connection.py
 
-# Verify security settings and permissions
+# Verify security settings meet production requirements
 /run python scripts/verification/verify_security.py
 
-# Verify test coverage meets requirements
+# Verify test coverage meets 80%+ target
 /run python scripts/verification/verify_test_coverage.py
+
+# Verify backup system functionality
+/run python scripts/verification/verify_backup.py
+
+# Verify log archiving and rotation
+/run python scripts/verification/verify_logs.py
 
 ### CODE END ###
 
