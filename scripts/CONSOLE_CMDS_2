@@ -38,6 +38,9 @@
 # Final deployment verification
 /run scripts/verify_deployment.py --check-type=final-check --verify-backups --check-production-settings
 
+# Verify admin user exists
+/run scripts/verify_admin_user.py --check-credentials --validate-permissions
+
 ### CODE END ###
 
 # Proceed to Step 3 - Review

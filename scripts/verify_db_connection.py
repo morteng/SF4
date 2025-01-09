@@ -38,6 +38,8 @@ def verify_db_connection():
     logger = configure_logger()
     
     max_retries = 3
+    base_delay = 1  # seconds
+    
     for attempt in range(max_retries):
         try:
             db_uri = os.getenv('SQLALCHEMY_DATABASE_URI')
@@ -48,6 +50,11 @@ def verify_db_connection():
             # Log database type for debugging
             if db_uri.startswith('sqlite'):
                 logger.info("Using SQLite database")
+                # Verify SQLite file exists
+                db_path = db_uri.replace('sqlite:///', '')
+                if not Path(db_path).exists():
+                    logger.error(f"SQLite database file not found: {db_path}")
+                    return False
             elif db_uri.startswith('postgresql'):
                 logger.info("Using PostgreSQL database")
             else:
@@ -56,6 +63,15 @@ def verify_db_connection():
             # Create engine and test connection
             engine = create_engine(db_uri)
             with engine.connect() as connection:
+                # Verify schema version
+                if db_uri.startswith('sqlite'):
+                    result = connection.execute("PRAGMA schema_version;")
+                    schema_version = result.scalar()
+                    if schema_version == 0:
+                        logger.error("Database schema not initialized")
+                        return False
+                    logger.info(f"Database schema version: {schema_version}")
+                
                 logger.info("Successfully connected to database")
                 return True
             
@@ -63,12 +79,14 @@ def verify_db_connection():
             if attempt == max_retries - 1:
                 logger.error(f"Database connection failed after {max_retries} attempts: {str(e)}")
                 return False
-            time.sleep(1)  # Wait before retrying
+            delay = base_delay * (2 ** attempt)  # Exponential backoff
+            time.sleep(delay)
         except Exception as e:
             if attempt == max_retries - 1:
                 logger.error(f"Unexpected error verifying database connection: {str(e)}")
                 return False
-            time.sleep(1)  # Wait before retrying
+            delay = base_delay * (2 ** attempt)  # Exponential backoff
+            time.sleep(delay)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
