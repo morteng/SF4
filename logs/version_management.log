@@ -2536,3 +2536,4 @@ M  logs/version_management.log
 2025-01-09 19:19:33,033 - INFO - Please commit or stash changes before proceeding
 2025-01-09 19:19:33,034 - ERROR - Cannot update docs with uncommitted changes
 2025-01-09 19:19:33,034 - ERROR - Documentation finalization failed
+2025-01-09 19:36:43,357 - ERROR - Path configuration failed
