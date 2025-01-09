@@ -1,5 +1,7 @@
 import pytest
 from app.models.user import User
+from datetime import datetime
+from datetime import timezone
 
 def test_user_creation(db_session):
     """Test basic user creation"""
