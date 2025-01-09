@@ -22,7 +22,9 @@ def verify_monitoring_setup():
         required_vars = [
             'MONITORING_ENABLED',
             'METRICS_ENDPOINT',
-            'ALERTING_ENABLED'
+            'ALERTING_ENABLED',
+            'MONITORING_INTERVAL',
+            'ALERT_THRESHOLDS'
         ]
         
         missing_vars = [var for var in required_vars if not os.getenv(var)]

@@ -18,10 +18,14 @@ def verify_security_settings():
     logger = configure_logger()
     
     try:
-        # Verify SECRET_KEY
+        # Verify SECRET_KEY with stronger requirements
         secret_key = os.getenv('SECRET_KEY')
         if not secret_key or len(secret_key) < 64:
             logger.error("SECRET_KEY must be at least 64 characters")
+            return False
+        # Check for sufficient entropy
+        if len(set(secret_key)) < 32:
+            logger.error("SECRET_KEY must contain at least 32 unique characters")
             return False
             
         # Check password complexity

@@ -4,22 +4,22 @@
 
 ### CODE START ###
 
-# Verify production environment settings
+# Verify security settings meet production requirements
 /run python scripts/verification/verify_security.py
 
-# Verify database integrity and schema
+# Validate database connection and schema integrity
 /run python scripts/verification/verify_db_connection.py
 
-# Verify backup and restore functionality
+# Check backup system functionality
 /run python scripts/verification/verify_backup.py
 
-# Verify logging and monitoring setup
+# Verify logging configuration and archive integrity
 /run python scripts/verification/verify_logs.py
 
-# Verify monitoring configuration
+# Ensure monitoring is properly configured
 /run python scripts/verification/verify_monitoring.py
 
-# Verify test coverage meets production standards
+# Confirm test coverage meets 80% target
 /run python scripts/verification/verify_test_coverage.py
 
 ### CODE END ###
