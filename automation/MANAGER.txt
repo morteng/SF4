@@ -1,6 +1,6 @@
 ### Info from management
 
-NEW COMMAND FROM CEO: We need a real "run app and get approval, see that it actually works as intended" step in the code cycle. When you are ready, add /run flask run as a console command, and Management will review the running app and give feedback.
+NEW COMMAND FROM CEO: We need a real "run app and get approval, see that it actually works as intended" step in the code cycle. When you are ready, add "/run flask run" or the appropriate run app command as a console command, and Management will review the running app and give feedback. We doo this and get appropriate feed back BEFORE we deploy to render.com.
 
 1. **Production Monitoring:**
    - Monitor system performance metrics
