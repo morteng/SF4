@@ -18,6 +18,9 @@
 /run python scripts/verification/verify_backup.py
 /run python scripts/verification/verify_monitoring.py
 
+# Verify configuration settings
+/run python scripts/verification/verify_config.py
+
 ### CODE END ###
 
 # Console commands done, we go on to 03_STEP_2.txt
