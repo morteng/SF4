@@ -4,41 +4,41 @@
 
 ### CODE START ###
 
-# Configure paths with enhanced verification
+# Configure paths with strict verification
 /run scripts/path_config.py --strict --verify --test
 
 # Initialize logging with production settings
 /run scripts/init_logging.py --production --verbose
 
 # Initialize database with enhanced schema validation
-/run scripts/startup/init_db.py --validate-schema --retry=5 --strict
+/run scripts/startup/init_db.py --validate-schema --retry=5 --strict --admin
 
-# Verify security settings with full audit and admin focus
-/run scripts/verification/verify_security.py --full-audit --admin-only --validate-keys --htmx
+# Verify security settings with full audit
+/run scripts/verification/verify_security.py --full-audit --admin-only --validate-keys --check-htmx-security
 
-# Initialize admin user with strict password checks
+# Initialize admin user with strict checks
 /run scripts/startup/init_admin.py --verify-email --strict-password
 
-# Verify database connection with retry logic
-/run scripts/verification/verify_db_connection.py --retry=5 --timeout=30 --strict
+# Verify database connection with admin credentials
+/run scripts/verification/verify_db_connection.py --retry=5 --timeout=30 --strict --admin
 
-# Verify database schema integrity with relation validation
-/run scripts/verification/verify_db_schema.py --strict --admin-tables --verify-relations
+# Verify database schema with HTMX endpoints
+/run scripts/verification/verify_db_schema.py --strict --admin-tables --verify-relations --check-htmx-endpoints
 
-# Verify test coverage with admin focus
-/run scripts/verification/verify_test_coverage.py --threshold=85 --admin-only --critical-paths
+# Verify test coverage with HTMX checks
+/run scripts/verification/verify_test_coverage.py --threshold=85 --admin-only --critical-paths --htmx-coverage
 
-# Verify HTMX integration for admin CRUD operations
-/run scripts/verification/verify_htmx_integration.py --full --test-all-crud --admin-only
+# Verify HTMX integration with partial updates
+/run scripts/verification/verify_htmx_integration.py --full --test-all-crud --admin-only --validate-partial-updates
 
-# Verify backup integrity with retention policy
-/run scripts/verification/verify_backup.py --retention=7 --verify-integrity --test-restore
+# Verify backup integrity
+/run scripts/verification/verify_backup.py --retention=7 --verify-integrity
 
-# Verify monitoring configuration with alert thresholds
-/run scripts/verification/verify_monitoring.py --production --alert-thresholds --detailed-metrics
+# Verify monitoring configuration
+/run scripts/verification/verify_monitoring.py --production --alert-thresholds
 
 # Verify logging configuration
-/run scripts/verification/verify_logs.py --check-rotation --verify-archives --admin-actions
+/run scripts/verification/verify_logs.py --check-rotation --verify-archives
 
 # Verify production configuration
 /run scripts/verification/verify_config.py --production --validate-env --strict
