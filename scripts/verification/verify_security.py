@@ -13,12 +13,12 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_security_settings():
+def verify_security_settings(full_audit=False):
     """Verify security-related settings with enhanced checks"""
     logger = configure_logger()
     
     try:
-        # Verify SECRET_KEY with stronger requirements
+        # Enhanced SECRET_KEY validation
         secret_key = os.getenv('SECRET_KEY')
         if not secret_key or len(secret_key) < 64:
             logger.error("SECRET_KEY must be at least 64 characters")

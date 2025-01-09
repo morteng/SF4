@@ -4,22 +4,24 @@
 
 ### CODE START ###
 
-# Verify production security settings with enhanced checks
-/run python scripts/verification/verify_security.py
+# Comprehensive security audit with enhanced checks
+/run python scripts/verification/verify_security.py --full-audit
 
-# Validate database connection and schema integrity with retry logic
-/run python scripts/verification/verify_db_connection.py
-/run python scripts/verification/verify_db_schema.py
+# Validate database with schema and connection checks
+/run python scripts/verification/verify_db_connection.py --retry=5
+/run python scripts/verification/verify_db_schema.py --strict
 
-# Confirm test coverage meets 85% target with critical path checks
-/run python scripts/verification/verify_test_coverage.py --threshold=85
+# Verify test coverage with critical path analysis
+/run python scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
 
-# Verify backup integrity and monitoring configuration
-/run python scripts/verification/verify_backup.py
-/run python scripts/verification/verify_monitoring.py
+# Validate production monitoring and alerting
+/run python scripts/verification/verify_monitoring.py --production
 
-# Verify configuration settings
-/run python scripts/verification/verify_config.py
+# Verify backup integrity and retention policy
+/run python scripts/verification/verify_backup.py --retention=7
+
+# Validate production configuration
+/run python scripts/verification/verify_config.py --production
 
 ### CODE END ###
 

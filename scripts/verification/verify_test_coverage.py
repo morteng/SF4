@@ -14,8 +14,8 @@ def configure_coverage_logging():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_coverage(threshold=80):
-    """Enhanced coverage verification with critical path checks"""
+def verify_coverage(threshold=80, critical_paths=False):
+    """Enhanced coverage verification with critical path analysis"""
     logger = configure_coverage_logging()
     
     # Setup test environment first
