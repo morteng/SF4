@@ -24,9 +24,12 @@ def initialize_database(validate_schema=False):
             db_path.parent.mkdir(exist_ok=True, parents=True)
             db_path.touch(mode=0o600)  # Set secure permissions
             
-        # Create required tables if they don't exist
-        from app.models import Stipend, Tag, Organization, User
-        db.create_all()
+        # Create required tables with application context
+        from app import create_app
+        app = create_app()
+        with app.app_context():
+            from app.models import Stipend, Tag, Organization, User
+            db.create_all()
         
         # Verify required tables exist
         required_tables = ['stipend', 'tag', 'organization', 'user']

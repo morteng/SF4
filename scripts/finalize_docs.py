@@ -51,9 +51,13 @@ def update_release_notes():
             logger.error("Path configuration failed")
             return False
             
-        # Force commit any changes
+        # Commit any pending changes first
         from scripts.commit_changes import commit_changes
-        commit_changes("Preparing release notes update")
+        commit_changes("Pre-commit before release notes update")
+        
+        # Get version info
+        from scripts.version import get_version
+        version = get_version()
         
         # Get version info
         from scripts.version import get_version

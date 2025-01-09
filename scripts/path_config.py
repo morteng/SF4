@@ -14,6 +14,21 @@ def configure_paths():
             site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
             if site_packages not in sys.path:
                 sys.path.insert(0, site_packages)
+        
+        # Add project directories in correct order
+        paths_to_add = [
+            project_root,
+            str(Path(project_root) / 'app'),
+            str(Path(project_root) / 'scripts'),
+            str(Path(project_root) / 'tests'),
+            str(Path(__file__).parent)
+        ]
+        
+        # Add paths to sys.path if not already present
+        for path in paths_to_add:
+            if path not in sys.path:
+                sys.path.insert(0, path)
+                print(f"Added to Python path: {path}")
                 
         # Add project directories
         paths_to_add = [
