@@ -156,12 +156,12 @@ def create():
     """Handle stipend creation requests."""
     logger.debug("Processing stipend creation request")
     
-    if not current_user.is_admin:
-        logger.warning(f"Non-admin user {current_user.id} attempted to access stipend creation")
-        abort(403)
-    
     form = StipendForm(request.form)
     logger.debug("Stipend form initialized successfully")
+    
+    # Pre-populate organization choices
+    from app.models.organization import Organization
+    form.organization_id.choices = [(org.id, org.name) for org in Organization.query.all()]
     
     if request.method == 'POST':
         if not form.validate():

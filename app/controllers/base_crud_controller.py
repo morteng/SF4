@@ -45,6 +45,12 @@ class BaseCrudController:
         if success:
             headers['HX-Redirect'] = url_for(f'admin.{self.entity_name}.index')
             
+        # Add flash messages for HTMX responses
+        if success:
+            headers['HX-Trigger'] = 'showSuccessMessage'
+        else:
+            headers['HX-Trigger'] = 'showErrorMessage'
+            
         return render_template(template, **(context or {})), status, headers
 
     def _handle_operation(self, operation, success_message, error_message, 
