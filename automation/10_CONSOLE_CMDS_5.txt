@@ -2,7 +2,7 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
-# Initialize core systems with enhanced logging
+# Initialize core systems with enhanced path configuration
 /run scripts/path_config.py --verify
 /run scripts/init_logging.py --test
 
