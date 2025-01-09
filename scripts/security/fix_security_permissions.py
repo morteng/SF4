@@ -25,6 +25,26 @@ def fix_permissions():
             if not path.exists():
                 logger.warning(f"File not found: {file}")
                 continue
+                
+            # Remove existing permissions first
+            path.chmod(0o777)
+            # Set new permissions
+            path.chmod(target_mode)
+            # Verify
+            actual_mode = path.stat().st_mode & 0o777
+            if actual_mode != target_mode:
+                logger.error(f"Failed to set permissions for {file}: {oct(actual_mode)} (expected {oct(target_mode)})")
+                return False
+            logger.info(f"Fixed permissions for {file}: {oct(target_mode)}")
+                
+        return True
+
+        # Ensure files exist before setting permissions
+        for file, target_mode in sensitive_files.items():
+            path = Path(file)
+            if not path.exists():
+                logger.warning(f"File not found: {file}")
+                continue
         
         # Set secure permissions
         for file, target_mode in sensitive_files.items():

@@ -24,6 +24,20 @@ def initialize_database(validate_schema=False):
             db_path.parent.mkdir(exist_ok=True, parents=True)
             db_path.touch(mode=0o600)  # Set secure permissions
             
+        # Create required tables if they don't exist
+        from app.models import Stipend, Tag, Organization, User
+        db.create_all()
+        
+        # Verify required tables exist
+        required_tables = ['stipend', 'tag', 'organization', 'user']
+        inspector = db.inspect(db.engine)
+        existing_tables = inspector.get_table_names()
+        
+        for table in required_tables:
+            if table not in existing_tables:
+                logger.error(f"Missing required table: {table}")
+                return False
+            
         # Run Alembic migrations
         alembic_cfg = Config("migrations/alembic.ini")
         command.upgrade(alembic_cfg, 'head')

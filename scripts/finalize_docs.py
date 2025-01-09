@@ -51,6 +51,22 @@ def update_release_notes():
             logger.error("Path configuration failed")
             return False
             
+        # Force commit any changes
+        from scripts.commit_changes import commit_changes
+        commit_changes("Preparing release notes update")
+        
+        # Get version info
+        from scripts.version import get_version
+        version = get_version()
+        
+        # Update release notes
+        with open('RELEASE_NOTES.md', 'a') as f:
+            f.write(f"\n## Version {version} - {datetime.now().strftime('%Y-%m-%d')}\n")
+            f.write("- Fixed security permission issues\n")
+            f.write("- Resolved database initialization problems\n")
+            f.write("- Improved path configuration\n")
+            f.write("- Enhanced documentation generation\n")
+            
         # Verify git state
         from scripts.verification.verify_git_state import verify_git_state
         if not verify_git_state():
