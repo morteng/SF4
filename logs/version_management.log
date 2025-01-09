@@ -445,3 +445,9 @@ MM logs/version_management.log
 2025-01-09 01:08:02,898 - ERROR - Uncommitted changes detected
 2025-01-09 01:08:02,898 - INFO - Please commit or stash changes before proceeding
 2025-01-09 01:08:02,898 - ERROR - Cannot deploy with uncommitted changes
+2025-01-09 01:10:40,622 - INFO - Git status:
+## main...origin/main [ahead 45]
+
+2025-01-09 01:10:40,622 - ERROR - Uncommitted changes detected
+2025-01-09 01:10:40,622 - INFO - Please commit or stash changes before proceeding
+2025-01-09 01:10:40,622 - ERROR - Cannot deploy with uncommitted changes
