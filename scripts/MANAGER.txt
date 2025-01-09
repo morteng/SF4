@@ -1,5 +1,10 @@
 ### **Current Priorities**
 
+**cleanup day**
+Before we work on the rest of this, we need to structure all the scripts in scripts folder better. move them into appropriate subfolders using windows commands.
+
+Afterwords, make sure all tests are working properly
+
 1. **Final Deployment Preparation:**
    - Configure Render environment variables
    - Verify strict security permissions

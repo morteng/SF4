@@ -32,5 +32,5 @@
 
 ### CODE END ###
 
-# Reset and return to Step 1
-/load scripts/STEP_1
+# Go to cleanup step, important! 
+/load scripts/FINAL_CLEANUP

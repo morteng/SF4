@@ -256,7 +256,7 @@ def index():
     except Exception as e:
         logger.error(f"Error loading stipend index: {str(e)}")
         flash('Error loading stipends', 'error')
-        return redirect(url_for('admin.index'))
+        return redirect(url_for('admin.dashboard.dashboard'))
 
 
 @admin_stipend_bp.route('/paginate', methods=['GET'])
