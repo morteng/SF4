@@ -18,6 +18,21 @@ def request_approval():
     """Request deployment approval from management"""
     logger = configure_logger()
     
+    # Configure paths first
+    from scripts.path_config import configure_paths
+    if not configure_paths():
+        logger.error("Path configuration failed")
+        return False
+        
+    # Setup test environment
+    from scripts.setup_test_env import setup_test_paths, configure_test_environment
+    if not setup_test_paths():
+        logger.error("Failed to setup test paths")
+        return False
+    if not configure_test_environment():
+        logger.error("Failed to configure test environment")
+        return False
+    
     try:
         # Verify deployment requirements first
         from scripts.verify_deployment import verify_deployment

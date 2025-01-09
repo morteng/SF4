@@ -234,6 +234,12 @@ def update_release_notes():
 def update_version_history():
     """Update version history file"""
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            logger.error("Path configuration failed")
+            return False
+            
         # Get current version
         from scripts.version import get_version
         version = get_version()
