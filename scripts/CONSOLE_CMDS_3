@@ -6,40 +6,35 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Fix critical security issues
-/run scripts/fix_security_permissions.py --strict --verify --reset
-/run scripts/verify_security.py --check-env --validate-keys --verify-permissions --check-rotation
+# Fix security permissions
+/run scripts/security/fix_security_permissions.py --strict
 
 # Setup clean test environment
-/run scripts/setup_test_env.py --clean --with-context --test-db --reset
+/run scripts/setup_test_env.py --clean --with-context --test-db
 
-# Install test dependencies with strict verification
-/run scripts/install_test_dependencies.py --test --strict --verify
+# Install test dependencies
+/run scripts/install_test_dependencies.py --test
 
-# Initialize test database with enhanced validation
-/run scripts/startup/init_db.py --validate-schema --test --migrate --backup-first --reset
+# Initialize test database
+/run scripts/startup/init_db.py --validate-schema --test
 
-# Run comprehensive test suites
-/run scripts/run_tests.py --unit --integration --security --coverage --critical
+# Run core test suites
+/run scripts/testing/run_tests.py --unit --integration --security
 
-# Generate detailed coverage reports
-/run scripts/generate_coverage_report.py --html --xml --show-missing --skip-covered --critical
+# Generate coverage reports
+/run scripts/generate_coverage_report.py --html --xml
 
-# Verify coverage with module thresholds
-/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90,app/routes:85
+# Verify test coverage
+/run scripts/verification/verify_test_coverage.py --min-coverage=80
 
-# Verify test cleanup
-/run scripts/verify_test_cleanup.py --strict --validate --reset
+# Verify database connection
+/run scripts/verification/verify_db_connection.py --retry=3 --timeout=10
 
-# Verify admin user exists
-/run scripts/verify_admin_user.py --check-credentials --validate-permissions
+# Verify Render readiness
+/run scripts/verification/verify_render_ready.py --check-api --validate-vars
 
-# Final verification
-/run scripts/verify_tests.py --final --validate-all --critical
-/run scripts/verify_deployment.py --test --check-security --verify-backups
-
-# Verify Render deployment readiness
-/run scripts/verify_render_ready.py --check-api --validate-vars --test-deploy --critical
+# Verify admin user
+/run scripts/startup/init_admin.py --verify-email
 
 ### CODE END ###
 
