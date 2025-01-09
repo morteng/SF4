@@ -21,13 +21,13 @@
 /run scripts/startup/init_db.py --validate-schema --check-migrations --backup-first
 
 # Verify security settings with enhanced checks
-/run scripts/verify_security.py --check-env --validate-keys --verify-permissions
+/run scripts/verify_security.py --check-env --validate-keys --verify-permissions --check-rotation
 
 # Verify test coverage meets requirements
-/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90
+/run scripts/verify_test_coverage.py --min-coverage=80 --critical-modules=app/models:90,app/services:90,app/routes:85
 
 # Verify deployment requirements
-/run scripts/verify_deployment_requirements.py --check-env --validate-keys
+/run scripts/verify_deployment_requirements.py --check-env --validate-keys --check-production
 
 # Verify Render deployment readiness
 /run scripts/verify_render_ready.py --check-api --validate-vars --test-deploy
@@ -36,7 +36,7 @@
 /run scripts/backup_rotation.py --max-backups=5 --compress --verify
 
 # Final deployment verification
-/run scripts/verify_deployment.py --check-type=final-check
+/run scripts/verify_deployment.py --check-type=final-check --verify-backups --check-production-settings
 
 ### CODE END ###
 
