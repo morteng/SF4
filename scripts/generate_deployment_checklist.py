@@ -21,6 +21,12 @@ def generate_checklist(validate=False):
     logger = configure_logger()
     
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            logger.error("Path configuration failed")
+            return False
+            
         # Verify git state
         from scripts.verification.verify_git_state import verify_git_state
         if not verify_git_state():
@@ -64,16 +70,6 @@ def generate_checklist(validate=False):
             
         logger.info("Deployment checklist generated successfully")
         return True
-    
-    # Configure paths first
-    from scripts.path_config import configure_paths
-    configure_paths()
-    
-    # Verify git state
-    from scripts.verification.verify_git_state import verify_git_state
-    if not verify_git_state():
-        logger.error("Cannot generate checklist with uncommitted changes")
-        return False
     try:
         # Verify git state first
         from scripts.verify_git_state import verify_git_state

@@ -45,6 +45,18 @@ def update_release_notes():
     logger = configure_logger()
     
     try:
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            logger.error("Path configuration failed")
+            return False
+            
+        # Verify git state
+        from scripts.verification.verify_git_state import verify_git_state
+        if not verify_git_state():
+            logger.error("Cannot update docs with uncommitted changes")
+            return False
+            
         # Get version info
         from scripts.version import get_version
         version = get_version()
@@ -68,17 +80,6 @@ def update_release_notes():
             
         logger.info("Release notes updated successfully")
         return True
-    
-    try:
-        # Configure paths first
-        from scripts.path_config import configure_paths
-        configure_paths()
-        
-        # Verify git state
-        from scripts.verification.verify_git_state import verify_git_state
-        if not verify_git_state():
-            logger.error("Cannot update docs with uncommitted changes")
-            return False
             
         # Get version info
         from scripts.version import get_version
