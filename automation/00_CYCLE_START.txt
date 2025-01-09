@@ -8,7 +8,7 @@
 /commit
 
 # load project docs and IO
-/read scripts/automation/RULES.txt
+/read automation/RULES.txt
 
 /read docs/PRD.md
 /read docs/Design_Documentation.md
