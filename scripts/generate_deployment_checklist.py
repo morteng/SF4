@@ -24,6 +24,10 @@ def generate_checklist(validate=False):
         # Clear any existing incorrect paths
         sys.path = [p for p in sys.path if not p.startswith('C:\\github')]
         
+        # Import verification functions
+        from scripts.verification.verify_security import verify_security_settings
+        from scripts.verification.verify_backup import verify_backup_integrity
+        
         # Add correct paths
         project_root = str(Path(__file__).parent.parent.parent)
         sys.path.insert(0, project_root)
