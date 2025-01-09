@@ -1,5 +1,8 @@
 ### Info from management
 
+0. **End-to-end integration testing**
+   - Test all CRUD operations on Stipends, tags, orgs and so on from login to creation and deletion - using the HTMX admin web interface. This must be done and prove 100% before we attempt to run the app again (or deploy)
+
 1. **Post-Deployment Monitoring:**
    - Monitor system performance metrics
    - Review error logs daily
