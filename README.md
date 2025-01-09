@@ -170,29 +170,41 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Deployment Instructions
 
 ### Backup Procedures
-- To create a production database backup, run:
+- To create a production database backup:
   ```bash
-  python -c "from scripts.version import create_db_backup; create_db_backup('instance/stipend.db')"
+  /run scripts/verification/verify_backup.py --create
   ```
 
 ### Running Migrations
-- To run database migrations, execute:
+- To run database migrations:
   ```bash
-  flask db upgrade
+  /run scripts/startup/init_db.py --migrate
   ```
 
 ### Release Process
-1. Update release notes in `RELEASE_NOTES.md`.
-2. Commit and push changes to the main branch.
-3. Create a version tag using:
+1. Update release notes:
    ```bash
-   git tag v0.2.0
-   git push origin v0.2.0
+   /run scripts/finalize_docs.py --include-deployment
+   ```
+2. Commit and push changes:
+   ```bash
+   /run scripts/commit_changes.py --message "Release v1.2.11" --push
+   ```
+3. Create and push version tag:
+   ```bash
+   git tag v1.2.11
+   git push origin v1.2.11
    ```
 
 ### Final Verification
-- Validate the production environment and check the database connection.
-- Verify version management and confirm backup functionality.
+- Validate production environment:
+  ```bash
+  /run scripts/verification/verify_production.py --full
+  ```
+- Verify deployment readiness:
+  ```bash
+  /run scripts/verification/verify_deployment.py --check-type=final-check
+  ```
 
 - Flask and SQLAlchemy for the backend framework
 - HTMX for frontend interactivity
