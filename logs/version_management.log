@@ -2393,3 +2393,6 @@ M  logs/version_management.log
 2025-01-09 12:03:02,181 - INFO - Please commit or stash changes before proceeding
 2025-01-09 12:03:02,181 - ERROR - Cannot update docs with uncommitted changes
 2025-01-09 12:03:02,181 - ERROR - Documentation finalization failed
+2025-01-09 13:34:55,719 - INFO - Logging system initialized successfully
+2025-01-09 13:34:55,720 - INFO - Logging system initialized successfully
+2025-01-09 13:34:55,721 - INFO - Logging system initialized successfully
