@@ -41,7 +41,7 @@
 /run scripts/commit_changes.py --message "Step 2 verification completed" --verify
 
 # Run application for management review
-/run flask run
+/run flask run --host=0.0.0.0 --port=5000
 
 ### CODE END ###
 
