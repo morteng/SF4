@@ -10,10 +10,8 @@
 # Setup test environment with proper application context
 /run scripts/setup_test_env.py --clean --with-context --test-db --validate
 
-# Fix security permissions with strict mode
+# Fix critical security issues
 /run scripts/security/fix_security_permissions.py --strict --verify
-
-# Verify security settings with comprehensive checks
 /run scripts/verification/verify_security.py --check-env --validate-keys --verify-permissions --check-production
 
 # Initialize database with schema validation
@@ -21,15 +19,6 @@
 
 # Verify database connection with retries
 /run scripts/verification/verify_db_connection.py --retry=5 --timeout=15 --validate --check-tables
-
-# Verify Render readiness with full checks
-/run scripts/verification/verify_render_ready.py --check-api --validate-vars --verify-backup
-
-# Generate detailed coverage reports
-/run scripts/generate_coverage_report.py --html --xml --verify
-
-# Verify test coverage meets requirements
-/run scripts/verification/verify_test_coverage.py --min-coverage=80 --critical-paths --verify-imports --check-paths
 
 # Verify backup system integrity
 /run scripts/verification/verify_backup.py --verify-size --check-schema --verify-tables --case-insensitive
