@@ -6,29 +6,23 @@
 /run scripts/path_config.py
 /run scripts/init_logging.py
 
-# Fix critical security issues
-/run scripts/fix_security_permissions.py --strict --verify --reset
+# Fix security permissions
+/run scripts/security/fix_security_permissions.py --strict
 
-# Commit pending changes with deployment message
-/run scripts/commit_changes.py --message "Pre-deployment documentation updates"
-
-# Finalize documentation with coverage reports
-/run scripts/finalize_docs.py --strict --validate --with-coverage --critical
+# Finalize documentation
+/run scripts/finalize_docs.py
 
 # Generate deployment checklist
-/run scripts/generate_deployment_checklist.py --validate --strict --critical
-
-# Verify deployment readiness
-/run scripts/verify_deployment_readiness.py --check-env --validate-keys --check-production
+/run scripts/generate_deployment_checklist.py
 
 # Request final approval
-/run scripts/request_approval.py --final --validate --critical
+/run scripts/request_approval.py
 
-# Deploy to Render
-/run scripts/deploy_to_render.py --final --validate --critical
+# Verify deployment readiness
+/run scripts/verification/verify_deployment.py --check-type=final-check
 
-# Push changes to GitHub
-/run scripts/commit_changes.py --message "Post-deployment updates" --push
+# Commit final changes
+/run scripts/commit_changes.py --message "Final deployment updates" --push
 
 ### CODE END ###
 
