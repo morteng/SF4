@@ -22,6 +22,7 @@
 
 ### **Rules**
 - Maintain 85%+ test coverage
+- Integration testing of all admin functionality
 - Conduct daily system health checks
 - Perform weekly security reviews
 - Plan next development cycle
