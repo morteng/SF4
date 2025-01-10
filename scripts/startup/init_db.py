@@ -15,7 +15,38 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-def initialize_database(validate_schema=False):
+def initialize_database(validate_schema=False, production=False):
+    """Initialize database with production context support"""
+    try:
+        # Add project root to path
+        import sys
+        from pathlib import Path
+        project_root = str(Path(__file__).resolve().parent.parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths(production=production):
+            raise RuntimeError("Failed to configure paths")
+            
+        # Import app with proper context
+        from app import create_app
+        app = create_app()
+        with app.app_context():
+            # Create required tables
+            from app.models import Stipend, Tag, Organization, User
+            db.create_all()
+            
+            # Verify required tables exist
+            required_tables = ['stipend', 'tag', 'organization', 'user']
+            inspector = db.inspect(db.engine)
+            existing_tables = inspector.get_table_names()
+            
+            for table in required_tables:
+                if table not in existing_tables:
+                    logger.error(f"Missing required table: {table}")
+                    return False
     """Initialize database schema and run migrations"""
     try:
         # Configure paths first

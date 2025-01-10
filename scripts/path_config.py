@@ -6,20 +6,43 @@ def get_project_root():
     """Centralized project root calculation"""
     return str(Path(__file__).resolve().parent.parent.parent)
 
-def configure_paths():
+def configure_paths(production=False):
     """Enhanced path configuration with proper error handling"""
     try:
         # Use centralized project root
         project_root = get_project_root()
+        
+        # Clear existing paths to avoid duplicates
+        sys.path = [p for p in sys.path if not p.startswith(project_root)]
         
         # Add project directories in correct order
         paths_to_add = [
             project_root,
             str(Path(project_root) / 'app'),
             str(Path(project_root) / 'scripts'),
-            str(Path(project_root) / 'tests'),
             str(Path(__file__).parent)
         ]
+        
+        # Add production-specific paths if needed
+        if production:
+            paths_to_add.append(str(Path(project_root) / 'logs'))
+            paths_to_add.append(str(Path(project_root) / 'backups'))
+            
+        # Add paths in reverse order to ensure correct precedence
+        for path in reversed(paths_to_add):
+            if path not in sys.path:
+                sys.path.insert(0, path)
+                
+        # Verify critical imports
+        try:
+            import app
+            import scripts
+            print("Successfully imported app and scripts modules")
+            return True
+        except ImportError as e:
+            print(f"Import verification failed: {str(e)}")
+            print(f"Current sys.path: {sys.path}")
+            return False
         
         # Add venv site-packages if exists
         venv_path = os.getenv('VIRTUAL_ENV')
