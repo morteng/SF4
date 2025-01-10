@@ -1,47 +1,51 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="admin-container flex">
-    {% include '_sidebar.html' %}
-    <div class="admin-content flex-1 p-4">
-        <div class="container mx-auto px-4 py-8">
-            <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
-            <div class="space-y-4">
-                <a href="{{ url_for('admin.admin_stipend.index') }}" 
-                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Manage Stipends
-                </a>
-                <a href="{{ url_for('admin.tag.index') }}" 
-                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Manage Tags
-                </a>
-                <a href="{{ url_for('admin.organization.index') }}" 
-                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Manage Organizations
-                </a>
-                <a href="{{ url_for('admin.user.index') }}" 
-                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Manage Users
-                </a>
-                <a href="{{ url_for('admin.bot.index') }}" 
-                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Manage Bots
-                </a>
-            </div>
-        </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="{{ url_for('admin.admin_stipend.index') }}" 
+           class="dashboard-card">
+            <h3>Manage Stipends</h3>
+            <p>View and manage all stipends</p>
+        </a>
+        
+        <a href="{{ url_for('admin.tag.index') }}" 
+           class="dashboard-card">
+            <h3>Manage Tags</h3>
+            <p>Organize and categorize content</p>
+        </a>
+        
+        <a href="{{ url_for('admin.organization.index') }}" 
+           class="dashboard-card">
+            <h3>Manage Organizations</h3>
+            <p>Handle organization details</p>
+        </a>
+        
+        <a href="{{ url_for('admin.user.index') }}" 
+           class="dashboard-card">
+            <h3>Manage Users</h3>
+            <p>Administer user accounts</p>
+        </a>
+        
+        <a href="{{ url_for('admin.bot.index') }}" 
+           class="dashboard-card">
+            <h3>Manage Bots</h3>
+            <p>Configure and run bots</p>
+        </a>
     </div>
 </div>
 
 <style>
-    .admin-container {
-        min-height: 100vh;
+    .dashboard-card {
+        @apply bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow;
     }
-    .admin-sidebar {
-        width: 16rem;
+    .dashboard-card h3 {
+        @apply text-xl font-bold mb-2;
     }
-    .admin-content {
-        margin-left: 16rem;
+    .dashboard-card p {
+        @apply text-gray-600;
     }
 </style>
 {% endblock %}
