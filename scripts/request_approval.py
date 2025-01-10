@@ -18,11 +18,17 @@ def request_approval():
     """Request deployment approval from management"""
     logger = configure_logger()
     
-    # Configure paths first
-    from scripts.path_config import configure_paths
-    if not configure_paths():
-        logger.error("Path configuration failed")
-        return False
+    try:
+        # Add project root to Python path
+        project_root = str(Path(__file__).resolve().parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            
+        # Now configure paths
+        from scripts.path_config import configure_paths
+        if not configure_paths(project_root):
+            logger.error("Path configuration failed")
+            return False
         
     # Verify deployment requirements
     from scripts.verification.verify_production_ready import verify_production_ready

@@ -266,8 +266,10 @@ def update_release_notes():
 def update_version_history():
     """Update version history file"""
     try:
-        # Clear any existing incorrect paths
-        sys.path = [p for p in sys.path if not p.startswith('C:\\github')]
+        # Add project root to Python path
+        project_root = str(Path(__file__).resolve().parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
         
         # Add correct paths
         project_root = str(Path(__file__).parent.parent.parent)

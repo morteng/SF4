@@ -3,26 +3,31 @@
 
 ### CODE START ###
 
-# Fix path configuration first
-/run scripts/path_config.py --strict --verify --fix-paths
+# Initialize environment
+/run scripts/init_logging.py --production
+/run scripts/setup_test_env.py --production
 
-# Verify production readiness
-/run scripts/verification/verify_production_ready.py --full --strict
+# Verify core functionality
+/run scripts/verification/verify_db_connection.py --strict
+/run scripts/verification/verify_db_schema.py --strict --tables=stipend
+
+# Verify security and configuration
+/run scripts/verification/verify_security.py --full-audit --validate-keys
+/run scripts/verification/verify_config.py --production --strict
+
+# Verify backup and monitoring
+/run scripts/verification/verify_backup.py --verify-integrity
+/run scripts/verification/verify_monitoring.py --production
 
 # Finalize documentation
-/run scripts/finalize_docs.py --version --validate --final
-
-# Generate deployment checklist
-/run scripts/generate_deployment_checklist.py --strict --validate --final
+/run scripts/finalize_docs.py
+/run scripts/generate_deployment_checklist.py
 
 # Request final approval
-/run scripts/request_approval.py --detailed --verify --final
+/run scripts/request_approval.py
 
-# Commit final changes
-/run scripts/commit_changes.py --message "Final deployment updates" --verify --strict
-
-# Push to GitHub
-/run scripts/commit_changes.py --push --message "Production deployment v1.2.11"
+# Commit and push final changes
+/run scripts/commit_changes.py --message "Production deployment v1.2.11" --verify --push
 
 # Run application for management review
 /run python app.py
