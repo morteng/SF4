@@ -426,7 +426,7 @@ def test_index_stipend_route(authenticated_admin: FlaskClient, test_stipend: Sti
     """Test that the stipend index page displays stipends correctly."""
     logger.info("Starting test_index_stipend_route")
     
-    response = authenticated_admin.get(url_for('admin.stipend.index'))
+    response = authenticated_admin.get(url_for('admin.admin_stipend.index'))
     assert response.status_code == 200, "Failed to load stipend index page"
     assert test_stipend.name.encode() in response.data, "Stipend not found in index page"
     

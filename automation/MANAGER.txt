@@ -1,15 +1,8 @@
 ### Info from management
 
-IMPORTANT BUG FIX! I see from the logs that you're adding these to python path:
-Added to Python path: C:\github
-Added to Python path: C:\github\app
-Added to Python path: C:\github\scripts
-Added to Python path: C:\github\tests
-Added to Python path: C:\github\SF4\.venv\Lib\site-packages
+IMPORTANT: When creating stipends in admin interface and when bots do it, only stipend name is obligatory - all other fields can be left empty. Please make note of this in docs and refactor code.
 
-Clearly the correct paths should all be C:\github\SF4\... since SF4 is project root folder. So C:\github\appshould be C:\github\SF4\app and so on.
-
-I have tested the admin interface. Stipends management is not working.
+IMPORTANT: All buttons in admin interface (create stipend and so on) must reload entire page, otherwise we get double top nav menus.
 
 0. **End-to-end integration testing**
    - Test all CRUD operations on Stipends, tags, orgs and so on from login to creation and deletion - using the HTMX admin web interface. This must be done and prove 100% before we attempt to run the app again (or deploy)
