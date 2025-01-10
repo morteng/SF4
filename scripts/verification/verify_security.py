@@ -16,6 +16,7 @@ def configure_logger():
 
 def verify_security_patches():
     """Verify recent security patches have been applied"""
+    logger = configure_logger()
     try:
         # Check for critical security updates
         from scripts.path_config import configure_paths
@@ -46,6 +47,7 @@ def verify_security_patches():
 
 def verify_login_attempts():
     """Check for suspicious login attempts"""
+    logger = configure_logger()
     try:
         from app.models.user import User
         from datetime import datetime, timedelta
