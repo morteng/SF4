@@ -29,7 +29,7 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_htmx_crud(base_url, test_stipends_crud=False, validate_partial_updates=False, admin_interface=False, validate_full_reloads=False):
+def verify_htmx_crud(base_url, test_stipends_crud=False, validate_partial_updates=False, admin_interface=False, validate_full_reloads=True):
     """Verify stipends CRUD operations through HTMX interface
     Args:
         base_url (str): Base URL of application

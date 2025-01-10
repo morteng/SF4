@@ -2,11 +2,15 @@ import sys
 import os
 from pathlib import Path
 
+def get_project_root():
+    """Centralized project root calculation"""
+    return str(Path(__file__).resolve().parent.parent.parent)
+
 def configure_paths():
     """Enhanced path configuration with proper error handling"""
     try:
-        # Get project root dynamically (three levels up from this script)
-        project_root = str(Path(__file__).resolve().parent.parent.parent)
+        # Use centralized project root
+        project_root = get_project_root()
         
         # Add project directories in correct order
         paths_to_add = [
