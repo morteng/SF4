@@ -4,20 +4,14 @@
 
 ### CODE START ###
 
-# Verify centralized path configuration
-/run scripts/path_config.py
+# Verify admin interface security and rate limiting
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface --check-rate-limits
 
-# Verify HTMX full page reloads in admin interface
-/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --admin-interface
+# Verify test coverage meets 85% target
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
 
-# Verify required fields for stipend creation
-/run scripts/verification/verify_db_schema.py --strict --tables=stipend --validate-required-fields
-
-# Security audit focused on admin interface
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface
-
-# Verify test coverage for critical paths
-/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=85 --critical-paths
+# Verify daily monitoring configuration
+/run scripts/verification/verify_monitoring.py
 
 ### CODE END ###
 

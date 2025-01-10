@@ -24,7 +24,7 @@ def verify_login_attempts():
     # TODO: Implement actual login attempt verification
     return True
 
-def verify_security_settings(full_audit=False, daily=False, validate_keys=False, check_stipends_security=False, check_admin_interface=False):
+def verify_security_settings(full_audit=False, daily=False, validate_keys=False, check_stipends_security=False, check_admin_interface=False, check_rate_limits=False):
     """Verify security-related settings with enhanced checks
     Args:
         full_audit (bool): Perform comprehensive security audit
@@ -94,6 +94,12 @@ def verify_security_settings(full_audit=False, daily=False, validate_keys=False,
             if not os.getenv('ADMIN_CSRF_SECRET'):
                 logger.error("Missing ADMIN_CSRF_SECRET for admin interface")
                 return False
+            # Verify admin rate limiting
+            if check_rate_limits:
+                from app.services.base_service import BaseService
+                if not hasattr(BaseService, 'limiter'):
+                    logger.error("Missing rate limiter in BaseService")
+                    return False
         
         missing_vars = [var for var in required_vars if not os.getenv(var)]
         if missing_vars:
