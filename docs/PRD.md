@@ -8,7 +8,9 @@ This document outlines the objectives, target audience, and key features for the
 - **Administrators**: Manage stipends, tags, and organizations; oversee backup and environment setups; monitor automated bots.
 
 ## 3. Key Features
-1. **Tag-Based Filtering**  
+1. **Minimal Required Fields**  
+   Only stipend name is required - other fields can be filled later by AI bot.
+2. **Tag-Based Filtering**  
    Real-time filtering via HTMX partial page updates.
 2. **Administrative Interface**  
    Secure dashboard for CRUD operations on stipends, tags, and organizations.

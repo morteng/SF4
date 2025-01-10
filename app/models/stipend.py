@@ -44,7 +44,7 @@ def parse_flexible_date(date_str):
 
 class Stipend(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    REQUIRED_FIELDS = ['name']  # Only name is required
+    REQUIRED_FIELDS = ['name']  # Only name is required per management directive
     name = db.Column(db.String(100), nullable=False, unique=True)
     summary = db.Column(db.Text, nullable=False)
     description = db.Column(db.Text, nullable=False)
@@ -61,18 +61,26 @@ class Stipend(db.Model):
 
     @staticmethod
     def create(data, user_id=None):
-        """Add debug logging to creation process"""
+        """Create stipend with only name required per management directive"""
         try:
             from app.services.stipend_service import StipendService
             service = StipendService()
             
-            # Validate required fields
-            required_fields = ['name', 'summary', 'description', 'homepage_url', 
-                             'organization_id', 'tags']
-            for field in required_fields:
-                if field not in data or not data[field]:
-                    raise ValueError(f"Missing required field: {field}")
-                    
+            # Validate only required field
+            if 'name' not in data or not data['name']:
+                raise ValueError("Name is required")
+                
+            # Set defaults for optional fields
+            data.setdefault('summary', '')
+            data.setdefault('description', '')
+            data.setdefault('homepage_url', '')
+            data.setdefault('organization_id', None)
+            data.setdefault('tags', [])
+            data.setdefault('application_procedure', '')
+            data.setdefault('eligibility_criteria', '')
+            data.setdefault('application_deadline', None)
+            data.setdefault('open_for_applications', True)
+            
             # Create the stipend
             result = service.create(data, user_id)
             logger.info(f"Stipend created successfully: {result.id}")

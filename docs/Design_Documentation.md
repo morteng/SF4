@@ -8,6 +8,7 @@
 ## 2. Data Model
 - **Stipend**  
   - Represents a funding opportunity with fields like `id`, `name`, `description`, and `tags`.
+  - Only `name` field is required - other fields can be populated later by AI bot.
 - **Tag**  
   - Represents a tag (e.g., `id`, `name`) in a many-to-many relationship with Stipend.
 - **Organization**  
