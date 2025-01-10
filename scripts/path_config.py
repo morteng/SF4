@@ -5,8 +5,8 @@ from pathlib import Path
 def configure_paths():
     """Enhanced path configuration with proper error handling"""
     try:
-        # Get project root (three levels up from this script)
-        project_root = str(Path(__file__).parent.parent.parent)
+        # Get project root dynamically (three levels up from this script)
+        project_root = str(Path(__file__).resolve().parent.parent.parent)
         
         # Add project directories in correct order
         paths_to_add = [

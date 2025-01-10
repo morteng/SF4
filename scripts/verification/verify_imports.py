@@ -19,14 +19,17 @@ def verify_project_paths():
     logger = configure_logger()
     
     try:
-        # Expected paths with correct SF4 root
+        # Get project root dynamically
+        project_root = str(Path(__file__).resolve().parent.parent.parent)
+        
+        # Expected paths relative to project root
         expected_paths = [
-            r'C:\github\SF4',
-            r'C:\github\SF4\app',
-            r'C:\github\SF4\scripts',
-            r'C:\github\SF4\tests',
-            r'C:\github\SF4\.venv\Lib\site-packages',
-            r'C:\github\SF4\automation'
+            project_root,
+            str(Path(project_root) / 'app'),
+            str(Path(project_root) / 'scripts'),
+            str(Path(project_root) / 'tests'),
+            str(Path(project_root) / '.venv' / 'Lib' / 'site-packages'),
+            str(Path(project_root) / 'automation')
         ]
         
         # Verify all paths exist and are accessible
