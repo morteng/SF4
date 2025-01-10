@@ -33,7 +33,7 @@ def verify_security_settings(full_audit=False, daily=False, validate_keys=False,
         check_htmx_security (bool): Verify HTMX-specific security measures
     """
     # Add project root to sys.path
-    project_root = str(Path(__file__).parent.parent.parent)
+    project_root = str(Path(__file__).parent.parent)
     if project_root not in sys.path:
         sys.path.insert(0, project_root)
     logger = configure_logger()

@@ -1,6 +1,8 @@
 ### Info from management
 
-IMPORTANT: When creating stipends in admin interface and when bots do it, only stipend name is obligatory - all other fields can be left empty. Please make note of this in docs and refactor code.
+CRITICAL!!  project_root is being defined multiple times in different files, and it seems to be wrong in several of them. please go through all code and centralizr project root setting to a functional code that does it correctly
+
+IMPORTANT: When creating stipends in admin interface and when bots do it, only stipend name is obligatory - all other fields can be left empty. Please make note of this in all docs and refactor code.
 
 IMPORTANT: All buttons in admin interface (create stipend and so on) must reload entire page, otherwise we get double top nav menus.
 

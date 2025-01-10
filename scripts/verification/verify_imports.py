@@ -20,7 +20,7 @@ def verify_project_paths():
     
     try:
         # Get project root dynamically
-        project_root = str(Path(__file__).resolve().parent.parent.parent)
+        project_root = str(Path(__file__).resolve().parent.parent)
         
         # Expected paths relative to project root
         expected_paths = [
