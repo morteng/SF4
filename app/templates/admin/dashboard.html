@@ -1,15 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
+<div class="admin-container flex">
+    {% include '_sidebar.html' %}
+    <div class="admin-content flex-1 p-4">
+        <div class="container mx-auto px-4 py-8">
+            <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
-<div class="space-y-4">
-    <a href="{{ url_for('admin.admin_stipend.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Manage Stipends</a>
-    <a href="{{ url_for('admin.tag.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Manage Tags</a>
-    <a href="{{ url_for('admin.organization.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Manage Organizations</a>
-    <a href="{{ url_for('admin.user.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Manage Users</a>
-    <a href="{{ url_for('admin.bot.index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Manage Bots</a>
+            <div class="space-y-4">
+                <a href="{{ url_for('admin.admin_stipend.index') }}" 
+                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Manage Stipends
+                </a>
+                <a href="{{ url_for('admin.tag.index') }}" 
+                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Manage Tags
+                </a>
+                <a href="{{ url_for('admin.organization.index') }}" 
+                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Manage Organizations
+                </a>
+                <a href="{{ url_for('admin.user.index') }}" 
+                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Manage Users
+                </a>
+                <a href="{{ url_for('admin.bot.index') }}" 
+                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Manage Bots
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
-
+<style>
+    .admin-container {
+        min-height: 100vh;
+    }
+    .admin-sidebar {
+        width: 16rem;
+    }
+    .admin-content {
+        margin-left: 16rem;
+    }
+</style>
 {% endblock %}
