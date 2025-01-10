@@ -29,17 +29,15 @@ def request_approval():
         if not configure_paths(project_root):
             logger.error("Path configuration failed")
             return False
-        
-    # Verify deployment requirements
-    from scripts.verification.verify_production_ready import verify_production_ready
-    if not verify_production_ready():
-        logger.error("Cannot request approval - production verification failed")
-        return False
-        
-    # Verify deployment requirements
-    from scripts.verification.verify_production_ready import verify_production_ready
-    if not verify_production_ready():
-        logger.error("Cannot request approval - production verification failed")
+            
+        # Verify deployment requirements
+        from scripts.verification.verify_production_ready import verify_production_ready
+        if not verify_production_ready():
+            logger.error("Cannot request approval - production verification failed")
+            return False
+            
+    except Exception as e:
+        logger.error(f"Failed to configure environment: {str(e)}")
         return False
         
     # Setup test environment
