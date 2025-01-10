@@ -30,7 +30,7 @@ class BaseCrudController:
             'invalid_date_format': FlashMessages.INVALID_DATE_FORMAT,
             'missing_field': FlashMessages.MISSING_FIELD_ERROR
         }
-        self.supports_htmx = True
+        self.supports_htmx = False  # Disable HTMX for full page reloads
         self.htmx_headers = {
             'HX-Trigger': f'{entity_name}Updated'
         }

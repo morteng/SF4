@@ -127,19 +127,13 @@ class Stipend(db.Model):
         return f'<Stipend {self.name}>'
 
     def validate(self):
-        """Validate stipend data"""
+        """Validate stipend data - only name is required"""
         errors = {}
         
         if not self.name:
             errors['name'] = 'Name is required'
-        if not self.summary:
-            errors['summary'] = 'Summary is required'
-        if not self.description:
-            errors['description'] = 'Description is required'
-        if not self.homepage_url:
-            errors['homepage_url'] = 'Homepage URL is required'
             
-        # Validate organization exists
+        # Validate organization exists if provided
         if self.organization_id:
             from app.models.organization import Organization
             if not Organization.query.get(self.organization_id):
