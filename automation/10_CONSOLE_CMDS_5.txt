@@ -3,16 +3,20 @@
 
 ### CODE START ###
 
-# Initialize production environment
+# Initialize production environment with proper path configuration
+/run scripts/path_config.py --production
 /run scripts/init_logging.py --production
 /run scripts/setup_test_env.py --production
+
+# Install production dependencies
+/run scripts/install_dependencies.py --production
 
 # Verify core functionality
 /run scripts/verification/verify_db_connection.py --production --strict
 /run scripts/verification/verify_db_schema.py --production --strict --tables=stipend
 
 # Security verification
-/run scripts/verification/verify_security.py --production --full-audit
+/run scripts/verification/verify_security.py --production --full-audit --check-path-config
 
 # Configuration verification
 /run scripts/verification/verify_config.py --production --strict
@@ -36,9 +40,6 @@
 
 # Commit and push final changes
 /run scripts/commit_changes.py --message "Production deployment v1.2.11" --verify --push
-
-# Run application for management review - do not do this yet!
-# /run python app.py
 
 ### CODE END ###
 
