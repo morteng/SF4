@@ -24,7 +24,7 @@ def verify_login_attempts():
     # TODO: Implement actual login attempt verification
     return True
 
-def verify_security_settings(full_audit=False, daily=False, validate_keys=False, check_stipends_security=False):
+def verify_security_settings(full_audit=False, daily=False, validate_keys=False, check_stipends_security=False, check_admin_interface=False):
     """Verify security-related settings with enhanced checks
     Args:
         full_audit (bool): Perform comprehensive security audit
@@ -77,7 +77,7 @@ def verify_security_settings(full_audit=False, daily=False, validate_keys=False,
             logger.error("Debug mode must be disabled in production")
             return False
             
-        # Verify environment variables
+        # Verify environment variables including admin interface
         required_vars = [
             'FLASK_ENV',
             'FLASK_DEBUG',
@@ -85,8 +85,15 @@ def verify_security_settings(full_audit=False, daily=False, validate_keys=False,
             'SECRET_KEY',
             'ADMIN_PASSWORD',
             'BACKUP_DIR',
-            'LOG_DIR'
+            'LOG_DIR',
+            'ADMIN_CSRF_SECRET'
         ]
+        
+        # Additional admin interface checks
+        if check_admin_interface:
+            if not os.getenv('ADMIN_CSRF_SECRET'):
+                logger.error("Missing ADMIN_CSRF_SECRET for admin interface")
+                return False
         
         missing_vars = [var for var in required_vars if not os.getenv(var)]
         if missing_vars:

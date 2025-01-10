@@ -18,14 +18,24 @@ def verify_project_paths():
     logger = configure_logger()
     
     try:
-        # Expected paths
+        # Expected paths with correct SF4 root
         expected_paths = [
             r'C:\github\SF4',
             r'C:\github\SF4\app',
             r'C:\github\SF4\scripts',
             r'C:\github\SF4\tests',
-            r'C:\github\SF4\.venv\Lib\site-packages'
+            r'C:\github\SF4\.venv\Lib\site-packages',
+            r'C:\github\SF4\automation'
         ]
+        
+        # Verify all paths exist and are accessible
+        for path in expected_paths:
+            if not Path(path).exists():
+                logger.error(f"Path does not exist: {path}")
+                return False
+            if not os.access(path, os.R_OK):
+                logger.error(f"Path not readable: {path}")
+                return False
         
         # Check each path exists and is in sys.path
         missing_paths = []

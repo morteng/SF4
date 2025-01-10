@@ -4,20 +4,20 @@
 
 ### CODE START ###
 
-# Verify and fix path configuration
-/run scripts/verification/verify_imports.py --full --validate-paths --fix-paths
+# Verify and fix path configuration with correct SF4 root
+/run scripts/verification/verify_imports.py --full --validate-paths --fix-paths --root=C:\github\SF4
 
-# Comprehensive stipends CRUD testing with HTMX
-/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates --check-htmx-security
+# Comprehensive stipends CRUD testing with HTMX (admin interface)
+/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates --admin-interface
 
 # Verify stipends database schema and relations
-/run scripts/verification/verify_db_schema.py --strict --tables=stipend --verify-relations --check-constraints
+/run scripts/verification/verify_db_schema.py --strict --tables=stipend --verify-relations --check-constraints --validate-migrations
 
 # Security audit focused on stipends management
-/run scripts/verification/verify_security.py --full-audit --validate-keys --check-stipends-security --verify-permissions
+/run scripts/verification/verify_security.py --full-audit --validate-keys --check-stipends-security --verify-permissions --check-admin-interface
 
 # Verify test coverage for critical paths
-/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95 --critical-paths
+/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95 --critical-paths --admin-interface
 
 ### CODE END ###
 

@@ -15,7 +15,7 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_htmx_crud(base_url, test_stipends_crud=False, validate_partial_updates=False):
+def verify_htmx_crud(base_url, test_stipends_crud=False, validate_partial_updates=False, admin_interface=False):
     """Verify stipends CRUD operations through HTMX interface
     Args:
         base_url (str): Base URL of application
@@ -29,13 +29,22 @@ def verify_htmx_crud(base_url, test_stipends_crud=False, validate_partial_update
     logger = configure_logger()
     
     try:
-        # Test login and session
+        # Test admin login and session
         session = requests.Session()
-        login_url = f"{base_url}/login"
+        login_url = f"{base_url}/admin/login"
         login_data = {
             'username': 'admin',
-            'password': os.getenv('ADMIN_PASSWORD')
+            'password': os.getenv('ADMIN_PASSWORD'),
+            'csrf_token': get_csrf_token(base_url)
         }
+        
+        # Verify admin interface is accessible
+        if admin_interface:
+            admin_url = f"{base_url}/admin"
+            response = session.get(admin_url)
+            if response.status_code != 200:
+                logger.error("Admin interface inaccessible")
+                return False
         response = session.post(login_url, data=login_data)
         if response.status_code != 200:
             logger.error("Login failed")
