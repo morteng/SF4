@@ -2,6 +2,19 @@ import logging
 import requests
 from bs4 import BeautifulSoup
 
+def get_csrf_token(base_url):
+    """Get CSRF token from login page"""
+    try:
+        response = requests.get(f"{base_url}/admin/login")
+        soup = BeautifulSoup(response.text, 'html.parser')
+        csrf_input = soup.find('input', {'name': 'csrf_token'})
+        if csrf_input:
+            return csrf_input.get('value')
+        return ''
+    except Exception as e:
+        logging.error(f"Failed to get CSRF token: {str(e)}")
+        return ''
+
 def configure_logger():
     """Configure logger for page reload verification"""
     logger = logging.getLogger(__name__)
