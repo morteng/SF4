@@ -29,7 +29,7 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_htmx_crud(base_url, test_stipends_crud=False, validate_partial_updates=False, admin_interface=False):
+def verify_htmx_crud(base_url, test_stipends_crud=False, validate_partial_updates=False, admin_interface=False, validate_full_reloads=False):
     """Verify stipends CRUD operations through HTMX interface
     Args:
         base_url (str): Base URL of application
@@ -52,13 +52,21 @@ def verify_htmx_crud(base_url, test_stipends_crud=False, validate_partial_update
             'csrf_token': get_csrf_token(base_url)
         }
         
-        # Verify admin interface is accessible
+        # Verify admin interface is accessible and uses full page reloads
         if admin_interface:
             admin_url = f"{base_url}/admin"
             response = session.get(admin_url)
             if response.status_code != 200:
                 logger.error("Admin interface inaccessible")
                 return False
+                
+            # Verify full page reloads for admin interface
+            if validate_full_reloads:
+                soup = BeautifulSoup(response.text, 'html.parser')
+                htmx_attrs = soup.find_all(attrs={"hx-get": True})
+                if htmx_attrs:
+                    logger.error("HTMX partial updates found when full page reloads required")
+                    return False
         response = session.post(login_url, data=login_data)
         if response.status_code != 200:
             logger.error("Login failed")

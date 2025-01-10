@@ -29,7 +29,7 @@ def verify_foreign_keys():
         logger.error(f"Foreign key verification failed: {str(e)}")
         return False
 
-def validate_schema(validate_relations=False):
+def validate_schema(validate_relations=False, validate_required_fields=False):
     """Validate database schema against expected structure
     Args:
         validate_relations (bool): Whether to validate foreign key relationships
@@ -81,6 +81,14 @@ def validate_schema(validate_relations=False):
             missing_columns = set(columns) - set(actual_columns)
             if missing_columns:
                 logger.error(f"Missing columns in {table}: {', '.join(missing_columns)}")
+                return False
+                
+        # Verify required fields for stipends
+        if validate_required_fields:
+            stipend_columns = inspector.get_columns('stipend')
+            name_col = next((col for col in stipend_columns if col['name'] == 'name'), None)
+            if not name_col or name_col.get('nullable', True):
+                logger.error("Stipend name must be required field")
                 return False
                 
         # Verify foreign key relationships
