@@ -37,8 +37,8 @@
 # Commit and push final changes
 /run scripts/commit_changes.py --message "Production deployment v1.2.11" --verify --push
 
-# Run application for management review
-/run python app.py
+# Run application for management review - do not do this yet!
+# /run python app.py
 
 ### CODE END ###
 
