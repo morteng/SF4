@@ -21,9 +21,14 @@ def request_approval():
     
     try:
         # Add project root to Python path
-        project_root = str(Path(__file__).resolve().parent.parent)
+        project_root = str(Path(__file__).resolve().parent.parent.parent)
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
+            
+        # Add scripts directory explicitly
+        scripts_dir = str(Path(project_root) / 'scripts')
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
             
         # Now configure paths
         from scripts.path_config import configure_paths
