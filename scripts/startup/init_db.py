@@ -47,12 +47,6 @@ def initialize_database(validate_schema=False, production=False):
                 if table not in existing_tables:
                     logger.error(f"Missing required table: {table}")
                     return False
-    """Initialize database schema and run migrations"""
-    try:
-        # Configure paths first
-        from scripts.path_config import configure_paths
-        if not configure_paths():
-            raise RuntimeError("Failed to configure paths")
             
         # Configure logging
         from scripts.init_logging import configure_logging
