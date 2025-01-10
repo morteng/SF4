@@ -1,23 +1,20 @@
+### **Current Priorities**
+- [x] Centralize project root configuration
+- [x] Fix path configuration issues
+- [x] Verify HTMX full page reloads
+- [ ] Update create operations to match minimal required fields
+- [ ] Verify admin interface CRUD operations
+- [ ] Complete end-to-end testing
+
 ### **Testing Tasks**
-- [ ] Verify test environment setup
-- [ ] Validate database initialization
-- [ ] Test admin user creation
-- [ ] Verify core functionality
+- [x] Verify path configuration
+- [x] Test database initialization
+- [x] Verify admin user creation
+- [ ] Test stipend CRUD operations
+- [ ] Verify tag-based filtering
 - [ ] Complete security audit
-- [ ] Test HTMX interface
-- [ ] Verify test coverage
-- [ ] Generate test reports
 
-### **Current Testing Priorities**
-- [ ] Fix path configuration issues
-- [ ] Verify application context handling
-- [ ] Test database schema validation
-- [ ] Verify HTMX full reload functionality
-- [ ] Validate test coverage thresholds
-- [ ] Generate HTML coverage reports
-
-### **Post-Testing Tasks**
-- [ ] Fix identified issues
-- [ ] Update documentation
-- [ ] Generate final test reports
-- [ ] Prepare for deployment
+### **Documentation Updates Needed**
+- [ ] Update PRD with minimal required fields
+- [ ] Add admin interface reload requirements
+- [ ] Document path configuration changes

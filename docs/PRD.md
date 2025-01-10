@@ -9,7 +9,9 @@ This document outlines the objectives, target audience, and key features for the
 
 ## 3. Key Features
 1. **Minimal Required Fields**  
-   Only stipend name is required - other fields can be filled later by AI bot.
+   - Only stipend name is required for creation
+   - Other fields can be populated later by AI bot
+   - Admin interface must use full page reloads for all CRUD operations
 2. **Tag-Based Filtering**  
    Real-time filtering via HTMX partial page updates.
 2. **Administrative Interface**  
