@@ -3,10 +3,7 @@
 
 ### CODE START ###
 
-# Fix path configuration with correct SF4 root
-/run scripts/verification/verify_imports.py --full --validate-paths --fix-paths --root=C:\github\SF4
-
-# Initialize test environment with proper logging
+# Initialize test environment with proper logging and paths
 /run scripts/init_logging.py --test --verbose
 /run scripts/setup_test_env.py --test --validate-paths
 
@@ -24,12 +21,12 @@
 # Run comprehensive test suites
 /run scripts/testing/run_tests.py --unit --integration --e2e --admin-interface
 
-# Verify HTMX functionality
-/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates --admin-interface
+# Verify HTMX functionality with full reloads
+/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates --admin-interface --validate-full-reloads
 
 # Generate and verify coverage
 /run scripts/generate_coverage_report.py --html --xml --admin-interface
-/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95 --critical-paths --admin-interface
+/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95 --critical-paths --admin-interface --validate-critical-modules
 
 # Finalize testing
 /run scripts/commit_changes.py --message "Testing cycle completed" --verify --push --check-coverage
