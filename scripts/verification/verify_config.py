@@ -13,8 +13,11 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_config():
-    """Verify critical configuration settings"""
+def verify_config(check_admin_config=False):
+    """Verify critical configuration settings
+    Args:
+        check_admin_config (bool): Verify admin-specific configuration
+    """
     logger = configure_logger()
     
     try:
@@ -40,6 +43,15 @@ def verify_config():
             logger.error("Missing SQLALCHEMY_DATABASE_URI")
             return False
             
+        # Additional admin config checks
+        if check_admin_config:
+            if not os.getenv('ADMIN_CSRF_SECRET'):
+                logger.error("Missing ADMIN_CSRF_SECRET for admin interface")
+                return False
+            if not os.getenv('ADMIN_SESSION_TIMEOUT'):
+                logger.error("Missing ADMIN_SESSION_TIMEOUT")
+                return False
+                
         logger.info("Configuration verification passed")
         return True
         
