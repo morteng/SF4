@@ -44,6 +44,7 @@ def parse_flexible_date(date_str):
 
 class Stipend(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    REQUIRED_FIELDS = ['name']  # Only name is required
     name = db.Column(db.String(100), nullable=False, unique=True)
     summary = db.Column(db.Text, nullable=False)
     description = db.Column(db.Text, nullable=False)

@@ -16,6 +16,17 @@ class CustomNameField(StringField):
             ]
         super().__init__(label=label, validators=validators, **kwargs)
 
+class OptionalStringField(StringField):
+    """Custom field that allows empty strings."""
+    
+    def __init__(self, label=None, validators=None, **kwargs):
+        if validators is None:
+            validators = [
+                Optional(),
+                Length(max=255, message=FlashMessages.FIELD_TOO_LONG)
+            ]
+        super().__init__(label=label, validators=validators, **kwargs)
+
 class CustomDateTimeField(Field):
     """Custom field for validating date/time strings."""
     

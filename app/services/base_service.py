@@ -231,7 +231,17 @@ class BaseService:
         """Validate data before creation"""
         if not data:
             raise ValidationError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors="No data provided"))
-        self.validate(data)
+            
+        # Only validate required fields
+        required_fields = self.model.REQUIRED_FIELDS if hasattr(self.model, 'REQUIRED_FIELDS') else []
+        errors = {}
+        
+        for field in required_fields:
+            if field not in data or not data[field]:
+                errors[field] = f"{field} is required"
+                
+        if errors:
+            raise ValidationError(FlashMessages.CRUD_VALIDATION_ERROR.format(errors=errors))
         
     def validate_update(self, data):
         """Validate data before update"""
