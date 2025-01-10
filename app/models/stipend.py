@@ -46,9 +46,9 @@ class Stipend(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     REQUIRED_FIELDS = ['name']  # Only name is required per management directive
     name = db.Column(db.String(100), nullable=False, unique=True)
-    summary = db.Column(db.Text, nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    homepage_url = db.Column(db.String(255), nullable=False)
+    summary = db.Column(db.Text, nullable=True)
+    description = db.Column(db.Text, nullable=True)
+    homepage_url = db.Column(db.String(255), nullable=True)
     application_procedure = db.Column(db.Text, nullable=True)
     eligibility_criteria = db.Column(db.Text, nullable=True)
     application_deadline = db.Column(db.DateTime, nullable=True)
