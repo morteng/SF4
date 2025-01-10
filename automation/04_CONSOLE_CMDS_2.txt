@@ -16,21 +16,23 @@
 # Security verification with rate limiting
 /run scripts/verification/verify_security.py --full-audit --check-admin-interface --check-rate-limits --check-path-config --daily
 
-# Database verification
+# Database verification with retry logic
 /run scripts/verification/verify_db_connection.py --strict --retry=3
-/run scripts/verification/verify_db_schema.py --strict --tables=stipend --validate-required-fields --validate-relations
+/run scripts/verification/verify_db_schema.py --strict --tables=stipend,tag,organization,user --validate-required-fields --validate-relations
 
 # HTMX interface verification
 /run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --admin-interface --validate-full-reloads
 
-# Test coverage verification
+# Test coverage verification with admin focus
 /run scripts/verification/verify_test_coverage.py --module=stipend --threshold=85 --critical-paths --admin-only
 
-# Backup and monitoring verification
-/run scripts/verification/verify_backup.py --verify-integrity --retry=3
-/run scripts/verification/verify_monitoring.py --production --validate-alerts
+# Backup verification with integrity checks
+/run scripts/verification/verify_backup.py --verify-integrity --retry=3 --check-retention
 
-# Finalize changes
+# Monitoring verification with alert validation
+/run scripts/verification/verify_monitoring.py --production --validate-alerts --check-dashboards
+
+# Finalize changes with verification
 /run scripts/commit_changes.py --message "Step 2 verification completed" --verify --push
 
 ### CODE END ###
