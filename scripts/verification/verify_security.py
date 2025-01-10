@@ -16,13 +16,53 @@ def configure_logger():
 
 def verify_security_patches():
     """Verify recent security patches have been applied"""
-    # TODO: Implement actual patch verification
-    return True
+    try:
+        # Check for critical security updates
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            return False
+            
+        # Verify security-related packages
+        import pkg_resources
+        vulnerable_packages = []
+        for pkg in ['flask', 'sqlalchemy', 'alembic']:
+            try:
+                dist = pkg_resources.get_distribution(pkg)
+                if dist.has_metadata('PKG-INFO'):
+                    for line in dist.get_metadata_lines('PKG-INFO'):
+                        if line.startswith('Security:') and 'critical' in line.lower():
+                            vulnerable_packages.append(pkg)
+            except Exception:
+                continue
+                
+        if vulnerable_packages:
+            logger.error(f"Vulnerable packages found: {', '.join(vulnerable_packages)}")
+            return False
+            
+        return True
+    except Exception as e:
+        logger.error(f"Security patch verification failed: {str(e)}")
+        return False
 
 def verify_login_attempts():
     """Check for suspicious login attempts"""
-    # TODO: Implement actual login attempt verification
-    return True
+    try:
+        from app.models.user import User
+        from datetime import datetime, timedelta
+        
+        # Check for failed login attempts in last 24 hours
+        recent_failures = User.query.filter(
+            User.last_failed_login > datetime.utcnow() - timedelta(hours=24)
+        ).count()
+        
+        if recent_failures > 10:
+            logger.warning(f"Excessive failed logins: {recent_failures} in last 24 hours")
+            return False
+            
+        return True
+    except Exception as e:
+        logger.error(f"Login attempt verification failed: {str(e)}")
+        return False
 
 def verify_security_settings(full_audit=False, daily=False, validate_keys=False, check_stipends_security=False, check_admin_interface=False, check_rate_limits=False):
     """Verify security-related settings with enhanced checks
