@@ -66,10 +66,18 @@ def verify_production_ready():
             logger.error("Database connection verification failed")
             return False
             
-        # Verify security settings
+        # Verify security settings including admin interface
         from scripts.verification.verify_security import verify_security_settings
-        if not verify_security_settings():
+        if not verify_security_settings(check_admin_interface=True):
             logger.error("Security verification failed")
+            return False
+            
+        # Verify admin interface configuration
+        if not os.getenv('ADMIN_CSRF_SECRET'):
+            logger.error("Missing ADMIN_CSRF_SECRET for admin interface")
+            return False
+        if not os.getenv('ADMIN_SESSION_TIMEOUT'):
+            logger.error("Missing ADMIN_SESSION_TIMEOUT")
             return False
             
         logger.info("Production environment is ready")
