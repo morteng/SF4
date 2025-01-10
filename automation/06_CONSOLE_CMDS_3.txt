@@ -3,9 +3,13 @@
 
 ### CODE START ###
 
-# Initialize test environment
+# Initialize test environment with proper path configuration
+/run scripts/path_config.py --test
 /run scripts/init_logging.py --test
 /run scripts/setup_test_env.py --test
+
+# Install test dependencies
+/run scripts/install_dependencies.py --test
 
 # Initialize test database
 /run scripts/startup/init_db.py --test --validate-schema
@@ -16,7 +20,7 @@
 /run scripts/verification/verify_db_schema.py --test --strict --tables=stipend
 
 # Security verification
-/run scripts/verification/verify_security.py --test --full-audit
+/run scripts/verification/verify_security.py --test --full-audit --check-path-config
 
 # HTMX interface tests
 /run scripts/verification/verify_htmx_integration.py --test --full --test-stipends-crud
