@@ -5,21 +5,24 @@
 ### CODE START ###
 
 # Core system verification with fixed paths
-/run scripts/verification/verify_imports.py --full --validate-paths
+/run scripts/verification/verify_imports.py --full --validate-paths --root=C:\github\SF4
 /run scripts/init_logging.py --production
 /run scripts/startup/init_db.py --validate-schema
 /run scripts/startup/init_admin.py --strict-password
 
 # Security verification with enhanced key validation
-/run scripts/verification/verify_security.py --full-audit --validate-keys
-/run scripts/verification/verify_config.py --production --strict
+/run scripts/verification/verify_security.py --full-audit --validate-keys --check-admin-interface --verify-csrf
+/run scripts/verification/verify_config.py --production --strict --check-admin-config
 
 # Database verification with schema checks
 /run scripts/verification/verify_db_connection.py --strict
-/run scripts/verification/verify_db_schema.py --strict --tables=stipend
+/run scripts/verification/verify_db_schema.py --strict --tables=stipend --check-constraints --validate-required-fields
 
 # Test coverage verification
-/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=85
+/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=85 --critical-paths --admin-interface --validate-critical-modules
+
+# HTMX interface verification
+/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --admin-interface --validate-full-reloads
 
 # Backup and monitoring verification
 /run scripts/verification/verify_backup.py --verify-integrity
