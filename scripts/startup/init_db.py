@@ -18,12 +18,15 @@ logger = logging.getLogger(__name__)
 def initialize_database(validate_schema=False, production=False):
     """Initialize database with production context support"""
     try:
-        # Add project root to path
-        import sys
-        from pathlib import Path
-        project_root = str(Path(__file__).resolve().parent.parent.parent)
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths(production=production):
+            raise RuntimeError("Failed to configure paths")
+            
+        # Configure logging
+        from scripts.init_logging import configure_logging
+        configure_logging(production=production)
+        logger = logging.getLogger(__name__)
             
         # Configure logging first
         from scripts.init_logging import configure_logging

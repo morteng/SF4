@@ -20,8 +20,33 @@ def configure_paths(production=False):
             project_root,
             str(Path(project_root) / 'app'),
             str(Path(project_root) / 'scripts'),
-            str(Path(__file__).parent)
+            str(Path(__file__).parent),
+            str(Path(project_root) / 'scripts/verification'),
+            str(Path(project_root) / 'scripts/testing')
         ]
+        
+        # Add virtual environment site-packages
+        venv_path = os.getenv('VIRTUAL_ENV')
+        if venv_path:
+            site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
+            paths_to_add.append(site_packages)
+            
+        # Add paths to sys.path if not already present
+        for path in paths_to_add:
+            if path not in sys.path:
+                sys.path.insert(0, path)
+                print(f"Added to Python path: {path}")
+                
+        # Verify critical imports
+        try:
+            import app
+            import scripts
+            print("Successfully imported app and scripts modules")
+            return True
+        except ImportError as e:
+            print(f"Import verification failed: {str(e)}")
+            print(f"Current sys.path: {sys.path}")
+            return False
         
         # Add production-specific paths if needed
         if production:
