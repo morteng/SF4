@@ -25,10 +25,16 @@ def initialize_database(validate_schema=False, production=False):
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
             
-        # Configure paths first
+        # Configure logging first
+        from scripts.init_logging import configure_logging
+        configure_logging(production=production)
+        logger = logging.getLogger(__name__)
+            
+        # Configure paths
         from scripts.path_config import configure_paths
         if not configure_paths(production=production):
-            raise RuntimeError("Failed to configure paths")
+            logger.error("Failed to configure paths")
+            return False
             
         # Import app with proper context
         from app import create_app
