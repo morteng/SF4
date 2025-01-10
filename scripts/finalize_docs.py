@@ -50,10 +50,18 @@ def update_release_notes():
     logger = configure_logger()
     
     try:
-        # Add project root to Python path
-        project_root = str(Path(__file__).resolve().parent.parent.parent)
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            logger.error("Path configuration failed")
+            return False
+            
+        # Get project root
+        from scripts.path_config import get_project_root
+        project_root = get_project_root()
+        if not project_root:
+            logger.error("Could not determine project root")
+            return False
             
         # Add scripts directory explicitly
         scripts_dir = str(Path(project_root) / 'scripts')

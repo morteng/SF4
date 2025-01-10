@@ -21,8 +21,11 @@ def generate_checklist(validate=False):
     logger = configure_logger()
     
     try:
-        # Clear any existing incorrect paths
-        sys.path = [p for p in sys.path if not p.startswith('C:\\github')]
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            logger.error("Path configuration failed")
+            return False
         
         # Import verification functions
         from scripts.verification.verify_security import verify_security_settings
