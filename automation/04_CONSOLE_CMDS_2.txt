@@ -7,31 +7,31 @@
 # Initialize core systems with proper path configuration
 /run scripts/init_logging.py --production
 /run scripts/path_config.py --production
-/run scripts/startup/init_db.py --validate-schema
-/run scripts/startup/init_admin.py --strict-password
+/run scripts/startup/init_db.py --validate-schema --production
+/run scripts/startup/init_admin.py --strict-password --verify-email
 
 # Verify system configuration
-/run scripts/verification/verify_config.py --production --strict
+/run scripts/verification/verify_config.py --production --strict --check-admin-config
 
 # Security verification with rate limiting
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --check-rate-limits --check-path-config
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface --check-rate-limits --check-path-config --daily
 
 # Database verification
-/run scripts/verification/verify_db_connection.py --strict
-/run scripts/verification/verify_db_schema.py --strict --tables=stipend --validate-required-fields
+/run scripts/verification/verify_db_connection.py --strict --retry=3
+/run scripts/verification/verify_db_schema.py --strict --tables=stipend --validate-required-fields --validate-relations
 
 # HTMX interface verification
-/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --admin-interface
+/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --admin-interface --validate-full-reloads
 
 # Test coverage verification
-/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=85 --critical-paths
+/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=85 --critical-paths --admin-only
 
 # Backup and monitoring verification
-/run scripts/verification/verify_backup.py --verify-integrity
-/run scripts/verification/verify_monitoring.py --production
+/run scripts/verification/verify_backup.py --verify-integrity --retry=3
+/run scripts/verification/verify_monitoring.py --production --validate-alerts
 
 # Finalize changes
-/run scripts/commit_changes.py --message "Step 2 verification completed" --verify
+/run scripts/commit_changes.py --message "Step 2 verification completed" --verify --push
 
 ### CODE END ###
 
