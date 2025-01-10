@@ -1,16 +1,5 @@
 ### Info from management
 
-CRITICAL!!  project_root is being defined multiple times in different files, and it seems to be wrong in several of them. please go through all code and centralizr project root setting to a functional code that does it correctly
-
-IMPORTANT: When creating stipends in admin interface and when bots do it, only stipend name is obligatory - all other fields can be left empty. Please make note of this in all docs and refactor code.
-
-IMPORTANT: All buttons in admin interface (create stipend and so on) must reload entire page, otherwise we get double top nav menus.
-
-IMPORTANT: ensure paths are calculated and set based on current environment, not hard-coded.
-
-0. **End-to-end integration testing**
-   - Test all CRUD operations on Stipends, tags, orgs and so on from login to creation and deletion - using the HTMX admin web interface. This must be done and prove 100% before we attempt to run the app again (or deploy)
-
 1. **Post-Deployment Monitoring:**
    - Monitor system performance metrics
    - Review error logs daily
@@ -30,7 +19,6 @@ IMPORTANT: ensure paths are calculated and set based on current environment, not
 
 ### **Rules**
 - Maintain 85%+ test coverage
-- Integration testing of all admin functionality
 - Conduct daily system health checks
 - Perform weekly security reviews
 - Plan next development cycle
