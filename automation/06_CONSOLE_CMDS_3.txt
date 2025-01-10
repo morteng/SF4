@@ -3,33 +3,36 @@
 
 ### CODE START ###
 
-# Fix path configuration first
-/run scripts/path_config.py --strict --verify --fix-paths
+# Fix path configuration with correct SF4 root
+/run scripts/verification/verify_imports.py --full --validate-paths --fix-paths --root=C:\github\SF4
 
-# Initialize test environment
+# Initialize test environment with proper logging
 /run scripts/init_logging.py --test --verbose
 /run scripts/setup_test_env.py --test --validate-paths
 
-# Initialize test database with required tables
-/run scripts/startup/init_db.py --test --validate-schema --check-constraints
+# Initialize test database with schema validation
+/run scripts/startup/init_db.py --test --validate-schema --check-constraints --verify-migrations
+/run scripts/startup/init_admin.py --strict-password --verify-email --check-admin-interface
 
 # Verify core functionality
-/run scripts/verification/verify_db_connection.py --strict --retry
-/run scripts/verification/verify_db_schema.py --strict --tables=stipend --verify-relations --check-constraints
-/run scripts/verification/verify_security.py --full-audit --validate-keys --check-stipends-security --verify-permissions
+/run scripts/verification/verify_db_connection.py --strict --retry --validate-schema
+/run scripts/verification/verify_db_schema.py --strict --tables=stipend --verify-relations --check-constraints --validate-migrations
 
-# Run core test suites
-/run scripts/testing/run_tests.py --unit --integration --e2e
+# Security verification
+/run scripts/verification/verify_security.py --full-audit --validate-keys --check-stipends-security --verify-permissions --check-admin-interface
+
+# Run comprehensive test suites
+/run scripts/testing/run_tests.py --unit --integration --e2e --admin-interface
 
 # Verify HTMX functionality
-/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates --check-htmx-security
+/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --validate-partial-updates --admin-interface
 
 # Generate and verify coverage
-/run scripts/generate_coverage_report.py --html --xml
-/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95 --critical-paths
+/run scripts/generate_coverage_report.py --html --xml --admin-interface
+/run scripts/verification/verify_test_coverage.py --module=stipend --threshold=95 --critical-paths --admin-interface
 
 # Finalize testing
-/run scripts/commit_changes.py --message "Testing cycle completed" --verify --push
+/run scripts/commit_changes.py --message "Testing cycle completed" --verify --push --check-coverage
 
 ### CODE END ###
 
