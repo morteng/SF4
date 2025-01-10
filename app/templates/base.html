@@ -8,22 +8,16 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
 <body class="bg-gray-100">
-    {% if current_user.is_authenticated and current_user.is_admin %}
-        {% include '_sidebar.html' %}
-    {% else %}
-        {% include '_nav.html' %}
-    {% endif %}
+    {% include '_nav.html' %}
 
-    <div class="{% if current_user.is_authenticated and current_user.is_admin %}ml-64{% endif %}">
+    <div class="container mx-auto px-4">
         {% from "_macros.html" import flash_messages %}
-        <div class="container mx-auto px-4">
-            {{ flash_messages() }}
-        </div>
-
-        <main id="main-content" class="p-4">
-            {% block content %}{% endblock %}
-        </main>
+        {{ flash_messages() }}
     </div>
+
+    <main id="main-content" class="p-4">
+        {% block content %}{% endblock %}
+    </main>
 
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
