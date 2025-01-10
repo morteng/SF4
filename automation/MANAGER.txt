@@ -10,11 +10,6 @@
    - Analyze usage patterns
    - Identify improvement areas
 
-3. **Maintenance Schedule:**
-   - Apply security patches promptly
-   - Review monitoring alerts
-   - Maintain test coverage
-
 ---
 
 ### **Rules**
