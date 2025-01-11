@@ -15,5 +15,7 @@
 - Documentation updates
 - Debug mode automation
 - Test coverage verification fixes
+- Database initialization fixes
+- Path configuration improvements
 
 ---
