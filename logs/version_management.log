@@ -5505,3 +5505,72 @@ Coverage failure: total of 19 is less than fail-under=85
 2025-01-12 00:27:48,073 - INFO - Version history updated successfully
 2025-01-12 00:27:48,086 - ERROR - Import verification failed: cannot import name 'verify_coverage' from 'scripts.verification' (unknown location)
 2025-01-12 00:27:48,086 - ERROR - Documentation finalization failed
+2025-01-12 00:43:14,430 - INFO - Logging system initialized successfully
+2025-01-12 00:43:14,432 - INFO - Logging system initialized successfully
+2025-01-12 00:43:14,433 - INFO - Logging system initialized successfully
+2025-01-12 00:43:14,603 - INFO - Deleting existing admin user: admin (ID: 1)
+2025-01-12 00:43:14,621 - INFO - User 1 deleted successfully
+2025-01-12 00:43:14,621 - INFO - Successfully deleted admin user admin
+2025-01-12 00:43:14,621 - INFO - Admin credentials from .env: testadmin, admin@test.com, TestPass123!
+2025-01-12 00:43:14,622 - INFO - Checking database connection...
+2025-01-12 00:43:14,623 - INFO - Database connection successful
+2025-01-12 00:43:14,623 - INFO - Creating new admin user from .env values
+2025-01-12 00:43:14,623 - INFO - Attempting to create user: testadmin
+2025-01-12 00:43:14,627 - INFO - Skipping admin password validation for debugging
+2025-01-12 00:43:15,024 - INFO - Password hash for testadmin: pbkdf2:sha256:600000$4dmAUdjubpuFLYb1$9b4f085b03e7acfcabb24bf7df345ff503164b9469fa5d857ceac981e069ae9a
+2025-01-12 00:43:15,414 - INFO - Password check test: True
+2025-01-12 00:43:15,430 - INFO - Successfully created user: testadmin (ID: 1)
+2025-01-12 00:43:15,433 - INFO - Creating audit log: create_user by user 0
+2025-01-12 00:43:15,442 - ERROR - Error creating notification for audit log: AUDIT_LOG
+2025-01-12 00:43:15,443 - INFO - Created audit log: create_user by user 0
+2025-01-12 00:43:15,453 - INFO - Created new admin user: testadmin
+2025-01-12 00:43:15,455 - INFO - Admin user exists: testadmin (ID: 1)
+2025-01-12 00:43:15,456 - INFO - Admin user password hash: pbkdf2:sha256:600000$4dmAUdjubpuFLYb1$9b4f085b03e7acfcabb24bf7df345ff503164b9469fa5d857ceac981e069ae9a
+2025-01-12 00:43:15,456 - INFO - Admin user is_admin: True
+2025-01-12 00:43:15,456 - INFO - Application initialized successfully
+2025-01-12 00:43:15,461 - INFO - Logging system initialized successfully
+2025-01-12 00:43:15,463 - INFO - Logging system initialized successfully
+2025-01-12 00:43:15,532 - INFO - Deleting existing admin user: testadmin (ID: 1)
+2025-01-12 00:43:15,548 - INFO - User 1 deleted successfully
+2025-01-12 00:43:15,549 - INFO - Successfully deleted admin user testadmin
+2025-01-12 00:43:15,549 - INFO - Admin credentials from .env: testadmin, admin@test.com, TestPass123!
+2025-01-12 00:43:15,549 - INFO - Checking database connection...
+2025-01-12 00:43:15,550 - INFO - Database connection successful
+2025-01-12 00:43:15,550 - INFO - Creating new admin user from .env values
+2025-01-12 00:43:15,551 - INFO - Attempting to create user: testadmin
+2025-01-12 00:43:15,556 - INFO - Skipping admin password validation for debugging
+2025-01-12 00:43:15,970 - INFO - Password hash for testadmin: pbkdf2:sha256:600000$FSskMHIGlsAVV2X4$ab930d932717c77e45b4df743a478666c83d71f66098c16f18f8d439b3d98007
+2025-01-12 00:43:16,403 - INFO - Password check test: True
+2025-01-12 00:43:16,421 - INFO - Successfully created user: testadmin (ID: 1)
+2025-01-12 00:43:16,424 - INFO - Creating audit log: create_user by user 0
+2025-01-12 00:43:16,436 - ERROR - Error creating notification for audit log: AUDIT_LOG
+2025-01-12 00:43:16,437 - INFO - Created audit log: create_user by user 0
+2025-01-12 00:43:16,450 - INFO - Created new admin user: testadmin
+2025-01-12 00:43:16,452 - INFO - Admin user exists: testadmin (ID: 1)
+2025-01-12 00:43:16,452 - INFO - Admin user password hash: pbkdf2:sha256:600000$FSskMHIGlsAVV2X4$ab930d932717c77e45b4df743a478666c83d71f66098c16f18f8d439b3d98007
+2025-01-12 00:43:16,453 - INFO - Admin user is_admin: True
+2025-01-12 00:43:16,453 - INFO - Application initialized successfully
+2025-01-12 00:43:16,459 - INFO - Logging system initialized successfully
+2025-01-12 00:43:16,512 - INFO - Deleting existing admin user: testadmin (ID: 1)
+2025-01-12 00:43:16,530 - INFO - User 1 deleted successfully
+2025-01-12 00:43:16,530 - INFO - Successfully deleted admin user testadmin
+2025-01-12 00:43:16,531 - INFO - Admin credentials from .env: testadmin, admin@test.com, TestPass123!
+2025-01-12 00:43:16,531 - INFO - Checking database connection...
+2025-01-12 00:43:16,532 - INFO - Database connection successful
+2025-01-12 00:43:16,532 - INFO - Creating new admin user from .env values
+2025-01-12 00:43:16,533 - INFO - Attempting to create user: testadmin
+2025-01-12 00:43:16,538 - INFO - Skipping admin password validation for debugging
+2025-01-12 00:43:16,933 - INFO - Password hash for testadmin: pbkdf2:sha256:600000$JIa1CeQYHsbzEyjw$57c7c8c04f4ee218e6b58a7fe9eb23734f98419ae91cfaf3d8cd60490914a394
+2025-01-12 00:43:17,413 - INFO - Password check test: True
+2025-01-12 00:43:17,434 - INFO - Successfully created user: testadmin (ID: 1)
+2025-01-12 00:43:17,438 - INFO - Creating audit log: create_user by user 0
+2025-01-12 00:43:17,450 - ERROR - Error creating notification for audit log: AUDIT_LOG
+2025-01-12 00:43:17,450 - INFO - Created audit log: create_user by user 0
+2025-01-12 00:43:17,464 - INFO - Created new admin user: testadmin
+2025-01-12 00:43:17,465 - INFO - Admin user exists: testadmin (ID: 1)
+2025-01-12 00:43:17,466 - INFO - Admin user password hash: pbkdf2:sha256:600000$JIa1CeQYHsbzEyjw$57c7c8c04f4ee218e6b58a7fe9eb23734f98419ae91cfaf3d8cd60490914a394
+2025-01-12 00:43:17,467 - INFO - Admin user is_admin: True
+2025-01-12 00:43:17,468 - INFO - Application initialized successfully
+2025-01-12 00:43:17,472 - ERROR - Missing required table: stipend
+2025-01-12 00:43:17,473 - ERROR - Failed to configure test environment: Failed to initialize test database
+2025-01-12 00:43:17,474 - INFO - Test environment configured successfully
