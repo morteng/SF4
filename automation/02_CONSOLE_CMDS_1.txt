@@ -4,17 +4,14 @@
 
 ### CODE START ###
 
-# Comprehensive security audit with admin interface and rate limiting checks
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --check-rate-limits --daily
+# Comprehensive system health check including security, monitoring and backups
+/run scripts/verification/verify_health.py --full-check
 
-# Verify test coverage meets 85% target with critical path analysis
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --admin-only
+# Verify test coverage with admin interface focus
+/run scripts/verification/verify_test_coverage.py --threshold=85 --admin-only --critical-paths
 
-# Verify monitoring configuration with alert thresholds
-/run scripts/verification/verify_monitoring.py --check-alerts --verify-dashboards
-
-# Verify backup integrity and retention policy
-/run scripts/verification/verify_backup.py --check-retention --verify-schema
+# Verify user feedback collection setup
+/run scripts/verification/verify_feedback.py --check-surveys --check-analytics
 
 ### CODE END ###
 
