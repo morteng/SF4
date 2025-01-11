@@ -29,7 +29,7 @@ def verify_foreign_keys():
         logger.error(f"Foreign key verification failed: {str(e)}")
         return False
 
-def validate_schema(validate_relations=False, validate_required_fields=False):
+def validate_schema(validate_relations=False, validate_required_fields=True, check_admin_interface=False):
     """Validate database schema against expected structure
     Args:
         validate_relations (bool): Whether to validate foreign key relationships
@@ -100,6 +100,13 @@ def validate_schema(validate_relations=False, validate_required_fields=False):
                 if col['name'] in optional_fields and not col.get('nullable', True):
                     logger.error(f"Field {col['name']} should be optional")
                     return False
+                    
+        # Verify admin interface uses full page reloads
+        if check_admin_interface:
+            from app.routes.admin import admin_bp
+            if not hasattr(admin_bp, 'full_page_reloads'):
+                logger.error("Admin interface must use full page reloads")
+                return False
                 
             # Verify other fields are optional
             optional_fields = ['description', 'tags', 'organization_id']
