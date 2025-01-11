@@ -95,6 +95,13 @@ def create_app(config_name='development'):
                 raise RuntimeError(f"Admin user creation failed: {str(e)}")
             
             logger.info(f"Created new admin user: {admin_username}")
+            
+            # Verify admin user creation
+            admin_user = User.query.filter_by(username=admin_username).first()
+            if admin_user:
+                logger.info(f"Admin user exists: {admin_user.username} (ID: {admin_user.id})")
+            else:
+                logger.error("Admin user was not created")
                 
         logger.info("Application initialized successfully")
         
@@ -269,6 +276,11 @@ def init_extensions(app):
         login_manager.init_app(app)
         login_manager.login_view = 'auth.login'
         logger.info("Login manager initialized successfully")
+        
+        @login_manager.user_loader
+        def load_user(user_id):
+            logger.info(f"Loading user with ID: {user_id}")
+            return User.query.get(int(user_id))
     except Exception as e:
         logger.error(f"Failed to initialize login manager: {str(e)}")
         raise

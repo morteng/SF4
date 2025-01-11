@@ -131,6 +131,7 @@ def create_user(form_data, current_user_id=None):
             is_admin=form_data.get('is_admin', False)
         )
         new_user.set_password(form_data['password'])
+        logger.info(f"Password hash for {new_user.username}: {new_user.password_hash}")
         
         db.session.add(new_user)
         db.session.commit()
