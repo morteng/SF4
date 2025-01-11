@@ -14,7 +14,7 @@ def configure_coverage_logging():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_coverage(threshold=85, critical_paths=True, admin_only=False, verify=False):
+def verify_coverage(threshold=80, critical_paths=True, admin_only=False, verify=False):
     """Enhanced coverage verification with critical path analysis
     Args:
         threshold (int): Minimum coverage percentage

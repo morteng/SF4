@@ -9,12 +9,19 @@ from app import create_app
 def validate_schema():
     """Validate database schema against migrations"""
     try:
+        # Configure logging first
+        from scripts.init_logging import configure_logging
+        configure_logging(production=True)
+        
         app = create_app('production')
         with app.app_context():
             # Ensure database exists
             if not os.path.exists('instance/stipend.db'):
                 print("Database file not found")
-                return False
+                # Create empty database if not exists
+                from app.extensions import db
+                db.create_all()
+                print("Created new database schema")
                 
             config = Config('migrations/alembic.ini')
             command.upgrade(config, 'head')

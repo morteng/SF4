@@ -24,7 +24,10 @@ def verify_monitoring_setup():
             'METRICS_ENDPOINT': '/metrics',
             'ALERTING_ENABLED': 'true',
             'MONITORING_INTERVAL': '60',
-            'ALERT_THRESHOLDS': 'cpu:90,memory:90,disk:90'
+            'ALERT_THRESHOLDS': 'cpu:90,memory:90,disk:90',
+            'ADMIN_MONITORING_ENABLED': 'true',
+            'USER_ACTIVITY_TRACKING': 'true',
+            'ERROR_TRACKING_ENABLED': 'true'
         }
         
         # Set default values if not present
