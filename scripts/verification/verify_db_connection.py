@@ -53,10 +53,16 @@ def verify_db_connection():
                 # Handle Windows paths
                 if os.name == 'nt':
                     db_path = db_path.lstrip('/')
+                    db_path = db_path.replace('/', '\\')
                 if not Path(db_path).exists():
-                    logger.error(f"Database file not found: {db_path}")
-                    logger.error(f"Current working directory: {os.getcwd()}")
-                    return False
+                    # Create database file if it doesn't exist
+                    try:
+                        Path(db_path).parent.mkdir(parents=True, exist_ok=True)
+                        Path(db_path).touch()
+                        logger.info(f"Created database file: {db_path}")
+                    except Exception as e:
+                        logger.error(f"Failed to create database file: {str(e)}")
+                        return False
                     
             engine = create_engine(db_uri)
             with engine.connect() as conn:

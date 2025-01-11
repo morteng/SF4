@@ -181,7 +181,7 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
             logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
             return False
             
-        # Verify file permissions strictly
+        # Verify and fix file permissions
         sensitive_files = {
             '.env': 0o600,
             'instance/site.db': 0o600,
@@ -195,8 +195,12 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
             if path.exists():
                 mode = path.stat().st_mode & 0o777
                 if mode != expected_mode:
-                    logger.error(f"Insecure permissions on {file}: {oct(mode)} (expected {oct(expected_mode)})")
-                    return False
+                    try:
+                        path.chmod(expected_mode)
+                        logger.info(f"Fixed permissions on {file}: {oct(mode)} -> {oct(expected_mode)}")
+                    except Exception as e:
+                        logger.error(f"Failed to fix permissions on {file}: {str(e)}")
+                        return False
                     
         # Additional daily checks
         if daily:

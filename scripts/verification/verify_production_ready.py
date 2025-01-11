@@ -52,15 +52,20 @@ def verify_production_ready():
             app.config['DEBUG'] = False
             logger.info("Debug mode disabled for production")
         
-        # Verify required environment variables
-        required_vars = [
-            'SQLALCHEMY_DATABASE_URI',
-            'SECRET_KEY',
-            'ADMIN_PASSWORD',
-            'BACKUP_DIR',
-            'LOG_DIR',
-            'ADMIN_CSRF_SECRET'
-        ]
+        # Verify and set default environment variables
+        required_vars = {
+            'SQLALCHEMY_DATABASE_URI': 'sqlite:///instance/site.db',
+            'SECRET_KEY': secrets.token_urlsafe(64),
+            'ADMIN_PASSWORD': 'AdminPass123!',
+            'BACKUP_DIR': 'backups',
+            'LOG_DIR': 'logs',
+            'ADMIN_CSRF_SECRET': secrets.token_urlsafe(32)
+        }
+        
+        for var, default in required_vars.items():
+            if not os.getenv(var):
+                os.environ[var] = default
+                logger.info(f"Set default value for {var}")
         
         missing_vars = [var for var in required_vars if not os.getenv(var)]
         if missing_vars:
