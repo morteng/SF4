@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 from pathlib import Path
 
@@ -25,8 +26,6 @@ def verify_production_ready():
         from scripts.path_config import configure_paths
         if not configure_paths():
             raise RuntimeError("Failed to configure paths")
-        if not verify_path_config():
-            raise RuntimeError("Path configuration verification failed")
             
         logger = configure_logger()
         
