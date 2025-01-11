@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 
-def configure_logging(production=False):
+def configure_logging(production=False, verify=False):
     """Configure logging system with proper error handling"""
     try:
         # Add project root to path

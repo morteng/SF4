@@ -15,7 +15,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-def initialize_database(validate_schema=False, production=False):
+def initialize_database(validate_schema=False, production=False, retry=3):
     """Initialize database with production context support"""
     try:
         # Add project root to path
@@ -111,7 +111,16 @@ def initialize_database(validate_schema=False, production=False):
         app = create_app()
         with app.app_context():
             from app.models import Stipend, Tag, Organization, User
-            db.create_all()
+            
+            # Retry logic for table creation
+            for attempt in range(retry):
+                try:
+                    db.create_all()
+                    break
+                except Exception as e:
+                    if attempt == retry - 1:
+                        raise
+                    time.sleep(1)
         
         # Verify required tables exist
         required_tables = ['stipend', 'tag', 'organization', 'user']

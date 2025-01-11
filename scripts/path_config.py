@@ -4,9 +4,19 @@ from pathlib import Path
 
 def get_project_root():
     """Centralized project root calculation"""
-    return str(Path(__file__).resolve().parent.parent.parent)
+    # Get the absolute path of the current file
+    current_path = Path(__file__).resolve()
+    
+    # Traverse up to find the project root (SF4 directory)
+    while current_path.name != 'SF4' and current_path.parent != current_path:
+        current_path = current_path.parent
+        
+    if current_path.name != 'SF4':
+        raise RuntimeError("Could not find project root directory (SF4)")
+        
+    return str(current_path)
 
-def configure_paths(production=False):
+def configure_paths(production=False, verify=False):
     """Enhanced path configuration with proper error handling"""
     try:
         # Use centralized project root
