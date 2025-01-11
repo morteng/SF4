@@ -1,5 +1,20 @@
 ### Info from management
 
+i see from logs that you're setting paths like this:
+
+
+Executing: /run scripts/verification/verify_production_ready.py
+Added to Python path: C:\github
+Added to Python path: C:\github\app
+Added to Python path: C:\github\scripts
+Added to Python path: C:\github\SF4\scripts
+Added to Python path: C:\github\scripts\verification
+Added to Python path: C:\github\scripts\testing
+Added to Python path: C:\github\scripts\startup
+
+These paths are WRONG - actual project root on dev machinge is c:\github\SF4\
+We must detect and set paths correctly and properly, not try hardcoding project root, that will not be the same when we push to production.
+
 
 ---
 
