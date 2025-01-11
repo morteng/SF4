@@ -1,3 +1,7 @@
+### **Feature requests**
+Implement reading github issues and either fixing the problem or putting it on the list into the code cycle.
+
+
 ### **Rules**
 - Maintain 85%+ test coverage
 - Conduct daily system health checks
