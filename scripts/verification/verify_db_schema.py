@@ -88,11 +88,18 @@ def validate_schema(validate_relations=False, validate_required_fields=False):
         if validate_required_fields:
             stipend_columns = inspector.get_columns('stipend')
             
-            # Only name should be required
+            # Verify only name is required
             name_col = next((col for col in stipend_columns if col['name'] == 'name'), None)
             if not name_col or name_col.get('nullable', True):
                 logger.error("Stipend name must be required field")
                 return False
+                
+            # Verify other fields are optional
+            optional_fields = ['description', 'tags', 'organization_id']
+            for col in stipend_columns:
+                if col['name'] in optional_fields and not col.get('nullable', True):
+                    logger.error(f"Field {col['name']} should be optional")
+                    return False
                 
             # Verify other fields are optional
             optional_fields = ['description', 'tags', 'organization_id']

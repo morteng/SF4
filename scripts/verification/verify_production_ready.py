@@ -85,6 +85,12 @@ def verify_production_ready():
             logger.error("Missing ADMIN_SESSION_TIMEOUT")
             return False
             
+        # Verify admin interface uses full page reloads
+        from app.routes.admin import admin_bp
+        if not hasattr(admin_bp, 'full_page_reloads'):
+            logger.error("Admin interface must use full page reloads")
+            return False
+            
         logger.info("Production environment is ready")
         return True
         

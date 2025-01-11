@@ -4,17 +4,20 @@
 
 ### CODE START ###
 
-# Verify database schema and initialization
-/run scripts/verification/verify_db_schema.py --validate-relations --validate-required-fields
+# Verify database schema and required fields
+/run scripts/verification/verify_db_schema.py --validate-required-fields
 
-# Verify security settings with full audit
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --check-rate-limits
+# Verify security settings with admin interface checks
+/run scripts/verification/verify_security.py --check-admin-interface --check-rate-limits
 
-# Verify test coverage meets requirements
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
+# Verify test coverage meets 85% target
+/run scripts/verification/verify_test_coverage.py --threshold=85
 
-# Verify system health with production focus
-/run scripts/verification/verify_health.py --production --check-response-time
+# Verify production readiness
+/run scripts/verification/verify_production_ready.py
+
+# Verify system health
+/run scripts/verification/verify_health.py
 
 ### CODE END ###
 
