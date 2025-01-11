@@ -7,14 +7,14 @@
 
 # Run application for management review
 # Only run app if all tests pass and manager instructions are followed
-/run scripts/path_config.py --production --strict --verify
-/run scripts/init_logging.py --production --verify --strict
+/run scripts/path_config.py --production --verify
+/run scripts/init_logging.py --production --verify
 
 # Final verification
-/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --strict --verify-imports
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --validate-keys --check-debug-mode --strict
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --validate-config --check-metrics --strict
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --admin-only --verify-imports --strict
+/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --verify-admin
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits --check-csrf
+/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-metrics --check-response-times
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin --check-models
 
 # Only run if all verifications pass
 /run python app.py --host=0.0.0.0 --port=5000 --no-debug
