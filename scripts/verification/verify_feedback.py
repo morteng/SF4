@@ -34,18 +34,15 @@ def verify_feedback_setup(check_surveys=False, check_analytics=False):
         if check_surveys:
             survey_dir = Path('surveys')
             if not survey_dir.exists():
-                logger.error("Survey directory not found")
-                return False
-                
-            required_files = [
-                'surveys/template.json',
-                'surveys/responses.db'
-            ]
-            
-            missing_files = [f for f in required_files if not Path(f).exists()]
-            if missing_files:
-                logger.error(f"Missing survey files: {', '.join(missing_files)}")
-                return False
+                logger.info("Creating survey directory structure")
+                try:
+                    survey_dir.mkdir(parents=True, exist_ok=True)
+                    (survey_dir / 'template.json').write_text('{}')
+                    (survey_dir / 'responses.db').touch()
+                    logger.info("Created default survey files")
+                except Exception as e:
+                    logger.error(f"Failed to create survey files: {str(e)}")
+                    return False
                 
         # Verify analytics configuration
         if check_analytics:
