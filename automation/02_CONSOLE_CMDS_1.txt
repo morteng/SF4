@@ -8,16 +8,16 @@
 /run scripts/verification/verify_db_schema.py --validate-required-fields
 
 # Verify security settings with admin interface checks
-/run scripts/verification/verify_security.py --check-admin-interface --check-rate-limits
+/run scripts/verification/verify_security.py --check-admin-interface --check-rate-limits --daily
 
 # Verify test coverage meets 85% target
-/run scripts/verification/verify_test_coverage.py --threshold=85
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
 
 # Verify production readiness
 /run scripts/verification/verify_production_ready.py
 
-# Verify system health
-/run scripts/verification/verify_health.py
+# Verify system health with production checks
+/run scripts/verification/verify_health.py --production --check-response-time
 
 ### CODE END ###
 
