@@ -55,41 +55,6 @@ def commit_changes(message, push=False):
             logger.info(f"Successfully committed changes: {message}")
             
         return True
-    """Commit pending changes with provided message"""
-    logger = configure_logging()
-    
-    try:
-        # Configure paths first
-        from scripts.path_config import configure_paths
-        if not configure_paths():
-            logger.error("Path configuration failed")
-            return False
-
-        # Verify git status first
-        status = subprocess.run(
-            ['git', 'status', '--porcelain'],
-            capture_output=True,
-            text=True
-        )
-        
-        if not status.stdout.strip():
-            logger.info("No changes to commit")
-            return True
-            
-        # Stage all changes
-        subprocess.run(['git', 'add', '.'], check=True)
-        
-        # Commit with message
-        subprocess.run(['git', 'commit', '-m', message], check=True)
-        
-        # Push changes if requested
-        if push:
-            subprocess.run(['git', 'push'], check=True)
-            logger.info(f"Successfully committed and pushed changes: {message}")
-        else:
-            logger.info(f"Successfully committed changes: {message}")
-            
-        return True
     except subprocess.CalledProcessError as e:
         logger.error(f"Commit failed: {str(e)}")
         return False
