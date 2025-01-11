@@ -3427,3 +3427,15 @@ Coverage failure: total of 18 is less than fail-under=85
 2025-01-11 17:40:39,670 - INFO - Version history updated successfully
 2025-01-11 17:40:39,694 - ERROR - Import verification failed: cannot import name 'verify_coverage' from 'scripts.verification' (unknown location)
 2025-01-11 17:40:39,695 - ERROR - Documentation finalization failed
+2025-01-11 18:04:06,720 - INFO - Logging system initialized successfully
+2025-01-11 18:04:06,722 - INFO - Logging system initialized successfully
+2025-01-11 18:04:06,725 - INFO - Logging system initialized successfully
+2025-01-11 18:04:07,078 - INFO - Application initialized successfully
+2025-01-11 18:04:07,086 - INFO - Logging system initialized successfully
+2025-01-11 18:04:07,091 - INFO - Logging system initialized successfully
+2025-01-11 18:04:07,137 - INFO - Application initialized successfully
+2025-01-11 18:04:07,146 - INFO - Logging system initialized successfully
+2025-01-11 18:04:07,302 - INFO - Application initialized successfully
+2025-01-11 18:04:07,309 - ERROR - Missing required table: stipend
+2025-01-11 18:04:07,310 - ERROR - Failed to configure test environment: Failed to initialize test database
+2025-01-11 18:04:07,310 - INFO - Test environment configured successfully
