@@ -68,7 +68,13 @@
 </table>
 {% endmacro %}
 
-{% macro pagination(paginated_data, endpoint, current_page=1, total_pages=1) %}
+{% macro pagination(paginated_data, endpoint, current_page=None, total_pages=None) %}
+{# Handle both direct paginated object and manual page parameters #}
+{% if current_page is none %}
+    {% set current_page = paginated_data.page %}
+    {% set total_pages = paginated_data.pages %}
+{% endif %}
+
 <nav class="mt-4">
     <ul class="pagination flex justify-center items-center space-x-2">
         {% if current_page > 1 %}
