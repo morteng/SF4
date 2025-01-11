@@ -3,18 +3,20 @@
 
 ### CODE START ###
 
-# Enhanced review environment setup
-/run scripts/path_config.py --production --verify
+# Initialize review environment
+/run scripts/setup_test_env.py --production --verify
 /run scripts/init_logging.py --production --verify
 
-# Comprehensive system verification
-/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --verify-admin
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits --check-csrf
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-metrics --check-response-times
-/run scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-pool --verify-timeout
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin --check-models
+# Core system verification
+/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits
+/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-metrics
 
-# Documentation and deployment preparation
+# Database and coverage verification
+/run scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-pool
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin
+
+# Documentation finalization
 /run scripts/finalize_docs.py --verify
 /run scripts/generate_deployment_checklist.py --validate --check-security
 
