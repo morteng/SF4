@@ -1,5 +1,11 @@
 import logging
+import sys
 from pathlib import Path
+
+# Add project root to path
+project_root = str(Path(__file__).resolve().parent.parent)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 def configure_logging(production=False, verify=False):
     """Configure logging system with proper error handling"""
