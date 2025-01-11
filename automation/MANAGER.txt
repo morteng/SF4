@@ -1,3 +1,6 @@
+TemplateNotFound
+jinja2.exceptions.TemplateNotFound: admin/organizations/create.html
+
 ### **Ongoing Priorities**
 - Maintain production stability
 - Monitor system performance
