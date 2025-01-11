@@ -1,5 +1,6 @@
 # app/config.py
 import os
+import secrets
 from dotenv import load_dotenv
 
 load_dotenv()
