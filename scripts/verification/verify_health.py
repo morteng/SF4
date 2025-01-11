@@ -51,6 +51,12 @@ def verify_system_health(production=False, check_response_time=False):
                 response_time = response.elapsed.total_seconds()
                 if response_time > 2.0:
                     logger.warning(f"Slow response time: {response_time:.2f}s")
+                
+            # Check response time in production
+            if production and check_response_time:
+                response_time = response.elapsed.total_seconds()
+                if response_time > 2.0:
+                    logger.warning(f"Slow response time: {response_time:.2f}s")
         except Exception as e:
             logger.error(f"Web interface check failed: {str(e)}")
             return False

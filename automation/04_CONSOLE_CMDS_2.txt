@@ -12,14 +12,17 @@
 
 # Verify system configuration with feedback defaults
 /run scripts/verification/verify_config.py --production --strict --check-admin-config
-/run scripts/verification/verify_feedback.py --check-surveys --check-analytics
+/run scripts/verification/verify_feedback.py --check-surveys --check-analytics --check-response-rate
 
 # Comprehensive system verification
-/run scripts/verification/verify_health.py --full-check
+/run scripts/verification/verify_health.py --production --check-response-time
 /run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --admin-only
 
 # Verify HTMX integration and admin interface
 /run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --admin-interface --validate-full-reloads
+
+# Verify monitoring and alerting
+/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts
 
 # Finalize changes with verification
 /run scripts/commit_changes.py --message "Step 2 coding completed" --verify --push
