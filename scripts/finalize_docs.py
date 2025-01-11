@@ -63,6 +63,16 @@ def update_release_notes():
         # Configure paths
         from scripts.path_config import configure_paths
         if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
+        # Add scripts directory explicitly
+        scripts_dir = str(Path(project_root) / 'scripts')
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+            
+        # Configure paths
+        from scripts.path_config import configure_paths
+        if not configure_paths():
             logger.error("Path configuration failed")
             return False
             
