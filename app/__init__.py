@@ -57,6 +57,9 @@ def create_app(config_name='development'):
             admin_email = os.getenv('ADMIN_EMAIL')
             admin_password = os.getenv('ADMIN_PASSWORD')
             
+            # Add debug logging
+            logger.info(f"Admin credentials from .env: {admin_username}, {admin_email}, {admin_password}")
+            
             if not all([admin_username, admin_email, admin_password]):
                 raise ValueError("Missing admin credentials in .env file")
             
