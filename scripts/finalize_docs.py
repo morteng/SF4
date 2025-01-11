@@ -50,11 +50,28 @@ def update_release_notes():
     logger = configure_logger()
     
     try:
-        # Configure paths first
+        # Add project root to path
+        project_root = str(Path(__file__).parent.parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            
+        # Configure paths
         from scripts.path_config import configure_paths
         if not configure_paths():
             logger.error("Path configuration failed")
             return False
+            
+        # Verify imports work
+        import app
+        import scripts
+        
+        # Get version info
+        from scripts.version import get_version
+        version = get_version()
+        
+        # Get test coverage
+        from scripts.verification.verify_test_coverage import verify_coverage
+        coverage = verify_coverage(threshold=85)
             
         # Get project root
         from scripts.path_config import get_project_root

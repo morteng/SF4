@@ -15,6 +15,21 @@ def configure_paths(production=False):
         # Clear existing paths to avoid duplicates
         sys.path = [p for p in sys.path if not p.startswith(project_root)]
         
+        # Add project root and scripts directory first
+        sys.path.insert(0, project_root)
+        sys.path.insert(0, str(Path(project_root) / 'scripts'))
+        
+        # Verify imports work
+        import app
+        import scripts
+        
+        # Add production-specific paths if needed
+        if production:
+            sys.path.insert(0, str(Path(project_root) / 'logs'))
+            sys.path.insert(0, str(Path(project_root) / 'backups'))
+            
+        return True
+        
         # Add project directories in correct order
         paths_to_add = [
             project_root,

@@ -18,10 +18,36 @@ logger = logging.getLogger(__name__)
 def initialize_database(validate_schema=False, production=False):
     """Initialize database with production context support"""
     try:
-        # Configure paths first
+        # Add project root to path
+        project_root = str(Path(__file__).parent.parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            
+        # Configure paths
         from scripts.path_config import configure_paths
         if not configure_paths(production=production):
             raise RuntimeError("Failed to configure paths")
+            
+        # Verify imports work
+        import app
+        from app.models import Stipend, Tag, Organization, User
+        
+        # Create application context
+        from app import create_app
+        app = create_app()
+        with app.app_context():
+            # Create all tables
+            db.create_all()
+            
+            # Verify required tables exist
+            required_tables = ['stipend', 'tag', 'organization', 'user']
+            inspector = db.inspect(db.engine)
+            existing_tables = inspector.get_table_names()
+            
+            for table in required_tables:
+                if table not in existing_tables:
+                    logger.error(f"Missing required table: {table}")
+                    return False
             
         # Configure logging
         from scripts.init_logging import configure_logging
