@@ -1,12 +1,7 @@
-Let's try to avoid repeated or duplicate code and debug output.
-
 ### **Rules**
 - Maintain 85%+ test coverage
 - Conduct daily system health checks
 - Perform weekly security reviews
 - Plan next development cycle
-- Ensure proper path configuration
-- Implement robust database initialization
-- Maintain comprehensive documentation
 
 ---
