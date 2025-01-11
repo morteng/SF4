@@ -128,6 +128,8 @@ class ProductionConfig(Config):
     REMEMBER_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
+    FLASK_ENV = 'production'
+    FLASK_DEBUG = '0'
 
 config_by_name = {
     'development': DevelopmentConfig,
