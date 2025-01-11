@@ -45,7 +45,51 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def update_release_notes():
+def update_release_notes(verify=False):
+    """Enhanced release notes with proper path handling"""
+    try:
+        # Add project root to Python path
+        import sys
+        from pathlib import Path
+        project_root = str(Path(__file__).parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            
+        # Configure paths first
+        from scripts.path_config import configure_paths
+        if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
+        # Get version info
+        from scripts.version import get_version
+        version = get_version()
+        
+        # Get test coverage
+        from scripts.verification.verify_test_coverage import verify_coverage
+        coverage = verify_coverage(threshold=85)
+        
+        # Get deployment status
+        from scripts.verification.verify_deployment import verify_deployment
+        deployment_status = verify_deployment()
+        
+        # Update release notes
+        with open('RELEASE_NOTES.md', 'a') as f:
+            f.write(f"\n## Version {version} - {datetime.now().strftime('%Y-%m-%d')}\n")
+            f.write("- Final deployment verification completed\n")
+            f.write("- Production environment verified\n")
+            f.write(f"- Test coverage: {coverage}%\n")
+            f.write(f"- Deployment status: {'Passed' if deployment_status else 'Failed'}\n")
+            
+        # Verify update
+        if verify:
+            with open('RELEASE_NOTES.md') as f:
+                content = f.read()
+                if f"## Version {version}" not in content:
+                    logger.error("Failed to update release notes")
+                    return False
+                    
+        logger.info("Release notes updated successfully")
+        return True
     """Enhanced release notes with deployment details"""
     logger = configure_logger()
     
