@@ -6,6 +6,7 @@
 
 # Enhanced initialization sequence
 /run scripts/init_logging.py --production --verify
+/run scripts/path_config.py --production --verify
 /run scripts/startup/init_db.py --validate-schema --production --retry=5 --check-pool
 /run scripts/startup/init_admin.py --strict-password --verify-email --check-complexity --require-special-char
 
@@ -20,6 +21,9 @@
 
 # Test coverage verification with critical paths
 /run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin --check-models
+
+# Production readiness verification
+/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --verify-admin
 
 # Final commit with verification
 /run scripts/commit_changes.py --message "Step 2 coding completed" --verify --push --check-coverage --check-security
