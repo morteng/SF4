@@ -3,31 +3,31 @@
 
 ### CODE START ###
 
-# Initialize test environment with proper path verification
-/run scripts/path_config.py --test --verify
-/run scripts/init_logging.py --test
-/run scripts/setup_test_env.py --test
+# Initialize test environment with enhanced verification
+/run scripts/path_config.py --test --strict --verify
+/run scripts/init_logging.py --test --verify
+/run scripts/setup_test_env.py --test --full
 
-# Initialize test database with schema validation
-/run scripts/startup/init_db.py --test --validate-schema --retry=3
-/run scripts/startup/init_admin.py --test --strict-password --verify-email --retry=3
+# Initialize test database with comprehensive checks
+/run scripts/startup/init_db.py --test --validate-schema --verify-relations --retry=3
+/run scripts/startup/init_admin.py --test --strict-password --verify-email --check-complexity --retry=3
 
-# Core functionality tests
-/run scripts/verification/verify_db_schema.py --test --validate-required-fields --check-admin-interface
-/run scripts/verification/verify_htmx_integration.py --test --full --test-stipends-crud
+# Core functionality tests with enhanced verification
+/run scripts/verification/verify_db_schema.py --test --validate-required-fields --check-admin-interface --verify-relations
+/run scripts/verification/verify_htmx_integration.py --test --full --test-stipends-crud --validate-partial-updates
 
-# Security and monitoring tests
-/run scripts/verification/verify_security.py --test --check-rate-limits --daily
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts
+# Security and monitoring tests with comprehensive checks
+/run scripts/verification/verify_security.py --test --full-audit --check-rate-limits --daily --verify-secrets
+/run scripts/verification/verify_monitoring.py --test --check-dashboards --check-alerts --verify-config
 
-# Run comprehensive test suites
-/run scripts/testing/run_tests.py --unit --integration --e2e --cov --cov-report=html
+# Run comprehensive test suites with coverage
+/run scripts/testing/run_tests.py --unit --integration --e2e --cov --cov-report=html --critical-paths
 
-# Verify test coverage
-/run scripts/verification/verify_test_coverage.py --test --threshold=85 --critical-paths
+# Verify test coverage with admin interface checks
+/run scripts/verification/verify_test_coverage.py --test --threshold=85 --critical-paths --admin-only --verify
 
-# Finalize testing
-/run scripts/commit_changes.py --message "Testing cycle completed" --verify --push
+# Finalize testing with comprehensive verification
+/run scripts/commit_changes.py --message "Testing cycle completed" --verify --push --check-coverage
 
 ### CODE END ###
 
