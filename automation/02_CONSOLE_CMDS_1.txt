@@ -4,20 +4,19 @@
 
 ### CODE START ###
 
-# Initialize system
-/run scripts/init_logging.py --production
-/run scripts/path_config.py --production --verify
-/run scripts/start_cycle.py
+# Initialize system with enhanced monitoring
+/run scripts/init_logging.py --production --monitoring
+/run scripts/path_config.py --production --verify --monitoring
+/run scripts/start_cycle.py --with-dashboard
 
-# Enhanced system verification
-/run scripts/verification/verify_health.py --production --check-response-time
-/run scripts/verification/verify_monitoring.py --full
-/run scripts/verification/verify_db_connection.py --retries=5 --timeout=30
-/run scripts/verification/verify_backup.py --verify-integrity --check-schema
+# Enhanced monitoring verification
+/run scripts/verification/verify_monitoring.py --full --dashboard
+/run scripts/verification/verify_health.py --production --check-response-time --monitoring
+/run scripts/verification/verify_db_connection.py --retries=5 --timeout=30 --monitoring
 
-# Security verification
-/run scripts/security/security_audit.py --full --daily
-/run scripts/verification/verify_security.py --check-admin-interface --verify-auth
+# Security verification with monitoring integration
+/run scripts/security/security_audit.py --full --daily --monitoring
+/run scripts/verification/verify_security.py --check-admin-interface --verify-auth --monitoring
 
 ### CODE END ###
 

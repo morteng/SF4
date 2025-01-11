@@ -27,7 +27,11 @@ def verify_monitoring_dashboards():
             'response_time',   # Performance monitoring
             'error_rate',      # Stability monitoring
             'backup_status',   # Backup system health
-            'security_events'  # Security monitoring
+            'security_events', # Security monitoring
+            'active_users',    # User activity tracking
+            'api_usage',       # API monitoring
+            'bot_activity',    # Bot performance
+            'stipend_updates'  # Stipend activity
         ]
         if not dashboard_path.exists():
             logger.error("Dashboard configuration not found")

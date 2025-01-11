@@ -14,8 +14,8 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_system_health(production=True, check_response_time=True):
-    """Perform comprehensive system health check with production focus"""
+def verify_system_health(production=True, check_response_time=True, monitoring=False):
+    """Perform comprehensive system health check with production focus and monitoring integration"""
     logger = configure_logger()
     
     try:
