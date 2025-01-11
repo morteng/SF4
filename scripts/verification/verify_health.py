@@ -14,8 +14,8 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_system_health():
-    """Perform comprehensive system health check"""
+def verify_system_health(production=False, check_response_time=False):
+    """Perform comprehensive system health check with production focus"""
     logger = configure_logger()
     
     try:
@@ -45,6 +45,12 @@ def verify_system_health():
             if response.status_code != 200:
                 logger.error("Web interface health check failed")
                 return False
+                
+            # Check response time in production
+            if production and check_response_time:
+                response_time = response.elapsed.total_seconds()
+                if response_time > 2.0:
+                    logger.warning(f"Slow response time: {response_time:.2f}s")
         except Exception as e:
             logger.error(f"Web interface check failed: {str(e)}")
             return False

@@ -13,8 +13,8 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_feedback_setup(check_surveys=False, check_analytics=False):
-    """Verify user feedback collection setup"""
+def verify_feedback_setup(check_surveys=False, check_analytics=False, check_response_rate=False):
+    """Verify user feedback collection setup with response rate analysis"""
     logger = configure_logger()
     
     try:
@@ -48,6 +48,16 @@ def verify_feedback_setup(check_surveys=False, check_analytics=False):
         if check_analytics:
             if not os.getenv('ANALYTICS_ENDPOINT'):
                 logger.error("Missing ANALYTICS_ENDPOINT")
+                return False
+                
+        # Verify response rate metrics
+        if check_response_rate:
+            response_rate = os.getenv('MIN_RESPONSE_RATE', '10')
+            try:
+                if int(response_rate) < 10:
+                    logger.warning(f"Low minimum response rate: {response_rate}%")
+            except ValueError:
+                logger.error("Invalid MIN_RESPONSE_RATE format")
                 return False
                 
         logger.info("Feedback setup verification passed")

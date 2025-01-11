@@ -4,14 +4,14 @@
 
 ### CODE START ###
 
-# Comprehensive system health check including security, monitoring and backups
-/run scripts/verification/verify_health.py --full-check
+# Verify production monitoring configuration
+/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts
 
-# Verify test coverage with admin interface focus
-/run scripts/verification/verify_test_coverage.py --threshold=85 --admin-only --critical-paths
+# Verify user feedback collection and analytics
+/run scripts/verification/verify_feedback.py --check-surveys --check-analytics --check-response-rate
 
-# Verify user feedback collection setup
-/run scripts/verification/verify_feedback.py --check-surveys --check-analytics
+# Verify system health with production focus
+/run scripts/verification/verify_health.py --production --check-response-time
 
 ### CODE END ###
 
