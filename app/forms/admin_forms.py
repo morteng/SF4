@@ -37,11 +37,12 @@ class StipendForm(FlaskForm):
         logger.debug("Initializing StipendForm")
         super().__init__(*args, **kwargs)
         logger.debug(f"Form fields initialized: {self._fields.keys()}")
-        
+
         # Generate CSRF token if not provided
         if not self.csrf_token.data:
             from flask_wtf.csrf import generate_csrf
             self.csrf_token.data = generate_csrf()
+            logger.debug("Generated new CSRF token")
         
     csrf_token = HiddenField('CSRF Token', validators=[
         DataRequired(message="CSRF token is required")
@@ -135,22 +136,36 @@ class StipendForm(FlaskForm):
 
     def validate(self):
         logger.debug("Validating StipendForm")
-        
+
+        # Validate CSRF token first
+        if not self.csrf_token.data:
+            self.csrf_token.errors.append("CSRF token is missing")
+            logger.error("CSRF token validation failed: token is missing")
+            return False
+
+        try:
+            from flask_wtf.csrf import validate_csrf
+            validate_csrf(self.csrf_token.data)
+        except Exception as e:
+            self.csrf_token.errors.append("Invalid CSRF token")
+            logger.error(f"CSRF token validation failed: {str(e)}")
+            return False
+
         # Add validation for required relationships
         if not self.organization_id.data:
             self.organization_id.errors.append("Organization is required")
             return False
-            
+
         # Validate tags
         if not self.tags.data:
             self.tags.errors.append("At least one tag is required")
             return False
-            
+
         # Additional custom validation
         if self.application_deadline.data and self.application_deadline.data < datetime.now():
             self.application_deadline.errors.append("Deadline must be in the future")
             return False
-            
+
         return super().validate()
 
 
