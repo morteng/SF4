@@ -112,10 +112,14 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
             app.config['SECRET_KEY'] = new_secret
             logger.info("Generated new secure SECRET_KEY")
         
-        # Verify debug mode is disabled in production
-        if os.getenv('FLASK_ENV') == 'production' and os.getenv('FLASK_DEBUG') == '1':
-            logger.error("Debug mode must be disabled in production")
-            return False
+        # Strict debug mode verification
+        if os.getenv('FLASK_ENV') == 'production':
+            if os.getenv('FLASK_DEBUG', '0').lower() in ('1', 'true', 'yes'):
+                logger.error("Debug mode must be disabled in production")
+                # Force disable debug mode
+                os.environ['FLASK_DEBUG'] = '0'
+                app.config['DEBUG'] = False
+                logger.info("Debug mode has been disabled")
             
         # Check password complexity
         admin_password = os.getenv('ADMIN_PASSWORD')

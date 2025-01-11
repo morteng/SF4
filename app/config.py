@@ -123,8 +123,8 @@ class ProductionConfig(Config):
     TESTING = False
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath(os.path.join('instance', 'site.db'))}"
     WTF_CSRF_ENABLED = True
-    WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or 'a-very-long-and-complex-csrf-key-with-at-least-64-characters-1234567890'
-    SECRET_KEY = 'a-very-long-and-complex-secret-key-with-at-least-64-characters-1234567890'
+    WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or secrets.token_urlsafe(64)
+    SECRET_KEY = os.environ.get('SECRET_KEY') or secrets.token_urlsafe(64)
     SESSION_COOKIE_SECURE = True
     REMEMBER_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
