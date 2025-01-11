@@ -8,31 +8,28 @@
 /run scripts/init_logging.py --test
 /run scripts/setup_test_env.py --test
 
-# Install test dependencies with verification
-/run scripts/install_dependencies.py --test --verify
-
 # Initialize test database with schema validation
 /run scripts/startup/init_db.py --test --validate-schema --retry=3
 /run scripts/startup/init_admin.py --test --strict-password --verify-email --retry=3
 
 # Core functionality tests with enhanced verification
 /run scripts/verification/verify_db_connection.py --test --strict --retry=3 --validate-schema
-/run scripts/verification/verify_db_schema.py --test --strict --tables=stipend --validate-required-fields --validate-relations --retry=3
+/run scripts/verification/verify_db_schema.py --test --strict --tables=stipend,tag,organization,user --validate-required-fields --validate-relations --retry=3
 
 # Security verification with daily checks
-/run scripts/verification/verify_security.py --test --full-audit --check-path-config --daily --check-rate-limits
+/run scripts/verification/verify_security.py --test --full-audit --check-path-config --daily --check-rate-limits --check-admin-interface
 
 # HTMX interface tests with full reload validation
 /run scripts/verification/verify_htmx_integration.py --test --full --test-stipends-crud --validate-full-reloads --admin-interface
 
-# Run test suites with coverage
+# Run comprehensive test suites
 /run scripts/testing/run_tests.py --unit --integration --e2e --cov --cov-report=html
 
-# Coverage verification with admin-only checks
+# Generate and verify coverage reports
 /run scripts/generate_coverage_report.py --test --html --xml
 /run scripts/verification/verify_test_coverage.py --test --module=stipend --threshold=85 --critical-paths --admin-only
 
-# Finalize testing with push
+# Finalize testing with verification
 /run scripts/commit_changes.py --message "Testing cycle completed" --verify --push
 
 ### CODE END ###
