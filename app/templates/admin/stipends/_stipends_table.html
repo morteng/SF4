@@ -14,8 +14,8 @@
                 <td class="px-4 py-2">{{ stipend.name }}</td>
                 <td class="px-4 py-2">
                     {% from "_macros.html" import edit_button, delete_button %}
-                    {{ edit_button(url_for('admin.stipend.edit', id=stipend.id), '#main-content') }}
-                    {{ delete_button(url_for('admin.stipend.delete', id=stipend.id), 'closest tr') }}
+                    {{ edit_button(url_for('admin.stipend.edit', id=stipend.id)) }}
+                    {{ delete_button(url_for('admin.stipend.delete', id=stipend.id)) }}
                 </td>
             </tr>
             {% endfor %}

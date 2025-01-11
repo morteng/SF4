@@ -16,8 +16,8 @@
                 <td class="px-4 py-2">{{ organization.description }}</td>
                 <td class="px-4 py-2">
                     {% from "_macros.html" import edit_button, delete_button %}
-                    {{ edit_button(url_for('admin.organization.edit', id=organization.id), '#main-content') }}
-                    {{ delete_button(url_for('admin.organization.delete', id=organization.id), 'closest tr') }}
+                    {{ edit_button(url_for('admin.organization.edit', id=organization.id)) }}
+                    {{ delete_button(url_for('admin.organization.delete', id=organization.id)) }}
                 </td>
             </tr>
             {% endfor %}

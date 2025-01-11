@@ -7,7 +7,11 @@
     <h1 class="text-2xl font-bold mb-4">Manage Users</h1>
     
     {% from "_macros.html" import primary_button %}
-    {{ primary_button('Create New User', url_for('admin.user.create'), '#main-content') }}
+    <button 
+        onclick="window.location.href='{{ url_for('admin.user.create') }}'"
+        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        Create New User
+    </button>
 
     <div class="mb-4">
         <form method="GET" action="{{ url_for('admin.user.index') }}">
