@@ -49,8 +49,15 @@ def create_app(config_name='development'):
             # Delete existing admin user if it exists
             admin_user = User.query.filter_by(is_admin=True).first()
             if admin_user:
-                logger.info(f"Deleting existing admin user: {admin_user.username}")
-                delete_user(admin_user)
+                logger.info(f"Deleting existing admin user: {admin_user.username} (ID: {admin_user.id})")
+                try:
+                    delete_user(admin_user)
+                    logger.info(f"Successfully deleted admin user {admin_user.username}")
+                except Exception as e:
+                    logger.error(f"Failed to delete admin user: {str(e)}")
+                    raise RuntimeError(f"Failed to delete existing admin user: {str(e)}")
+            else:
+                logger.info("No existing admin user found")
             
             # Get admin credentials from .env
             admin_username = os.getenv('ADMIN_USERNAME')
@@ -61,7 +68,17 @@ def create_app(config_name='development'):
             logger.info(f"Admin credentials from .env: {admin_username}, {admin_email}, {admin_password}")
             
             if not all([admin_username, admin_email, admin_password]):
+                logger.error("Missing admin credentials in .env file")
                 raise ValueError("Missing admin credentials in .env file")
+            
+            # Verify database connection
+            logger.info("Checking database connection...")
+            try:
+                db.session.execute("SELECT 1")
+                logger.info("Database connection successful")
+            except Exception as e:
+                logger.error(f"Database connection failed: {str(e)}")
+                raise RuntimeError(f"Database connection failed: {str(e)}")
             
             # Create new admin user
             logger.info("Creating new admin user from .env values")

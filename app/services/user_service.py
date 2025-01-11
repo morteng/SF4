@@ -98,7 +98,7 @@ def validate_password_strength(password):
 
 # Add this temporarily to test your password
 if __name__ == "__main__":
-    test_password = "StrongPass123!"  # Replace with your password
+    test_password = "Uq6IcUZ0QMWnH4x?*/"  # Replace with your password
     is_valid, message = validate_password_strength(test_password)
     print(f"Password valid: {is_valid}")
     print(f"Message: {message}")
@@ -118,10 +118,11 @@ def create_user(form_data, current_user_id=None):
             raise ValueError(FlashMessages.EMAIL_ALREADY_EXISTS.value)
         
         # Validate password strength for admin users (temporarily disabled)
-        # if form_data.get('is_admin', False):
-        #     is_valid, message = validate_password_strength(form_data['password'])
-        #     if not is_valid:
-        #         raise ValueError(f"Admin password requirements: {message}")
+        if form_data.get('is_admin', False):
+            logger.info("Skipping admin password validation for debugging")
+            # is_valid, message = validate_password_strength(form_data['password'])
+            # if not is_valid:
+            #     raise ValueError(f"Admin password requirements: {message}")
         
         # Create user
         new_user = User(
