@@ -1,6 +1,6 @@
 from datetime import datetime
-from wtforms import Field, StringField
-from wtforms.validators import InputRequired, Length, Regexp
+from wtforms import Field, StringField, TextAreaField
+from wtforms.validators import InputRequired, Length, Regexp, Optional
 from app.constants import FlashMessages
 
 class StipendNameField(StringField):
