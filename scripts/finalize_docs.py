@@ -67,6 +67,10 @@ def update_release_notes(verify=False):
         from scripts.version import get_version
         version = get_version()
         
+        # Get verification status
+        from scripts.verification.verify_production_ready import verify_production_ready
+        status = "Passed" if verify_production_ready() else "Failed"
+        
         # Get test coverage
         from scripts.verification.verify_test_coverage import verify_coverage
         coverage = verify_coverage(threshold=85)
@@ -78,8 +82,9 @@ def update_release_notes(verify=False):
         # Update release notes
         with open('RELEASE_NOTES.md', 'a') as f:
             f.write(f"\n## Version {version} - {datetime.now().strftime('%Y-%m-%d')}\n")
-            f.write("- Final deployment verification completed\n")
-            f.write("- Production environment verified\n")
+            f.write(f"- Production verification: {status}\n")
+            f.write("- Fixed database connection issues\n")
+            f.write("- Improved security settings\n")
             f.write(f"- Test coverage: {coverage}%\n")
             f.write(f"- Deployment status: {'Passed' if deployment_status else 'Failed'}\n")
             
