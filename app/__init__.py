@@ -3,6 +3,7 @@ import time
 import logging
 from flask import Flask
 from dotenv import load_dotenv
+from sqlalchemy import text
 from app.extensions import db, login_manager, migrate, csrf, limiter
 from scripts.ensure_admin_user import ensure_admin_user
 
@@ -74,7 +75,7 @@ def create_app(config_name='development'):
             # Verify database connection
             logger.info("Checking database connection...")
             try:
-                db.session.execute("SELECT 1")
+                db.session.execute(text("SELECT 1"))
                 logger.info("Database connection successful")
             except Exception as e:
                 logger.error(f"Database connection failed: {str(e)}")
