@@ -42,6 +42,10 @@ def verify_production_ready():
                 os.environ[var] = default
                 logger.info(f"Set default value for {var}: {default}")
                 
+        # Create application context
+        from app import create_app
+        app = create_app()
+
         # Ensure debug mode is disabled
         if os.getenv('FLASK_DEBUG', '0').lower() in ('1', 'true', 'yes'):
             os.environ['FLASK_DEBUG'] = '0'
