@@ -8,7 +8,9 @@
 # Run application for management review
 /run scripts/path_config.py --production --strict
 /run scripts/init_logging.py --production --verify
-/run scripts/verification/verify_production_ready.py --full
+/run scripts/verification/verify_production_ready.py --full --validate-config
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface --validate-keys
+/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --validate-config
 /run python app.py
 
 ### CODE END ###
