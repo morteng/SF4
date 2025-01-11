@@ -5431,3 +5431,77 @@ Coverage failure: total of 19 is less than fail-under=85
 2025-01-12 00:25:32,212 - INFO - Version history updated successfully
 2025-01-12 00:25:32,225 - ERROR - Import verification failed: cannot import name 'verify_coverage' from 'scripts.verification' (unknown location)
 2025-01-12 00:25:32,225 - ERROR - Documentation finalization failed
+2025-01-12 00:27:47,016 - INFO - Set default value for BACKUP_DIR: backups
+2025-01-12 00:27:47,016 - INFO - Set default value for LOG_DIR: logs
+2025-01-12 00:27:47,122 - DEBUG - Created admin blueprint
+2025-01-12 00:27:47,129 - DEBUG - Created stipend blueprint: admin_stipend
+2025-01-12 00:27:47,129 - DEBUG - URL prefix: /stipends
+2025-01-12 00:27:47,129 - DEBUG - Import name: app.routes.admin.stipend_routes
+2025-01-12 00:27:47,137 - DEBUG - Registered stipend blueprint: admin_stipend
+2025-01-12 00:27:47,137 - DEBUG - Registered dashboard blueprint: dashboard
+2025-01-12 00:27:47,154 - DEBUG - Registered admin blueprint with app
+2025-01-12 00:27:47,154 - DEBUG - Registered routes:
+2025-01-12 00:27:47,154 - DEBUG - Route: static
+2025-01-12 00:27:47,154 - DEBUG - Route: admin.admin_stipend.create
+2025-01-12 00:27:47,154 - DEBUG - Route: admin.admin_stipend.edit
+2025-01-12 00:27:47,154 - DEBUG - Route: admin.admin_stipend.delete
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.admin_stipend.index
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.admin_stipend.paginate
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.dashboard.dashboard
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.user.create
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.user.edit
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.user.delete
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.user.reset_password
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.user.toggle_active
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.user.edit_profile
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.user.index
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.bot.create
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.bot.delete
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.bot.index
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.bot.run
+2025-01-12 00:27:47,155 - DEBUG - Route: admin.bot.schedule
+2025-01-12 00:27:47,156 - DEBUG - Route: admin.bot.edit
+2025-01-12 00:27:47,156 - DEBUG - Route: admin.organization.create
+2025-01-12 00:27:47,156 - DEBUG - Route: admin.organization.delete
+2025-01-12 00:27:47,156 - DEBUG - Route: admin.organization.index
+2025-01-12 00:27:47,156 - DEBUG - Route: admin.organization.paginate
+2025-01-12 00:27:47,156 - DEBUG - Route: admin.organization.view
+2025-01-12 00:27:47,156 - DEBUG - Route: admin.organization.edit
+2025-01-12 00:27:47,156 - DEBUG - Route: admin.tag.create
+2025-01-12 00:27:47,156 - DEBUG - Route: admin.tag.edit
+2025-01-12 00:27:47,156 - DEBUG - Route: admin.tag.delete
+2025-01-12 00:27:47,156 - DEBUG - Route: admin.tag.index
+2025-01-12 00:27:47,156 - DEBUG - Route: admin.tag.paginate
+2025-01-12 00:27:47,156 - DEBUG - Validating required routes: ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+2025-01-12 00:27:47,157 - DEBUG - Registered routes: ['static', 'admin.admin_stipend.create', 'admin.admin_stipend.edit', 'admin.admin_stipend.delete', 'admin.admin_stipend.index', 'admin.admin_stipend.paginate', 'admin.dashboard.dashboard', 'admin.user.create', 'admin.user.edit', 'admin.user.delete', 'admin.user.reset_password', 'admin.user.toggle_active', 'admin.user.edit_profile', 'admin.user.index', 'admin.bot.create', 'admin.bot.delete', 'admin.bot.index', 'admin.bot.run', 'admin.bot.schedule', 'admin.bot.edit', 'admin.organization.create', 'admin.organization.delete', 'admin.organization.index', 'admin.organization.paginate', 'admin.organization.view', 'admin.organization.edit', 'admin.tag.create', 'admin.tag.edit', 'admin.tag.delete', 'admin.tag.index', 'admin.tag.paginate']
+2025-01-12 00:27:47,157 - DEBUG - Required routes: ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+2025-01-12 00:27:47,188 - INFO - Deleting existing admin user: admin (ID: 1)
+2025-01-12 00:27:47,207 - INFO - User 1 deleted successfully
+2025-01-12 00:27:47,207 - INFO - Successfully deleted admin user admin
+2025-01-12 00:27:47,207 - INFO - Admin credentials from .env: admin, admin@example.com, Uq6IcUZ0QMWnH4x?*/
+2025-01-12 00:27:47,207 - INFO - Checking database connection...
+2025-01-12 00:27:47,208 - INFO - Database connection successful
+2025-01-12 00:27:47,208 - INFO - Creating new admin user from .env values
+2025-01-12 00:27:47,209 - INFO - Attempting to create user: admin
+2025-01-12 00:27:47,212 - INFO - Skipping admin password validation for debugging
+2025-01-12 00:27:47,622 - INFO - Password hash for admin: pbkdf2:sha256:600000$CxVaZjVwIuGiNyZV$1bfc0a16c75a269e8fda3df97771795e695056aa40b7ab0099e95ad959f7c7b6
+2025-01-12 00:27:48,011 - INFO - Password check test: True
+2025-01-12 00:27:48,030 - INFO - Successfully created user: admin (ID: 1)
+2025-01-12 00:27:48,033 - INFO - Creating audit log: create_user by user 0
+2025-01-12 00:27:48,046 - ERROR - Error creating notification for audit log: AUDIT_LOG
+2025-01-12 00:27:48,047 - INFO - Created audit log: create_user by user 0
+2025-01-12 00:27:48,056 - INFO - Created new admin user: admin
+2025-01-12 00:27:48,057 - INFO - Admin user exists: admin (ID: 1)
+2025-01-12 00:27:48,057 - INFO - Admin user password hash: pbkdf2:sha256:600000$CxVaZjVwIuGiNyZV$1bfc0a16c75a269e8fda3df97771795e695056aa40b7ab0099e95ad959f7c7b6
+2025-01-12 00:27:48,057 - INFO - Admin user is_admin: True
+2025-01-12 00:27:48,057 - INFO - Application initialized successfully
+2025-01-12 00:27:48,058 - ERROR - Production readiness verification failed: name 'secrets' is not defined
+2025-01-12 00:27:48,062 - ERROR - Import error: cannot import name 'BaseService' from 'app.services' (unknown location)
+2025-01-12 00:27:48,063 - ERROR - Current sys.path: ['C:\\github\\SF4\\.venv\\Lib\\site-packages', 'C:\\github\\SF4\\backups', 'C:\\github\\SF4\\logs', 'C:\\github\\SF4\\scripts\\startup', 'C:\\github\\SF4\\scripts\\testing', 'C:\\github\\SF4\\scripts\\verification', 'C:\\github\\SF4\\scripts', 'C:\\github\\SF4\\app', 'C:\\github\\SF4', 'C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.8_3.8.2800.0_x64__qbz5n2kfra8p0\\python38.zip', 'C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.8_3.8.2800.0_x64__qbz5n2kfra8p0\\DLLs', 'C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.8_3.8.2800.0_x64__qbz5n2kfra8p0\\lib', 'C:\\Users\\Morten\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.8_qbz5n2kfra8p0']
+2025-01-12 00:27:48,068 - INFO - Version validation passed: 0.2.0
+2025-01-12 00:27:48,069 - ERROR - Database connection verification failed: No module named 'scripts.verify_db_connection'
+2025-01-12 00:27:48,069 - ERROR - Database connection verification failed
+2025-01-12 00:27:48,070 - INFO - Release notes updated successfully
+2025-01-12 00:27:48,073 - INFO - Version history updated successfully
+2025-01-12 00:27:48,086 - ERROR - Import verification failed: cannot import name 'verify_coverage' from 'scripts.verification' (unknown location)
+2025-01-12 00:27:48,086 - ERROR - Documentation finalization failed
