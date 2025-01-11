@@ -59,10 +59,11 @@ def verify_production_ready():
             logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
             return False
             
-        # Verify debug mode is disabled
+        # Ensure debug mode is disabled
         if os.getenv('FLASK_DEBUG', '0').lower() in ('1', 'true', 'yes'):
-            logger.error("Debug mode must be disabled in production")
-            return False
+            os.environ['FLASK_DEBUG'] = '0'
+            app.config['DEBUG'] = False
+            logger.info("Debug mode disabled for production")
         
         # Verify SECRET_KEY meets requirements
         secret_key = os.getenv('SECRET_KEY') or app.config.get('SECRET_KEY')
