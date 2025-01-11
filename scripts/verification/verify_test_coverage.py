@@ -24,14 +24,20 @@ def verify_coverage(threshold=80, critical_paths=True, admin_only=False, verify=
     logger = configure_coverage_logging()
     
     try:
-        # Configure paths first
+        # Configure paths with production settings
         from scripts.path_config import configure_paths
-        if not configure_paths():
+        if not configure_paths(production=True):
             raise RuntimeError("Failed to configure paths")
             
-        # Verify imports
+        # Verify imports with proper path
+        project_root = str(Path(__file__).parent.parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            
         import app
         import tests
+        from app.models import Stipend, User
+        from app.services import BaseService
     except ImportError as e:
         logger.error(f"Import error: {str(e)}")
         logger.error(f"Current sys.path: {sys.path}")

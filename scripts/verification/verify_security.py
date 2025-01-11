@@ -106,8 +106,12 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
         # Enhanced SECRET_KEY validation with secure generation if missing
         secret_key = os.getenv('SECRET_KEY') or app.config.get('SECRET_KEY')
         if not secret_key or len(secret_key) < 64 or len(set(secret_key)) < 32:
-            import secrets
-            new_secret = secrets.token_urlsafe(64)
+            import random
+            import string
+            new_secret = ''.join(random.choices(
+                string.ascii_letters + string.digits + string.punctuation, 
+                k=64
+            ))
             os.environ['SECRET_KEY'] = new_secret
             app.config['SECRET_KEY'] = new_secret
             logger.info("Generated new secure SECRET_KEY")

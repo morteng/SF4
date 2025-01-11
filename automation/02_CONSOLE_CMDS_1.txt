@@ -4,13 +4,19 @@
 
 ### CODE START ###
 
-# Enhanced production verification with new metrics
+# Initial system verification
 /run scripts/init_logging.py --production
+/run scripts/path_config.py --production --verify
+/run scripts/start_cycle.py
+
+# Core system verification
 /run scripts/verification/verify_db_connection.py --check-pool --verify-retries
 /run scripts/validate_schema.py --verify-relations
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-metrics
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits --check-csrf
+
+# Monitoring and coverage
+/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-metrics --check-response-times
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin --check-models
 
 ### CODE END ###
 

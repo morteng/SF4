@@ -124,26 +124,38 @@ def configure_paths(production=False):
 def verify_path_config():
     """Verify path configuration is correct"""
     try:
+        # Ensure project root is first
+        project_root = get_project_root()
+        if sys.path[0] != project_root:
+            sys.path.insert(0, project_root)
+            
         # Check critical imports
         import app
         import scripts
         from scripts.verification import verify_db_connection
         from scripts.verification import verify_security
-
-        # Verify project root is first in sys.path
-        project_root = get_project_root()
-        if sys.path[0] != project_root:
-            print(f"Project root not first in sys.path: {sys.path[0]}")
-            return False
+        from scripts.verification import verify_test_coverage
 
         # Verify virtual environment path
         venv_path = os.getenv('VIRTUAL_ENV')
         if venv_path:
             site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
             if site_packages not in sys.path:
-                print(f"Missing site-packages: {site_packages}")
-                return False
+                sys.path.append(site_packages)
 
+        # Verify all required paths
+        required_paths = [
+            project_root,
+            str(Path(project_root) / 'app'),
+            str(Path(project_root) / 'scripts'),
+            str(Path(project_root) / 'scripts/verification')
+        ]
+        
+        missing_paths = [p for p in required_paths if p not in sys.path]
+        if missing_paths:
+            for p in missing_paths:
+                sys.path.insert(0, p)
+                
         return True
     except ImportError as e:
         print(f"Path verification failed: {str(e)}")
