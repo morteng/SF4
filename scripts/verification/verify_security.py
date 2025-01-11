@@ -120,7 +120,10 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
         default_vars = {
             'BACKUP_DIR': 'backups',
             'LOG_DIR': 'logs',
-            'ADMIN_CSRF_SECRET': secrets.token_urlsafe(32)
+            'ADMIN_CSRF_SECRET': ''.join(random.choices(
+                string.ascii_letters + string.digits + string.punctuation, 
+                k=32
+            ))
         }
         
         for var, default in default_vars.items():
