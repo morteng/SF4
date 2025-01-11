@@ -6,8 +6,9 @@
 ### CODE START ###
 
 # Run application for management review
-/run scripts/path_config.py --production --verify
-/run scripts/init_logging.py --production
+/run scripts/path_config.py --production --strict --verify
+/run scripts/init_logging.py --production --verify
+/run scripts/setup_test_env.py --production --full
 /run python app.py
 
 ### CODE END ###
