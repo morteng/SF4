@@ -84,10 +84,16 @@ def verify_production_ready():
             logger.error("Missing ADMIN_SESSION_TIMEOUT")
             return False
             
-        # Verify admin interface uses full page reloads
+        # Verify admin interface uses full page reloads and has required fields
         from app.routes.admin import admin_bp
         if not hasattr(admin_bp, 'full_page_reloads'):
             logger.error("Admin interface must use full page reloads")
+            return False
+            
+        # Verify only stipend name is required
+        from app.models.stipend import Stipend
+        if not Stipend.__table__.columns['name'].nullable:
+            logger.error("Stipend name must be required field")
             return False
             
         logger.info("Production environment is ready")

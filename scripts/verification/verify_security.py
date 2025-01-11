@@ -66,7 +66,7 @@ def verify_login_attempts():
         logger.error(f"Login attempt verification failed: {str(e)}")
         return False
 
-def verify_security_settings(full_audit=False, daily=True, validate_keys=False, check_stipends_security=False, check_admin_interface=False, check_rate_limits=False):
+def verify_security_settings(full_audit=False, daily=True, validate_keys=False, check_stipends_security=False, check_admin_interface=False, check_rate_limits=True):
     """Verify security-related settings with enhanced checks
     Args:
         full_audit (bool): Perform comprehensive security audit
