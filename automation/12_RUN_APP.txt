@@ -1,11 +1,14 @@
-# Code Cycle Step 12 (Optionally run app)
+# Code Cycle Step 12 (Run app for management review)
 # Only edit the section between CODE START and CODE END
 
 /reset
 
 ### CODE START ###
 
-# optionally include code to run the app here if ready for demo to Management. Otherwise leave blank to start a new code cycle
+# Run application for management review
+/run scripts/path_config.py --production --verify
+/run scripts/init_logging.py --production
+/run python app.py
 
 ### CODE END ###
 
