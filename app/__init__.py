@@ -101,6 +101,8 @@ def create_app(config_name='development'):
             admin_user = User.query.filter_by(username=admin_username).first()
             if admin_user:
                 logger.info(f"Admin user exists: {admin_user.username} (ID: {admin_user.id})")
+                logger.info(f"Admin user password hash: {admin_user.password_hash}")
+                logger.info(f"Admin user is_admin: {admin_user.is_admin}")
             else:
                 logger.error("Admin user was not created")
                 
@@ -281,7 +283,13 @@ def init_extensions(app):
         @login_manager.user_loader
         def load_user(user_id):
             logger.info(f"Loading user with ID: {user_id}")
-            return User.query.get(int(user_id))
+            user = User.query.get(int(user_id))
+            if user:
+                logger.info(f"User loaded: {user.username}")
+                logger.info(f"User is_admin: {user.is_admin}")
+            else:
+                logger.warning(f"User with ID {user_id} not found")
+            return user
     except Exception as e:
         logger.error(f"Failed to initialize login manager: {str(e)}")
         raise
