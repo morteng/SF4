@@ -34,7 +34,7 @@ def generate_checklist(validate=False):
             
         # Import verification functions
         from scripts.verification.verify_security import verify_security_settings
-        from scripts.verification.verify_backup import verify_backup_integration
+        from scripts.verification.verify_backup import verify_backup_integrity as verify_backup_integration
         from scripts.verification.verify_production_ready import verify_production_ready
         
         # Create deployment directory if it doesn't exist

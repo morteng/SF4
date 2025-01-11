@@ -44,9 +44,14 @@ def verify_coverage(threshold=85, critical_paths=True, admin_only=False, verify=
             raise RuntimeError("Failed to configure paths")
             
         # Add project root to Python path
-        project_root = str(Path(__file__).parent.parent)
+        project_root = str(Path(__file__).parent.parent.parent)
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
+            
+        # Add scripts directory explicitly
+        scripts_dir = str(Path(project_root) / 'scripts')
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
             
         # Add app directory explicitly
         app_dir = str(Path(project_root) / 'app')
