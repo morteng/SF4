@@ -3,28 +3,28 @@
 
 ### CODE START ###
 
-# Initialize test environment
+# Enhanced test environment setup
 /run scripts/path_config.py --test --verify
 /run scripts/init_logging.py --test --verify
-/run scripts/setup_test_env.py --test --verify --validate-schema
+/run scripts/setup_test_env.py --test --verify --validate-schema --check-pool
 
-# Core functionality tests
-/run scripts/testing/run_tests.py --unit --integration --e2e --cov --critical-paths
-/run scripts/verification/verify_htmx_integration.py --test-stipends-crud --validate-partial-updates
+# Comprehensive test suite
+/run scripts/testing/run_tests.py --unit --integration --e2e --cov --critical-paths --verify-admin
+/run scripts/verification/verify_htmx_integration.py --test-stipends-crud --validate-partial-updates --check-admin-interface
 
-# Database and security tests
-/run scripts/verification/verify_db_connection.py --retries=3 --delay=1 --validate-schema --check-backups
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --check-rate-limits
+# Enhanced database and security tests
+/run scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-pool --verify-timeout
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits --check-csrf
 
 # Monitoring and coverage verification
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-dashboards
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify
+/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-metrics --check-response-times
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin --check-models
 
-# Final production readiness check
-/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode
+# Production readiness verification
+/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --verify-admin
 
 # Commit test results
-/run scripts/commit_changes.py --message "Testing cycle completed" --verify --push
+/run scripts/commit_changes.py --message "Testing cycle completed" --verify --push --check-coverage --check-security
 
 ### CODE END ###
 
