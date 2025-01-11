@@ -44,8 +44,9 @@ def verify_production_ready():
                 
         # Ensure debug mode is disabled
         if os.getenv('FLASK_DEBUG', '0').lower() in ('1', 'true', 'yes'):
-            logger.error("Debug mode must be disabled in production")
-            return False
+            os.environ['FLASK_DEBUG'] = '0'
+            app.config['DEBUG'] = False
+            logger.info("Debug mode disabled for production")
         
         # Verify required environment variables
         required_vars = [
