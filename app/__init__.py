@@ -62,12 +62,16 @@ def create_app(config_name='development'):
             
             # Create new admin user
             logger.info("Creating new admin user from .env values")
-            create_user({
-                'username': admin_username,
-                'email': admin_email,
-                'password': admin_password,
-                'is_admin': True
-            }, current_user_id=0)  # current_user_id=0 indicates system-initiated action
+            try:
+                create_user({
+                    'username': admin_username,
+                    'email': admin_email,
+                    'password': admin_password,
+                    'is_admin': True
+                }, current_user_id=0)  # current_user_id=0 indicates system-initiated action
+            except ValueError as e:
+                logger.error(f"Failed to create admin user: {str(e)}")
+                raise RuntimeError(f"Admin user creation failed: {str(e)}")
             
             logger.info(f"Created new admin user: {admin_username}")
                 

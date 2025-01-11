@@ -10,7 +10,7 @@ from app.models.notification import NotificationType
 from app.models.audit_log import AuditLog
 from app.models.notification import Notification
 from app.extensions import db
-from app.utils import flash_message, validate_password_strength
+from app.utils import flash_message
 from app.constants import FlashMessages, FlashCategory
 from flask_login import current_user
 
@@ -81,6 +81,21 @@ def search_users(query, page=1, per_page=10):
         logging.error(f"Error searching users: {str(e)}")
         raise ValueError(FlashMessages.USER_SEARCH_ERROR.value)
 
+def validate_password_strength(password):
+    """Validate password strength with detailed error messages"""
+    if len(password) < 12:
+        return False, "Password must be at least 12 characters long"
+    
+    has_upper = any(char.isupper() for char in password)
+    has_lower = any(char.islower() for char in password)
+    has_digit = any(char.isdigit() for char in password)
+    has_special = any(not char.isalnum() for char in password)
+    
+    if not all([has_upper, has_lower, has_digit, has_special]):
+        return False, "Password must contain uppercase, lowercase, numbers and special characters"
+    
+    return True, ""
+
 def create_user(form_data, current_user_id=None):
     """Create a new user with validation and audit logging"""
     logger = logging.getLogger(__name__)
@@ -97,8 +112,9 @@ def create_user(form_data, current_user_id=None):
         
         # Validate password strength for admin users
         if form_data.get('is_admin', False):
-            if not validate_password_strength(form_data['password']):
-                raise ValueError("Admin password must be at least 12 characters long and contain uppercase, lowercase, numbers and special characters")
+            is_valid, message = validate_password_strength(form_data['password'])
+            if not is_valid:
+                raise ValueError(f"Admin password requirements: {message}")
         
         # Create user
         new_user = User(
