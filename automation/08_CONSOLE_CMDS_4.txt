@@ -3,27 +3,27 @@
 
 ### CODE START ###
 
-# Initialize review environment with proper path verification
-/run scripts/path_config.py --production --verify
-/run scripts/init_logging.py --production
-/run scripts/setup_test_env.py --production
+# Initialize review environment with enhanced verification
+/run scripts/path_config.py --production --strict --verify
+/run scripts/init_logging.py --production --verify
+/run scripts/setup_test_env.py --production --full
 
 # Comprehensive system verification
-/run scripts/verification/verify_production_ready.py --production --full
-/run scripts/verification/verify_db_schema.py --validate-required-fields --check-admin-interface
-/run scripts/verification/verify_security.py --check-rate-limits --daily
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts
+/run scripts/verification/verify_production_ready.py --production --full --verify-debug --check-admin
+/run scripts/verification/verify_db_schema.py --validate-required-fields --check-admin-interface --verify-relations
+/run scripts/verification/verify_security.py --full-audit --check-rate-limits --daily --verify-secrets
+/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-config
 
-# Documentation finalization
-/run scripts/finalize_docs.py
-/run scripts/generate_deployment_checklist.py
+# Documentation finalization with coverage verification
+/run scripts/finalize_docs.py --verify-coverage
+/run scripts/generate_deployment_checklist.py --verify
 
-# Request final approval
-/run scripts/request_approval.py
+# Request final approval with comprehensive checks
+/run scripts/request_approval.py --full
 
-# Final cleanup and commit
-/run scripts/final_cleanup.py
-/run scripts/commit_changes.py --message "Final review completed" --verify --push
+# Final cleanup and commit with verification
+/run scripts/final_cleanup.py --verify
+/run scripts/commit_changes.py --message "Final review completed" --verify --push --check-coverage
 
 ### CODE END ###
 
