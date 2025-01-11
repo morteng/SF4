@@ -6,7 +6,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'a-very-long-and-complex-secret-key-with-at-least-64-characters-1234567890'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or secrets.token_urlsafe(64)
+    WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or secrets.token_urlsafe(64)
+    BACKUP_DIR = os.environ.get('BACKUP_DIR', 'backups')
+    LOG_DIR = os.environ.get('LOG_DIR', 'logs')
+    DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///app.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = True

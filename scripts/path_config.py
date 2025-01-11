@@ -16,6 +16,10 @@ def get_project_root():
     return str(current_path)
 
 def configure_paths(production=False):
+    # Add scripts directory explicitly
+    scripts_dir = str(Path(__file__).parent)
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
     """Enhanced path configuration with proper error handling"""
     try:
         project_root = get_project_root()

@@ -46,6 +46,9 @@ def configure_logger():
     return logger
 
 def update_release_notes(verify=False):
+    # Ensure proper imports
+    from scripts.path_config import configure_paths
+    configure_paths()
     """Enhanced release notes with proper path handling"""
     try:
         # Add project root to Python path

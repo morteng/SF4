@@ -17,6 +17,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 def initialize_database(validate_schema=False, production=False, retry=3):
+    import sys  # Add missing import
     """Initialize database with production context support"""
     logger = logging.getLogger(__name__)
     try:
