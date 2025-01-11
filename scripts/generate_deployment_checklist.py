@@ -18,6 +18,7 @@ def configure_logger():
 
 def generate_checklist(validate=False):
     """Enhanced checklist generation with proper path handling"""
+    logger = configure_logger()
     try:
         # Add project root to Python path
         import sys

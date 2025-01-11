@@ -17,6 +17,7 @@ def configure_logging():
 
 def commit_changes(message, push=False):
     """Enhanced commit with proper path handling"""
+    logger = configure_logging()
     try:
         # Add project root to Python path
         import sys
