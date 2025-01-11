@@ -4,29 +4,29 @@
 
 ### CODE START ###
 
-# Initialize system with enhanced logging
-/run scripts/init_logging.py --production --verify
-/run scripts/path_config.py --production --verify
-/run scripts/start_cycle.py
+# Initialize system with enhanced monitoring
+/run scripts/init_logging.py --production --monitoring --verify
+/run scripts/path_config.py --production --verify --monitoring
+/run scripts/start_cycle.py --with-dashboard
 
-# Database initialization with retries
-/run scripts/startup/init_db.py --retry=5 --validate-schema --check-pool --verify-timeout
+# Database initialization with monitoring
+/run scripts/startup/init_db.py --retry=5 --validate-schema --check-pool --verify-timeout --monitoring
 
 # Admin user setup with enhanced security
-/run scripts/startup/init_admin.py --strict-password --verify-email --check-complexity --require-special-char
+/run scripts/startup/init_admin.py --strict-password --verify-email --check-complexity --require-special-char --monitoring
 
-# Core system verification
-/run scripts/verification/verify_db_connection.py --retries=5 --timeout=30 --check-pool
-/run scripts/verification/verify_backup.py --verify-integrity --check-schema
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-auth
+# Core system verification with monitoring
+/run scripts/verification/verify_db_connection.py --retries=5 --timeout=30 --check-pool --monitoring
+/run scripts/verification/verify_backup.py --verify-integrity --check-schema --monitoring
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-auth --monitoring
 
-# Monitoring and health checks
-/run scripts/verification/verify_monitoring.py --full --check-dashboards --verify-metrics
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
+# Enhanced monitoring and health checks
+/run scripts/verification/verify_monitoring.py --full --dashboard --verify-metrics
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --monitoring
 
-# Final verification and commit
-/run scripts/verification/verify_production_ready.py --full --validate-config
-/run scripts/commit_changes.py --message "Step 2 coding completed" --verify --push
+# Final verification with monitoring
+/run scripts/verification/verify_production_ready.py --full --validate-config --monitoring
+/run scripts/commit_changes.py --message "Step 2 coding completed" --verify --push --monitoring
 
 ### CODE END ###
 
