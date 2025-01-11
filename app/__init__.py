@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from sqlalchemy import text
 from app.extensions import db, login_manager, migrate, csrf, limiter
 from scripts.ensure_admin_user import ensure_admin_user
+from app.models.user import User
 
 logger = logging.getLogger(__name__)
 
