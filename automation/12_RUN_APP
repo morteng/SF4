@@ -1,0 +1,13 @@
+# Code Cycle Step 12 (Optionally run app)
+# Only edit the section between CODE START and CODE END
+
+/reset
+
+### CODE START ###
+
+# optionally include code to run the app here if ready for demo to Management. Otherwise leave blank to start a new code cycle
+
+### CODE END ###
+
+# start new cycle
+/load automation/00_CYCLE_START.txt

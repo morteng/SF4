@@ -1,4 +1,4 @@
-# Console Commands for Step 5 (Document, Demo, Deploy)
+# Console Commands for Step 5 (Document, Pre-Demo)
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
@@ -38,8 +38,8 @@
 # Request final approval
 /run scripts/request_approval.py
 
-# Start application for management review
-/run python app.py
+# Start application for management review ORDER FROM MANAGEMENT: Don't do this here.
+# /run python app.py
 
 # Commit and push final changes
 /run scripts/commit_changes.py --message "Production deployment v1.2.11" --verify --push
