@@ -4,23 +4,23 @@
 
 ### CODE START ###
 
-# Initialize core systems with enhanced security
-/run scripts/path_config.py --production --strict
-/run scripts/init_logging.py --production --verify
-/run scripts/startup/init_db.py --validate-schema --production --retry=5 --force
-/run scripts/startup/init_admin.py --strict-password --verify-email --complexity=high --force
+# Enhanced initialization sequence
+/run scripts/path_config.py --production --strict --verify
+/run scripts/init_logging.py --production --verify --strict
+/run scripts/startup/init_db.py --validate-schema --production --retry=5 --force --strict
+/run scripts/startup/init_admin.py --strict-password --verify-email --complexity=high --force --strict
 
-# Comprehensive security verification
+# Comprehensive verification suite
 /run scripts/verification/verify_security.py --full-audit --check-admin-interface --validate-keys --check-debug-mode --strict
-/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --strict
+/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --strict --verify-imports
 /run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --validate-config --check-metrics --strict
 
-# Final verification before commit
-/run scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-tables --check-backups
+# Database and coverage verification
+/run scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-tables --check-backups --strict
 /run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --admin-only --verify-imports --strict
 
-# Commit changes with verification
-/run scripts/commit_changes.py --message "Step 2 coding completed" --verify --push --force
+# Final commit with enhanced verification
+/run scripts/commit_changes.py --message "Step 2 coding completed" --verify --push --force --strict
 
 ### CODE END ###
 
