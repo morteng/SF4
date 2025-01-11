@@ -95,10 +95,10 @@ def verify_security_settings(full_audit=False, daily=False, validate_keys=False,
         app = create_app()
         with app.app_context():
             # Perform security checks
-        if not configure_paths():
-            raise RuntimeError("Failed to configure paths")
-            
-        # Configure paths first
+            if not configure_paths():
+                raise RuntimeError("Failed to configure paths")
+                
+            # Configure paths first
         from scripts.path_config import configure_paths
         if not configure_paths():
             raise RuntimeError("Failed to configure paths")
