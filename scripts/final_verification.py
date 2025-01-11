@@ -3,8 +3,8 @@ import logging
 from pathlib import Path
 
 # Add project root to Python path
-root_dir = Path(__file__).parent.parent.parent
-sys.path.append(str(root_dir))
+root_dir = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(root_dir))
 
 def verify_all():
     """Perform final verification before deployment"""
@@ -15,9 +15,6 @@ def verify_all():
     logger = logging.getLogger(__name__)
     
     try:
-        # Add project root to Python path
-        root_dir = Path(__file__).parent.parent
-        sys.path.append(str(root_dir))
         
         # Import verification modules
         from scripts.verification.verify_production import verify_production

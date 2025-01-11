@@ -6,8 +6,8 @@ from pathlib import Path
 import logging
 
 # Add project root to Python path
-root_dir = Path(__file__).parent.parent.parent
-sys.path.append(str(root_dir))
+root_dir = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(root_dir))
 
 logger = logging.getLogger(__name__)
 
