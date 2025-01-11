@@ -4659,3 +4659,143 @@ Coverage failure: total of 19 is less than fail-under=85
 2025-01-11 23:02:57,245 - INFO - Version history updated successfully
 2025-01-11 23:02:57,257 - ERROR - Import verification failed: cannot import name 'verify_coverage' from 'scripts.verification' (unknown location)
 2025-01-11 23:02:57,258 - ERROR - Documentation finalization failed
+2025-01-11 23:05:51,916 - INFO - Set default value for BACKUP_DIR: backups
+2025-01-11 23:05:51,916 - INFO - Set default value for LOG_DIR: logs
+2025-01-11 23:05:52,003 - DEBUG - Created admin blueprint
+2025-01-11 23:05:52,011 - DEBUG - Created stipend blueprint: admin_stipend
+2025-01-11 23:05:52,012 - DEBUG - URL prefix: /stipends
+2025-01-11 23:05:52,012 - DEBUG - Import name: app.routes.admin.stipend_routes
+2025-01-11 23:05:52,020 - DEBUG - Registered stipend blueprint: admin_stipend
+2025-01-11 23:05:52,020 - DEBUG - Registered dashboard blueprint: dashboard
+2025-01-11 23:05:52,037 - DEBUG - Registered admin blueprint with app
+2025-01-11 23:05:52,037 - DEBUG - Registered routes:
+2025-01-11 23:05:52,037 - DEBUG - Route: static
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.admin_stipend.create
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.admin_stipend.edit
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.admin_stipend.delete
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.admin_stipend.index
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.admin_stipend.paginate
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.dashboard.dashboard
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.user.create
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.user.edit
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.user.delete
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.user.reset_password
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.user.toggle_active
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.user.edit_profile
+2025-01-11 23:05:52,038 - DEBUG - Route: admin.user.index
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.bot.create
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.bot.delete
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.bot.index
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.bot.run
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.bot.schedule
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.bot.edit
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.organization.create
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.organization.delete
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.organization.index
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.organization.paginate
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.organization.view
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.organization.edit
+2025-01-11 23:05:52,039 - DEBUG - Route: admin.tag.create
+2025-01-11 23:05:52,040 - DEBUG - Route: admin.tag.edit
+2025-01-11 23:05:52,040 - DEBUG - Route: admin.tag.delete
+2025-01-11 23:05:52,040 - DEBUG - Route: admin.tag.index
+2025-01-11 23:05:52,040 - DEBUG - Route: admin.tag.paginate
+2025-01-11 23:05:52,040 - DEBUG - Validating required routes: ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+2025-01-11 23:05:52,040 - DEBUG - Registered routes: ['static', 'admin.admin_stipend.create', 'admin.admin_stipend.edit', 'admin.admin_stipend.delete', 'admin.admin_stipend.index', 'admin.admin_stipend.paginate', 'admin.dashboard.dashboard', 'admin.user.create', 'admin.user.edit', 'admin.user.delete', 'admin.user.reset_password', 'admin.user.toggle_active', 'admin.user.edit_profile', 'admin.user.index', 'admin.bot.create', 'admin.bot.delete', 'admin.bot.index', 'admin.bot.run', 'admin.bot.schedule', 'admin.bot.edit', 'admin.organization.create', 'admin.organization.delete', 'admin.organization.index', 'admin.organization.paginate', 'admin.organization.view', 'admin.organization.edit', 'admin.tag.create', 'admin.tag.edit', 'admin.tag.delete', 'admin.tag.index', 'admin.tag.paginate']
+2025-01-11 23:05:52,040 - DEBUG - Required routes: ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+2025-01-11 23:05:52,102 - INFO - Application initialized successfully
+2025-01-11 23:05:52,102 - ERROR - Production readiness verification failed: name 'secrets' is not defined
+2025-01-11 23:05:53,468 - ERROR - Coverage below 85%
+2025-01-11 23:05:53,468 - INFO - Name                                       Stmts   Miss  Cover   Missing
+------------------------------------------------------------------------
+app\__init__.py                              162    150     7%   13-220, 223-247, 251-269, 272-273
+app\common.py                                  2      2     0%   1-3
+app\common\base_service.py                    18     18     0%   1-26
+app\common\utils.py                           88     69    22%   14-16, 20-25, 29-33, 37-65, 76-118, 122-151
+app\config.py                                 91     15    84%   45-48, 96-110
+app\controllers\base_crud_controller.py       96     80    17%   14-34, 40-54, 58-133, 136-153, 159-166, 177-184
+app\extensions.py                             30     18    40%   24-52
+app\factory.py                                14     14     0%   1-21
+app\forms.py                                  39     39     0%   1-73
+app\forms\admin_forms.py                     201    121    40%   37-45, 91, 94-97, 102-117, 122-129, 132-135, 138-169, 184-185, 197-201, 230-235, 238-241, 244-247, 264-265, 268-273, 276-281, 302-303, 307-361, 364-365, 370-383
+app\forms\custom_fields.py                    28     18    36%   10-15, 18-24, 31-33, 40-42
+app\forms\fields.py                           30     21    30%   10-13, 16-41, 45
+app\forms\user_forms.py                       57     28    51%   24-27, 30-33, 37-46, 49-53, 69-71, 74-76
+app\models\__init__.py                        13      5    62%   11-28
+app\models\audit_log.py                       70     47    33%   10-11, 34-116
+app\models\bot.py                             58     19    67%   42-59, 62, 65, 84-89
+app\models\notification.py                    52     30    42%   19, 22, 36-60, 64, 69-85
+app\models\organization.py                    13      2    85%   13, 16
+app\models\stipend.py                        110     74    33%   13-43, 65-90, 94-114, 119-121, 125-132, 136, 140-151, 155
+app\models\tag.py                             11      1    91%   21
+app\models\user.py                            56     27    52%   19-28, 31-35, 38, 42-44, 50, 55-57, 61, 65, 68, 73
+app\routes\__init__.py                        15     15     0%   1-23
+app\routes\admin\__init__.py                 105    105     0%   1-180
+app\routes\admin\bot_routes.py                90     90     0%   1-126
+app\routes\admin\dashboard_routes.py          28     28     0%   1-55
+app\routes\admin\organization_routes.py      131    131     0%   1-236
+app\routes\admin\stipend_routes.py           169    169     0%   1-268
+app\routes\admin\tag_routes.py                58     58     0%   1-79
+app\routes\admin\user_routes.py              195    195     0%   1-344
+app\routes\public_routes.py                   88     88     0%   1-139
+app\routes\user_routes.py                     57     57     0%   1-77
+app\services\base_service.py                 247    167    32%   21-51, 84, 88, 91, 94, 97, 100, 103, 106, 111-114, 119, 123, 128-132, 136-157, 161-187, 191-228, 232-244, 248-250, 254, 259-263, 267-280, 284, 289-293, 297-308, 312-314, 318-320, 324-332, 336-342, 346-352, 356-358, 374-393
+app\services\bot_service.py                  112     83    26%   8-9, 16, 23-25, 28, 37-77, 80, 84-109, 112-113, 116, 120-130, 137-147, 151-161, 165-175, 177-178
+app\services\notification_service.py          51     40    22%   10-31, 35-41, 45-51, 55-74, 78, 82-83
+app\services\organization_service.py          15      7    53%   7, 11, 15-18, 22
+app\services\stipend_service.py               68     48    29%   14-22, 26-28, 32, 36-38, 42, 45-47, 55-59, 64-70, 74-96, 100
+app\services\tag_service.py                   17      6    65%   11, 17-20, 24
+app\services\user_service.py                 101     80    21%   19-29, 33-43, 59-69, 73-82, 86-139, 142-172
+app\utils.py                                 286    226    21%   18, 34-109, 121-145, 165-176, 191-215, 219-220, 231-232, 258-275, 281-303, 307-394, 398-409, 412-421, 428-430, 438-447, 456-467, 472-482, 486-492, 496-505, 512-523
+scripts\add_version_tests.py                  14     14     0%   1-18
+scripts\archive_logs.py                       31     31     0%   1-40
+scripts\check_coverage.py                     18     18     0%   1-32
+scripts\check_env.py                          23     23     0%   1-26
+scripts\commit_changes.py                     41     41     0%   1-71
+scripts\create_backup.py                      47     47     0%   1-67
+scripts\create_logs_dir.py                    16     16     0%   1-23
+scripts\end_cycle.py                          36     36     0%   1-48
+scripts\ensure_admin_user.py                  46     38    17%   11-67, 70-76
+scripts\final_cleanup.py                      53     53     0%   1-76
+scripts\final_verification.py                 34     34     0%   1-52
+scripts\finalize_docs.py                     132    132     0%   1-191
+scripts\fix_coverage_reporting.py             36     36     0%   1-55
+scripts\fix_pytest_config.py                  24     24     0%   1-63
+scripts\fix_tag_stipend_relationship.py       11     11     0%   1-20
+scripts\generate_coverage_report.py           38     38     0%   1-57
+scripts\generate_deployment_checklist.py      68     68     0%   1-103
+scripts\git_sync.py                           32     32     0%   1-56
+scripts\init_logging.py                       41     41     0%   1-75
+scripts\init_test_db.py                       55     55     0%   1-103
+scripts\initialize_test_db.py                  4      4     0%   1-4
+scripts\install_test_dependencies.py          32     32     0%   1-42
+scripts\path_config.py                       114    114     0%   1-191
+scripts\print_datetime.py                      7      7     0%   1-18
+scripts\render_api_client.py                  51     51     0%   1-69
+scripts\request_approval.py                  108    108     0%   1-148
+scripts\run_all_tests.py                      16     16     0%   1-25
+scripts\run_relationship_tests.py             17     17     0%   1-22
+scripts\run_version_management_tests.py       46     46     0%   1-90
+scripts\run_version_tests.py                   4      4     0%   1-5
+scripts\setup_test_env.py                     85     85     0%   1-146
+scripts\start_cycle.py                        24     24     0%   1-34
+scripts\startup\init_admin.py                 72     61    15%   8-16, 22-29, 33-104, 107-113
+scripts\update_requirements.py                12     12     0%   1-15
+scripts\update_test_config.py                 28     28     0%   1-51
+scripts\validate_db.py                        12     12     0%   1-16
+scripts\validate_schema.py                    26     26     0%   1-35
+scripts\validate_version.py                   21     21     0%   1-28
+scripts\version.py                           452    411     9%   37-79, 83-176, 180-190, 194-212, 216-231, 235-255, 259-292, 295, 299-310, 314-336, 340, 344-353, 357-387, 393-422, 426-444, 448-474, 489-499, 503-520, 524-550, 554-616, 627-661, 669-689
+------------------------------------------------------------------------
+TOTAL                                       5225   4258    19%
+
+5 files skipped due to complete coverage.
+Coverage failure: total of 19 is less than fail-under=85
+
+2025-01-11 23:05:54,008 - INFO - Version validation passed: 0.2.0
+2025-01-11 23:05:54,008 - ERROR - Database connection verification failed: No module named 'scripts.verify_db_connection'
+2025-01-11 23:05:54,008 - ERROR - Database connection verification failed
+2025-01-11 23:05:54,009 - INFO - Release notes updated successfully
+2025-01-11 23:05:54,012 - INFO - Version history updated successfully
+2025-01-11 23:05:54,037 - ERROR - Import verification failed: cannot import name 'verify_coverage' from 'scripts.verification' (unknown location)
+2025-01-11 23:05:54,038 - ERROR - Documentation finalization failed
