@@ -3221,3 +3221,9 @@ Coverage failure: total of 19 is less than fail-under=85
 2025-01-11 17:01:36,113 - INFO - Version history updated successfully
 2025-01-11 17:01:36,127 - ERROR - Failed to generate deployment checklist: cannot import name 'verify_backup_integration' from 'scripts.verification.verify_backup' (C:\github\SF4\scripts\verification\verify_backup.py)
 2025-01-11 17:01:36,127 - ERROR - Documentation finalization failed
+2025-01-11 17:25:52,045 - INFO - Logging system initialized successfully
+2025-01-11 17:25:52,046 - INFO - Logging system initialized successfully
+2025-01-11 17:25:52,049 - INFO - Logging system initialized successfully
+2025-01-11 17:25:52,186 - ERROR - Database initialization failed: name 'sys' is not defined
+2025-01-11 17:25:52,187 - ERROR - Failed to configure test environment: Failed to initialize test database
+2025-01-11 17:25:52,187 - INFO - Test environment configured successfully
