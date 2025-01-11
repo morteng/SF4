@@ -8,6 +8,8 @@
 # timestamp cycle ends
 /run scripts/end_cycle.py
 
+/add docs/DEVLOG.md
+
 # New devlog entry
 /code Remove the previous devlog entry in docs/DEVLOG.md, write a new summary of this cycle's changes, and remove completed items from TODO. Also review and revise MANAGER.txt, removing instructions that are now integrated.
 
