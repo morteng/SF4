@@ -149,7 +149,7 @@ def create_user(form_data, current_user_id=None):
             object_type='User',
             object_id=new_user.id,
             details=f'Created user {new_user.username}',
-            ip_address=request.remote_addr
+            ip_address=request.remote_addr if request else '0.0.0.0'  # Handle no request context
         )
         
         # Create notification
