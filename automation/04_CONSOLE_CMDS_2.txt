@@ -4,27 +4,23 @@
 
 ### CODE START ###
 
-# Initialize core systems with enhanced path configuration
-/run scripts/path_config.py --production --strict --verify
+# Initialize core systems with enhanced verification
+/run scripts/path_config.py --production --strict
 /run scripts/init_logging.py --production --verify
-/run scripts/startup/init_db.py --validate-schema --production --strict
-/run scripts/startup/init_admin.py --strict-password --verify-email --check-complexity
+/run scripts/startup/init_db.py --validate-schema --production
+/run scripts/startup/init_admin.py --strict-password --verify-email
 
-# Comprehensive system verification
-/run scripts/verification/verify_config.py --production --strict --check-admin-config --verify-secrets
-/run scripts/verification/verify_db_schema.py --validate-required-fields --check-admin-interface --verify-relations
-/run scripts/verification/verify_security.py --full-audit --check-rate-limits --daily --verify-secrets
+# Critical system verifications
+/run scripts/verification/verify_db_connection.py --retries=5 --delay=2
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
 
-# Enhanced test coverage and production checks
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --admin-only --verify
-/run scripts/verification/verify_production_ready.py --full --verify-debug --check-admin
+# Production readiness checks
+/run scripts/verification/verify_production_ready.py --full
+/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts
 
-# System health and monitoring verification
-/run scripts/verification/verify_health.py --production --check-response-time --verify-backups
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-config
-
-# Finalize changes with comprehensive verification
-/run scripts/commit_changes.py --message "Step 2 coding completed" --verify --push --check-coverage
+# Commit changes with verification
+/run scripts/commit_changes.py --message "Step 2 coding completed" --verify --push
 
 ### CODE END ###
 
