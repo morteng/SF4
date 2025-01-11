@@ -2,6 +2,10 @@ import sys
 import logging
 from pathlib import Path
 
+# Add project root to Python path
+root_dir = Path(__file__).parent.parent.parent
+sys.path.append(str(root_dir))
+
 def verify_all():
     """Perform final verification before deployment"""
     logging.basicConfig(

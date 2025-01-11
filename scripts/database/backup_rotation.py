@@ -1,8 +1,13 @@
 import os
+import sys
 import shutil
 from datetime import datetime
 from pathlib import Path
 import logging
+
+# Add project root to Python path
+root_dir = Path(__file__).parent.parent.parent
+sys.path.append(str(root_dir))
 
 logger = logging.getLogger(__name__)
 
