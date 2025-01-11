@@ -5,23 +5,22 @@
 ### CODE START ###
 
 # Initialize core systems with proper path configuration
+/run scripts/path_config.py --production --verify
 /run scripts/init_logging.py --production
-/run scripts/path_config.py --production
 /run scripts/startup/init_db.py --validate-schema --production
 /run scripts/startup/init_admin.py --strict-password --verify-email
 
-# Verify system configuration with feedback defaults
+# Verify system configuration with enhanced checks
 /run scripts/verification/verify_config.py --production --strict --check-admin-config
-/run scripts/verification/verify_feedback.py --check-surveys --check-analytics --check-response-rate
+/run scripts/verification/verify_db_schema.py --validate-required-fields --check-admin-interface
+/run scripts/verification/verify_security.py --check-rate-limits --daily
 
-# Comprehensive system verification
+# Verify test coverage and production readiness
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
+/run scripts/verification/verify_production_ready.py
+
+# Verify system health and monitoring
 /run scripts/verification/verify_health.py --production --check-response-time
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --admin-only
-
-# Verify HTMX integration and admin interface
-/run scripts/verification/verify_htmx_integration.py --full --test-stipends-crud --admin-interface --validate-full-reloads
-
-# Verify monitoring and alerting
 /run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts
 
 # Finalize changes with verification
