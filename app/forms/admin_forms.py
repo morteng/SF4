@@ -38,6 +38,11 @@ class StipendForm(FlaskForm):
         super().__init__(*args, **kwargs)
         logger.debug(f"Form fields initialized: {self._fields.keys()}")
         
+        # Generate CSRF token if not provided
+        if not self.csrf_token.data:
+            from flask_wtf.csrf import generate_csrf
+            self.csrf_token.data = generate_csrf()
+        
     csrf_token = HiddenField('CSRF Token', validators=[
         DataRequired(message="CSRF token is required")
     ])

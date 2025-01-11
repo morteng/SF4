@@ -90,6 +90,11 @@ def create_app(config_name='development'):
     from flask_wtf.csrf import CSRFError
     from app.constants import FlashMessages
 
+    @app.errorhandler(CSRFError)
+    def handle_csrf_error(error):
+        from flask import flash, redirect, url_for
+        flash(FlashMessages.CSRF_ERROR.value, 'error')
+        return redirect(url_for('admin.stipend.create'))
 
     with app.app_context():
         try:

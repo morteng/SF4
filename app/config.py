@@ -10,6 +10,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = True
     WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or 'a-very-long-and-complex-csrf-key-with-at-least-64-characters-1234567890'
+    WTF_CSRF_TIME_LIMIT = 3600  # 1 hour
     
     # Rate limiting configuration
     RATELIMIT_STORAGE_URI = 'memory://'
