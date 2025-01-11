@@ -14,11 +14,19 @@ def configure_logger():
     return logger
 
 def verify_monitoring_dashboards():
-    """Verify monitoring dashboards configuration"""
+    """Verify monitoring dashboards configuration with enhanced metrics"""
     logger = configure_logger()
     try:
         # Verify dashboard configuration
         dashboard_path = Path('monitoring/dashboard.json')
+        
+        # Add new required metrics from MANAGER.txt
+        required_metrics = [
+            'cpu', 'memory', 'disk', 'requests',
+            'db_connections',  # New
+            'response_time',   # New
+            'error_rate'       # New
+        ]
         if not dashboard_path.exists():
             logger.error("Dashboard configuration not found")
             return False
