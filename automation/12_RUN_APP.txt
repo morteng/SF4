@@ -9,9 +9,9 @@
 # Only run app if all tests work and other criteria are fulfilled! Otherwise do not run and a new code cycle will start automatically. running app breaks code cycle so only do it when sure!
 /run scripts/path_config.py --production --strict
 /run scripts/init_logging.py --production --verify
-/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --validate-keys --check-debug-mode
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --validate-config --check-metrics
+/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --strict
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface --validate-keys --check-debug-mode --strict
+/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --validate-config --check-metrics --strict
 /run python app.py --host=0.0.0.0 --port=5000 --no-debug
 
 ### CODE END ###
