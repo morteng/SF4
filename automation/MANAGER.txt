@@ -1,5 +1,5 @@
 ### **Feature requests**
-Implement reading github issues and either fixing the problem or putting it on the list into the code cycle.
+Implement reading github issues and either fixing the problem or putting it on the list, into the code cycle.
 
 
 ### **Rules**
