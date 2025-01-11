@@ -8,27 +8,7 @@
 /run scripts/init_logging.py --production
 /run scripts/setup_test_env.py --production
 
-# Install production dependencies with verification
-/run scripts/install_dependencies.py --production --verify
-
-# Core functionality verification with retries
-/run scripts/verification/verify_db_connection.py --production --strict --retry=3 --validate-schema
-/run scripts/verification/verify_db_schema.py --production --strict --tables=stipend,tag,organization,user --validate-required-fields --validate-relations --retry=3
-
-# Security verification with daily checks
-/run scripts/verification/verify_security.py --production --full-audit --check-path-config --daily --check-rate-limits --check-admin-interface
-
-# Configuration verification
-/run scripts/verification/verify_config.py --production --strict --check-admin-config
-
-# Test coverage verification with admin-only checks
-/run scripts/verification/verify_test_coverage.py --production --module=stipend --threshold=85 --critical-paths --admin-only
-
-# Backup and monitoring verification
-/run scripts/verification/verify_backup.py --production --verify-integrity --retry=3 --check-retention
-/run scripts/verification/verify_monitoring.py --production --validate-alerts --check-dashboards
-
-# Production readiness verification
+# Comprehensive system verification
 /run scripts/verification/verify_production_ready.py --production --full
 
 # Documentation finalization
