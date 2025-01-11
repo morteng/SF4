@@ -1,5 +1,6 @@
 import logging
 import os
+import time
 from pathlib import Path
 from alembic import command
 from alembic.config import Config
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 def initialize_database(validate_schema=False, production=False, retry=3):
     """Initialize database with production context support"""
+    logger = logging.getLogger(__name__)
     try:
         # Add project root to path
         project_root = str(Path(__file__).parent.parent.parent)
