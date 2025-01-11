@@ -3,15 +3,16 @@
 
 ### CODE START ###
 
-# Initialize review environment
+# Initialize review environment with enhanced verification
 /run scripts/path_config.py --production --strict
 /run scripts/init_logging.py --production --verify
+/run scripts/setup_test_env.py --test --verify --validate-schema
 
 # Core system verification
-/run scripts/verification/verify_production_ready.py --full --validate-config
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --validate-keys
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --validate-config
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --admin-only
+/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface --validate-keys --check-debug-mode
+/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --validate-config --check-metrics
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --admin-only --verify-imports
 
 # Documentation and checklist
 /run scripts/finalize_docs.py --verify
