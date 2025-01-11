@@ -16,10 +16,10 @@ def verify_all():
         sys.path.append(str(root_dir))
         
         # Import verification modules
-        from scripts.verify_production import verify_production
-        from scripts.verify_deployment import verify_deployment
-        from scripts.verify_test_db import verify_test_db
-        from scripts.check_coverage import check_coverage
+        from scripts.verification.verify_production import verify_production
+        from scripts.verification.verify_deployment import verify_deployment
+        from scripts.verification.verify_test_db import verify_test_db
+        from scripts.verification.check_coverage import check_coverage
         
         # Run verifications
         if not verify_production():
