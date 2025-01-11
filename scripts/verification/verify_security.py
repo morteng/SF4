@@ -104,13 +104,14 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
             raise RuntimeError("Failed to configure paths")
             
         # Enhanced SECRET_KEY validation
-        secret_key = os.getenv('SECRET_KEY')
-        if not secret_key or len(secret_key) < 64:
-            logger.error("SECRET_KEY must be at least 64 characters")
+        secret_key = os.getenv('SECRET_KEY') or app.config.get('SECRET_KEY')
+        if not secret_key or len(secret_key) < 64 or len(set(secret_key)) < 32:
+            logger.error("SECRET_KEY must be at least 64 characters with 32 unique characters")
             return False
-        # Check for sufficient entropy
-        if len(set(secret_key)) < 32:
-            logger.error("SECRET_KEY must contain at least 32 unique characters")
+        
+        # Verify debug mode is disabled in production
+        if os.getenv('FLASK_ENV') == 'production' and os.getenv('FLASK_DEBUG') == '1':
+            logger.error("Debug mode must be disabled in production")
             return False
             
         # Check password complexity

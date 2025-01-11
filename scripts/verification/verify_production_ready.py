@@ -63,6 +63,12 @@ def verify_production_ready():
         if os.getenv('FLASK_DEBUG', '0').lower() in ('1', 'true', 'yes'):
             logger.error("Debug mode must be disabled in production")
             return False
+        
+        # Verify SECRET_KEY meets requirements
+        secret_key = os.getenv('SECRET_KEY') or app.config.get('SECRET_KEY')
+        if not secret_key or len(secret_key) < 64 or len(set(secret_key)) < 32:
+            logger.error("SECRET_KEY must be at least 64 characters with 32 unique characters")
+            return False
             
         # Verify database connection
         from scripts.verification.verify_db_connection import verify_db_connection

@@ -123,13 +123,15 @@ class ProductionConfig(Config):
     TESTING = False
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath(os.path.join('instance', 'site.db'))}"
     WTF_CSRF_ENABLED = True
-    WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or Config.SECRET_KEY
+    WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or 'a-very-long-and-complex-csrf-key-with-at-least-64-characters-1234567890'
+    SECRET_KEY = 'a-very-long-and-complex-secret-key-with-at-least-64-characters-1234567890'
     SESSION_COOKIE_SECURE = True
     REMEMBER_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
     FLASK_ENV = 'production'
     FLASK_DEBUG = '0'
+    PROPAGATE_EXCEPTIONS = True
 
 config_by_name = {
     'development': DevelopmentConfig,
