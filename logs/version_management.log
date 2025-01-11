@@ -5002,3 +5002,146 @@ Coverage failure: total of 19 is less than fail-under=85
 2025-01-12 00:06:54,564 - ERROR - Missing required table: stipend
 2025-01-12 00:06:54,564 - ERROR - Failed to configure test environment: Failed to initialize test database
 2025-01-12 00:06:54,564 - INFO - Test environment configured successfully
+2025-01-12 00:10:01,113 - INFO - Logging system initialized successfully
+2025-01-12 00:10:01,115 - INFO - Logging system initialized successfully
+2025-01-12 00:10:01,116 - INFO - Logging system initialized successfully
+2025-01-12 00:10:01,277 - INFO - Deleting existing admin user: admin (ID: 1)
+2025-01-12 00:10:01,299 - INFO - User 1 deleted successfully
+2025-01-12 00:10:01,299 - INFO - Successfully deleted admin user admin
+2025-01-12 00:10:01,299 - INFO - Admin credentials from .env: testadmin, admin@test.com, TestPass123!
+2025-01-12 00:10:01,300 - INFO - Checking database connection...
+2025-01-12 00:10:01,300 - INFO - Database connection successful
+2025-01-12 00:10:01,301 - INFO - Creating new admin user from .env values
+2025-01-12 00:10:01,301 - INFO - Attempting to create user: testadmin
+2025-01-12 00:10:01,305 - INFO - Skipping admin password validation for debugging
+2025-01-12 00:10:01,694 - INFO - Password hash for testadmin: pbkdf2:sha256:600000$RGnGfI1wu6d8yAWC$dd5d94aade4a2dcc6189fb94bd3c0af3a9e0c965629d26f2be53bb2680f8421b
+2025-01-12 00:10:02,089 - INFO - Password check test: True
+2025-01-12 00:10:02,108 - INFO - Successfully created user: testadmin (ID: 1)
+2025-01-12 00:10:02,111 - INFO - Creating audit log: create_user by user 0
+2025-01-12 00:10:02,124 - ERROR - Error creating notification for audit log: AUDIT_LOG
+2025-01-12 00:10:02,124 - INFO - Created audit log: create_user by user 0
+2025-01-12 00:10:02,136 - INFO - Created new admin user: testadmin
+2025-01-12 00:10:02,137 - INFO - Admin user exists: testadmin (ID: 1)
+2025-01-12 00:10:02,138 - INFO - Admin user password hash: pbkdf2:sha256:600000$RGnGfI1wu6d8yAWC$dd5d94aade4a2dcc6189fb94bd3c0af3a9e0c965629d26f2be53bb2680f8421b
+2025-01-12 00:10:02,138 - INFO - Admin user is_admin: True
+2025-01-12 00:10:02,138 - INFO - Application initialized successfully
+2025-01-12 00:10:02,142 - INFO - Logging system initialized successfully
+2025-01-12 00:10:02,144 - INFO - Logging system initialized successfully
+2025-01-12 00:10:02,177 - INFO - Deleting existing admin user: testadmin (ID: 1)
+2025-01-12 00:10:02,232 - INFO - User 1 deleted successfully
+2025-01-12 00:10:02,233 - INFO - Successfully deleted admin user testadmin
+2025-01-12 00:10:02,234 - INFO - Admin credentials from .env: testadmin, admin@test.com, TestPass123!
+2025-01-12 00:10:02,234 - INFO - Checking database connection...
+2025-01-12 00:10:02,235 - INFO - Database connection successful
+2025-01-12 00:10:02,235 - INFO - Creating new admin user from .env values
+2025-01-12 00:10:02,236 - INFO - Attempting to create user: testadmin
+2025-01-12 00:10:02,239 - INFO - Skipping admin password validation for debugging
+2025-01-12 00:10:02,638 - INFO - Password hash for testadmin: pbkdf2:sha256:600000$PCQ1sV2fHnV3Z91B$1fdd890aa45b454a6428252070963224e8cb822fd07311cc4e11401bfdbb43eb
+2025-01-12 00:10:03,033 - INFO - Password check test: True
+2025-01-12 00:10:03,051 - INFO - Successfully created user: testadmin (ID: 1)
+2025-01-12 00:10:03,053 - INFO - Creating audit log: create_user by user 0
+2025-01-12 00:10:03,065 - ERROR - Error creating notification for audit log: AUDIT_LOG
+2025-01-12 00:10:03,065 - INFO - Created audit log: create_user by user 0
+2025-01-12 00:10:03,077 - INFO - Created new admin user: testadmin
+2025-01-12 00:10:03,079 - INFO - Admin user exists: testadmin (ID: 1)
+2025-01-12 00:10:03,079 - INFO - Admin user password hash: pbkdf2:sha256:600000$PCQ1sV2fHnV3Z91B$1fdd890aa45b454a6428252070963224e8cb822fd07311cc4e11401bfdbb43eb
+2025-01-12 00:10:03,080 - INFO - Admin user is_admin: True
+2025-01-12 00:10:03,080 - INFO - Application initialized successfully
+2025-01-12 00:10:03,085 - INFO - Logging system initialized successfully
+2025-01-12 00:10:03,134 - INFO - Deleting existing admin user: testadmin (ID: 1)
+2025-01-12 00:10:03,147 - INFO - User 1 deleted successfully
+2025-01-12 00:10:03,147 - INFO - Successfully deleted admin user testadmin
+2025-01-12 00:10:03,148 - INFO - Admin credentials from .env: testadmin, admin@test.com, TestPass123!
+2025-01-12 00:10:03,148 - INFO - Checking database connection...
+2025-01-12 00:10:03,149 - INFO - Database connection successful
+2025-01-12 00:10:03,149 - INFO - Creating new admin user from .env values
+2025-01-12 00:10:03,150 - INFO - Attempting to create user: testadmin
+2025-01-12 00:10:03,153 - INFO - Skipping admin password validation for debugging
+2025-01-12 00:10:03,546 - INFO - Password hash for testadmin: pbkdf2:sha256:600000$qq3zC32kPIHO97P8$699915af141d1af82fd5383cba07f03f37966bccfa28769de5c149888ac2b331
+2025-01-12 00:10:03,939 - INFO - Password check test: True
+2025-01-12 00:10:03,954 - INFO - Successfully created user: testadmin (ID: 1)
+2025-01-12 00:10:03,957 - INFO - Creating audit log: create_user by user 0
+2025-01-12 00:10:03,967 - ERROR - Error creating notification for audit log: AUDIT_LOG
+2025-01-12 00:10:03,968 - INFO - Created audit log: create_user by user 0
+2025-01-12 00:10:03,975 - INFO - Created new admin user: testadmin
+2025-01-12 00:10:03,977 - INFO - Admin user exists: testadmin (ID: 1)
+2025-01-12 00:10:03,977 - INFO - Admin user password hash: pbkdf2:sha256:600000$qq3zC32kPIHO97P8$699915af141d1af82fd5383cba07f03f37966bccfa28769de5c149888ac2b331
+2025-01-12 00:10:03,977 - INFO - Admin user is_admin: True
+2025-01-12 00:10:03,978 - INFO - Application initialized successfully
+2025-01-12 00:10:03,983 - ERROR - Missing required table: stipend
+2025-01-12 00:10:03,983 - ERROR - Failed to configure test environment: Failed to initialize test database
+2025-01-12 00:10:03,984 - INFO - Test environment configured successfully
+2025-01-12 00:10:47,278 - INFO - Set default value for BACKUP_DIR: backups
+2025-01-12 00:10:47,279 - INFO - Set default value for LOG_DIR: logs
+2025-01-12 00:10:47,361 - DEBUG - Created admin blueprint
+2025-01-12 00:10:47,369 - DEBUG - Created stipend blueprint: admin_stipend
+2025-01-12 00:10:47,369 - DEBUG - URL prefix: /stipends
+2025-01-12 00:10:47,369 - DEBUG - Import name: app.routes.admin.stipend_routes
+2025-01-12 00:10:47,378 - DEBUG - Registered stipend blueprint: admin_stipend
+2025-01-12 00:10:47,378 - DEBUG - Registered dashboard blueprint: dashboard
+2025-01-12 00:10:47,394 - DEBUG - Registered admin blueprint with app
+2025-01-12 00:10:47,394 - DEBUG - Registered routes:
+2025-01-12 00:10:47,395 - DEBUG - Route: static
+2025-01-12 00:10:47,395 - DEBUG - Route: admin.admin_stipend.create
+2025-01-12 00:10:47,395 - DEBUG - Route: admin.admin_stipend.edit
+2025-01-12 00:10:47,395 - DEBUG - Route: admin.admin_stipend.delete
+2025-01-12 00:10:47,395 - DEBUG - Route: admin.admin_stipend.index
+2025-01-12 00:10:47,395 - DEBUG - Route: admin.admin_stipend.paginate
+2025-01-12 00:10:47,395 - DEBUG - Route: admin.dashboard.dashboard
+2025-01-12 00:10:47,395 - DEBUG - Route: admin.user.create
+2025-01-12 00:10:47,395 - DEBUG - Route: admin.user.edit
+2025-01-12 00:10:47,395 - DEBUG - Route: admin.user.delete
+2025-01-12 00:10:47,395 - DEBUG - Route: admin.user.reset_password
+2025-01-12 00:10:47,395 - DEBUG - Route: admin.user.toggle_active
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.user.edit_profile
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.user.index
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.bot.create
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.bot.delete
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.bot.index
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.bot.run
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.bot.schedule
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.bot.edit
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.organization.create
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.organization.delete
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.organization.index
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.organization.paginate
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.organization.view
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.organization.edit
+2025-01-12 00:10:47,396 - DEBUG - Route: admin.tag.create
+2025-01-12 00:10:47,397 - DEBUG - Route: admin.tag.edit
+2025-01-12 00:10:47,397 - DEBUG - Route: admin.tag.delete
+2025-01-12 00:10:47,397 - DEBUG - Route: admin.tag.index
+2025-01-12 00:10:47,397 - DEBUG - Route: admin.tag.paginate
+2025-01-12 00:10:47,397 - DEBUG - Validating required routes: ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+2025-01-12 00:10:47,397 - DEBUG - Registered routes: ['static', 'admin.admin_stipend.create', 'admin.admin_stipend.edit', 'admin.admin_stipend.delete', 'admin.admin_stipend.index', 'admin.admin_stipend.paginate', 'admin.dashboard.dashboard', 'admin.user.create', 'admin.user.edit', 'admin.user.delete', 'admin.user.reset_password', 'admin.user.toggle_active', 'admin.user.edit_profile', 'admin.user.index', 'admin.bot.create', 'admin.bot.delete', 'admin.bot.index', 'admin.bot.run', 'admin.bot.schedule', 'admin.bot.edit', 'admin.organization.create', 'admin.organization.delete', 'admin.organization.index', 'admin.organization.paginate', 'admin.organization.view', 'admin.organization.edit', 'admin.tag.create', 'admin.tag.edit', 'admin.tag.delete', 'admin.tag.index', 'admin.tag.paginate']
+2025-01-12 00:10:47,397 - DEBUG - Required routes: ['admin.admin_stipend.create', 'admin.dashboard.dashboard']
+2025-01-12 00:10:47,430 - INFO - Deleting existing admin user: admin (ID: 1)
+2025-01-12 00:10:47,448 - INFO - User 1 deleted successfully
+2025-01-12 00:10:47,449 - INFO - Successfully deleted admin user admin
+2025-01-12 00:10:47,449 - INFO - Admin credentials from .env: admin, admin@example.com, Uq6IcUZ0QMWnH4x?*/
+2025-01-12 00:10:47,449 - INFO - Checking database connection...
+2025-01-12 00:10:47,450 - INFO - Database connection successful
+2025-01-12 00:10:47,450 - INFO - Creating new admin user from .env values
+2025-01-12 00:10:47,450 - INFO - Attempting to create user: admin
+2025-01-12 00:10:47,454 - INFO - Skipping admin password validation for debugging
+2025-01-12 00:10:47,865 - INFO - Password hash for admin: pbkdf2:sha256:600000$JyQlSOt8s4rXFsKF$6c71290139b64ea74b5eeff6c2a150d5b942943c1b040d06b162205b50707b88
+2025-01-12 00:10:48,256 - INFO - Password check test: True
+2025-01-12 00:10:48,274 - INFO - Successfully created user: admin (ID: 1)
+2025-01-12 00:10:48,277 - INFO - Creating audit log: create_user by user 0
+2025-01-12 00:10:48,288 - ERROR - Error creating notification for audit log: AUDIT_LOG
+2025-01-12 00:10:48,289 - INFO - Created audit log: create_user by user 0
+2025-01-12 00:10:48,303 - INFO - Created new admin user: admin
+2025-01-12 00:10:48,304 - INFO - Admin user exists: admin (ID: 1)
+2025-01-12 00:10:48,304 - INFO - Admin user password hash: pbkdf2:sha256:600000$JyQlSOt8s4rXFsKF$6c71290139b64ea74b5eeff6c2a150d5b942943c1b040d06b162205b50707b88
+2025-01-12 00:10:48,304 - INFO - Admin user is_admin: True
+2025-01-12 00:10:48,304 - INFO - Application initialized successfully
+2025-01-12 00:10:48,304 - ERROR - Production readiness verification failed: name 'secrets' is not defined
+2025-01-12 00:10:48,307 - ERROR - Import error: cannot import name 'BaseService' from 'app.services' (unknown location)
+2025-01-12 00:10:48,308 - ERROR - Current sys.path: ['C:\\github\\SF4\\.venv\\Lib\\site-packages', 'C:\\github\\SF4\\backups', 'C:\\github\\SF4\\logs', 'C:\\github\\SF4\\scripts\\startup', 'C:\\github\\SF4\\scripts\\testing', 'C:\\github\\SF4\\scripts\\verification', 'C:\\github\\SF4\\scripts', 'C:\\github\\SF4\\app', 'C:\\github\\SF4', 'C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.8_3.8.2800.0_x64__qbz5n2kfra8p0\\python38.zip', 'C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.8_3.8.2800.0_x64__qbz5n2kfra8p0\\DLLs', 'C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.8_3.8.2800.0_x64__qbz5n2kfra8p0\\lib', 'C:\\Users\\Morten\\AppData\\Local\\Microsoft\\WindowsApps\\PythonSoftwareFoundation.Python.3.8_qbz5n2kfra8p0']
+2025-01-12 00:10:48,313 - INFO - Version validation passed: 0.2.0
+2025-01-12 00:10:48,314 - ERROR - Database connection verification failed: No module named 'scripts.verify_db_connection'
+2025-01-12 00:10:48,314 - ERROR - Database connection verification failed
+2025-01-12 00:10:48,315 - INFO - Release notes updated successfully
+2025-01-12 00:10:48,319 - INFO - Version history updated successfully
+2025-01-12 00:10:48,331 - ERROR - Import verification failed: cannot import name 'verify_coverage' from 'scripts.verification' (unknown location)
+2025-01-12 00:10:48,331 - ERROR - Documentation finalization failed
