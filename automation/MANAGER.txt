@@ -1,3 +1,5 @@
+Let's try to avoid repeated or duplicate code and debug output.
+
 ### **Rules**
 - Maintain 85%+ test coverage
 - Conduct daily system health checks
