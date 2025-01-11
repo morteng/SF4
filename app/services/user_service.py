@@ -95,6 +95,11 @@ def create_user(form_data, current_user_id):
             logger.warning(f"Email already exists: {form_data['email']}")
             raise ValueError(FlashMessages.EMAIL_ALREADY_EXISTS.value)
         
+        # Validate password strength for admin users
+        if form_data.get('is_admin', False):
+            if not validate_password_strength(form_data['password']):
+                raise ValueError("Admin password must be at least 12 characters long and contain uppercase, lowercase, numbers and special characters")
+        
         # Create user
         new_user = User(
             username=form_data['username'],
@@ -116,7 +121,7 @@ def create_user(form_data, current_user_id):
         
         # Create audit log
         AuditLog.create(
-            user_id=current_user_id,
+            user_id=current_user_id if current_user_id else 0,  # 0 = system
             action='create_user',
             object_type='User',
             object_id=new_user.id,
@@ -129,7 +134,7 @@ def create_user(form_data, current_user_id):
             type=NotificationType.CRUD_CREATE,
             message=f'User {new_user.username} was created',
             related_object=new_user,
-            user_id=current_user_id
+            user_id=current_user_id if current_user_id else 0  # 0 = system
         )
         
         return new_user

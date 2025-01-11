@@ -44,30 +44,32 @@ def create_app(config_name='development'):
         with app.app_context():
             from app.models.user import User
             from app.extensions import db
+            from app.services.user_service import delete_user, create_user
             
-            # Check if any admin exists
-            if not User.query.filter_by(is_admin=True).first():
-                logger.info("No admin user found, creating default admin...")
-                
-                # Get admin credentials from .env
-                admin_username = os.getenv('ADMIN_USERNAME')
-                admin_email = os.getenv('ADMIN_EMAIL')
-                admin_password = os.getenv('ADMIN_PASSWORD')
-                
-                if not all([admin_username, admin_email, admin_password]):
-                    raise ValueError("Missing admin credentials in .env file")
-                
-                # Create admin user
-                admin_user = User(
-                    username=admin_username,
-                    email=admin_email,
-                    password=admin_password,
-                    is_admin=True
-                )
-                
-                db.session.add(admin_user)
-                db.session.commit()
-                logger.info(f"Created default admin user: {admin_username}")
+            # Delete existing admin user if it exists
+            admin_user = User.query.filter_by(is_admin=True).first()
+            if admin_user:
+                logger.info(f"Deleting existing admin user: {admin_user.username}")
+                delete_user(admin_user)
+            
+            # Get admin credentials from .env
+            admin_username = os.getenv('ADMIN_USERNAME')
+            admin_email = os.getenv('ADMIN_EMAIL')
+            admin_password = os.getenv('ADMIN_PASSWORD')
+            
+            if not all([admin_username, admin_email, admin_password]):
+                raise ValueError("Missing admin credentials in .env file")
+            
+            # Create new admin user
+            logger.info("Creating new admin user from .env values")
+            create_user({
+                'username': admin_username,
+                'email': admin_email,
+                'password': admin_password,
+                'is_admin': True
+            }, user_id=0)  # user_id=0 indicates system-initiated action
+            
+            logger.info(f"Created new admin user: {admin_username}")
                 
         logger.info("Application initialized successfully")
         
