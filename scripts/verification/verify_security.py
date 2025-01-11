@@ -75,7 +75,7 @@ def verify_security_settings(full_audit=False, daily=False, validate_keys=False,
         check_htmx_security (bool): Verify HTMX-specific security measures
     """
     # Add project root to sys.path
-    project_root = str(Path(__file__).parent.parent)
+    project_root = str(Path(__file__).parent.parent.parent)
     if project_root not in sys.path:
         sys.path.insert(0, project_root)
     logger = configure_logger()
@@ -83,6 +83,18 @@ def verify_security_settings(full_audit=False, daily=False, validate_keys=False,
     try:
         # Configure paths first
         from scripts.path_config import configure_paths
+        if not configure_paths():
+            raise RuntimeError("Failed to configure paths")
+            
+        # Verify imports work
+        import app
+        import scripts
+        
+        # Create application context
+        from app import create_app
+        app = create_app()
+        with app.app_context():
+            # Perform security checks
         if not configure_paths():
             raise RuntimeError("Failed to configure paths")
             
