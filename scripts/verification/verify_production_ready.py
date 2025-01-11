@@ -59,6 +59,10 @@ def verify_production_ready():
             logger.error(f"Missing required environment variables: {', '.join(missing_vars)}")
             return False
             
+        # Create application context
+        from app import create_app
+        app = create_app()
+        
         # Ensure debug mode is disabled
         if os.getenv('FLASK_DEBUG', '0').lower() in ('1', 'true', 'yes'):
             os.environ['FLASK_DEBUG'] = '0'
