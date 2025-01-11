@@ -1,4 +1,3 @@
-Major error: Unable to log in with default admin account, please fix.
 
 ### **Ongoing Priorities**
 - Maintain production stability
