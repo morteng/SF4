@@ -56,7 +56,10 @@ def verify_production_ready():
         required_vars = [
             'SQLALCHEMY_DATABASE_URI',
             'SECRET_KEY',
-            'ADMIN_PASSWORD'
+            'ADMIN_PASSWORD',
+            'BACKUP_DIR',
+            'LOG_DIR',
+            'ADMIN_CSRF_SECRET'
         ]
         
         missing_vars = [var for var in required_vars if not os.getenv(var)]

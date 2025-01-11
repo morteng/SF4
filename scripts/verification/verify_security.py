@@ -111,6 +111,19 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
             os.environ['SECRET_KEY'] = new_secret
             app.config['SECRET_KEY'] = new_secret
             logger.info("Generated new secure SECRET_KEY")
+            
+        # Set default values for missing environment variables
+        default_vars = {
+            'BACKUP_DIR': 'backups',
+            'LOG_DIR': 'logs',
+            'ADMIN_CSRF_SECRET': secrets.token_urlsafe(32)
+        }
+        
+        for var, default in default_vars.items():
+            if not os.getenv(var):
+                os.environ[var] = default
+                app.config[var] = default
+                logger.info(f"Set default value for {var}")
         
         # Strict debug mode verification
         if os.getenv('FLASK_ENV') == 'production':
