@@ -19,15 +19,15 @@
           hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'
           hx-target="#stipend-form"
           hx-swap="outerHTML"
-          hx-headers='{"X-CSRFToken": "{{ csrf_token() }}"}'
-          class="space-y-4">
+          class="space-y-4"
+          novalidate>
         
         {{ form.hidden_tag() }}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         
         <div class="form-group">
             {{ form.name.label(class="block text-sm font-medium text-gray-700") }}
-            {{ form.name(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm") }}
+            {{ form.name(class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", required=True) }}
             {% if form.name.errors %}
                 <div class="text-red-500 text-sm mt-1">{{ form.name.errors[0] }}</div>
             {% endif %}
