@@ -4,11 +4,14 @@
 
 ### CODE START ###
 
-# Verify production monitoring configuration
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts
+# Verify database schema and initialization
+/run scripts/verification/verify_db_schema.py --validate-relations --validate-required-fields
 
-# Verify user feedback collection and analytics
-/run scripts/verification/verify_feedback.py --check-surveys --check-analytics --check-response-rate
+# Verify security settings with full audit
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface --check-rate-limits
+
+# Verify test coverage meets requirements
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
 
 # Verify system health with production focus
 /run scripts/verification/verify_health.py --production --check-response-time
