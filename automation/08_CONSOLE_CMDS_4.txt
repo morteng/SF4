@@ -3,30 +3,30 @@
 
 ### CODE START ###
 
-# Initialize review environment
-/run scripts/setup_test_env.py --production --verify
+# Initialize review environment with enhanced logging
+/run scripts/setup_test_env.py --production --verify --debug
 /run scripts/init_logging.py --production --verify
 /run scripts/path_config.py --production --verify
 
-# Core system verification
-/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --verify-admin
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits --check-csrf
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-metrics --check-response-times
+# Core system verification with enhanced checks
+/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --verify-admin --check-rate-limits
+/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits --check-csrf --validate-paths
+/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-metrics --check-response-times --validate-paths
 
-# Database and coverage verification
-/run scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-pool --verify-timeout
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin --check-models
+# Database and coverage verification with retries
+/run scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-pool --verify-timeout --validate-paths
+/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin --check-models --validate-paths
 
-# Documentation finalization
-/run scripts/finalize_docs.py --verify
-/run scripts/generate_deployment_checklist.py --validate --check-security
+# Documentation finalization with path validation
+/run scripts/finalize_docs.py --verify --validate-paths
+/run scripts/generate_deployment_checklist.py --validate --check-security --validate-paths
 
 # Final cleanup and approval
-/run scripts/final_cleanup.py --verify --force
-/run scripts/request_approval.py --validate --check-coverage
+/run scripts/final_cleanup.py --verify --force --validate-paths
+/run scripts/request_approval.py --validate --check-coverage --validate-paths
 
 # Commit review results
-/run scripts/commit_changes.py --message "Final review completed" --verify --push --check-coverage --check-security
+/run scripts/commit_changes.py --message "Final review completed" --verify --push --check-coverage --check-security --validate-paths
 
 ### CODE END ###
 
