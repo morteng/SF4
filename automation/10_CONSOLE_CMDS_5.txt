@@ -38,6 +38,9 @@
 # Request final approval
 /run scripts/request_approval.py
 
+# Start application for management review
+/run python app.py
+
 # Commit and push final changes
 /run scripts/commit_changes.py --message "Production deployment v1.2.11" --verify --push
 
