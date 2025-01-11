@@ -37,8 +37,14 @@ def verify_db_connection():
     """Enhanced database verification with retry logic and schema validation"""
     logger = configure_logger()
     
-    max_retries = 5  # Increased from 3
-    base_delay = 2  # Increased from 1 second
+    # Configurable retries and timeout from environment
+    max_retries = int(os.getenv('DB_RETRIES', '5'))
+    base_delay = int(os.getenv('DB_RETRY_DELAY', '2'))
+    timeout = int(os.getenv('DB_TIMEOUT', '30'))
+    
+    # Verify connection pool settings
+    pool_size = int(os.getenv('DB_POOL_SIZE', '10'))
+    max_overflow = int(os.getenv('DB_MAX_OVERFLOW', '20'))
     
     # Verify connection pool settings
     pool_size = int(os.getenv('DB_POOL_SIZE', '5'))

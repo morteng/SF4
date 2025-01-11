@@ -9,13 +9,15 @@
 /run scripts/path_config.py --production --verify
 /run scripts/start_cycle.py
 
-# Verify admin access
-/run scripts/verification/verify_admin.py --check-credentials --verify-access
-/run scripts/verification/verify_security.py --check-admin-interface --verify-auth
+# Enhanced system verification
+/run scripts/verification/verify_health.py --production --check-response-time
+/run scripts/verification/verify_monitoring.py --full
+/run scripts/verification/verify_db_connection.py --retries=5 --timeout=30
+/run scripts/verification/verify_backup.py --verify-integrity --check-schema
 
-# Validate core security
-/run scripts/security/security_audit.py --full --focus-admin
-/run scripts/verification/verify_db_connection.py --check-admin-access
+# Security verification
+/run scripts/security/security_audit.py --full --daily
+/run scripts/verification/verify_security.py --check-admin-interface --verify-auth
 
 ### CODE END ###
 

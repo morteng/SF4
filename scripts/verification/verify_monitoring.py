@@ -20,12 +20,14 @@ def verify_monitoring_dashboards():
         # Verify dashboard configuration
         dashboard_path = Path('monitoring/dashboard.json')
         
-        # Add new required metrics from MANAGER.txt
+        # Enhanced metrics based on MANAGER.txt priorities
         required_metrics = [
             'cpu', 'memory', 'disk', 'requests',
-            'db_connections',  # New
-            'response_time',   # New
-            'error_rate'       # New
+            'db_connections',  # Database reliability
+            'response_time',   # Performance monitoring
+            'error_rate',      # Stability monitoring
+            'backup_status',   # Backup system health
+            'security_events'  # Security monitoring
         ]
         if not dashboard_path.exists():
             logger.error("Dashboard configuration not found")
