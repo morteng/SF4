@@ -81,7 +81,7 @@ def search_users(query, page=1, per_page=10):
         logging.error(f"Error searching users: {str(e)}")
         raise ValueError(FlashMessages.USER_SEARCH_ERROR.value)
 
-def create_user(form_data, current_user_id):
+def create_user(form_data, current_user_id=None):
     """Create a new user with validation and audit logging"""
     logger = logging.getLogger(__name__)
     try:

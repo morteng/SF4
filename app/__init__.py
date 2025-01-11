@@ -67,7 +67,7 @@ def create_app(config_name='development'):
                 'email': admin_email,
                 'password': admin_password,
                 'is_admin': True
-            }, user_id=0)  # user_id=0 indicates system-initiated action
+            }, current_user_id=0)  # current_user_id=0 indicates system-initiated action
             
             logger.info(f"Created new admin user: {admin_username}")
                 
