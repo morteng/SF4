@@ -13,6 +13,34 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
+def verify_monitoring_dashboards():
+    """Verify monitoring dashboards configuration"""
+    logger = configure_logger()
+    try:
+        # Verify dashboard configuration
+        dashboard_path = Path('monitoring/dashboard.json')
+        if not dashboard_path.exists():
+            logger.error("Dashboard configuration not found")
+            return False
+            
+        # Verify dashboard contains required metrics
+        import json
+        with open(dashboard_path) as f:
+            dashboard = json.load(f)
+            
+        required_metrics = ['cpu', 'memory', 'disk', 'requests']
+        missing_metrics = [m for m in required_metrics if m not in dashboard.get('metrics', [])]
+        
+        if missing_metrics:
+            logger.error(f"Dashboard missing required metrics: {', '.join(missing_metrics)}")
+            return False
+            
+        logger.info("Dashboard configuration verified")
+        return True
+    except Exception as e:
+        logger.error(f"Dashboard verification failed: {str(e)}")
+        return False
+
 def verify_monitoring_setup():
     """Verify production monitoring configuration"""
     logger = configure_logger()
