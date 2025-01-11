@@ -4,24 +4,26 @@
 ### CODE START ###
 
 # Initialize test environment
-/run scripts/setup_test_env.py --test --verify --validate-schema --check-pool
+/run scripts/setup_test_env.py --test --verify
+/run scripts/path_config.py --test --verify
 
-# Run core test suite
-/run scripts/testing/run_tests.py --unit --integration --e2e --cov
+# Core functionality tests
+/run scripts/testing/run_tests.py --unit --integration --e2e --cov --fail-under=85
 
-# Verify critical functionality
-/run scripts/verification/verify_htmx_integration.py --test-stipends-crud --validate-partial-updates
-/run scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-pool
+# Admin interface verification
+/run scripts/verification/verify_admin.py --check-credentials --verify-access
+/run scripts/verification/verify_htmx_integration.py --test-stipends-crud --validate-partial-updates --admin-interface
+
+# Security and database verification
 /run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits
+/run scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-pool
 
-# Validate monitoring and coverage
+# Monitoring and coverage verification
 /run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-metrics
 /run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin
 
-# Final production verification
+# Final verification and commit
 /run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode
-
-# Commit test results
 /run scripts/commit_changes.py --message "Testing cycle completed" --verify --push --check-coverage --check-security
 
 ### CODE END ###
