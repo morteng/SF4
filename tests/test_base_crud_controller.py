@@ -166,8 +166,9 @@ class TestBaseCrudController(BaseTestCase):
         """Helper method to get a valid CSRF token"""
         # Make a GET request to trigger CSRF token generation
         self.client.get(url_for('public.login'))
-        # Get the CSRF token from the session
-        return self.client.session_transaction()['csrf_token']
+        # Get the CSRF token from the session using context manager
+        with self.client.session_transaction() as session:
+            return session.get('csrf_token')
 
     def login(self):
         """Helper method to log in test user"""
