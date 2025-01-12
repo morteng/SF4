@@ -164,19 +164,22 @@ class TestBaseCrudController(BaseTestCase):
 
     def get_csrf_token(self):
         """Helper method to get a valid CSRF token"""
-        with self.client:
-            # Make a GET request to trigger CSRF token generation
-            self.client.get(url_for('public.login'))
-            # Get the CSRF token from the session
-            return self.client.session_transaction()['csrf_token']
+        # Make a GET request to trigger CSRF token generation
+        self.client.get(url_for('public.login'))
+        # Get the CSRF token from the session
+        return self.client.session_transaction()['csrf_token']
 
     def login(self):
         """Helper method to log in test user"""
         with self.client:
+            # Get CSRF token first
+            csrf_token = self.get_csrf_token()
+            
+            # Then make login request
             response = self.client.post(url_for('public.login'), data={
                 'username': self.test_user.username,
                 'password': 'testpass',
-                'csrf_token': self.get_csrf_token()
+                'csrf_token': csrf_token
             })
             self.assertEqual(response.status_code, 302)
 
