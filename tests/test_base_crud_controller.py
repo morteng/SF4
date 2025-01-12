@@ -20,6 +20,15 @@ class TestBaseCrudController(BaseTestCase):
         Tag.query.filter(Tag.name.like('TestTag%')).delete()
         db.session.commit()
         
+        # Create unique test user
+        self.test_user = User(
+            username=f'testuser_{uuid.uuid4().hex[:8]}',
+            email=f'test{uuid.uuid4().hex[:8]}@example.com',
+            password_hash='testhash'
+        )
+        db.session.add(self.test_user)
+        db.session.commit()
+        
         # Create test template directory
         os.makedirs('templates/admin/tag', exist_ok=True)
         with open('templates/admin/tag/create.html', 'w') as f:
@@ -153,6 +162,16 @@ class TestBaseCrudController(BaseTestCase):
             # Verify no duplicate was created
             user_count = User.query.filter(User.username == form_data['username']).count()
             self.assertEqual(user_count, 0)
+
+    def login(self):
+        """Helper method to log in test user"""
+        with self.client:
+            response = self.client.post(url_for('public.login'), data={
+                'username': self.test_user.username,
+                'password': 'testpass',
+                'csrf_token': self.get_csrf_token()
+            })
+            self.assertEqual(response.status_code, 302)
 
     def test_stipend_form_validation(self):
         # Test missing name
