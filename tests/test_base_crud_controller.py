@@ -20,12 +20,12 @@ class TestBaseCrudController(BaseTestCase):
         Tag.query.filter(Tag.name.like('TestTag%')).delete()
         db.session.commit()
         
-        # Create unique test user with actual password
+        # Create unique test user with hashed password
         self.test_user = User(
             username=f'testuser_{uuid.uuid4().hex[:8]}',
-            email=f'test{uuid.uuid4().hex[:8]}@example.com',
-            password='testpass'  # Changed from password_hash to password
+            email=f'test{uuid.uuid4().hex[:8]}@example.com'
         )
+        self.test_user.set_password('testpass')  # Use set_password to hash the password
         db.session.add(self.test_user)
         db.session.commit()
         
@@ -181,7 +181,8 @@ class TestBaseCrudController(BaseTestCase):
                 'username': self.test_user.username,
                 'password': 'testpass',  # This matches the password used above
                 'csrf_token': csrf_token
-            })
+            }, follow_redirects=False)  # Don't follow redirects
+            
             # Check for successful login redirect
             self.assertEqual(response.status_code, 302)
             self.assertEqual(response.location, url_for('public.index', _external=True))
