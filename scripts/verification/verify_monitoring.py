@@ -46,7 +46,22 @@ def verify_monitoring_dashboards(verify_tests=True):
         with open(dashboard_path) as f:
             dashboard = json.load(f)
             
-        required_metrics = ['cpu', 'memory', 'disk', 'requests']
+        required_metrics = [
+            'cpu', 'memory', 'disk', 'requests',
+            'db_connections',  # Database reliability
+            'response_time',   # Performance monitoring
+            'error_rate',      # Stability monitoring
+            'backup_status',   # Backup system health
+            'security_events', # Security monitoring
+            'active_users',    # User activity tracking
+            'api_usage',       # API monitoring
+            'bot_activity',    # Bot performance
+            'stipend_updates', # Stipend activity
+            'test_coverage',   # Test coverage
+            'failed_tests',    # Test failures
+            'pending_updates', # System updates
+            'security_audit'   # Security audit status
+        ]
         missing_metrics = [m for m in required_metrics if m not in dashboard.get('metrics', [])]
         
         if missing_metrics:

@@ -9,14 +9,16 @@
 /run scripts/path_config.py --production --verify
 /run scripts/start_cycle.py
 
-# Verify and fix test failures
+# Verify core functionality
 /run scripts/verification/verify_tests.py --final --validate-schema
+/run scripts/verification/verify_db_connection.py
+/run scripts/verification/verify_deployment.py
 
-# Set up monitoring dashboard
-/run scripts/verification/verify_monitoring.py --full --dashboard --metrics
+# Set up comprehensive monitoring
+/run scripts/verification/verify_monitoring.py --full --dashboard --metrics --stats
 
 # Verify security settings
-/run scripts/verification/verify_security.py --full-audit --daily --check-admin
+/run scripts/verification/verify_security.py --full-audit --daily --check-admin --check-bots
 
 ### CODE END ###
 

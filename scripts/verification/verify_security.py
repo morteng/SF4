@@ -40,6 +40,18 @@ def verify_security_patches():
             logger.error(f"Vulnerable packages found: {', '.join(vulnerable_packages)}")
             return False
             
+        # Additional bot security checks
+        if check_bots:
+            from app.services.bot_service import TagBot, UpdateBot, ReviewBot
+            for bot_class in [TagBot, UpdateBot, ReviewBot]:
+                bot = bot_class()
+                if not hasattr(bot, 'run'):
+                    logger.error(f"Bot {bot_class.__name__} missing required run method")
+                    return False
+                if not hasattr(bot, 'status'):
+                    logger.error(f"Bot {bot_class.__name__} missing status tracking")
+                    return False
+                    
         return True
     except Exception as e:
         logger.error(f"Security patch verification failed: {str(e)}")
@@ -66,7 +78,7 @@ def verify_login_attempts():
         logger.error(f"Login attempt verification failed: {str(e)}")
         return False
 
-def verify_security_settings(full_audit=False, daily=True, validate_keys=False, check_stipends_security=False, check_admin_interface=True, check_rate_limits=True, verify_auth=True, monitoring=False):
+def verify_security_settings(full_audit=False, daily=True, validate_keys=False, check_stipends_security=False, check_admin_interface=True, check_rate_limits=True, verify_auth=True, monitoring=False, check_bots=False):
     """Verify security-related settings with enhanced checks
     Args:
         full_audit (bool): Perform comprehensive security audit
