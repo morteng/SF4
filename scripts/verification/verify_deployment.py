@@ -11,14 +11,15 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
-# Configure paths
+# Attempt to import and configure paths once
 try:
     from scripts.path_config import configure_paths
-    if not configure_paths():
-        logger.error("Path configuration failed")
-        sys.exit(1)
 except ImportError as e:
     logger.error(f"Failed to import path configuration module: {e}")
+    sys.exit(1)
+
+if not configure_paths():
+    logger.error("Path configuration failed")
     sys.exit(1)
 
 # Helper Functions
@@ -44,6 +45,11 @@ def validate_environment_variables(required_vars):
     return True
 
 # Verification Functions
+def verify_environment():
+    """Verify required environment variables are set."""
+    required_vars = ['FLASK_ENV', 'FLASK_DEBUG', 'SQLALCHEMY_DATABASE_URI', 'SECRET_KEY']
+    return validate_environment_variables(required_vars)
+
 def verify_security_settings():
     """Verify security-related settings."""
     secret_key = os.getenv('SECRET_KEY')
@@ -98,43 +104,38 @@ def verify_db_connection():
         logger.error(f"Database connection verification failed: {str(e)}")
         return False
 
-def verify_environment():
-    """Verify required environment variables are set."""
-    required_vars = ['FLASK_ENV', 'FLASK_DEBUG', 'SQLALCHEMY_DATABASE_URI', 'SECRET_KEY']
-    return validate_environment_variables(required_vars)
-
 def verify_deployment(verify_paths=True):
-    """Enhanced deployment verification with path validation"""
+    """
+    Verify all deployment settings and configurations.
+    If verify_paths is True, re-run path configuration checks in production mode.
+    """
+    logger.info("Starting deployment verification")
+
     if verify_paths:
-        from scripts.path_config import configure_paths
+        # Re-run path config in production/verification mode
         if not configure_paths(production=True, verify=True):
             logger.error("Path configuration failed")
             return False
-    """Verify all deployment settings and configurations."""
-    try:
-        logger.info("Starting deployment verification")
 
-        if not verify_version():
-            logger.error("Version verification failed")
-            return False
-
-        if not verify_security_settings():
-            logger.error("Security settings verification failed")
-            return False
-
-        if not verify_db_connection():
-            logger.error("Database connection verification failed")
-            return False
-
-        if not verify_environment():
-            logger.error("Environment verification failed")
-            return False
-
-        logger.info("Deployment verification passed")
-        return True
-    except Exception as e:
-        logger.error(f"Deployment verification failed: {str(e)}")
+    # Do environment verification first, so we don’t blow up on missing vars
+    if not verify_environment():
+        logger.error("Environment verification failed")
         return False
+
+    if not verify_security_settings():
+        logger.error("Security settings verification failed")
+        return False
+
+    if not verify_version():
+        logger.error("Version verification failed")
+        return False
+
+    if not verify_db_connection():
+        logger.error("Database connection verification failed")
+        return False
+
+    logger.info("Deployment verification passed")
+    return True
 
 if __name__ == "__main__":
     if verify_deployment():
