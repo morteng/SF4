@@ -13,7 +13,7 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_monitoring_dashboards():
+def verify_monitoring_dashboards(verify_tests=True):
     """Verify monitoring dashboards configuration with enhanced metrics"""
     logger = configure_logger()
     try:

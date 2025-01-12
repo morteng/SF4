@@ -1,0 +1,60 @@
+{
+    "metrics": {
+        "cpu": {
+            "threshold": 90,
+            "alert": true
+        },
+        "memory": {
+            "threshold": 90,
+            "alert": true
+        },
+        "disk": {
+            "threshold": 90,
+            "alert": true
+        },
+        "requests": {
+            "threshold": 1000,
+            "alert": true
+        },
+        "db_connections": {
+            "threshold": 50,
+            "alert": true
+        },
+        "response_time": {
+            "threshold": 2.0,
+            "alert": true
+        },
+        "error_rate": {
+            "threshold": 5,
+            "alert": true
+        },
+        "backup_status": {
+            "threshold": 1,
+            "alert": true
+        },
+        "security_events": {
+            "threshold": 0,
+            "alert": true
+        },
+        "active_users": {
+            "threshold": 100,
+            "alert": true
+        },
+        "api_usage": {
+            "threshold": 1000,
+            "alert": true
+        },
+        "bot_activity": {
+            "threshold": 10,
+            "alert": true
+        },
+        "stipend_updates": {
+            "threshold": 100,
+            "alert": true
+        }
+    },
+    "alerts": {
+        "email": "admin@example.com",
+        "slack": "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX"
+    }
+}
