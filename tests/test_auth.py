@@ -28,6 +28,10 @@ def test_login(client, db_session, app):
     assert response.status_code == 302
     assert response.location == '/'
     
+    # Verify session contains user_id
+    with client.session_transaction() as session:
+        assert 'user_id' in session
+    
     # Verify authenticated users are redirected from login page
     login_redirect = client.get('/login')
     assert login_redirect.status_code == 302

@@ -1,6 +1,8 @@
 import os
+import uuid
 from unittest.mock import patch
 from flask import Response
+from app.models.user import User
 from tests.base_test_case import BaseTestCase
 from app.controllers.base_crud_controller import BaseCrudController
 from app.models import Tag
@@ -11,6 +13,10 @@ from app.constants import FlashMessages
 class TestBaseCrudController(BaseTestCase):
     def setUp(self):
         super().setUp()
+        # Clean up any existing test users
+        User.query.filter(User.username.like('testuser_%')).delete()
+        db.session.commit()
+        
         self.controller = BaseCrudController(
             service=tag_service,
             entity_name='tag',
@@ -95,9 +101,9 @@ class TestBaseCrudController(BaseTestCase):
             self.login()
             # Use unique username
             form_data = {
-                'username': 'unique_user_456',
+                'username': f'testuser_{uuid.uuid4().hex[:8]}',
                 'password': 'testpass',
-                'email': 'unique2@test.com'
+                'email': f'test{uuid.uuid4().hex[:8]}@example.com'
             }
             response = self.controller.create(form_data)
             self.assertEqual(response.status_code, 302)  # Should redirect
@@ -116,9 +122,9 @@ class TestBaseCrudController(BaseTestCase):
     def test_create_invalid_form_data(self):
         # Test invalid form data with unique username
         form_data = {
-            'username': 'unique_user_123',
+            'username': f'testuser_{uuid.uuid4().hex[:8]}',
             'password': 'testpass',
-            'email': 'unique@test.com',
+            'email': f'test{uuid.uuid4().hex[:8]}@example.com',
             'name': '',  # Invalid data
             'category': 'TestCategory'
         }
