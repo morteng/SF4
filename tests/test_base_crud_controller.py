@@ -17,6 +17,9 @@ class TestBaseCrudController(BaseTestCase):
         # Clean up any existing test users
         User.query.filter(User.username.like('testuser_%')).delete()
         db.session.commit()
+        # Clean up any existing test users
+        User.query.filter(User.username.like('testuser_%')).delete()
+        db.session.commit()
         
         self.controller = BaseCrudController(
             service=tag_service,
