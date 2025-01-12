@@ -25,9 +25,15 @@ def create_app(config_name='development'):
     """Create and configure the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
     
-    # Load configuration first
+    # Initialize extensions first
+    from app.extensions import db, login_manager, migrate, csrf, limiter
+    
+    # Load configuration
     from app.config import config_by_name
     app.config.from_object(config_by_name[config_name])
+    
+    # Initialize database
+    db.init_app(app)
     
     # Set debug mode based on config
     app.debug = app.config.get('DEBUG', False)
@@ -43,9 +49,21 @@ def create_app(config_name='development'):
         # Load environment variables
         load_dotenv()
         
-        # Initialize extensions
-        from app.extensions import init_extensions
-        init_extensions(app)
+        # Initialize extensions with retry logic
+        max_retries = 3
+        retry_delay = 1  # seconds
+        
+        for attempt in range(max_retries):
+            try:
+                from app.extensions import init_extensions
+                init_extensions(app)
+                break
+            except Exception as e:
+                if attempt == max_retries - 1:
+                    logger.error(f"Failed to initialize extensions after {max_retries} attempts: {str(e)}")
+                    raise
+                logger.warning(f"Extension initialization attempt {attempt + 1} failed, retrying in {retry_delay}s...")
+                time.sleep(retry_delay)
     
         # Initialize database models FIRST
         with app.app_context():
