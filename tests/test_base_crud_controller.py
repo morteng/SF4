@@ -162,6 +162,14 @@ class TestBaseCrudController(BaseTestCase):
         user_count = User.query.filter(User.username == form_data['username']).count()
         self.assertEqual(user_count, 0)
 
+    def get_csrf_token(self):
+        """Helper method to get a valid CSRF token"""
+        with self.client:
+            # Make a GET request to trigger CSRF token generation
+            self.client.get(url_for('public.login'))
+            # Get the CSRF token from the session
+            return self.client.session_transaction()['csrf_token']
+
     def login(self):
         """Helper method to log in test user"""
         with self.client:
