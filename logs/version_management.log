@@ -5866,3 +5866,21 @@ sqlalchemy.exc.InvalidRequestError: Can't operate on closed transaction inside c
 2025-01-12 20:42:09,015 - ERROR - Missing required table: stipend
 2025-01-12 20:42:09,015 - ERROR - Failed to configure test environment: Failed to initialize test database
 2025-01-12 20:42:09,016 - INFO - Test environment configured successfully
+2025-01-12 21:17:59,883 - INFO - Logging system initialized successfully
+2025-01-12 21:17:59,884 - INFO - Logging system initialized successfully
+2025-01-12 21:17:59,885 - INFO - Logging system initialized successfully
+2025-01-12 21:17:59,954 - INFO - Database connection successful
+2025-01-12 21:17:59,977 - INFO - Admin user already exists: admin
+2025-01-12 21:17:59,996 - INFO - Application initialized successfully
+2025-01-12 21:18:00,003 - INFO - Logging system initialized successfully
+2025-01-12 21:18:00,005 - INFO - Logging system initialized successfully
+2025-01-12 21:18:00,017 - INFO - Database connection successful
+2025-01-12 21:18:00,022 - INFO - Admin user already exists: admin
+2025-01-12 21:18:00,043 - INFO - Application initialized successfully
+2025-01-12 21:18:00,048 - INFO - Logging system initialized successfully
+2025-01-12 21:18:00,118 - INFO - Database connection successful
+2025-01-12 21:18:00,120 - INFO - Admin user already exists: admin
+2025-01-12 21:18:00,139 - INFO - Application initialized successfully
+2025-01-12 21:18:00,141 - ERROR - Missing required table: stipend
+2025-01-12 21:18:00,142 - ERROR - Failed to configure test environment: Failed to initialize test database
+2025-01-12 21:18:00,142 - INFO - Test environment configured successfully
