@@ -92,7 +92,7 @@ def app():
     """Create and configure a new app instance for the test session."""
     app = create_app()
     app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # Force in-memory DB
     # Add rate limiter config
     app.config['RATELIMIT_ENABLED'] = True
     app.config['RATELIMIT_STORAGE_URL'] = 'memory://'
