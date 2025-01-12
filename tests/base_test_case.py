@@ -8,6 +8,10 @@ from wtforms.validators import ValidationError
 class BaseTestCase(TestCase):
     def create_app(self):
         app = create_app('testing')
+        # Override admin user creation for tests
+        app.config['ADMIN_USERNAME'] = 'admin'
+        app.config['ADMIN_EMAIL'] = 'admin@test.com' 
+        app.config['ADMIN_PASSWORD'] = 'password'
         return app
 
     def setUp(self):

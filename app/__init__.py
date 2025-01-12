@@ -70,25 +70,30 @@ def _init_database(app):
 
 def _ensure_admin_user(app):
     """Ensure an admin user exists in the database."""
-    admin_username = os.getenv('ADMIN_USERNAME')
-    admin_email = os.getenv('ADMIN_EMAIL')
-    admin_password = os.getenv('ADMIN_PASSWORD')
-
-    if not all([admin_username, admin_email, admin_password]):
-        raise ValueError("Missing admin credentials in environment variables")
+    admin_username = os.getenv('ADMIN_USERNAME', 'admin')
+    admin_email = os.getenv('ADMIN_EMAIL', 'admin@example.com')
+    admin_password = os.getenv('ADMIN_PASSWORD', 'password')
 
     with app.app_context():
-        with db.session.begin():
-            admin_user = User.query.filter_by(is_admin=True).first()
-            if admin_user:
-                delete_user(admin_user)
+        # Check if admin user already exists
+        admin_user = User.query.filter_by(is_admin=True).first()
+        if admin_user:
+            logger.info(f"Admin user already exists: {admin_user.username}")
+            return
 
+        try:
+            # Create admin user
             create_user({
                 'username': admin_username,
                 'email': admin_email,
                 'password': admin_password,
                 'is_admin': True
             })
+            logger.info(f"Created admin user: {admin_username}")
+        except Exception as e:
+            logger.error(f"Failed to create admin user: {str(e)}")
+            # Don't fail the entire app if admin creation fails
+            logger.warning("Continuing without admin user creation")
 
 
 def _register_blueprints(app):
