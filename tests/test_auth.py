@@ -44,11 +44,3 @@ def test_login(client, db_session, app):
         'csrf_token': 'invalid_token'
     }, follow_redirects=True)
     assert b"CSRF token is invalid" in invalid_response.data
-    
-    # Test login with invalid CSRF token
-    invalid_response = client.post('/login', data={
-        'username': 'testuser',
-        'password': 'testpass',
-        'csrf_token': 'invalid_token'
-    }, follow_redirects=True)
-    assert b"CSRF token is invalid" in invalid_response.data
