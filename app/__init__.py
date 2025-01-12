@@ -35,9 +35,12 @@ def create_app(config_name='development'):
         # Initialize extensions
         from app.extensions import init_extensions
         init_extensions(app)
-        
+    
         # Initialize database models FIRST
         with app.app_context():
+            # Ensure db is initialized
+            db.init_app(app)
+        
             from app.models import init_models
             init_models(app)
             
