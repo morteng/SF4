@@ -19,6 +19,10 @@ class TestBaseCrudController(BaseTestCase):
         Tag.query.filter(Tag.name.like('TestTag%')).delete()
         db.session.commit()
         
+        # Clean up any existing test users
+        User.query.filter(User.username.like('testuser_%')).delete()
+        db.session.commit()
+        
         self.controller = BaseCrudController(
             service=tag_service,
             entity_name='tag',
@@ -97,11 +101,10 @@ class TestBaseCrudController(BaseTestCase):
 
     def test_create_missing_template(self):
         # Use unique test data
-        unique_id = uuid.uuid4().hex[:8]
         form_data = {
-            'username': f'testuser_{unique_id}',
+            'username': f'testuser_{uuid.uuid4().hex[:8]}',
             'password': 'testpass',
-            'email': f'test{unique_id}@example.com'
+            'email': f'test{uuid.uuid4().hex[:8]}@example.com'
         }
         with self.client:
             self.login()
@@ -125,11 +128,10 @@ class TestBaseCrudController(BaseTestCase):
 
     def test_create_invalid_form_data(self):
         # Use unique test data
-        unique_id = uuid.uuid4().hex[:8]
         form_data = {
-            'username': f'testuser_{unique_id}',
+            'username': f'testuser_{uuid.uuid4().hex[:8]}',
             'password': 'testpass',
-            'email': f'test{unique_id}@example.com',
+            'email': f'test{uuid.uuid4().hex[:8]}@example.com',
             'name': '',  # Invalid data
             'category': 'TestCategory'
         }

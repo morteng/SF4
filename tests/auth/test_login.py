@@ -31,11 +31,11 @@ def test_login_success(client, test_user):
         'username': test_user.username,
         'password': 'password123',
         'csrf_token': csrf_token
-    }, follow_redirects=True)
+    })
 
     # Verify redirect to admin dashboard
-    assert response.status_code == 200
-    assert b"Dashboard" in response.data
+    assert response.status_code == 302
+    assert response.location == url_for('admin.dashboard')
     
     # Verify session contains user_id
     with client.session_transaction() as session:
