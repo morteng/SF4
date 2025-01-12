@@ -1,7 +1,7 @@
 import os
 import uuid
 from unittest.mock import patch
-from flask import Response
+from flask import Response, url_for
 from app.models.user import User
 from app.extensions import db
 from tests.base_test_case import BaseTestCase
