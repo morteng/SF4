@@ -14,26 +14,23 @@ from app.constants import FlashMessages
 class TestBaseCrudController(BaseTestCase):
     def setUp(self):
         super().setUp()
+        
         # Clean up any existing test data
         User.query.filter(User.username.like('testuser_%')).delete()
         Tag.query.filter(Tag.name.like('TestTag%')).delete()
         db.session.commit()
         
-        # Clean up any existing test users
-        User.query.filter(User.username.like('testuser_%')).delete()
-        db.session.commit()
-        
+        # Create test template directory
+        os.makedirs('templates/admin/tag', exist_ok=True)
+        with open('templates/admin/tag/create.html', 'w') as f:
+            f.write('<html></html>')
+            
         self.controller = BaseCrudController(
             service=tag_service,
             entity_name='tag',
             form_class=TagForm,
             template_dir='admin/tag'
         )
-        
-        # Create test template directory
-        os.makedirs('templates/admin/tag', exist_ok=True)
-        with open('templates/admin/tag/create.html', 'w') as f:
-            f.write('<html></html>')
 
     @patch('app.controllers.base_crud_controller.render_template')
     def test_create_success(self, mock_render):
@@ -99,6 +96,16 @@ class TestBaseCrudController(BaseTestCase):
         assert form.validate() is False
         assert FlashMessages.USERNAME_FORMAT in form.username.errors
 
+    def test_create_template_error(self):
+        # Simulate a template rendering error
+        with patch('app.controllers.base_crud_controller.render_template') as mock_render:
+            mock_render.side_effect = Exception("Template rendering failed")
+            with self.client:
+                self.login()
+                response = self.controller.create()
+                self.assertEqual(response.status_code, 302)  # Should redirect
+                self.assertIn(FlashMessages.TEMPLATE_ERROR.value, response.get_data(as_text=True))
+
     def test_create_missing_template(self):
         # Use unique test data
         form_data = {
@@ -106,6 +113,7 @@ class TestBaseCrudController(BaseTestCase):
             'password': 'testpass',
             'email': f'test{uuid.uuid4().hex[:8]}@example.com'
         }
+        
         with self.client:
             self.login()
             response = self.controller.create(form_data)
@@ -135,6 +143,7 @@ class TestBaseCrudController(BaseTestCase):
             'name': '',  # Invalid data
             'category': 'TestCategory'
         }
+        
         with self.client:
             self.login()
             response = self.controller.create(form_data)
