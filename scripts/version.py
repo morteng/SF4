@@ -8,6 +8,8 @@ from datetime import datetime
 from typing import Optional, Tuple
 import re
 from app.common.db_utils import validate_db_connection
+from scripts.archive_logs import archive_logs
+from scripts.init_logging import verify_logging_configuration
 
 # Current version
 __version__ = "0.2.0"

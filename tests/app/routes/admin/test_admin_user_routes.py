@@ -178,3 +178,4 @@ def test_user_crud_operations(logged_in_admin, test_user, db_session, app):
 
         # Test rollback approach
         with db_session.begin():
+            pass
