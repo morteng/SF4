@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 import pytest
-from scripts.backup_rotation import rotate_backups
+from scripts.database.backup_rotation import rotate_backups
 
 @pytest.fixture
 def setup_backups(tmp_path):

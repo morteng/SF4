@@ -18,7 +18,3 @@ def test_register_route_accessible(client):
     response = client.get(url_for('public.register'))
     assert response.status_code == 200
     assert b"Register" in response.data
-```
-```python
-tests\routes\test_public_routes_integration.py
-<<<<<<< SEARCH

@@ -1,6 +1,6 @@
 import pytest
-from scripts.verify_deployment import verify_deployment
-from scripts.verify_db_connection import verify_db_connection
+from scripts.verification.verify_deployment import verify_deployment
+from scripts.verification.verify_db_connection import verify_db_connection
 from scripts.startup.init_admin import initialize_admin_user
 import os
 
