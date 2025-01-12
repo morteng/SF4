@@ -8,6 +8,17 @@ from app.extensions import db, login_manager, migrate, csrf, limiter
 from scripts.ensure_admin_user import ensure_admin_user
 from app.models.user import User
 
+# Now we can safely query the database
+from app.models.user import User
+from app.extensions import db
+from app.services.user_service import delete_user, create_user
+
+# Register blueprints
+from app.routes import register_blueprints
+from app.routes.admin import register_admin_blueprints
+register_admin_blueprints(app)
+register_blueprints(app)
+
 logger = logging.getLogger(__name__)
 
 def create_app(config_name='development'):
@@ -53,21 +64,8 @@ def create_app(config_name='development'):
                 logger.error(f"Database connection failed: {str(e)}")
                 raise RuntimeError(f"Database connection failed: {str(e)}")
             
-            # Now we can safely query the database
-            from app.models.user import User
-            from app.extensions import db
-            from app.services.user_service import delete_user, create_user
+
             
-            # Register blueprints
-            from app.routes import register_blueprints
-            from app.routes.admin import register_admin_blueprints
-            register_admin_blueprints(app)
-            register_blueprints(app)
-            
-            # Ensure admin user exists
-            from app.models.user import User
-            from app.extensions import db
-            from app.services.user_service import delete_user, create_user
             
             # Delete existing admin user if it exists
             admin_user = User.query.filter_by(is_admin=True).first()
