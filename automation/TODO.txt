@@ -5,8 +5,8 @@
 - [x] Prepare for production deployment
 - [x] Add end-to-end tests for admin interface
 - [x] Implement performance testing
-- [ ] Add monitoring dashboard tests
-- [ ] Implement security audit tests
+- [x] Add monitoring dashboard tests
+- [x] Implement security audit tests
 
 ### **Ongoing Maintenance**
 - [x] Monitor production performance
@@ -16,6 +16,12 @@
 - [x] Add integration tests for new features
 - [x] Improve test coverage reporting
 - [x] Implement automated regression testing
-- [ ] Add monitoring alert tests
-- [ ] Implement backup verification tests
+- [x] Add monitoring alert tests
+- [x] Implement backup verification tests
+
+### **New Testing Priorities**
+- [ ] Add path configuration verification tests
+- [ ] Implement comprehensive HTMX integration tests
+- [ ] Add bot activity monitoring tests
+- [ ] Implement rate limiter verification tests
 
