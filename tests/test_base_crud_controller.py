@@ -153,15 +153,14 @@ class TestBaseCrudController(BaseTestCase):
             'category': 'TestCategory'
         }
         
-        with self.client:
-            self.login()
-            response = self.controller.create(form_data)
-            self.assertEqual(response.status_code, 200)
-            self.assertIn(FlashMessages.NAME_REQUIRED.value, response.get_data(as_text=True))
-            
-            # Verify no duplicate was created
-            user_count = User.query.filter(User.username == form_data['username']).count()
-            self.assertEqual(user_count, 0)
+        self.login()
+        response = self.controller.create(form_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(FlashMessages.NAME_REQUIRED.value, response.get_data(as_text=True))
+        
+        # Verify no duplicate was created
+        user_count = User.query.filter(User.username == form_data['username']).count()
+        self.assertEqual(user_count, 0)
 
     def login(self):
         """Helper method to log in test user"""
