@@ -614,85 +614,85 @@ def test_user_crud_operations(logged_in_admin, db_session, test_user, app):
     
         verify_user_crud_operations(logged_in_admin, test_user, unique_user_data)
  
- def test_get_all_users_sorting(db_session):
-     """Test sorting functionality in get_all_users()"""
-     # Create test users with password hashes
-     user1 = User(
-         username='user1',
-         email='user1@example.com',
-         created_at=datetime(2024, 1, 1, tzinfo=timezone.utc),
-         password_hash='hash1'
-     )
-     user2 = User(
-         username='user2',
-         email='user2@example.com',
-         created_at=datetime(2024, 1, 2, tzinfo=timezone.utc),
-         password_hash='hash2'
-     )
-     user3 = User(
-         username='user3',
-         email='user3@example.com',
-         created_at=datetime(2024, 1, 3, tzinfo=timezone.utc),
-         password_hash='hash3'
-     )
-     db_session.add_all([user1, user2, user3])
-     db_session.commit()
+def test_get_all_users_sorting(db_session):
+    """Test sorting functionality in get_all_users()"""
+    # Create test users with password hashes
+    user1 = User(
+        username='user1',
+        email='user1@example.com',
+        created_at=datetime(2024, 1, 1, tzinfo=timezone.utc),
+        password_hash='hash1'
+    )
+    user2 = User(
+        username='user2',
+        email='user2@example.com',
+        created_at=datetime(2024, 1, 2, tzinfo=timezone.utc),
+        password_hash='hash2'
+    )
+    user3 = User(
+        username='user3',
+        email='user3@example.com',
+        created_at=datetime(2024, 1, 3, tzinfo=timezone.utc),
+        password_hash='hash3'
+    )
+    db_session.add_all([user1, user2, user3])
+    db_session.commit()
  
-     # Test username ascending
-     result = get_all_users(sort_by='username', sort_order='asc')
-     assert [u.username for u in result.items] == ['user1', 'user2', 'user3']
+    # Test username ascending
+    result = get_all_users(sort_by='username', sort_order='asc')
+    assert [u.username for u in result.items] == ['user1', 'user2', 'user3']
  
-     # Test username descending
-     result = get_all_users(sort_by='username', sort_order='desc')
-     assert [u.username for u in result.items] == ['user3', 'user2', 'user1']
+    # Test username descending
+    result = get_all_users(sort_by='username', sort_order='desc')
+    assert [u.username for u in result.items] == ['user3', 'user2', 'user1']
  
-     # Test email ascending
-     result = get_all_users(sort_by='email', sort_order='asc')
-     assert [u.email for u in result.items] == ['user1@example.com', 'user2@example.com', 'user3@example.com']
+    # Test email ascending
+    result = get_all_users(sort_by='email', sort_order='asc')
+    assert [u.email for u in result.items] == ['user1@example.com', 'user2@example.com', 'user3@example.com']
  
-     # Test created_at descending (default)
-     result = get_all_users()
-     assert [u.username for u in result.items] == ['user3', 'user2', 'user1']
+    # Test created_at descending (default)
+    result = get_all_users()
+    assert [u.username for u in result.items] == ['user3', 'user2', 'user1']
  
- def test_create_user(logged_in_admin, db_session):
-     """Test user creation"""
-     # Get CSRF token
-     create_response = logged_in_admin.get('/admin/users/create')
-     csrf_token = extract_csrf_token(create_response.data)
+def test_create_user(logged_in_admin, db_session):
+    """Test user creation"""
+    # Get CSRF token
+    create_response = logged_in_admin.get('/admin/users/create')
+    csrf_token = extract_csrf_token(create_response.data)
      
-     # Test valid user creation
-     response = logged_in_admin.post('/admin/users/create', data={
-         'username': 'testuser',
-         'email': 'test@example.com',
-         'password': 'StrongPass123!',
-         'csrf_token': csrf_token
-     }, follow_redirects=True)
+    # Test valid user creation
+    response = logged_in_admin.post('/admin/users/create', data={
+        'username': 'testuser',
+        'email': 'test@example.com',
+        'password': 'StrongPass123!',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
      
-     assert response.status_code == 200
-     assert_flash_message(response, FlashMessages.CREATE_USER_SUCCESS)
+    assert response.status_code == 200
+    assert_flash_message(response, FlashMessages.CREATE_USER_SUCCESS)
      
-     # Verify user exists
-     user = User.query.filter_by(username='testuser').first()
-     assert user is not None
-     assert user.email == 'test@example.com'
+    # Verify user exists
+    user = User.query.filter_by(username='testuser').first()
+    assert user is not None
+    assert user.email == 'test@example.com'
      
-     # Test duplicate username
-     response = logged_in_admin.post('/admin/users/create', data={
-         'username': 'testuser',  # Duplicate username
-         'email': 'test2@example.com',
-         'password': 'StrongPass123!',
-         'csrf_token': csrf_token
-     }, follow_redirects=True)
+    # Test duplicate username
+    response = logged_in_admin.post('/admin/users/create', data={
+        'username': 'testuser',  # Duplicate username
+        'email': 'test2@example.com',
+        'password': 'StrongPass123!',
+        'csrf_token': csrf_token
+    }, follow_redirects=True)
      
-     assert response.status_code == 200
-     assert_flash_message(response, FlashMessages.CREATE_USER_DUPLICATE)
+    assert response.status_code == 200
+    assert_flash_message(response, FlashMessages.CREATE_USER_DUPLICATE)
      
-     # Test invalid email
-     response = logged_in_admin.post('/admin/users/create', data={
-         'username': 'testuser2',
-         'email': 'invalid-email',
-         'password': 'StrongPass123!',
-         'csrf_token': csrf_token
+    # Test invalid email
+    response = logged_in_admin.post('/admin/users/create', data={
+        'username': 'testuser2',
+        'email': 'invalid-email',
+        'password': 'StrongPass123!',
+        'csrf_token': csrf_token
      }, follow_redirects=True)
      
      assert response.status_code == 200
