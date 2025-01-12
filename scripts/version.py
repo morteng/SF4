@@ -7,6 +7,7 @@ import subprocess
 from datetime import datetime
 from typing import Optional, Tuple
 import re
+from app.common.db_utils import validate_db_connection
 
 # Current version
 __version__ = "0.2.0"
@@ -31,52 +32,6 @@ def configure_logging():
     return LOG_FILE
 
 LOG_FILE = configure_logging()
-
-def validate_db_connection(db_path: str) -> bool:
-    """Validate database connection with enhanced error handling"""
-    try:
-        # Convert Windows paths and handle relative paths
-        db_path = str(Path(db_path).absolute()).replace('\\', '/')
-        
-        # Check if database URI is configured
-        if not os.getenv('SQLALCHEMY_DATABASE_URI'):
-            logging.error("Database URI not configured in .env")
-            return False
-            
-        # Test connection with retries
-        max_retries = 3
-        retry_delay = 1
-        
-        for attempt in range(max_retries):
-            try:
-                conn = sqlite3.connect(db_path)
-                cursor = conn.cursor()
-                
-                # Verify basic operations
-                cursor.execute("PRAGMA foreign_keys = ON")
-                cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
-                tables = cursor.fetchall()
-                
-                if not tables:
-                    logging.error("No tables found in database")
-                    return False
-                    
-                cursor.execute("SELECT 1")
-                cursor.close()
-                conn.close()
-                return True
-                
-            except sqlite3.Error as e:
-                if attempt == max_retries - 1:
-                    logging.error(f"Database connection failed after {max_retries} attempts: {str(e)}")
-                    return False
-                time.sleep(retry_delay)
-                
-        return False
-        
-    except Exception as e:
-        logging.error(f"Unexpected error during database connection: {str(e)}")
-        return False
 
 def main() -> None:
     """Main entry point for version management CLI"""
@@ -291,9 +246,6 @@ def verify_deployment(full=False):
         logging.error(f"Deployment verification failed: {str(e)}", exc_info=True)
         return False
 
-if __name__ == "__main__":
-    main()
-
 def get_db_version(db_path: str) -> Optional[str]:
     """Get version from database if available"""
     if not validate_db_connection(db_path):
@@ -469,7 +421,7 @@ def create_db_backup(source_db: str, backup_path: str = None) -> bool:
             
         logging.info(f"Database backup created: {source_db} -> {backup_path}")
         return True
-    except Exception as e:
+    except sqlite3.Error as e:
         logging.error(f"Database backup failed: {str(e)}")
         return False
 
@@ -501,7 +453,7 @@ def validate_version_file(file_path: Optional[str] = None) -> bool:
 def create_version_history(new_version: str, history_path: str = None) -> None:
     """Create version history file"""
     history_file = Path(history_path) if history_path else Path('VERSION_HISTORY.md')
-    history_file.parent.mkdir(parents=True, exist_ok=True)
+    history_file.parent.mkdir(exist_ok=True, parents=True)
     
     if not history_file.exists():
         history_file.write_text("# Version History\n\n")
@@ -518,36 +470,6 @@ def create_version_history(new_version: str, history_path: str = None) -> None:
         f.write("- Version bump\n")
         f.write("- Fixed version management tests\n")
         f.write("- Improved version history tracking\n\n")
-
-def create_db_backup(source_db: str, backup_path: str = None) -> bool:
-    """Create a timestamped backup of the database"""
-    try:
-        # Set default backup path if not provided
-        if backup_path is None:
-            backup_dir = Path('backups')
-            backup_dir.mkdir(exist_ok=True)
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            backup_path = str(backup_dir / f"stipend_{timestamp}.db")
-        
-        # Ensure backup directory exists
-        backup_dir = Path(backup_path).parent
-        backup_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Connect to source database and create backup
-        conn = sqlite3.connect(source_db)
-        with conn:
-            conn.execute(f"VACUUM INTO '{backup_path}'")
-        conn.close()
-        
-        # Verify backup was created
-        if not Path(backup_path).exists():
-            raise RuntimeError("Backup file was not created")
-            
-        logging.info(f"Database backup created: {source_db} -> {backup_path}")
-        return True
-    except sqlite3.Error as e:
-        logging.error(f"Database backup failed: {str(e)}")
-        return False
 
 def validate_production_environment() -> bool:
     """Validate production environment settings"""
@@ -614,76 +536,3 @@ def validate_production_environment() -> bool:
         
     logging.info("Production environment validation passed")
     return True
-
-def archive_logs(force: bool = False) -> bool:
-    """Archive current logs to a timestamped file
-    
-    Args:
-        force: If True, create empty archive even if no logs exist
-        
-    Returns:
-        bool: True if archiving succeeded, False otherwise
-    """
-    try:
-        log_file = Path('version_management.log')
-        
-        # Handle case where log file doesn't exist
-        if not log_file.exists():
-            if force:
-                # Create empty archive file
-                archive_path = log_file.with_suffix(f".{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
-                archive_path.touch()
-                logging.info(f"Created empty log archive: {archive_path}")
-                return True
-            logging.warning("No log file found to archive")
-            return False
-            
-        # Verify log file has content
-        if not force and log_file.stat().st_size == 0:
-            logging.warning("Log file is empty, not archiving")
-            return False
-            
-        # Create archive path with timestamp
-        archive_path = log_file.with_suffix(f".{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
-        
-        # Move log file to archive
-        log_file.rename(archive_path)
-        
-        # Verify archive was created
-        if not archive_path.exists():
-            raise RuntimeError("Archive file was not created")
-            
-        logging.info(f"Logs archived to: {archive_path}")
-        return True
-        
-    except Exception as e:
-        logging.error(f"Log archiving failed: {str(e)}", exc_info=True)
-        return False
-
-def verify_logging_configuration() -> bool:
-    """Verify logging configuration is working correctly
-    
-    Returns:
-        bool: True if logging is configured properly, False otherwise
-    """
-    try:
-        # Test all logging levels
-        logging.debug("Debug message test")
-        logging.info("Info message test")
-        logging.warning("Warning message test")
-        logging.error("Error message test")
-        logging.critical("Critical message test")
-        
-        # Verify log file was created and contains messages
-        if not os.path.exists('version_management.log'):
-            return False
-            
-        with open('version_management.log') as f:
-            content = f.read()
-            if not all(level in content for level in ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']):
-                return False
-                
-        return True
-    except Exception as e:
-        logging.error(f"Logging configuration verification failed: {str(e)}")
-        return False
