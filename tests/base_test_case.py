@@ -2,6 +2,7 @@ from flask_testing import TestCase
 from app import create_app, db
 from app.models import User, Stipend, Tag, Organization
 from app.constants import FlashMessages
+import uuid
 from datetime import datetime, timedelta, timezone
 from wtforms.validators import ValidationError
 
@@ -23,10 +24,13 @@ class BaseTestCase(TestCase):
         db.drop_all()
 
     def create_test_data(self):
-        # Create test admin user
+        # Clean up existing admin user if it exists
+        User.query.filter_by(username='admin').delete()
+        
+        # Create test admin user with unique credentials
         admin = User(
-            username='admin',
-            email='admin@test.com',
+            username=f'admin_{uuid.uuid4().hex[:8]}',
+            email=f'admin{uuid.uuid4().hex[:8]}@test.com',
             is_admin=True
         )
         admin.set_password('password')
