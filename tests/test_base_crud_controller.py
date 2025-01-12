@@ -3,6 +3,7 @@ import uuid
 from unittest.mock import patch
 from flask import Response
 from app.models.user import User
+from app.extensions import db
 from tests.base_test_case import BaseTestCase
 from app.controllers.base_crud_controller import BaseCrudController
 from app.models import Tag
