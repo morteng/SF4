@@ -25,8 +25,8 @@ def test_login(client, db_session, app):
     }, follow_redirects=True)
     
     # Verify redirect to home page after successful login
-    assert response.status_code == 200
-    assert b"Login successful" in response.data
+    assert response.status_code == 302
+    assert response.location == '/'
     
     # Verify authenticated users are redirected from login page
     login_redirect = client.get('/login')

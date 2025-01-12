@@ -93,7 +93,13 @@ class TestBaseCrudController(BaseTestCase):
         
         with self.client:
             self.login()
-            response = self.controller.create()
+            # Use unique username
+            form_data = {
+                'username': 'unique_user_456',
+                'password': 'testpass',
+                'email': 'unique2@test.com'
+            }
+            response = self.controller.create(form_data)
             self.assertEqual(response.status_code, 302)  # Should redirect
             self.assertIn(FlashMessages.TEMPLATE_NOT_FOUND.value, response.get_data(as_text=True))
 
@@ -108,8 +114,14 @@ class TestBaseCrudController(BaseTestCase):
                 self.assertIn(FlashMessages.TEMPLATE_ERROR.value, response.get_data(as_text=True))
 
     def test_create_invalid_form_data(self):
-        # Test invalid form data
-        form_data = {'name': '', 'category': 'TestCategory'}  # Invalid data
+        # Test invalid form data with unique username
+        form_data = {
+            'username': 'unique_user_123',
+            'password': 'testpass',
+            'email': 'unique@test.com',
+            'name': '',  # Invalid data
+            'category': 'TestCategory'
+        }
         with self.client:
             self.login()
             response = self.controller.create(form_data)
