@@ -239,3 +239,7 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
         return False
 
 if __name__ == "__main__":
+    if verify_security_settings():
+        exit(0)
+    else:
+        exit(1)
