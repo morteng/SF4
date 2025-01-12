@@ -3,10 +3,10 @@ import os
 from pathlib import Path
 
 def get_project_root():
-    """Centralized project root calculation"""
+    """Centralized project root calculation."""
     current_path = Path(__file__).resolve()
-
-    # Traverse up to find the project root (SF4 directory)
+    
+    # Traverse up to find the project root (SF4 directory).
     while current_path.name != 'SF4' and current_path.parent != current_path:
         current_path = current_path.parent
 
@@ -15,15 +15,16 @@ def get_project_root():
 
     return str(current_path)
 
+
 def configure_paths(production=False):
-    """Enhanced path configuration with proper error handling"""
+    """Enhanced path configuration with proper error handling."""
     try:
         project_root = get_project_root()
 
-        # Clear existing project paths from sys.path to avoid duplicates
+        # Clear existing project paths from sys.path to avoid duplicates.
         sys.path = [p for p in sys.path if not p.startswith(project_root)]
 
-        # Define paths to add
+        # Define base paths to add.
         paths_to_add = [
             project_root,
             str(Path(project_root) / 'app'),
@@ -31,33 +32,33 @@ def configure_paths(production=False):
             str(Path(__file__).parent),
             str(Path(project_root) / 'scripts/verification'),
             str(Path(project_root) / 'scripts/testing'),
-            str(Path(project_root) / 'scripts/startup')
+            str(Path(project_root) / 'scripts/startup'),
         ]
 
-        # Add production-specific paths
+        # Add production-specific paths if needed.
         if production:
             paths_to_add.extend([
                 str(Path(project_root) / 'logs'),
-                str(Path(project_root) / 'backups')
+                str(Path(project_root) / 'backups'),
             ])
 
-        # Add virtual environment site-packages if available
+        # Add virtual environment site-packages if available.
         venv_path = os.getenv('VIRTUAL_ENV')
         if venv_path:
             site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
             paths_to_add.append(site_packages)
 
-        # Add paths to sys.path if not already present
+        # Insert paths into sys.path if not already present.
         for path in paths_to_add:
             if path not in sys.path:
                 sys.path.insert(0, path)
                 print(f"Added to Python path: {path}")
 
-        # Verify critical imports
+        # Quick import verification.
         try:
             import app
             import scripts
-            print("Successfully imported app and scripts modules")
+            print("Successfully imported app and scripts modules.")
         except ImportError as e:
             print(f"Import verification failed: {str(e)}")
             print(f"Current sys.path: {sys.path}")
@@ -68,127 +69,25 @@ def configure_paths(production=False):
     except Exception as e:
         print(f"Path configuration failed: {str(e)}")
         return False
-    """Enhanced path configuration with proper error handling"""
-    try:
-        project_root = get_project_root()
 
-        # Clear existing project paths from sys.path to avoid duplicates
-        sys.path = [p for p in sys.path if not p.startswith(project_root)]
-
-        # Define paths to add
-        paths_to_add = [
-            project_root,
-            str(Path(project_root) / 'app'),
-            str(Path(project_root) / 'scripts'),
-            str(Path(__file__).parent),
-            str(Path(project_root) / 'scripts/verification'),
-            str(Path(project_root) / 'scripts/testing'),
-            str(Path(project_root) / 'scripts/startup')
-        ]
-
-        # Add production-specific paths
-        if production:
-            paths_to_add.extend([
-                str(Path(project_root) / 'logs'),
-                str(Path(project_root) / 'backups')
-            ])
-
-        # Add virtual environment site-packages if available
-        venv_path = os.getenv('VIRTUAL_ENV')
-        if venv_path:
-            site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
-            paths_to_add.append(site_packages)
-
-        # Add paths to sys.path if not already present
-        for path in paths_to_add:
-            if path not in sys.path:
-                sys.path.insert(0, path)
-                print(f"Added to Python path: {path}")
-
-        # Verify critical imports
-        try:
-            import app
-            import scripts
-            print("Successfully imported app and scripts modules")
-        except ImportError as e:
-            print(f"Import verification failed: {str(e)}")
-            print(f"Current sys.path: {sys.path}")
-            return False
-
-        return True
-
-    except Exception as e:
-        print(f"Path configuration failed: {str(e)}")
-        return False
 
 def verify_path_config():
-    """Verify path configuration is correct"""
+    """Verify path configuration is correct."""
     try:
-        # Ensure project root is first
-        project_root = get_project_root()
-        if sys.path[0] != project_root:
-            sys.path.insert(0, project_root)
-            
-        # Check critical imports
+        # Check critical imports.
         import app
         import scripts
         from scripts.verification import verify_db_connection
         from scripts.verification import verify_security
         from scripts.verification import verify_test_coverage
 
-        # Verify virtual environment path
-        venv_path = os.getenv('VIRTUAL_ENV')
-        if venv_path:
-            site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
-            if site_packages not in sys.path:
-                sys.path.append(site_packages)
-
-        # Verify all required paths
-        required_paths = [
-            project_root,
-            str(Path(project_root) / 'app'),
-            str(Path(project_root) / 'scripts'),
-            str(Path(project_root) / 'scripts/verification')
-        ]
-        
-        missing_paths = [p for p in required_paths if p not in sys.path]
-        if missing_paths:
-            for p in missing_paths:
-                sys.path.insert(0, p)
-                
-        return True
-    except ImportError as e:
-        print(f"Path verification failed: {str(e)}")
-        print(f"Current sys.path: {sys.path}")
-        return False
-
-if __name__ == "__main__":
-    if configure_paths():
-        if verify_path_config():
-            print("Path configuration and verification successful")
-            exit(0)
-        else:
-            print("Path verification failed")
-            exit(1)
-    else:
-        print("Path configuration failed")
-        exit(1)
-def verify_path_config():
-    """Verify path configuration is correct"""
-    try:
-        # Check critical imports
-        import app
-        import scripts
-        from scripts.verification import verify_db_connection
-        from scripts.verification import verify_security
-
-        # Verify project root is first in sys.path
+        # Ensure project root is first in sys.path.
         project_root = get_project_root()
         if sys.path[0] != project_root:
-            print(f"Project root not first in sys.path: {sys.path[0]}")
-            return False
+            print(f"Project root not first in sys.path, fixing that. Current first: {sys.path[0]}")
+            sys.path.insert(0, project_root)
 
-        # Verify virtual environment path
+        # Check that site-packages from virtualenv is present if applicable.
         venv_path = os.getenv('VIRTUAL_ENV')
         if venv_path:
             site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
@@ -197,7 +96,22 @@ def verify_path_config():
                 return False
 
         return True
+
     except ImportError as e:
         print(f"Path verification failed: {str(e)}")
         print(f"Current sys.path: {sys.path}")
         return False
+
+
+if __name__ == "__main__":
+    # Configure paths, then verify
+    if configure_paths():
+        if verify_path_config():
+            print("Path configuration and verification successful.")
+            exit(0)
+        else:
+            print("Path verification failed.")
+            exit(1)
+    else:
+        print("Path configuration failed.")
+        exit(1)
