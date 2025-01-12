@@ -14,8 +14,9 @@ from app.constants import FlashMessages
 class TestBaseCrudController(BaseTestCase):
     def setUp(self):
         super().setUp()
-        # Clean up any existing test users
+        # Clean up any existing test data
         User.query.filter(User.username.like('testuser_%')).delete()
+        Tag.query.filter(Tag.name.like('TestTag%')).delete()
         db.session.commit()
         
         self.controller = BaseCrudController(
@@ -96,16 +97,21 @@ class TestBaseCrudController(BaseTestCase):
 
     def test_create_missing_template(self):
         # Use unique test data
+        unique_id = uuid.uuid4().hex[:8]
         form_data = {
-            'username': f'testuser_{uuid.uuid4().hex[:8]}',
+            'username': f'testuser_{unique_id}',
             'password': 'testpass',
-            'email': f'test{uuid.uuid4().hex[:8]}@example.com'
+            'email': f'test{unique_id}@example.com'
         }
         with self.client:
             self.login()
             response = self.controller.create(form_data)
             self.assertEqual(response.status_code, 302)
             self.assertIn(FlashMessages.TEMPLATE_NOT_FOUND.value, response.get_data(as_text=True))
+            
+            # Verify no duplicate was created
+            user_count = User.query.filter(User.username == form_data['username']).count()
+            self.assertEqual(user_count, 0)
 
     def test_create_template_error(self):
         # Simulate a template rendering error
@@ -119,10 +125,11 @@ class TestBaseCrudController(BaseTestCase):
 
     def test_create_invalid_form_data(self):
         # Use unique test data
+        unique_id = uuid.uuid4().hex[:8]
         form_data = {
-            'username': f'testuser_{uuid.uuid4().hex[:8]}',
+            'username': f'testuser_{unique_id}',
             'password': 'testpass',
-            'email': f'test{uuid.uuid4().hex[:8]}@example.com',
+            'email': f'test{unique_id}@example.com',
             'name': '',  # Invalid data
             'category': 'TestCategory'
         }
@@ -131,6 +138,10 @@ class TestBaseCrudController(BaseTestCase):
             response = self.controller.create(form_data)
             self.assertEqual(response.status_code, 200)
             self.assertIn(FlashMessages.NAME_REQUIRED.value, response.get_data(as_text=True))
+            
+            # Verify no duplicate was created
+            user_count = User.query.filter(User.username == form_data['username']).count()
+            self.assertEqual(user_count, 0)
 
     def test_stipend_form_validation(self):
         # Test missing name
