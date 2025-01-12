@@ -20,11 +20,11 @@ class TestBaseCrudController(BaseTestCase):
         Tag.query.filter(Tag.name.like('TestTag%')).delete()
         db.session.commit()
         
-        # Create unique test user
+        # Create unique test user with actual password
         self.test_user = User(
             username=f'testuser_{uuid.uuid4().hex[:8]}',
             email=f'test{uuid.uuid4().hex[:8]}@example.com',
-            password_hash='testhash'
+            password='testpass'  # Changed from password_hash to password
         )
         db.session.add(self.test_user)
         db.session.commit()
@@ -179,10 +179,12 @@ class TestBaseCrudController(BaseTestCase):
             # Then make login request
             response = self.client.post(url_for('public.login'), data={
                 'username': self.test_user.username,
-                'password': 'testpass',
+                'password': 'testpass',  # This matches the password used above
                 'csrf_token': csrf_token
             })
+            # Check for successful login redirect
             self.assertEqual(response.status_code, 302)
+            self.assertEqual(response.location, url_for('public.index', _external=True))
 
     def test_stipend_form_validation(self):
         # Test missing name
