@@ -31,7 +31,11 @@ def verify_monitoring_dashboards(verify_tests=True):
             'active_users',    # User activity tracking
             'api_usage',       # API monitoring
             'bot_activity',    # Bot performance
-            'stipend_updates'  # Stipend activity
+            'stipend_updates', # Stipend activity
+            'test_coverage',   # Test coverage
+            'failed_tests',    # Test failures
+            'pending_updates', # System updates
+            'security_audit'   # Security audit status
         ]
         if not dashboard_path.exists():
             logger.error("Dashboard configuration not found")

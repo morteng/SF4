@@ -4,18 +4,19 @@
 
 ### CODE START ###
 
-# Initialize system with test fixes and monitoring
+# Initialize system with enhanced monitoring
 /run scripts/init_logging.py --production --monitoring
 /run scripts/path_config.py --production --verify
 /run scripts/start_cycle.py
 
-# Fix failing tests and implement monitoring
-/run scripts/verification/verify_db_connection.py --retries=5 --timeout=30
-/run scripts/verification/verify_monitoring.py --full --dashboard
-/run scripts/verification/verify_security.py --full-audit --daily
+# Verify and fix test failures
+/run scripts/verification/verify_tests.py --final --validate-schema
 
-# Run test fixes and monitoring setup
-/run scripts/security/security_audit.py --full --daily
+# Set up monitoring dashboard
+/run scripts/verification/verify_monitoring.py --full --dashboard --metrics
+
+# Verify security settings
+/run scripts/verification/verify_security.py --full-audit --daily --check-admin
 
 ### CODE END ###
 

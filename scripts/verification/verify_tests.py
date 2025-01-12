@@ -37,6 +37,14 @@ def verify_tests(final=False, validate_schema=False):
         raise RuntimeError("Failed to setup test paths")
     if not configure_test_environment():
         raise RuntimeError("Failed to configure test environment")
+
+    # Clear test database state
+    from app import create_app
+    app = create_app('testing')
+    with app.app_context():
+        from app.models import db
+        db.drop_all()
+        db.create_all()
     
     try:
         # Setup test environment first
