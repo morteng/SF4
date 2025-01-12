@@ -36,14 +36,32 @@ def create_app(config_name='development'):
         from app.extensions import init_extensions
         init_extensions(app)
         
-        # Register blueprints
-        from app.routes import register_blueprints
-        from app.routes.admin import register_admin_blueprints
-        register_admin_blueprints(app)
-        register_blueprints(app)
-        
-        # Ensure admin user exists
+        # Initialize database models FIRST
         with app.app_context():
+            from app.models import init_models
+            init_models(app)
+            
+            # Verify database connection
+            logger.info("Checking database connection...")
+            try:
+                db.session.execute(text("SELECT 1"))
+                logger.info("Database connection successful")
+            except Exception as e:
+                logger.error(f"Database connection failed: {str(e)}")
+                raise RuntimeError(f"Database connection failed: {str(e)}")
+            
+            # Now we can safely query the database
+            from app.models.user import User
+            from app.extensions import db
+            from app.services.user_service import delete_user, create_user
+            
+            # Register blueprints
+            from app.routes import register_blueprints
+            from app.routes.admin import register_admin_blueprints
+            register_admin_blueprints(app)
+            register_blueprints(app)
+            
+            # Ensure admin user exists
             from app.models.user import User
             from app.extensions import db
             from app.services.user_service import delete_user, create_user
@@ -295,22 +313,30 @@ def init_extensions(app):
         raise
 
 def init_models(app):
-    """Initialize database models with proper context."""
-    logger = logging.getLogger(__name__)
+    """Initialize database models with proper relationship mapping"""
+    from app.extensions import db
     
     with app.app_context():
         try:
-            from app.models import association_tables
-            from app.models.bot import Bot
-            from app.models.notification import Notification
-            from app.models.organization import Organization
-            from app.models.stipend import Stipend
-            from app.models.tag import Tag
-            from app.models.user import User
-            
-            # Create database tables if they don't exist
+            # Create all tables if they don't exist
             db.create_all()
-            logger.info("Database models initialized successfully")
+            logger.info("Database tables created/verified successfully")
+            
+            # Configure relationships after tables exist
+            from app.models.tag import Tag
+            from app.models.stipend import Stipend
+            
+            Tag.stipends = db.relationship(
+                'Stipend',
+                secondary='stipend_tag_association',
+                back_populates='tags'
+            )
+            
+            Stipend.tags = db.relationship(
+                'Tag',
+                secondary='stipend_tag_association',
+                back_populates='stipends'
+            )
             
         except Exception as e:
             logger.error(f"Failed to initialize models: {str(e)}")
