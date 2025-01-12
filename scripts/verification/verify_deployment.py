@@ -103,7 +103,13 @@ def verify_environment():
     required_vars = ['FLASK_ENV', 'FLASK_DEBUG', 'SQLALCHEMY_DATABASE_URI', 'SECRET_KEY']
     return validate_environment_variables(required_vars)
 
-def verify_deployment():
+def verify_deployment(verify_paths=True):
+    """Enhanced deployment verification with path validation"""
+    if verify_paths:
+        from scripts.path_config import configure_paths
+        if not configure_paths(production=True, verify=True):
+            logger.error("Path configuration failed")
+            return False
     """Verify all deployment settings and configurations."""
     try:
         logger.info("Starting deployment verification")

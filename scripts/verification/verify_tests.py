@@ -25,7 +25,13 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_tests(final=False, validate_schema=False):
+def verify_tests(final=False, validate_schema=False, verify_paths=True):
+    """Enhanced test verification with path validation"""
+    if verify_paths:
+        from scripts.path_config import configure_paths
+        if not configure_paths(production=True, verify=True):
+            logger.error("Path configuration failed")
+            return False
     """Verify all tests pass with proper configuration and schema validation"""
     # Configure logger at module level
     global logger
