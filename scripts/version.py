@@ -9,7 +9,7 @@ from typing import Optional, Tuple
 import re
 from app.common.db_utils import validate_db_connection
 from scripts.archive_logs import archive_logs
-from scripts.init_logging import verify_logging_configuration
+from scripts.init_logging import configure_logging
 
 # Current version
 __version__ = "0.2.0"
@@ -18,21 +18,6 @@ __version__ = "0.2.0"
 logger = logging.getLogger(__name__)
 
 # Configure logging
-def configure_logging():
-    log_dir = Path('logs')
-    log_dir.mkdir(exist_ok=True, parents=True)
-    LOG_FILE = log_dir / 'version_management.log'
-    
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler(LOG_FILE),
-            logging.StreamHandler()
-        ]
-    )
-    return LOG_FILE
-
 LOG_FILE = configure_logging()
 
 def main() -> None:
@@ -232,10 +217,6 @@ def verify_deployment(full=False):
             from app.extensions import db, login_manager, migrate, csrf, limiter
             if not all([db, login_manager, migrate, csrf, limiter]):
                 logging.error("Extensions initialization verification failed")
-                return False
-                
-            if not verify_logging_configuration():
-                logging.error("Logging configuration verification failed")
                 return False
                 
             if not validate_version_file():

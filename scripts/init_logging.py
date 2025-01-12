@@ -63,7 +63,7 @@ if not configure_logging():
     raise RuntimeError("Failed to initialize logging system")
 
 # Create specific loggers
-for logger_name in ['app', 'tests', 'bots']:
+for logger_name in ['app', 'tests', 'bots', 'version_management']:
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.INFO)
     handler = logging.FileHandler(f'logs/{logger_name}.log')
