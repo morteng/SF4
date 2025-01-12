@@ -33,9 +33,9 @@ def test_login_success(client, test_user):
         'csrf_token': csrf_token
     })
 
-    # Verify redirect to home page
+    # Verify redirect to admin dashboard
     assert response.status_code == 302
-    assert response.location == '/'
+    assert response.location == url_for('admin.dashboard')
     
     # Verify session contains user_id
     with client.session_transaction() as session:
