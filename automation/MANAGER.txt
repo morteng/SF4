@@ -1,3 +1,5 @@
+Fix failing tests before anything else
+
 FEATURE REQUEST: Ensure dashboard has stats and values for monitoring metrics and all other relevant info you can think of
 
 
