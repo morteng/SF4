@@ -2,11 +2,10 @@ from functools import wraps
 from sqlalchemy.exc import SQLAlchemyError
 from wtforms import ValidationError
 from werkzeug.exceptions import Unauthorized
-from app.extensions import db
+from app.extensions import db, limiter
 import logging
 from datetime import datetime
 from app.constants import FlashMessages, FlashCategory
-from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 class AuthenticationError(Unauthorized):
@@ -56,10 +55,7 @@ class BaseService:
         self.model = model
         self.audit_logger = audit_logger
         # Add rate limiter
-        self.limiter = Limiter(
-            key_func=get_remote_address,
-            default_limits=["200 per day", "50 per hour"]
-        )
+        self.limiter = limiter
         self.rate_limits = {
             'create': "10 per minute",
             'update': "10 per minute", 

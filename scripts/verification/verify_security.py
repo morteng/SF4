@@ -239,10 +239,3 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
         return False
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    if verify_security_settings():
-        print("Security verification passed")
-        exit(0)
-    else:
-        print("Security verification failed")
-        exit(1)
