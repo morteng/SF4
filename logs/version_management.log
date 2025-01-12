@@ -5791,3 +5791,42 @@ Coverage failure: total of 19 is less than fail-under=85
 2025-01-12 00:50:59,245 - INFO - Version history updated successfully
 2025-01-12 00:50:59,257 - ERROR - Import verification failed: cannot import name 'verify_coverage' from 'scripts.verification' (unknown location)
 2025-01-12 00:50:59,258 - ERROR - Documentation finalization failed
+2025-01-12 13:47:20,704 - INFO - Logging system initialized successfully
+2025-01-12 13:47:20,705 - INFO - Logging system initialized successfully
+2025-01-12 13:47:20,706 - INFO - Logging system initialized successfully
+2025-01-12 13:47:20,894 - INFO - Database connection successful
+2025-01-12 13:47:20,965 - INFO - Attempting to create user: testadmin
+2025-01-12 13:47:20,969 - INFO - Skipping admin password validation for debugging
+2025-01-12 13:47:21,398 - INFO - Password hash for testadmin: pbkdf2:sha256:600000$5jGQYch4KZrYHUVE$3fd72ac04cc716da22b9115ca465e8873fcacb6c4df2972049b612a669848d7c
+2025-01-12 13:47:21,800 - INFO - Password check test: True
+2025-01-12 13:47:21,815 - ERROR - Error creating user: Can't operate on closed transaction inside context manager.  Please complete the context manager before emitting further commands.
+Traceback (most recent call last):
+  File "C:\github\SF4\app\services\user_service.py", line 141, in create_user
+    if not new_user or not new_user.id:
+  File "C:\github\SF4\.venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 566, in __get__
+    return self.impl.get(state, dict_)  # type: ignore[no-any-return]
+  File "C:\github\SF4\.venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1086, in get
+    value = self._fire_loader_callables(state, key, passive)
+  File "C:\github\SF4\.venv\Lib\site-packages\sqlalchemy\orm\attributes.py", line 1116, in _fire_loader_callables
+    return state._load_expired(state, passive)
+  File "C:\github\SF4\.venv\Lib\site-packages\sqlalchemy\orm\state.py", line 798, in _load_expired
+    self.manager.expired_attribute_loader(self, toload, passive)
+  File "C:\github\SF4\.venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 1649, in load_scalar_attributes
+    result = load_on_ident(
+  File "C:\github\SF4\.venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 505, in load_on_ident
+    return load_on_pk_identity(
+  File "C:\github\SF4\.venv\Lib\site-packages\sqlalchemy\orm\loading.py", line 690, in load_on_pk_identity
+    session.execute(
+  File "C:\github\SF4\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2308, in execute
+    return self._execute_internal(
+  File "C:\github\SF4\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2180, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "C:\github\SF4\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2042, in _connection_for_bind
+    TransactionalContext._trans_ctx_check(self)
+  File "C:\github\SF4\.venv\Lib\site-packages\sqlalchemy\engine\util.py", line 110, in _trans_ctx_check
+    raise exc.InvalidRequestError(
+sqlalchemy.exc.InvalidRequestError: Can't operate on closed transaction inside context manager.  Please complete the context manager before emitting further commands.
+2025-01-12 13:47:21,820 - ERROR - Failed to initialize application: CREATE_USER_ERROR
+2025-01-12 13:47:21,820 - ERROR - Database initialization failed: Application initialization failed: CREATE_USER_ERROR
+2025-01-12 13:47:21,821 - ERROR - Failed to configure test environment: Failed to initialize test database
+2025-01-12 13:47:21,821 - INFO - Test environment configured successfully
