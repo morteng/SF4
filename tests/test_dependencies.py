@@ -1,16 +1,29 @@
-import importlib
 import pytest
+import importlib
 import subprocess
 from typing import List
-try:
-    from requirements.parser import RequirementsParser
-except ImportError:
-    RequirementsParser = None
 
 def get_requirements() -> List[str]:
-    """Get list of package names from requirements.txt."""
-    with open("requirements.txt") as f:
-        return [line.strip().split("==")[0] for line in f if line.strip() and not line.startswith("#")]
+    """Get a list of package names from requirements.txt."""
+    try:
+        with open("requirements.txt") as f:
+            return [line.strip().split("==")[0] for line in f if line.strip() and not line.startswith("#")]
+    except FileNotFoundError:
+        pytest.fail("requirements.txt file not found")
+    except PermissionError:
+        pytest.fail("No permission to read requirements.txt")
+
+
+def test_requirements_file_exists_and_readable():
+    """Ensure requirements.txt exists and is readable."""
+    try:
+        with open("requirements.txt") as f:
+            assert f.readable(), "requirements.txt is not readable"
+    except FileNotFoundError:
+        pytest.fail("requirements.txt file not found")
+    except PermissionError:
+        pytest.fail("No permission to read requirements.txt")
+
 
 def test_all_dependencies_installed():
     """Verify all packages in requirements.txt are installed."""
@@ -20,557 +33,55 @@ def test_all_dependencies_installed():
             importlib.import_module(package)
         except ImportError:
             missing_deps.append(package)
-    
+
     assert not missing_deps, (
         f"Missing dependencies: {', '.join(missing_deps)}. "
         "Run `pip install -r requirements.txt` to install them."
     )
 
-def test_flask_limiter_installed():
-    """Verify flask-limiter is installed and importable"""
-    flask_limiter = importlib.import_module("flask_limiter")
-    assert flask_limiter is not None
-
-def test_flask_limiter_installed():
-    """Verify flask-limiter is installed and importable"""
-    flask_limiter = importlib.import_module("flask_limiter")
-    assert flask_limiter is not None
-
-def test_freezegun_installed():
-    """Verify freezegun is installed and importable"""
-    try:
-        import freezegun
-        assert freezegun is not None
-    except ImportError:
-        pytest.fail("freezegun is not installed - required for time-based testing. Run `pip install -r requirements.txt` to install it.")
-
-def test_requirements_file_exists():
-    """Verify requirements.txt exists and is readable"""
-    try:
-        with open("requirements.txt") as f:
-            assert f.readable()
-    except FileNotFoundError:
-        pytest.fail("requirements.txt file not found")
-    except PermissionError:
-        pytest.fail("No permission to read requirements.txt")
-
-def test_requirements_format():
-    """Verify requirements.txt has valid format"""
-    try:
-        get_requirements()
-    except Exception as e:
-        pytest.fail(f"Invalid requirements.txt format: {str(e)}")
 
 def test_package_versions():
-    """Verify installed packages meet minimum version requirements"""
+    """Verify installed packages meet version requirements in requirements.txt."""
     import pkg_resources
-    missing_deps = []
-    version_mismatches = []
-    
-    for package in get_requirements():
-        try:
-            pkg_resources.require(package)
-        except pkg_resources.DistributionNotFound:
-            missing_deps.append(package)
-        except pkg_resources.VersionConflict as e:
-            version_mismatches.append(f"{package}: {str(e)}")
-    
-    if missing_deps or version_mismatches:
-        errors = []
-        if missing_deps:
-            errors.append(f"Missing packages: {', '.join(missing_deps)}")
-        if version_mismatches:
-            errors.append(f"Version mismatches: {', '.join(version_mismatches)}")
-        pytest.fail("\n".join(errors))
 
-def test_development_environment():
-    """Verify basic development environment setup"""
-    # Test virtual environment
     try:
-        import sys
-        assert 'venv' in sys.prefix or '.venv' in sys.prefix, "Not running in a virtual environment"
-    except AssertionError:
-        pytest.fail("Not running in a virtual environment. Create and activate one first.")
-    
-    # Test Python version
-    import platform
-    assert platform.python_version_tuple()[0] == '3', "Python 3 is required"
-    
-    # Test pip is installed
-    try:
-        subprocess.check_call(['pip', '--version'])
-    except subprocess.CalledProcessError:
-        pytest.fail("pip is not installed or not in PATH")
-import subprocess
-import pytest
+        pkg_resources.require(get_requirements())
+    except pkg_resources.ResolutionError as e:
+        pytest.fail(f"Dependency issue: {str(e)}")
 
-def test_dependencies():
-    """Verify all dependencies are installed."""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies_installed():
-    """Verify all required dependencies are installed"""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
 
 def test_critical_packages():
-    """Verify critical packages are installed"""
-    required = ["Flask", "freezegun", "pytest"]
-    for package in required:
+    """Verify critical packages are installed."""
+    critical_packages = ["Flask", "freezegun", "pytest"]
+    missing = []
+    for package in critical_packages:
         try:
-            subprocess.check_call(["pip", "show", package])
-        except subprocess.CalledProcessError:
-            pytest.fail(f"Required package {package} is not installed")
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all dependencies are installed."""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all required dependencies are installed."""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all required dependencies are installed."""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import pytest
-import importlib
-
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
+            importlib.import_module(package)
         except ImportError:
-            missing_deps.append(dep)
-    
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
+            missing.append(package)
 
-def test_dependencies():
-    """Verify all required dependencies are installed"""
-    verify_dependencies()
-import pytest
-import importlib
+    assert not missing, f"Critical missing packages: {', '.join(missing)}. Install them via pip."
 
-def test_dependencies():
-    """Verify all required dependencies are installed."""
-    missing_deps = []
-    for dep in ["pytest", "freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
-import pytest
-import importlib
 
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["pytest", "freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
+def test_virtual_environment():
+    """Check if running in a virtual environment."""
+    import sys
+    assert 'venv' in sys.prefix or '.venv' in sys.prefix, (
+        "Not running in a virtual environment. Please activate one."
+    )
 
-def test_dependencies():
-    verify_dependencies()
-import pytest
-import importlib
 
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["pytest", "freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
-
-def test_dependencies():
+def test_pip_installed():
+    """Ensure pip is installed and usable."""
     try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+        subprocess.check_call(["pip", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import pytest
-import importlib
+        pytest.fail("pip is not installed or not available in PATH")
 
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["pytest", "freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
 
-def test_dependencies():
-    verify_dependencies()
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all required dependencies are installed."""
+def test_install_dependencies():
+    """Test installing dependencies from requirements.txt."""
     try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+        subprocess.check_call(["pip", "install", "-r", "requirements.txt"], stdout=subprocess.DEVNULL)
     except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import pytest
-import importlib
-
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["pytest", "freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
-
-def test_dependencies():
-    verify_dependencies()
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all dependencies are installed."""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all required dependencies are installed"""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import pytest
-import importlib
-
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["pytest", "freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
-
-def test_dependencies():
-    verify_dependencies()
-import pytest
-import importlib
-
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["pytest", "freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
-
-def test_dependencies():
-    verify_dependencies()
-import pytest
-import importlib
-
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["pytest", "freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
-
-def test_dependencies():
-    verify_dependencies()
-import pytest
-import importlib
-
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["pytest", "freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
-
-def test_dependencies():
-    verify_dependencies()
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all required dependencies are installed"""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all required dependencies are installed"""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import pytest
-import importlib
-
-def verify_dependencies():
-    missing_deps = []
-    for dep in ["pytest", "freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
-
-def test_dependencies():
-    verify_dependencies()
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all required dependencies are installed."""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all required dependencies are installed"""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-import importlib
-
-def test_dependencies():
-    """Verify all required dependencies are installed"""
-    missing_deps = []
-    for dep in ["pytest", "freezegun", "Flask"]:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    
-    if missing_deps:
-        pytest.fail(f"Missing dependencies: {', '.join(missing_deps)}")
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all required dependencies are installed"""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import pytest
-import subprocess
-
-def test_dependencies():
-    """Verify all required dependencies are installed"""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all required dependencies are installed."""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    """Verify all required dependencies are installed"""
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-import importlib
-
-def test_dependencies():
-    missing_deps = []
-    required_deps = ["pytest", "freezegun", "Flask"]
-    
-    for dep in required_deps:
-        try:
-            importlib.import_module(dep)
-        except ImportError:
-            missing_deps.append(dep)
-    
-    if missing_deps:
-        pytest.skip(f"Missing dependencies: {', '.join(missing_deps)}")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
-import subprocess
-import pytest
-
-def test_dependencies():
-    try:
-        subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
-    except subprocess.CalledProcessError:
-        pytest.fail("Failed to install dependencies")
+        pytest.fail("Failed to install dependencies from requirements.txt")

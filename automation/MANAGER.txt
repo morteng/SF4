@@ -1,10 +1,4 @@
-Fix failing tests before anything else
-
-errors look like:
-FAILED tests/test_auth.py::test_login - assert b'Login successful' in b'<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\...
-FAILED tests/test_base_crud_controller.py::TestBaseCrudController::test_create_invalid_form_data - sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: user.username
-FAILED tests/test_base_crud_controller.py::TestBaseCrudController::test_create_missing_template - sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: user.usernam
-
+Fix failing tests. go through the project looking for duplicated code to consolidate.
 
 FEATURE REQUEST: Ensure dashboard has stats and values for monitoring metrics and all other relevant info you can think of
 
