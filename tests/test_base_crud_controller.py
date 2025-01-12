@@ -95,19 +95,16 @@ class TestBaseCrudController(BaseTestCase):
         assert FlashMessages.USERNAME_FORMAT in form.username.errors
 
     def test_create_missing_template(self):
-        # Remove the test template to simulate missing template
-        os.remove('templates/admin/tag/create.html')
-        
+        # Use unique test data
+        form_data = {
+            'username': f'testuser_{uuid.uuid4().hex[:8]}',
+            'password': 'testpass',
+            'email': f'test{uuid.uuid4().hex[:8]}@example.com'
+        }
         with self.client:
             self.login()
-            # Use unique username
-            form_data = {
-                'username': f'testuser_{uuid.uuid4().hex[:8]}',
-                'password': 'testpass',
-                'email': f'test{uuid.uuid4().hex[:8]}@example.com'
-            }
             response = self.controller.create(form_data)
-            self.assertEqual(response.status_code, 302)  # Should redirect
+            self.assertEqual(response.status_code, 302)
             self.assertIn(FlashMessages.TEMPLATE_NOT_FOUND.value, response.get_data(as_text=True))
 
     def test_create_template_error(self):
@@ -121,7 +118,7 @@ class TestBaseCrudController(BaseTestCase):
                 self.assertIn(FlashMessages.TEMPLATE_ERROR.value, response.get_data(as_text=True))
 
     def test_create_invalid_form_data(self):
-        # Test invalid form data with unique username
+        # Use unique test data
         form_data = {
             'username': f'testuser_{uuid.uuid4().hex[:8]}',
             'password': 'testpass',

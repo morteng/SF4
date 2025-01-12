@@ -31,10 +31,13 @@ def test_login_success(client, test_user):
         'username': test_user.username,
         'password': 'password123',
         'csrf_token': csrf_token
-    }, follow_redirects=True)
+    })
 
-    # Verify response and session
-    assert response.status_code == 200
+    # Verify redirect to home page
+    assert response.status_code == 302
+    assert response.location == '/'
+    
+    # Verify session contains user_id
     with client.session_transaction() as session:
         assert '_user_id' in session
         assert session['_user_id'] == str(test_user.id)
