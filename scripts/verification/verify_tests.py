@@ -27,15 +27,16 @@ def configure_logger():
 
 def verify_tests(final=False, validate_schema=False, verify_paths=True):
     """Enhanced test verification with path validation"""
+    # Configure logger at module level
+    global logger
+    logger = configure_logger()
+    
     if verify_paths:
         from scripts.path_config import configure_paths
         if not configure_paths(production=True, verify=True):
             logger.error("Path configuration failed")
             return False
     """Verify all tests pass with proper configuration and schema validation"""
-    # Configure logger at module level
-    global logger
-    logger = configure_logger()
     
     # Setup test environment first
     from scripts.setup_test_env import setup_test_paths, configure_test_environment
