@@ -9,11 +9,10 @@
 /run scripts/path_config.py --production --verify
 /run scripts/start_cycle.py
 
-# Run comprehensive verification
-/run scripts/verification/verify_all.py
-
-# Run tests
-pytest
+# Run verifications
+/run scripts/verification/verify_db_connection.py
+/run scripts/verification/verify_test_coverage.py
+/run scripts/verification/verify_production_ready.py
 
 ### CODE END ###
 

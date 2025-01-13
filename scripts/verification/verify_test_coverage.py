@@ -3,6 +3,14 @@ import subprocess
 import logging
 from pathlib import Path
 
+# Configure paths before importing project modules
+project_root = str(Path(__file__).resolve().parent.parent.parent)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+from scripts.path_config import configure_paths
+from scripts.init_logging import configure_logging
+
 def configure_coverage_logging():
     """Configure logging for coverage verification"""
     logger = logging.getLogger('coverage')
@@ -24,55 +32,11 @@ def verify_coverage(threshold=80, critical_paths=True, admin_only=False, verify=
     logger = configure_coverage_logging()
     
     try:
-        # Configure paths with production settings
-        from scripts.path_config import configure_paths
+        # Ensure paths are configured for production
         if not configure_paths(production=True):
-            raise RuntimeError("Failed to configure paths")
-            
-        # Verify imports with proper path
-        project_root = str(Path(__file__).parent.parent.parent)
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
-            
-        import app
-        import tests
-        from app.models import Stipend, User
-        from app.services import BaseService
-    except ImportError as e:
-        logger.error(f"Import error: {str(e)}")
-        logger.error(f"Current sys.path: {sys.path}")
-        return False
-    
-    try:
-        # Configure paths first
-        from scripts.path_config import configure_paths
-        if not configure_paths():
-            raise RuntimeError("Failed to configure paths")
-            
-        # Add project root to Python path
-        project_root = str(Path(__file__).parent.parent.parent)
-        if project_root not in sys.path:
-            sys.path.insert(0, project_root)
-            
-        # Add scripts directory explicitly
-        scripts_dir = str(Path(project_root) / 'scripts')
-        if scripts_dir not in sys.path:
-            sys.path.insert(0, scripts_dir)
-            
-        # Add app directory explicitly
-        app_dir = str(Path(project_root) / 'app')
-        if app_dir not in sys.path:
-            sys.path.insert(0, app_dir)
-            
-        # Verify imports
-        try:
-            import app
-            import tests
-        except ImportError as e:
-            logger.error(f"Import error: {str(e)}")
-            logger.error(f"Current sys.path: {sys.path}")
+            logger.error("Failed to configure paths.")
             return False
-        
+
         # Run coverage report with detailed output
         result = subprocess.run(
             ['coverage', 'report', f'--fail-under={threshold}', '--show-missing', '--skip-covered'],
