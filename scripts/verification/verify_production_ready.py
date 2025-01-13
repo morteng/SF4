@@ -116,4 +116,25 @@ def verify_production_ready():
             return False
             
         # Verify only stipend name is required
-        from app.models.stipend import
+        from app.models.stipend import Stipend
+        
+        # Get the columns of the Stipend model
+        stipend_columns = Stipend.__table__.columns
+        
+        # Check if 'name' is the only required field
+        required_fields = [col.name for col in stipend_columns if not col.nullable]
+        if len(required_fields) != 1 or 'name' not in required_fields:
+            logger.error(f"Only 'name' should be required for Stipend creation, but found: {required_fields}")
+            return False
+            
+        logger.info("Production readiness verification passed")
+        return True
+    except Exception as e:
+        logger.error(f"Production readiness verification failed: {str(e)}")
+        return False
+
+if __name__ == "__main__":
+    if verify_production_ready():
+        exit(0)
+    else:
+        exit(1)
