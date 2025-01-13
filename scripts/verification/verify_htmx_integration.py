@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
+import argparse
 
 def get_csrf_token(base_url):
     """Get CSRF token from login page"""
@@ -145,10 +146,14 @@ if __name__ == "__main__":
                        help='Test stipends CRUD operations')
     parser.add_argument('--validate-partial-updates', action='store_true',
                        help='Verify HTMX partial page updates')
+    parser.add_argument('--admin-interface', action='store_true',
+                       help='Verify admin interface')
+    parser.add_argument('--check-full-reloads', action='store_true',
+                       help='Verify full page reloads')
     args = parser.parse_args()
     
     base_url = os.getenv('BASE_URL', 'http://localhost:5000')
-    if verify_htmx_crud(base_url, args.test_all_crud):
+    if verify_htmx_crud(base_url, args.test_stipends_crud, args.validate_partial_updates, args.admin_interface, args.check_full_reloads):
         print("HTMX integration verification passed")
         exit(0)
     else:
