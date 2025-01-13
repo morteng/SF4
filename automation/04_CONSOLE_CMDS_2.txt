@@ -30,6 +30,7 @@
 # New commands for Step 3 preparation
 /run scripts/verification/verify_tests.py --final --validate-schema --verify-paths
 /run scripts/verification/verify_deployment.py --full --verify-paths
+
 ### CODE END ###
 
 # Console commands done, we go on to 05_STEP_3.txt
