@@ -14,22 +14,11 @@ def configure_test_logging():
         logger.setLevel(logging.INFO)
     return logger
 
-def configure_logger():
-    """Configure the logger for test verification"""
-    logger = logging.getLogger('test_verification')
-    if not logger.handlers:
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
-    return logger
-
 def verify_tests(final=False, validate_schema=False, verify_paths=True):
     """Enhanced test verification with path validation"""
     # Configure logger at module level
     global logger
-    logger = configure_logger()
+    logger = configure_test_logging()
     
     if verify_paths:
         from scripts.path_config import configure_paths
@@ -105,47 +94,6 @@ def verify_tests(final=False, validate_schema=False, verify_paths=True):
         return True
     except Exception as e:
         logger.error(f"Test verification failed: {str(e)}")
-        return False
-
-if __name__ == "__main__":
-    if verify_tests():
-        exit(0)
-    else:
-        exit(1)
-import sys
-import subprocess
-from pathlib import Path
-
-def verify_tests():
-    """Verify all tests pass with proper configuration"""
-    try:
-        # Add project root to Python path
-        root_dir = Path(__file__).parent.parent
-        sys.path.append(str(root_dir))
-        
-        # Run core test suites
-        test_suites = [
-            'tests/models/test_relationships.py',
-            'tests/version_management/test_version.py'
-        ]
-        
-        for suite in test_suites:
-            result = subprocess.run(
-                ['pytest', '-v', suite],
-                capture_output=True,
-                text=True
-            )
-            
-            if result.returncode != 0:
-                print(f"Test suite failed: {suite}")
-                print(result.stdout)
-                print(result.stderr)
-                return False
-                
-        print("All test suites passed")
-        return True
-    except Exception as e:
-        print(f"Test verification failed: {str(e)}")
         return False
 
 if __name__ == "__main__":
