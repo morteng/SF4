@@ -4,21 +4,13 @@
 
 ### CODE START ###
 
-# Initialize system with enhanced monitoring
-/run scripts/init_logging.py --production --monitoring
+# Initialize system with consolidated verification
+/run scripts/init_logging.py --production
 /run scripts/path_config.py --production --verify
 /run scripts/start_cycle.py
 
-# Verify core functionality
-/run scripts/verification/verify_tests.py --final --validate-schema
-/run scripts/verification/verify_db_connection.py
-/run scripts/verification/verify_deployment.py
-
-# Set up comprehensive monitoring
-/run scripts/verification/verify_monitoring.py --full --dashboard --metrics --stats
-
-# Verify security settings
-/run scripts/verification/verify_security.py --full-audit --daily --check-admin --check-bots
+# Run comprehensive verification with dashboard metrics
+/run scripts/verification/verify_all.py
 
 ### CODE END ###
 

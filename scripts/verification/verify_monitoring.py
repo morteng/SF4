@@ -20,6 +20,16 @@ def verify_monitoring_dashboards(verify_tests=True):
         # Verify dashboard configuration
         dashboard_path = Path('monitoring/dashboard.json')
         
+        # Collect real-time stats
+        import psutil
+        stats = {
+            'cpu': psutil.cpu_percent(),
+            'memory': psutil.virtual_memory().percent,
+            'disk': psutil.disk_usage('/').percent,
+            'processes': len(psutil.pids()),
+            'network': psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv
+        }
+        
         # Enhanced metrics based on MANAGER.txt priorities
         required_metrics = [
             'cpu', 'memory', 'disk', 'requests',
