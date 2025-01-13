@@ -6,6 +6,8 @@ from app.models.notification import Notification
 from app.models.audit_log import AuditLog
 from app.models.bot import Bot
 from app.models.user import User
+import psutil
+from scripts.verification.verify_all import get_performance_metrics, get_check_metrics
 
 admin_dashboard_bp = Blueprint('dashboard', __name__, url_prefix='/admin/dashboard')
 
@@ -46,13 +48,23 @@ def dashboard():
         # Get bot status
         bots = Bot.query.all()
         
+        # Get performance metrics
+        performance_metrics = get_performance_metrics()
+
+        # Get check metrics
+        check_metrics = get_check_metrics()
+
         return render_template('admin/dashboard.html',
                              notification_count=notification_count,
                              recent_activity=recent_activity,
-                             bots=bots)
+                             bots=bots,
+                             performance_metrics=performance_metrics,
+                             check_metrics=check_metrics)
     except Exception as e:
         current_app.logger.error(f"Error in dashboard route: {str(e)}")
         return render_template('admin/dashboard.html',
                              notification_count=0,
                              recent_activity=[],
-                             bots=[])
+                             bots=[],
+                             performance_metrics={},
+                             check_metrics={})
