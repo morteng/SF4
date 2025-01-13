@@ -78,4 +78,12 @@
         "pending_updates": {
             "threshold": 0,
             "alert": true,
-            "description": "Number of
+            "description": "Number of pending system updates"
+        },
+        "security_audit": {
+            "threshold": 0,
+            "alert": true,
+            "description": "Status of the last security audit (0=failed, 1=success)"
+        }
+    }
+}
