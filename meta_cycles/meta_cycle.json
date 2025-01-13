@@ -3,14 +3,41 @@
     {
       "name": "Fix Bug Cycle",
       "priority": 10,
-      "completed": false,
-      "script": "fix_bug_cycle.aiderscript"
+      "status": "pending",  // pending, in_progress, completed
+      "script": "fix_bug_cycle.aiderscript",
+      "target_files": [
+        "path/to/buggy_file.py",
+        "tests/test_sessions.py"
+      ],
+      "instructions": [
+        "Fix session handling to gracefully handle idle sessions",
+        "Add proper error handling and logging",
+        "Update tests to verify session timeout behavior"
+      ],
+      "test_command": "pytest --maxfail=1",
+      "created_at": "2025-01-13",
+      "last_modified": "2025-01-13"
     },
     {
       "name": "Feature Dev Cycle",
       "priority": 8,
-      "completed": false,
-      "script": "feature_dev_cycle.aiderscript"
+      "status": "pending",
+      "script": "feature_dev_cycle.aiderscript",
+      "target_files": [
+        "path/to/new_feature.py",
+        "tests/test_dashboard.py"
+      ],
+      "instructions": [
+        "Implement new user dashboard with real-time stats",
+        "Add responsive design for mobile",
+        "Include comprehensive tests for all dashboard features"
+      ],
+      "test_command": "pytest --maxfail=1",
+      "created_at": "2025-01-13",
+      "last_modified": "2025-01-13"
     }
-  ]
+  ],
+  "version": "1.1.0",
+  "created_at": "2025-01-13",
+  "last_modified": "2025-01-13"
 }
