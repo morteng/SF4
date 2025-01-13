@@ -15,6 +15,7 @@
 /add docs/Design_Documentation.md
 /add docs/Planning_and_Progress.md
 /add docs/DEPLOYMENT_CHECKLIST.md
+/add docs/DEVLOG.md
 
 /add automation/TODO.txt
 /add automation/MANAGER.txt
