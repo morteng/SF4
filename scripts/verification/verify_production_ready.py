@@ -94,10 +94,9 @@ def verify_production_ready():
             
         # Verify database connection
         from scripts.verification.verify_db_connection import validate_db_connection
-        if not verify_db_connection():
+        if not validate_db_connection(os.getenv('SQLALCHEMY_DATABASE_URI')):
             logger.error("Database connection verification failed")
             return False
-            
         # Verify security settings including admin interface
         from scripts.verification.verify_security import verify_security_settings
         if not verify_security_settings(check_admin_interface=True):
