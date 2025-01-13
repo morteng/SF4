@@ -1,0 +1,28 @@
+{
+  "cycles": [
+    {
+      "name": "Bug Fixing Cycle",
+      "priority": 10,
+      "completed": false,
+      "description": "Focus on critical bug fixes, especially blocking issues."
+    },
+    {
+      "name": "Feature Development Cycle",
+      "priority": 7,
+      "completed": false,
+      "description": "Implement new user features. May overshadow bug fixes if manager demands it."
+    },
+    {
+      "name": "Refactoring Cycle",
+      "priority": 6,
+      "completed": false,
+      "description": "Code cleanup and DRY refactoring tasks."
+    },
+    {
+      "name": "Optimization Cycle",
+      "priority": 5,
+      "completed": false,
+      "description": "Performance improvements and optimization tasks."
+    }
+  ]
+}
