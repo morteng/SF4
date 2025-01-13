@@ -1,4 +1,6 @@
-Focus this epoch should be DRY and cleaning up duplicated funcitionality, code and tests. Fix failing tests. go through the project looking for duplicated code to consolidate.
+Pick one issue to focus on each code cycle, this will allow you to do a better job in the long run than trying to fix everything at once.
+
+Overall, try DRY and try cleaning up duplicated funcitionality, code and tests. Fix failing tests. go through the project looking for duplicated code to consolidate.
 
 FEATURE REQUEST: Ensure dashboard has stats and values for monitoring metrics and all other relevant info you can think of
 
