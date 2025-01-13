@@ -92,10 +92,11 @@ def verify_version():
         logger.error(f"Version verification failed: {str(e)}")
         return False
 
+    
 def verify_db_connection():
     """Verify database connection."""
     try:
-        from scripts.verify_db_connection import verify_db_connection as verify_db
+        from scripts.verification.verify_db_connection import verify_db_connection as verify_db
         return verify_db()
     except ImportError as e:
         logger.error(f"Failed to import database connection verification module: {e}")
