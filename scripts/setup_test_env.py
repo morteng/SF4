@@ -108,7 +108,7 @@ def configure_test_environment(mode: str = 'test'):
         
         # Initialize test database with schema validation
         from scripts.startup.init_db import initialize_database
-        if not initialize_database(validate_schema=True):
+        if not initialize_database(validate_schema=True, production=False):
             raise RuntimeError("Failed to initialize test database")
             
         # Verify core tables exist

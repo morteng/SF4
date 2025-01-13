@@ -2,6 +2,7 @@ import os
 import sys
 import logging
 from pathlib import Path
+import secrets
 
 def configure_logger():
     """Configure logger for production readiness verification"""

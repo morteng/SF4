@@ -81,39 +81,4 @@ def verify_coverage(threshold=80, critical_paths=True, admin_only=False, verify=
         )
         
         if result.returncode != 0:
-            logger.error(f"Coverage below {threshold}%")
-            logger.info(result.stdout)
-            return False
-            
-        logger.info(f"Coverage meets {threshold}% requirement")
-        logger.info(result.stdout)
-        # Verify critical modules have required coverage
-        critical_modules = {
-            'app/models': 95,
-            'app/services': 95,
-            'app/routes': 90,
-            'app/controllers': 90,
-            'app/security': 95
-        }
-        
-        for module, min_coverage in critical_modules.items():
-            if module in result.stdout:
-                coverage_line = next(line for line in result.stdout.splitlines() 
-                                   if module in line)
-                coverage_pct = int(coverage_line.split()[-1].rstrip('%'))
-                if coverage_pct < min_coverage:
-                    logger.error(f"{module} coverage {coverage_pct}% < {min_coverage}%")
-                    return False
-                    
-        return True
-        
-    except Exception as e:
-        logger.error(f"Coverage verification failed: {str(e)}")
-        return False
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    if verify_coverage():
-        exit(0)
-    else:
-        exit(1)
+            logger.error(f

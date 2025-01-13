@@ -105,9 +105,14 @@ def initialize_admin_user(verify_email=False):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    if initialize_admin_user():
-        print("Admin user initialization successful")
-        exit(0)
-    else:
-        print("Admin user initialization failed")
-        exit(1)
+    
+    # Create application context
+    from app import create_app
+    app = create_app()
+    with app.app_context():
+        if initialize_admin_user():
+            print("Admin user initialization successful")
+            exit(0)
+        else:
+            print("Admin user initialization failed")
+            exit(1)

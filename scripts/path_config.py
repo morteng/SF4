@@ -16,7 +16,7 @@ def get_project_root():
     return str(current_path)
 
 
-def configure_paths(production=False):
+def configure_paths(production=False, verify=False):
     """Enhanced path configuration with proper error handling."""
     try:
         project_root = get_project_root()
@@ -63,6 +63,11 @@ def configure_paths(production=False):
             print(f"Import verification failed: {str(e)}")
             print(f"Current sys.path: {sys.path}")
             return False
+        
+        if verify:
+            if not verify_path_config():
+                print("Path verification failed")
+                return False
 
         return True
 
