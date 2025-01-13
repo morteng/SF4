@@ -2,59 +2,80 @@
     "metrics": {
         "cpu": {
             "threshold": 90,
-            "alert": true
+            "alert": true,
+            "description": "CPU usage percentage"
         },
         "memory": {
             "threshold": 90,
-            "alert": true
+            "alert": true,
+            "description": "Memory usage percentage"
         },
         "disk": {
             "threshold": 90,
-            "alert": true
+            "alert": true,
+            "description": "Disk usage percentage"
         },
         "requests": {
             "threshold": 1000,
-            "alert": true
+            "alert": true,
+            "description": "Number of requests per minute"
         },
         "db_connections": {
             "threshold": 50,
-            "alert": true
+            "alert": true,
+            "description": "Number of active database connections"
         },
         "response_time": {
             "threshold": 2.0,
-            "alert": true
+            "alert": true,
+            "description": "Average response time in seconds"
         },
         "error_rate": {
             "threshold": 5,
-            "alert": true
+            "alert": true,
+            "description": "Percentage of failed requests"
         },
         "backup_status": {
             "threshold": 1,
-            "alert": true
+            "alert": true,
+             "description": "Status of the last backup (0=failed, 1=success)"
         },
         "security_events": {
             "threshold": 0,
-            "alert": true
+            "alert": true,
+            "description": "Number of security-related events"
         },
         "active_users": {
             "threshold": 100,
-            "alert": true
+            "alert": true,
+            "description": "Number of active users"
         },
         "api_usage": {
             "threshold": 1000,
-            "alert": true
+            "alert": true,
+            "description": "Number of API calls per minute"
         },
         "bot_activity": {
             "threshold": 10,
-            "alert": true
+            "alert": true,
+            "description": "Number of bot activities per minute"
         },
         "stipend_updates": {
             "threshold": 100,
-            "alert": true
-        }
-    },
-    "alerts": {
-        "email": "admin@example.com",
-        "slack": "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX"
-    }
-}
+            "alert": true,
+            "description": "Number of stipend updates per minute"
+        },
+        "test_coverage": {
+            "threshold": 80,
+            "alert": true,
+            "description": "Current test coverage percentage"
+        },
+        "failed_tests": {
+            "threshold": 0,
+            "alert": true,
+            "description": "Number of failed tests"
+        },
+        "pending_updates": {
+            "threshold": 0,
+            "alert": true,
+            "description": "Number of

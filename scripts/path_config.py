@@ -49,9 +49,13 @@ def configure_paths(production=False, verify=False):
             paths_to_add.append(site_packages)
 
         # Insert paths into sys.path if not already present.
+        # Ensure project root is first
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            print(f"Added to Python path: {project_root}")
         for path in paths_to_add:
-            if path not in sys.path:
-                sys.path.insert(0, path)
+            if path != project_root and path not in sys.path:
+                sys.path.insert(1, path)
                 print(f"Added to Python path: {path}")
 
         # Quick import verification.
