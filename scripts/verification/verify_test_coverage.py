@@ -81,4 +81,17 @@ def verify_coverage(threshold=80, critical_paths=True, admin_only=False, verify=
         )
         
         if result.returncode != 0:
-            logger.error(f
+            logger.error(f"Coverage check failed: {result.stderr}")
+            return False
+            
+        logger.info("Coverage check passed")
+        return True
+    except Exception as e:
+        logger.error(f"Coverage verification failed: {str(e)}")
+        return False
+
+if __name__ == "__main__":
+    if verify_coverage():
+        exit(0)
+    else:
+        exit(1)
