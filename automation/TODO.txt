@@ -1,12 +1,13 @@
 ### **Next Development Cycle Tasks**
-- [ ] Fix database schema validation
-- [ ] Implement proper security validation
 - [ ] Resolve test coverage verification
+- [ ] Implement proper security validation
 - [ ] Prepare for production deployment
 - [ ] Add end-to-end tests for admin interface
 - [ ] Implement performance testing
 - [ ] Add monitoring dashboard tests
 - [ ] Implement security audit tests
+- [ ] Add bot activity monitoring tests
+- [ ] Implement rate limiter verification tests
 
 ### **Ongoing Maintenance**
 - [x] Monitor production performance
@@ -20,7 +21,4 @@
 - [x] Implement backup verification tests
 
 ### **New Testing Priorities**
-- [ ] Add path configuration verification tests
 - [ ] Implement comprehensive HTMX integration tests
-- [ ] Add bot activity monitoring tests
-- [ ] Implement rate limiter verification tests
