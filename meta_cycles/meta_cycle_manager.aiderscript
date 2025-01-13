@@ -1,0 +1,29 @@
+import json
+
+def select_next_cycle():
+    with open("meta_cycles/meta_cycle.json", "r") as f:
+        data = json.load(f)
+    cycles = data.get("cycles", [])
+    # sort by priority desc
+    cycles.sort(key=lambda c: c["priority"], reverse=True)
+    for cycle in cycles:
+        if not cycle.get("completed", False):
+            return cycle
+    return None
+
+def main():
+    cycle = select_next_cycle()
+    if cycle:
+        print(f"Next cycle is: {cycle['name']}")
+        print(f"/load meta_cycles/{cycle['script']}")
+    else:
+        print("All cycles are completed! ")
+
+if __name__ == "__main__":
+    main()
+
+# Usage:
+# /load meta_cycle_manager.aiderscript
+# Aider runs the Python snippet, which prints something like:
+# /load meta_cycles/fix_bug_cycle.aiderscript
+# That triggers the next script automatically.

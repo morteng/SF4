@@ -1,0 +1,17 @@
+/open path/to/new_feature.py
+
+/ask We need to add a new user dashboard with real-time stats. Please implement it, including tests for the new dashboard route or view.
+
+/code Let's create a new `Dashboard` class and route. Then add a test in test_dashboard.py
+
+/run pytest --maxfail=1
+
+/ask If it's good, let's mark "Feature Dev Cycle" => "completed": true in meta_cycle.json
+
+/open meta_cycle.json
+
+/code "Feature Dev Cycle" -> "completed": true
+
+/ask That should conclude this cycle, let's reload the manager
+
+/load meta_cycle_manager.aiderscript

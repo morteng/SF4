@@ -1,0 +1,16 @@
+{
+  "cycles": [
+    {
+      "name": "Fix Bug Cycle",
+      "priority": 10,
+      "completed": false,
+      "script": "fix_bug_cycle.aiderscript"
+    },
+    {
+      "name": "Feature Dev Cycle",
+      "priority": 8,
+      "completed": false,
+      "script": "feature_dev_cycle.aiderscript"
+    }
+  ]
+}
