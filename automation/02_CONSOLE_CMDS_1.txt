@@ -4,13 +4,16 @@
 
 ### CODE START ###
 
-# Initialize system with consolidated verification
+# Initialize system
 /run scripts/init_logging.py --production
 /run scripts/path_config.py --production --verify
 /run scripts/start_cycle.py
 
-# Run comprehensive verification with dashboard metrics
+# Run comprehensive verification
 /run scripts/verification/verify_all.py
+
+# Run tests
+pytest
 
 ### CODE END ###
 

@@ -1,6 +1,6 @@
 import pytest
 from scripts.verification.verify_deployment import verify_deployment
-from scripts.verification.verify_db_connection import verify_db_connection
+from scripts.verification.verify_db_connection import validate_db_connection
 from scripts.startup.init_admin import initialize_admin_user
 import os
 
@@ -17,5 +17,5 @@ def setup_test_env(monkeypatch):
 def test_final_verification(setup_test_env):
     """Test final deployment verification"""
     assert verify_deployment() is True
-    assert verify_db_connection() is True
+    assert validate_db_connection(os.getenv('SQLALCHEMY_DATABASE_URI')) is True
     assert initialize_admin_user() is True
