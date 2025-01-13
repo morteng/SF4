@@ -1,15 +1,25 @@
 import sys
 import logging
 import os
-
 import psutil
+from pathlib import Path
+
+# Add project root to path
+project_root = str(Path(__file__).resolve().parent.parent.parent)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+# Configure paths
+from scripts.path_config import configure_paths
+if not configure_paths(production=True, verify=True):
+    print("Could not configure paths.")
+    exit()
 
 # External verification imports (moved to the top for clarity)
 from scripts.verification.verify_monitoring import verify_monitoring_dashboards
 from scripts.verification.verify_db_connection import validate_db_connection
 from scripts.verification.verify_tests import verify_tests
 from scripts.verification.verify_security import verify_security_settings
-from scripts.path_config import configure_paths
 
 
 def configure_verification_logger() -> logging.Logger:

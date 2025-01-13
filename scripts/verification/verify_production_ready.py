@@ -93,7 +93,7 @@ def verify_production_ready():
             logger.info("Generated new secure SECRET_KEY")
             
         # Verify database connection
-        from scripts.verification.verify_db_connection import verify_db_connection
+        from scripts.verification.verify_db_connection import validate_db_connection
         if not verify_db_connection():
             logger.error("Database connection verification failed")
             return False
