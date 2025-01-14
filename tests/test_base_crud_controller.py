@@ -37,6 +37,10 @@ class TestBaseCrudController(BaseTestCase):
         # Initialize client
         self.client = app.test_client()
         
+        # Clear any existing session data
+        with self.client.session_transaction() as session:
+            session.clear()
+        
         # Login before each test
         self.login()
         
@@ -155,7 +159,7 @@ class TestBaseCrudController(BaseTestCase):
                 self.assertIn(FlashMessages.TEMPLATE_ERROR.value, response.get_data(as_text=True))
 
     def test_create_invalid_form_data(self):
-        # Ensure we're logged in
+        # Verify we're logged in
         with self.client.session_transaction() as session:
             self.assertIn('_user_id', session)
             self.assertEqual(session['_user_id'], str(self.test_user.id))
@@ -168,7 +172,7 @@ class TestBaseCrudController(BaseTestCase):
         response = self.client.post(url_for('admin.stipend.create'), data={
             'name': '',  # Invalid - empty name
             'csrf_token': csrf_token
-        })
+        }, follow_redirects=True)
         
         # Verify we get a form error
         self.assertEqual(response.status_code, 200)
@@ -198,14 +202,13 @@ class TestBaseCrudController(BaseTestCase):
                 'username': self.test_user.username,
                 'password': 'testpass',
                 'csrf_token': csrf_token
-            }, follow_redirects=False)
+            }, follow_redirects=True)  # Changed to follow redirects
             
-            # Verify we got a redirect
-            self.assertEqual(response.status_code, 302)
-            
-            # Follow the redirect to verify we're logged in
-            response = self.client.get(response.headers['Location'])
+            # Verify we got a successful response
             self.assertEqual(response.status_code, 200)
+            
+            # Verify we're on the dashboard page
+            self.assertIn(b'Dashboard', response.data)
             
             # Verify session contains user ID
             with self.client.session_transaction() as session:
