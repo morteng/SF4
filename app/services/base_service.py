@@ -288,9 +288,14 @@ class BaseService:
         self.rate_limits['update'] = value
         
     @handle_errors
-    @limiter.limit(lambda self: self.rate_limits['update'], key_func=get_remote_address)
     def update(self, id, data, user_id=None):
         """Update an existing entity with validation and audit logging"""
+        # Apply rate limiting decorator dynamically
+        update_func = self._rate_limit_decorator('update')(self._update)
+        return update_func(id, data, user_id)
+
+    def _update(self, id, data, user_id=None):
+        """Actual update implementation without rate limiting"""
         entity = self.get_by_id(id)
         
         if hasattr(self, '_validate_update_data'):
@@ -318,9 +323,14 @@ class BaseService:
         self.rate_limits['delete'] = value
         
     @handle_errors
-    @limiter.limit(lambda self: self.rate_limits['delete'], key_func=get_remote_address)
     def delete(self, id, user_id=None):
         """Enhanced delete with soft delete support"""
+        # Apply rate limiting decorator dynamically
+        delete_func = self._rate_limit_decorator('delete')(self._delete)
+        return delete_func(id, user_id)
+
+    def _delete(self, id, user_id=None):
+        """Actual delete implementation without rate limiting"""
         entity = self.get_by_id(id)
         
         if self.soft_delete_enabled:
