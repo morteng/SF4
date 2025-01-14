@@ -8,10 +8,11 @@
 - [ ] Track restore test coverage
 
 ### **Next Development Cycle Tasks**
-- [ ] Increase coverage to 35%
-- [ ] Add comprehensive error handling tests
-- [ ] Implement security validation tests
-- [ ] Improve database transaction testing
+- [ ] Increase coverage to 50%
+- [ ] Add transaction management tests
+- [ ] Implement advanced HTMX testing
+- [ ] Add security validation tests
+- [ ] Improve audit logging coverage
 - [ ] Add rate limiting tests
 - [ ] Implement database performance monitoring
 - [ ] Add API response time metrics
@@ -19,11 +20,14 @@
 - [ ] Add automated alert thresholds
 - [ ] Implement load testing scenarios
 - [ ] Add performance benchmarks
-- [ ] Add audit logging tests
 - [ ] Add CSRF protection tests
 - [ ] Add input sanitization tests
 
 ### **Completed Tasks**
+- [x] Increase coverage to 35%
+- [x] Add comprehensive error handling tests
+- [x] Improve database transaction testing
+- [x] Add audit logging tests
 - [x] Fix failing controller tests
 - [x] Implement parallel test execution
 - [x] Add proper request context mocking
