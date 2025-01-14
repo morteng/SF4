@@ -20,3 +20,8 @@
 - [x] Add comprehensive error handling tests
 - [x] Improve HTMX response testing
 - [x] Document test best practices
+- [x] Consolidate duplicate test files
+- [x] Add edge case testing
+- [x] Fix test coverage reporting
+- [x] Add database constraint tests
+- [x] Add form validation edge cases
