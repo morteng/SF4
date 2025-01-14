@@ -1,6 +1,8 @@
 # start.aiderscript
 # Modified to better initialize the Stipend Finder project
 # NEVER edit this document!
+# REMEMBER: All /code, /architect and /ask prompts must be on single line only, no linebreaks!
+
 
 # 0 Log start timestamp - ALWAYS DO THIS
 /run scripts\start_cycle.py
