@@ -8,20 +8,20 @@ class TestBackupMonitoring(unittest.TestCase):
     def setUp(self):
         self.dashboard = BackupDashboard()
         
-        # Mock configuration for BackupAlerts
-        self.mock_config = {
-            'email_recipients': ['test@example.com'],
-            'smtp_server': 'localhost',
-            'smtp_port': 587,
-            'smtp_user': 'user',
-            'smtp_password': 'password',
-            'alert_thresholds': {
+        # Create mock config as AlertConfig instance
+        self.mock_config = AlertConfig(
+            email_recipients=['test@example.com'],
+            smtp_server='localhost',
+            smtp_port=587,
+            smtp_user='user',
+            smtp_password='password',
+            alert_thresholds={
                 'failure_rate': 0.2,
                 'duration_warning': 300,
                 'size_warning': 1024
             },
-            'notification_cooldown': 300
-        }
+            notification_cooldown=300
+        )
         
         # Patch the _load_config method to return our mock config
         self.patcher = patch('scripts.db_alerts.BackupAlerts._load_config', 
