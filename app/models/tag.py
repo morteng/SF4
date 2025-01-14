@@ -11,7 +11,7 @@ class Tag(db.Model):
     stipends = db.relationship(
         'Stipend',
         secondary=stipend_tag_association,
-        backref='tags',  # Changed from back_populates to backref
+        back_populates='tags',  # Changed to back_populates to match Stipend model
         lazy='dynamic'
     )
 
