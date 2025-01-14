@@ -1,0 +1,28 @@
+# Test Coverage Improvement Cycle
+
+# 1. Analyze current test coverage
+/run scripts/analyze_test_coverage.py
+
+# 2. Identify critical paths needing coverage
+/ask Based on the coverage report, what are the most critical paths that need test coverage? Focus on:
+- Core business logic in services
+- Database operations
+- Form validation
+- Route handlers
+- Error handling
+
+# 3. Create missing test files
+/code Create any needed test files in tests/ directory to cover identified gaps
+
+# 4. Enhance existing tests
+/code Update existing test files to improve coverage of edge cases and error conditions
+
+# 5. Verify coverage meets target
+/run scripts/verify_test_coverage.py
+
+# 6. Update documentation
+/code Update DEVLOG.md with test coverage results
+/code Update TODO.txt to mark test coverage tasks complete
+
+# 7. Transition to finalization
+/load meta_cycles/finalize_cycle.aiderscript
