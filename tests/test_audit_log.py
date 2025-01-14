@@ -8,6 +8,7 @@ from app.models.notification import Notification
 from app.constants import NotificationType
 
 def test_audit_log_creation(client, db_session, test_user):
+    """Test audit log creation"""
     log = AuditLog.create(
         user_id=test_user.id,
         action="test_action",
@@ -15,8 +16,11 @@ def test_audit_log_creation(client, db_session, test_user):
     )
     assert log.id is not None
     assert log.action == "test_action"
+    assert log.user_id == test_user.id
+    assert log.details == "Test details"
 
 def test_audit_log_missing_action(client, db_session, test_user):
+    """Test audit log creation with missing required field"""
     with pytest.raises(ValueError):
         AuditLog.create(
             user_id=test_user.id,
@@ -24,6 +28,7 @@ def test_audit_log_missing_action(client, db_session, test_user):
         )
 
 def test_audit_log_object_type_without_id(client, db_session, test_user):
+    """Test audit log creation with object type but no ID"""
     with pytest.raises(ValueError):
         AuditLog.create(
             user_id=test_user.id,

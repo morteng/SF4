@@ -139,15 +139,6 @@ def _db(app):
         from app.models.stipend import Stipend
         db.create_all()
         
-        # Verify schema
-        column = Stipend.__table__.c.tags
-        if not isinstance(column.type, JSONB):
-            # If schema needs migration, run it here
-            from alembic import command
-            from alembic.config import Config
-            alembic_cfg = Config("alembic.ini")
-            command.upgrade(alembic_cfg, 'head')
-        
         try:
             yield db
         finally:
