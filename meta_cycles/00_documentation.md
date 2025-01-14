@@ -85,7 +85,7 @@ Following these rules ensures a **clean**, **modular** Aider scripting workflow.
 
 # Cycle Transition Rules:
 # 1. Each cycle determines and sets the next appropriate cycle
-# 2. Only update the /load directive to point to the next cycle
+# 2. Only update the /load directive to point to the next cycle. IMPORTANT! There can only be one /load directive at end of a code cycle file! If you have two, the second one will never execute.
 # 3. Never add logic or code to this file
 # 4. Use stop_cycle when project reaches a milestone or completion
 # 5. Cycle scripts must end by loading the next cycle
