@@ -1,5 +1,7 @@
 # Updated Manager Instructions - 2025-01-14
 
+Get all the tests working!
+
 IMPORTANT! There can only be one /load directive at end of a code cycle file! If you have two, the second one will never execute.
 
 start.aiderscript should always move on to chooser.aidersctipt.
