@@ -2,7 +2,8 @@ from functools import wraps
 from sqlalchemy.exc import SQLAlchemyError
 from wtforms import ValidationError
 from werkzeug.exceptions import Unauthorized
-from app.extensions import db, limiter
+from app.extensions import db
+from flask import current_app
 import logging
 from datetime import datetime
 from app.constants import FlashMessages, FlashCategory
@@ -54,8 +55,7 @@ class BaseService:
     def __init__(self, model, audit_logger=None):
         self.model = model
         self.audit_logger = audit_logger
-        # Add rate limiter
-        self.limiter = limiter
+        # Initialize rate limits without limiter
         self.rate_limits = {
             'create': "10 per minute",
             'update': "10 per minute", 
@@ -74,6 +74,30 @@ class BaseService:
         self.post_validation_hooks = []
         self.validation_cache = {}
         self.cache_validation = False
+
+    def _get_limiter(self):
+        """Get the limiter instance from the current app"""
+        if not hasattr(current_app, 'extensions') or 'limiter' not in current_app.extensions:
+            return None
+        return current_app.extensions['limiter']
+
+    def _rate_limit_decorator(self, operation):
+        """Create a rate limit decorator if limiter is available"""
+        limiter = self._get_limiter()
+        if limiter is None:
+            # If no limiter, return a no-op decorator
+            def noop_decorator(f):
+                @wraps(f)
+                def wrapper(*args, **kwargs):
+                    return f(*args, **kwargs)
+                return wrapper
+            return noop_decorator
+        
+        # Create actual rate limit decorator
+        return limiter.limit(
+            lambda self: self.rate_limits[operation],
+            key_func=get_remote_address
+        )
 
     def add_pre_validation_hook(self, hook):
         """Add a hook to run before validation"""
