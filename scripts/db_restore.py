@@ -6,6 +6,7 @@ from typing import Optional
 from datetime import datetime
 from app.extensions import db
 from app.services.notification_service import NotificationService
+from app.services.metrics_service import MetricsService
 from app.constants import FlashMessages
 
 logger = logging.getLogger(__name__)
