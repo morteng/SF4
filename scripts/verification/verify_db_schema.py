@@ -69,13 +69,30 @@ def validate_schema(validate_relations=False, validate_required_fields=True):
             logger.error(f"Missing tables: {', '.join(missing_tables)}")
             return False
 
-        # Verify table columns
+        # Verify table columns with detailed error reporting
         for table, expected_columns in expected_schema.items():
             actual_columns = [col['name'] for col in inspector.get_columns(table)]
             missing_columns = set(expected_columns) - set(actual_columns)
+            
             if missing_columns:
+                # Special handling for tags column in stipend table
+                if table == 'stipend' and 'tags' in missing_columns:
+                    logger.error("Critical schema issue: Missing 'tags' column in stipend table")
+                    logger.info("Repair suggestion: Run 'flask db migrate' and 'flask db upgrade'")
+                    logger.info("Or manually add column with: ALTER TABLE stipend ADD COLUMN tags JSONB")
+                
+                # General missing column error
                 logger.error(f"Missing columns in {table}: {', '.join(missing_columns)}")
+                logger.info(f"Expected columns for {table}: {', '.join(expected_columns)}")
+                logger.info(f"Actual columns found: {', '.join(actual_columns)}")
                 return False
+            
+            # Verify column types for critical columns
+            if table == 'stipend':
+                for col in inspector.get_columns(table):
+                    if col['name'] == 'tags' and col['type'].__class__.__name__ != 'JSONB':
+                        logger.error("Invalid type for tags column - expected JSONB")
+                        return False
 
         # Verify required fields
         if validate_required_fields:
