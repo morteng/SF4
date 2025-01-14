@@ -2,7 +2,7 @@ import os
 import uuid
 from datetime import datetime
 from unittest.mock import patch
-from flask import Response, url_for
+from flask import Response, url_for, request
 from app.models.user import User
 from app.models.stipend import Stipend
 from app.extensions import db
@@ -10,6 +10,7 @@ from tests.base_test_case import BaseTestCase
 from app.controllers.base_crud_controller import BaseCrudController
 from app.models import Tag
 from app.forms.admin_forms import TagForm, UserForm, StipendForm
+from app.forms.user_forms import LoginForm
 from app.services.tag_service import tag_service
 from app.constants import FlashMessages
 from app import create_app
