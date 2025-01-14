@@ -1,16 +1,14 @@
 import logging
 from datetime import datetime, timedelta
-from unittest.mock import patch
-
+from unittest.mock import patch, MagicMock
 import pytest
-from flask import url_for, session
+from flask import url_for, session, request
 from flask.testing import FlaskClient
 from flask_login import login_user, current_user
 from pytz import timezone
 from app.constants import FlashMessages
 from tests.conftest import extract_csrf_token
 from tests.utils import AuthActions
-
 from app.models.stipend import Stipend
 from app.models.organization import Organization
 from app.models.tag import Tag
@@ -18,8 +16,36 @@ from app.models.audit_log import AuditLog
 from app.models.notification import Notification
 from app.models.user import User
 from app.extensions import db
+from app.forms.admin_forms import StipendForm
+from app.routes.admin.stipend_routes import (
+    admin_stipend_bp,
+    register_stipend_routes,
+    StipendController
+)
 
 logger = logging.getLogger(__name__)
+
+# Enhanced test fixtures
+@pytest.fixture(scope='module')
+def test_app(app):
+    """Fixture to register stipend routes with test app"""
+    register_stipend_routes(app)
+    yield app
+
+@pytest.fixture
+def mock_form():
+    """Mock StipendForm with validation"""
+    form = MagicMock(spec=StipendForm)
+    form.validate.return_value = True
+    form.errors = {}
+    return form
+
+@pytest.fixture
+def mock_controller():
+    """Mock StipendController"""
+    controller = MagicMock(spec=StipendController)
+    controller.service = MagicMock()
+    return controller
 
 
 @pytest.fixture
@@ -27,6 +53,60 @@ def authenticated_admin(client: FlaskClient, auth: AuthActions) -> FlaskClient:
     """Fixture to authenticate as an admin user."""
     auth.login()
     return client
+
+@pytest.fixture
+def test_stipend_data():
+    """Standard test data for stipend creation"""
+    return {
+        'name': 'Test Stipend',
+        'summary': 'Test summary',
+        'description': 'Test description',
+        'homepage_url': 'http://example.com',
+        'application_procedure': 'Apply online',
+        'eligibility_criteria': 'Open to all',
+        'application_deadline': (
+            datetime.now(timezone.utc) + timedelta(days=30)
+        ).strftime('%Y-%m-%d %H:%M:%S'),
+        'open_for_applications': True
+    }
+
+@pytest.fixture
+def test_organization(db_session):
+    """Create and return a test organization"""
+    org = Organization(name='Test Org')
+    db_session.add(org)
+    db_session.commit()
+    return org
+
+@pytest.fixture
+def test_tags(db_session):
+    """Create and return test tags"""
+    tags = [
+        Tag(name='Research', category='Academic'),
+        Tag(name='Scholarship', category='Funding')
+    ]
+    db_session.add_all(tags)
+    db_session.commit()
+    return tags
+
+@pytest.fixture
+def test_stipend(db_session, test_organization, test_tags):
+    """Create and return a test stipend"""
+    stipend = Stipend(
+        name='Existing Stipend',
+        summary='Existing summary',
+        description='Existing description',
+        homepage_url='http://existing.com',
+        application_procedure='Existing procedure',
+        eligibility_criteria='Existing criteria',
+        application_deadline=datetime.now(timezone.utc) + timedelta(days=30),
+        open_for_applications=True,
+        organization_id=test_organization.id
+    )
+    stipend.tags = test_tags
+    db_session.add(stipend)
+    db_session.commit()
+    return stipend
 
 
 @pytest.fixture(scope='function')
@@ -103,28 +183,243 @@ def create_test_stipend(authenticated_admin: FlaskClient, db_session) -> dict:
     }
 
 
-def test_create_duplicate_stipend(authenticated_admin: FlaskClient, db_session) -> None:
-    """Ensure that creating a stipend with the same name twice is not allowed."""
-    # First create a valid stipend
-    form_data = create_test_stipend(authenticated_admin, db_session)
-    response = authenticated_admin.post(
-        url_for('admin.stipend.create'),
-        data=form_data,
-        follow_redirects=True
-    )
-    assert response.status_code == 200
+class TestStipendRoutes:
+    """Comprehensive test suite for stipend routes"""
 
-    # Attempt the same creation again
-    csrf_token = get_csrf_token(authenticated_admin, 'admin.stipend.create')
-    form_data['csrf_token'] = csrf_token
+    def test_create_stipend_success(self, authenticated_admin, test_stipend_data, test_organization, test_tags):
+        """Test successful stipend creation"""
+        csrf_token = get_csrf_token(authenticated_admin, 'admin.stipend.create')
+        form_data = test_stipend_data.copy()
+        form_data.update({
+            'organization_id': str(test_organization.id),
+            'tags': [str(tag.id) for tag in test_tags],
+            'csrf_token': csrf_token
+        })
 
-    response = authenticated_admin.post(
-        url_for('admin.stipend.create'),
-        data=form_data,
-        follow_redirects=True
-    )
-    assert response.status_code == 400
-    assert b'Stipend with this name already exists' in response.data
+        response = authenticated_admin.post(
+            url_for('admin.stipend.create'),
+            data=form_data,
+            follow_redirects=True
+        )
+        
+        assert response.status_code == 200
+        assert FlashMessages.CREATE_SUCCESS.value.encode() in response.data
+        
+        # Verify database
+        stipend = Stipend.query.filter_by(name=form_data['name']).first()
+        assert stipend is not None
+        assert stipend.organization_id == test_organization.id
+        assert len(stipend.tags) == len(test_tags)
+
+    def test_create_stipend_duplicate(self, authenticated_admin, test_stipend_data, test_organization, test_tags):
+        """Test duplicate stipend creation"""
+        csrf_token = get_csrf_token(authenticated_admin, 'admin.stipend.create')
+        form_data = test_stipend_data.copy()
+        form_data.update({
+            'organization_id': str(test_organization.id),
+            'tags': [str(tag.id) for tag in test_tags],
+            'csrf_token': csrf_token
+        })
+
+        # First create
+        response = authenticated_admin.post(
+            url_for('admin.stipend.create'),
+            data=form_data,
+            follow_redirects=True
+        )
+        assert response.status_code == 200
+
+        # Attempt duplicate
+        response = authenticated_admin.post(
+            url_for('admin.stipend.create'),
+            data=form_data,
+            follow_redirects=True
+        )
+        assert response.status_code == 400
+        assert b'Stipend with this name already exists' in response.data
+
+    def test_create_stipend_missing_required_fields(self, authenticated_admin):
+        """Test stipend creation with missing required fields"""
+        csrf_token = get_csrf_token(authenticated_admin, 'admin.stipend.create')
+        
+        # Test missing name
+        invalid_data = {
+            'summary': 'Test summary',
+            'csrf_token': csrf_token
+        }
+        
+        response = authenticated_admin.post(
+            url_for('admin.stipend.create'),
+            data=invalid_data,
+            follow_redirects=True
+        )
+        assert response.status_code == 400
+        assert b'Name is required' in response.data
+
+    def test_create_stipend_invalid_organization(self, authenticated_admin, test_stipend_data, test_tags):
+        """Test stipend creation with invalid organization"""
+        csrf_token = get_csrf_token(authenticated_admin, 'admin.stipend.create')
+        form_data = test_stipend_data.copy()
+        form_data.update({
+            'organization_id': '99999',  # Invalid ID
+            'tags': [str(tag.id) for tag in test_tags],
+            'csrf_token': csrf_token
+        })
+
+        response = authenticated_admin.post(
+            url_for('admin.stipend.create'),
+            data=form_data,
+            follow_redirects=True
+        )
+        assert response.status_code == 400
+        assert b'Invalid organization' in response.data
+
+    def test_create_stipend_invalid_tags(self, authenticated_admin, test_stipend_data, test_organization):
+        """Test stipend creation with invalid tags"""
+        csrf_token = get_csrf_token(authenticated_admin, 'admin.stipend.create')
+        form_data = test_stipend_data.copy()
+        form_data.update({
+            'organization_id': str(test_organization.id),
+            'tags': ['99999'],  # Invalid tag IDs
+            'csrf_token': csrf_token
+        })
+
+        response = authenticated_admin.post(
+            url_for('admin.stipend.create'),
+            data=form_data,
+            follow_redirects=True
+        )
+        assert response.status_code == 400
+        assert b'Invalid tag' in response.data
+
+    def test_create_stipend_rate_limiting(self, authenticated_admin, test_stipend_data, test_organization, test_tags):
+        """Test rate limiting on stipend creation"""
+        csrf_token = get_csrf_token(authenticated_admin, 'admin.stipend.create')
+        form_data = test_stipend_data.copy()
+        form_data.update({
+            'organization_id': str(test_organization.id),
+            'tags': [str(tag.id) for tag in test_tags],
+            'csrf_token': csrf_token
+        })
+
+        # Make 11 requests (default limit is 10 per minute)
+        for _ in range(11):
+            response = authenticated_admin.post(
+                url_for('admin.stipend.create'),
+                data=form_data,
+                follow_redirects=True
+            )
+        
+        assert response.status_code == 429  # Too Many Requests
+
+    def test_update_stipend_success(self, authenticated_admin, test_stipend):
+        """Test successful stipend update"""
+        csrf_token = get_csrf_token(authenticated_admin, 'admin.stipend.edit', id=test_stipend.id)
+        
+        updated_data = {
+            'name': 'Updated Stipend',
+            'summary': test_stipend.summary,
+            'description': test_stipend.description,
+            'homepage_url': test_stipend.homepage_url,
+            'application_procedure': test_stipend.application_procedure,
+            'eligibility_criteria': test_stipend.eligibility_criteria,
+            'application_deadline': (
+                datetime.now(timezone.utc) + timedelta(days=30)
+            ).strftime('%Y-%m-%d %H:%M:%S'),
+            'organization_id': str(test_stipend.organization_id),
+            'tags': [str(tag.id) for tag in test_stipend.tags],
+            'csrf_token': csrf_token
+        }
+
+        response = authenticated_admin.post(
+            url_for('admin.stipend.edit', id=test_stipend.id),
+            data=updated_data,
+            follow_redirects=True
+        )
+        
+        assert response.status_code == 200
+        assert FlashMessages.UPDATE_SUCCESS.value.encode() in response.data
+        
+        # Verify database
+        updated_stipend = Stipend.query.get(test_stipend.id)
+        assert updated_stipend.name == 'Updated Stipend'
+
+    def test_delete_stipend_success(self, authenticated_admin, test_stipend):
+        """Test successful stipend deletion"""
+        response = authenticated_admin.post(
+            url_for('admin.stipend.delete', id=test_stipend.id),
+            follow_redirects=True
+        )
+        
+        assert response.status_code == 200
+        assert FlashMessages.DELETE_SUCCESS.value.encode() in response.data
+        
+        # Verify database
+        deleted_stipend = Stipend.query.get(test_stipend.id)
+        assert deleted_stipend is None
+
+    def test_stipend_index_page(self, authenticated_admin, test_stipend):
+        """Test stipend index page"""
+        response = authenticated_admin.get(url_for('admin.admin_stipend.index'))
+        
+        assert response.status_code == 200
+        assert test_stipend.name.encode() in response.data
+
+    def test_stipend_pagination(self, authenticated_admin, test_stipend):
+        """Test stipend pagination"""
+        response = authenticated_admin.get(url_for('admin.stipend.paginate', page=1))
+        
+        assert response.status_code == 200
+        assert test_stipend.name.encode() in response.data
+
+    def test_htmx_create_stipend(self, authenticated_admin, test_stipend_data, test_organization, test_tags):
+        """Test HTMX stipend creation"""
+        csrf_token = get_csrf_token(authenticated_admin, 'admin.stipend.create')
+        form_data = test_stipend_data.copy()
+        form_data.update({
+            'organization_id': str(test_organization.id),
+            'tags': [str(tag.id) for tag in test_tags],
+            'csrf_token': csrf_token
+        })
+
+        response = authenticated_admin.post(
+            url_for('admin.stipend.create'),
+            data=form_data,
+            headers={'HX-Request': 'true'},
+            follow_redirects=True
+        )
+        
+        assert response.status_code == 200
+        assert b'<tr id="stipend-row-' in response.data
+
+    def test_htmx_update_stipend(self, authenticated_admin, test_stipend):
+        """Test HTMX stipend update"""
+        csrf_token = get_csrf_token(authenticated_admin, 'admin.stipend.edit', id=test_stipend.id)
+        
+        updated_data = {
+            'name': 'HTMX Updated Stipend',
+            'summary': test_stipend.summary,
+            'description': test_stipend.description,
+            'homepage_url': test_stipend.homepage_url,
+            'application_procedure': test_stipend.application_procedure,
+            'eligibility_criteria': test_stipend.eligibility_criteria,
+            'application_deadline': (
+                datetime.now(timezone.utc) + timedelta(days=30)
+            ).strftime('%Y-%m-%d %H:%M:%S'),
+            'organization_id': str(test_stipend.organization_id),
+            'tags': [str(tag.id) for tag in test_stipend.tags],
+            'csrf_token': csrf_token
+        }
+
+        response = authenticated_admin.post(
+            url_for('admin.stipend.edit', id=test_stipend.id),
+            data=updated_data,
+            headers={'HX-Request': 'true'},
+            follow_redirects=True
+        )
+        
+        assert response.status_code == 200
+        assert b'<tr id="stipend-row-' in response.data
 
 def test_create_stipend_requires_login(client: FlaskClient) -> None:
     """Test that stipend creation requires authentication."""
