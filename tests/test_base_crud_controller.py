@@ -32,7 +32,7 @@ class TestBaseCrudController(BaseTestCase):
             email=f'test{uuid.uuid4().hex[:8]}@example.com',
             is_admin=True,
             is_active=True,
-            confirmed_at=datetime.utcnow()  # Add this line
+            confirmed_at=datetime.utcnow()
         )
         self.test_user.set_password('testpass')
         db.session.add(self.test_user)
