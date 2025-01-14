@@ -640,14 +640,37 @@ class DatabaseBackup:
             # Rotate old backups
             self._rotate_backups()
             
-            # Update metrics
+            # Calculate compression ratio
+            original_size = temp_file.stat().st_size
+            compressed_size = backup_file.stat().st_size
+            compression_ratio = (original_size - compressed_size) / original_size
+            
+            # Update comprehensive metrics
             duration = (datetime.now() - start_time).total_seconds()
             self.metrics.update({
                 'backup_count': self.metrics['backup_count'] + 1,
                 'last_success': datetime.now(),
                 'last_duration': duration,
-                'total_size': self.metrics['total_size'] + backup_file.stat().st_size
+                'total_size': self.metrics['total_size'] + compressed_size,
+                'compression_ratio': compression_ratio,
+                'verification_success_rate': 1.0,
+                'last_backup_size': compressed_size,
+                'last_backup_duration': duration,
+                'average_backup_size': (
+                    (self.metrics['average_backup_size'] * (self.metrics['backup_count'] - 1) + compressed_size) 
+                    / self.metrics['backup_count']
+                ),
+                'backup_success_rate': (
+                    self.metrics['backup_count'] / 
+                    (self.metrics['backup_count'] + self.metrics['failed_count'])
+                ),
+                'data_integrity_checks': self.metrics['data_integrity_checks'] + 1
             })
+            
+            # Record metrics
+            self.metrics_service.record('backup_duration', duration)
+            self.metrics_service.record('backup_size', compressed_size)
+            self.metrics_service.record('compression_ratio', compression_ratio)
             
             # Notify success
             self.notification_service.send(
@@ -921,7 +944,7 @@ class DatabaseBackup:
         self.notification_service = NotificationService()
         self.metrics_service = MetricsService()
         
-        # Initialize metrics
+        # Initialize comprehensive metrics
         self.metrics = {
             'backup_count': 0,
             'last_success': None,
@@ -929,7 +952,17 @@ class DatabaseBackup:
             'total_size': 0,
             'failed_count': 0,
             'compression_ratio': 0.0,
-            'verification_success_rate': 1.0
+            'verification_success_rate': 1.0,
+            'backups_rotated': 0,
+            'storage_freed': 0,
+            'average_backup_size': 0,
+            'backup_success_rate': 1.0,
+            'last_backup_size': 0,
+            'last_backup_duration': 0,
+            'last_verification_time': 0,
+            'total_verification_time': 0,
+            'data_integrity_checks': 0,
+            'data_integrity_errors': 0
         }
         
     def _generate_backup_name(self):

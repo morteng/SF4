@@ -52,7 +52,14 @@ class DatabaseRestore:
             'restore_validation_time': 0,
             'restore_validation_success_rate': 1.0,
             'data_integrity_checks': 0,
-            'data_integrity_errors': 0
+            'data_integrity_errors': 0,
+            'restore_attempts': 0,
+            'last_restore_size': 0,
+            'total_data_restored': 0,
+            'average_restore_size': 0,
+            'restore_validation_errors': 0,
+            'backup_freshness': None,
+            'restore_throughput': 0
         }
 
     def _verify_backup(self, backup_path: Path) -> bool:
@@ -152,16 +159,19 @@ class DatabaseRestore:
                     logger.error(f"Restore failed: {stderr.decode()}")
                     return False
                     
-            # Update metrics
+            # Calculate restore metrics
             duration = (datetime.now() - start_time).total_seconds()
             backup_age = datetime.now() - datetime.fromtimestamp(backup_path.stat().st_mtime)
+            restore_size = backup_path.stat().st_size
+            throughput = restore_size / duration if duration > 0 else 0
             
+            # Update comprehensive metrics
             self.metrics.update({
                 'restore_count': self.metrics['restore_count'] + 1,
                 'last_success': datetime.now(),
                 'last_duration': duration,
                 'last_backup_used': backup_path.name,
-                'data_restored': backup_path.stat().st_size,
+                'data_restored': restore_size,
                 'backup_age_restored': backup_age.total_seconds(),
                 'average_restore_time': (
                     (self.metrics['average_restore_time'] * (self.metrics['restore_count'] - 1) + duration) 
@@ -170,8 +180,23 @@ class DatabaseRestore:
                 'restore_success_rate': (
                     self.metrics['restore_count'] / 
                     (self.metrics['restore_count'] + self.metrics['failed_count'])
-                )
+                ),
+                'last_restore_size': restore_size,
+                'total_data_restored': self.metrics['total_data_restored'] + restore_size,
+                'average_restore_size': (
+                    (self.metrics['average_restore_size'] * (self.metrics['restore_count'] - 1) + restore_size) 
+                    / self.metrics['restore_count']
+                ),
+                'restore_throughput': throughput,
+                'backup_freshness': backup_age.total_seconds(),
+                'data_integrity_checks': self.metrics['data_integrity_checks'] + 1
             })
+            
+            # Record metrics
+            self.metrics_service.record('restore_duration', duration)
+            self.metrics_service.record('restore_size', restore_size)
+            self.metrics_service.record('backup_age_restored', backup_age.total_seconds())
+            self.metrics_service.record('restore_throughput', throughput)
             
             # Record metrics
             self.metrics_service.record('restore_duration', duration)
