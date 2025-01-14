@@ -17,6 +17,11 @@ def login():
         return redirect(url_for('admin.dashboard.dashboard'))
     
     form = LoginForm()
+    
+    # Add CSRF token to form if not already present
+    if not form.csrf_token.data:
+        form.csrf_token.data = generate_csrf_token()
+    
     current_app.logger.info(f"Login form created, CSRF token: {form.csrf_token.data}")
     
     if form.validate_on_submit():
