@@ -19,6 +19,7 @@ from tests.conftest import extract_csrf_token
 
 # Create test app instance
 app = create_app('testing')
+app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for testing
 
 class TestBaseCrudController(BaseTestCase):
     def setUp(self):
