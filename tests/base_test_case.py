@@ -8,6 +8,7 @@ from app.forms.admin_forms import StipendForm
 import uuid
 from datetime import datetime, timedelta, timezone
 from wtforms.validators import ValidationError
+from tests.conftest import extract_csrf_token
 
 class BaseTestCase(TestCase):
     def create_app(self):
