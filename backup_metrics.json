@@ -1,0 +1,16 @@
+{
+  "history": [
+    {
+      "timestamp": "2025-01-14T17:13:50.841099",
+      "success": true,
+      "size_mb": 500,
+      "duration_sec": 120,
+      "error": null
+    }
+  ],
+  "metrics": {
+    "success_count": 1,
+    "failure_count": 0,
+    "total_size_mb": 500.0,
+    "total_duration_sec": 120.0,
+    "last_success": 
