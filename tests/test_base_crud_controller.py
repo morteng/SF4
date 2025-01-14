@@ -26,7 +26,8 @@ class TestBaseCrudController(BaseTestCase):
         self.test_user = User(
             username=f'testuser_{uuid.uuid4().hex[:8]}',
             email=f'test{uuid.uuid4().hex[:8]}@example.com',
-            is_admin=True
+            is_admin=True,
+            is_active=True  # Ensure user is active
         )
         self.test_user.set_password('testpass')
         db.session.add(self.test_user)

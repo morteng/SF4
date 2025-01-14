@@ -31,12 +31,7 @@ def login():
             current_app.logger.debug(f"Password check: {user.check_password(form.password.data)}")
             current_app.logger.debug(f"User active status: {user.is_active}")
         
-        if user and user.check_password(form.password.data):
-            # Ensure user is active before logging in
-            if not user.is_active:
-                flash('Your account is inactive.', 'danger')
-                return redirect(url_for('public.login'))
-                
+        if user and user.check_password(form.password.data) and user.is_active:
             login_user(user)
             session['_user_id'] = str(user.id)
             session['is_admin'] = user.is_admin
