@@ -78,8 +78,19 @@ def validate_schema(validate_relations=False, validate_required_fields=True):
                 # Special handling for tags column in stipend table
                 if table == 'stipend' and 'tags' in missing_columns:
                     logger.error("Critical schema issue: Missing 'tags' column in stipend table")
-                    logger.info("Repair suggestion: Run 'flask db migrate' and 'flask db upgrade'")
-                    logger.info("Or manually add column with: ALTER TABLE stipend ADD COLUMN tags JSONB")
+                    logger.info("Attempting to fix schema automatically...")
+                    try:
+                        from sqlalchemy import text
+                        with engine.connect() as conn:
+                            stmt = text("ALTER TABLE stipend ADD COLUMN tags JSONB")
+                            conn.execute(stmt)
+                            conn.commit()
+                            logger.info("Successfully added tags column")
+                            # Re-verify schema after fix
+                            return validate_schema(validate_relations, validate_required_fields)
+                    except Exception as e:
+                        logger.error(f"Failed to automatically fix schema: {str(e)}")
+                        logger.info("Manual repair suggestion: Run 'flask db migrate' and 'flask db upgrade'")
                 
                 # General missing column error
                 logger.error(f"Missing columns in {table}: {', '.join(missing_columns)}")

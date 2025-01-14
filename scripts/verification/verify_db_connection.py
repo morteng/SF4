@@ -21,7 +21,9 @@ def validate_db_connection(db_uri: str) -> bool:
     try:
         engine = create_engine(db_uri)
         with engine.connect() as conn:
-            conn.execute("SELECT 1")
+            # Use text() for proper SQL statement handling
+            stmt = text("SELECT 1")
+            conn.execute(stmt)
             return True
     except SQLAlchemyError as e:
         logger.error(f"Database connection failed: {str(e)}")
