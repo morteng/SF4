@@ -575,3 +575,106 @@ def test_stipend_service_audit_logging(test_data, db_session, app, admin_user):
         assert log is not None
         assert log.action == 'create'
         assert log.object_id == result.id
+
+def test_create_stipend_with_invalid_organization(test_data, db_session, app):
+    """Test creating stipend with invalid organization"""
+    test_data['organization_id'] = 9999  # Non-existent organization
+    
+    service = StipendService()
+    
+    with pytest.raises(ValueError) as exc_info:
+        service.create(test_data)
+        
+    assert "Invalid organization" in str(exc_info.value)
+
+def test_update_stipend_with_invalid_data(test_data, db_session, app):
+    """Test updating stipend with invalid data"""
+    stipend = Stipend(**test_data)
+    db.session.add(stipend)
+    db.session.commit()
+
+    invalid_data = {
+        'name': '',  # Invalid name
+        'application_deadline': 'invalid-date'
+    }
+
+    service = StipendService()
+    
+    with pytest.raises(ValueError) as exc_info:
+        service.update(stipend.id, invalid_data)
+        
+    errors = exc_info.value.args[0]
+    assert 'name' in errors
+    assert 'application_deadline' in errors
+
+def test_delete_stipend_with_dependencies(test_data, db_session, app):
+    """Test deleting stipend with dependent records"""
+    from app.models.tag import Tag
+    
+    # Create stipend with tags
+    stipend = Stipend(**test_data)
+    tag = Tag(name="Test Tag")
+    stipend.tags.append(tag)
+    db.session.add(stipend)
+    db.session.commit()
+
+    service = StipendService()
+    
+    # Should still be able to delete
+    result = service.delete(stipend.id)
+    assert result is True
+    
+    # Verify deletion
+    assert Stipend.query.get(stipend.id) is None
+    assert Tag.query.get(tag.id) is not None  # Tags should remain
+
+def test_create_stipend_with_duplicate_name(test_data, db_session, app):
+    """Test creating stipend with duplicate name"""
+    org = Organization(name="Test Org")
+    db.session.add(org)
+    db.session.commit()
+    test_data['organization_id'] = org.id
+
+    # Create initial stipend
+    stipend = Stipend(**test_data)
+    db.session.add(stipend)
+    db.session.commit()
+
+    service = StipendService()
+    
+    with pytest.raises(ValueError) as exc_info:
+        service.create(test_data)
+        
+    assert "already exists" in str(exc_info.value)
+
+def test_create_stipend_with_past_deadline(test_data, db_session, app):
+    """Test creating stipend with past deadline"""
+    org = Organization(name="Test Org")
+    db.session.add(org)
+    db.session.commit()
+    test_data['organization_id'] = org.id
+    test_data['application_deadline'] = '2020-01-01 00:00:00'  # Past date
+
+    service = StipendService()
+    
+    with pytest.raises(ValueError) as exc_info:
+        service.create(test_data)
+        
+    assert "must be in the future" in str(exc_info.value)
+
+def test_update_stipend_with_invalid_tags(test_data, db_session, app):
+    """Test updating stipend with invalid tags"""
+    stipend = Stipend(**test_data)
+    db.session.add(stipend)
+    db.session.commit()
+
+    invalid_data = {
+        'tags': [9999]  # Non-existent tag
+    }
+
+    service = StipendService()
+    
+    with pytest.raises(ValueError) as exc_info:
+        service.update(stipend.id, invalid_data)
+        
+    assert "Invalid tags" in str(exc_info.value)

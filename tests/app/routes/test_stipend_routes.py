@@ -210,3 +210,126 @@ def test_stipend_create_rate_limiting(client, admin_user, test_data):
             
         # Last request should be rate limited
         assert response.status_code == 429
+
+def test_htmx_create_stipend(client, admin_user, test_data):
+    """Test HTMX partial response for stipend creation"""
+    org = Organization(name="Test Org")
+    db.session.add(org)
+    db.session.commit()
+    test_data['organization_id'] = org.id
+
+    with client:
+        login_user(admin_user)
+        
+        # Add HTMX headers
+        headers = {
+            'HX-Request': 'true',
+            'HX-Trigger': 'stipendForm'
+        }
+        
+        response = client.post(
+            url_for('admin.admin_stipend.create'),
+            data=test_data,
+            headers=headers,
+            follow_redirects=True
+        )
+        
+        # Verify HTMX response
+        assert response.status_code == 200
+        assert 'HX-Trigger' in response.headers
+        assert 'stipendCreated' in response.headers['HX-Trigger']
+
+def test_htmx_validation_errors(client, admin_user):
+    """Test HTMX response for form validation errors"""
+    invalid_data = {
+        'name': '',  # Invalid name
+        'application_deadline': 'invalid-date'
+    }
+
+    with client:
+        login_user(admin_user)
+        
+        # Add HTMX headers
+        headers = {
+            'HX-Request': 'true',
+            'HX-Trigger': 'stipendForm'
+        }
+        
+        response = client.post(
+            url_for('admin.admin_stipend.create'),
+            data=invalid_data,
+            headers=headers,
+            follow_redirects=True
+        )
+        
+        # Verify HTMX error response
+        assert response.status_code == 200
+        assert 'HX-Trigger' in response.headers
+        assert 'validationError' in response.headers['HX-Trigger']
+        assert b"Name: This field is required" in response.data
+
+def test_database_constraint_violation(client, admin_user, test_data):
+    """Test handling of database constraint violations"""
+    org = Organization(name="Test Org")
+    db.session.add(org)
+    db.session.commit()
+    test_data['organization_id'] = org.id
+
+    # Create initial stipend
+    stipend = Stipend(**test_data)
+    db.session.add(stipend)
+    db.session.commit()
+
+    with client:
+        login_user(admin_user)
+        
+        # Try to create duplicate stipend
+        response = client.post(
+            url_for('admin.admin_stipend.create'),
+            data=test_data,
+            follow_redirects=True
+        )
+        
+        # Verify constraint violation handling
+        assert response.status_code == 200
+        assert FlashMessages.CREATE_ERROR.value.encode() in response.data
+
+def test_missing_required_fields(client, admin_user):
+    """Test handling of missing required fields"""
+    invalid_data = {
+        'name': '',  # Missing required field
+        'application_deadline': ''  # Missing required field
+    }
+
+    with client:
+        login_user(admin_user)
+        response = client.post(
+            url_for('admin.admin_stipend.create'),
+            data=invalid_data,
+            follow_redirects=True
+        )
+        
+        # Verify error handling
+        assert response.status_code == 200
+        assert b"Name: This field is required" in response.data
+        assert b"Application Deadline: This field is required" in response.data
+
+def test_invalid_form_submission(client, admin_user):
+    """Test handling of completely invalid form data"""
+    invalid_data = {
+        'name': 'A' * 101,  # Exceeds max length
+        'application_deadline': 'not-a-date'
+    }
+
+    with client:
+        login_user(admin_user)
+        response = client.post(
+            url_for('admin.admin_stipend.create'),
+            data=invalid_data,
+            follow_redirects=True
+        )
+        
+        # Verify error handling
+        assert response.status_code == 200
+        assert b"Name: Field must be between 1 and 100 characters long" in response.data
+        assert b"Application Deadline: Invalid date format" in response.data
