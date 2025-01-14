@@ -1,22 +1,23 @@
 import logging
 from datetime import datetime, timedelta
+from unittest.mock import patch
 
 import pytest
-from flask import url_for
+from flask import url_for, session
 from flask.testing import FlaskClient
-from flask_login import login_user
+from flask_login import login_user, current_user
 from pytz import timezone
 from app.constants import FlashMessages
 from tests.conftest import extract_csrf_token
+from tests.utils import AuthActions
 
 from app.models.stipend import Stipend
 from app.models.organization import Organization
 from app.models.tag import Tag
 from app.models.audit_log import AuditLog
 from app.models.notification import Notification
-from app.constants import FlashMessages
-from tests.conftest import extract_csrf_token
-from tests.utils import AuthActions
+from app.models.user import User
+from app.extensions import db
 
 logger = logging.getLogger(__name__)
 
@@ -124,6 +125,111 @@ def test_create_duplicate_stipend(authenticated_admin: FlaskClient, db_session) 
     )
     assert response.status_code == 400
     assert b'Stipend with this name already exists' in response.data
+
+def test_create_stipend_requires_login(client: FlaskClient) -> None:
+    """Test that stipend creation requires authentication."""
+    response = client.get(url_for('admin.stipend.create'))
+    assert response.status_code == 302
+    assert '/login' in response.location
+
+def test_create_stipend_requires_admin(client: FlaskClient, auth: AuthActions) -> None:
+    """Test that stipend creation requires admin privileges."""
+    # Create regular user
+    auth.register()
+    auth.login()
+    
+    response = client.get(url_for('admin.stipend.create'))
+    assert response.status_code == 403
+    assert b'Forbidden' in response.data
+
+def test_create_stipend_with_missing_csrf(authenticated_admin: FlaskClient, db_session) -> None:
+    """Test that stipend creation fails without CSRF token."""
+    form_data = create_test_stipend(authenticated_admin, db_session)
+    form_data.pop('csrf_token')
+    
+    response = authenticated_admin.post(
+        url_for('admin.stipend.create'),
+        data=form_data,
+        follow_redirects=True
+    )
+    assert response.status_code == 400
+    assert b'CSRF token is missing' in response.data
+
+def test_create_stipend_with_invalid_csrf(authenticated_admin: FlaskClient, db_session) -> None:
+    """Test that stipend creation fails with invalid CSRF token."""
+    form_data = create_test_stipend(authenticated_admin, db_session)
+    form_data['csrf_token'] = 'invalid-token'
+    
+    response = authenticated_admin.post(
+        url_for('admin.stipend.create'),
+        data=form_data,
+        follow_redirects=True
+    )
+    assert response.status_code == 400
+    assert b'CSRF token is invalid' in response.data
+
+def test_create_stipend_with_missing_required_fields(authenticated_admin: FlaskClient, db_session) -> None:
+    """Test that stipend creation fails when required fields are missing."""
+    # Create organization and tags
+    organization = Organization(name='Test Org Missing Fields')
+    db_session.add(organization)
+    db_session.commit()
+
+    csrf_token = get_csrf_token(authenticated_admin, 'admin.stipend.create')
+
+    # Test missing name
+    invalid_data = {
+        'summary': 'Test summary',
+        'description': 'Test description',
+        'homepage_url': 'http://example.com',
+        'application_procedure': 'Apply online',
+        'eligibility_criteria': 'Open to all',
+        'application_deadline': (datetime.now(timezone.utc) + timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S'),
+        'organization_id': str(organization.id),
+        'tags': [],
+        'open_for_applications': True,
+        'csrf_token': csrf_token
+    }
+
+    response = authenticated_admin.post(
+        url_for('admin.stipend.create'),
+        data=invalid_data,
+        follow_redirects=True
+    )
+    assert response.status_code == 400
+    assert b'Name is required' in response.data
+
+def test_create_stipend_with_invalid_organization(authenticated_admin: FlaskClient, db_session) -> None:
+    """Test that stipend creation fails with invalid organization."""
+    # Create tags
+    tag1 = Tag(name='Research', category='Academic')
+    tag2 = Tag(name='Scholarship', category='Funding')
+    db_session.add_all([tag1, tag2])
+    db_session.commit()
+
+    csrf_token = get_csrf_token(authenticated_admin, 'admin.stipend.create')
+
+    invalid_data = {
+        'name': 'Invalid Org Stipend',
+        'summary': 'Test summary',
+        'description': 'Test description',
+        'homepage_url': 'http://example.com',
+        'application_procedure': 'Apply online',
+        'eligibility_criteria': 'Open to all',
+        'application_deadline': (datetime.now(timezone.utc) + timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S'),
+        'organization_id': '99999',  # Invalid org ID
+        'tags': [str(tag1.id), str(tag2.id)],
+        'open_for_applications': True,
+        'csrf_token': csrf_token
+    }
+
+    response = authenticated_admin.post(
+        url_for('admin.stipend.create'),
+        data=invalid_data,
+        follow_redirects=True
+    )
+    assert response.status_code == 400
+    assert b'Invalid organization' in response.data
 
 
 def test_create_stipend_with_invalid_references(authenticated_admin: FlaskClient, db_session) -> None:
@@ -369,6 +475,86 @@ def test_update_stipend_route(authenticated_admin: FlaskClient, test_stipend: St
 
     # Verify success message
     assert FlashMessages.UPDATE_STIPEND_SUCCESS.value.encode() in final_response.data
+
+def test_update_stipend_requires_login(client: FlaskClient, test_stipend: Stipend) -> None:
+    """Test that stipend update requires authentication."""
+    response = client.get(url_for('admin.stipend.edit', id=test_stipend.id))
+    assert response.status_code == 302
+    assert '/login' in response.location
+
+def test_update_stipend_requires_admin(client: FlaskClient, auth: AuthActions, test_stipend: Stipend) -> None:
+    """Test that stipend update requires admin privileges."""
+    # Create regular user
+    auth.register()
+    auth.login()
+    
+    response = client.get(url_for('admin.stipend.edit', id=test_stipend.id))
+    assert response.status_code == 403
+    assert b'Forbidden' in response.data
+
+def test_update_nonexistent_stipend(authenticated_admin: FlaskClient) -> None:
+    """Test updating a non-existent stipend."""
+    response = authenticated_admin.get(url_for('admin.stipend.edit', id=9999))
+    assert response.status_code == 404
+    assert FlashMessages.NOT_FOUND.value.encode() in response.data
+
+def test_update_stipend_with_invalid_data(authenticated_admin: FlaskClient, test_stipend: Stipend) -> None:
+    """Test updating a stipend with invalid data."""
+    update_response = authenticated_admin.get(url_for('admin.stipend.edit', id=test_stipend.id))
+    csrf_token = extract_csrf_token(update_response.data)
+
+    invalid_data = {
+        'name': '',  # Empty name
+        'summary': test_stipend.summary,
+        'description': test_stipend.description,
+        'homepage_url': test_stipend.homepage_url,
+        'application_procedure': test_stipend.application_procedure,
+        'eligibility_criteria': test_stipend.eligibility_criteria,
+        'application_deadline': (
+            datetime.now() + timedelta(days=365)
+        ).strftime('%Y-%m-%d %H:%M:%S'),
+        'organization_id': test_stipend.organization_id,
+        'open_for_applications': True,
+        'csrf_token': csrf_token
+    }
+
+    response = authenticated_admin.post(
+        url_for('admin.stipend.edit', id=test_stipend.id),
+        data=invalid_data,
+        follow_redirects=True
+    )
+    assert response.status_code == 400
+    assert b'Name is required' in response.data
+
+def test_update_stipend_rate_limiting(authenticated_admin: FlaskClient, test_stipend: Stipend) -> None:
+    """Test that stipend updates are rate limited."""
+    update_response = authenticated_admin.get(url_for('admin.stipend.edit', id=test_stipend.id))
+    csrf_token = extract_csrf_token(update_response.data)
+
+    updated_data = {
+        'name': 'Updated Stipend',
+        'summary': test_stipend.summary,
+        'description': test_stipend.description,
+        'homepage_url': test_stipend.homepage_url,
+        'application_procedure': test_stipend.application_procedure,
+        'eligibility_criteria': test_stipend.eligibility_criteria,
+        'application_deadline': (
+            datetime.now() + timedelta(days=365)
+        ).strftime('%Y-%m-%d %H:%M:%S'),
+        'organization_id': test_stipend.organization_id,
+        'open_for_applications': True,
+        'csrf_token': csrf_token
+    }
+
+    # Make 11 requests (default limit is 10 per minute)
+    for _ in range(11):
+        response = authenticated_admin.post(
+            url_for('admin.stipend.edit', id=test_stipend.id),
+            data=updated_data,
+            follow_redirects=True
+        )
+    
+    assert response.status_code == 429  # Too Many Requests
 
 
 def test_delete_stipend_route(authenticated_admin: FlaskClient, test_stipend: Stipend, db_session) -> None:
