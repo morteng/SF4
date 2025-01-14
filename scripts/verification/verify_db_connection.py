@@ -3,7 +3,7 @@ import logging
 import sys
 import time
 from pathlib import Path
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 
 # Configure paths before importing project modules

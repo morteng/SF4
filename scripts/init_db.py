@@ -49,6 +49,7 @@ def recreate_tables():
 def create_admin_user():
     """Create initial admin user if it doesn't exist"""
     try:
+        from app import db
         from app.models import User
         if not User.query.filter_by(username='admin').first():
             admin = User(
