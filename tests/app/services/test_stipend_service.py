@@ -2,7 +2,7 @@ import pytest
 import re
 from unittest.mock import patch, MagicMock
 from datetime import datetime, timedelta
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError, StaleDataError
 from flask_login import login_user
 from flask import get_flashed_messages
 from app.models.tag import Tag
