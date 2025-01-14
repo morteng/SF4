@@ -1,12 +1,17 @@
-# Finalize code cycle, start new metacycle.
+# Enhanced finalization cycle
 
-/architect how can we best implement the next code cycle? edit meta_cycles/start.aiderscript and any other code cycles you want to chain.
+# 1) Clean up resources
+/run scripts/cleanup.py
 
-/code Implement the suggested changes. 
+# 2) Update documentation and logs
+/code Update DEVLOG.md with results of this cycle
+/code Update TODO.txt with completed tasks
 
-/run scripts\end_cycle.py
+# 3) Reset context memory
+/reset
 
-/code Update todo based on results of this cycle. Clean up manager instructions that have been implemented or are in progress. Write a new devlog to replace the previous entry.
+# 4) Start new cycle
+/load meta_cycles/start.aiderscript
 
 
 
