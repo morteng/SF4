@@ -7,11 +7,7 @@
 /add tests/app/forms/test_stipend_form.py
 
 # 2) Analyze validation needs
-/ask Based on the current codebase, what validation improvements are needed? Please focus on:
-- Custom field validation
-- Form validation rules
-- Error message handling
-- Test coverage
+/ask Based on the current codebase, what validation improvements are needed? Please focus on: - Custom field validation - Form validation rules - Error message handling - Test coverage
 
 # 3) Implement validation improvements
 /code Update validation logic in forms and custom fields

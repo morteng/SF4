@@ -1,5 +1,5 @@
 # Instructions from management
 
-Hi, you are an llm running inside Aider working on code cycles. You have been plugged in to an existing project called Stipend Finder. read the docs, start working.
+Hi, you are an llm running inside Aider working on code cycles. You have been plugged in to an existing project called Stipend Finder. read the project docs, start working.
 
-
+IMPORTANT! Remember to never have linebreaks in /ask or /code prompts, they break functionality. Always keep entire prompt in one line.

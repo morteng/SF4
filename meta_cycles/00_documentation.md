@@ -1,87 +1,6 @@
 
 ## Meta Cycles System Architecture
 
-### Core Components
-1. **Cycle Manager**
-   - Manages cycle transitions and state
-   - Tracks cycle history and performance metrics
-   - Handles error recovery and fallback cycles
-   - Implements automated cycle sequencing
-   - Maintains transition history logs
-
-2. **Cycle Executor**
-   - Executes individual cycle logic
-   - Manages cycle dependencies
-   - Handles cycle-specific configurations
-   - Tracks resource usage per cycle
-   - Implements cycle timeout handling
-
-3. **Metrics Collector**
-   - Tracks cycle performance metrics
-   - Stores historical data for analysis
-   - Provides real-time monitoring
-   - Calculates performance scores
-   - Enforces resource usage limits
-
-4. **Dependency Manager**
-   - Handles cross-cycle dependencies
-   - Manages resource allocation
-   - Ensures proper sequencing
-   - Validates cycle prerequisites
-   - Tracks dependency graphs
-
-5. **Transition Engine**
-   - Implements cycle transition rules
-   - Validates cycle prerequisites
-   - Handles error conditions
-   - Maintains transition history
-   - Implements fallback strategies
-
-### Data Flow
-1. Start -> Cycle Manager -> Cycle Executor
-2. Cycle Executor -> Metrics Collector -> Transition Engine
-3. Transition Engine -> Next Cycle or Stop
-
-### Requirements
-
-#### Functional Requirements
-1. Must support at least 30 different cycle types
-2. Must track cycle performance metrics
-3. Must maintain cycle history
-4. Must handle cycle dependencies
-5. Must support automated transitions
-6. Must provide monitoring capabilities
-7. Must support project milestones
-8. Must handle error conditions gracefully
-
-#### Non-Functional Requirements
-1. Performance: Handle 1000+ cycles per project
-2. Scalability: Support multiple concurrent projects
-3. Reliability: 99.9% uptime for cycle execution
-4. Maintainability: Clear documentation and modular design
-5. Security: Role-based access control
-6. Extensibility: Easy to add new cycle types
-7. Portability: Cross-platform support
-
-## Key Features
-- **Modular Cycle System**: Independent, reusable cycle scripts
-- **Automated Transitions**: Seamless progression between cycles with sequencing
-- **Stop Mechanism**: Controlled project completion
-- **Self-Contained**: Easy integration into other projects
-- **Documentation**: Complete Aider scripting guide included
-- **Monitoring**: Integrated performance tracking
-- **Cycle History**: Tracks cycle transitions
-- **Performance Metrics**: Cycle performance data
-- **Dependency Management**: Automatic handling of cycle dependencies
-- **AI Recommendations**: Smart cycle suggestions based on project context
-- **Predictive Analytics**: Forecasting system for cycle performance
-
-## Getting Started
-1. Initialize the system by running:
-   ```bash
-   /load meta_cycles/start.aiderscript
-   ```
-2. The system will automatically progress through appropriate cycles
 
 ## Managing Cycles
 - **Cycle Transition**: Each cycle determines and sets the next appropriate cycle
@@ -171,38 +90,6 @@ Following these rules ensures a **clean**, **modular** Aider scripting workflow.
 # 4. Use stop_cycle when project reaches a milestone or completion
 # 5. Cycle scripts must end by loading the next cycle
 # 6. The stop_cycle is the only cycle that doesn't load another cycle
-
-# Supported Cycle Types:
-# - Planning
-# - Coding
-# - Testing
-# - Documentation
-# - Bugfix
-# - Finalize/Cleanup
-# - Code Review
-# - Deployment
-# - Refactoring
-# - Research
-# - Maintenance
-# - Security
-# - Performance
-# - Infrastructure
-# - Integration
-# - UI/UX
-# - Data
-# - Configuration
-# - Metrics
-# - Monitoring
-# - Backup
-# - Audit
-# - Quality
-# - Workflow
-# - Migration
-# - Dependency
-# - Logging
-# - Security Audit
-# - Design
-# - Debugging
 
 # Documentation:
 # - See meta_cycles/manager_instructions.txt for full documentation

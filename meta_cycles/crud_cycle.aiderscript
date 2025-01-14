@@ -8,11 +8,7 @@
 /add app/models/stipend.py
 
 # 2) Analyze CRUD needs
-/ask Based on the current codebase, what CRUD improvements are needed? Please focus on:
-- Stipend form validation
-- Route handling
-- Service layer operations
-- Error handling
+/ask Based on the current codebase, what CRUD improvements are needed? Please focus on: - Stipend form validation - Route handling - Service layer operations - Error handling
 
 # 3) Implement CRUD improvements
 /code Implement suggested CRUD improvements across controller, service, and route files

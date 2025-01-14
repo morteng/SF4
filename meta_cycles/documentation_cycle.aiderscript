@@ -6,17 +6,15 @@
 /add app/services/stipend_service.py
 
 # 2) Analyze documentation needs
-/ask Based on the current codebase, what documentation improvements are needed? Please focus on:
-- API endpoint documentation
-- Service layer documentation
-- Form validation documentation
-- Code comments
+/ask Based on the current codebase, what documentation improvements are needed? Please focus on: - API endpoint documentation - Service layer documentation - Form validation documentation - Code comments
 
 # 3) Implement documentation updates
-/code Update docstrings and comments across the codebase
+/code Implement the suggested changes. 
 
 # 4) Verify documentation
 /ask Please verify the documentation updates and suggest any additional improvements.
+
+/code Implement the suggested changes. 
 
 # 5) Go to cleanup
 /load meta_cycles/finalize_cycle.aiderscript

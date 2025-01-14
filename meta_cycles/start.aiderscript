@@ -2,6 +2,18 @@
 # Modified to better initialize the Stipend Finder project
 
 # 1) Bring core project files into context
+/git add .
+/commit
+
+/add docs/Design_Documentation.md
+/add docs/Planning_and_Progress.md
+/add docs/PRD.md
+/add docs/DEVLOG.md
+
+/add meta_cycles/00_documentation.md
+/add meta_cycles/02_TODO.txt
+/add meta_cycles/01_manager_instructions.txt
+
 /add app/controllers/base_crud_controller.py
 /add app/forms/admin_forms.py
 /add app/routes/admin/stipend_routes.py

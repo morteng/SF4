@@ -2,7 +2,9 @@
 
 /ask how can we best implement the next code cycle? edit meta_cycles/start.aiderscript and any other code cycles you want to chain.
 
-/code Implement the suggested code changes. Update todo based on results of this cycle. Clean up manager instructions that have been implemented or are in progress. 
+/code Implement the suggested code changes. 
+
+/code Update todo based on results of this cycle. Clean up manager instructions that have been implemented or are in progress. Write a new devlog to replace the previous entry.
 
 # Start new metacycle after clearing context
 /reset

@@ -6,11 +6,7 @@
 /add app/models/stipend.py
 
 # 2) Analyze testing needs
-/ask Based on the current codebase, what test improvements are needed? Please focus on:
-- Form validation tests
-- Model validation tests
-- Edge cases for stipend management
-- Test coverage analysis
+/ask Based on the current codebase, what test improvements are needed? Please focus on: - Form validation tests - Model validation tests - Edge cases for stipend management - Test coverage analysis
 
 # 3) Implement test improvements
 /code Update test_stipend_form.py with additional test cases
