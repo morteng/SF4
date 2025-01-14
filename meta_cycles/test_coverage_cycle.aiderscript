@@ -4,16 +4,16 @@
 # 1. Analyze current test coverage
 /run scripts/analyze_test_coverage.py
 
-# 2. Identify critical paths needing coverage 
-/ask Based on the coverage report, what are the most critical paths that need test coverage? Focus on: - Core business logic in services - Database operations - Form validation - Route handlers - Error handling - Edge cases - HTMX functionality
+# 2. Verify test file consolidation
+/ask Verify that tests/app/routes/test_stipend_routes.py has been consolidated into tests/app/routes/admin/test_stipend_routes.py
 
-# 3. Consolidate duplicate test files
-/code Consolidate tests/app/routes/test_stipend_routes.py and tests/app/routes/admin/test_stipend_routes.py into a single comprehensive test file in tests/app/routes/admin/test_stipend_routes.py
+# 3. Identify critical paths needing coverage 
+/ask Based on the coverage report, what are the most critical paths that need test coverage? Focus on: - Core business logic in services - Database operations - Form validation - Route handlers - Error handling - Edge cases - HTMX functionality
 
 # 4. Enhance existing tests
 /code Update tests/app/services/test_stipend_service.py to add more edge case and error condition tests
 
-# 5. Add comprehensive test cases
+# 5. Add comprehensive test cases  
 /code Add test cases for: - Invalid form submissions - Missing required fields - Database constraint violations - HTMX partial responses - Error conditions - Edge cases
 
 # 6. Verify coverage meets target
