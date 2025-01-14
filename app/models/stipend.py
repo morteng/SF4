@@ -182,8 +182,15 @@ class Stipend(db.Model):
         }
 
     # Relationships
-    tags = db.Column(
-        JSONB().with_variant(JSON, 'sqlite'),
-        nullable=True
+    tags = db.relationship(
+        'Tag',
+        secondary=stipend_tag_association,
+        backref='stipends',  # Matches the backref in Tag model
+        lazy='dynamic'
     )
-    organizations = db.relationship('Organization', secondary=organization_stipends, back_populates='stipends')
+
+    organizations = db.relationship(
+        'Organization', 
+        secondary=organization_stipends, 
+        back_populates='stipends'
+    )

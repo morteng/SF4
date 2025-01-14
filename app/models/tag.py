@@ -7,11 +7,11 @@ class Tag(db.Model):
     category = db.Column(db.String(100), nullable=False)  # Add this if missing
     description = db.Column(db.Text)
 
-    # Define bidirectional relationship with Stipend
+    # Define relationship with Stipend through association table
     stipends = db.relationship(
         'Stipend',
         secondary=stipend_tag_association,
-        back_populates='tags',
+        backref='tags',  # Changed from back_populates to backref
         lazy='dynamic'
     )
 
