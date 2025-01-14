@@ -1,7 +1,7 @@
 import os
 import uuid
 from datetime import datetime
-from unittest.mock import patch
+from unittest.mock import patch, ANY
 from flask import Response, url_for, request
 from flask_login import current_user
 from app.models.user import User
