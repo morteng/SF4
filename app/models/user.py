@@ -44,20 +44,6 @@ class User(db.Model, UserMixin):
         self.email = email
         return self
     
-    # Flask-Login required properties and methods
-    @property
-    def is_active(self):
-        """Return whether the user is active."""
-        return self._is_active
-
-    @is_active.setter
-    def is_active(self, value):
-        """Set the user's active status."""
-        if not isinstance(value, bool):
-            raise ValueError("is_active must be a boolean")
-        self._is_active = value
-
-
     @classmethod
     def get_by_id(cls, user_id, session):
         """Get user by ID with proper session handling"""
