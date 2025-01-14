@@ -5,6 +5,8 @@ import pytest
 from flask import url_for
 from flask.testing import FlaskClient
 from pytz import timezone
+from app.constants import FlashMessages
+from tests.conftest import extract_csrf_token
 
 from app.models.stipend import Stipend
 from app.models.organization import Organization
@@ -400,6 +402,44 @@ def test_paginate_stipend_route(authenticated_admin: FlaskClient, test_stipend: 
     assert response.status_code == 200, "Failed to load paginated page"
     assert test_stipend.name.encode() in response.data, "Stipend not in paginated results"
 
+
+def test_stipend_create_with_missing_organization(client, admin_user, test_data):
+    """Test stipend creation with missing organization"""
+    # Remove organization_id from test data
+    test_data.pop('organization_id', None)
+    
+    with client:
+        login_user(admin_user)
+        response = client.post(
+            url_for('admin.admin_stipend.create'),
+            data=test_data,
+            follow_redirects=True
+        )
+        assert response.status_code == 200
+        assert b"Organization is required" in response.data
+
+def test_stipend_edit_nonexistent(client, admin_user):
+    """Test editing a non-existent stipend"""
+    with client:
+        login_user(admin_user)
+        response = client.post(
+            url_for('admin.admin_stipend.edit', id=9999),
+            data={'name': 'Test'},
+            follow_redirects=True
+        )
+        assert response.status_code == 200
+        assert FlashMessages.NOT_FOUND.value.encode() in response.data
+
+def test_stipend_delete_nonexistent(client, admin_user):
+    """Test deleting a non-existent stipend"""
+    with client:
+        login_user(admin_user)
+        response = client.post(
+            url_for('admin.admin_stipend.delete', id=9999),
+            follow_redirects=True
+        )
+        assert response.status_code == 200
+        assert FlashMessages.NOT_FOUND.value.encode() in response.data
 
 def test_create_stipend_route_htmx(logged_in_admin, stipend_data, db_session):
     """Test creating a stipend with HTMX headers."""
