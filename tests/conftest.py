@@ -71,6 +71,7 @@ from app.extensions import db, login_manager
 from app.models.user import User
 from app.models.organization import Organization
 from app.models.stipend import Stipend
+from sqlalchemy.dialects.postgresql import JSONB
 from app.models.tag import Tag
 import os
 import sys
