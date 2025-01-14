@@ -5,40 +5,111 @@ import sqlite3
 from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
+from datetime import datetime
+from typing import Optional, Dict, Any
 
+# Configure logging
 logger = logging.getLogger(__name__)
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
-def validate_db_connection(db_uri):
-    """Validate database connection with enhanced error handling"""
+class DatabaseError(Exception):
+    """Base class for database errors"""
+    def __init__(self, message: str, operation: str, details: Optional[Dict[str, Any]] = None):
+        super().__init__(message)
+        self.operation = operation
+        self.details = details or {}
+        self.timestamp = datetime.utcnow()
+        logger.error(f"DatabaseError: {message}", extra={
+            'operation': operation,
+            'details': details,
+            'timestamp': self.timestamp
+        })
+
+class ConnectionError(DatabaseError):
+    """Raised when database connection fails"""
+    pass
+
+class QueryError(DatabaseError):
+    """Raised when a database query fails"""
+    pass
+
+class SchemaError(DatabaseError):
+    """Raised when schema validation fails"""
+    pass
+
+class BackupError(DatabaseError):
+    """Raised when backup operations fail"""
+    pass
+
+def validate_db_connection(db_uri: str) -> bool:
+    """Validate database connection with enhanced error handling and logging
+    
+    Args:
+        db_uri: Database connection URI
+        
+    Returns:
+        bool: True if connection is valid, False otherwise
+        
+    Raises:
+        ConnectionError: If connection fails after retries
+        SchemaError: If schema validation fails
+    """
+    logger.info(f"Validating database connection: {db_uri}")
+    
     try:
         if db_uri.startswith('sqlite:///'):
             db_path = db_uri.replace('sqlite:///', '')
             if not Path(db_path).exists():
-                logger.error(f"SQLite database file not found: {db_path}")
-                return False
+                error_msg = f"SQLite database file not found: {db_path}"
+                logger.error(error_msg)
+                raise ConnectionError(
+                    message=error_msg,
+                    operation="validate_db_connection",
+                    details={'db_uri': db_uri, 'db_path': db_path}
+                )
                 
-        # Verify connection using existing logic
+        # Verify connection with retry logic
         return _verify_db_connection(db_uri)
+    except ConnectionError:
+        raise
     except Exception as e:
-        logger.error(f"Database validation failed: {str(e)}")
-        return False
+        error_msg = f"Database validation failed: {str(e)}"
+        logger.error(error_msg, exc_info=True)
+        raise ConnectionError(
+            message=error_msg,
+            operation="validate_db_connection",
+            details={'db_uri': db_uri, 'error': str(e)}
+        )
 
-def _verify_db_connection(db_uri):
-    """Enhanced database verification with retry logic and schema validation"""
-    logger = logging.getLogger(__name__)
+def _verify_db_connection(db_uri: str) -> bool:
+    """Enhanced database verification with retry logic and schema validation
     
-    # Configurable retries and timeout from environment
+    Args:
+        db_uri: Database connection URI
+        
+    Returns:
+        bool: True if connection is valid, False otherwise
+        
+    Raises:
+        ConnectionError: If connection fails after retries
+        SchemaError: If schema validation fails
+    """
+    logger.info(f"Verifying database connection: {db_uri}")
+    
+    # Configurable settings from environment
     max_retries = int(os.getenv('DB_RETRIES', '5'))
     base_delay = int(os.getenv('DB_RETRY_DELAY', '2'))
     timeout = int(os.getenv('DB_TIMEOUT', '30'))
-    
-    # Verify connection pool settings
     pool_size = int(os.getenv('DB_POOL_SIZE', '10'))
     max_overflow = int(os.getenv('DB_MAX_OVERFLOW', '20'))
     
-    # Verify connection pool settings
-    pool_size = int(os.getenv('DB_POOL_SIZE', '5'))
-    max_overflow = int(os.getenv('DB_MAX_OVERFLOW', '10'))
+    # Log connection settings
+    logger.debug(f"Connection settings - retries: {max_retries}, delay: {base_delay}, "
+                f"timeout: {timeout}, pool_size: {pool_size}, max_overflow: {max_overflow}")
     
     for attempt in range(max_retries):
         try:
