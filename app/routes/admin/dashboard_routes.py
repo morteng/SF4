@@ -55,6 +55,7 @@ def dashboard():
         check_metrics = get_check_metrics()
 
         return render_template('admin/dashboard.html',
+                             title='Dashboard',
                              notification_count=notification_count,
                              recent_activity=recent_activity,
                              bots=bots,

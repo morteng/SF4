@@ -52,7 +52,9 @@ class TestBaseCrudController(BaseTestCase):
         
         # Verify login was successful
         self.assertEqual(login_response.status_code, 200)
+        self.assertEqual(login_response.status_code, 200)
         self.assertIn(b'Dashboard', login_response.data)
+        self.assertIn(b'Recent Activity', login_response.data)
         
         # Create test template directory
         os.makedirs('templates/admin/tag', exist_ok=True)

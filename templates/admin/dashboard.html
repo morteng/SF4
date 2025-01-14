@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    {% if notification_count %}
+    <div class="notifications">You have {{ notification_count }} unread notifications</div>
+    {% endif %}
+    
+    {% if recent_activity %}
+    <div class="activity">
+        <h2>Recent Activity</h2>
+        <ul>
+        {% for activity, username in recent_activity %}
+            <li>{{ username }} - {{ activity.action }} at {{ activity.timestamp }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</body>
+</html>
