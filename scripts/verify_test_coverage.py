@@ -32,16 +32,25 @@ def verify_coverage():
         # Check if coverage meets target
         target = 85.0
         if total_coverage >= target:
-            print(f"✅ Test coverage meets target: {total_coverage:.1f}% >= {target}%")
+            try:
+                print(f"✅ Test coverage meets target: {total_coverage:.1f}% >= {target}%")
+            except UnicodeEncodeError:
+                print(f"Test coverage meets target: {total_coverage:.1f}% >= {target}%")
             return True
         else:
-            print(f"❌ Test coverage below target: {total_coverage:.1f}% < {target}%")
+            try:
+                print(f"❌ Test coverage below target: {total_coverage:.1f}% < {target}%")
+            except UnicodeEncodeError:
+                print(f"Test coverage below target: {total_coverage:.1f}% < {target}%")
             # Generate HTML report for detailed analysis
             cov.html_report(directory='coverage_report')
             return False
             
     except Exception as e:
-        print(f"⚠️ Error verifying coverage: {str(e)}")
+        try:
+            print(f"⚠️ Error verifying coverage: {str(e)}")
+        except UnicodeEncodeError:
+            print("Warning: Error verifying coverage")
         return False
     finally:
         # Ensure coverage is stopped
