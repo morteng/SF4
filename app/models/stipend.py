@@ -3,6 +3,7 @@ from .association_tables import stipend_tag_association, organization_stipends
 from app.extensions import db
 from .organization import Organization
 from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import JSON  # Add this import
 
 logger = logging.getLogger(__name__)
 from datetime import datetime, timezone
@@ -181,5 +182,8 @@ class Stipend(db.Model):
         }
 
     # Relationships
-    tags = db.Column(JSONB(none_as_null=True), nullable=True)
+    tags = db.Column(
+        JSONB().with_variant(JSON, 'sqlite'),
+        nullable=True
+    )
     organizations = db.relationship('Organization', secondary=organization_stipends, back_populates='stipends')
