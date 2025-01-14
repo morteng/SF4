@@ -213,15 +213,14 @@ class TestBaseCrudController(BaseTestCase):
             username = self.test_user.username
             
         # First get the login page to get CSRF token
-        login_page = self.client.get('/login')
+        login_page = self.client.get(url_for('public.login'))
         csrf_token = extract_csrf_token(login_page.data)
         
         # Perform login with valid credentials
-        response = self.client.post('/login', data={
+        response = self.client.post(url_for('public.login'), data={
             'username': username,
             'password': password,
-            'csrf_token': csrf_token,
-            'submit': 'Login'
+            'csrf_token': csrf_token
         }, follow_redirects=True)
         
         # Verify we got a successful response
@@ -234,28 +233,47 @@ class TestBaseCrudController(BaseTestCase):
         with self.client.session_transaction() as session:
             self.assertIn('_user_id', session)
             self.assertEqual(session['_user_id'], str(self.test_user.id))
+            self.assertIn('is_admin', session)
+            self.assertEqual(session['is_admin'], self.test_user.is_admin)
+            self.assertIn('_fresh', session)
 
         return response
 
     def test_login_route(self):
         """Test the login route directly"""
-        # Get login page
+        # Test GET request
         response = self.client.get(url_for('public.login'))
         self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Login', response.data)
         
         # Extract CSRF token
         csrf_token = extract_csrf_token(response.data)
         
-        # Submit login form
+        # Test POST with valid credentials
         response = self.client.post(url_for('public.login'), data={
             'username': self.test_user.username,
             'password': 'testpass',
             'csrf_token': csrf_token
         }, follow_redirects=True)
-        
-        # Verify successful login
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Dashboard', response.data)
+        
+        # Verify session data
+        with self.client.session_transaction() as session:
+            self.assertIn('_user_id', session)
+            self.assertEqual(session['_user_id'], str(self.test_user.id))
+            self.assertIn('is_admin', session)
+            self.assertEqual(session['is_admin'], self.test_user.is_admin)
+            self.assertIn('_fresh', session)
+            
+        # Test POST with invalid credentials
+        response = self.client.post(url_for('public.login'), data={
+            'username': 'invalid',
+            'password': 'wrong',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Invalid username or password', response.data)
 
     def test_stipend_form_validation(self):
         # Test missing name
