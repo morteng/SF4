@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ title }}</title>
+    <title>Admin Dashboard</title>
 </head>
 <body>
-    <h1>{{ title }}</h1>
+    <h1>Dashboard</h1>
+    <div class="recent-activity">
+        <h2>Recent Activity</h2>
+        {% if recent_activity %}
+        <ul>
+            {% for activity, username in recent_activity %}
+                <li>{{ username }} - {{ activity.action }} at {{ activity.timestamp }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
     {% if notification_count %}
     <div class="notifications">You have {{ notification_count }} unread notifications</div>
-    {% endif %}
-    
-    {% if recent_activity %}
-    <div class="activity">
-        <h2>Recent Activity</h2>
-        <ul>
-        {% for activity, username in recent_activity %}
-            <li>{{ username }} - {{ activity.action }} at {{ activity.timestamp }}</li>
-        {% endfor %}
-        </ul>
-    </div>
     {% endif %}
 </body>
 </html>

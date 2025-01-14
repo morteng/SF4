@@ -11,37 +11,21 @@ public_bp = Blueprint('public', __name__)
 
 @public_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    current_app.logger.info("Login route accessed")
-    
     if current_user.is_authenticated:
-        current_app.logger.info("User already authenticated, redirecting to dashboard")
         return redirect(url_for('admin.dashboard.dashboard'))
     
     form = LoginForm()
     
     if form.validate_on_submit():
-        current_app.logger.info("Login form submitted and validated")
         user = User.query.filter_by(username=form.username.data).first()
         
         if user and user.check_password(form.password.data) and user.is_active:
-            # Clear and regenerate session
-            session.clear()
-            session.permanent = True
-            
-            # Login user and commit session
             login_user(user, remember=True)
-            session['_user_id'] = str(user.id)
-            session['_fresh'] = True
-            session.modified = True
             
-            # Verify login
+            # Verify login was successful
             if not current_user.is_authenticated:
-                current_app.logger.error("Login failed - user not authenticated")
                 flash('Login failed', 'danger')
                 return redirect(url_for('public.login'))
-            
-            current_app.logger.info(f"User {user.username} logged in successfully")
-            current_app.logger.info(f"Session data: {dict(session)}")
             
             # Create audit log
             try:
@@ -56,11 +40,10 @@ def login():
             except Exception as e:
                 current_app.logger.error(f"Error creating login audit log: {str(e)}")
             
-            flash('Login successful.', 'success')
+            # Redirect to dashboard with explicit URL
             return redirect(url_for('admin.dashboard.dashboard'))
-        else:
-            current_app.logger.warning("Login failed - invalid credentials or inactive user")
-            flash('Invalid username or password', 'danger')
+            
+        flash('Invalid username or password', 'danger')
     
     return render_template('login.html', form=form)
 
