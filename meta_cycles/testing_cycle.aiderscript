@@ -1,7 +1,6 @@
 # For implementing and running tests
 
 # 1) Bring relevant test files into context
-/add ../myproject/tests/test_file.py
 
 # 2) Analyze testing needs
 /ask Based on the current codebase, what tests should we add or modify? Please outline the approach.

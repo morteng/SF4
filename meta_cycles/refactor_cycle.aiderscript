@@ -2,7 +2,6 @@
 
 # 1) Bring relevant files into context
 /add meta_cycles/manager_instructions.txt
-/add ../myproject/code/refactor_file.py
 
 # 2) Analyze refactoring needs
 /ask Based on manager_instructions.txt, what refactoring improvements should we make to refactor_file.py? Please outline the approach.

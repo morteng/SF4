@@ -2,8 +2,6 @@
 
 # 1) Bring relevant files into context
 /add meta_cycles/manager_instructions.txt
-/add ../myproject/migrations/migration_script.py
-/add ../myproject/database_schema.md
 
 # 2) Analyze migration needs
 /ask Based on manager_instructions.txt, what database schema changes or data migrations should we implement? Please outline the approach.
