@@ -33,6 +33,7 @@ def configure_paths(production=False, verify=False):
             str(Path(project_root) / 'scripts/verification'),
             str(Path(project_root) / 'scripts/testing'),
             str(Path(project_root) / 'scripts/startup'),
+            str(Path(project_root) / 'instance'),
         ]
 
         # Add production-specific paths if needed.

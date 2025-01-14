@@ -4,29 +4,17 @@
 # 0 Log start timestamp
 /run scripts\start_cycle.py
 
-# 1) Bring core project files into context
-/git add .
-/commit
+# 1) Verify and configure paths
+/run scripts/path_config.py
 
-/add docs/Design_Documentation.md
-/add docs/Planning_and_Progress.md
-/add docs/PRD.md
-/add docs/DEVLOG.md
+# 2) Initialize database
+/run scripts/init_db.py
 
-/add meta_cycles/00_documentation.md
-/add meta_cycles/02_TODO.txt
-/add meta_cycles/01_manager_instructions.txt
+# 3) Verify database connection
+/run scripts/verification/verify_db_connection.py
 
-/add app/controllers/base_crud_controller.py
-/add app/forms/admin_forms.py
-/add app/routes/admin/stipend_routes.py
-/add app/services/stipend_service.py
+# 4) Verify database schema
+/run scripts/verification/verify_db_schema.py
 
-# 2) Analyze project state
-/architect Based on the current context, documents and codebase, what is the most critical cycle to run first? Instructions from manager have priority. Please create the appropriate next cycle.
-
-# 3) Load database verification cycle
+# 5) Load next cycle based on verification results
 /load meta_cycles/db_verification_cycle.aiderscript
-
-# 4) Start the cycle system
-/load meta_cycles/chooser.aiderscript

@@ -5,5 +5,5 @@
 # NOTE: The primary entry point is start.aiderscript
 
 # Current active cycle (updated by cycle scripts)
-/load meta_cycles/db_init_cycle.aiderscript
+/load meta_cycles/db_verification_cycle.aiderscript
 
