@@ -17,32 +17,41 @@ from app.constants import FlashMessages
 logger = logging.getLogger(__name__)
 
 def get_stipend_by_id(id):
-    """Retrieve a stipend by its ID.
+    """Retrieve a stipend by its ID with error handling.
     
     Args:
-        id: The ID of the stipend to retrieve
+        id (int): The ID of the stipend to retrieve
         
     Returns:
         Stipend: The retrieved stipend instance
         
     Raises:
         404: If no stipend exists with the given ID
+        Exception: If database query fails
+        
+    Note:
+        Uses SQLAlchemy's get_or_404() to automatically handle missing records
     """
     return Stipend.query.get_or_404(id)
 
 def update_stipend(stipend, data, session=None):
-    """Update a stipend record with new data.
+    """Update a stipend record with new data and transaction management.
     
     Args:
-        stipend: The stipend instance to update
-        data: Dictionary of new field values
-        session: Optional database session to use
+        stipend (Stipend): The stipend instance to update
+        data (dict): Dictionary of new field values
+        session (Session): Optional database session to use
         
     Returns:
         Stipend: The updated stipend instance
         
     Raises:
-        Exception: If the update fails
+        ValueError: If invalid data is provided
+        IntegrityError: If database constraints are violated
+        Exception: For other database errors
+        
+    Note:
+        Automatically handles transaction rollback on failure
     """
     session = session or db.session
     try:

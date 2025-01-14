@@ -10,20 +10,35 @@ from app.models.audit_log import AuditLog
 from app.constants import FlashMessages, FlashCategory
 
 class BaseCrudController:
-    """Base controller class for CRUD operations.
+    """Base controller class for CRUD operations with enhanced functionality.
     
-    Provides common functionality for create, read, update and delete operations
-    with built-in error handling, audit logging, and HTMX support.
+    Provides a standardized interface for create, read, update and delete operations
+    with built-in features including:
+    - Error handling and validation
+    - Audit logging and tracking
+    - HTMX partial response support
+    - Flash message management
+    - Rate limiting and security
+    
+    The controller acts as an intermediary between routes and services, ensuring
+    consistent behavior across all CRUD operations.
     
     Attributes:
-        service: Service layer instance for business logic
-        entity_name: Name of the entity being managed
-        form_class: WTForms class for form validation
-        template_dir: Directory for template files
-        audit_logger: Optional audit logging instance
-        flash_messages: Dictionary of flash message templates
-        supports_htmx: Whether to support HTMX partial responses
-        htmx_headers: Default HTMX response headers
+        service (BaseService): Service layer instance for business logic
+        entity_name (str): Name of the entity being managed (e.g. 'stipend')
+        form_class (FlaskForm): WTForms class for form validation
+        template_dir (str): Directory for template files (e.g. 'admin/stipends')
+        audit_logger (AuditLogger): Optional audit logging instance
+        flash_messages (dict): Dictionary of flash message templates
+        supports_htmx (bool): Whether to support HTMX partial responses
+        htmx_headers (dict): Default HTMX response headers
+        
+    Methods:
+        create: Handle entity creation
+        edit: Handle entity updates
+        delete: Handle entity deletion
+        _handle_htmx_response: Process HTMX-specific responses
+        _handle_operation: Core operation handler with error handling
     """
     def __init__(self, service, entity_name, form_class, template_dir=None, audit_logger=None):
         self.service = service

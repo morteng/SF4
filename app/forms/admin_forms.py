@@ -33,24 +33,34 @@ from app.extensions import db
 
 
 class StipendForm(FlaskForm):
-    """Form for creating and editing stipend records.
+    """Form for creating and editing stipend records with comprehensive validation.
     
-    Includes validation for required fields, date formats, and relationships
-    with organizations and tags.
+    Handles all stipend-related data entry with robust validation including:
+    - Required field checks
+    - Date format validation
+    - Organization and tag relationships
+    - CSRF protection
+    - Custom field validation
     
     Attributes:
-        csrf_token: Hidden CSRF token field for security
-        name: Stipend name field
-        summary: Short description field
-        description: Detailed description field
-        homepage_url: Organization website URL
-        application_procedure: Instructions for applying
-        eligibility_criteria: Requirements for eligibility
-        application_deadline: Deadline for applications
-        organization_id: Related organization
-        open_for_applications: Status flag
-        tags: Associated tags
-        submit: Form submission button
+        csrf_token (HiddenField): CSRF token for form security
+        name (StringField): Stipend name (required, max 100 chars)
+        summary (TextAreaField): Short description (required, max 500 chars)
+        description (TextAreaField): Detailed description (required, max 2000 chars)
+        homepage_url (URLField): Organization website URL (required, valid URL)
+        application_procedure (TextAreaField): Application instructions (required, max 2000 chars)
+        eligibility_criteria (TextAreaField): Eligibility requirements (required, max 2000 chars)
+        application_deadline (CustomDateTimeField): Application deadline (required, future date)
+        organization_id (SelectField): Related organization (required)
+        open_for_applications (BooleanField): Application status flag
+        tags (SelectMultipleField): Associated tags (optional)
+        submit (SubmitField): Form submission button
+        
+    Methods:
+        validate_application_deadline: Custom deadline validation
+        validate_organization_id: Organization existence check
+        validate_open_for_applications: Status field validation
+        validate: Comprehensive form validation
     """
     def __init__(self, *args, **kwargs):
         logger.debug("Initializing StipendForm")
