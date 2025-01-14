@@ -195,6 +195,26 @@ class FlashCategory(str, Enum):
     TEMPLATE_NOT_FOUND = "Template not found."
     TEMPLATE_ERROR = "Error rendering template."
 
+    # Backup/Restore Messages
+    BACKUP_STARTED = "Database backup started"
+    BACKUP_SUCCESS = "Database backup completed successfully"
+    BACKUP_FAILED = "Database backup failed: {error}"
+    RESTORE_STARTED = "Database restore started"
+    RESTORE_SUCCESS = "Database restore completed successfully"
+    RESTORE_FAILED = "Database restore failed: {error}"
+    BACKUP_VALIDATION_SUCCESS = "Backup validation successful"
+    BACKUP_VALIDATION_FAILED = "Backup validation failed: {error}"
+    BACKUP_FILE_NOT_FOUND = "Backup file not found: {filename}"
+    BACKUP_INTEGRITY_CHECK_FAILED = "Backup integrity check failed"
+    BACKUP_SCHEDULE_UPDATED = "Backup schedule updated successfully"
+    BACKUP_SCHEDULE_UPDATE_FAILED = "Failed to update backup schedule: {error}"
+    BACKUP_RETENTION_POLICY_UPDATED = "Backup retention policy updated"
+    INVALID_BACKUP_FILE = "Invalid backup file format"
+    BACKUP_ALREADY_RUNNING = "Backup operation already in progress"
+    RESTORE_CONFIRMATION_REQUIRED = "Restore operation requires confirmation"
+    RESTORE_CANCELLED = "Restore operation cancelled"
+    BACKUP_STORAGE_LIMIT_EXCEEDED = "Backup storage limit exceeded"
+
     # Profile Management
     UPDATE_PROFILE_SUCCESS = "Profile updated successfully."
     
