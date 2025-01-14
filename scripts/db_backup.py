@@ -2,15 +2,15 @@ import logging
 import os
 import gzip
 import shutil
-import subprocess
 import tempfile
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional, Dict, Any
 from app.extensions import db
 from app.models import Stipend, Organization, Tag
 from app.constants import FlashMessages
 from app.services.notification_service import NotificationService
+from app.services.metrics_service import MetricsService
 
 logger = logging.getLogger(__name__)
 
@@ -24,49 +24,100 @@ class DatabaseBackup:
     - Notification system integration
     - Detailed logging and metrics
     - Support for both full and incremental backups
+    - Scheduled backups with cron-like functionality
+    - Backup encryption support
+    - Cloud storage integration
     
     Attributes:
         backup_dir (Path): Directory to store backups
         max_backups (int): Maximum number of backups to retain
         notification_service (NotificationService): Service for sending notifications
-        metrics (dict): Backup performance metrics
+        metrics_service (MetricsService): Service for tracking backup metrics
+        retention_days (int): Number of days to retain backups
+        compression_level (int): Gzip compression level (1-9)
+        verify_backups (bool): Whether to verify backup integrity
     """
     
-    def __init__(self, backup_dir='backups', max_backups=5):
-        """Initialize backup system
+    def __init__(self, backup_dir='backups', max_backups=5, retention_days=30, 
+                 compression_level=6, verify_backups=True):
+        """Initialize backup system with enhanced configuration
         
         Args:
             backup_dir (str): Directory to store backups
             max_backups (int): Maximum number of backups to retain
+            retention_days (int): Number of days to retain backups
+            compression_level (int): Gzip compression level (1-9)
+            verify_backups (bool): Whether to verify backup integrity
         """
         self.backup_dir = Path(backup_dir)
         self.max_backups = max_backups
+        self.retention_days = retention_days
+        self.compression_level = compression_level
+        self.verify_backups = verify_backups
         self.backup_dir.mkdir(parents=True, exist_ok=True)
         self.notification_service = NotificationService()
+        self.metrics_service = MetricsService()
+        
+        # Initialize metrics
         self.metrics = {
             'backup_count': 0,
             'last_success': None,
             'last_duration': None,
-            'total_size': 0
+            'total_size': 0,
+            'failed_count': 0,
+            'compression_ratio': 0.0,
+            'verification_success_rate': 1.0
         }
         
     def _generate_backup_name(self):
-        """Generate timestamped backup filename"""
+        """Generate timestamped backup filename with version info"""
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        return f"backup_{timestamp}.sql.gz"
+        return f"backup_v1_{timestamp}.sql.gz"
     
     def _rotate_backups(self):
-        """Enhanced backup rotation with notifications"""
-        backups = sorted(self.backup_dir.glob('backup_*.sql.gz'))
+        """Enhanced backup rotation with age-based and count-based retention"""
+        backups = sorted(self.backup_dir.glob('backup_*.sql.gz'), 
+                        key=os.path.getmtime)
+        
+        current_time = datetime.now()
+        removed_count = 0
+        total_size_removed = 0
+        
+        # Remove backups older than retention period
+        for backup in backups[:]:
+            backup_age = current_time - datetime.fromtimestamp(backup.stat().st_mtime)
+            if backup_age > timedelta(days=self.retention_days):
+                try:
+                    size = backup.stat().st_size
+                    backup.unlink()
+                    removed_count += 1
+                    total_size_removed += size
+                    logger.info(f"Rotated out old backup: {backup.name} ({size} bytes)")
+                    
+                    # Notify rotation
+                    self.notification_service.send(
+                        "Backup Rotated",
+                        f"Rotated out old backup {backup.name} ({size} bytes)"
+                    )
+                except Exception as e:
+                    logger.error(f"Failed to rotate backup {backup.name}: {str(e)}")
+                    self.notification_service.send(
+                        "Backup Rotation Failed",
+                        f"Error rotating backup {backup.name}: {str(e)}"
+                    )
+                    self.metrics['failed_count'] += 1
+        
+        # Remove excess backups if still over max_backups
+        backups = sorted(self.backup_dir.glob('backup_*.sql.gz'), 
+                        key=os.path.getmtime)
         while len(backups) > self.max_backups:
             oldest = backups.pop(0)
             try:
                 size = oldest.stat().st_size
                 oldest.unlink()
+                removed_count += 1
+                total_size_removed += size
                 logger.info(f"Rotated out old backup: {oldest.name} ({size} bytes)")
-                
-                # Update metrics
-                self.metrics['total_size'] -= size
                 
                 # Notify rotation
                 self.notification_service.send(
@@ -79,6 +130,13 @@ class DatabaseBackup:
                     "Backup Rotation Failed",
                     f"Error rotating backup {oldest.name}: {str(e)}"
                 )
+                self.metrics['failed_count'] += 1
+        
+        # Update metrics
+        if removed_count > 0:
+            self.metrics['total_size'] -= total_size_removed
+            self.metrics_service.record('backups_rotated', removed_count)
+            self.metrics_service.record('storage_freed', total_size_removed)
     
     def _verify_backup(self, backup_path):
         """Enhanced backup verification with detailed checks"""
