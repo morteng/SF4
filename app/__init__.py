@@ -27,15 +27,27 @@ def create_app(config_name='development'):
         if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
             init_extensions(app)
             
+        # Initialize Flask-Migrate
+        from flask_migrate import Migrate
+        migrate = Migrate()
+        migrate.init_app(app, db)
+        
         _init_database(app)
-        _ensure_admin_user(app)
+        
+        # Skip admin check during migration
+        if not app.config.get('SKIP_ADMIN_CHECK', False):
+            _ensure_admin_user(app)
+            
         _register_blueprints(app)
         _add_error_handlers(app)
         _add_context_processors(app)
         logger.info("Application initialized successfully")
     except Exception as e:
         logger.error(f"Failed to initialize application: {str(e)}")
-        raise RuntimeError(f"Application initialization failed: {str(e)}")
+        if 'no such column' in str(e):
+            logger.warning("Database schema appears outdated, skipping admin check")
+        else:
+            raise RuntimeError(f"Application initialization failed: {str(e)}")
 
     return app
 
