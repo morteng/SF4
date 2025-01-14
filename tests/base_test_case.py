@@ -39,7 +39,7 @@ class BaseTestCase(TestCase):
         self.service = BaseService(model=User)
         self.controller = BaseCrudController(
             service=self.service,
-            entity_name='test',
+            entity_name='test', 
             form_class=BaseForm
         )
 
