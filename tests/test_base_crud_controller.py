@@ -225,6 +225,8 @@ class TestBaseCrudController(BaseTestCase):
             self.assertIn('_user_id', session)
             # Don't check specific user ID since we're using different users
 
+        return response
+
     def test_login_route(self):
         """Test the login route directly"""
         # Get login page
