@@ -10,24 +10,34 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 migrate = Migrate()
 csrf = CSRFProtect()
-limiter = Limiter(key_func=get_remote_address)  # Initialize without app
+limiter = Limiter(key_func=get_remote_address, default_limits=["200 per day", "50 per hour"])
 
 def init_extensions(app):
     """Initialize all Flask extensions with proper configuration."""
-    global limiter
+    # Initialize SQLAlchemy
+    db.init_app(app)
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
-    # Only initialize extensions if they haven't been initialized yet
-    if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
-        # Initialize SQLAlchemy with explicit configuration
-        db.init_app(app)
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-        
-        # Initialize rate limiter with proper configuration
-        limiter.init_app(app)
-        app.config['RATELIMIT_STORAGE_URI'] = 'memory://'
-        app.config['RATELIMIT_STRATEGY'] = 'fixed-window'
-        app.config['RATELIMIT_ENABLED'] = True
-        app.config['RATELIMIT_DEFAULT'] = ["200 per day", "50 per hour"]
+    # Initialize rate limiter
+    limiter.init_app(app)
+    app.extensions['limiter'] = limiter
+    
+    # Initialize other extensions
+    login_manager.init_app(app)
+    migrate.init_app(app, db)
+    csrf.init_app(app)
+    
+    # Configure login manager
+    login_manager.login_view = 'public.login'
+    
+    @login_manager.user_loader
+    def load_user(user_id):
+        from app.models.user import User
+        try:
+            return User.query.get(int(user_id))
+        except Exception as e:
+            app.logger.error(f"Error loading user: {str(e)}")
+            return None
     """Initialize all Flask extensions with proper configuration."""
     # Only initialize extensions if they haven't been initialized yet
     if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
