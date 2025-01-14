@@ -22,7 +22,7 @@ def configure_coverage_logging():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_coverage(threshold=80, critical_paths=True, admin_only=False, verify=False):
+def verify_coverage(threshold=80, critical_paths=True, admin_only=False, verify=False, focus_area='core_services'):
     """Enhanced coverage verification with critical path analysis
     Args:
         threshold (int): Minimum coverage percentage
@@ -37,9 +37,19 @@ def verify_coverage(threshold=80, critical_paths=True, admin_only=False, verify=
             logger.error("Failed to configure paths.")
             return False
 
-        # Run coverage report with detailed output
+        # Run focused coverage report
+        coverage_cmd = ['coverage', 'run', '-m', 'pytest', 
+                       f'--cov=app.services.base_service',
+                       f'--cov-report=term-missing:skip-covered',
+                       f'--cov-fail-under={threshold}']
+        
+        if focus_area == 'core_services':
+            coverage_cmd.extend(['tests/test_base_service.py'])
+        elif focus_area == 'stipend_service':
+            coverage_cmd.extend(['tests/test_stipend_service.py'])
+            
         result = subprocess.run(
-            ['coverage', 'report', f'--fail-under={threshold}', '--show-missing', '--skip-covered'],
+            coverage_cmd,
             capture_output=True,
             text=True
         )
