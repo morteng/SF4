@@ -6,13 +6,13 @@
 /add app/services/stipend_service.py
 
 # 2) Analyze documentation needs
-/ask Based on the current codebase, what documentation improvements are needed? Please focus on: - API endpoint documentation - Service layer documentation - Form validation documentation - Code comments
+/architect Based on the current codebase, what documentation improvements are needed? Please focus on: - API endpoint documentation - Service layer documentation - Form validation documentation - Code comments
 
 # 3) Implement documentation updates
 /code Implement the suggested changes. 
 
 # 4) Verify documentation
-/ask Please verify the documentation updates and suggest any additional improvements.
+/architect Please verify the documentation updates and suggest any additional improvements.
 
 /code Implement the suggested changes. 
 

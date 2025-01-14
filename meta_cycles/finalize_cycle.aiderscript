@@ -1,8 +1,10 @@
 # Finalize code cycle, start new metacycle.
 
-/ask how can we best implement the next code cycle? edit meta_cycles/start.aiderscript and any other code cycles you want to chain.
+/architect how can we best implement the next code cycle? edit meta_cycles/start.aiderscript and any other code cycles you want to chain.
 
-/code Implement the suggested code changes. 
+/code Implement the suggested changes. 
+
+/run scripts\end_cycle.py
 
 /code Update todo based on results of this cycle. Clean up manager instructions that have been implemented or are in progress. Write a new devlog to replace the previous entry.
 

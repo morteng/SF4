@@ -4,8 +4,6 @@ import sys
 def run_tests():
     """Run all test suites"""
     test_commands = [
-        "pytest tests/models/ -v",
-        "pytest tests/version_management/ -v",
         "pytest --cov=scripts.version --cov-report=term-missing"
     ]
     

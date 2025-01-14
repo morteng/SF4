@@ -1,6 +1,9 @@
 # start.aiderscript
 # Modified to better initialize the Stipend Finder project
 
+# 0 Log start timestamp
+/run scripts\start_cycle.py
+
 # 1) Bring core project files into context
 /git add .
 /commit
@@ -20,7 +23,7 @@
 /add app/services/stipend_service.py
 
 # 2) Analyze project state
-/ask Based on the current codebase, what is the most critical cycle to run first? Please suggest the appropriate next cycle.
+/architect Based on the current codebase, what is the most critical cycle to run first? Please suggest the appropriate next cycle.
 
 # 3) Load chooser with recommended cycle
 /code Update meta_cycles/chooser.aiderscript to load the recommended cycle

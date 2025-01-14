@@ -8,7 +8,7 @@
 /add app/models/stipend.py
 
 # 2) Analyze CRUD needs
-/ask Based on the current codebase, what CRUD improvements are needed? Please focus on: - Stipend form validation - Route handling - Service layer operations - Error handling
+/architect Based on the current codebase, what CRUD improvements are needed? Please focus on: - Stipend form validation - Route handling - Service layer operations - Error handling
 
 # 3) Implement CRUD improvements
 /code Implement suggested CRUD improvements across controller, service, and route files
@@ -17,7 +17,7 @@
 /run pytest tests/app/forms/test_stipend_form.py --maxfail=1
 
 # 5) If tests fail, suggest fixes
-/ask Did CRUD tests fail? Suggest specific fixes for form validation and CRUD operations.
+/architect Did CRUD tests fail? Suggest specific fixes for form validation and CRUD operations.
 
 # 6) Go to cleanup
 /load meta_cycles/finalize_cycle.aiderscript
