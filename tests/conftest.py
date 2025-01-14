@@ -17,7 +17,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from flask import url_for, current_app
 from flask_wtf.csrf import generate_csrf
 from app import create_app
-from app.extensions import init_extensions, db, login_manager
+from app.extensions import init_extensions, db, login_manager, limiter
 from app.models.user import User
 from app.models.organization import Organization
 from app.models.stipend import Stipend

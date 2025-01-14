@@ -10,9 +10,12 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 migrate = Migrate()
 csrf = CSRFProtect()
+limiter = None  # Initialize as None, will be set in init_extensions
 
 def init_extensions(app):
     """Initialize all Flask extensions with proper configuration."""
+    global limiter  # Make limiter available globally after initialization
+    
     # Only initialize extensions if they haven't been initialized yet
     if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
         # Initialize SQLAlchemy with explicit configuration
@@ -20,7 +23,7 @@ def init_extensions(app):
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         
         # Initialize rate limiter with proper configuration
-        app.extensions['limiter'] = Limiter(
+        limiter = Limiter(
             app=app,
             key_func=get_remote_address,
             default_limits=["200 per day", "50 per hour"],
@@ -28,6 +31,7 @@ def init_extensions(app):
             strategy="fixed-window",
             enabled=True
         )
+        app.extensions['limiter'] = limiter
     """Initialize all Flask extensions with proper configuration."""
     # Only initialize extensions if they haven't been initialized yet
     if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
