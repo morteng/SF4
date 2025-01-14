@@ -12,5 +12,8 @@
 # 4) If schema verification fails, fix path configuration
 /run scripts/path_config.py
 
+/ask how can we fix problem?
+/code implement suggested changes.
+
 # 5) Load next cycle based on verification results
 /load meta_cycles/finalize_cycle.aiderscript
