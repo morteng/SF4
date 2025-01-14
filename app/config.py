@@ -36,9 +36,23 @@ class Config:
 class TestConfig(Config):
     DEBUG = False
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:?cache=shared'
     WTF_CSRF_ENABLED = True  # Enable CSRF in testing to match production
     WTF_CSRF_SECRET_KEY = 'test-secret-key'  # Add a test CSRF secret key
+    
+    # Configure SQLite for testing
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'poolclass': 'StaticPool',
+        'connect_args': {'check_same_thread': False}
+    }
+    
+    # Ensure migrations run for in-memory database
+    @classmethod
+    def init_app(cls, app):
+        super().init_app(app)
+        with app.app_context():
+            from flask_migrate import upgrade
+            upgrade()
     
     # CSRF testing configuration
     WTF_CSRF_CHECK_DEFAULT = True

@@ -29,6 +29,23 @@ def init_extensions(app):
     def setup_db_connection():
         """Initialize database connection pool and verify connection"""
         try:
+            # Test database connection with appropriate pool settings
+            if app.config.get('SQLALCHEMY_DATABASE_URI', '').startswith('sqlite'):
+                # Disable connection pooling for SQLite
+                app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+                    'poolclass': 'StaticPool',
+                    'connect_args': {'check_same_thread': False}
+                }
+            else:
+                # Use connection pooling for other databases
+                app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+                    'pool_size': 10,
+                    'max_overflow': 20,
+                    'pool_timeout': 30,
+                    'pool_recycle': 3600,
+                    'pool_pre_ping': True
+                }
+            
             # Test database connection
             db.engine.connect()
             app.logger.info("Database connection established successfully")

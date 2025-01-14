@@ -1,14 +1,20 @@
 from tests.base_test_case import BaseTestCase
 from app.services.base_service import BaseService
 from app.models.tag import Tag
+from app.models.stipend import Stipend
 from wtforms.validators import ValidationError
 from app.extensions import db
 import pytest
 
+@pytest.fixture
+def base_service_fixture():
+    return BaseService(Stipend)
+
 class TestBaseService(BaseTestCase):
     def setUp(self):
         super().setUp()
-        self.service = BaseService(Tag)
+        # Use the renamed fixture
+        self.service = base_service_fixture()
 
     def test_create(self):
         data = {'name': 'New Tag', 'category': 'Test'}
