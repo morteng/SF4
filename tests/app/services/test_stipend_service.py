@@ -631,6 +631,172 @@ def test_create_stipend_with_invalid_application_deadline_format(test_data, db_s
             new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
             assert new_stipend is None
 
+def test_create_stipend_with_invalid_unicode(test_data, db_session, app):
+    """Test creating stipend with invalid unicode"""
+    service = StipendService()
+    
+    invalid_unicode_cases = [
+        {'name': b'\xff'.decode('latin1')},  # Invalid UTF-8
+        {'summary': b'\xfe'.decode('latin1')},
+        {'description': b'\xfd'.decode('latin1')}
+    ]
+    
+    for case in invalid_unicode_cases:
+        invalid_data = {**test_data, **case}
+        with pytest.raises(ValueError):
+            service.create(invalid_data)
+
+def test_create_stipend_with_sql_injection_attempt(test_data, db_session, app):
+    """Test creating stipend with SQL injection attempt"""
+    service = StipendService()
+    
+    # Test SQL injection in name field
+    test_data['name'] = "Test'; DROP TABLE stipends; --"
+    with pytest.raises(ValueError) as exc_info:
+        service.create(test_data)
+    assert "Invalid characters" in str(exc_info.value)
+
+def test_create_stipend_with_xss_attempt(test_data, db_session, app):
+    """Test creating stipend with XSS attempt"""
+    service = StipendService()
+    
+    # Test XSS in description field
+    test_data['description'] = "<script>alert('XSS')</script>"
+    with pytest.raises(ValueError) as exc_info:
+        service.create(test_data)
+    assert "Invalid characters" in str(exc_info.value)
+
+def test_create_stipend_with_oversized_data(test_data, db_session, app):
+    """Test creating stipend with oversized data"""
+    service = StipendService()
+    
+    oversized_data = {
+        'name': 'A' * 101,  # Exceeds max length
+        'summary': 'B' * 501,
+        'description': 'C' * 2001,
+        'homepage_url': 'http://' + 'a' * 200 + '.com',
+        'application_procedure': 'D' * 2001,
+        'eligibility_criteria': 'E' * 2001
+    }
+    
+    with pytest.raises(ValueError) as exc_info:
+        service.create({**test_data, **oversized_data})
+    assert "exceeds maximum length" in str(exc_info.value)
+
+def test_create_stipend_with_invalid_boolean_values(test_data, db_session, app):
+    """Test creating stipend with invalid boolean values"""
+    service = StipendService()
+    
+    invalid_cases = [
+        'maybe', 'yes', 'no', '1', '0', 'true', 'false', 'on', 'off'
+    ]
+    
+    for case in invalid_cases:
+        test_data['open_for_applications'] = case
+        with pytest.raises(ValueError):
+            service.create(test_data)
+
+def test_create_stipend_with_invalid_url(test_data, db_session, app):
+    """Test creating stipend with invalid URL"""
+    service = StipendService()
+    
+    invalid_urls = [
+        'invalid-url',
+        'ftp://example.com',
+        'javascript:alert(1)',
+        'data:text/html,<script>alert(1)</script>'
+    ]
+    
+    for url in invalid_urls:
+        test_data['homepage_url'] = url
+        with pytest.raises(ValueError):
+            service.create(test_data)
+
+def test_create_stipend_with_invalid_tag_ids(test_data, db_session, app):
+    """Test creating stipend with invalid tag IDs"""
+    service = StipendService()
+    
+    invalid_cases = [
+        ['invalid'],  # Non-integer
+        [99999],  # Non-existent
+        [-1],  # Negative
+        [0],  # Zero
+        ['1', '2', '3']  # String numbers
+    ]
+    
+    for case in invalid_cases:
+        test_data['tags'] = case
+        with pytest.raises(ValueError):
+            service.create(test_data)
+
+def test_create_stipend_with_duplicate_tags(test_data, db_session, app):
+    """Test creating stipend with duplicate tags"""
+    service = StipendService()
+    
+    # Create test tags
+    tag1 = Tag(name='Test Tag 1')
+    tag2 = Tag(name='Test Tag 2')
+    db_session.add_all([tag1, tag2])
+    db_session.commit()
+    
+    test_data['tags'] = [tag1.id, tag1.id]  # Duplicate tag IDs
+    
+    with pytest.raises(ValueError) as exc_info:
+        service.create(test_data)
+    assert "Duplicate tags" in str(exc_info.value)
+
+def test_create_stipend_with_invalid_organization_relationship(test_data, db_session, app):
+    """Test creating stipend with invalid organization relationship"""
+    service = StipendService()
+    
+    # Create organization but delete it
+    org = Organization(name='Test Org')
+    db_session.add(org)
+    db_session.commit()
+    org_id = org.id
+    db_session.delete(org)
+    db_session.commit()
+    
+    test_data['organization_id'] = org_id
+    
+    with pytest.raises(ValueError) as exc_info:
+        service.create(test_data)
+    assert "Invalid organization" in str(exc_info.value)
+
+def test_create_stipend_with_invalid_audit_logging(test_data, db_session, app):
+    """Test creating stipend with audit logging failure"""
+    service = StipendService()
+    
+    with patch('app.models.audit_log.AuditLog.create', side_effect=Exception("Audit log error")):
+        with pytest.raises(Exception) as exc_info:
+            service.create(test_data)
+        assert "Audit log error" in str(exc_info.value)
+
+def test_create_stipend_with_database_error(test_data, db_session, app):
+    """Test creating stipend with database error"""
+    service = StipendService()
+    
+    with patch('app.extensions.db.session.commit', side_effect=Exception("Database error")):
+        with pytest.raises(Exception) as exc_info:
+            service.create(test_data)
+        assert "Database error" in str(exc_info.value)
+
+def test_create_stipend_with_rate_limit_exceeded(test_data, db_session, app):
+    """Test creating stipend with rate limit exceeded"""
+    service = StipendService()
+    
+    # Create organization first
+    org = Organization(name='Test Org')
+    db_session.add(org)
+    db_session.commit()
+    test_data['organization_id'] = org.id
+    
+    # Make 11 requests (limit is 10 per minute)
+    with pytest.raises(Exception) as exc_info:
+        for _ in range(11):
+            service.create(test_data)
+    assert "Rate limit exceeded" in str(exc_info.value)
+
 def test_create_stipend_with_missing_required_fields(test_data, db_session, app, admin_user):
     """Test creation with missing required fields"""
     required_fields = ['name', 'organization_id', 'application_deadline']
