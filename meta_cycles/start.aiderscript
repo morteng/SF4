@@ -15,7 +15,7 @@
 /add docs/DEVLOG.md
 
 /add meta_cycles/00_documentation.md
-/add meta_cycles/02_TODO.txt
+/add automation/TODO.txt
 /add meta_cycles/01_manager_instructions.txt
 
 /add app/controllers/base_crud_controller.py
