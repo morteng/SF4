@@ -193,8 +193,8 @@ def client(app):
         if 'limiter' in app.extensions:
             limiter = app.extensions['limiter']
             
-            # Initialize storage if needed
-            if not hasattr(limiter, '_storage') or limiter._storage is None:
+            # Ensure limiter is properly initialized
+            if not hasattr(limiter, '_storage'):
                 limiter.init_app(app)
             
             # Reset limiter if storage is available
