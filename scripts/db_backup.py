@@ -2,21 +2,53 @@ import logging
 import os
 import gzip
 import shutil
+import subprocess
+import tempfile
 from datetime import datetime
 from pathlib import Path
+from typing import Optional, Dict, Any
 from app.extensions import db
 from app.models import Stipend, Organization, Tag
 from app.constants import FlashMessages
+from app.services.notification_service import NotificationService
 
 logger = logging.getLogger(__name__)
 
 class DatabaseBackup:
-    """Handles database backup operations with compression and verification"""
+    """Handles database backup operations with compression, verification and scheduling
+    
+    Features:
+    - Compressed backups with timestamping
+    - Backup rotation with configurable retention
+    - Integrity verification
+    - Notification system integration
+    - Detailed logging and metrics
+    - Support for both full and incremental backups
+    
+    Attributes:
+        backup_dir (Path): Directory to store backups
+        max_backups (int): Maximum number of backups to retain
+        notification_service (NotificationService): Service for sending notifications
+        metrics (dict): Backup performance metrics
+    """
     
     def __init__(self, backup_dir='backups', max_backups=5):
+        """Initialize backup system
+        
+        Args:
+            backup_dir (str): Directory to store backups
+            max_backups (int): Maximum number of backups to retain
+        """
         self.backup_dir = Path(backup_dir)
         self.max_backups = max_backups
         self.backup_dir.mkdir(parents=True, exist_ok=True)
+        self.notification_service = NotificationService()
+        self.metrics = {
+            'backup_count': 0,
+            'last_success': None,
+            'last_duration': None,
+            'total_size': 0
+        }
         
     def _generate_backup_name(self):
         """Generate timestamped backup filename"""
