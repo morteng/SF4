@@ -1,5 +1,7 @@
 # Updated Manager Instructions - 2025-01-14
 
+MOST IMPORTANT RULE: You must avoid endless code cycle lopps, always chain code cycles together properly starting with start.aiderscript, chooser.aiderscri pt, one or more code cycle aiderscripts and finally finalize_cycle.aiderscript that cleans up the cycle, resets context memory and starts the process all over again. 
+
 ## Current Status
 - Database initialization cycle implemented
 - Basic verification scripts in place

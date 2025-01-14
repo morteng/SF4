@@ -8,9 +8,7 @@
 
 /code Update todo based on results of this cycle. Clean up manager instructions that have been implemented or are in progress. Write a new devlog to replace the previous entry.
 
-# Start new metacycle after clearing context
-/reset
-/load meta_cycles/start.aiderscript# Finalize Cycle
+
 
 # 1. Clean up resources
 /run scripts/cleanup.py
