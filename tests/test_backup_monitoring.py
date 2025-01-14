@@ -52,14 +52,17 @@ class TestBackupMonitoring(unittest.TestCase):
                 size_mb=1000,
                 duration_sec=600
             ))
+        
         # Mock the send_notifications method to prevent actual email sending
         with patch.object(self.alerts, '_send_notifications') as mock_send:
-            alerts = self.alerts._check_thresholds({
+            # Call check_and_notify instead of _check_thresholds
+            self.alerts.check_and_notify({
                 'failure_rate': 1.0,
                 'avg_duration': 600,
                 'avg_size': 1000
             })
-            self.assertTrue(len(alerts) > 0)
+            
+            # Verify notifications were sent
             mock_send.assert_called_once()
 
 if __name__ == '__main__':
