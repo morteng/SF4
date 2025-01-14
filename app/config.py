@@ -13,11 +13,8 @@ class Config:
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///app.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # Default engine options - will be overridden for SQLite
     SQLALCHEMY_ENGINE_OPTIONS = {
-        'pool_size': 10,
-        'max_overflow': 20,
-        'pool_timeout': 30,  # seconds
-        'pool_recycle': 3600,  # 1 hour
         'pool_pre_ping': True,  # Enable connection health checks
         'connect_args': {
             'timeout': 30  # seconds
