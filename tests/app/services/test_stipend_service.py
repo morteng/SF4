@@ -1,71 +1,352 @@
 import pytest
-import re  # Import the re module to use regex for extracting CSRF token
-from unittest.mock import patch  # For mocking in tests
-from app.models.tag import Tag  # Import Tag model
-from wtforms.validators import ValidationError
+import re
+from unittest.mock import patch, MagicMock
+from datetime import datetime, timedelta
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from app.models.tag import Tag
 from app.models.stipend import Stipend
 from app.models.organization import Organization
+from app.models.audit_log import AuditLog
 from app.services.stipend_service import StipendService
-from datetime import datetime
-from flask_login import login_user
-from app.extensions import db  # Ensure consistent session usage
-from app.forms.admin_forms import StipendForm
-from app.models.user import User
-from app.constants import FlashMessages, FlashCategory
-from flask import get_flashed_messages
+from app.extensions import db
+from app.constants import FlashMessages
 import logging
 
+# Configure logging
+logger = logging.getLogger(__name__)
 
-def test_invalid_form_submissions(test_data, db_session, app, admin_user):
-    """Test various invalid form submission scenarios"""
-    invalid_cases = [
-        # Missing required fields
-        {'name': None, 'organization_id': None, 'application_deadline': None},
-        # Invalid field types
-        {'name': 123, 'organization_id': 'abc', 'application_deadline': 123456},
-        # Exceeding max lengths
-        {'name': 'A' * 101, 'summary': 'B' * 501, 'description': 'C' * 2001},
-        # Invalid URLs
-        {'homepage_url': 'invalid-url'},
-        # Invalid boolean values
-        {'open_for_applications': 'maybe'},
-        # Invalid tag IDs
-        {'tags': ['invalid']},
-        # SQL injection attempts
-        {'name': "Test'; DROP TABLE stipends; --"},
-        # XSS attempts
-        {'description': "<script>alert('XSS')</script>"},
-        # Invalid unicode
-        {'name': b'\xff'.decode('latin1')},
-        # Empty strings
-        {'name': '   ', 'summary': '   '},
-        # Negative numbers
-        {'organization_id': -1},
-        # Zero values
-        {'organization_id': 0},
-        # String numbers
-        {'organization_id': '1'},
-        # Invalid date formats
-        {'application_deadline': '2023-02-30 12:00:00'},  # Invalid day
-        {'application_deadline': '2023-04-31 12:00:00'},  # Invalid day
-        {'application_deadline': '2023-00-01 12:00:00'},  # Invalid month
-        {'application_deadline': '2023-01-00 12:00:00'},  # Invalid day
-        {'application_deadline': 'invalid-date'},         # Completely invalid
-        {'application_deadline': ''},                     # Empty string
-        {'application_deadline': None}                    # Null value
+@pytest.fixture
+def test_stipend_data():
+    """Standard test data for stipend creation"""
+    return {
+        'name': 'Test Stipend',
+        'summary': 'Test summary',
+        'description': 'Test description',
+        'homepage_url': 'http://example.com',
+        'application_procedure': 'Apply online',
+        'eligibility_criteria': 'Open to all',
+        'application_deadline': (
+            datetime.utcnow() + timedelta(days=30)
+        ).strftime('%Y-%m-%d %H:%M:%S'),
+        'open_for_applications': True
+    }
+
+@pytest.fixture
+def test_organization(db_session):
+    """Create and return a test organization"""
+    org = Organization(name='Test Org')
+    db_session.add(org)
+    db_session.commit()
+    return org
+
+@pytest.fixture
+def test_tags(db_session):
+    """Create and return test tags"""
+    tags = [
+        Tag(name='Research', category='Academic'),
+        Tag(name='Scholarship', category='Funding')
     ]
+    db_session.add_all(tags)
+    db_session.commit()
+    return tags
 
-    service = StipendService()
+@pytest.fixture
+def test_stipend(db_session, test_organization, test_tags):
+    """Create and return a test stipend"""
+    stipend = Stipend(
+        name='Existing Stipend',
+        summary='Existing summary',
+        description='Existing description',
+        homepage_url='http://existing.com',
+        application_procedure='Existing procedure',
+        eligibility_criteria='Existing criteria',
+        application_deadline=datetime.utcnow() + timedelta(days=30),
+        open_for_applications=True,
+        organization_id=test_organization.id
+    )
+    stipend.tags = test_tags
+    db_session.add(stipend)
+    db_session.commit()
+    return stipend
+
+class TestStipendService:
+    """Comprehensive test suite for StipendService"""
+
+    # Test edge cases
+    @pytest.mark.parametrize("invalid_data,expected_error", [
+        # Missing required fields
+        ({'name': None}, "Missing required field: name"),
+        ({'organization_id': None}, "Missing required field: organization_id"),
+        ({'application_deadline': None}, "Missing required field: application_deadline"),
     
-    with app.app_context(), app.test_client() as client:
-        with app.test_request_context():
-            login_user(admin_user)
-            
-            for case in invalid_cases:
-                invalid_data = {**test_data, **case}
-                with pytest.raises(ValueError) as exc_info:
-                    service.create(invalid_data)
-                assert "validation error" in str(exc_info.value).lower()
+        # Invalid field types
+        ({'name': 123}, "Invalid name format"),
+        ({'organization_id': 'abc'}, "Invalid organization ID"),
+        ({'application_deadline': 123456}, "Invalid date format"),
+    
+        # Exceeding max lengths
+        ({'name': 'A' * 101}, "Name exceeds maximum length"),
+        ({'summary': 'B' * 501}, "Summary exceeds maximum length"),
+        ({'description': 'C' * 2001}, "Description exceeds maximum length"),
+    
+        # Invalid URLs
+        ({'homepage_url': 'invalid-url'}, "Invalid URL format"),
+        ({'homepage_url': 'javascript:alert(1)'}, "Invalid URL scheme"),
+    
+        # Invalid boolean values
+        ({'open_for_applications': 'maybe'}, "Invalid boolean value"),
+    
+        # Invalid tag IDs
+        ({'tags': ['invalid']}, "Invalid tag ID format"),
+        ({'tags': [99999]}, "Invalid tag ID"),
+    
+        # SQL injection attempts
+        ({'name': "Test'; DROP TABLE stipends; --"}, "Invalid characters in name"),
+    
+        # XSS attempts
+        ({'description': "<script>alert('XSS')</script>"}, "Invalid characters in description"),
+    
+        # Invalid unicode
+        ({'name': b'\xff'.decode('latin1')}, "Invalid characters in name"),
+    
+        # Empty strings
+        ({'name': '   '}, "Name cannot be empty"),
+        ({'summary': '   '}, "Summary cannot be empty"),
+    
+        # Negative numbers
+        ({'organization_id': -1}, "Invalid organization ID"),
+    
+        # Zero values
+        ({'organization_id': 0}, "Invalid organization ID"),
+    
+        # String numbers
+        ({'organization_id': '1'}, "Invalid organization ID format"),
+    
+        # Invalid date formats
+        ({'application_deadline': '2023-02-30 12:00:00'}, "Invalid date format"),
+        ({'application_deadline': '2023-04-31 12:00:00'}, "Invalid date format"),
+        ({'application_deadline': '2023-00-01 12:00:00'}, "Invalid date format"),
+        ({'application_deadline': '2023-01-00 12:00:00'}, "Invalid date format"),
+        ({'application_deadline': 'invalid-date'}, "Invalid date format"),
+        ({'application_deadline': ''}, "Invalid date format"),
+        ({'application_deadline': None}, "Invalid date format")
+    ])
+    def test_create_stipend_invalid_data(self, test_data, test_organization, test_tags, invalid_data, expected_error):
+        """Test stipend creation with various invalid data scenarios"""
+        service = StipendService()
+        form_data = test_data.copy()
+        form_data.update({
+            'organization_id': test_organization.id,
+            'tags': [tag.id for tag in test_tags]
+        })
+        form_data.update(invalid_data)
+
+        with pytest.raises(ValueError) as exc_info:
+            service.create(form_data)
+        
+        assert expected_error in str(exc_info.value)
+
+    # Test error conditions
+    def test_create_stipend_database_error(self, test_data, test_organization, test_tags):
+        """Test database error during stipend creation"""
+        service = StipendService()
+        form_data = test_data.copy()
+        form_data.update({
+            'organization_id': test_organization.id,
+            'tags': [tag.id for tag in test_tags]
+        })
+
+        with patch('app.extensions.db.session.commit', side_effect=SQLAlchemyError("Database error")):
+            with pytest.raises(SQLAlchemyError) as exc_info:
+                service.create(form_data)
+            assert "Database error" in str(exc_info.value)
+
+    def test_create_stipend_audit_log_error(self, test_data, test_organization, test_tags):
+        """Test audit logging error during stipend creation"""
+        service = StipendService()
+        form_data = test_data.copy()
+        form_data.update({
+            'organization_id': test_organization.id,
+            'tags': [tag.id for tag in test_tags]
+        })
+
+        with patch('app.models.audit_log.AuditLog.create', side_effect=Exception("Audit log error")):
+            with pytest.raises(Exception) as exc_info:
+                service.create(form_data)
+            assert "Audit log error" in str(exc_info.value)
+
+    def test_create_stipend_rate_limit_exceeded(self, test_data, test_organization, test_tags):
+        """Test rate limiting during stipend creation"""
+        service = StipendService()
+        form_data = test_data.copy()
+        form_data.update({
+            'organization_id': test_organization.id,
+            'tags': [tag.id for tag in test_tags]
+        })
+
+        # Mock rate limiter to always fail
+        with patch('app.services.base_service.BaseService._check_rate_limit', return_value=False):
+            with pytest.raises(Exception) as exc_info:
+                service.create(form_data)
+            assert "Rate limit exceeded" in str(exc_info.value)
+
+    # Test edge cases
+    def test_create_stipend_with_max_length_fields(self, test_data, test_organization, test_tags):
+        """Test creating stipend with maximum length fields"""
+        service = StipendService()
+        form_data = test_data.copy()
+        form_data.update({
+            'name': 'A' * 100,  # Max length
+            'summary': 'B' * 500,
+            'description': 'C' * 2000,
+            'homepage_url': 'http://' + 'a' * 200 + '.com',
+            'application_procedure': 'D' * 2000,
+            'eligibility_criteria': 'E' * 2000,
+            'organization_id': test_organization.id,
+            'tags': [tag.id for tag in test_tags]
+        })
+
+        result = service.create(form_data)
+        
+        # Verify all fields were saved correctly
+        stipend = Stipend.query.filter_by(name=form_data['name']).first()
+        assert stipend is not None
+        assert len(stipend.name) == 100
+        assert len(stipend.summary) == 500
+        assert len(stipend.description) == 2000
+
+    def test_create_stipend_with_minimal_data(self, test_organization):
+        """Test creating stipend with only required fields"""
+        service = StipendService()
+        minimal_data = {
+            'name': 'Minimal Stipend',
+            'organization_id': test_organization.id,
+            'application_deadline': (datetime.utcnow() + timedelta(days=30)).strftime('%Y-%m-%d %H:%M:%S')
+        }
+
+        result = service.create(minimal_data)
+        
+        # Verify stipend was created with minimal data
+        stipend = Stipend.query.filter_by(name='Minimal Stipend').first()
+        assert stipend is not None
+        assert stipend.summary is None
+        assert stipend.description is None
+
+    # Test update operations
+    def test_update_stipend_with_empty_fields(self, test_stipend):
+        """Test updating stipend with empty optional fields"""
+        service = StipendService()
+        update_data = {
+            'name': 'Updated Stipend',
+            'summary': '',
+            'description': '',
+            'organization_id': test_stipend.organization_id
+        }
+
+        result = service.update(test_stipend.id, update_data)
+        
+        # Verify update
+        updated_stipend = Stipend.query.get(test_stipend.id)
+        assert updated_stipend.name == 'Updated Stipend'
+        assert updated_stipend.summary is None
+        assert updated_stipend.description is None
+
+    def test_update_stipend_with_invalid_data(self, test_stipend):
+        """Test updating stipend with invalid data"""
+        service = StipendService()
+        invalid_data = {
+            'name': '',  # Invalid name
+            'application_deadline': 'invalid-date'
+        }
+
+        with pytest.raises(ValueError) as exc_info:
+            service.update(test_stipend.id, invalid_data)
+        
+        errors = exc_info.value.args[0]
+        assert 'name' in errors
+        assert 'application_deadline' in errors
+
+    # Test delete operations
+    def test_delete_stipend_with_dependencies(self, test_stipend):
+        """Test deleting stipend with dependent records"""
+        service = StipendService()
+        
+        # Should still be able to delete
+        result = service.delete(test_stipend.id)
+        assert result is True
+        
+        # Verify deletion
+        assert Stipend.query.get(test_stipend.id) is None
+        assert Tag.query.count() == 2  # Tags should remain
+
+    def test_delete_nonexistent_stipend(self):
+        """Test deleting non-existent stipend"""
+        service = StipendService()
+        
+        with pytest.raises(ValueError) as exc_info:
+            service.delete(9999)
+        assert "Stipend not found" in str(exc_info.value)
+
+    # Test relationship management
+    def test_create_stipend_with_invalid_organization(self, test_data, test_tags):
+        """Test creating stipend with invalid organization"""
+        service = StipendService()
+        form_data = test_data.copy()
+        form_data.update({
+            'organization_id': 99999,  # Invalid ID
+            'tags': [tag.id for tag in test_tags]
+        })
+
+        with pytest.raises(ValueError) as exc_info:
+            service.create(form_data)
+        assert "Invalid organization" in str(exc_info.value)
+
+    def test_create_stipend_with_invalid_tags(self, test_data, test_organization):
+        """Test creating stipend with invalid tags"""
+        service = StipendService()
+        form_data = test_data.copy()
+        form_data.update({
+            'organization_id': test_organization.id,
+            'tags': [99999]  # Invalid tag IDs
+        })
+
+        with pytest.raises(ValueError) as exc_info:
+            service.create(form_data)
+        assert "Invalid tags" in str(exc_info.value)
+
+    # Test audit logging
+    def test_audit_logging_on_create(self, test_data, test_organization, test_tags):
+        """Test audit logging during stipend creation"""
+        service = StipendService()
+        form_data = test_data.copy()
+        form_data.update({
+            'organization_id': test_organization.id,
+            'tags': [tag.id for tag in test_tags]
+        })
+
+        result = service.create(form_data)
+        
+        # Verify audit log was created
+        log = AuditLog.query.filter_by(object_type='Stipend').first()
+        assert log is not None
+        assert log.action == 'create'
+        assert log.object_id == result.id
+
+    # Test rate limiting
+    def test_rate_limiting_on_create(self, test_data, test_organization, test_tags):
+        """Test rate limiting during stipend creation"""
+        service = StipendService()
+        form_data = test_data.copy()
+        form_data.update({
+            'organization_id': test_organization.id,
+            'tags': [tag.id for tag in test_tags]
+        })
+
+        # Make 11 requests (default limit is 10 per minute)
+        with pytest.raises(Exception) as exc_info:
+            for _ in range(11):
+                service.create(form_data)
+        assert "Rate limit exceeded" in str(exc_info.value)
 
 def test_database_constraint_violations(test_data, db_session, app, admin_user):
     """Test database constraint violations"""
