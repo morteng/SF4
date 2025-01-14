@@ -16,6 +16,14 @@ class User(db.Model, UserMixin):
 
     __mapper_args__ = {"confirm_deleted_rows": False}
 
+    @property
+    def is_active(self):
+        return self._is_active
+
+    @is_active.setter
+    def is_active(self, value):
+        self._is_active = value
+
     def __init__(self, username, email, password=None, password_hash=None, is_admin=False, is_active=True):
         self.username = username
         self.email = email
@@ -24,7 +32,7 @@ class User(db.Model, UserMixin):
         elif password_hash:
             self.password_hash = password_hash
         self.is_admin = is_admin
-        self.is_active = is_active  # This will now use the property setter
+        self._is_active = is_active  # Set the private attribute directly
         self.created_at = db.func.current_timestamp()
         self.updated_at = db.func.current_timestamp()
 
