@@ -82,6 +82,11 @@ class TestBaseCrudController(BaseTestCase):
         form_data = {'name': 'New Tag', 'category': 'TestCategory', 'submit': True}
         with self.client:
             self.login()
+            
+            # Mock request context for template rendering
+            with self.client.session_transaction() as session:
+                session['_fresh'] = True
+                
             response = self.controller.create(form_data)
             
             # Verify service was called with form data
@@ -90,7 +95,8 @@ class TestBaseCrudController(BaseTestCase):
             # Verify template was rendered
             mock_render.assert_called_once_with(
                 'admin/tag/create.html',
-                form=ANY  # We don't care about the exact form instance
+                form=ANY,  # We don't care about the exact form instance
+                htmx_request=False
             )
             
             self.assertEqual(response.status_code, 200)

@@ -16,11 +16,21 @@ def verify_coverage():
     try:
         # Initialize coverage with proper config
         cov = coverage.Coverage(
-            config_file='.coveragerc',
-            data_file='.coverage.verified'
+            config_file='pytest.ini',
+            data_file='.coverage.verified',
+            branch=True,
+            concurrency='multiprocessing',
+            source=['app', 'scripts'],
+            omit=[
+                '*/__init__.py',
+                '*/tests/*',
+                '*/migrations/*',
+                '*/extensions.py',
+                '*/version.py'
+            ]
         )
         cov.start()
-        logger.info("Coverage started")
+        logger.info("Coverage started with multiprocessing support")
         
         # Run tests
         test_result = os.system('pytest tests/ --cov=app --cov-report=term-missing')
