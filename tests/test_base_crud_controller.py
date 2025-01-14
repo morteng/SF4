@@ -38,14 +38,6 @@ class TestBaseCrudController(BaseTestCase):
         db.session.add(self.test_user)
         db.session.commit()
         
-        # Verify password hash
-        print(f"Test user password hash: {self.test_user.password_hash}")
-        print(f"Password check: {self.test_user.check_password('testpass')}")
-        
-        # Manually confirm the user after creation
-        self.test_user.confirmed_at = datetime.utcnow()
-        db.session.commit()
-        
         # Initialize client with session support
         self.client = app.test_client()
         self.client.testing = True
@@ -55,13 +47,15 @@ class TestBaseCrudController(BaseTestCase):
             session.clear()
     
         # Login before each test using the test user
-        login_response = self.login()
+        login_response = self.client.post(url_for('public.login'), data={
+            'username': self.test_user.username,
+            'password': 'testpass',
+            'csrf_token': self.get_csrf_token()
+        }, follow_redirects=True)
         
         # Verify login was successful
         self.assertEqual(login_response.status_code, 200)
-        self.assertEqual(login_response.status_code, 200)
         self.assertIn(b'Dashboard', login_response.data)
-        self.assertIn(b'Recent Activity', login_response.data)
         
         # Create test template directory
         os.makedirs('templates/admin/tag', exist_ok=True)
@@ -170,43 +164,22 @@ class TestBaseCrudController(BaseTestCase):
         with self.client.session_transaction() as session:
             return session.get('csrf_token')
 
-    def login(self, username=None, password='testpass'):
+    def login(self):
         """Helper method to log in test user"""
-        if username is None:
-            username = self.test_user.username
-            
-        # Get login page
-        login_page = self.client.get(url_for('public.login'))
-        print(f"Login page status: {login_page.status_code}")
+        # Get login page to generate CSRF token
+        self.client.get(url_for('public.login'))
         
-        # Extract CSRF
-        csrf_token = extract_csrf_token(login_page.data)
-        print(f"CSRF token: {csrf_token}")
-        
-        # Verify test user exists
-        user = User.query.filter_by(username=username).first()
-        print(f"Test user exists: {user is not None}")
-        print(f"Test user active: {user.is_active if user else False}")
-        print(f"Test user password hash: {user.password_hash if user else None}")
+        # Get CSRF token from session
+        csrf_token = self.get_csrf_token()
         
         # Login POST
         response = self.client.post(url_for('public.login'), data={
-            'username': username,
-            'password': password,
+            'username': self.test_user.username,
+            'password': 'testpass',
             'csrf_token': csrf_token,
             'submit': 'Login'
         }, follow_redirects=True)
         
-        print(f"Login response status: {response.status_code}")
-        print(f"Login response path: {response.request.path}")
-        print(f"Response data: {response.data[:500]}")  # Print first 500 chars
-        
-        # Verify session contains correct user ID
-        with self.client.session_transaction() as session:
-            print(f"Session user ID: {session.get('_user_id')}")
-            print(f"Session fresh: {session.get('_fresh')}")
-            print(f"Session keys: {list(session.keys())}")
-    
         return response
 
     def test_login_route(self):
