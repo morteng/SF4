@@ -9,5 +9,5 @@
 # 3. Verify database schema
 /run scripts/verification/verify_db_schema.py
 
-# 4. Load next cycle based on results
-/load meta_cycles/chooser.aiderscript
+# 4. Load finalize cycle
+/load meta_cycles/finalize_cycle.aiderscript

@@ -10,4 +10,13 @@
 
 # Start new metacycle after clearing context
 /reset
+/load meta_cycles/start.aiderscript# Finalize Cycle
+
+# 1. Clean up resources
+/run scripts/cleanup.py
+
+# 2. Reset context memory
+/reset
+
+# 3. Start new cycle
 /load meta_cycles/start.aiderscript
