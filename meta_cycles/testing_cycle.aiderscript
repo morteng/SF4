@@ -1,19 +1,25 @@
-# For implementing and running tests
+# Enhanced testing cycle focused on stipend functionality
 
-# 1) Bring relevant test files into context
+# 1) Bring test-related files into context
+/add tests/app/forms/test_stipend_form.py
+/add app/forms/admin_forms.py
+/add app/models/stipend.py
 
 # 2) Analyze testing needs
-/ask Based on the current codebase, what tests should we add or modify? Please outline the approach.
+/ask Based on the current codebase, what test improvements are needed? Please focus on:
+- Form validation tests
+- Model validation tests
+- Edge cases for stipend management
+- Test coverage analysis
 
-# 3) Implement test updates
-/code Update test_file.py with the suggested test improvements
+# 3) Implement test improvements
+/code Update test_stipend_form.py with additional test cases
 
 # 4) Run tests
-/run pytest --maxfail=1
+/run pytest tests/app/forms/test_stipend_form.py --maxfail=1
 
 # 5) If tests fail, suggest fixes
-/ask Did test fail? Suggest fixes.
-/code implement suggested test improvements.
+/ask Did tests fail? Suggest specific fixes for failing tests.
 
-# Go to cleanup
+# 6) Go to cleanup
 /load meta_cycles/finalize_cycle.aiderscript

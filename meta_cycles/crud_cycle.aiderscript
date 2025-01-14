@@ -1,0 +1,27 @@
+# Focused on core stipend management operations
+
+# 1) Bring CRUD-related files into context
+/add app/controllers/base_crud_controller.py
+/add app/forms/admin_forms.py
+/add app/routes/admin/stipend_routes.py
+/add app/services/stipend_service.py
+/add app/models/stipend.py
+
+# 2) Analyze CRUD needs
+/ask Based on the current codebase, what CRUD improvements are needed? Please focus on:
+- Stipend form validation
+- Route handling
+- Service layer operations
+- Error handling
+
+# 3) Implement CRUD improvements
+/code Implement suggested CRUD improvements across controller, service, and route files
+
+# 4) Run CRUD tests
+/run pytest tests/app/forms/test_stipend_form.py --maxfail=1
+
+# 5) If tests fail, suggest fixes
+/ask Did CRUD tests fail? Suggest specific fixes for form validation and CRUD operations.
+
+# 6) Go to cleanup
+/load meta_cycles/finalize_cycle.aiderscript

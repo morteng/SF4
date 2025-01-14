@@ -1,18 +1,22 @@
-# For creating and maintaining project documentation
+# Focused on API and code documentation
 
-# 1) Bring relevant files into context
-/add meta_cycles/02_TODO.txt
-/add meta_cycles/01_manager_instructions.txt
-/add meta_cycles/00_documentation.md
+# 1) Bring documentation-related files into context
+/add app/controllers/base_crud_controller.py
+/add app/routes/admin/stipend_routes.py
+/add app/services/stipend_service.py
 
 # 2) Analyze documentation needs
-/ask Based on manager_instructions.txt, what documentation updates are needed? Please outline the approach.
+/ask Based on the current codebase, what documentation improvements are needed? Please focus on:
+- API endpoint documentation
+- Service layer documentation
+- Form validation documentation
+- Code comments
 
 # 3) Implement documentation updates
-/code Update PROJECT_DOCS.md and TODO.txt with the suggested documentation
+/code Update docstrings and comments across the codebase
 
-# 4) Verify documentation updates
-/code Did we complete all documentation updates from manager_instructions.txt? If not, suggest remaining updates.
+# 4) Verify documentation
+/ask Please verify the documentation updates and suggest any additional improvements.
 
-# 5) Transition to metrics cycle
-/load meta_cycles/metrics_cycle.aiderscript
+# 5) Go to cleanup
+/load meta_cycles/finalize_cycle.aiderscript
