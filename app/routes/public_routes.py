@@ -10,34 +10,52 @@ public_bp = Blueprint('public', __name__)
 
 @public_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    current_app.logger.info("Login route accessed")
+    
     if current_user.is_authenticated:
+        current_app.logger.info("User already authenticated, redirecting to dashboard")
         return redirect(url_for('admin.dashboard.dashboard'))
     
     form = LoginForm()
+    current_app.logger.info(f"Login form created, CSRF token: {form.csrf_token.data}")
+    
     if form.validate_on_submit():
+        current_app.logger.info("Login form submitted and validated")
         user = User.query.filter_by(username=form.username.data).first()
         
-        if user and user.check_password(form.password.data) and user.is_active:
-            login_user(user)
-            session['_user_id'] = str(user.id)
-            session['is_admin'] = user.is_admin
-            session['_fresh'] = True
+        if user:
+            current_app.logger.info(f"User found: {user.username}")
+            current_app.logger.info(f"User active status: {user.is_active}")
+            current_app.logger.info(f"Password check result: {user.check_password(form.password.data)}")
             
-            # Create audit log
-            try:
-                AuditLog.create(
-                    user_id=user.id,
-                    action='login',
-                    details='User logged in',
-                    ip_address=request.remote_addr,
-                    http_method=request.method,
-                    endpoint=request.endpoint
-                )
-            except Exception as e:
-                current_app.logger.error(f"Error creating login audit log: {str(e)}")
-            
-            flash('Login successful.', 'success')
-            return redirect(url_for('admin.dashboard.dashboard'))
+            if user.check_password(form.password.data) and user.is_active:
+                login_user(user)
+                session['_user_id'] = str(user.id)
+                session['is_admin'] = user.is_admin
+                session['_fresh'] = True
+                
+                current_app.logger.info(f"User {user.username} logged in successfully")
+                current_app.logger.info(f"Session data: {dict(session)}")
+                
+                # Create audit log
+                try:
+                    AuditLog.create(
+                        user_id=user.id,
+                        action='login',
+                        details='User logged in',
+                        ip_address=request.remote_addr,
+                        http_method=request.method,
+                        endpoint=request.endpoint
+                    )
+                except Exception as e:
+                    current_app.logger.error(f"Error creating login audit log: {str(e)}")
+                
+                flash('Login successful.', 'success')
+                return redirect(url_for('admin.dashboard.dashboard'))
+            else:
+                current_app.logger.warning("Login failed - invalid password or inactive user")
+        else:
+            current_app.logger.warning(f"User not found: {form.username.data}")
             
         flash('Invalid username or password', 'danger')
     

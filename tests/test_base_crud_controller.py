@@ -216,27 +216,48 @@ class TestBaseCrudController(BaseTestCase):
         login_page = self.client.get(url_for('public.login'))
         csrf_token = extract_csrf_token(login_page.data)
         
+        # Verify test user exists and is active
+        user = User.query.filter_by(username=username).first()
+        self.assertIsNotNone(user, "Test user not found in database")
+        self.assertTrue(user.is_active, "Test user is not active")
+        self.assertTrue(user.check_password(password), "Test user password check failed")
+        
         # Perform login with valid credentials
         response = self.client.post(url_for('public.login'), data={
             'username': username,
             'password': password,
             'csrf_token': csrf_token,
-            'submit': 'Login'  # Add explicit submit button value
+            'submit': 'Login'
         }, follow_redirects=True)
         
+        # Debugging: Print response data if login fails
+        if b'Dashboard' not in response.data:
+            print("\nLogin failed. Response data:")
+            print(response.data.decode('utf-8'))
+            print("\nSession data after login attempt:")
+            with self.client.session_transaction() as session:
+                print(dict(session))
+        
         # Verify we got a successful response
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200, 
+                        f"Expected status code 200, got {response.status_code}")
         
         # Verify we're on the dashboard page
-        self.assertIn(b'Dashboard', response.data)
+        self.assertIn(b'Dashboard', response.data, 
+                     "Dashboard content not found in response")
         
         # Verify session contains user ID
         with self.client.session_transaction() as session:
-            self.assertIn('_user_id', session)
-            self.assertEqual(session['_user_id'], str(self.test_user.id))
-            self.assertIn('is_admin', session)
-            self.assertEqual(session['is_admin'], self.test_user.is_admin)
-            self.assertIn('_fresh', session)
+            self.assertIn('_user_id', session, 
+                         "User ID not found in session")
+            self.assertEqual(session['_user_id'], str(self.test_user.id),
+                           f"Session user ID {session['_user_id']} doesn't match test user ID {self.test_user.id}")
+            self.assertIn('is_admin', session,
+                         "is_admin flag not found in session")
+            self.assertEqual(session['is_admin'], self.test_user.is_admin,
+                           f"Session is_admin {session['is_admin']} doesn't match test user is_admin {self.test_user.is_admin}")
+            self.assertIn('_fresh', session,
+                         "Session freshness flag not found")
 
         return response
 
