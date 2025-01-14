@@ -45,12 +45,16 @@ class BackupService:
         self.backup_dir.mkdir(parents=True, exist_ok=True)
         
     def create_backup(self) -> Tuple[bool, str]:
-        """Create a compressed database backup.
+        """Create a compressed database backup with monitoring integration.
         
         Returns:
             Tuple[bool, str]: (success, message) indicating backup status
         """
-        timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+        from scripts.db_monitor import dashboard
+        from scripts.db_alerts import alerts
+        
+        start_time = datetime.datetime.now()
+        timestamp = start_time.strftime('%Y%m%d_%H%M%S')
         backup_file = self.backup_dir / f'db_backup_{timestamp}.sql.gz'
         
         try:
@@ -66,17 +70,55 @@ class BackupService:
                 if process.returncode != 0:
                     error_msg = f"Backup failed: {stderr.decode('utf-8')}"
                     logger.error(error_msg)
+                    
+                    # Record failed backup
+                    duration = (datetime.datetime.now() - start_time).total_seconds()
+                    dashboard.add_metric(BackupMetric(
+                        timestamp=start_time,
+                        success=False,
+                        size_mb=0,
+                        duration_sec=duration,
+                        error=error_msg
+                    ))
                     return False, error_msg
                     
+            # Get backup size
+            backup_size = backup_file.stat().st_size / (1024 * 1024)  # Convert to MB
+            duration = (datetime.datetime.now() - start_time).total_seconds()
+            
             # Verify backup integrity
             if not self.verify_backup(backup_file):
                 error_msg = "Backup verification failed"
                 logger.error(error_msg)
                 backup_file.unlink()  # Remove invalid backup
+                
+                # Record failed verification
+                dashboard.add_metric(BackupMetric(
+                    timestamp=start_time,
+                    success=False,
+                    size_mb=backup_size,
+                    duration_sec=duration,
+                    error=error_msg
+                ))
                 return False, error_msg
                 
             # Clean up old backups
             self.cleanup_old_backups()
+            
+            # Record successful backup
+            dashboard.add_metric(BackupMetric(
+                timestamp=start_time,
+                success=True,
+                size_mb=backup_size,
+                duration_sec=duration
+            ))
+            
+            # Check for alerts
+            alerts.check_and_notify({
+                'failure_rate': dashboard.get_success_rate(),
+                'avg_duration': dashboard.get_avg_duration(),
+                'avg_size': dashboard.get_avg_size()
+            })
             
             logger.info(f"Backup created successfully: {backup_file}")
             return True, f"Backup created: {backup_file.name}"
