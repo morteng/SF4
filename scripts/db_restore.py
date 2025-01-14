@@ -73,6 +73,21 @@ class DatabaseRestore:
             'backup_freshness': None,
             'restore_throughput': 0
         }
+            'verification_success_rate': 1.0,
+            'total_verification_time': 0,
+            'last_verification_time': 0,
+            'restore_validation_time': 0,
+            'restore_validation_success_rate': 1.0,
+            'data_integrity_checks': 0,
+            'data_integrity_errors': 0,
+            'restore_attempts': 0,
+            'last_restore_size': 0,
+            'total_data_restored': 0,
+            'average_restore_size': 0,
+            'restore_validation_errors': 0,
+            'backup_freshness': None,
+            'restore_throughput': 0
+        }
 
     def _verify_backup(self, backup_path: Path) -> bool:
         """Enhanced backup verification with detailed checks"""
