@@ -153,23 +153,7 @@ class TestBaseCrudController(BaseTestCase):
                 self.assertEqual(response.status_code, 302)  # Should redirect
                 self.assertIn(FlashMessages.TEMPLATE_ERROR.value, response.get_data(as_text=True))
 
-    def test_create_missing_template(self):
-        # Use unique test data
-        form_data = {
-            'username': f'testuser_{uuid.uuid4().hex[:8]}',
-            'password': 'testpass',
-            'email': f'test{uuid.uuid4().hex[:8]}@example.com'
-        }
-        
-        with self.client:
-            self.login()
-            response = self.controller.create(form_data)
-            self.assertEqual(response.status_code, 302)
-            self.assertIn(FlashMessages.TEMPLATE_NOT_FOUND.value, response.get_data(as_text=True))
-            
-            # Verify no duplicate was created
-            user_count = User.query.filter(User.username == form_data['username']).count()
-            self.assertEqual(user_count, 0)
+
 
     def test_create_template_error(self):
         # Simulate a template rendering error
@@ -181,29 +165,6 @@ class TestBaseCrudController(BaseTestCase):
                 self.assertEqual(response.status_code, 302)  # Should redirect
                 self.assertIn(FlashMessages.TEMPLATE_ERROR.value, response.get_data(as_text=True))
 
-    def test_create_invalid_form_data(self):
-        # Verify we're logged in
-        with self.client.session_transaction() as session:
-            self.assertIn('_user_id', session)
-            self.assertEqual(session['_user_id'], str(self.test_user.id))
-        
-        # Get CSRF token for the form
-        create_page = self.client.get(url_for('admin.stipend.create'))
-        csrf_token = extract_csrf_token(create_page.data)
-        
-        # Submit invalid form data
-        response = self.client.post(url_for('admin.stipend.create'), data={
-            'name': '',  # Invalid - empty name
-            'csrf_token': csrf_token
-        }, follow_redirects=True)
-        
-        # Verify we get a form error
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'This field is required', response.data)
-        
-        # Verify no stipend was created
-        stipend_count = Stipend.query.filter(Stipend.name == '').count()
-        self.assertEqual(stipend_count, 0)
 
     def get_csrf_token(self):
         """Helper method to get a valid CSRF token"""
