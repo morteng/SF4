@@ -206,6 +206,34 @@ class DatabaseBackup:
             )
             return False
     
+    def _verify_sql_file(self, sql_file):
+        """Verify the temporary SQL file before compression"""
+        try:
+            with sql_file.open('r') as f:
+                content = f.read()
+                
+                # Check for required tables
+                required_tables = ['stipend', 'organization', 'tag']
+                for table in required_tables:
+                    if f'CREATE TABLE {table}' not in content:
+                        logger.error(f"Missing required table in SQL: {table}")
+                        return False
+                        
+                # Check for data inserts
+                if 'INSERT INTO' not in content:
+                    logger.error("No data inserts found in SQL file")
+                    return False
+                    
+                # Check for complete transactions
+                if 'BEGIN TRANSACTION' not in content or 'COMMIT' not in content:
+                    logger.error("Incomplete transaction in SQL file")
+                    return False
+                    
+            return True
+        except Exception as e:
+            logger.error(f"SQL file verification failed: {str(e)}")
+            return False
+
     def create_backup(self):
         """Create a compressed database backup with enhanced monitoring"""
         start_time = datetime.now()
@@ -416,6 +444,10 @@ class DatabaseBackup:
             with temp_file.open('w') as f:
                 for line in db.engine.raw_connection().connection.iterdump():
                     f.write(f'{line}\n')
+            
+            # Verify temporary SQL file
+            if not self._verify_sql_file(temp_file):
+                raise ValueError("Temporary SQL file verification failed")
             
             # Compress the backup
             with temp_file.open('rb') as f_in:
@@ -717,23 +749,55 @@ class DatabaseBackup:
     def _verify_backup(self, backup_path):
         """Enhanced backup verification with detailed checks"""
         try:
-            with gzip.open(backup_path, 'rb') as f:
-                # Check header
-                header = f.read(100)
-                if b'CREATE TABLE' not in header:
-                    return False
+            # Basic file checks
+            if not backup_path.exists():
+                logger.error(f"Backup file not found: {backup_path}")
+                return False
                 
-                # Check footer
-                f.seek(-100, 2)  # Go to last 100 bytes
-                footer = f.read()
-                if b'COMMIT' not in footer:
-                    return False
+            if backup_path.stat().st_size < 1024:  # Minimum 1KB
+                logger.error(f"Backup file too small: {backup_path.stat().st_size} bytes")
+                return False
+
+            # Gzip integrity check
+            try:
+                with gzip.open(backup_path, 'rb') as f:
+                    # Check header
+                    header = f.read(100)
+                    if b'CREATE TABLE' not in header:
+                        logger.error("Invalid backup header - missing CREATE TABLE")
+                        return False
                     
-                # Check size
-                if backup_path.stat().st_size < 1024:  # Minimum 1KB
-                    return False
+                    # Check footer
+                    f.seek(-100, 2)  # Go to last 100 bytes
+                    footer = f.read()
+                    if b'COMMIT' not in footer:
+                        logger.error("Invalid backup footer - missing COMMIT")
+                        return False
                     
-                return True
+                    # Check for required tables
+                    f.seek(0)
+                    content = f.read().decode('utf-8')
+                    required_tables = ['stipend', 'organization', 'tag']
+                    for table in required_tables:
+                        if f'CREATE TABLE {table}' not in content:
+                            logger.error(f"Missing required table: {table}")
+                            return False
+                            
+                    # Check for data integrity markers
+                    if 'INSERT INTO' not in content:
+                        logger.error("No data inserts found in backup")
+                        return False
+                        
+            except gzip.BadGzipFile:
+                logger.error("Invalid gzip file format")
+                return False
+            except UnicodeDecodeError:
+                logger.error("Invalid file encoding")
+                return False
+                
+            # If all checks passed
+            logger.info(f"Backup verification successful: {backup_path}")
+            return True
         except Exception as e:
             logger.error(f"Backup verification failed: {str(e)}")
             self.notification_service.send(
