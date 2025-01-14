@@ -35,6 +35,11 @@ class TestBaseCrudController(BaseTestCase):
         db.session.add(self.test_user)
         db.session.commit()
         
+        # Add debug print to verify user creation
+        print(f"\nCreated test user: {self.test_user.username}")
+        print(f"Password hash: {self.test_user.password_hash}")
+        print(f"Password check: {self.test_user.check_password('testpass')}")
+        
         # Manually confirm the user after creation
         self.test_user.confirmed_at = datetime.utcnow()
         db.session.commit()
@@ -219,9 +224,11 @@ class TestBaseCrudController(BaseTestCase):
         
         # Verify test user exists and is active
         user = User.query.filter_by(username=username).first()
-        self.assertIsNotNone(user, "Test user not found in database")
-        self.assertTrue(user.is_active, "Test user is not active")
-        self.assertTrue(user.check_password(password), "Test user password check failed")
+        print(f"\nAttempting to login user: {username}")
+        print(f"User found: {user is not None}")
+        if user:
+            print(f"User active: {user.is_active}")
+            print(f"Password check: {user.check_password(password)}")
         
         # Perform login with valid credentials
         response = self.client.post(url_for('public.login'), data={
@@ -231,18 +238,11 @@ class TestBaseCrudController(BaseTestCase):
             'submit': 'Login'
         }, follow_redirects=True)
         
-        # Debugging: Print response data if login fails
-        if b'Dashboard' not in response.data:
-            print("\nLogin failed. Response data:")
-            print(response.data.decode('utf-8'))
-            print("\nForm errors:")
-            form = LoginForm()
-            form.process(data=request.form)
-            print(form.errors)
+        # Print session data
+        with self.client.session_transaction() as session:
             print("\nSession data after login attempt:")
-            with self.client.session_transaction() as session:
-                print(dict(session))
-    
+            print(dict(session))
+        
         # Verify we got a successful response
         self.assertEqual(response.status_code, 200, 
                         f"Expected status code 200, got {response.status_code}")

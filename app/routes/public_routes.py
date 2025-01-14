@@ -34,6 +34,10 @@ def login():
             current_app.logger.info(f"User active status: {user.is_active}")
             current_app.logger.info(f"Password check result: {user.check_password(form.password.data)}")
             
+            # Add debug logging for password check details
+            current_app.logger.info(f"Password hash: {user.password_hash}")
+            current_app.logger.info(f"Input password: {form.password.data}")
+            
             if user.check_password(form.password.data) and user.is_active:
                 login_user(user)
                 session['_user_id'] = str(user.id)
@@ -42,6 +46,7 @@ def login():
                 
                 current_app.logger.info(f"User {user.username} logged in successfully")
                 current_app.logger.info(f"Session data: {dict(session)}")
+                current_app.logger.info(f"Current user authenticated: {current_user.is_authenticated}")
                 
                 # Create audit log
                 try:
