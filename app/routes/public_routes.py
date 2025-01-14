@@ -21,35 +21,20 @@ def login():
         current_app.logger.debug(f"Login form submitted for user: {form.username.data}")
         user = User.query.filter_by(username=form.username.data).first()
         
-        if user:
-            current_app.logger.debug(f"User found: {user.username}")
-            if user.check_password(form.password.data):
-                current_app.logger.debug("Password check passed")
-                if user.is_active:
-                    current_app.logger.debug("User is active, logging in")
-                    login_user(user, remember=True)
-                    
-                    # Add debug logging for Flask-Login
-                    current_app.logger.debug(f"Current user after login: {current_user}")
-                    current_app.logger.debug(f"User authenticated: {current_user.is_authenticated}")
-                    current_app.logger.debug(f"User ID: {current_user.get_id()}")
-                    
-                    if not current_user.is_authenticated:
-                        current_app.logger.error("Login failed - user not authenticated")
-                        flash('Login failed', 'danger')
-                        return redirect(url_for('public.login'))
-                    
-                    current_app.logger.debug("Login successful, redirecting to dashboard")
-                    return redirect(url_for('admin.dashboard.dashboard'))
-                else:
-                    current_app.logger.debug("User is inactive")
-                    flash('Account is inactive', 'danger')
-            else:
-                current_app.logger.debug("Password check failed")
-                flash('Invalid password', 'danger')
-        else:
-            current_app.logger.debug("User not found")
-            flash('User not found', 'danger')
+        if user and user.check_password(form.password.data) and user.is_active:
+            login_user(user, remember=True)
+            
+            # Verify login succeeded
+            if not current_user.is_authenticated:
+                current_app.logger.error("Login failed - user not authenticated")
+                flash('Login failed', 'danger')
+                return redirect(url_for('public.login'))
+            
+            current_app.logger.debug("Login successful, redirecting to dashboard")
+            return redirect(url_for('admin.dashboard.dashboard'))
+        
+        # Generic error message to prevent user enumeration
+        flash('Invalid username or password', 'danger')
     
     # Add form error logging
     if form.errors:
