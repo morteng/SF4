@@ -193,32 +193,31 @@ class TestBaseCrudController(BaseTestCase):
 
     def login(self, username='admin', password='password'):
         """Helper method to log in test user"""
-        with self.client:
-            # Get login page to set CSRF token
-            login_page = self.client.get(url_for('public.login'))
-            csrf_token = extract_csrf_token(login_page.data)
-            
-            # Perform login with valid credentials
-            response = self.client.post(url_for('public.login'), data={
-                'username': username,
-                'password': password,
-                'csrf_token': csrf_token
-            }, follow_redirects=True)
-            
-            # Debug logging
-            print(f"Login response status: {response.status_code}")
-            print(f"Response data: {response.data.decode('utf-8')}")
-            
-            # Verify we got a successful response
-            self.assertEqual(response.status_code, 200)
-            
-            # Verify we're on the dashboard page
-            self.assertIn(b'Dashboard', response.data)
-            
-            # Verify session contains user ID
-            with self.client.session_transaction() as session:
-                self.assertIn('_user_id', session)
-                # Don't check specific user ID since we're using different users
+        # First get the login page to get CSRF token
+        login_page = self.client.get('/login')
+        csrf_token = extract_csrf_token(login_page.data)
+        
+        # Perform login with valid credentials
+        response = self.client.post('/login', data={
+            'username': username,
+            'password': password,
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        
+        # Debug logging
+        print(f"Login response status: {response.status_code}")
+        print(f"Response data: {response.data.decode('utf-8')}")
+        
+        # Verify we got a successful response
+        self.assertEqual(response.status_code, 200)
+        
+        # Verify we're on the dashboard page
+        self.assertIn(b'Dashboard', response.data)
+        
+        # Verify session contains user ID
+        with self.client.session_transaction() as session:
+            self.assertIn('_user_id', session)
+            # Don't check specific user ID since we're using different users
 
     def test_login_route(self):
         """Test the login route directly"""

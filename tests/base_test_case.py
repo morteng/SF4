@@ -149,18 +149,33 @@ class BaseTestCase(TestCase):
         if not admin:
             admin = User(
                 username=username,
-                email=f'{username}@test.com',
+                email=f'{username}@test.com', 
                 is_admin=True
             )
             admin.set_password(password)
             db.session.add(admin)
             db.session.commit()
 
-        # Now perform the login
-        return self.client.post('/login', data=dict(
-            username=username,
-            password=password
-        ), follow_redirects=True)
+        # First get the login page to get CSRF token
+        login_page = self.client.get('/login')
+        csrf_token = extract_csrf_token(login_page.data)
+        
+        # Perform login with valid credentials
+        response = self.client.post('/login', data={
+            'username': username,
+            'password': password,
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        
+        # Verify successful login
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Dashboard', response.data)
+        
+        # Verify session contains user ID
+        with self.client.session_transaction() as session:
+            self.assertIn('_user_id', session)
+        
+        return response
 
     def logout(self):
         return self.client.get('/logout', follow_redirects=True)
