@@ -1,0 +1,13 @@
+# Database Initialization Cycle
+
+# 1. Initialize database connection
+/run scripts/init_db.py
+
+# 2. Verify database connection
+/run scripts/verification/verify_db_connection.py
+
+# 3. Verify database schema
+/run scripts/verification/verify_db_schema.py
+
+# 4. Load next cycle based on results
+/load meta_cycles/chooser.aiderscript

@@ -25,8 +25,8 @@
 # 2) Analyze project state
 /architect Based on the current codebase, what is the most critical cycle to run first? Please create the appropriate next cycle.
 
-# 3) Load chooser with recommended cycle
-/code Update meta_cycles/chooser.aiderscript to load the recommended cycle
+# 3) Load database initialization cycle
+/load meta_cycles/db_init_cycle.aiderscript
 
 # 4) Start the cycle system
 /load meta_cycles/chooser.aiderscript
