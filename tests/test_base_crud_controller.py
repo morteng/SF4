@@ -243,26 +243,17 @@ class TestBaseCrudController(BaseTestCase):
             print("\nSession data after login attempt:")
             print(dict(session))
         
-        # Verify we got a successful response
-        self.assertEqual(response.status_code, 200, 
-                        f"Expected status code 200, got {response.status_code}")
+        # Verify login was successful
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Dashboard', response.data)
         
-        # Verify we're on the dashboard page
-        self.assertIn(b'Dashboard', response.data, 
-                     "Dashboard content not found in response")
-        
-        # Verify session contains user ID
+        # Verify session contains correct user ID
         with self.client.session_transaction() as session:
-            self.assertIn('_user_id', session, 
-                         "User ID not found in session")
-            self.assertEqual(session['_user_id'], str(self.test_user.id),
-                           f"Session user ID {session['_user_id']} doesn't match test user ID {self.test_user.id}")
-            self.assertIn('is_admin', session,
-                         "is_admin flag not found in session")
-            self.assertEqual(session['is_admin'], self.test_user.is_admin,
-                           f"Session is_admin {session['is_admin']} doesn't match test user is_admin {self.test_user.is_admin}")
-            self.assertIn('_fresh', session,
-                         "Session freshness flag not found")
+            self.assertIn('_user_id', session)
+            self.assertEqual(session['_user_id'], str(self.test_user.id))
+            self.assertIn('is_admin', session)
+            self.assertEqual(session['is_admin'], self.test_user.is_admin)
+            self.assertIn('_fresh', session)
 
         return response
 
