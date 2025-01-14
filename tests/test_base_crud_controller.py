@@ -82,7 +82,7 @@ class TestBaseCrudController(BaseTestCase):
         form_data = {'name': 'New Tag', 'category': 'TestCategory'}
         with self.client:
             self.login()
-            template, status_code = self.controller.create(form_data)
+            response = self.controller.create(form_data)
             
             # Verify service was called with form data
             mock_create.assert_called_once_with(form_data)
@@ -93,7 +93,7 @@ class TestBaseCrudController(BaseTestCase):
                 form=ANY  # We don't care about the exact form instance
             )
             
-            self.assertEqual(status_code, 200)
+            self.assertEqual(response.status_code, 200)
 
     @patch('app.controllers.base_crud_controller.render_template')
     def test_create_validation_error(self, mock_render):
