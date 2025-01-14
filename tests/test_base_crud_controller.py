@@ -44,7 +44,11 @@ class TestBaseCrudController(BaseTestCase):
             session.clear()
         
         # Login before each test using the test user
-        self.login(self.test_user.username, 'testpass')
+        login_response = self.login(self.test_user.username, 'testpass')
+        
+        # Verify login was successful
+        self.assertEqual(login_response.status_code, 200)
+        self.assertIn(b'Dashboard', login_response.data)
         
         # Create test template directory
         os.makedirs('templates/admin/tag', exist_ok=True)
