@@ -1,0 +1,20 @@
+# For API development and maintenance
+
+# 1) Bring relevant files into context
+/add meta_cycles/manager_instructions.txt
+
+# 2) Analyze API needs
+/ask Based on manager_instructions.txt, what API improvements should we make? Please outline the approach.
+
+# 3) Implement API improvements
+/code Update main_api.py with the suggested API enhancements
+
+# 4) Run API tests
+/run pytest
+
+# 5) If API issues found, suggest fixes
+/ask Did API tests reveal any issues? Suggest fixes.
+/code implement suggested API improvements.
+
+# Go to cleanup
+/load meta_cycles/finalize_cycle.aiderscript

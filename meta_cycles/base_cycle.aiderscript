@@ -1,0 +1,13 @@
+# Template for all code cycles
+
+# Common cycle steps
+def start_cycle():
+    print(f"Starting {__name__} cycle...")
+
+def end_cycle():
+    print(f"Ending {__name__} cycle...")
+    /load meta_cycles/finalize_cycle.aiderscript
+
+# Common utilities
+def log(message):
+    print(f"[{__name__}] {message}")

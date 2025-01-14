@@ -1,0 +1,22 @@
+# For managing versioning and release notes
+
+# 1) Bring relevant files into context
+/add meta_cycles/manager_instructions.txt
+/add ../myproject/CHANGELOG.md
+/add ../myproject/version.txt
+
+# 2) Analyze release needs
+/ask Based on manager_instructions.txt, what version update and release notes should we prepare? Please outline the approach.
+
+# 3) Implement release updates
+/code Update CHANGELOG.md and version.txt with the suggested changes
+
+# 4) Run release checks
+/run python -c "import semver; print(semver.VersionInfo.parse(open('version.txt').read().strip()))"
+
+# 5) If checks fail, suggest fixes
+/ask Did version check fail? Suggest fixes.
+/code implement suggested release improvements.
+
+# Go to cleanup
+/load meta_cycles/finalize_cycle.aiderscript

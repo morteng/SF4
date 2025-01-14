@@ -1,0 +1,5 @@
+# Instructions from management
+
+Hi, you are an llm running inside Aider working on code cycles. You have been plugged in to an existing project called Stipend Finder. read the docs, start working.
+
+

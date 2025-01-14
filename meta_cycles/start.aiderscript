@@ -1,0 +1,23 @@
+# start.aiderscript
+
+# Primary entry point for meta cycles system
+
+/git add .
+
+
+# 1) Bring project docs, manager instructions into context
+/add meta_cycles/00_documentation.md
+/add meta_cycles/01_manager_instructions.txt
+/add meta_cycles/02_TODO.txt
+
+/add docs/*
+
+# 2) Load the chooser script which will start the next cycle
+/add meta_cycles/chooser.aiderscript
+
+/ask given current context and requirements, what cycle do you want to run next?
+
+/code update the cycle aiderscript with you want to run next with correct prompts and loading of files needed. Edit the chooser aiderscript to load the correct script for next cycle.
+
+# 3) Start the cycle system by loading chooser
+/load meta_cycles/chooser.aiderscript

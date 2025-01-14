@@ -1,0 +1,20 @@
+# For implementing and running tests
+
+# 1) Bring relevant test files into context
+/add ../myproject/tests/test_file.py
+
+# 2) Analyze testing needs
+/ask Based on the current codebase, what tests should we add or modify? Please outline the approach.
+
+# 3) Implement test updates
+/code Update test_file.py with the suggested test improvements
+
+# 4) Run tests
+/run pytest --maxfail=1
+
+# 5) If tests fail, suggest fixes
+/ask Did test fail? Suggest fixes.
+/code implement suggested test improvements.
+
+# Go to cleanup
+/load meta_cycles/finalize_cycle.aiderscript

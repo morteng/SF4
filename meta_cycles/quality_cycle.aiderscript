@@ -1,0 +1,21 @@
+# For quality assurance and testing strategies
+
+# 1) Bring relevant files into context
+/add meta_cycles/manager_instructions.txt
+/add ../myproject/quality/quality_check.py
+
+# 2) Analyze quality needs
+/ask Based on manager_instructions.txt, what quality assurance improvements should we make? Please outline the approach.
+
+# 3) Implement quality improvements
+/code Update quality_check.py with the suggested quality enhancements
+
+# 4) Run quality tests
+/run pytest ../myproject/tests/test_quality.py
+
+# 5) If quality issues found, suggest fixes
+/ask Did quality tests reveal any issues? Suggest fixes.
+/code implement suggested quality improvements.
+
+# Go to cleanup
+/load meta_cycles/finalize_cycle.aiderscript

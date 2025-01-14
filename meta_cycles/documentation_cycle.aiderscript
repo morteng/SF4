@@ -1,0 +1,18 @@
+# For creating and maintaining project documentation
+
+# 1) Bring relevant files into context
+/add meta_cycles/02_TODO.txt
+/add meta_cycles/01_manager_instructions.txt
+/add meta_cycles/00_documentation.md
+
+# 2) Analyze documentation needs
+/ask Based on manager_instructions.txt, what documentation updates are needed? Please outline the approach.
+
+# 3) Implement documentation updates
+/code Update PROJECT_DOCS.md and TODO.txt with the suggested documentation
+
+# 4) Verify documentation updates
+/code Did we complete all documentation updates from manager_instructions.txt? If not, suggest remaining updates.
+
+# 5) Transition to metrics cycle
+/load meta_cycles/metrics_cycle.aiderscript

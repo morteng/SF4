@@ -1,0 +1,21 @@
+# For process optimization and automation
+
+# 1) Bring relevant files into context
+/add meta_cycles/manager_instructions.txt
+/add ../myproject/workflows/main_workflow.py
+
+# 2) Analyze workflow needs
+/ask Based on manager_instructions.txt, what workflow optimizations should we make? Please outline the approach.
+
+# 3) Implement workflow improvements
+/code Update main_workflow.py with the suggested workflow enhancements
+
+# 4) Run workflow tests
+/run pytest ../myproject/tests/test_workflow.py
+
+# 5) If workflow issues found, suggest fixes
+/ask Did workflow tests reveal any issues? Suggest fixes.
+/code implement suggested workflow improvements.
+
+# Go to cleanup
+/load meta_cycles/finalize_cycle.aiderscript

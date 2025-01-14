@@ -1,0 +1,7 @@
+# Finalize code cycle, start new metacycle.
+
+/code update todo based on results of this cycle. Clean up manager instructions that have been implemented or are in progress.
+
+# Start new metacycle after clearing context
+/reset
+/load meta_cycles/start.aiderscript

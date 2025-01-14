@@ -1,0 +1,10 @@
+# chooser.aiderscript
+
+# Cycle Chooser - path choice point for meta cycles system
+# This file contains only the current active cycle and should only be modified by cycle scripts. Note that this file cannot edit itself to change what script is loaded next - other scripts edit this file to change code cycle path.
+# NOTE: The primary entry point is start.aiderscript
+
+
+# Current active cycle (updated by cycle scripts)
+/load meta_cycles/documentation_cycle.aiderscript
+

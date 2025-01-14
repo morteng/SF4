@@ -1,0 +1,15 @@
+# Final cycle that breaks the meta cycle loop and presents work for evaluation
+
+# 1) Present final work status
+/ask Please summarize the current state of the project and any outstanding tasks
+
+# 2) Show project metrics
+/ask Please provide metrics on cycle usage and project progress
+
+# 3) Prepare final report
+/ask Please suggest how to format a final project report for review
+
+/code implement suggested changes.
+
+# 4) Break the cycle loop by not loading another cycle
+# This is the end of the cycle chain

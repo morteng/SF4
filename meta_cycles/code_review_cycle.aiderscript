@@ -1,0 +1,21 @@
+# For peer review and code quality assurance
+
+# 1) Bring relevant files into context
+/add meta_cycles/manager_instructions.txt
+
+
+# 2) Analyze code quality
+/ask Please review review_file.py for code quality issues, potential bugs, and improvements. Provide detailed feedback.
+
+# 3) Implement review suggestions
+/code Update review_file.py with the suggested improvements
+
+# 4) Run tests to verify changes
+/run pytest --maxfail=1
+
+# 5) If tests fail, suggest fixes
+/ask Did test fail? Suggest fixes.
+/code implement suggested code changes.
+
+# Go to cleanup
+/load meta_cycles/finalize_cycle.aiderscript

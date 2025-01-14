@@ -1,0 +1,22 @@
+# For profiling and performance optimization
+
+# 1) Bring relevant files into context
+/add meta_cycles/manager_instructions.txt
+/add ../myproject/code/performance_critical.py
+/add ../myproject/profiling_results.txt
+
+# 2) Analyze performance needs
+/ask Based on manager_instructions.txt, what performance profiling and optimizations should we perform? Please outline the approach.
+
+# 3) Implement performance improvements
+/code Update performance_critical.py with the suggested optimizations
+
+# 4) Run performance tests
+/run python -m cProfile -o profiling_results.txt performance_critical.py
+
+# 5) If performance issues found, suggest fixes
+/ask Did profiling reveal performance bottlenecks? Suggest fixes.
+/code implement suggested performance improvements.
+
+# Go to cleanup
+/load meta_cycles/finalize_cycle.aiderscript

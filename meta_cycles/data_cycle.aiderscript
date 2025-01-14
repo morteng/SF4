@@ -1,0 +1,21 @@
+# For data management and analytics tasks
+
+# 1) Bring relevant files into context
+/add meta_cycles/manager_instructions.txt
+/add ../myproject/data/data_processor.py
+
+# 2) Analyze data needs
+/ask Based on manager_instructions.txt, what data processing and analytics improvements should we make? Please outline the approach.
+
+# 3) Implement data improvements
+/code Update data_processor.py with the suggested data enhancements
+
+# 4) Run data tests
+/run pytest ../myproject/tests/test_data.py
+
+# 5) If data issues found, suggest fixes
+/ask Did data tests reveal any issues? Suggest fixes.
+/code implement suggested data improvements.
+
+# Go to cleanup
+/load meta_cycles/finalize_cycle.aiderscript

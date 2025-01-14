@@ -1,0 +1,20 @@
+{
+    "resource_limits": {
+        "cpu": 0.9,
+        "memory": 2048,
+        "disk": 1024,
+        "time": 3600
+    },
+    "performance_thresholds": {
+        "duration": 300,
+        "error_count": 3,
+        "warning_count": 5
+    },
+    "score_weights": {
+        "time": 0.25,
+        "error": 0.25,
+        "resource": 0.20,
+        "task": 0.15,
+        "quality": 0.15
+    }
+}

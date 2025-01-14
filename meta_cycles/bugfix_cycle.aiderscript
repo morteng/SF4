@@ -1,0 +1,19 @@
+# bugfix_cycle.aiderscript
+# update this as needed, always end with going to cleanup.
+
+# 1) Bring the buggy files into context
+/add ../myproject/code/buggy_file.py
+
+# 2) Ask for approach, then code changes
+/ask We have a bug in buggy_file.py. Please outline how to fix it effectively.
+/code Implement your suggested bug fix in buggy_file.py
+
+# 3) Run tests
+/run pytest --maxfail=1
+
+# 4) If tests pass, let's move to finalize. We'll do so by editing this script or just printing a line
+/ask Did test fail? Suggest fixes.
+/code implement suggested code changes.
+
+# Go to cleanup
+/load meta_cycles/finalize_cycle.aiderscript
