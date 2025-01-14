@@ -340,22 +340,39 @@ class DatabaseBackup:
         metrics (dict): Backup performance metrics
     """
     
-    def __init__(self, backup_dir='backups', max_backups=5):
-        """Initialize backup system
+    def __init__(self, backup_dir='backups', max_backups=5, retention_days=30, 
+                 compression_level=6, verify_backups=True):
+        """Initialize backup system with enhanced configuration
         
         Args:
             backup_dir (str): Directory to store backups
             max_backups (int): Maximum number of backups to retain
+            retention_days (int): Number of days to retain backups
+            compression_level (int): Gzip compression level (1-9)
+            verify_backups (bool): Whether to verify backup integrity
         """
         self.backup_dir = Path(backup_dir)
         self.max_backups = max_backups
+        self.retention_days = retention_days
+        self.compression_level = compression_level
+        self.verify_backups = verify_backups
         self.backup_dir.mkdir(parents=True, exist_ok=True)
         self.notification_service = NotificationService()
+        self.metrics_service = MetricsService()
+        
+        # Initialize metrics
         self.metrics = {
             'backup_count': 0,
             'last_success': None,
             'last_duration': None,
-            'total_size': 0
+            'total_size': 0,
+            'failed_count': 0,
+            'compression_ratio': 0.0,
+            'verification_success_rate': 1.0,
+            'backups_rotated': 0,
+            'storage_freed': 0,
+            'average_backup_size': 0,
+            'backup_success_rate': 1.0
         }
         
     def _generate_backup_name(self):

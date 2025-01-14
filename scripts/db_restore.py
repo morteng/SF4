@@ -27,18 +27,25 @@ class DatabaseRestore:
     """
     
     def __init__(self, backup_dir='backups'):
-        """Initialize restore system
+        """Initialize restore system with enhanced monitoring
         
         Args:
             backup_dir (str): Directory containing backups
         """
         self.backup_dir = Path(backup_dir)
         self.notification_service = NotificationService()
+        self.metrics_service = MetricsService()
         self.metrics = {
             'restore_count': 0,
             'last_success': None,
             'last_duration': None,
-            'last_backup_used': None
+            'last_backup_used': None,
+            'failed_count': 0,
+            'average_restore_time': 0,
+            'restore_success_rate': 1.0,
+            'data_restored': 0,
+            'backup_age_restored': None,
+            'verification_success_rate': 1.0
         }
 
     def _verify_backup(self, backup_path: Path) -> bool:
@@ -101,12 +108,29 @@ class DatabaseRestore:
                     
             # Update metrics
             duration = (datetime.now() - start_time).total_seconds()
+            backup_age = datetime.now() - datetime.fromtimestamp(backup_path.stat().st_mtime)
+            
             self.metrics.update({
                 'restore_count': self.metrics['restore_count'] + 1,
                 'last_success': datetime.now(),
                 'last_duration': duration,
-                'last_backup_used': backup_path.name
+                'last_backup_used': backup_path.name,
+                'data_restored': backup_path.stat().st_size,
+                'backup_age_restored': backup_age.total_seconds(),
+                'average_restore_time': (
+                    (self.metrics['average_restore_time'] * (self.metrics['restore_count'] - 1) + duration) 
+                    / self.metrics['restore_count']
+                ),
+                'restore_success_rate': (
+                    self.metrics['restore_count'] / 
+                    (self.metrics['restore_count'] + self.metrics['failed_count'])
+                )
             })
+            
+            # Record metrics
+            self.metrics_service.record('restore_duration', duration)
+            self.metrics_service.record('restore_size', backup_path.stat().st_size)
+            self.metrics_service.record('backup_age_restored', backup_age.total_seconds())
             
             logger.info(f"Successfully restored from {backup_path.name} in {duration:.2f} seconds")
             self.notification_service.send(
