@@ -32,6 +32,17 @@ def init_extensions(app):
             enabled=True
         )
         app.extensions['limiter'] = limiter
+        
+        # Initialize rate limiter with proper configuration
+        limiter = Limiter(
+            app=app,
+            key_func=get_remote_address,
+            default_limits=["200 per day", "50 per hour"],
+            storage_uri="memory://",
+            strategy="fixed-window",
+            enabled=True
+        )
+        app.extensions['limiter'] = limiter
     """Initialize all Flask extensions with proper configuration."""
     # Only initialize extensions if they haven't been initialized yet
     if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:

@@ -128,9 +128,14 @@ class BaseService:
         self.rate_limits['create'] = value
         
     @handle_errors
-    @limiter.limit(lambda self: self.rate_limits['create'], key_func=get_remote_address)
     def create(self, data, user_id=None):
         """Create a new entity with validation and audit logging"""
+        # Apply rate limiting decorator dynamically
+        create_func = self._rate_limit_decorator('create')(self._create)
+        return create_func(data, user_id)
+
+    def _create(self, data, user_id=None):
+        """Actual create implementation without rate limiting"""
         try:
             # Run pre-create hooks
             for hook in self.pre_create_hooks:
