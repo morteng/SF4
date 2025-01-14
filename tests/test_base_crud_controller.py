@@ -3,6 +3,7 @@ import uuid
 from unittest.mock import patch
 from flask import Response, url_for
 from app.models.user import User
+from app.models.stipend import Stipend
 from app.extensions import db
 from tests.base_test_case import BaseTestCase
 from app.controllers.base_crud_controller import BaseCrudController
@@ -10,6 +11,11 @@ from app.models import Tag
 from app.forms.admin_forms import TagForm, UserForm, StipendForm
 from app.services.tag_service import tag_service
 from app.constants import FlashMessages
+from app import create_app
+from tests.conftest import extract_csrf_token
+
+# Create test app instance
+app = create_app('testing')
 
 class TestBaseCrudController(BaseTestCase):
     def setUp(self):
