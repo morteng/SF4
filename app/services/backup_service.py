@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Optional, Tuple
 from app.extensions import db
 from app.constants import FlashMessages
+from scripts.db_monitor import BackupMetric
 
 logger = logging.getLogger(__name__)
 
