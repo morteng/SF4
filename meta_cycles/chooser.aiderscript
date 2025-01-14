@@ -6,5 +6,5 @@
 
 
 # Current active cycle (updated by cycle scripts)
-/load meta_cycles/documentation_cycle.aiderscript
+/load meta_cycles/verification_cycle.aiderscript
 
