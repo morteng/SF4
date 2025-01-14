@@ -8,17 +8,20 @@
 /ask Based on the coverage report, what are the most critical paths that need test coverage? Focus on: - Core business logic in services - Database operations - Form validation - Route handlers - Error handling - Edge cases - HTMX functionality
 
 # 3. Create missing test files
-/code Create any needed test files in tests/ directory to cover identified gaps
+/code Create any needed test files in tests/ directory to cover identified gaps, focusing on routes and services
 
 # 4. Enhance existing tests
-/code Update existing test files to improve coverage of edge cases and error conditions
+/code Update existing test files to improve coverage of edge cases and error conditions, especially in test_stipend_routes.py and test_stipend_service.py
 
-# 5. Verify coverage meets target
+# 5. Add comprehensive test cases
+/code Add test cases for: - Invalid form submissions - Missing required fields - Database constraint violations - HTMX partial responses - Error conditions - Edge cases
+
+# 6. Verify coverage meets target
 /run scripts/verify_test_coverage.py
 
-# 6. Update documentation
+# 7. Update documentation
 /code Update DEVLOG.md with test coverage results
 /code Update TODO.txt to mark test coverage tasks complete
 
-# 7. Transition to finalization
+# 8. Transition to finalization
 /load meta_cycles/finalize_cycle.aiderscript
