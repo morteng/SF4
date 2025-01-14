@@ -23,7 +23,24 @@ class BackupAlerts:
     """Backup alert system with multiple notification channels"""
     
     def __init__(self, config_file: str = "backup_alerts.json"):
-        self.config = self._load_config(config_file)
+        try:
+            self.config = self._load_config(config_file)
+        except FileNotFoundError:
+            # Use default config if file not found
+            self.config = AlertConfig(
+                email_recipients=[],
+                smtp_server='localhost',
+                smtp_port=587,
+                smtp_user='',
+                smtp_password='',
+                alert_thresholds={
+                    'failure_rate': 0.2,
+                    'duration_warning': 300,
+                    'size_warning': 1024
+                }
+            )
+            logger.warning(f"Using default alert config - config file not found: {config_file}")
+            
         self.last_notification = None
         self.alert_history = []
         
