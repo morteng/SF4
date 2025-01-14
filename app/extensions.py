@@ -24,6 +24,26 @@ def init_extensions(app):
     db.init_app(app)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
+    # Configure database connection handling
+    @app.before_first_request
+    def setup_db_connection():
+        """Initialize database connection pool and verify connection"""
+        try:
+            # Test database connection
+            db.engine.connect()
+            app.logger.info("Database connection established successfully")
+        except Exception as e:
+            app.logger.error(f"Failed to connect to database: {str(e)}")
+            raise
+            
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        """Clean up database connections after each request"""
+        db.session.remove()
+        if exception:
+            db.session.rollback()
+            app.logger.error(f"Database session error: {str(exception)}")
+    
     # Initialize Flask-Login with proper settings
     login_manager.init_app(app)
     login_manager.login_view = 'public.login'
