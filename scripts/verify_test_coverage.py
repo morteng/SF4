@@ -1,61 +1,76 @@
 import coverage
 import os
 import sys
+import logging
+from pathlib import Path
 
 def verify_coverage():
     """Verify test coverage meets minimum threshold"""
-    # Initialize coverage with config
-    cov = coverage.Coverage(config_file='.coveragerc')
-    cov.start()
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    logger = logging.getLogger(__name__)
     
     try:
-        # Run tests with explicit paths and coverage
-        result = os.system('coverage run -m pytest tests/app/ tests/')
-        if result != 0:
-            raise RuntimeError("Tests failed to run successfully")
+        # Initialize coverage with proper config
+        cov = coverage.Coverage(
+            config_file='.coveragerc',
+            data_file='.coverage.verified'
+        )
+        cov.start()
+        logger.info("Coverage started")
+        
+        # Run tests
+        test_result = os.system('pytest tests/ --cov=app --cov-report=term-missing')
+        if test_result != 0:
+            logger.error("Tests failed to run successfully")
+            raise RuntimeError("Test execution failed")
             
         # Ensure coverage data exists
-        if not os.path.exists('.coverage'):
+        if not os.path.exists('.coverage.verified'):
+            logger.error("No coverage data collected")
             raise RuntimeError("No coverage data collected")
             
         cov.stop()
         cov.save()
+        logger.info("Coverage data saved")
         
         # Verify coverage data was collected
         if not cov.get_data():
-            raise RuntimeError("No coverage data collected - check test paths")
+            logger.error("No coverage data available")
+            raise RuntimeError("No coverage data available")
             
         # Generate detailed report
-        cov.report()
+        cov.report(show_missing=True)
         total_coverage = cov.get_data().lines_covered_percent()
+        logger.info(f"Total coverage: {total_coverage:.2f}%")
         
         # Check if coverage meets target
         target = 85.0
         if total_coverage >= target:
-            try:
-                print(f"✅ Test coverage meets target: {total_coverage:.1f}% >= {target}%")
-            except UnicodeEncodeError:
-                print(f"Test coverage meets target: {total_coverage:.1f}% >= {target}%")
+            logger.info(f"✅ Test coverage meets target: {total_coverage:.1f}% >= {target}%")
             return True
         else:
-            try:
-                print(f"❌ Test coverage below target: {total_coverage:.1f}% < {target}%")
-            except UnicodeEncodeError:
-                print(f"Test coverage below target: {total_coverage:.1f}% < {target}%")
+            logger.warning(f"❌ Test coverage below target: {total_coverage:.1f}% < {target}%")
             # Generate HTML report for detailed analysis
-            cov.html_report(directory='coverage_report')
+            cov.html_report(
+                directory='coverage_report',
+                title='Test Coverage Report',
+                skip_covered=True
+            )
+            logger.info("HTML coverage report generated")
             return False
             
     except Exception as e:
-        try:
-            print(f"⚠️ Error verifying coverage: {str(e)}")
-        except UnicodeEncodeError:
-            print("Warning: Error verifying coverage")
+        logger.error(f"⚠️ Error verifying coverage: {str(e)}", exc_info=True)
         return False
     finally:
         # Ensure coverage is stopped
         cov.stop()
         cov.save()
+        logger.info("Coverage verification completed")
 
 if __name__ == "__main__":
     if not verify_coverage():

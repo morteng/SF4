@@ -2,12 +2,17 @@ import os
 import sys
 import logging
 from pathlib import Path
+import coverage
+import pytest
 
 def fix_coverage():
     """Fix test coverage reporting issues"""
     try:
         # Configure logging
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
         logger = logging.getLogger(__name__)
         
         # Add project root to Python path
@@ -19,31 +24,50 @@ def fix_coverage():
         try:
             import app
             import scripts
+            logger.info("Imports verified successfully")
         except ImportError as e:
             logger.error(f"Import error: {str(e)}")
             return False
             
-        # Run coverage
-        import subprocess
-        result = subprocess.run(
-            ['coverage', 'run', '--source=app', '-m', 'pytest', 'tests/'],
-            capture_output=True,
-            text=True
+        # Initialize coverage with proper config
+        cov = coverage.Coverage(
+            source=['app'],
+            omit=[
+                '*/__init__.py',
+                '*/tests/*',
+                '*/migrations/*',
+                '*/scripts/*',
+                '*/templates/*'
+            ],
+            branch=True,
+            data_file='.coverage.fixed'
         )
+        cov.start()
+        logger.info("Coverage started")
         
-        if result.returncode != 0:
-            logger.error("Tests failed during coverage run")
-            logger.error(result.stderr)
+        # Run tests
+        test_result = pytest.main(['tests/', '--cov=app', '--cov-report=term-missing'])
+        if test_result != 0:
+            logger.error("Some tests failed during coverage run")
             return False
             
-        # Generate coverage report
-        subprocess.run(['coverage', 'report', '-m'])
-        subprocess.run(['coverage', 'html'])
+        # Stop and save coverage
+        cov.stop()
+        cov.save()
+        logger.info("Coverage data saved")
         
-        logger.info("Fixed coverage reporting")
+        # Generate reports
+        cov.report(show_missing=True)
+        cov.html_report(
+            directory='coverage_report',
+            title='Test Coverage Report',
+            skip_covered=True
+        )
+        logger.info("Coverage reports generated")
+        
         return True
     except Exception as e:
-        logger.error(f"Failed to fix coverage reporting: {str(e)}")
+        logger.error(f"Failed to fix coverage reporting: {str(e)}", exc_info=True)
         return False
 
 if __name__ == "__main__":
