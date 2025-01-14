@@ -3,19 +3,26 @@
 # Only edit the section between CODE START and CODE END
 
 ### CODE START ###
+
 # Initialize system
 /run scripts/init_logging.py --production
 /run scripts/path_config.py --production --verify
 /run scripts/start_cycle.py
 
-# Run comprehensive verification
-/run scripts/verification/verify_all.py
+# Run database schema cleanup
+/run scripts/verification/verify_db_connection.py --cleanup
 
-# Run tests
-pytest
+# Run security verification
+/run scripts/verification/verify_security.py --full-audit
+
+# Run focused test coverage
+/run scripts/verification/verify_test_coverage.py --focus-area=core_services
+
+# Run tests with coverage
+/run scripts/testing/run_tests.py --test-type=unit
 
 # Commit changes
-/run scripts/commit_changes.py --message "Fix: Resolve import errors and failing tests"
+/run scripts/commit_changes.py --message "Fix: Resolve SQLAlchemy conflicts and improve test coverage"
 
 ### CODE END ###
 
