@@ -1,0 +1,10 @@
+# Verification Cycle - Database and Schema Validation
+
+# 1. Verify database connection
+/run scripts/verification/verify_db_connection.py
+
+# 2. Verify database schema
+/run scripts/verification/verify_db_schema.py
+
+# 3. Load next cycle based on verification results
+/load meta_cycles/chooser.aiderscript
