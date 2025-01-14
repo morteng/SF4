@@ -3,7 +3,7 @@ from app import create_app, db
 from app.models import User, Stipend, Tag, Organization
 from app.constants import FlashMessages
 from app.services.base_service import BaseService
-from app.controllers.base_controller import BaseCrudController
+from app.controllers.base_crud_controller import BaseCrudController
 from app.forms.base_form import BaseForm
 import uuid
 from datetime import datetime, timedelta, timezone
