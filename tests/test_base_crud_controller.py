@@ -79,7 +79,7 @@ class TestBaseCrudController(BaseTestCase):
         from app.services.base_service import Result
         mock_create.return_value = Result(success=True, message="Created")
         
-        form_data = {'name': 'New Tag', 'category': 'TestCategory'}
+        form_data = {'name': 'New Tag', 'category': 'TestCategory', 'submit': True}
         with self.client:
             self.login()
             response = self.controller.create(form_data)
