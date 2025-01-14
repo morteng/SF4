@@ -168,17 +168,25 @@ class TestBaseCrudController(BaseTestCase):
         if username is None:
             username = self.test_user.username
             
-        # First get the login page to get CSRF token
+        # Get login page
         login_page = self.client.get(url_for('public.login'))
-        csrf_token = extract_csrf_token(login_page.data)
+        print(f"Login page status: {login_page.status_code}")
         
-        # Perform login with valid credentials
+        # Extract CSRF
+        csrf_token = extract_csrf_token(login_page.data)
+        print(f"CSRF token: {csrf_token}")
+        
+        # Login POST
         response = self.client.post(url_for('public.login'), data={
             'username': username,
             'password': password,
             'csrf_token': csrf_token,
             'submit': 'Login'
         }, follow_redirects=True)
+        
+        print(f"Login response status: {response.status_code}")
+        print(f"Login response path: {response.request.path}")
+        print(f"Response data: {response.data[:500]}")  # Print first 500 chars
         
         # Verify redirect to dashboard
         self.assertEqual(response.status_code, 200)

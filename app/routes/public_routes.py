@@ -12,36 +12,49 @@ public_bp = Blueprint('public', __name__)
 @public_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
+        current_app.logger.debug("User already authenticated, redirecting to dashboard")
         return redirect(url_for('admin.dashboard.dashboard'))
     
     form = LoginForm()
     
     if form.validate_on_submit():
+        current_app.logger.debug(f"Login form submitted for user: {form.username.data}")
         user = User.query.filter_by(username=form.username.data).first()
         
-        if user and user.check_password(form.password.data) and user.is_active:
-            login_user(user, remember=True)
-            
-            # Verify login was successful
-            if not current_user.is_authenticated:
-                flash('Login failed', 'danger')
-                return redirect(url_for('public.login'))
-            
-            # Create audit log
-            try:
-                AuditLog.create(
-                    user_id=user.id,
-                    action='login',
-                    details='User logged in',
-                    ip_address=request.remote_addr,
-                    http_method=request.method,
-                    endpoint=request.endpoint
-                )
-            except Exception as e:
-                current_app.logger.error(f"Error creating login audit log: {str(e)}")
-            
-            # Redirect to dashboard with explicit URL
-            return redirect(url_for('admin.dashboard.dashboard'))
+        if user:
+            current_app.logger.debug(f"User found: {user.username}")
+            if user.check_password(form.password.data):
+                current_app.logger.debug("Password check passed")
+                if user.is_active:
+                    current_app.logger.debug("User is active, logging in")
+                    login_user(user, remember=True)
+                    
+                    if not current_user.is_authenticated:
+                        current_app.logger.error("Login failed - user not authenticated")
+                        flash('Login failed', 'danger')
+                        return redirect(url_for('public.login'))
+                    
+                    # Create audit log
+                    try:
+                        AuditLog.create(
+                            user_id=user.id,
+                            action='login',
+                            details='User logged in',
+                            ip_address=request.remote_addr,
+                            http_method=request.method,
+                            endpoint=request.endpoint
+                        )
+                    except Exception as e:
+                        current_app.logger.error(f"Error creating login audit log: {str(e)}")
+                    
+                    current_app.logger.debug("Login successful, redirecting to dashboard")
+                    return redirect(url_for('admin.dashboard.dashboard'))
+                else:
+                    current_app.logger.debug("User is inactive")
+            else:
+                current_app.logger.debug("Password check failed")
+        else:
+            current_app.logger.debug("User not found")
             
         flash('Invalid username or password', 'danger')
     
