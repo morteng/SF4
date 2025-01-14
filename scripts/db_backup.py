@@ -559,6 +559,7 @@ class DatabaseBackup:
     
     def create_backup(self):
         """Create a compressed database backup"""
+        start_time = datetime.now()  # Initialize start time
         backup_file = self.backup_dir / self._generate_backup_name()
         temp_file = backup_file.with_suffix('.sql')
         
