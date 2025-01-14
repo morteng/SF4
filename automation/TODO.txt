@@ -1,4 +1,9 @@
 ### **Next Development Cycle Tasks**
+- [ ] Fix missing tags column in stipend schema
+- [ ] Resolve verify_db_connection import errors
+- [ ] Improve database connection error handling
+- [ ] Verify all verification script dependencies
+- [ ] Add schema validation before operations
 - [ ] Improve test coverage and ensure all tests pass
 - [ ] Thoroughly test dashboard metrics
 - [ ] Complete DRY code refactoring
