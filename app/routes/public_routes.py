@@ -23,6 +23,14 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
+        
+        # Add debug logging
+        current_app.logger.debug(f"Attempting login for user: {form.username.data}")
+        current_app.logger.debug(f"User exists: {user is not None}")
+        if user:
+            current_app.logger.debug(f"Password check: {user.check_password(form.password.data)}")
+            current_app.logger.debug(f"User active status: {user.is_active}")
+        
         if user and user.check_password(form.password.data):
             # Ensure user is active before logging in
             if not user.is_active:

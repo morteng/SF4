@@ -27,12 +27,13 @@ class TestBaseCrudController(BaseTestCase):
             email=f'test{uuid.uuid4().hex[:8]}@example.com',
             is_admin=True
         )
+        # Set password using the proper method
         self.test_user.set_password('testpass')
         db.session.add(self.test_user)
         db.session.commit()
         
-        # Refresh the user object to ensure it's properly attached to the session
-        db.session.refresh(self.test_user)
+        # Verify password was set correctly
+        self.assertTrue(self.test_user.check_password('testpass'))
         
         # Initialize client
         self.client = app.test_client()
@@ -202,7 +203,11 @@ class TestBaseCrudController(BaseTestCase):
                 'username': self.test_user.username,
                 'password': 'testpass',
                 'csrf_token': csrf_token
-            }, follow_redirects=True)  # Changed to follow redirects
+            }, follow_redirects=True)
+            
+            # Debug logging
+            print(f"Login response status: {response.status_code}")
+            print(f"Response data: {response.data.decode('utf-8')}")
             
             # Verify we got a successful response
             self.assertEqual(response.status_code, 200)
@@ -214,6 +219,26 @@ class TestBaseCrudController(BaseTestCase):
             with self.client.session_transaction() as session:
                 self.assertIn('_user_id', session)
                 self.assertEqual(session['_user_id'], str(self.test_user.id))
+
+    def test_login_route(self):
+        """Test the login route directly"""
+        # Get login page
+        response = self.client.get(url_for('public.login'))
+        self.assertEqual(response.status_code, 200)
+        
+        # Extract CSRF token
+        csrf_token = extract_csrf_token(response.data)
+        
+        # Submit login form
+        response = self.client.post(url_for('public.login'), data={
+            'username': self.test_user.username,
+            'password': 'testpass',
+            'csrf_token': csrf_token
+        }, follow_redirects=True)
+        
+        # Verify successful login
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Dashboard', response.data)
 
     def test_stipend_form_validation(self):
         # Test missing name
