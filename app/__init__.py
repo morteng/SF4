@@ -23,11 +23,9 @@ def create_app(config_name='development'):
     load_dotenv()
 
     try:
-        # Initialize extensions
-        init_extensions(app)
-        
-        # Get the limiter instance after initialization
-        from app.extensions import limiter
+        # Initialize extensions only if they haven't been initialized
+        if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
+            init_extensions(app)
             
         _init_database(app)
         _ensure_admin_user(app)
