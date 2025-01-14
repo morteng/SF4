@@ -245,15 +245,25 @@ class TestBaseCrudController(BaseTestCase):
         
         # Verify login was successful
         self.assertEqual(response.status_code, 200)
+        self.assertTrue(current_user.is_authenticated)
         self.assertIn(b'Dashboard', response.data)
         
         # Verify session contains correct user ID
         with self.client.session_transaction() as session:
+            print("\nSession data after login attempt:")
+            print(dict(session))
+            
             self.assertIn('_user_id', session)
             self.assertEqual(session['_user_id'], str(self.test_user.id))
             self.assertIn('is_admin', session)
             self.assertEqual(session['is_admin'], self.test_user.is_admin)
             self.assertIn('_fresh', session)
+            
+            # Verify authentication
+            if '_user_id' not in session:
+                print("Login failed - _user_id not in session")
+            if not current_user.is_authenticated:
+                print("Login failed - current_user not authenticated")
     
         return response
 

@@ -24,15 +24,21 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         
         if user and user.check_password(form.password.data) and user.is_active:
-            # Clear any existing session data
+            # Clear and regenerate session
             session.clear()
-            
-            # Login user and set session data
-            login_user(user)
-            session['_user_id'] = str(user.id)
-            session['is_admin'] = user.is_admin
-            session['_fresh'] = True
             session.permanent = True
+            
+            # Login user and commit session
+            login_user(user, remember=True)
+            session['_user_id'] = str(user.id)
+            session['_fresh'] = True
+            session.modified = True
+            
+            # Verify login
+            if not current_user.is_authenticated:
+                current_app.logger.error("Login failed - user not authenticated")
+                flash('Login failed', 'danger')
+                return redirect(url_for('public.login'))
             
             current_app.logger.info(f"User {user.username} logged in successfully")
             current_app.logger.info(f"Session data: {dict(session)}")

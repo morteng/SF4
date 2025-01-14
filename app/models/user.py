@@ -1,7 +1,8 @@
 from app.extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
@@ -56,16 +57,6 @@ class User(db.Model):
             raise ValueError("is_active must be a boolean")
         self._is_active = value
 
-    @property
-    def is_authenticated(self):
-        return True
-
-    @property
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return str(self.id)
 
     @classmethod
     def get_by_id(cls, user_id, session):
