@@ -13,4 +13,4 @@
 /run scripts/path_config.py
 
 # 5) Load next cycle based on verification results
-/load meta_cycles/chooser.aiderscript
+/load meta_cycles/finalize_cycle.aiderscript
