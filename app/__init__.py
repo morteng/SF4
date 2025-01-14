@@ -49,6 +49,12 @@ def _init_extensions(app):
     # Configure database
     db.init_app(app)
     
+    # Remove pooling parameters for SQLite
+    if app.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite'):
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+            'poolclass': 'StaticPool'  # Use StaticPool for SQLite
+        }
+    
     # Configure login manager
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'

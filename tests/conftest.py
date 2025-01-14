@@ -96,6 +96,11 @@ def app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # Force in-memory DB
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
+    # Add this to disable pooling for SQLite
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'poolclass': 'StaticPool'
+    }
+    
     # Initialize extensions
     from app.extensions import init_extensions
     init_extensions(app)
