@@ -4,22 +4,11 @@
 /run scripts/cleanup.py
 
 # 2) Update documentation and logs
-/code Update DEVLOG.md with results of this cycle
-/code Update TODO.txt with completed tasks
+/code Update DEVLOG.md replacing old entry with results of this cycle
+/code Update TODO.txt, removing completed tasks
 
 # 3) Reset context memory
 /reset
 
-# 4) Start new cycle
-/load meta_cycles/start.aiderscript
-
-
-
-# 1. Clean up resources
-/run scripts/cleanup.py
-
-# 2. Reset context memory
-/reset
-
-# 3. Start new cycle
+# 4. Start new cycle
 /load meta_cycles/start.aiderscript
