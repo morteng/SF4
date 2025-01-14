@@ -1167,6 +1167,151 @@ def test_create_stipend_with_invalid_organization(test_data, db_session, app):
         
     assert "Invalid organization" in str(exc_info.value)
 
+def test_create_stipend_with_deleted_organization(test_data, db_session, app):
+    """Test creating stipend with deleted organization"""
+    # Create then delete organization
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+    org_id = org.id
+    db_session.delete(org)
+    db_session.commit()
+    
+    test_data['organization_id'] = org_id
+    
+    service = StipendService()
+    
+    with pytest.raises(ValueError) as exc_info:
+        service.create(test_data)
+        
+    assert "Invalid organization" in str(exc_info.value)
+
+def test_create_stipend_with_invalid_tag_relationships(test_data, db_session, app):
+    """Test creating stipend with invalid tag relationships"""
+    # Create valid organization
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+    test_data['organization_id'] = org.id
+    
+    # Test various invalid tag scenarios
+    invalid_cases = [
+        [99999],  # Non-existent tag
+        [-1],     # Negative tag ID
+        [0],      # Zero tag ID
+        ['invalid'],  # String instead of int
+        [1, 1]    # Duplicate tags
+    ]
+    
+    service = StipendService()
+    
+    for case in invalid_cases:
+        test_data['tags'] = case
+        with pytest.raises(ValueError) as exc_info:
+            service.create(test_data)
+        assert "Invalid tags" in str(exc_info.value)
+
+def test_create_stipend_with_database_errors(test_data, db_session, app):
+    """Test creating stipend with database errors"""
+    # Create valid organization
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+    test_data['organization_id'] = org.id
+    
+    service = StipendService()
+    
+    # Test various database error scenarios
+    with patch('app.extensions.db.session.commit', side_effect=SQLAlchemyError("Database error")):
+        with pytest.raises(SQLAlchemyError) as exc_info:
+            service.create(test_data)
+        assert "Database error" in str(exc_info.value)
+        
+    with patch('app.extensions.db.session.flush', side_effect=IntegrityError(None, None, None)):
+        with pytest.raises(IntegrityError):
+            service.create(test_data)
+
+def test_create_stipend_with_rate_limiting(test_data, db_session, app):
+    """Test rate limiting during stipend creation"""
+    # Create valid organization
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+    test_data['organization_id'] = org.id
+    
+    service = StipendService()
+    
+    # Make 11 requests (limit is 10 per minute)
+    with pytest.raises(Exception) as exc_info:
+        for _ in range(11):
+            service.create(test_data)
+    assert "Rate limit exceeded" in str(exc_info.value)
+
+def test_create_stipend_with_audit_log_failure(test_data, db_session, app):
+    """Test audit logging failure during stipend creation"""
+    # Create valid organization
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+    test_data['organization_id'] = org.id
+    
+    service = StipendService()
+    
+    with patch('app.models.audit_log.AuditLog.create', side_effect=Exception("Audit log error")):
+        with pytest.raises(Exception) as exc_info:
+            service.create(test_data)
+        assert "Audit log error" in str(exc_info.value)
+
+def test_create_stipend_with_concurrent_modification(test_data, db_session, app):
+    """Test concurrent modification scenarios"""
+    # Create valid organization
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+    test_data['organization_id'] = org.id
+    
+    service = StipendService()
+    
+    # Simulate concurrent modification
+    with patch('app.extensions.db.session.commit', side_effect=StaleDataError()):
+        with pytest.raises(StaleDataError):
+            service.create(test_data)
+
+def test_create_stipend_with_invalid_unicode(test_data, db_session, app):
+    """Test creating stipend with invalid unicode"""
+    service = StipendService()
+    
+    invalid_unicode_cases = [
+        {'name': b'\xff'.decode('latin1')},  # Invalid UTF-8
+        {'summary': b'\xfe'.decode('latin1')},
+        {'description': b'\xfd'.decode('latin1')}
+    ]
+    
+    for case in invalid_unicode_cases:
+        invalid_data = {**test_data, **case}
+        with pytest.raises(ValueError):
+            service.create(invalid_data)
+
+def test_create_stipend_with_sql_injection_attempt(test_data, db_session, app):
+    """Test creating stipend with SQL injection attempt"""
+    service = StipendService()
+    
+    # Test SQL injection in name field
+    test_data['name'] = "Test'; DROP TABLE stipends; --"
+    with pytest.raises(ValueError) as exc_info:
+        service.create(test_data)
+    assert "Invalid characters" in str(exc_info.value)
+
+def test_create_stipend_with_xss_attempt(test_data, db_session, app):
+    """Test creating stipend with XSS attempt"""
+    service = StipendService()
+    
+    # Test XSS in description field
+    test_data['description'] = "<script>alert('XSS')</script>"
+    with pytest.raises(ValueError) as exc_info:
+        service.create(test_data)
+    assert "Invalid characters" in str(exc_info.value)
+
 def test_create_stipend_with_malformed_data(test_data, db_session, app):
     """Test creating stipend with malformed data"""
     service = StipendService()
