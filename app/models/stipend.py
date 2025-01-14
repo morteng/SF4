@@ -180,10 +180,5 @@ class Stipend(db.Model):
         }
 
     # Relationships
-    tags = db.relationship(
-        'Tag', 
-        secondary=stipend_tag_association,
-        back_populates='stipends',
-        lazy='dynamic'
-    )
+    tags = db.Column(JSONB(none_as_null=True), nullable=True)
     organizations = db.relationship('Organization', secondary=organization_stipends, back_populates='stipends')

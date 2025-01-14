@@ -1,0 +1,14 @@
+# Schema Migration Cycle
+# Fix tags column type mismatch (NUMERIC to JSON/JSONB)
+
+# 1) Run migration script
+/run scripts/schema_migration_01.py
+
+# 2) Verify schema changes
+/run scripts/verify_schema.py
+
+# 3) Run tests
+/run tests/test_schema_migrations.py
+
+# 4) Continue to next cycle
+/load meta_cycles/finalize_cycle.aiderscript
