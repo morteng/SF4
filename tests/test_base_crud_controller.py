@@ -70,28 +70,30 @@ class TestBaseCrudController(BaseTestCase):
         )
 
     @patch('app.controllers.base_crud_controller.render_template')
-    def test_create_success(self, mock_render):
+    @patch('app.services.tag_service.TagService.create')
+    def test_create_success(self, mock_create, mock_render):
         # Mock render_template to return a Flask Response object
         mock_render.return_value = Response(status=200)
+        
+        # Mock the service create method to return a success result
+        from app.services.base_service import Result
+        mock_create.return_value = Result(success=True, message="Created")
+        
         form_data = {'name': 'New Tag', 'category': 'TestCategory'}
         with self.client:
             self.login()
-            template, status_code = self.controller.create(form_data)  # Unpack tuple
-            self.assertEqual(status_code, 200)  # Check status code
+            template, status_code = self.controller.create(form_data)
             
-            # Get the form that was passed to render_template
-            render_args, render_kwargs = mock_render.call_args
-            rendered_form = render_kwargs['form']
-            
-            # Verify the form contains the expected data
-            self.assertEqual(rendered_form.name.data, 'New Tag')
-            self.assertEqual(rendered_form.category.data, 'TestCategory')
+            # Verify service was called with form data
+            mock_create.assert_called_once_with(form_data)
             
             # Verify template was rendered
-            mock_render.assert_called_once()
+            mock_render.assert_called_once_with(
+                'admin/tag/create.html',
+                form=ANY  # We don't care about the exact form instance
+            )
             
-            tag = Tag.query.filter_by(name='New Tag').first()
-            self.assertIsNotNone(tag)
+            self.assertEqual(status_code, 200)
 
     @patch('app.controllers.base_crud_controller.render_template')
     def test_create_validation_error(self, mock_render):

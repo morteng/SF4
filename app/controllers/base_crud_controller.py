@@ -173,25 +173,32 @@ class BaseCrudController:
     def create(self, data=None):
         form = self.form_class(data=data)
         if not form.validate():
-            # Return 200 with form errors
             return render_template(
                 f'{self.template_dir}/create.html',
                 form=form
             ), 200
+            
         try:
+            # Call service with validated form data
             result = self.service.create(form.data)
+            
             if result.success:
                 flash(self.flash_messages['create_success'], 'success')
                 return redirect(url_for(f'admin.{self.entity_name}.index'))
             else:
                 flash(result.message, 'error')
+                return render_template(
+                    f'{self.template_dir}/create.html', 
+                    form=form
+                ), 200
+                
         except Exception as e:
             logger.error(f"Error creating {self.entity_name}: {str(e)}")
             flash(f"Error creating {self.entity_name}: {str(e)}", 'error')
-        return render_template(
-            f'{self.template_dir}/create.html',
-            form=form
-        ), 200
+            return render_template(
+                f'{self.template_dir}/create.html',
+                form=form
+            ), 200
 
     def edit(self, id, data):
         def update_operation(**kwargs):
