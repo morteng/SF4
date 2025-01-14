@@ -2,6 +2,20 @@ from functools import wraps
 from sqlalchemy.exc import SQLAlchemyError
 from wtforms import ValidationError
 from werkzeug.exceptions import Unauthorized
+
+class Result:
+    """Simple result container for service operations"""
+    
+    def __init__(self, success: bool, message: str = None, data: dict = None):
+        self.success = success
+        self.message = message
+        self.data = data
+        
+    def __bool__(self):
+        return self.success
+        
+    def __repr__(self):
+        return f"Result(success={self.success}, message={self.message})"
 from app.extensions import db
 from flask import current_app
 import logging
