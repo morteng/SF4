@@ -191,33 +191,44 @@ def test_update_stipend_with_valid_data(test_data, db_session, app, admin_user):
         assert FlashMessages.UPDATE_STIPEND_SUCCESS.value in messages
 
 def test_update_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
+    # Create initial stipend
     stipend = Stipend(**test_data)
     db_session.add(stipend)
     db_session.commit()
     
-    update_data = {
-        'name': test_data['name'],
-        'application_deadline': '2024-13-32 99:99:99',
-    }
+    # Test various invalid date formats
+    invalid_formats = [
+        '2024-13-32 99:99:99',  # Invalid everything
+        '2023-02-30 12:00:00',  # Invalid day
+        '2023-04-31 12:00:00',  # Invalid day
+        '2023-00-01 12:00:00',  # Invalid month
+        '2023-01-00 12:00:00',  # Invalid day
+        'invalid-date',         # Completely invalid
+        '',                     # Empty string
+        None                    # Null value
+    ]
     
-    with app.app_context(), app.test_client() as client:
-        with app.test_request_context():
-            login_user(admin_user)
+    for invalid_format in invalid_formats:
+        update_data = {
+            'name': test_data['name'],
+            'application_deadline': invalid_format,
+        }
+        
+        with app.app_context(), app.test_client() as client:
+            with app.test_request_context():
+                login_user(admin_user)
+                
+            form = StipendForm(data=update_data)
+            service = StipendService()
             
-        # Create a form instance and validate it
-        form = StipendForm(data=update_data)
-        service = StipendService()
-        result = service.update(stipend.id, form.data)
-
-    # Assert that the stipend was not updated due to validation errors
-    updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
-    assert updated_stipend.name == test_data['name']
-    assert updated_stipend.summary == test_data['summary']
-
-    # Check if the correct flash message was set
-    with app.test_request_context():
-        messages = get_flashed_messages()
-        assert FlashMessages.INVALID_DATE_FORMAT.value in messages
+            with pytest.raises(ValueError) as exc_info:
+                service.update(stipend.id, form.data)
+            
+            assert "Invalid date format" in str(exc_info.value)
+            
+            # Verify stipend was not updated
+            updated_stipend = db_session.query(Stipend).filter_by(id=stipend.id).first()
+            assert updated_stipend.application_deadline == test_data['application_deadline']
 
 def test_update_stipend_open_for_applications(test_data, db_session, app, admin_user):
     stipend = Stipend(**test_data)

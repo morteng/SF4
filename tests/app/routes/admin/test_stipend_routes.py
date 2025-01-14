@@ -480,40 +480,91 @@ def test_create_stipend_route_with_invalid_application_deadline_format_htmx(
 
 
 def test_create_stipend_with_invalid_form_data_htmx(logged_in_admin, stipend_data, db_session):
-    """Test HTMX form submission with invalid (empty) 'name' field."""
+    """Test HTMX form submission with various invalid data scenarios."""
     organization = Organization(name='Test Org Invalid Form Data HTMX')
     db_session.add(organization)
     db_session.commit()
 
     csrf_token = get_csrf_token(logged_in_admin, 'admin.stipend.create')
 
-    invalid_data = {
-        'name': '',
-        'summary': stipend_data['summary'],
-        'description': stipend_data['description'],
-        'homepage_url': stipend_data['homepage_url'],
-        'application_procedure': stipend_data['application_procedure'],
-        'eligibility_criteria': stipend_data['eligibility_criteria'],
-        'application_deadline': stipend_data['application_deadline'],
-        'organization_id': organization.id,
-        'open_for_applications': stipend_data['open_for_applications'],
-        'csrf_token': csrf_token
-    }
+    # Test cases for invalid form submissions
+    test_cases = [
+        {
+            'data': {
+                'name': '',  # Empty name
+                'summary': 'Test',
+                'application_deadline': '2025-01-01 00:00:00',
+                'organization_id': organization.id,
+                'csrf_token': csrf_token
+            },
+            'expected_error': b'Name: Name is required.'
+        },
+        {
+            'data': {
+                'name': 'A' * 101,  # Name too long
+                'summary': 'Test',
+                'application_deadline': '2025-01-01 00:00:00',
+                'organization_id': organization.id,
+                'csrf_token': csrf_token
+            },
+            'expected_error': b'Name: Field must be between 1 and 100 characters long'
+        },
+        {
+            'data': {
+                'name': 'Test',
+                'summary': 'Test',
+                'application_deadline': 'invalid-date',  # Invalid date
+                'organization_id': organization.id,
+                'csrf_token': csrf_token
+            },
+            'expected_error': b'Invalid date format'
+        },
+        {
+            'data': {
+                'name': 'Test',
+                'summary': 'Test',
+                'application_deadline': '2025-01-01 00:00:00',
+                'organization_id': 'invalid-id',  # Invalid org ID
+                'csrf_token': csrf_token
+            },
+            'expected_error': b'Invalid organization'
+        },
+        {
+            'data': {
+                'name': 'Test',
+                'summary': 'Test',
+                'application_deadline': '2025-01-01 00:00:00',
+                'organization_id': organization.id,
+                'tags': ['invalid-tag'],  # Invalid tag
+                'csrf_token': csrf_token
+            },
+            'expected_error': b'Invalid tag'
+        },
+        {
+            'data': {
+                'name': 'Test',
+                'summary': 'Test',
+                'application_deadline': '2025-01-01 00:00:00',
+                'organization_id': organization.id,
+                'csrf_token': 'invalid-token'  # Invalid CSRF
+            },
+            'expected_error': b'CSRF token is invalid'
+        }
+    ]
 
-    response = logged_in_admin.post(
-        url_for('admin.stipend.create'),
-        data=invalid_data,
-        headers={'HX-Request': 'true'},
-        follow_redirects=True
-    )
-    assert response.status_code == 400
-    assert b'Name: Name is required.' in response.data, (
-        "Expected 'Name is required' validation error"
-    )
+    for case in test_cases:
+        response = logged_in_admin.post(
+            url_for('admin.stipend.create'),
+            data=case['data'],
+            headers={'HX-Request': 'true'},
+            follow_redirects=True
+        )
+        assert response.status_code == 400
+        assert case['expected_error'] in response.data
 
-    # Ensure it wasn't created
-    stipends = db_session.query(Stipend).all()
-    assert not any(s.name == invalid_data['name'] for s in stipends)
+        # Verify no record was created
+        stipends = db_session.query(Stipend).all()
+        assert not any(s.name == case['data'].get('name', '') for s in stipends)
 
 
 def test_update_stipend_route_htmx(logged_in_admin, test_stipend, db_session):
