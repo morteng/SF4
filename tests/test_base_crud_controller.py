@@ -191,7 +191,7 @@ class TestBaseCrudController(BaseTestCase):
         with self.client.session_transaction() as session:
             return session.get('csrf_token')
 
-    def login(self):
+    def login(self, username='admin', password='password'):
         """Helper method to log in test user"""
         with self.client:
             # Get login page to set CSRF token
@@ -200,8 +200,8 @@ class TestBaseCrudController(BaseTestCase):
             
             # Perform login with valid credentials
             response = self.client.post(url_for('public.login'), data={
-                'username': self.test_user.username,
-                'password': 'testpass',
+                'username': username,
+                'password': password,
                 'csrf_token': csrf_token
             }, follow_redirects=True)
             
