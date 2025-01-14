@@ -1,11 +1,9 @@
 ### **Next Development Cycle Tasks**
-- [x] Fix tags column type mismatch (NUMERIC to JSON/JSONB)
-- [ ] Fix test environment configuration
-- [ ] Add comprehensive migration tests
-- [ ] Document schema migration process
-- [ ] Implement schema version tracking
-- [ ] Create rollback procedures
+- [ ] Implement backup/restore system
 - [ ] Add database connection pooling
+- [ ] Create monitoring dashboard
+- [ ] Implement schema version tracking
+- [ ] Document test environment setup
 
 ### **Ongoing Maintenance**
 - [ ] Monitor database connection health
