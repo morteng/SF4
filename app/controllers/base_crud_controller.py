@@ -19,9 +19,14 @@ class BaseCrudController:
     - HTMX partial response support
     - Flash message management
     - Rate limiting and security
+    - Transaction management
+    - Pre/post operation hooks
     
     The controller acts as an intermediary between routes and services, ensuring
-    consistent behavior across all CRUD operations.
+    consistent behavior across all CRUD operations. It implements the following patterns:
+    - Template Method: Core operations follow a consistent template
+    - Chain of Responsibility: Error handling flows through multiple layers
+    - Observer: Audit logging hooks into operation lifecycle
     
     Attributes:
         service (BaseService): Service layer instance for business logic
@@ -32,13 +37,16 @@ class BaseCrudController:
         flash_messages (dict): Dictionary of flash message templates
         supports_htmx (bool): Whether to support HTMX partial responses
         htmx_headers (dict): Default HTMX response headers
+        cache_validation (bool): Whether to cache validation results
         
     Methods:
-        create: Handle entity creation
-        edit: Handle entity updates
-        delete: Handle entity deletion
+        create: Handle entity creation with validation and error handling
+        edit: Handle entity updates with audit logging
+        delete: Handle entity deletion with confirmation
         _handle_htmx_response: Process HTMX-specific responses
         _handle_operation: Core operation handler with error handling
+        _pre_validate: Hook for pre-validation logic
+        _post_validate: Hook for post-validation logic
     """
     def __init__(self, service, entity_name, form_class, template_dir=None, audit_logger=None):
         self.service = service

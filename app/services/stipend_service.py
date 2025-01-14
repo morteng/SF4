@@ -18,8 +18,14 @@ class StipendService(BaseService):
     - Relationship management (organizations, tags)
     - Rate limiting and security
     - Pre/post operation hooks
+    - Form data preparation
+    - Complex validation rules
     
-    Inherits from BaseService and adds stipend-specific functionality.
+    Implements the following design patterns:
+    - Facade: Simplifies complex stipend operations
+    - Template Method: Standardizes operation flows
+    - Observer: Audit logging through hooks
+    - Chain of Responsibility: Validation pipeline
     
     Attributes:
         model (Stipend): The Stipend model class
@@ -27,17 +33,23 @@ class StipendService(BaseService):
         limiter (Limiter): Rate limiter instance
         rate_limits (dict): Dictionary of rate limits for operations
         validation_rules (dict): Stipend-specific validation rules
+        pre_update_hooks (list): Hooks to run before updates
+        post_update_hooks (list): Hooks to run after updates
+        pre_delete_hooks (list): Hooks to run before deletion
+        post_delete_hooks (list): Hooks to run after deletion
         
     Methods:
-        get_form_choices: Get options for form dropdowns
-        _pre_validate: Pre-validation hook
-        _post_validate: Post-validation hook
+        get_form_choices: Get options for form dropdowns (organizations and tags)
+        _pre_validate: Pre-validation hook for data normalization
+        _post_validate: Post-validation hook for complex rules
         _validate_create_data: Validate data before creation
         _validate_update_data: Validate data before update
         _log_pre_update: Log state before update
         _log_post_update: Log state after update
         _log_pre_delete: Log state before deletion
         _log_post_delete: Log state after deletion
+        _prepare_create_data: Prepare data for creation
+        _prepare_update_data: Prepare data for updates
     """
     def __init__(self):
         super().__init__(Stipend)

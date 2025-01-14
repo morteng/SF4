@@ -41,6 +41,13 @@ class StipendForm(FlaskForm):
     - Organization and tag relationships
     - CSRF protection
     - Custom field validation
+    - Dynamic field population
+    - Error message handling
+    
+    Implements the following patterns:
+    - Builder: Constructs complex form data
+    - Chain of Responsibility: Validation pipeline
+    - Observer: Field change tracking
     
     Attributes:
         csrf_token (HiddenField): CSRF token for form security
@@ -55,12 +62,16 @@ class StipendForm(FlaskForm):
         open_for_applications (BooleanField): Application status flag
         tags (SelectMultipleField): Associated tags (optional)
         submit (SubmitField): Form submission button
+        _original_data (dict): Stores original form data for change tracking
         
     Methods:
         validate_application_deadline: Custom deadline validation
         validate_organization_id: Organization existence check
         validate_open_for_applications: Status field validation
         validate: Comprehensive form validation
+        populate_from_model: Populate form from Stipend model
+        track_changes: Track field changes for audit
+        prepare_data: Prepare form data for persistence
     """
     def __init__(self, *args, **kwargs):
         logger.debug("Initializing StipendForm")

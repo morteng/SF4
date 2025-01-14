@@ -177,7 +177,24 @@ stipend_controller = StipendController()
 @login_required
 @admin_required
 def create():
-    """Handle stipend creation requests."""
+    """Handle stipend creation requests.
+    
+    This endpoint handles both GET and POST requests for creating new stipends.
+    Implements rate limiting and requires admin privileges.
+    
+    GET:
+        - Renders the stipend creation form
+        - Pre-populates organization and tag choices
+        
+    POST:
+        - Validates form data
+        - Creates new stipend record
+        - Handles errors and validation failures
+        - Redirects to stipend index on success
+        
+    Returns:
+        Response: Rendered template or redirect
+    """
     logger.debug("Processing stipend creation request")
     
     form = StipendForm(request.form)
