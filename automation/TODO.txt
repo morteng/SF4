@@ -8,10 +8,9 @@
 - [ ] Track restore test coverage
 
 ### **Next Development Cycle Tasks**
-- [ ] Increase coverage to 50%
+- [ ] Increase coverage to 35%
 - [ ] Add comprehensive error handling tests
-- [ ] Implement HTMX response testing
-- [ ] Add security validation tests
+- [ ] Implement security validation tests
 - [ ] Improve database transaction testing
 - [ ] Add rate limiting tests
 - [ ] Implement database performance monitoring
@@ -20,6 +19,9 @@
 - [ ] Add automated alert thresholds
 - [ ] Implement load testing scenarios
 - [ ] Add performance benchmarks
+- [ ] Add audit logging tests
+- [ ] Add CSRF protection tests
+- [ ] Add input sanitization tests
 
 ### **Completed Tasks**
 - [x] Fix failing controller tests
@@ -34,3 +36,5 @@
 - [x] Implement HTMX response testing
 - [x] Add error condition tests
 - [x] Add form validation edge case tests
+- [x] Improve test isolation and mocking
+- [x] Add comprehensive form validation tests
