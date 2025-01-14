@@ -5,6 +5,6 @@
 # NOTE: The primary entry point is start.aiderscript
 
 # Current active cycle (updated by cycle scripts)
-# Running backup monitoring cycle to implement dashboard and alerts
-/load meta_cycles/backup_monitoring_cycle.aiderscript
+# Running test coverage cycle to verify and improve test coverage
+/load meta_cycles/test_coverage_cycle.aiderscript
 
