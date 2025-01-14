@@ -171,7 +171,7 @@ class StipendForm(FlaskForm):
 
     def validate(self):
         logger.debug("Validating StipendForm")
-
+        
         # Validate CSRF token first
         if not self.csrf_token.data:
             self.csrf_token.errors.append("CSRF token is missing")
@@ -186,7 +186,7 @@ class StipendForm(FlaskForm):
             logger.error(f"CSRF token validation failed: {str(e)}")
             return False
 
-        # Add validation for required relationships
+        # Validate required relationships
         if not self.organization_id.data:
             self.organization_id.errors.append("Organization is required")
             return False

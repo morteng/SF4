@@ -111,8 +111,10 @@ class StipendService(BaseService):
                 errors['application_deadline'] = str(FlashMessages.INVALID_DATE_FORMAT)
 
     def _validate_create_data(self, data):
-        """Validate stipend data before creation"""
+        """Enhanced validation for stipend creation"""
         logger.debug("Validating stipend creation data")
+        
+        errors = {}
         
         # Validate required fields
         required_fields = {
@@ -122,22 +124,28 @@ class StipendService(BaseService):
         
         for field, error_msg in required_fields.items():
             if not data.get(field):
+                errors[field] = error_msg
                 logger.error(f"Missing required field: {field}")
-                raise ValueError(error_msg)
             
         # Validate organization exists
-        org = db.session.get(Organization, data['organization_id'])
-        if not org:
-            logger.error(f"Invalid organization ID: {data['organization_id']}")
-            raise ValueError('Invalid organization selected')
+        if 'organization_id' in data:
+            org = db.session.get(Organization, data['organization_id'])
+            if not org:
+                errors['organization_id'] = 'Invalid organization selected'
+                logger.error(f"Invalid organization ID: {data['organization_id']}")
 
         # Validate application deadline format if present
         if 'application_deadline' in data and data['application_deadline']:
             try:
-                datetime.strptime(data['application_deadline'], '%Y-%m-%d %H:%M:%S')
-            except ValueError as e:
+                deadline = datetime.strptime(data['application_deadline'], '%Y-%m-%d %H:%M:%S')
+                if deadline < datetime.now():
+                    errors['application_deadline'] = str(FlashMessages.PAST_DATE)
+            except ValueError:
+                errors['application_deadline'] = str(FlashMessages.INVALID_DATE_FORMAT)
                 logger.error(f"Invalid date format: {data['application_deadline']}")
-                raise ValueError(FlashMessages.INVALID_DATE_FORMAT)
+
+        if errors:
+            raise ValueError(errors)
 
     def _validate_update_data(self, data):
         """Validate stipend data before update"""
