@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import pytest
 from flask import url_for
 from flask.testing import FlaskClient
+from flask_login import login_user
 from pytz import timezone
 from app.constants import FlashMessages
 from tests.conftest import extract_csrf_token
