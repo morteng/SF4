@@ -1,10 +1,17 @@
-# Test Coverage Improvement Cycle
+# Enhanced Test Coverage Cycle
 
 # 1. Analyze current test coverage
 /run scripts/analyze_test_coverage.py
 
 # 2. Identify critical paths needing coverage 
-/ask Based on the coverage report, what are the most critical paths that need test coverage? Focus on: - Core business logic in services - Database operations - Form validation - Route handlers - Error handling
+/ask Based on the coverage report, what are the most critical paths that need test coverage? Focus on:
+- Core business logic in services
+- Database operations
+- Form validation
+- Route handlers
+- Error handling
+- Edge cases
+- HTMX functionality
 
 # 3. Create missing test files
 /code Create any needed test files in tests/ directory to cover identified gaps

@@ -5,6 +5,6 @@
 # NOTE: The primary entry point is start.aiderscript
 
 # Current active cycle (updated by cycle scripts)
-# Running test coverage cycle to verify and improve test coverage
+# Running enhanced test coverage cycle to verify and improve test coverage
 /load meta_cycles/test_coverage_cycle.aiderscript
 
