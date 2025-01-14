@@ -105,11 +105,10 @@ def app():
     app.config['WTF_CSRF_ENABLED'] = True
     app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'
 
-    # Initialize the limiter properly
-    if 'limiter' in app.extensions:
-        limiter = app.extensions['limiter']
-        limiter.enabled = False
-        limiter.init_app(app)  # Ensure limiter is properly initialized
+    # Configure rate limiter and CSRF
+    app.config['RATELIMIT_ENABLED'] = False  # Disable rate limiting for tests
+    app.config['WTF_CSRF_ENABLED'] = True
+    app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'
 
     # Initialize the app with migrations
     with app.app_context():
@@ -444,11 +443,12 @@ def test_stipend(db_session, stipend_data, test_organization, app):
 def reset_rate_limiter(app):
     """Reset the rate limiter and clear audit logs before each test."""
     with app.app_context():
+        # Only attempt to reset limiter if it's properly initialized
         if 'limiter' in app.extensions:
             limiter = app.extensions['limiter']
-            if hasattr(limiter, 'storage') and limiter.storage is not None:
+            if hasattr(limiter, '_storage') and limiter._storage is not None:
                 try:
-                    limiter.storage.reset()
+                    limiter._storage.reset()
                 except Exception as e:
                     app.logger.warning(f"Failed to reset rate limiter: {str(e)}")
         
