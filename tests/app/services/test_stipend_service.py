@@ -30,7 +30,29 @@ def test_invalid_form_submissions(test_data, db_session, app, admin_user):
         # Invalid boolean values
         {'open_for_applications': 'maybe'},
         # Invalid tag IDs
-        {'tags': ['invalid']}
+        {'tags': ['invalid']},
+        # SQL injection attempts
+        {'name': "Test'; DROP TABLE stipends; --"},
+        # XSS attempts
+        {'description': "<script>alert('XSS')</script>"},
+        # Invalid unicode
+        {'name': b'\xff'.decode('latin1')},
+        # Empty strings
+        {'name': '   ', 'summary': '   '},
+        # Negative numbers
+        {'organization_id': -1},
+        # Zero values
+        {'organization_id': 0},
+        # String numbers
+        {'organization_id': '1'},
+        # Invalid date formats
+        {'application_deadline': '2023-02-30 12:00:00'},  # Invalid day
+        {'application_deadline': '2023-04-31 12:00:00'},  # Invalid day
+        {'application_deadline': '2023-00-01 12:00:00'},  # Invalid month
+        {'application_deadline': '2023-01-00 12:00:00'},  # Invalid day
+        {'application_deadline': 'invalid-date'},         # Completely invalid
+        {'application_deadline': ''},                     # Empty string
+        {'application_deadline': None}                    # Null value
     ]
 
     service = StipendService()
@@ -44,6 +66,129 @@ def test_invalid_form_submissions(test_data, db_session, app, admin_user):
                 with pytest.raises(ValueError) as exc_info:
                     service.create(invalid_data)
                 assert "validation error" in str(exc_info.value).lower()
+
+def test_database_constraint_violations(test_data, db_session, app, admin_user):
+    """Test database constraint violations"""
+    # Create initial valid stipend
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+    
+    valid_data = {
+        'name': 'Valid Stipend',
+        'organization_id': org.id,
+        'application_deadline': '2025-12-31 23:59:59'
+    }
+    
+    service = StipendService()
+    
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+            
+            # Test unique constraint violation
+            service.create(valid_data)
+            with pytest.raises(ValueError) as exc_info:
+                service.create(valid_data)
+            assert "already exists" in str(exc_info.value)
+            
+            # Test foreign key constraint violation
+            invalid_data = {**valid_data, 'organization_id': 99999}
+            with pytest.raises(ValueError) as exc_info:
+                service.create(invalid_data)
+            assert "foreign key constraint" in str(exc_info.value).lower()
+
+def test_htmx_partial_responses(test_data, db_session, app, admin_user):
+    """Test HTMX partial response handling"""
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+    
+    valid_data = {
+        'name': 'HTMX Stipend',
+        'organization_id': org.id,
+        'application_deadline': '2025-12-31 23:59:59'
+    }
+    
+    service = StipendService()
+    
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+            
+            # Test successful HTMX response
+            result = service.create(valid_data, htmx_request=True)
+            assert 'hx-redirect' in result.headers
+            assert 'hx-trigger' in result.headers
+            
+            # Test HTMX error response
+            invalid_data = {**valid_data, 'name': None}
+            with pytest.raises(ValueError) as exc_info:
+                service.create(invalid_data, htmx_request=True)
+            assert 'hx-trigger' in exc_info.value.headers
+            assert 'error' in exc_info.value.headers['hx-trigger']
+
+def test_error_conditions(test_data, db_session, app, admin_user):
+    """Test various error conditions"""
+    service = StipendService()
+    
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+            
+            # Test database connection failure
+            with patch('app.extensions.db.session.commit', side_effect=Exception("DB Error")):
+                with pytest.raises(Exception) as exc_info:
+                    service.create(test_data)
+                assert "DB Error" in str(exc_info.value)
+                
+            # Test audit logging failure
+            with patch('app.models.audit_log.AuditLog.create', side_effect=Exception("Log Error")):
+                with pytest.raises(Exception) as exc_info:
+                    service.create(test_data)
+                assert "Log Error" in str(exc_info.value)
+
+def test_edge_cases(test_data, db_session, app, admin_user):
+    """Test various edge cases"""
+    service = StipendService()
+    
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+            
+            # Test empty string handling
+            empty_data = {
+                'name': '   ',
+                'organization_id': '',
+                'application_deadline': ''
+            }
+            with pytest.raises(ValueError) as exc_info:
+                service.create({**test_data, **empty_data})
+            assert "cannot be empty" in str(exc_info.value)
+            
+            # Test maximum values
+            max_data = {
+                'name': 'A' * 100,
+                'summary': 'B' * 500,
+                'description': 'C' * 2000,
+                'homepage_url': 'http://' + 'a' * 200 + '.com',
+                'application_procedure': 'D' * 2000,
+                'eligibility_criteria': 'E' * 2000
+            }
+            result = service.create({**test_data, **max_data})
+            assert result is not None
+            
+            # Test minimum values
+            min_data = {
+                'name': 'A',
+                'summary': 'B',
+                'description': 'C',
+                'homepage_url': 'http://a.com',
+                'application_procedure': 'D',
+                'eligibility_criteria': 'E'
+            }
+            result = service.create({**test_data, **min_data})
+            assert result is not None
 
 def test_database_constraint_violations(test_data, db_session, app, admin_user):
     """Test database constraint violations"""
