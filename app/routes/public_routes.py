@@ -29,6 +29,11 @@ def login():
                     current_app.logger.debug("User is active, logging in")
                     login_user(user, remember=True)
                     
+                    # Add debug logging for Flask-Login
+                    current_app.logger.debug(f"Current user after login: {current_user}")
+                    current_app.logger.debug(f"User authenticated: {current_user.is_authenticated}")
+                    current_app.logger.debug(f"User ID: {current_user.get_id()}")
+                    
                     if not current_user.is_authenticated:
                         current_app.logger.error("Login failed - user not authenticated")
                         flash('Login failed', 'danger')

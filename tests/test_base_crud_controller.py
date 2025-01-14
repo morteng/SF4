@@ -44,8 +44,9 @@ class TestBaseCrudController(BaseTestCase):
         self.test_user.confirmed_at = datetime.utcnow()
         db.session.commit()
         
-        # Initialize client
+        # Initialize client with session support
         self.client = app.test_client()
+        self.client.testing = True
         
         # Clear any existing session data
         with self.client.session_transaction() as session:
@@ -202,6 +203,7 @@ class TestBaseCrudController(BaseTestCase):
         with self.client.session_transaction() as session:
             print(f"Session user ID: {session.get('_user_id')}")
             print(f"Session fresh: {session.get('_fresh')}")
+            print(f"Session keys: {list(session.keys())}")
     
         return response
 

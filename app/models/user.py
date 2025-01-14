@@ -46,6 +46,15 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def get_id(self):
+        """Override get_id to return string ID for Flask-Login"""
+        return str(self.id)
+    
+    @property
+    def is_authenticated(self):
+        """Override is_authenticated to check confirmed_at"""
+        return super().is_authenticated and self.confirmed_at is not None
+
     def update_profile(self, username, email):
         """Update user profile information"""
         self.username = username
