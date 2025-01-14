@@ -2,7 +2,12 @@ from alembic import op
 import sqlalchemy as sa
 
 def upgrade():
-    # Add stipends relationship to Tag model
+    # Add JSONB column to stipend table
+    op.add_column('stipend', 
+        sa.Column('tags', sa.JSON(none_as_null=True), nullable=True)
+    )
+    
+    # Create many-to-many relationship table
     op.create_table(
         'stipend_tags',
         sa.Column('stipend_id', sa.Integer(), sa.ForeignKey('stipend.id'), primary_key=True),

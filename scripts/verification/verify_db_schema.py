@@ -101,9 +101,11 @@ def validate_schema(validate_relations=False, validate_required_fields=True):
             # Verify column types for critical columns
             if table == 'stipend':
                 for col in inspector.get_columns(table):
-                    if col['name'] == 'tags' and col['type'].__class__.__name__ != 'JSONB':
-                        logger.error("Invalid type for tags column - expected JSONB")
-                        return False
+                    if col['name'] == 'tags':
+                        # Accept either JSON or JSONB type
+                        if col['type'].__class__.__name__ not in ['JSON', 'JSONB']:
+                            logger.error(f"Invalid type for tags column - expected JSON/JSONB, got {col['type'].__class__.__name__}")
+                            return False
 
         # Verify required fields
         if validate_required_fields:
