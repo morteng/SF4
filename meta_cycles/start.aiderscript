@@ -23,7 +23,7 @@
 /add app/services/stipend_service.py
 
 # 2) Analyze project state
-/architect Based on the current codebase, what is the most critical cycle to run first? Please create the appropriate next cycle.
+/architect Based on the current context, documents and codebase, what is the most critical cycle to run first? Instructions from manager have priority. Please create the appropriate next cycle.
 
 # 3) Load database initialization cycle
 /load meta_cycles/db_init_cycle.aiderscript
