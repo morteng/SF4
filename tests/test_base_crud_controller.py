@@ -234,10 +234,14 @@ class TestBaseCrudController(BaseTestCase):
         if b'Dashboard' not in response.data:
             print("\nLogin failed. Response data:")
             print(response.data.decode('utf-8'))
+            print("\nForm errors:")
+            form = LoginForm()
+            form.process(data=request.form)
+            print(form.errors)
             print("\nSession data after login attempt:")
             with self.client.session_transaction() as session:
                 print(dict(session))
-        
+    
         # Verify we got a successful response
         self.assertEqual(response.status_code, 200, 
                         f"Expected status code 200, got {response.status_code}")

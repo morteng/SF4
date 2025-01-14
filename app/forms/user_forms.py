@@ -56,7 +56,18 @@ class ProfileForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
+    csrf_token = HiddenField('CSRF Token')  # Add CSRF token field
     submit = SubmitField('Login')
+
+    def validate_csrf_token(self, field):
+        """Custom CSRF token validation"""
+        if not field.data:
+            raise ValidationError(FlashMessages.CSRF_INVALID.value)
+        try:
+            from flask_wtf.csrf import validate_csrf
+            validate_csrf(field.data)
+        except Exception as e:
+            raise ValidationError(FlashMessages.CSRF_INVALID.value)
 
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
