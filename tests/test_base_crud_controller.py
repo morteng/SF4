@@ -220,7 +220,8 @@ class TestBaseCrudController(BaseTestCase):
         response = self.client.post(url_for('public.login'), data={
             'username': username,
             'password': password,
-            'csrf_token': csrf_token
+            'csrf_token': csrf_token,
+            'submit': 'Login'  # Add explicit submit button value
         }, follow_redirects=True)
         
         # Verify we got a successful response
