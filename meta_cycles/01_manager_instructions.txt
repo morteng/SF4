@@ -1,5 +1,7 @@
 # Updated Manager Instructions - 2025-01-14
 
+If you need to update the database schema then also create and run a script that actually performs the migration and upgrade.
+
 Get all the tests working!
 
 IMPORTANT! There can only be one /load directive at end of a code cycle file! If you have two, the second one will never execute.
