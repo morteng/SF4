@@ -25,8 +25,8 @@
 # 2) Analyze project state
 /architect Based on the current context, documents and codebase, what is the most critical cycle to run first? Instructions from manager have priority. Please create the appropriate next cycle.
 
-# 3) Load database initialization cycle
-/load meta_cycles/db_init_cycle.aiderscript
+# 3) Load database verification cycle
+/load meta_cycles/db_verification_cycle.aiderscript
 
 # 4) Start the cycle system
 /load meta_cycles/chooser.aiderscript

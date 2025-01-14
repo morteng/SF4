@@ -1,0 +1,16 @@
+# Cycle to verify and fix database connection and schema issues
+
+# 1) Verify database connection
+/run scripts/verification/verify_db_connection.py
+
+# 2) If connection fails, run initialization
+/ask If database connection fails, should we run init_db.py to recreate the database?
+
+# 3) Verify database schema
+/run scripts/verification/verify_db_schema.py
+
+# 4) If schema verification fails, fix path configuration
+/code Update scripts/path_config.py to ensure proper app module import paths
+
+# 5) Load next cycle based on verification results
+/load meta_cycles/chooser.aiderscript
