@@ -2,6 +2,9 @@ from flask_testing import TestCase
 from app import create_app, db
 from app.models import User, Stipend, Tag, Organization
 from app.constants import FlashMessages
+from app.services.base_service import BaseService
+from app.controllers.base_controller import BaseCrudController
+from app.forms.base_form import BaseForm
 import uuid
 from datetime import datetime, timedelta, timezone
 from wtforms.validators import ValidationError
@@ -32,11 +35,12 @@ class BaseTestCase(TestCase):
         self.login(self.admin.username, 'testpassword')
         
         # Create test service and controller
-        self.service = TestService()
+        # Create a simple test service using BaseService
+        self.service = BaseService(model=User)
         self.controller = BaseCrudController(
             service=self.service,
             entity_name='test',
-            form_class=TestForm
+            form_class=BaseForm
         )
 
     def tearDown(self):
