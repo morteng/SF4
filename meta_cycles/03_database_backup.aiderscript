@@ -1,0 +1,22 @@
+# Database Backup/Restore Cycle - 2025-01-14
+
+# This cycle implements automated database backup and restore functionality
+# with rotation, integrity verification, and monitoring
+
+# Key Features:
+# - Automated daily backups with rotation
+# - Backup integrity verification
+# - Restore functionality
+# - Monitoring and alerting
+# - Integration with existing logging system
+
+# Implementation Steps:
+# 1. Create backup service module
+# 2. Add backup configuration
+# 3. Implement backup scheduler
+# 4. Add restore functionality
+# 5. Integrate with monitoring system
+# 6. Add tests
+
+# Next cycle will focus on database connection pooling
+/load meta_cycles/04_connection_pooling.aiderscript
