@@ -9,10 +9,14 @@ def verify_coverage():
     cov.start()
     
     try:
-        # Run tests with explicit paths
-        result = os.system('python -m pytest tests/app/ tests/')
+        # Run tests with explicit paths and coverage
+        result = os.system('coverage run -m pytest tests/app/ tests/')
         if result != 0:
             raise RuntimeError("Tests failed to run successfully")
+            
+        # Ensure coverage data exists
+        if not os.path.exists('.coverage'):
+            raise RuntimeError("No coverage data collected")
             
         cov.stop()
         cov.save()

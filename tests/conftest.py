@@ -22,6 +22,8 @@ from app.models.user import User
 from app.models.organization import Organization
 from app.models.stipend import Stipend
 from app.models.tag import Tag
+from app.models.bot import Bot
+from app.models.notification import Notification
 
 # Ensure the project root is in the Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -172,9 +174,11 @@ def db_session(_db, app):
         session = _db.session
         session.bind = connection
         
-        # Ensure audit_log table exists
+        # Ensure all required tables exist
         from app.models.audit_log import AuditLog
+        from app.models.tag import Tag
         AuditLog.__table__.create(bind=connection, checkfirst=True)
+        Tag.__table__.create(bind=connection, checkfirst=True)
         
         yield session
         
