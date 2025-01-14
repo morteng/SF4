@@ -1,23 +1,16 @@
-# Enhanced database verification cycle with better error handling
+# Cycle to verify and fix database connection and schema issues
 
-# 1) Configure paths and logging
-/run scripts/path_config.py
-/run scripts/init_logging.py
-
-# 2) Verify database connection with retries
+# 1) Verify database connection
 /run scripts/verification/verify_db_connection.py
 
-# 3) If connection fails, initialize database
+# 2) If connection fails, run initialization
 /run scripts/init_db.py
 
-# 4) Verify database schema with proper imports
+# 3) Verify database schema
 /run scripts/verification/verify_db_schema.py
 
-# 5) If schema verification fails, fix path configuration
+# 4) If schema verification fails, fix path configuration
 /run scripts/path_config.py
 
-# 6) Record metrics and clean up
-/run scripts/end_cycle.py
-
-# 7) Load next cycle
+# 5) Load next cycle based on verification results
 /load meta_cycles/finalize_cycle.aiderscript

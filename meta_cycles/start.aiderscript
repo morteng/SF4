@@ -4,18 +4,29 @@
 # 0 Log start timestamp
 /run scripts\start_cycle.py
 
-# 1) Configure paths and logging
-/run scripts/path_config.py
-/run scripts/init_logging.py
+# 1) Bring core project files into context IMORTANT! NEVER REMOVE THESE!
+/git add .
+/commit
 
-# 2) Initialize database
-/run scripts/init_db.py
+/add docs/Design_Documentation.md
+/add docs/Planning_and_Progress.md
+/add docs/PRD.md
+/add docs/DEVLOG.md
 
-# 3) Verify database connection
-/run scripts/verification/verify_db_connection.py
+/add meta_cycles/00_documentation.md
+/add meta_cycles/02_TODO.txt
+/add meta_cycles/01_manager_instructions.txt
 
-# 4) Verify database schema
-/run scripts/verification/verify_db_schema.py
+/add app/controllers/base_crud_controller.py
+/add app/forms/admin_forms.py
+/add app/routes/admin/stipend_routes.py
+/add app/services/stipend_service.py
 
-# 5) Start the cycle system
+# 2) Analyze project state
+/architect Based on the current codebase, what is the most critical cycle to run first? Please suggest the appropriate next cycle.
+
+# 3) Load chooser with recommended cycle
+/code Update meta_cycles/chooser.aiderscript to load the recommended cycle
+
+# 4) Start the cycle system
 /load meta_cycles/chooser.aiderscript
