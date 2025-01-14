@@ -14,8 +14,24 @@ if project_root not in sys.path:
 
 try:
     from app.extensions import db
-    from app.services.notification_service import NotificationService
-    from app.services.metrics_service import MetricsService
+    class NotificationService:
+        """Basic notification service for restore operations"""
+        def send(self, title, message):
+            logger.info(f"Notification: {title} - {message}")
+            # Also print to console for immediate visibility
+            print(f"[NOTIFICATION] {title}: {message}")
+            
+    class MetricsService:
+        """Basic metrics service for restore operations"""
+        def __init__(self):
+            self.metrics_store = {}
+            
+        def record(self, metric, value):
+            logger.info(f"Recording metric: {metric}={value}")
+            self.metrics_store[metric] = value
+            # Print important metrics to console
+            if metric in ['restore_duration', 'restore_size', 'backup_age_restored']:
+                print(f"[METRIC] {metric}: {value}")
     from app.constants import FlashMessages
 except ImportError as e:
     logging.error(f"Import error: {str(e)}")
