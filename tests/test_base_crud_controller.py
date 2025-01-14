@@ -206,7 +206,8 @@ class TestBaseCrudController(BaseTestCase):
         response = self.client.post('/login', data={
             'username': username,
             'password': password,
-            'csrf_token': csrf_token
+            'csrf_token': csrf_token,
+            'submit': 'Login'  # Add submit button value
         }, follow_redirects=True)
         
         # Debug logging
