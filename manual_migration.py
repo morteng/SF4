@@ -11,20 +11,31 @@ def apply_migration():
         # Verify database connection
         print("Database URL:", app.config['SQLALCHEMY_DATABASE_URI'])
         
-        # Use connection object for SQL execution
-        with db.engine.connect() as connection:
-            # Add the column manually
-            connection.execute(db.text("""
-                ALTER TABLE user 
-                ADD COLUMN confirmed_at DATETIME
-            """))
+        # Check if column already exists
+        inspector = db.inspect(db.engine)
+        columns = inspector.get_columns('user')
+        column_names = [col['name'] for col in columns]
+        
+        if 'confirmed_at' not in column_names:
+            # Use connection object for SQL execution
+            with db.engine.connect() as connection:
+                # Add the column manually
+                connection.execute(db.text("""
+                    ALTER TABLE user 
+                    ADD COLUMN confirmed_at DATETIME
+                """))
+                print("Added confirmed_at column")
+        else:
+            print("confirmed_at column already exists")
             
-            # Update existing users
+        # Update existing users
+        with db.engine.connect() as connection:
             connection.execute(db.text("""
                 UPDATE user 
                 SET confirmed_at = CURRENT_TIMESTAMP 
                 WHERE confirmed_at IS NULL
             """))
+            print("Updated existing users")
             
             # Commit the changes
             connection.commit()
