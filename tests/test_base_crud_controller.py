@@ -57,6 +57,9 @@ class TestBaseCrudController(BaseTestCase):
         
         # Verify session contains correct user ID
         with self.client.session_transaction() as session:
+            self.assertIn('_user_id', session)
+            self.assertIn('is_admin', session)
+            self.assertIn('_fresh', session)
             self.assertEqual(session['_user_id'], str(self.test_user.id))
         
         # Create test template directory
