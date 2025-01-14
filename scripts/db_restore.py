@@ -46,22 +46,67 @@ class DatabaseRestore:
             'restore_success_rate': 1.0,
             'data_restored': 0,
             'backup_age_restored': None,
-            'verification_success_rate': 1.0
+            'verification_success_rate': 1.0,
+            'total_verification_time': 0,
+            'last_verification_time': 0,
+            'restore_validation_time': 0,
+            'restore_validation_success_rate': 1.0,
+            'data_integrity_checks': 0,
+            'data_integrity_errors': 0
         }
 
     def _verify_backup(self, backup_path: Path) -> bool:
-        """Verify backup integrity before restore
-        
-        Args:
-            backup_path (Path): Path to backup file
-            
-        Returns:
-            bool: True if backup is valid, False otherwise
-        """
+        """Enhanced backup verification with detailed checks"""
         try:
-            with gzip.open(backup_path, 'rb') as f:
-                header = f.read(100)
-                return b'CREATE TABLE' in header
+            # Basic file checks
+            if not backup_path.exists():
+                logger.error(f"Backup file not found: {backup_path}")
+                return False
+                
+            if backup_path.stat().st_size < 1024:  # Minimum 1KB
+                logger.error(f"Backup file too small: {backup_path.stat().st_size} bytes")
+                return False
+
+            # Gzip integrity check
+            try:
+                with gzip.open(backup_path, 'rb') as f:
+                    # Check header
+                    header = f.read(100)
+                    if b'CREATE TABLE' not in header:
+                        logger.error("Invalid backup header - missing CREATE TABLE")
+                        return False
+                    
+                    # Check footer
+                    f.seek(-100, 2)  # Go to last 100 bytes
+                    footer = f.read()
+                    if b'COMMIT' not in footer:
+                        logger.error("Invalid backup footer - missing COMMIT")
+                        return False
+                    
+                    # Check for required tables
+                    f.seek(0)
+                    content = f.read().decode('utf-8')
+                    required_tables = ['stipend', 'organization', 'tag']
+                    for table in required_tables:
+                        if f'CREATE TABLE {table}' not in content:
+                            logger.error(f"Missing required table: {table}")
+                            return False
+                            
+                    # Check for data integrity markers
+                    if 'INSERT INTO' not in content:
+                        logger.error("No data inserts found in backup")
+                        return False
+                        
+            except gzip.BadGzipFile:
+                logger.error("Invalid gzip file format")
+                return False
+            except UnicodeDecodeError:
+                logger.error("Invalid file encoding")
+                return False
+                
+            # If all checks passed
+            logger.info(f"Backup verification successful: {backup_path}")
+            return True
         except Exception as e:
             logger.error(f"Backup verification failed: {str(e)}")
             return False

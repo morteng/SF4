@@ -66,7 +66,15 @@ class DatabaseBackup:
             'total_size': 0,
             'failed_count': 0,
             'compression_ratio': 0.0,
-            'verification_success_rate': 1.0
+            'verification_success_rate': 1.0,
+            'backups_rotated': 0,
+            'storage_freed': 0,
+            'average_backup_size': 0,
+            'backup_success_rate': 1.0,
+            'last_backup_size': 0,
+            'last_backup_duration': 0,
+            'last_verification_time': 0,
+            'total_verification_time': 0
         }
         
     def _generate_backup_name(self):
@@ -513,23 +521,55 @@ class DatabaseBackup:
     def _verify_backup(self, backup_path):
         """Enhanced backup verification with detailed checks"""
         try:
-            with gzip.open(backup_path, 'rb') as f:
-                # Check header
-                header = f.read(100)
-                if b'CREATE TABLE' not in header:
-                    return False
+            # Basic file checks
+            if not backup_path.exists():
+                logger.error(f"Backup file not found: {backup_path}")
+                return False
                 
-                # Check footer
-                f.seek(-100, 2)  # Go to last 100 bytes
-                footer = f.read()
-                if b'COMMIT' not in footer:
-                    return False
+            if backup_path.stat().st_size < 1024:  # Minimum 1KB
+                logger.error(f"Backup file too small: {backup_path.stat().st_size} bytes")
+                return False
+
+            # Gzip integrity check
+            try:
+                with gzip.open(backup_path, 'rb') as f:
+                    # Check header
+                    header = f.read(100)
+                    if b'CREATE TABLE' not in header:
+                        logger.error("Invalid backup header - missing CREATE TABLE")
+                        return False
                     
-                # Check size
-                if backup_path.stat().st_size < 1024:  # Minimum 1KB
-                    return False
+                    # Check footer
+                    f.seek(-100, 2)  # Go to last 100 bytes
+                    footer = f.read()
+                    if b'COMMIT' not in footer:
+                        logger.error("Invalid backup footer - missing COMMIT")
+                        return False
                     
-                return True
+                    # Check for required tables
+                    f.seek(0)
+                    content = f.read().decode('utf-8')
+                    required_tables = ['stipend', 'organization', 'tag']
+                    for table in required_tables:
+                        if f'CREATE TABLE {table}' not in content:
+                            logger.error(f"Missing required table: {table}")
+                            return False
+                            
+                    # Check for data integrity markers
+                    if 'INSERT INTO' not in content:
+                        logger.error("No data inserts found in backup")
+                        return False
+                        
+            except gzip.BadGzipFile:
+                logger.error("Invalid gzip file format")
+                return False
+            except UnicodeDecodeError:
+                logger.error("Invalid file encoding")
+                return False
+                
+            # If all checks passed
+            logger.info(f"Backup verification successful: {backup_path}")
+            return True
         except Exception as e:
             logger.error(f"Backup verification failed: {str(e)}")
             self.notification_service.send(
