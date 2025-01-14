@@ -56,7 +56,7 @@ class ProfileForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    csrf_token = HiddenField('CSRF Token')  # Add CSRF token field
+    csrf_token = HiddenField('CSRF Token')
     submit = SubmitField('Login')
 
     def validate_csrf_token(self, field):
@@ -68,6 +68,12 @@ class LoginForm(FlaskForm):
             validate_csrf(field.data)
         except Exception as e:
             raise ValidationError(FlashMessages.CSRF_INVALID.value)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Generate CSRF token if not already set
+        if not self.csrf_token.data:
+            self.csrf_token.data = generate_csrf_token()
 
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

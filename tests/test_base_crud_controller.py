@@ -254,7 +254,7 @@ class TestBaseCrudController(BaseTestCase):
             self.assertIn('is_admin', session)
             self.assertEqual(session['is_admin'], self.test_user.is_admin)
             self.assertIn('_fresh', session)
-
+    
         return response
 
     def test_login_route(self):

@@ -19,56 +19,42 @@ def login():
     
     form = LoginForm()
     
-    # Add CSRF token to form if not already present
-    if not form.csrf_token.data:
-        form.csrf_token.data = generate_csrf_token()
-    
-    current_app.logger.info(f"Login form created, CSRF token: {form.csrf_token.data}")
-    
     if form.validate_on_submit():
         current_app.logger.info("Login form submitted and validated")
         user = User.query.filter_by(username=form.username.data).first()
         
-        if user:
-            current_app.logger.info(f"User found: {user.username}")
-            current_app.logger.info(f"User active status: {user.is_active}")
-            current_app.logger.info(f"Password check result: {user.check_password(form.password.data)}")
+        if user and user.check_password(form.password.data) and user.is_active:
+            # Clear any existing session data
+            session.clear()
             
-            if user.check_password(form.password.data) and user.is_active:
-                # Clear any existing session data
-                session.clear()
-                
-                # Login user and set session data
-                login_user(user)
-                session['_user_id'] = str(user.id)
-                session['is_admin'] = user.is_admin
-                session['_fresh'] = True
-                session.permanent = True
-                
-                current_app.logger.info(f"User {user.username} logged in successfully")
-                current_app.logger.info(f"Session data: {dict(session)}")
-                
-                # Create audit log
-                try:
-                    AuditLog.create(
-                        user_id=user.id,
-                        action='login',
-                        details='User logged in',
-                        ip_address=request.remote_addr,
-                        http_method=request.method,
-                        endpoint=request.endpoint
-                    )
-                except Exception as e:
-                    current_app.logger.error(f"Error creating login audit log: {str(e)}")
-                
-                flash('Login successful.', 'success')
-                return redirect(url_for('admin.dashboard.dashboard'))
-            else:
-                current_app.logger.warning("Login failed - invalid password or inactive user")
+            # Login user and set session data
+            login_user(user)
+            session['_user_id'] = str(user.id)
+            session['is_admin'] = user.is_admin
+            session['_fresh'] = True
+            session.permanent = True
+            
+            current_app.logger.info(f"User {user.username} logged in successfully")
+            current_app.logger.info(f"Session data: {dict(session)}")
+            
+            # Create audit log
+            try:
+                AuditLog.create(
+                    user_id=user.id,
+                    action='login',
+                    details='User logged in',
+                    ip_address=request.remote_addr,
+                    http_method=request.method,
+                    endpoint=request.endpoint
+                )
+            except Exception as e:
+                current_app.logger.error(f"Error creating login audit log: {str(e)}")
+            
+            flash('Login successful.', 'success')
+            return redirect(url_for('admin.dashboard.dashboard'))
         else:
-            current_app.logger.warning(f"User not found: {form.username.data}")
-            
-        flash('Invalid username or password', 'danger')
+            current_app.logger.warning("Login failed - invalid credentials or inactive user")
+            flash('Invalid username or password', 'danger')
     
     return render_template('login.html', form=form)
 
