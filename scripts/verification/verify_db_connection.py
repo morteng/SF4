@@ -16,14 +16,22 @@ from scripts.init_logging import configure_logging
 
 logger = logging.getLogger(__name__)
 
+def validate_db_connection(db_uri: str) -> bool:
+    """Validate database connection with error handling"""
+    try:
+        engine = create_engine(db_uri)
+        with engine.connect() as conn:
+            conn.execute("SELECT 1")
+            return True
+    except SQLAlchemyError as e:
+        logger.error(f"Database connection failed: {str(e)}")
+        return False
+
 def verify_db_connection(db_uri, max_retries=5, retry_delay=2):
     """Enhanced database connection verification with retries"""
     for attempt in range(max_retries):
         try:
-            engine = create_engine(db_uri)
-            with engine.connect() as conn:
-                # Execute a simple query to verify connection
-                conn.execute("SELECT 1")
+            if validate_db_connection(db_uri):
                 return True
         except SQLAlchemyError as e:
             if attempt == max_retries - 1:

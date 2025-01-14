@@ -23,7 +23,18 @@ try:
     with app.app_context():
         logger.info("Creating database tables...")
         db.create_all()
-        logger.info("Database tables created successfully")
+            
+        # Add missing tags column if it doesn't exist
+        from sqlalchemy import inspect, Column, JSON
+        inspector = inspect(db.engine)
+        if 'stipend' in inspector.get_table_names():
+            columns = [col['name'] for col in inspector.get_columns('stipend')]
+            if 'tags' not in columns:
+                logger.info("Adding missing 'tags' column to stipend table")
+                with db.engine.connect() as conn:
+                    conn.execute('ALTER TABLE stipend ADD COLUMN tags JSONB')
+            
+        logger.info("Database tables created/updated successfully")
         
         # Create initial admin user if doesn't exist
         if not User.query.filter_by(username='admin').first():
