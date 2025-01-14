@@ -4,7 +4,7 @@ from app.models import User, Stipend, Tag, Organization
 from app.constants import FlashMessages
 from app.services.base_service import BaseService
 from app.controllers.base_crud_controller import BaseCrudController
-from app.forms.base_form import BaseForm
+from app.forms.admin_forms import StipendForm
 import uuid
 from datetime import datetime, timedelta, timezone
 from wtforms.validators import ValidationError
