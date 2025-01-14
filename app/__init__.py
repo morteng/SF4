@@ -4,7 +4,7 @@ from flask import Flask, redirect, url_for, flash
 from dotenv import load_dotenv
 from sqlalchemy import text
 from flask_wtf.csrf import CSRFError
-from app.extensions import db, login_manager, limiter
+from app.extensions import db, login_manager, limiter, init_extensions
 from app.config import config_by_name
 from app.services.user_service import create_user, delete_user
 from app.models.user import User
