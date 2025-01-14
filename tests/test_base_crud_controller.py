@@ -3,6 +3,7 @@ import uuid
 from datetime import datetime
 from unittest.mock import patch
 from flask import Response, url_for, request
+from flask_login import current_user
 from app.models.user import User
 from app.models.stipend import Stipend
 from app.extensions import db
