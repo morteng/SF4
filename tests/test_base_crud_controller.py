@@ -210,10 +210,6 @@ class TestBaseCrudController(BaseTestCase):
             'submit': 'Login'  # Add submit button value
         }, follow_redirects=True)
         
-        # Debug logging
-        print(f"Login response status: {response.status_code}")
-        print(f"Response data: {response.data.decode('utf-8')}")
-        
         # Verify we got a successful response
         self.assertEqual(response.status_code, 200)
         
@@ -223,7 +219,8 @@ class TestBaseCrudController(BaseTestCase):
         # Verify session contains user ID
         with self.client.session_transaction() as session:
             self.assertIn('_user_id', session)
-            # Don't check specific user ID since we're using different users
+            self.assertIn('is_admin', session)
+            self.assertIn('_fresh', session)
 
         return response
 
