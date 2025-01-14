@@ -19,7 +19,8 @@ app = create_app('testing')
 
 class TestBaseCrudController(BaseTestCase):
     def setUp(self):
-        super().setUp()
+        # Create all database tables
+        db.create_all()
         
         # Create unique test user with hashed password
         self.test_user = User(

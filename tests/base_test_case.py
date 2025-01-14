@@ -19,6 +19,7 @@ class BaseTestCase(TestCase):
         return app
 
     def setUp(self):
+        # Create all database tables
         db.create_all()
         
         # Create test admin user
