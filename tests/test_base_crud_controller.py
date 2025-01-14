@@ -180,8 +180,9 @@ class TestBaseCrudController(BaseTestCase):
             'submit': 'Login'
         }, follow_redirects=True)
         
-        # Verify login was successful
+        # Verify redirect to dashboard
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.request.path, url_for('admin.dashboard.dashboard'))
         self.assertIn(b'Dashboard', response.data)
         
         # Verify session contains correct user ID
