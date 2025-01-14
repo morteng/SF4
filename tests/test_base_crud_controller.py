@@ -80,6 +80,12 @@ class TestBaseCrudController(BaseTestCase):
         mock_create.return_value = Result(success=True, message="Created")
         
         form_data = {'name': 'New Tag', 'category': 'TestCategory', 'submit': True}
+        
+        # Create mock form
+        mock_form = MagicMock()
+        mock_form.validate.return_value = True
+        mock_form.data = form_data
+        
         with self.client:
             self.login()
             
@@ -87,7 +93,9 @@ class TestBaseCrudController(BaseTestCase):
             with self.client.session_transaction() as session:
                 session['_fresh'] = True
                 
-            response = self.controller.create(form_data)
+            # Patch form creation
+            with patch('app.forms.admin_forms.TagForm', return_value=mock_form):
+                response = self.controller.create(form_data)
             
             # Verify service was called with form data
             mock_create.assert_called_once_with(form_data)
@@ -95,11 +103,14 @@ class TestBaseCrudController(BaseTestCase):
             # Verify template was rendered
             mock_render.assert_called_once_with(
                 'admin/tag/create.html',
-                form=ANY,  # We don't care about the exact form instance
+                form=mock_form,
                 htmx_request=False
             )
             
             self.assertEqual(response.status_code, 200)
+            
+            # Verify form validation was called
+            mock_form.validate.assert_called_once()
 
     @patch('app.controllers.base_crud_controller.render_template')
     def test_create_validation_error(self, mock_render):
