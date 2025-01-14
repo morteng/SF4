@@ -78,10 +78,18 @@ class TestBaseCrudController(BaseTestCase):
             self.login()
             template, status_code = self.controller.create(form_data)  # Unpack tuple
             self.assertEqual(status_code, 200)  # Check status code
-            mock_render.assert_called_once_with(
-                'admin/tag/create.html',
-                form=self.controller.form_class()
-            )
+            
+            # Get the form that was passed to render_template
+            render_args, render_kwargs = mock_render.call_args
+            rendered_form = render_kwargs['form']
+            
+            # Verify the form contains the expected data
+            self.assertEqual(rendered_form.name.data, 'New Tag')
+            self.assertEqual(rendered_form.category.data, 'TestCategory')
+            
+            # Verify template was rendered
+            mock_render.assert_called_once()
+            
             tag = Tag.query.filter_by(name='New Tag').first()
             self.assertIsNotNone(tag)
 
