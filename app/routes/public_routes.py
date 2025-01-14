@@ -64,6 +64,11 @@ def login():
         # Use consistent error message for security
         flash('Invalid username or password', 'danger')
         return render_template('login.html', form=form)
+    
+    # Handle CSRF token errors
+    if form.errors.get('csrf_token'):
+        flash('Invalid CSRF token. Please try again.', 'danger')
+    
     return render_template('login.html', form=form)
 
 from app.models.tag import Tag
