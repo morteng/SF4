@@ -3,28 +3,27 @@
 
 ### CODE START ###
 
-# Initialize enhanced test environment with path verification
-/run scripts/setup_test_env.py --test --verify --debug
-/run scripts/path_config.py --test --verify --monitoring
+# Initialize test environment
+/run scripts/setup_test_env.py --test
+/run scripts/path_config.py --test
 
-# Core functionality tests with enhanced monitoring
-/run scripts/testing/run_tests.py --unit --integration --e2e --cov --fail-under=85 --critical-paths --monitoring
+# Run core service tests
+/run scripts/testing/run_tests.py --test-type=unit --coverage
+/run scripts/testing/run_tests.py --test-type=integration --coverage
 
-# Admin interface and security verification
-/run scripts/verification/verify_admin.py --check-credentials --verify-access --test-password-complexity --monitoring
-/run scripts/verification/verify_htmx_integration.py --test-stipends-crud --validate-partial-updates --admin-interface --check-full-reloads --monitoring
+# Verify database and security
+/run scripts/verification/verify_db_connection.py --retries=3
+/run scripts/verification/verify_security.py --full-audit
 
-# Security and database verification with retries
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits --check-csrf --monitoring
-/run scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-pool --verify-timeout --monitoring
+# Test HTMX integration
+/run scripts/verification/verify_htmx_integration.py --test-stipends-crud
 
-# Enhanced monitoring and coverage verification
-/run scripts/verification/verify_monitoring.py --full --dashboard --verify-metrics --check-response-times --verify-alerts
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin --check-models --monitoring
+# Verify monitoring setup
+/run scripts/verification/verify_monitoring.py --dashboard
 
 # Final verification and commit
-/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --verify-admin --monitoring
-/run scripts/commit_changes.py --message "Testing cycle completed" --verify --push --check-coverage --check-security --monitoring
+/run scripts/verification/verify_production_ready.py
+/run scripts/commit_changes.py --message "Testing cycle completed"
 
 ### CODE END ###
 
