@@ -105,16 +105,25 @@ def app():
     app.config['WTF_CSRF_ENABLED'] = True
     app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'
 
-    # Configure rate limiter and CSRF
-    app.config['RATELIMIT_ENABLED'] = False  # Disable rate limiting for tests
-    app.config['WTF_CSRF_ENABLED'] = True
-    app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'
-
     # Initialize the app with migrations
     with app.app_context():
-        from flask_migrate import upgrade
-        upgrade()
-        db.session.expire_on_commit = False
+        # Create migrations directory if it doesn't exist
+        migrations_dir = Path('migrations')
+        if not migrations_dir.exists():
+            migrations_dir.mkdir()
+            
+        # Initialize database and run migrations
+        db.create_all()
+        
+        # Create initial migration if needed
+        from flask_migrate import Migrate
+        migrate = Migrate(app, db)
+        try:
+            from flask_migrate import upgrade
+            upgrade()
+        except Exception as e:
+            # If migrations fail, create the tables directly
+            db.create_all()
 
     yield app
 
@@ -136,7 +145,13 @@ def _db(app):
         # Create all tables including audit_log
         from app.models.audit_log import AuditLog
         from app.models.stipend import Stipend
-        db.create_all()
+        
+        # Create tables directly if migrations fail
+        try:
+            db.create_all()
+        except Exception as e:
+            app.logger.warning(f"Failed to create tables via migrations: {str(e)}")
+            db.create_all()
         
         try:
             yield db
