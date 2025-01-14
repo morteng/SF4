@@ -15,27 +15,38 @@ import logging
 
 
 def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
-    # Modify test data with an invalid application_deadline format
-    test_data['application_deadline'] = '12/31/2023 23:59:59'  # Different format
+    # Test various invalid date formats
+    invalid_formats = [
+        '12/31/2023 23:59:59',  # Wrong format
+        '2023-02-30 12:00:00',  # Invalid date
+        '2023-13-01 12:00:00',  # Invalid month
+        '2023-01-32 12:00:00',  # Invalid day
+        '2023-01-01 25:00:00',  # Invalid hour
+        '2023-01-01 12:60:00',  # Invalid minute
+        '2023-01-01 12:00:60',  # Invalid second
+        'invalid-date',         # Completely invalid
+        '',                     # Empty string
+        None                    # Null value
+    ]
     
-    form = StipendForm(data=test_data)
-    
-    with app.app_context(), app.test_client() as client:
-        with app.test_request_context():
-            login_user(admin_user)
+    for invalid_format in invalid_formats:
+        test_data['application_deadline'] = invalid_format
         
-        stipend_data = {k: v for k, v in form.data.items() if k != 'submit'}
-        service = StipendService()
-        result = service.create(stipend_data)
-
-    # Assert that the stipend was not created due to validation errors
-    new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
-    assert new_stipend is None
-
-    # Check if the correct flash message was set
-    with app.test_request_context():
-        messages = get_flashed_messages()
-        assert any("Invalid date format" in msg for msg in messages)
+        with app.app_context(), app.test_client() as client:
+            with app.test_request_context():
+                login_user(admin_user)
+            
+            stipend_data = {k: v for k, v in test_data.items() if k != 'submit'}
+            service = StipendService()
+            
+            with pytest.raises(ValueError) as exc_info:
+                service.create(stipend_data)
+            
+            assert "Invalid date format" in str(exc_info.value)
+            
+            # Verify no record was created
+            new_stipend = db_session.query(Stipend).filter_by(name=test_data['name']).first()
+            assert new_stipend is None
 
 def test_create_stipend_with_all_fields(test_data, db_session, app, admin_user):
     # Create an organization first

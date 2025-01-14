@@ -185,7 +185,7 @@ def test_create_stipend_route(authenticated_admin: FlaskClient, db_session) -> N
         'csrf_token': csrf_token
     }
 
-    # Submit form
+    # Test successful creation
     response = authenticated_admin.post(
         url_for('admin.stipend.create'),
         data=form_data,
@@ -210,6 +210,51 @@ def test_create_stipend_route(authenticated_admin: FlaskClient, db_session) -> N
     assert notification.type == 'STIPEND_CREATED'
 
     assert FlashMessages.CREATE_STIPEND_SUCCESS.value.encode() in response.data
+
+    # Test missing required fields
+    for field in ['name', 'application_deadline', 'organization_id']:
+        invalid_data = form_data.copy()
+        invalid_data[field] = ''
+        
+        response = authenticated_admin.post(
+            url_for('admin.stipend.create'),
+            data=invalid_data,
+            follow_redirects=True
+        )
+        assert response.status_code == 400
+        assert b'This field is required' in response.data
+
+    # Test invalid organization ID
+    invalid_data = form_data.copy()
+    invalid_data['organization_id'] = '99999'
+    response = authenticated_admin.post(
+        url_for('admin.stipend.create'),
+        data=invalid_data,
+        follow_redirects=True
+    )
+    assert response.status_code == 400
+    assert b'Invalid organization' in response.data
+
+    # Test invalid tag IDs
+    invalid_data = form_data.copy()
+    invalid_data['tags'] = ['99999']
+    response = authenticated_admin.post(
+        url_for('admin.stipend.create'),
+        data=invalid_data,
+        follow_redirects=True
+    )
+    assert response.status_code == 400
+    assert b'Invalid tag' in response.data
+
+    # Test rate limiting
+    for _ in range(11):  # Default limit is 10 per minute
+        response = authenticated_admin.post(
+            url_for('admin.stipend.create'),
+            data=form_data,
+            follow_redirects=True
+        )
+    
+    assert response.status_code == 429  # Too Many Requests
 
 
 @pytest.mark.parametrize("invalid_date, expected_message", [
