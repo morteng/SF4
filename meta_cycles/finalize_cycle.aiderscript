@@ -1,7 +1,13 @@
 # Enhanced finalization cycle
 
+/ask did the cycle result in success? If not, is there anything we can do to fix the problem?
+/code implement suggested changes.
+
 # 1) Clean up resources
 /run scripts/cleanup.py
+
+# ALWATYS run the end cycle script!
+/run scripts\end_cycle.py
 
 # 2) Update documentation and logs
 /code Update DEVLOG.md replacing old entry with results of this cycle

@@ -2,7 +2,7 @@
 # Modified to better initialize the Stipend Finder project
 # NEVER edit this document!
 
-# 0 Log start timestamp
+# 0 Log start timestamp - ALWAYS DO THIS
 /run scripts\start_cycle.py
 
 # 1) Bring core project files into context IMORTANT! NEVER REMOVE THESE!
