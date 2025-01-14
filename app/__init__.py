@@ -69,10 +69,11 @@ def _init_extensions(app):
             logger.error(f"Error loading user: {str(e)}")
             return None
             
-    # Verify database connection
+    # Verify database connection using SQLAlchemy 2.0+ API
     try:
         with app.app_context():
-            db.engine.execute('SELECT 1')
+            with db.engine.connect() as connection:
+                connection.execute(text('SELECT 1'))
             logger.info("Database connection verified")
     except Exception as e:
         logger.error(f"Database connection failed: {str(e)}")

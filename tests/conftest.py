@@ -91,9 +91,9 @@ warnings.filterwarnings("ignore", category=SAWarning)
 @pytest.fixture(scope='session')
 def app():
     """Create and configure a new app instance for the test session."""
-    app = create_app()
+    app = create_app("testing")
     app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # Force in-memory DB
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     # Configure SQLite-specific settings

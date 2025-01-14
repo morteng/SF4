@@ -33,9 +33,9 @@ class Config:
 class TestConfig(Config):
     DEBUG = False
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:?cache=shared'
-    WTF_CSRF_ENABLED = True  # Enable CSRF in testing to match production
-    WTF_CSRF_SECRET_KEY = 'test-secret-key'  # Add a test CSRF secret key
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    WTF_CSRF_ENABLED = True
+    WTF_CSRF_SECRET_KEY = 'test-secret-key'
     
     # Configure SQLite for testing
     SQLALCHEMY_ENGINE_OPTIONS = {
