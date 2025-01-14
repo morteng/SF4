@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from scripts.db_monitor import BackupDashboard, BackupMetric
-from scripts.db_alerts import BackupAlerts
+from scripts.db_alerts import BackupAlerts, AlertConfig
 from datetime import datetime
 
 class TestBackupMonitoring(unittest.TestCase):
