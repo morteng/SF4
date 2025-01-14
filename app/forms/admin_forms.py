@@ -33,6 +33,25 @@ from app.extensions import db
 
 
 class StipendForm(FlaskForm):
+    """Form for creating and editing stipend records.
+    
+    Includes validation for required fields, date formats, and relationships
+    with organizations and tags.
+    
+    Attributes:
+        csrf_token: Hidden CSRF token field for security
+        name: Stipend name field
+        summary: Short description field
+        description: Detailed description field
+        homepage_url: Organization website URL
+        application_procedure: Instructions for applying
+        eligibility_criteria: Requirements for eligibility
+        application_deadline: Deadline for applications
+        organization_id: Related organization
+        open_for_applications: Status flag
+        tags: Associated tags
+        submit: Form submission button
+    """
     def __init__(self, *args, **kwargs):
         logger.debug("Initializing StipendForm")
         super().__init__(*args, **kwargs)

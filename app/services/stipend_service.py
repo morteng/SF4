@@ -10,6 +10,19 @@ from app.constants import FlashMessages, FlashCategory
 logger = logging.getLogger(__name__)
 
 class StipendService(BaseService):
+    """Service layer for stipend-related business logic.
+    
+    Handles CRUD operations for stipends with built-in validation,
+    audit logging, and relationship management.
+    
+    Inherits from BaseService and adds stipend-specific functionality.
+    
+    Attributes:
+        model: The Stipend model class
+        audit_logger: Optional audit logging instance
+        limiter: Rate limiter instance
+        rate_limits: Dictionary of rate limits for operations
+    """
     def __init__(self):
         super().__init__(Stipend)
         # Add pre/post hooks for audit logging

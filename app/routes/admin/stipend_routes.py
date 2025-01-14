@@ -35,9 +35,33 @@ from app.models import Stipend, Organization, Tag
 from app.constants import FlashMessages, FlashCategory
 
 def get_stipend_by_id(id):
+    """Retrieve a stipend by its ID.
+    
+    Args:
+        id: The ID of the stipend to retrieve
+        
+    Returns:
+        Stipend: The retrieved stipend instance
+        
+    Raises:
+        404: If no stipend exists with the given ID
+    """
     return Stipend.query.get_or_404(id)
 
 def update_stipend(stipend, data, session=None):
+    """Update a stipend record with new data.
+    
+    Args:
+        stipend: The stipend instance to update
+        data: Dictionary of new field values
+        session: Optional database session to use
+        
+    Returns:
+        Stipend: The updated stipend instance
+        
+    Raises:
+        Exception: If the update fails
+    """
     session = session or db.session
     try:
         for key, value in data.items():
@@ -49,6 +73,15 @@ def update_stipend(stipend, data, session=None):
         raise e
 
 def delete_stipend(id):
+    """Delete a stipend by its ID.
+    
+    Args:
+        id: The ID of the stipend to delete
+        
+    Raises:
+        404: If no stipend exists with the given ID
+        Exception: If the deletion fails
+    """
     stipend = get_stipend_by_id(id)
     db.session.delete(stipend)
     db.session.commit()

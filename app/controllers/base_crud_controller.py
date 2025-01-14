@@ -10,6 +10,21 @@ from app.models.audit_log import AuditLog
 from app.constants import FlashMessages, FlashCategory
 
 class BaseCrudController:
+    """Base controller class for CRUD operations.
+    
+    Provides common functionality for create, read, update and delete operations
+    with built-in error handling, audit logging, and HTMX support.
+    
+    Attributes:
+        service: Service layer instance for business logic
+        entity_name: Name of the entity being managed
+        form_class: WTForms class for form validation
+        template_dir: Directory for template files
+        audit_logger: Optional audit logging instance
+        flash_messages: Dictionary of flash message templates
+        supports_htmx: Whether to support HTMX partial responses
+        htmx_headers: Default HTMX response headers
+    """
     def __init__(self, service, entity_name, form_class, template_dir=None, audit_logger=None):
         self.service = service
         self.entity_name = entity_name
