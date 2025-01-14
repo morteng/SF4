@@ -1,5 +1,7 @@
 # Updated Manager Instructions - 2025-01-14
 
+Important! No need to split cycle files up, like wit backup_restore_cycle.aiderscript just add all steps to it before the last /load command.
+
 If you need to update the database schema then also create and run a script that actually performs the migration and upgrade.
 
 Get all the tests working!

@@ -18,4 +18,4 @@
 /code Create scripts/db_backup.py with a DatabaseBackup class that handles automated backups with compression, timestamping, and verification
 
 ## Next Cycle
-/load meta_cycles/backup_restore_cycle_2.aiderscript
+/load meta_cycles/finalize_cycle.aiderscript
