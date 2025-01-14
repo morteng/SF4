@@ -133,6 +133,7 @@ def app():
         if hasattr(db, 'engine'):
             db.engine.dispose()
         db.drop_all()
+        db.drop_all()
 
 
 # -------------------------------------------------------------------
