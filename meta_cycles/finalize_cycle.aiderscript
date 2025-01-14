@@ -10,7 +10,7 @@
 /run scripts\end_cycle.py
 
 # 2) Update documentation and logs
-/code Update DEVLOG.md replacing old entry with results of this cycle
+/code Update DEVLOG.md - remove old entry and write a new one based on results of this cycle
 /code Update TODO.txt, removing completed tasks
 
 # 3) Reset context memory
