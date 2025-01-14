@@ -1,7 +1,7 @@
 # Updated Manager Instructions - 2025-01-14
 
 Most important new rule!
-NEVER use /code prompts to edit or create files directly by naming the files in the prompt. Instead, use /add filename commands and then use /code and ask for the changes you want in the code.
+NEVER use /code prompts to edit or create files directly by naming the files in the prompt. Instead, use /add filename1 filename 2 filename 3 command and then use /code and ask for the changes you want in the code.
 
 
 Never add comments like this:

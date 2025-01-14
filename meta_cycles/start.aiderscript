@@ -24,7 +24,7 @@
 /add app/services/stipend_service.py
 
 # 2) Analyze project state
-/architect Based on the current codebase, what is the most critical cycle to run first? Please plan out and set up the appropriate next code cycle.
+/architect Based on the current codebase, what is the most critical cycle to run next? Please plan out and set up the appropriate next code cycle.
 
 # 3) Load chooser with recommended cycle
 /code Update meta_cycles/chooser.aiderscript to load the recommended cycle
