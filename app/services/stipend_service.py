@@ -86,21 +86,24 @@ class StipendService(BaseService):
         """Validate stipend data before creation"""
         logger.debug("Validating stipend creation data")
         
-        if not data.get('name'):
-            logger.error("Name is required")
-            raise ValueError(FlashMessages.REQUIRED_FIELD.format(field='name'))
+        # Validate required fields
+        required_fields = {
+            'name': FlashMessages.REQUIRED_FIELD.format(field='name'),
+            'organization_id': 'Organization is required'
+        }
+        
+        for field, error_msg in required_fields.items():
+            if not data.get(field):
+                logger.error(f"Missing required field: {field}")
+                raise ValueError(error_msg)
             
-        # Validate organization
-        if 'organization_id' not in data or not data['organization_id']:
-            logger.error("Organization is required")
-            raise ValueError('Organization is required.')
-            
+        # Validate organization exists
         org = db.session.get(Organization, data['organization_id'])
         if not org:
             logger.error(f"Invalid organization ID: {data['organization_id']}")
             raise ValueError('Invalid organization selected')
 
-        # Validate application deadline
+        # Validate application deadline format if present
         if 'application_deadline' in data and data['application_deadline']:
             try:
                 datetime.strptime(data['application_deadline'], '%Y-%m-%d %H:%M:%S')

@@ -110,6 +110,7 @@ class StipendForm(FlaskForm):
         validate_application_deadline(field)
 
     def validate_organization_id(self, field):
+        """Validate organization ID field"""
         if field.data:  # Only validate if organization_id is provided
             organization = db.session.get(Organization, field.data)
             if not organization:
@@ -135,8 +136,8 @@ class StipendForm(FlaskForm):
             self.tags.data = [tag.id for tag in kwargs['obj'].tags]
             self.organization_id.data = kwargs['obj'].organization_id
 
-
     def validate_open_for_applications(self, field):
+        """Validate open_for_applications field"""
         # Handle string values from form submission
         if isinstance(field.data, str):
             field.data = field.data.lower() in ['true', 'yes', '1', 'y', 'on']
@@ -146,12 +147,6 @@ class StipendForm(FlaskForm):
         # Ensure the field data is properly set in the form
         self.open_for_applications.data = field.data
         return None  # Explicitly return None as required by WTForms
-
-    def validate_organization_id(self, field):
-        if field.data:  # Only validate if organization_id is provided
-            organization = db.session.get(Organization, field.data)
-            if not organization:
-                raise ValidationError('Invalid organization selected.')
 
     def validate(self):
         logger.debug("Validating StipendForm")
