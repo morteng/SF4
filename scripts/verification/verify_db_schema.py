@@ -1,23 +1,27 @@
+import os
 import logging
 import sys
 from pathlib import Path
-from sqlalchemy import inspect
+from sqlalchemy import inspect, create_engine
 from sqlalchemy.exc import SQLAlchemyError
 
+# Configure logging
 logger = logging.getLogger(__name__)
 
 def configure_paths():
-    """Configure project paths."""
+    """Configure project paths with proper error handling."""
     try:
-        # Assuming this function sets up required paths dynamically
-        project_root = Path(__file__).resolve().parent.parent
-        sys.path.insert(0, str(project_root))
-
-        app_dir = project_root / 'app'
-        sys.path.insert(0, str(app_dir))
+        project_root = str(Path(__file__).resolve().parent.parent.parent)
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+        
+        app_dir = str(Path(project_root) / 'app')
+        if app_dir not in sys.path:
+            sys.path.insert(0, app_dir)
+            
         return True
     except Exception as e:
-        logger.error(f"Failed to configure paths: {e}")
+        logger.error(f"Failed to configure paths: {str(e)}")
         return False
 
 def verify_foreign_keys(inspector):
@@ -31,26 +35,24 @@ def verify_foreign_keys(inspector):
                     return False
         return True
     except SQLAlchemyError as e:
-        logger.error(f"Foreign key verification failed: {e}")
+        logger.error(f"Foreign key verification failed: {str(e)}")
         return False
 
 def validate_schema(validate_relations=False, validate_required_fields=True):
-    """Validate database schema against expected structure.
-
-    Args:
-        validate_relations (bool): Whether to validate foreign key relationships.
-        validate_required_fields (bool): Verify required fields in specific tables.
-
-    Returns:
-        bool: True if validation passes, False otherwise.
-    """
+    """Validate database schema against expected structure."""
     if not configure_paths():
         logger.error("Path configuration failed")
         return False
 
     try:
-        from app import db
-
+        db_uri = os.getenv('SQLALCHEMY_DATABASE_URI')
+        if not db_uri:
+            logger.error("SQLALCHEMY_DATABASE_URI not set")
+            return False
+            
+        engine = create_engine(db_uri)
+        inspector = inspect(engine)
+        
         # Define expected schema
         expected_schema = {
             'user': ['id', 'username', 'email', 'password_hash'],
@@ -59,7 +61,6 @@ def validate_schema(validate_relations=False, validate_required_fields=True):
             'tag': ['id', 'name']
         }
 
-        inspector = inspect(db.engine)
         actual_tables = inspector.get_table_names()
 
         # Verify all expected tables exist
@@ -92,16 +93,11 @@ def validate_schema(validate_relations=False, validate_required_fields=True):
         logger.info("Schema validation passed")
         return True
 
-    except ImportError as e:
-        logger.error(f"Import error: {e}")
-        return False
-
     except SQLAlchemyError as e:
-        logger.error(f"SQLAlchemy error: {e}")
+        logger.error(f"SQLAlchemy error: {str(e)}")
         return False
-
     except Exception as e:
-        logger.error(f"Unexpected error: {e}")
+        logger.error(f"Unexpected error: {str(e)}")
         return False
 
 if __name__ == "__main__":

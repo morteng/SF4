@@ -1,7 +1,10 @@
 import os
 import logging
 import sys
+import time
 from pathlib import Path
+from sqlalchemy import create_engine
+from sqlalchemy.exc import SQLAlchemyError
 
 # Configure paths before importing project modules
 project_root = str(Path(__file__).resolve().parent.parent.parent)
@@ -11,10 +14,23 @@ if project_root not in sys.path:
 from scripts.path_config import configure_paths
 from scripts.init_logging import configure_logging
 
-# Now import project modules
-from app.common.db_utils import validate_db_connection
-
 logger = logging.getLogger(__name__)
+
+def verify_db_connection(db_uri, max_retries=5, retry_delay=2):
+    """Enhanced database connection verification with retries"""
+    for attempt in range(max_retries):
+        try:
+            engine = create_engine(db_uri)
+            with engine.connect() as conn:
+                # Execute a simple query to verify connection
+                conn.execute("SELECT 1")
+                return True
+        except SQLAlchemyError as e:
+            if attempt == max_retries - 1:
+                logger.error(f"Database connection failed after {max_retries} attempts: {str(e)}")
+                return False
+            time.sleep(retry_delay * (attempt + 1))  # Exponential backoff
+    return False
 
 if __name__ == "__main__":
     configure_logging()
@@ -26,7 +42,8 @@ if __name__ == "__main__":
 
     logger.info("Starting database connection verification")
     db_uri = os.getenv('SQLALCHEMY_DATABASE_URI')
-    if validate_db_connection(db_uri):
+    
+    if verify_db_connection(db_uri):
         print("Database connection verification passed")
         logger.info("Database connection verification passed")
         exit(0)
