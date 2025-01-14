@@ -451,3 +451,127 @@ def test_get_all_stipends_with_no_entries(app):
     service = StipendService()
     all_stipends = service.get_all()
     assert len(all_stipends) == 0
+
+def test_create_stipend_with_max_length_fields(test_data, db_session, app, admin_user):
+    """Test creating stipend with maximum length fields"""
+    # Create organization first
+    org = Organization(name="Test Org")
+    db.session.add(org)
+    db.session.commit()
+    
+    # Set max length values
+    test_data.update({
+        'name': 'A' * 100,  # Max length
+        'summary': 'B' * 500,
+        'description': 'C' * 2000,
+        'homepage_url': 'http://' + 'a' * 200 + '.com',
+        'application_procedure': 'D' * 2000,
+        'eligibility_criteria': 'E' * 2000,
+        'organization_id': org.id
+    })
+
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+        
+        service = StipendService()
+        result = service.create(test_data)
+        
+        # Verify all fields were saved correctly
+        stipend = Stipend.query.filter_by(name=test_data['name']).first()
+        assert stipend is not None
+        assert len(stipend.name) == 100
+        assert len(stipend.summary) == 500
+        assert len(stipend.description) == 2000
+
+def test_create_stipend_with_minimal_data(db_session, app, admin_user):
+    """Test creating stipend with only required fields"""
+    # Create organization first
+    org = Organization(name="Test Org")
+    db.session.add(org)
+    db.session.commit()
+    
+    minimal_data = {
+        'name': 'Minimal Stipend',
+        'organization_id': org.id,
+        'application_deadline': '2025-12-31 23:59:59'
+    }
+
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+        
+        service = StipendService()
+        result = service.create(minimal_data)
+        
+        # Verify stipend was created with minimal data
+        stipend = Stipend.query.filter_by(name='Minimal Stipend').first()
+        assert stipend is not None
+        assert stipend.summary is None
+        assert stipend.description is None
+
+def test_update_stipend_with_empty_fields(test_data, db_session, app, admin_user):
+    """Test updating stipend with empty optional fields"""
+    stipend = Stipend(**test_data)
+    db.session.add(stipend)
+    db.session.commit()
+
+    update_data = {
+        'name': 'Updated Stipend',
+        'summary': '',
+        'description': '',
+        'organization_id': stipend.organization_id
+    }
+
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+        
+        service = StipendService()
+        result = service.update(stipend.id, update_data)
+        
+        # Verify update
+        updated_stipend = Stipend.query.get(stipend.id)
+        assert updated_stipend.name == 'Updated Stipend'
+        assert updated_stipend.summary is None
+        assert updated_stipend.description is None
+
+def test_stipend_service_rate_limiting(test_data, app):
+    """Test rate limiting in stipend service"""
+    service = StipendService()
+    
+    # Create organization first
+    org = Organization(name="Test Org")
+    db.session.add(org)
+    db.session.commit()
+    test_data['organization_id'] = org.id
+
+    # Make 11 requests (limit is 10 per minute)
+    with pytest.raises(Exception) as exc_info:
+        for i in range(11):
+            service.create(test_data)
+            
+    assert "Rate limit exceeded" in str(exc_info.value)
+
+def test_stipend_service_audit_logging(test_data, db_session, app, admin_user):
+    """Test audit logging in stipend service"""
+    from app.models.audit_log import AuditLog
+    
+    # Create organization first
+    org = Organization(name="Test Org")
+    db.session.add(org)
+    db.session.commit()
+    test_data['organization_id'] = org.id
+
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+        
+        service = StipendService()
+        result = service.create(test_data)
+        
+        # Verify audit log was created
+        log = AuditLog.query.filter_by(object_type='Stipend').first()
+        assert log is not None
+        assert log.action == 'create'
+        assert log.object_id == result.id

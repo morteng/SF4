@@ -126,3 +126,87 @@ def test_stipend_routes_require_admin(client, regular_user):
                 follow_redirects=True
             )
             assert response.status_code == 403  # Forbidden
+
+def test_stipend_create_with_missing_organization(client, admin_user, test_data):
+    """Test stipend creation with missing organization"""
+    # Remove organization_id from test data
+    test_data.pop('organization_id', None)
+    
+    with client:
+        login_user(admin_user)
+        response = client.post(
+            url_for('admin.admin_stipend.create'),
+            data=test_data,
+            follow_redirects=True
+        )
+        assert response.status_code == 200
+        assert b"Organization is required" in response.data
+
+def test_stipend_edit_nonexistent(client, admin_user):
+    """Test editing a non-existent stipend"""
+    with client:
+        login_user(admin_user)
+        response = client.post(
+            url_for('admin.admin_stipend.edit', id=9999),
+            data={'name': 'Test'},
+            follow_redirects=True
+        )
+        assert response.status_code == 200
+        assert FlashMessages.NOT_FOUND.value.encode() in response.data
+
+def test_stipend_delete_nonexistent(client, admin_user):
+    """Test deleting a non-existent stipend"""
+    with client:
+        login_user(admin_user)
+        response = client.post(
+            url_for('admin.admin_stipend.delete', id=9999),
+            follow_redirects=True
+        )
+        assert response.status_code == 200
+        assert FlashMessages.NOT_FOUND.value.encode() in response.data
+
+def test_stipend_pagination_edge_cases(client, admin_user, test_data):
+    """Test pagination edge cases"""
+    # Create 25 stipends
+    for i in range(25):
+        stipend = Stipend(**test_data)
+        stipend.name = f"Test Stipend {i}"
+        db.session.add(stipend)
+    db.session.commit()
+
+    with client:
+        login_user(admin_user)
+        
+        # Test first page
+        response = client.get(url_for('admin.admin_stipend.index'))
+        assert response.status_code == 200
+        
+        # Test last page
+        response = client.get(url_for('admin.admin_stipend.index', page=3))
+        assert response.status_code == 200
+        
+        # Test out of bounds page
+        response = client.get(url_for('admin.admin_stipend.index', page=999))
+        assert response.status_code == 200
+        assert b"Test Stipend 24" in response.data  # Should redirect to last page
+
+def test_stipend_create_rate_limiting(client, admin_user, test_data):
+    """Test rate limiting on stipend creation"""
+    org = Organization(name="Test Org")
+    db.session.add(org)
+    db.session.commit()
+    test_data['organization_id'] = org.id
+
+    with client:
+        login_user(admin_user)
+        
+        # Make 11 requests (limit is 10 per minute)
+        for i in range(11):
+            response = client.post(
+                url_for('admin.admin_stipend.create'),
+                data=test_data,
+                follow_redirects=True
+            )
+            
+        # Last request should be rate limited
+        assert response.status_code == 429
