@@ -23,7 +23,10 @@ def create_app(config_name='development'):
     load_dotenv()
 
     try:
-        _init_extensions(app)
+        # Initialize extensions only once
+        if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
+            init_extensions(app)
+            
         _init_database(app)
         _ensure_admin_user(app)
         _register_blueprints(app)
