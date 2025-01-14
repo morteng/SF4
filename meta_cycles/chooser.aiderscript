@@ -5,6 +5,6 @@
 # NOTE: The primary entry point is start.aiderscript
 
 # Current active cycle (updated by cycle scripts)
-# Running backup/restore verification cycle to ensure data protection
-/load meta_cycles/backup_restore_cycle.aiderscript
+# Running verification cycle to ensure database is ready
+/load meta_cycles/verification_cycle.aiderscript
 
