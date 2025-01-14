@@ -27,7 +27,6 @@ class TestBaseCrudController(BaseTestCase):
             email=f'test{uuid.uuid4().hex[:8]}@example.com',
             is_admin=True
         )
-        # Set password using the proper method
         self.test_user.set_password('testpass')
         db.session.add(self.test_user)
         db.session.commit()
@@ -43,7 +42,7 @@ class TestBaseCrudController(BaseTestCase):
             session.clear()
         
         # Login before each test
-        self.login()
+        self.login(self.test_user.username, 'testpass')
         
         # Create test template directory
         os.makedirs('templates/admin/tag', exist_ok=True)

@@ -29,6 +29,47 @@ class BaseTestCase(TestCase):
         )
         self.admin.set_password('testpassword')
         db.session.add(self.admin)
+        
+        # Create test organization
+        self.org = Organization(name='Test Org', description='Test Description')
+        db.session.add(self.org)
+        
+        # Create test tags
+        self.tags = [
+            Tag(name='Research', category='Academic'),
+            Tag(name='Internship', category='Professional'), 
+            Tag(name='Scholarship', category='Financial')
+        ]
+        db.session.add_all(self.tags)
+        
+        # Create test stipends
+        self.stipends = [
+            Stipend(
+                name='Test Stipend 1',
+                summary='Test Summary 1',
+                description='Test Description 1',
+                homepage_url='https://example.com/stipend1',
+                application_procedure='Apply online',
+                eligibility_criteria='Open to all students',
+                application_deadline=datetime.now(timezone.utc) + timedelta(days=30),
+                open_for_applications=True,
+                organization=self.org,
+                tags=[self.tags[0]]
+            ),
+            Stipend(
+                name='Test Stipend 2',
+                summary='Test Summary 2',
+                description='Test Description 2',
+                homepage_url='https://example.com/stipend2',
+                application_procedure='Email application',
+                eligibility_criteria='Graduate students only',
+                application_deadline=datetime.now(timezone.utc) + timedelta(days=60),
+                open_for_applications=True,
+                organization=self.org,
+                tags=[self.tags[1]]
+            )
+        ]
+        db.session.add_all(self.stipends)
         db.session.commit()
         
         # Login as admin
