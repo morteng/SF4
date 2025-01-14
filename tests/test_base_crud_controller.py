@@ -76,8 +76,8 @@ class TestBaseCrudController(BaseTestCase):
         form_data = {'name': 'New Tag', 'category': 'TestCategory'}
         with self.client:
             self.login()
-            response = self.controller.create(form_data)
-            self.assertEqual(response.status_code, 200)
+            template, status_code = self.controller.create(form_data)  # Unpack tuple
+            self.assertEqual(status_code, 200)  # Check status code
             mock_render.assert_called_once_with(
                 'admin/tag/create.html',
                 form=self.controller.form_class()
