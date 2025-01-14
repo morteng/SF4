@@ -1,16 +1,27 @@
 import logging
 import os
+import sys
 import gzip
 import shutil
 import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional, Dict, Any
-from app.extensions import db
-from app.models import Stipend, Organization, Tag
-from app.constants import FlashMessages
-from app.services.notification_service import NotificationService
-from app.services.metrics_service import MetricsService
+
+# Add project root to Python path
+project_root = str(Path(__file__).resolve().parent.parent)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+try:
+    from app.extensions import db
+    from app.models import Stipend, Organization, Tag
+    from app.constants import FlashMessages
+    from app.services.notification_service import NotificationService
+    from app.services.metrics_service import MetricsService
+except ImportError as e:
+    logging.error(f"Import error: {str(e)}")
+    sys.exit(1)
 
 logger = logging.getLogger(__name__)
 

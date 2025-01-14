@@ -1,13 +1,25 @@
 import logging
+import os
+import sys
 import gzip
 import subprocess
 from pathlib import Path
 from typing import Optional
 from datetime import datetime
-from app.extensions import db
-from app.services.notification_service import NotificationService
-from app.services.metrics_service import MetricsService
-from app.constants import FlashMessages
+
+# Add project root to Python path
+project_root = str(Path(__file__).resolve().parent.parent)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+try:
+    from app.extensions import db
+    from app.services.notification_service import NotificationService
+    from app.services.metrics_service import MetricsService
+    from app.constants import FlashMessages
+except ImportError as e:
+    logging.error(f"Import error: {str(e)}")
+    sys.exit(1)
 
 logger = logging.getLogger(__name__)
 

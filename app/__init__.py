@@ -46,14 +46,29 @@ def _configure_logging(debug):
 
 def _init_extensions(app):
     """Initialize Flask extensions."""
+    # Configure database
     db.init_app(app)
-
+    
+    # Configure login manager
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
 
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        try:
+            return User.query.get(int(user_id))
+        except Exception as e:
+            logger.error(f"Error loading user: {str(e)}")
+            return None
+            
+    # Verify database connection
+    try:
+        with app.app_context():
+            db.engine.execute('SELECT 1')
+            logger.info("Database connection verified")
+    except Exception as e:
+        logger.error(f"Database connection failed: {str(e)}")
+        raise RuntimeError(f"Database connection failed: {str(e)}")
 
 
 def _init_database(app):
