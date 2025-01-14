@@ -35,12 +35,11 @@ class BaseTestCase(TestCase):
         self.login(self.admin.username, 'testpassword')
         
         # Create test service and controller
-        # Create a simple test service using BaseService
         self.service = BaseService(model=User)
         self.controller = BaseCrudController(
             service=self.service,
-            entity_name='test', 
-            form_class=BaseForm
+            entity_name='test',
+            form_class=StipendForm
         )
 
     def tearDown(self):
