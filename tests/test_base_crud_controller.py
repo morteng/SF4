@@ -28,11 +28,14 @@ class TestBaseCrudController(BaseTestCase):
             username=f'testuser_{uuid.uuid4().hex[:8]}',
             email=f'test{uuid.uuid4().hex[:8]}@example.com',
             is_admin=True,
-            is_active=True,  # Ensure user is active
-            confirmed_at=datetime.utcnow()  # Add confirmed timestamp
+            is_active=True  # Ensure user is active
         )
         self.test_user.set_password('testpass')
         db.session.add(self.test_user)
+        db.session.commit()
+        
+        # Manually confirm the user by setting confirmed_at
+        self.test_user.confirmed_at = datetime.utcnow()
         db.session.commit()
         
         # Verify password was set correctly
