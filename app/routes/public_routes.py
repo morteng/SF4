@@ -11,31 +11,17 @@ public_bp = Blueprint('public', __name__)
 @public_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        # Redirect based on user role
-        if current_user.is_admin:
-            try:
-                return redirect(url_for('admin.dashboard.dashboard'))
-            except BuildError:
-                current_app.logger.error("Admin dashboard route not found")
-                return redirect(url_for('public.index'))
-        return redirect(url_for('public.index'))
+        return redirect(url_for('admin.dashboard.dashboard'))
     
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         
-        # Add debug logging
-        current_app.logger.debug(f"Attempting login for user: {form.username.data}")
-        current_app.logger.debug(f"User exists: {user is not None}")
-        if user:
-            current_app.logger.debug(f"Password check: {user.check_password(form.password.data)}")
-            current_app.logger.debug(f"User active status: {user.is_active}")
-        
         if user and user.check_password(form.password.data) and user.is_active:
             login_user(user)
             session['_user_id'] = str(user.id)
             session['is_admin'] = user.is_admin
-            session['_fresh'] = True  # Mark session as fresh
+            session['_fresh'] = True
             
             # Create audit log
             try:
@@ -51,23 +37,9 @@ def login():
                 current_app.logger.error(f"Error creating login audit log: {str(e)}")
             
             flash('Login successful.', 'success')
+            return redirect(url_for('admin.dashboard.dashboard'))
             
-            # Handle redirect after login
-            try:
-                if user.is_admin:
-                    return redirect(url_for('admin.dashboard.dashboard'))
-                return redirect(url_for('public.index'))
-            except BuildError:
-                current_app.logger.error("Dashboard route not found")
-                return redirect(url_for('public.index'))
-                
-        # Use consistent error message for security
         flash('Invalid username or password', 'danger')
-        return render_template('login.html', form=form)
-    
-    # Handle CSRF token errors
-    if form.errors.get('csrf_token'):
-        flash('Invalid CSRF token. Please try again.', 'danger')
     
     return render_template('login.html', form=form)
 
