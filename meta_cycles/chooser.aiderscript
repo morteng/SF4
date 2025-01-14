@@ -5,6 +5,6 @@
 # NOTE: The primary entry point is start.aiderscript
 
 # Current active cycle (updated by cycle scripts)
-# Running schema migration cycle to fix tags column type
-/load meta_cycles/schema_migration_cycle.aiderscript
+# Running backup/restore cycle first to ensure data protection
+/load meta_cycles/backup_restore_cycle.aiderscript
 
