@@ -1,5 +1,6 @@
 import os
 import uuid
+from datetime import datetime
 from unittest.mock import patch
 from flask import Response, url_for
 from app.models.user import User
@@ -27,7 +28,8 @@ class TestBaseCrudController(BaseTestCase):
             username=f'testuser_{uuid.uuid4().hex[:8]}',
             email=f'test{uuid.uuid4().hex[:8]}@example.com',
             is_admin=True,
-            is_active=True  # Ensure user is active
+            is_active=True,  # Ensure user is active
+            confirmed_at=datetime.utcnow()  # Add confirmed timestamp
         )
         self.test_user.set_password('testpass')
         db.session.add(self.test_user)
@@ -44,11 +46,15 @@ class TestBaseCrudController(BaseTestCase):
             session.clear()
         
         # Login before each test using the test user
-        login_response = self.login(self.test_user.username, 'testpass')
+        login_response = self.login()
         
         # Verify login was successful
         self.assertEqual(login_response.status_code, 200)
         self.assertIn(b'Dashboard', login_response.data)
+        
+        # Verify session contains correct user ID
+        with self.client.session_transaction() as session:
+            self.assertEqual(session['_user_id'], str(self.test_user.id))
         
         # Create test template directory
         os.makedirs('templates/admin/tag', exist_ok=True)
@@ -196,8 +202,12 @@ class TestBaseCrudController(BaseTestCase):
         with self.client.session_transaction() as session:
             return session.get('csrf_token')
 
-    def login(self, username='admin', password='password'):
+    def login(self, username=None, password='testpass'):
         """Helper method to log in test user"""
+        # Use test user credentials if none provided
+        if username is None:
+            username = self.test_user.username
+            
         # First get the login page to get CSRF token
         login_page = self.client.get('/login')
         csrf_token = extract_csrf_token(login_page.data)
@@ -221,6 +231,7 @@ class TestBaseCrudController(BaseTestCase):
             self.assertIn('_user_id', session)
             self.assertIn('is_admin', session)
             self.assertIn('_fresh', session)
+            self.assertEqual(session['_user_id'], str(self.test_user.id))
 
         return response
 
