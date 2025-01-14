@@ -34,29 +34,21 @@ def login():
                         flash('Login failed', 'danger')
                         return redirect(url_for('public.login'))
                     
-                    # Create audit log
-                    try:
-                        AuditLog.create(
-                            user_id=user.id,
-                            action='login',
-                            details='User logged in',
-                            ip_address=request.remote_addr,
-                            http_method=request.method,
-                            endpoint=request.endpoint
-                        )
-                    except Exception as e:
-                        current_app.logger.error(f"Error creating login audit log: {str(e)}")
-                    
                     current_app.logger.debug("Login successful, redirecting to dashboard")
                     return redirect(url_for('admin.dashboard.dashboard'))
                 else:
                     current_app.logger.debug("User is inactive")
+                    flash('Account is inactive', 'danger')
             else:
                 current_app.logger.debug("Password check failed")
+                flash('Invalid password', 'danger')
         else:
             current_app.logger.debug("User not found")
-            
-        flash('Invalid username or password', 'danger')
+            flash('User not found', 'danger')
+    
+    # Add form error logging
+    if form.errors:
+        current_app.logger.error(f"Form validation errors: {form.errors}")
     
     return render_template('login.html', form=form)
 
