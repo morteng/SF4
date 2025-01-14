@@ -93,6 +93,11 @@ def app():
     app = create_app()
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # Force in-memory DB
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # Initialize extensions
+    from app.extensions import init_extensions
+    init_extensions(app)
     # Add rate limiter config
     app.config['RATELIMIT_ENABLED'] = True
     app.config['RATELIMIT_STORAGE_URL'] = 'memory://'
@@ -124,7 +129,17 @@ def _db(app):
     with app.app_context():
         # Create all tables including audit_log
         from app.models.audit_log import AuditLog
+        from app.models.stipend import Stipend
         db.create_all()
+        
+        # Verify schema
+        column = Stipend.__table__.c.tags
+        if not isinstance(column.type, JSONB):
+            # If schema needs migration, run it here
+            from alembic import command
+            from alembic.config import Config
+            alembic_cfg = Config("alembic.ini")
+            command.upgrade(alembic_cfg, 'head')
         
         try:
             yield db
