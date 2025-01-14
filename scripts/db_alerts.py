@@ -130,5 +130,23 @@ class BackupAlerts:
         """Get alert history with timestamps"""
         return self.alert_history
 
-# Initialize global alert system
-alerts = BackupAlerts()
+import argparse
+
+def main():
+    parser = argparse.ArgumentParser(description='Backup Alert System')
+    parser.add_argument('--history', action='store_true', help='Show alert history')
+    args = parser.parse_args()
+
+    alerts = BackupAlerts()
+
+    if args.history:
+        for alert in alerts.get_alert_history():
+            print(f"[{alert['timestamp']}]")
+            for message in alert['alerts']:
+                print(f" - {message}")
+    else:
+        print("Alert system running...")
+        # Add your alert monitoring loop here
+
+if __name__ == '__main__':
+    main()

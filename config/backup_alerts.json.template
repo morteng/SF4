@@ -1,0 +1,13 @@
+{
+    "email_recipients": ["admin@example.com"],
+    "smtp_server": "smtp.example.com",
+    "smtp_port": 587,
+    "smtp_user": "backup@example.com",
+    "smtp_password": "your_password",
+    "alert_thresholds": {
+        "failure_rate": 0.2,
+        "duration_warning": 300,
+        "size_warning": 1024
+    },
+    "notification_cooldown": 300
+}

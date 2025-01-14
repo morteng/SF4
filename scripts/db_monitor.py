@@ -213,5 +213,21 @@ class BackupDashboard:
         except Exception as e:
             logger.error(f"Failed to load metrics: {str(e)}")
 
-# Initialize global dashboard instance
-dashboard = BackupDashboard()
+import argparse
+
+def main():
+    parser = argparse.ArgumentParser(description='Backup Monitoring System')
+    parser.add_argument('--status', action='store_true', help='Show current status')
+    args = parser.parse_args()
+
+    dashboard = BackupDashboard()
+    dashboard.load_metrics()
+
+    if args.status:
+        dashboard.display()
+    else:
+        print("Monitoring system running...")
+        # Add your monitoring loop here
+
+if __name__ == '__main__':
+    main()
