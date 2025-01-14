@@ -105,9 +105,11 @@ def app():
     app.config['WTF_CSRF_ENABLED'] = True
     app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'
 
-    # Disable rate limiting if it's initialized
+    # Initialize the limiter properly
     if 'limiter' in app.extensions:
-        app.extensions['limiter'].enabled = False
+        limiter = app.extensions['limiter']
+        limiter.enabled = False
+        limiter.init_app(app)  # Ensure limiter is properly initialized
 
     # Initialize the app with migrations
     with app.app_context():
@@ -444,9 +446,9 @@ def reset_rate_limiter(app):
     with app.app_context():
         if 'limiter' in app.extensions:
             limiter = app.extensions['limiter']
-            if hasattr(limiter, '_storage') and limiter._storage is not None:
+            if hasattr(limiter, 'storage') and limiter.storage is not None:
                 try:
-                    limiter.reset()
+                    limiter.storage.reset()
                 except Exception as e:
                     app.logger.warning(f"Failed to reset rate limiter: {str(e)}")
         
