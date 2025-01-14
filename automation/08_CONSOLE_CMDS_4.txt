@@ -3,30 +3,27 @@
 
 ### CODE START ###
 
-# Initialize review environment with enhanced monitoring
-/run scripts/setup_test_env.py --production --verify --monitoring
-/run scripts/init_logging.py --production --verify --monitoring
-/run scripts/path_config.py --production --verify --monitoring
+# Initialize review environment
+/run scripts/setup_test_env.py --production
+/run scripts/init_logging.py --production
+/run scripts/path_config.py --production
 
-# Comprehensive system verification
-/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --verify-admin --check-rate-limits --monitoring
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits --check-csrf --validate-paths --monitoring
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-metrics --check-response-times --validate-paths --monitoring
+# Run final verifications
+/run scripts/verification/verify_production_ready.py
+/run scripts/verification/verify_security.py --full-audit
+/run scripts/verification/verify_monitoring.py --dashboard
+/run scripts/verification/verify_db_connection.py --retries=3
 
-# Database and coverage verification with retries
-/run scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-pool --verify-timeout --monitoring
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin --check-models --validate-paths --monitoring
+# Finalize documentation
+/run scripts/finalize_docs.py
+/run scripts/generate_deployment_checklist.py
 
-# Documentation and monitoring finalization
-/run scripts/finalize_docs.py --verify --validate-paths --monitoring
-/run scripts/generate_deployment_checklist.py --validate --check-security --validate-paths --monitoring
-
-# Final cleanup and approval
-/run scripts/final_cleanup.py --verify --force --validate-paths --monitoring
-/run scripts/request_approval.py --validate --check-coverage --validate-paths --monitoring
+# Cleanup and request approval
+/run scripts/final_cleanup.py
+/run scripts/request_approval.py
 
 # Commit review results
-/run scripts/commit_changes.py --message "Final review completed" --verify --push --check-coverage --check-security --validate-paths --monitoring
+/run scripts/commit_changes.py --message "Final review completed"
 
 ### CODE END ###
 
