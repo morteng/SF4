@@ -25,7 +25,7 @@ class User(db.Model, UserMixin):
     def is_active(self, value):
         self._is_active = value
 
-    def __init__(self, username, email, password=None, password_hash=None, is_admin=False, is_active=True):
+    def __init__(self, username, email, password=None, password_hash=None, is_admin=False, is_active=True, confirmed_at=None):
         self.username = username
         self.email = email
         if password:
@@ -34,6 +34,7 @@ class User(db.Model, UserMixin):
             self.password_hash = password_hash
         self.is_admin = is_admin
         self._is_active = is_active  # Set the private attribute directly
+        self.confirmed_at = confirmed_at  # Add this line
         self.created_at = db.func.current_timestamp()
         self.updated_at = db.func.current_timestamp()
 
