@@ -23,11 +23,18 @@ class TestBaseCrudController(BaseTestCase):
         # Create unique test user with hashed password
         self.test_user = User(
             username=f'testuser_{uuid.uuid4().hex[:8]}',
-            email=f'test{uuid.uuid4().hex[:8]}@example.com'
+            email=f'test{uuid.uuid4().hex[:8]}@example.com',
+            is_admin=True  # Make user admin for testing
         )
-        self.test_user.set_password('testpass')  # Use set_password to hash the password
+        self.test_user.set_password('testpass')
         db.session.add(self.test_user)
         db.session.commit()
+        
+        # Initialize client
+        self.client = app.test_client()
+        
+        # Login before each test
+        self.login()
         
         # Create test template directory
         os.makedirs('templates/admin/tag', exist_ok=True)
@@ -144,23 +151,27 @@ class TestBaseCrudController(BaseTestCase):
                 self.assertIn(FlashMessages.TEMPLATE_ERROR.value, response.get_data(as_text=True))
 
     def test_create_invalid_form_data(self):
-        # Use unique test data
-        form_data = {
-            'username': f'testuser_{uuid.uuid4().hex[:8]}',
-            'password': 'testpass',
-            'email': f'test{uuid.uuid4().hex[:8]}@example.com',
-            'name': '',  # Invalid data
-            'category': 'TestCategory'
-        }
+        # Ensure we're logged in
+        with self.client.session_transaction() as session:
+            self.assertIn('_user_id', session)
         
-        self.login()
-        response = self.controller.create(form_data)
+        # Get CSRF token for the form
+        create_page = self.client.get(url_for('admin.stipend.create'))
+        csrf_token = extract_csrf_token(create_page.data)
+        
+        # Submit invalid form data
+        response = self.client.post(url_for('admin.stipend.create'), data={
+            'name': '',  # Invalid - empty name
+            'csrf_token': csrf_token
+        })
+        
+        # Verify we get a form error
         self.assertEqual(response.status_code, 200)
-        self.assertIn(FlashMessages.NAME_REQUIRED.value, response.get_data(as_text=True))
+        self.assertIn(b'This field is required', response.data)
         
-        # Verify no duplicate was created
-        user_count = User.query.filter(User.username == form_data['username']).count()
-        self.assertEqual(user_count, 0)
+        # Verify no stipend was created
+        stipend_count = Stipend.query.filter(Stipend.name == '').count()
+        self.assertEqual(stipend_count, 0)
 
     def get_csrf_token(self):
         """Helper method to get a valid CSRF token"""
@@ -173,19 +184,27 @@ class TestBaseCrudController(BaseTestCase):
     def login(self):
         """Helper method to log in test user"""
         with self.client:
-            # Get CSRF token first
-            csrf_token = self.get_csrf_token()
+            # Get login page to set CSRF token
+            login_page = self.client.get(url_for('public.login'))
+            csrf_token = extract_csrf_token(login_page.data)
             
-            # Then make login request
+            # Perform login with valid credentials
             response = self.client.post(url_for('public.login'), data={
                 'username': self.test_user.username,
-                'password': 'testpass',  # This matches the password used above
+                'password': 'testpass',
                 'csrf_token': csrf_token
-            }, follow_redirects=False)  # Don't follow redirects
+            }, follow_redirects=False)
             
-            # Check for successful login redirect
+            # Verify we got a redirect
             self.assertEqual(response.status_code, 302)
-            self.assertEqual(response.location, url_for('public.index', _external=True))
+            
+            # Follow the redirect to verify we're logged in
+            response = self.client.get(response.headers['Location'])
+            self.assertEqual(response.status_code, 200)
+            
+            # Verify session contains user ID
+            with self.client.session_transaction() as session:
+                self.assertIn('_user_id', session)
 
     def test_stipend_form_validation(self):
         # Test missing name
