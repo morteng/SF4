@@ -1,5 +1,24 @@
 # Updated Manager Instructions - 2025-01-14
 
+Never add comments like this:
+
+
+## Objectives
+1. Implement automated database backup system
+2. Create restore functionality
+3. Add verification checks
+4. Set up scheduled backups
+5. Add monitoring and alerts
+
+## Implementation Steps
+1. Create backup scripts in scripts/db_backup.py
+2. Add restore functionality in scripts/db_restore.py
+3. Implement verification in scripts/db_verify.py
+4. Add scheduling via scripts/db_scheduler.py
+5. Create monitoring dashboard in scripts/db_monitor.py
+
+to any .aiderscript files, they do not work and are not added to context.
+
 Important! No need to split cycle files up, like wit backup_restore_cycle.aiderscript just add all steps to it before the last /load command.
 
 If you need to update the database schema then also create and run a script that actually performs the migration and upgrade.
