@@ -2,6 +2,7 @@ import logging
 from .association_tables import stipend_tag_association, organization_stipends
 from app.extensions import db
 from .organization import Organization
+from sqlalchemy.dialects.postgresql import JSONB
 
 logger = logging.getLogger(__name__)
 from datetime import datetime, timezone
