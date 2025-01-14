@@ -100,7 +100,7 @@ def app():
     init_extensions(app)
 
     # Configure rate limiter and CSRF
-    app.config['RATELIMIT_ENABLED'] = True
+    app.config['RATELIMIT_ENABLED'] = False  # Disable rate limiting for tests
     app.config['RATELIMIT_STORAGE_URL'] = 'memory://'
     app.config['WTF_CSRF_ENABLED'] = True
     app.config['WTF_CSRF_SECRET_KEY'] = 'test-secret-key'
@@ -192,7 +192,6 @@ def client(app):
         # Initialize or disable rate limiter if present
         if 'limiter' in app.extensions:
             limiter = app.extensions['limiter']
-            limiter.enabled = False
             
             # Initialize storage if needed
             if not hasattr(limiter, '_storage') or limiter._storage is None:
@@ -201,7 +200,7 @@ def client(app):
             # Reset limiter if storage is available
             if hasattr(limiter, '_storage') and limiter._storage is not None:
                 try:
-                    limiter.reset()
+                    limiter._storage.reset()
                 except Exception as e:
                     app.logger.warning(f"Failed to reset rate limiter: {str(e)}")
         
