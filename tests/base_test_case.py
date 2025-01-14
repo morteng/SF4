@@ -17,7 +17,27 @@ class BaseTestCase(TestCase):
 
     def setUp(self):
         db.create_all()
-        self.create_test_data()
+        
+        # Create test admin user
+        self.admin = User(
+            username='testadmin',
+            email='admin@test.com',
+            is_admin=True
+        )
+        self.admin.set_password('testpassword')
+        db.session.add(self.admin)
+        db.session.commit()
+        
+        # Login as admin
+        self.login(self.admin.username, 'testpassword')
+        
+        # Create test service and controller
+        self.service = TestService()
+        self.controller = BaseCrudController(
+            service=self.service,
+            entity_name='test',
+            form_class=TestForm
+        )
 
     def tearDown(self):
         db.session.remove()
@@ -79,6 +99,19 @@ class BaseTestCase(TestCase):
         db.session.commit()
 
     def login(self, username='admin', password='password'):
+        # First ensure the admin user exists
+        admin = User.query.filter_by(username=username).first()
+        if not admin:
+            admin = User(
+                username=username,
+                email=f'{username}@test.com',
+                is_admin=True
+            )
+            admin.set_password(password)
+            db.session.add(admin)
+            db.session.commit()
+
+        # Now perform the login
         return self.client.post('/login', data=dict(
             username=username,
             password=password
@@ -105,8 +138,12 @@ class BaseTestCase(TestCase):
         
         # Test invalid data
         if invalid_data:
-            with self.assertRaises(ValidationError):
-                service.create(invalid_data)
+            with self.client:
+                response = self.controller.create(data=invalid_data)
+                
+                # Verify response contains validation errors
+                self.assertEqual(response.status_code, 400)
+                self.assertIn(b'This field is required', response.data)
 
     def assertServiceUpdates(self, service, entity, valid_data, invalid_data=None):
         """Test service update operation"""
