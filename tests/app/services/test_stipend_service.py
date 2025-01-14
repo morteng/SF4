@@ -1,6 +1,7 @@
 import pytest
 import re  # Import the re module to use regex for extracting CSRF token
 from unittest.mock import patch  # For mocking in tests
+from app.models.tag import Tag  # Import Tag model
 from wtforms.validators import ValidationError
 from app.models.stipend import Stipend
 from app.models.organization import Organization
