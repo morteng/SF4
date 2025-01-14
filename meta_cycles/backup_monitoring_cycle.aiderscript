@@ -1,31 +1,9 @@
 # Backup Monitoring Cycle
 
-# 1. Create monitoring dashboard
-/code Create scripts/db_monitor.py with a Dashboard class that:
-- Tracks backup success/failure rates
-- Monitors backup sizes and durations
-- Tracks restore success rates
-- Provides alert thresholds
-- Implements a console-based dashboard interface
-
-# 2. Create alerting system
-/code Create scripts/db_alerts.py with:
-- Email/SMS alert capabilities
-- Configurable alert thresholds
-- Backup failure notifications
-- Restore failure notifications
-- Verification failure notifications
 
 # 3. Update backup service with monitoring hooks
-/code Update app/services/backup_service.py to:
-- Add monitoring hooks
-- Track backup metrics
-- Trigger alerts on failures
-- Integrate with the dashboard
+/code Update app/services/backup_service.py to: - Add monitoring hooks - Track backup metrics - Trigger alerts on failures - Integrate with the dashboard
 
-# 4. Update documentation
-/code Update DEVLOG.md to reflect the new monitoring system
-/code Update TODO.txt to mark monitoring tasks as complete
 
 # 5. Transition to finalization
 /load meta_cycles/finalize_cycle.aiderscript
