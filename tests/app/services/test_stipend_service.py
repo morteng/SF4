@@ -14,6 +14,158 @@ from flask import get_flashed_messages
 import logging
 
 
+def test_invalid_form_submissions(test_data, db_session, app, admin_user):
+    """Test various invalid form submission scenarios"""
+    invalid_cases = [
+        # Missing required fields
+        {'name': None, 'organization_id': None, 'application_deadline': None},
+        # Invalid field types
+        {'name': 123, 'organization_id': 'abc', 'application_deadline': 123456},
+        # Exceeding max lengths
+        {'name': 'A' * 101, 'summary': 'B' * 501, 'description': 'C' * 2001},
+        # Invalid URLs
+        {'homepage_url': 'invalid-url'},
+        # Invalid boolean values
+        {'open_for_applications': 'maybe'},
+        # Invalid tag IDs
+        {'tags': ['invalid']}
+    ]
+
+    service = StipendService()
+    
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+            
+            for case in invalid_cases:
+                invalid_data = {**test_data, **case}
+                with pytest.raises(ValueError) as exc_info:
+                    service.create(invalid_data)
+                assert "validation error" in str(exc_info.value).lower()
+
+def test_database_constraint_violations(test_data, db_session, app, admin_user):
+    """Test database constraint violations"""
+    # Create initial valid stipend
+    org = Organization(name="Test Org")
+    db.session.add(org)
+    db.session.commit()
+    
+    valid_data = {
+        'name': 'Valid Stipend',
+        'organization_id': org.id,
+        'application_deadline': '2025-12-31 23:59:59'
+    }
+    
+    service = StipendService()
+    
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+            
+            # Test unique constraint violation
+            service.create(valid_data)
+            with pytest.raises(ValueError) as exc_info:
+                service.create(valid_data)
+            assert "already exists" in str(exc_info.value)
+            
+            # Test foreign key constraint violation
+            invalid_data = {**valid_data, 'organization_id': 99999}
+            with pytest.raises(ValueError) as exc_info:
+                service.create(invalid_data)
+            assert "foreign key constraint" in str(exc_info.value).lower()
+
+def test_htmx_partial_responses(test_data, db_session, app, admin_user):
+    """Test HTMX partial response handling"""
+    org = Organization(name="Test Org")
+    db.session.add(org)
+    db.session.commit()
+    
+    valid_data = {
+        'name': 'HTMX Stipend',
+        'organization_id': org.id,
+        'application_deadline': '2025-12-31 23:59:59'
+    }
+    
+    service = StipendService()
+    
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+            
+            # Test successful HTMX response
+            result = service.create(valid_data, htmx_request=True)
+            assert 'hx-redirect' in result.headers
+            assert 'hx-trigger' in result.headers
+            
+            # Test HTMX error response
+            invalid_data = {**valid_data, 'name': None}
+            with pytest.raises(ValueError) as exc_info:
+                service.create(invalid_data, htmx_request=True)
+            assert 'hx-trigger' in exc_info.value.headers
+            assert 'error' in exc_info.value.headers['hx-trigger']
+
+def test_error_conditions(test_data, db_session, app, admin_user):
+    """Test various error conditions"""
+    service = StipendService()
+    
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+            
+            # Test database connection failure
+            with patch('app.extensions.db.session.commit', side_effect=Exception("DB Error")):
+                with pytest.raises(Exception) as exc_info:
+                    service.create(test_data)
+                assert "DB Error" in str(exc_info.value)
+                
+            # Test audit logging failure
+            with patch('app.models.audit_log.AuditLog.create', side_effect=Exception("Log Error")):
+                with pytest.raises(Exception) as exc_info:
+                    service.create(test_data)
+                assert "Log Error" in str(exc_info.value)
+
+def test_edge_cases(test_data, db_session, app, admin_user):
+    """Test various edge cases"""
+    service = StipendService()
+    
+    with app.app_context(), app.test_client() as client:
+        with app.test_request_context():
+            login_user(admin_user)
+            
+            # Test empty string handling
+            empty_data = {
+                'name': '   ',
+                'organization_id': '',
+                'application_deadline': ''
+            }
+            with pytest.raises(ValueError) as exc_info:
+                service.create({**test_data, **empty_data})
+            assert "cannot be empty" in str(exc_info.value)
+            
+            # Test maximum values
+            max_data = {
+                'name': 'A' * 100,
+                'summary': 'B' * 500,
+                'description': 'C' * 2000,
+                'homepage_url': 'http://' + 'a' * 200 + '.com',
+                'application_procedure': 'D' * 2000,
+                'eligibility_criteria': 'E' * 2000
+            }
+            result = service.create({**test_data, **max_data})
+            assert result is not None
+            
+            # Test minimum values
+            min_data = {
+                'name': 'A',
+                'summary': 'B',
+                'description': 'C',
+                'homepage_url': 'http://a.com',
+                'application_procedure': 'D',
+                'eligibility_criteria': 'E'
+            }
+            result = service.create({**test_data, **min_data})
+            assert result is not None
+
 def test_create_stipend_with_invalid_application_deadline_format(test_data, db_session, app, admin_user):
     # Test various invalid date formats
     invalid_formats = [
