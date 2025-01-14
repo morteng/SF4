@@ -11,16 +11,23 @@ login_manager = LoginManager()
 migrate = Migrate()
 csrf = CSRFProtect()
 
-# Initialize limiter with default configuration
-limiter = Limiter(
-    key_func=get_remote_address,
-    default_limits=["200 per day", "50 per hour"],
-    storage_uri="memory://",
-    strategy="fixed-window",
-    enabled=True
-)
-
 def init_extensions(app):
+    """Initialize all Flask extensions with proper configuration."""
+    # Only initialize extensions if they haven't been initialized yet
+    if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
+        # Initialize SQLAlchemy with explicit configuration
+        db.init_app(app)
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        
+        # Initialize rate limiter with proper configuration
+        app.extensions['limiter'] = Limiter(
+            app=app,
+            key_func=get_remote_address,
+            default_limits=["200 per day", "50 per hour"],
+            storage_uri="memory://",
+            strategy="fixed-window",
+            enabled=True
+        )
     """Initialize all Flask extensions with proper configuration."""
     # Only initialize extensions if they haven't been initialized yet
     if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
