@@ -21,20 +21,18 @@ class TestBaseCrudController(BaseTestCase):
     def setUp(self):
         super().setUp()
         
-        # Clean up any existing test data
-        User.query.filter(User.username.like('testuser_%')).delete()
-        Tag.query.filter(Tag.name.like('TestTag%')).delete()
-        db.session.commit()
-        
         # Create unique test user with hashed password
         self.test_user = User(
             username=f'testuser_{uuid.uuid4().hex[:8]}',
             email=f'test{uuid.uuid4().hex[:8]}@example.com',
-            is_admin=True  # Make user admin for testing
+            is_admin=True
         )
         self.test_user.set_password('testpass')
         db.session.add(self.test_user)
         db.session.commit()
+        
+        # Refresh the user object to ensure it's properly attached to the session
+        db.session.refresh(self.test_user)
         
         # Initialize client
         self.client = app.test_client()
@@ -160,6 +158,7 @@ class TestBaseCrudController(BaseTestCase):
         # Ensure we're logged in
         with self.client.session_transaction() as session:
             self.assertIn('_user_id', session)
+            self.assertEqual(session['_user_id'], str(self.test_user.id))
         
         # Get CSRF token for the form
         create_page = self.client.get(url_for('admin.stipend.create'))
@@ -211,6 +210,7 @@ class TestBaseCrudController(BaseTestCase):
             # Verify session contains user ID
             with self.client.session_transaction() as session:
                 self.assertIn('_user_id', session)
+                self.assertEqual(session['_user_id'], str(self.test_user.id))
 
     def test_stipend_form_validation(self):
         # Test missing name
