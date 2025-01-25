@@ -16,6 +16,8 @@ def configure_logging():
     return logging.getLogger(__name__)
 
 def commit_changes(message, push=False):
+    # Force add all changes
+    subprocess.run(['git', 'add', '-A'], check=True)
     """Enhanced commit with Windows path handling"""
     logger = configure_logging()
     # Normalize paths for Windows

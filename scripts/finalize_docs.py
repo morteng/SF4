@@ -46,6 +46,12 @@ def configure_logger():
     return logger
 
 def update_release_notes(verify=False):
+    # Add path configuration first
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    
+    from scripts.verification.verify_production_ready import verify_production_ready
     # Ensure proper imports
     from scripts.path_config import configure_paths
     configure_paths()

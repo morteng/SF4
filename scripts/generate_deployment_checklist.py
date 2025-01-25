@@ -17,6 +17,12 @@ def configure_logger():
     return logger
 
 def generate_checklist(validate=False):
+    # Add path configuration first
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    
+    from scripts.verification.verify_production_ready import verify_production_ready
     """Enhanced checklist generation with proper path handling"""
     logger = configure_logger()
     try:
