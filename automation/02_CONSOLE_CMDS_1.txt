@@ -4,15 +4,17 @@
 
 ### CODE START ###
 
-# Force clean migration state
+# Clean migration state and reapply
 /run del instance\\stipend.db
 /run alembic upgrade head --sql > full_migration.sql
 /run sqlite3 instance/stipend.db < full_migration.sql
 
-# Critical path verification
+# Schema verification
 /run python scripts/verification/verify_db_schema.py --check-column user.confirmed_at
-/run python scripts/verification/verify_security.py --full-audit
-/run flask routes | findstr "admin_stipend"
+/run sqlite3 instance/stipend.db ".schema user"
+
+# Security verification
+/run python scripts/verification/verify_security.py --full-audit --check-admin-interface
 
 ### CODE END ###
 
