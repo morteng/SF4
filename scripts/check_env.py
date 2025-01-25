@@ -1,5 +1,7 @@
 import sys
 import subprocess
+import os
+from pathlib import Path
 
 def check_virtualenv():
     """Check if running inside a virtual environment with Windows support"""

@@ -7,6 +7,7 @@ def verify_deployment_requirements():
     """Verify all deployment requirements are met"""
     try:
         # Import verification modules
+        from scripts.check_env import check_windows_paths
         from scripts.verify_git_state import verify_git_state
         from scripts.verify_db_connection import verify_db_connection
         from scripts.verify_test_coverage import verify_coverage
