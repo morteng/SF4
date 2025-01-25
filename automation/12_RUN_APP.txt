@@ -24,3 +24,8 @@
 
 # start new cycle
 /load automation/00_CYCLE_START.txt
+# Production deployment commands
+/run python scripts/deployment/checklist.py --production
+/run python scripts/init_logging.py --production
+/run python scripts/path_config.py --production
+/run python app.py --host=0.0.0.0 --port=5000 --no-debug
