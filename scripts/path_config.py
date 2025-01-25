@@ -47,13 +47,12 @@ def configure_paths(production=False, verify=False):
                 str(Path(project_root) / 'backups'),
             ])
 
-        # Add virtual environment paths (Windows specific)
-        venv_path = os.getenv('VIRTUAL_ENV')
-        if venv_path:
-            # Add both Lib and site-packages for Windows compatibility
-            lib_path = str(Path(venv_path) / 'Lib')
-            site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
-            paths_to_add.extend([lib_path, site_packages])
+        # Add virtual environment paths with explicit site-packages
+        venv_path = os.path.join(project_root, '.venv')
+        site_packages = os.path.join(venv_path, 'Lib', 'site-packages')
+        if os.path.exists(site_packages):
+            paths_to_add.append(site_packages)
+            print(f"Added virtualenv site-packages: {site_packages}")
 
         # Insert paths into sys.path if not already present.
         # Ensure project root is first

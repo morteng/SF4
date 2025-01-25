@@ -11,7 +11,9 @@ CRITICAL_DEPS = [
     'sqlalchemy',
     'flask_wtf',
     'wtforms',
-    'flask_limiter'
+    'flask_limiter',
+    'croniter',  # Added missing dependency
+    'scripts'    # Ensure scripts package is accessible
 ]
 
 def verify_dependencies():
@@ -34,6 +36,12 @@ def verify_dependencies():
     return True
 
 if __name__ == '__main__':
+    import sys
+    from pathlib import Path
+    project_root = Path(__file__).parent.parent
+    sys.path.insert(0, str(project_root.resolve()))  # Normalized path
+    sys.path.insert(1, str(project_root / '.venv' / 'Lib' / 'site-packages'))
+    
     from scripts.init_logging import configure_logging
     configure_logging()
     if verify_dependencies():
