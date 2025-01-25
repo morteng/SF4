@@ -3,21 +3,17 @@
 
 ### CODE START ###
 
-# Validate migration history
-/run alembic history --verbose
-/run alembic current --verbose
+# Validate user confirmation system
+/run python -m pytest tests/test_user_model.py -k "confirmed_at or password" -v --cov=app.models.user --cov-report=term-missing
 
-# Test schema changes
-/run python scripts/verification/verify_db_schema.py --full --validate-relations --fix-missing-columns
+# Security audit for confirmation flow
+/run python scripts/verification/verify_security.py --check-auth --check-confirmed
 
-# Verify production readiness
-/run python scripts/verification/verify_production_ready.py --check-migrations --skip-limiter-check --skip-admin-check
+# Final schema validation
+/run python scripts/verification/verify_db_schema.py --full-check --production
 
-# Update test coverage
-/run python scripts/testing/test_report.py --update-coverage --component models
-
-# Commit verified changes
-/run python scripts/commit_changes.py --message "Testing completed: Migration validation passed"
+# Commit verified state
+/run python scripts/commit_changes.py --message "Cycle 102: User confirmation system validation"
 
 ### CODE END ###
 
