@@ -30,6 +30,7 @@ exceptiongroup==1.2.2
 flake8==7.0.0
 Flask==2.3.2
 Flask-Limiter==3.5.0
+pywin32==306 ; sys_platform == 'win32'
 Flask-Login==0.6.3
 Flask-Migrate==4.0.5
 Flask-SQLAlchemy==3.1.1

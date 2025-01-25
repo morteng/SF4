@@ -4,15 +4,16 @@
 
 ### CODE START ###
 
-# Initialize system with new monitoring
-/run python scripts/init_logging.py --production --enable-monitoring
-/run python scripts/path_config.py --production --verify
-/run python scripts/start_cycle.py --phase=consolidation
-
-# Enhanced verifications
-/run python scripts/verification/validate_datetime_fields.py --all-formats
-/run python scripts/verification/verify_audit_logs.py --with-notifications
-/run python scripts/monitoring/setup_dashboard.py --enable-metrics
+# Strict environment validation
+/run python scripts/check_env.py --strict --windows
+# Configure paths for Windows
+/run python scripts/path_config.py --production --force --platform=win
+# Verify git state
+/run python scripts/verification/verify_git_state.py --pull --auto-resolve
+# Deployment readiness check
+/run python scripts/verification/verify_deployment_readiness.py --phase=analysis
+# Initialize analysis cycle
+/run python scripts/start_cycle.py --phase=analysis --instance-dir=instance
 
 ### CODE END ###
 
