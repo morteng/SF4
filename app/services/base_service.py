@@ -123,10 +123,10 @@ class BaseService:
         self.cache_validation = False
 
     def _get_limiter(self):
-        """Get the limiter instance from the current app"""
-        if not hasattr(current_app, 'extensions') or 'limiter' not in current_app.extensions:
+        """Get limiter from current app"""
+        if not current_app or not hasattr(current_app, 'extensions'):
             return None
-        return current_app.extensions['limiter']
+        return current_app.extensions.get('limiter')
 
     def _rate_limit_decorator(self, operation):
         """Create a rate limit decorator if limiter is available"""

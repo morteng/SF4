@@ -45,6 +45,11 @@ def validate_schema(validate_relations=False, validate_required_fields=True):
         return False
 
     try:
+        # Add explicit confirmed_at check
+        user_columns = [col['name'] for col in inspector.get_columns('user')]
+        if 'confirmed_at' not in user_columns:
+            logger.error("Missing critical confirmed_at column in user table")
+            return False
         db_uri = os.getenv('SQLALCHEMY_DATABASE_URI')
         if not db_uri:
             logger.error("SQLALCHEMY_DATABASE_URI not set")
