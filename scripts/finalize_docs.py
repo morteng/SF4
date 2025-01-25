@@ -87,6 +87,7 @@ def update_release_notes(verify=False):
             f.write("- Improved security settings\n")
             f.write(f"- Test coverage: {coverage}%\n")
             f.write(f"- Deployment status: {'Passed' if deployment_status else 'Failed'}\n")
+            f.write("- Verified confirmed_at column in user table\n")
             
         # Verify update
         if verify:
