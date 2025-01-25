@@ -104,9 +104,9 @@ class BaseService:
         self._init_metrics()  # Initialize metrics tracking
         # Initialize rate limits without limiter
         self.rate_limits = {
-            'create': "10 per minute",
-            'update': "10 per minute", 
-            'delete': "5 per minute"
+            'create': "10/minute",
+            'update': "10/minute", 
+            'delete': "5/minute"
         }
         self._create_limit = self.rate_limits['create']
         self.soft_delete_enabled = hasattr(model, 'is_deleted')
