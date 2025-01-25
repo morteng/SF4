@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
     confirmed_at = db.Column(db.DateTime, nullable=True, default=None)
+    last_failed_login = db.Column(db.DateTime, nullable=True)
     notifications = db.relationship('Notification', backref='user', lazy=True)
     audit_logs = db.relationship('AuditLog', backref='user', lazy=True)
 

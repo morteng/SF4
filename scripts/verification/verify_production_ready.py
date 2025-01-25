@@ -25,6 +25,7 @@ def verify_production_ready(check_migrations=False, validate_config=False):
     with app.app_context():
         """Final production readiness check with emergency fallback"""
         logger = configure_logger()
+        logger = configure_logger()
         
         # Verify core requirements
         if not verify_db_schema():
