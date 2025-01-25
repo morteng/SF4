@@ -5,10 +5,10 @@
 
 /add automation/04_CONSOLE_CMDS_2.txt
 
-/ask How can we best implement Code Cycle Step 2 - Coding? Objective: Implement changes based on the analysis. Key Actions:  - Execute development tasks  - Update code files as required  - Prepare outputs for testing. Think step by step.
+/architect How can we best implement Code Cycle Step 2 - Coding? Objective: Implement changes based on the analysis. Key Actions:  - Execute development tasks  - Update code files as required  - Prepare outputs for testing. Think step by step.
 
 
-/code Implement the suggestions from Step 1.  - Remove old console commands from 04_CONSOLE_CMDS_2.txt  - Add any new console commands to be run before Step 3  - Remember: do not run Python directly in console commands. 
+/architect Implement the suggestions from Step 1.  - Remove old console commands from 04_CONSOLE_CMDS_2.txt  - Add any new console commands to be run before Step 3  - Remember: do not run Python directly in console commands. 
 
 
 # Step 2 over, go to 04_CONSOLE_CMDS_2.txt
