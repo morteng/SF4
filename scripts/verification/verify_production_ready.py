@@ -133,8 +133,20 @@ def verify_production_ready():
             
         # Verify test coverage meets requirements
         from scripts.verification.verify_test_coverage import verify_coverage
-        if not verify_coverage(min_percent=80):
+        if not verify_coverage(min_percent=85):
             logger.error("Test coverage below required threshold")
+            return False
+            
+        # Verify database migrations
+        from scripts.verification.verify_migrations import check_migrations_applied
+        if not check_migrations_applied():
+            logger.error("Database migrations not fully applied")
+            return False
+                
+        # Verify monitoring dashboard
+        from scripts.verification.verify_monitoring import check_monitoring_endpoint
+        if not check_monitoring_endpoint():
+            logger.error("Monitoring dashboard not accessible")
             return False
 
         # Verify only stipend name is required
