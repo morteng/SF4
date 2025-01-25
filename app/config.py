@@ -11,7 +11,7 @@ class Config:
     BACKUP_DIR = os.environ.get('BACKUP_DIR', 'backups')
     LOG_DIR = os.environ.get('LOG_DIR', 'logs')
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///app.db'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///stipend.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # Default engine options - will be overridden for SQLite
     SQLALCHEMY_ENGINE_OPTIONS = {

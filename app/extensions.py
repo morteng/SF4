@@ -16,18 +16,20 @@ def init_extensions(app):
     """Initialize all Flask extensions with proper configuration."""
     # Only initialize extensions if they haven't been initialized yet
     if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
-        # Initialize SQLAlchemy
-        db.init_app(app)
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-        
-        # Initialize rate limiter
+        # Initialize security components first
+        login_manager.init_app(app)
         limiter.init_app(app)
+        csrf.init_app(app)
         app.extensions['limiter'] = limiter
         
-        # Initialize other extensions
-        login_manager.init_app(app)
+        # Initialize database components
+        db.init_app(app)
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         migrate.init_app(app, db)
-        csrf.init_app(app)
+        
+        # Configure admin rate limits
+        from app.routes.admin import admin_bp
+        limiter.limit("100/hour")(admin_bp)
         
         # Configure login manager
         login_manager.login_view = 'public.login'
