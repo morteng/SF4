@@ -73,9 +73,8 @@ def verify_login_attempts():
         from app import create_app
         app = create_app()
         with app.app_context():
-        from app import create_app
-        app = create_app()
-        with app.app_context():
+            from app.models.user import User
+            from datetime import datetime, timedelta
             from app.models.user import User
             from datetime import datetime, timedelta
         
