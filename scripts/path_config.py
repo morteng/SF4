@@ -51,8 +51,10 @@ def configure_paths(production=False, verify=False):
         venv_path = os.path.join(project_root, '.venv')
         site_packages = os.path.join(venv_path, 'Lib', 'site-packages')
         if os.path.exists(site_packages):
-            paths_to_add.append(site_packages)
-            print(f"Added virtualenv site-packages: {site_packages}")
+            # Insert directly into sys.path instead of paths_to_add
+            if site_packages not in sys.path:
+                sys.path.insert(1, site_packages)
+                print(f"Added virtualenv site-packages: {site_packages}")
 
         # Insert paths into sys.path if not already present.
         # Ensure project root is first
