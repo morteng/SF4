@@ -23,10 +23,11 @@
 - [x] Windows deployment pipeline
 
 ### **v1.3.0 Priorities** 
-- [ ] Monitoring dashboard refinement
-- [ ] Test coverage expansion
+- [x] Monitoring dashboard refinement
+- [x] Test coverage expansion
 - [ ] User documentation overhaul
 - [ ] Performance benchmarking
+- [ ] Add email confirmation workflow tests
 
 ### **Completed Tasks**
 - [x] Increase coverage to 35%
