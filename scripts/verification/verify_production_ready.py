@@ -3,6 +3,9 @@ import sys
 import logging
 from pathlib import Path
 import secrets
+from scripts.verification.verify_db_schema import verify_db_schema
+from scripts.verification.verify_security import verify_security_settings
+from scripts.verification.verify_monitoring import verify_monitoring
 
 def configure_logger():
     """Configure logger for production readiness verification"""
@@ -21,22 +24,6 @@ def verify_production_ready(check_migrations=False, validate_config=False):
     
     with app.app_context():
         """Final production readiness check with emergency fallback"""
-        logger = configure_logger()
-        
-        # Verify core requirements
-        if not verify_db_schema():
-            return False
-            
-        if not verify_security_settings():
-            return False
-            
-        # Verify monitoring
-        if not verify_monitoring():
-            return False
-            
-        logger.info("Production environment verified")
-        return True
-        # Actual verification logic
         logger = configure_logger()
         
         # Verify core requirements
