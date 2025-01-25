@@ -97,7 +97,7 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
     app = create_app('production')
     
     with app.app_context():
-        # Properly indented verification logic
+        # Properly indent all code inside context manager
         import sys
         from pathlib import Path
         sys.path.insert(0, str(Path(__file__).parent.parent.parent))
