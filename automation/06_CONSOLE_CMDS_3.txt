@@ -3,17 +3,20 @@
 
 ### CODE START ###
 
-# Validate user confirmation system
-/run python -m pytest tests/test_user_model.py -k "confirmed_at or password" -v --cov=app.models.user --cov-report=term-missing
+# Install test dependencies
+/run python scripts/install_test_dependencies.py
 
-# Security audit for confirmation flow
-/run python scripts/verification/verify_security.py --check-auth --check-confirmed
+# Apply migrations
+/run alembic upgrade head
 
-# Final schema validation
-/run python scripts/verification/verify_db_schema.py --full-check --production
+# Run security field tests
+/run python -m pytest tests/test_user_model.py -k test_security_columns -v
 
-# Commit verified state
-/run python scripts/commit_changes.py --message "Cycle 102: User confirmation system validation"
+# Verify database schema
+/run python scripts/verification/verify_db_schema.py --full-check
+
+# Perform security audit
+/run python scripts/verification/verify_security.py --full-audit
 
 ### CODE END ###
 

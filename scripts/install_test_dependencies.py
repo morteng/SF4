@@ -18,8 +18,9 @@ def install_dependencies():
             logger.error("requirements-test.txt not found! Creating default...")
             req_file.write_text(
                 "pytest>=8.0.0\n"
-                "coverage>=7.0.0\n"
                 "freezegun>=1.2.0\n"
+                "factory-boy>=3.3.0\n"
+                "python-dotenv>=1.0.0\n"
                 "factory-boy>=3.3.0\n"
                 "python-dotenv>=1.0.0\n"
             )
