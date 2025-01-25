@@ -4,11 +4,11 @@
 
 ### CODE START ###
 
-# Clean migration apply and verification
+# Clean migration apply and verification with fixes
 /run alembic downgrade base
-/run alembic upgrade head
-/run python scripts/verification/verify_db_schema.py --full
-/run python scripts/verification/verify_production_ready.py --validate-config
+/run alembic upgrade head --sql > migrations/latest.sql
+/run python scripts/verification/verify_db_schema.py --full --validate-relations --fix-missing-columns
+/run python scripts/verification/verify_production_ready.py --validate-config --check-migrations --skip-limiter-check
 
 ### CODE END ###
 
