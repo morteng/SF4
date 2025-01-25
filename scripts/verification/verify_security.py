@@ -2,6 +2,7 @@ import os
 import sys
 import logging
 from pathlib import Path
+from sqlalchemy.exc import SQLAlchemyError
 
 def configure_logger():
     """Configure logger for security verification"""

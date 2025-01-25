@@ -32,7 +32,10 @@ def verify_production_ready(check_migrations=False, validate_config=False):
                 
             if not verify_security_settings():
                 return False
-        logger = configure_logger()
+        except Exception as e:
+            logger.error(f"Production verification failed: {str(e)}")
+            return False
+            
         logger = configure_logger()
         
         # Verify core requirements
