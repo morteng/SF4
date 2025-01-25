@@ -4,13 +4,17 @@
 
 ### CODE START ###
 
-# Install critical dependencies first
-/run python -m pip install bleach markdown flask-htmx safety
+# Apply critical database migration
+/run python migrations/versions/20250114_add_confirmed_at.py upgrade
 
-# Validate core environment
-/run python scripts/path_config.py --production --force --platform=win
-/run python scripts/verification/verify_dependencies.py
-/run python scripts/verification/verify_deployment_readiness.py --phase=analysis
+# Run security audit with fixes
+/run python scripts/security/security_audit.py --full --fix
+
+# Verify production readiness
+/run python scripts/verification/verify_production_ready.py --full --validate-config
+
+# Finalize documentation updates
+/run python scripts/finalize_docs.py --production --verify
 
 ### CODE END ###
 

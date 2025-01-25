@@ -42,6 +42,10 @@ if __name__ == '__main__':
     sys.path.insert(0, str(project_root.resolve()))  # Normalized path
     sys.path.insert(1, str(project_root / '.venv' / 'Lib' / 'site-packages'))
     
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))  # Add project root
+
     from scripts.init_logging import configure_logging
     configure_logging()
     if verify_dependencies():
