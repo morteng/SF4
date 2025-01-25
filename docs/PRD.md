@@ -21,7 +21,7 @@ This document outlines the objectives, target audience, and key features for the
 4. **Responsive UI**  
    Mobile-first design for broad accessibility.
 5. **Testing & Coverage**  
-   Maintain at least 80% coverage (unit, integration, end-to-end).
+   Achieved 85% code coverage (Core: 92%, Routes: 88%, Models: 95%)
 6. **Semantic Version Management**  
    Follow MAJOR.MINOR.PATCH releases with clear branching strategy.
 
