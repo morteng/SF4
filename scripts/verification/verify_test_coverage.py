@@ -22,7 +22,9 @@ def configure_coverage_logging():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_coverage(threshold=85, critical_paths=True, verify=False, focus_areas=['core_services', 'stipend_service']):
+def verify_coverage(threshold=85, critical_paths=True, verify=False, focus_areas=None):
+    if focus_areas is None:
+        focus_areas = ['core_services', 'stipend_service']
     """Enhanced coverage verification with critical path analysis
     Args:
         threshold (int): Minimum coverage percentage

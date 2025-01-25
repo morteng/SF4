@@ -19,6 +19,7 @@ def init_extensions(app):
         # Initialize security components first
         login_manager.init_app(app)
         limiter.init_app(app)
+        limiter.storage_uri = "memory://"  # Required for Windows compatibility
         csrf.init_app(app)
         app.extensions['limiter'] = limiter
         
