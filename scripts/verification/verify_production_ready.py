@@ -131,6 +131,12 @@ def verify_production_ready():
             logger.error("Admin interface must use full page reloads")
             return False
             
+        # Verify test coverage meets requirements
+        from scripts.verification.verify_test_coverage import verify_coverage
+        if not verify_coverage(min_percent=80):
+            logger.error("Test coverage below required threshold")
+            return False
+
         # Verify only stipend name is required
         from app.models.stipend import Stipend
         if not Stipend.__table__.columns['name'].nullable:
