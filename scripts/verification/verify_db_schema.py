@@ -38,13 +38,20 @@ def verify_foreign_keys(inspector):
         logger.error(f"Foreign key verification failed: {str(e)}")
         return False
 
-def validate_schema(validate_relations=False, validate_required_fields=True, test_config=None):
-    if test_config:
-        from flask import current_app
-        if not current_app:
-            from app import create_app
-            app = create_app(config=test_config)
-            app.app_context().push()
+def validate_schema(validate_relations=False, validate_required_fields=True, test_config=None, emergency_create=False):
+    """Enhanced schema validation with emergency table creation"""
+    from pathlib import Path
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    
+    from app import create_app
+    app = create_app()
+    with app.app_context():
+        if test_config:
+            from flask import current_app
+            if not current_app:
+                app = create_app(config=test_config)
+                app.app_context().push()
     """Validate database schema against expected structure."""
     if not configure_paths():
         logger.error("Path configuration failed")
