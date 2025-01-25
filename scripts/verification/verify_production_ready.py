@@ -26,8 +26,8 @@ def verify_production_ready():
         from app import create_app
         app = create_app()
         with app.app_context():
-        # Add project root to Python path
-        project_root = str(Path(__file__).parent.parent.parent)
+            # Add project root to Python path
+            project_root = str(Path(__file__).parent.parent.parent)
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
             
