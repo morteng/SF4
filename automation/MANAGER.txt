@@ -1,7 +1,4 @@
-Pick one issue to focus on each code cycle, this will allow you to do a better job in the long run than trying to fix everything at once.
-
-Overall, try DRY and try cleaning up duplicated funcitionality, code and tests. Fix failing tests. go through the project looking for duplicated code to consolidate.
-
+Just try to get something up and running, start building out the frontend where users get asked questions and select appropriate tags to narrow down to a set of relevant stipends that are appropriate for the user. we also need systems to build the questions.
 FEATURE REQUEST: Ensure dashboard has stats and values for monitoring metrics and all other relevant info you can think of
 
 
