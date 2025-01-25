@@ -7,7 +7,6 @@
 # Initialize system
 /run python scripts/init_logging.py --production
 /run python scripts/path_config.py --production --verify
-/run python scripts/start_cycle.py
 
 # Run database schema cleanup
 /run python scripts/verification/verify_db_connection.py --cleanup
