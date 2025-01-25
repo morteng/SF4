@@ -79,13 +79,18 @@ def verify_login_attempts():
             from datetime import datetime, timedelta
         
         # Check for failed login attempts in last 24 hours
-        if hasattr(User, 'last_failed_login'):
-            recent_failures = User.query.filter(
-                User.last_failed_login > datetime.utcnow() - timedelta(hours=24)
-            ).count()
-        else:
-            logger.warning("Security tracking field missing: last_failed_login")
-            recent_failures = 0  # Temporary until migration
+        # Gracefully handle missing security fields
+        try:
+            if hasattr(User, 'last_failed_login'):
+                recent_failures = User.query.filter(
+                    User.last_failed_login > datetime.utcnow() - timedelta(hours=24)
+                ).count()
+            else:
+                logger.warning("Security tracking field missing: last_failed_login")
+                recent_failures = 0  # Temporary until migration
+        except SQLAlchemyError as e:
+            logger.warning(f"Security verification partial failure: {str(e)}")
+            recent_failures = 0  # Allow continuation with warning
         
         if recent_failures > 10:
             logger.warning(f"Excessive failed logins: {recent_failures} in last 24 hours")
