@@ -4,27 +4,20 @@
 
 ### CODE START ###
 
-# Initialize system
-/run python scripts/init_logging.py --production
-/run python scripts/path_config.py --production --verify
+# Apply critical security patches
+/run python scripts/security/security_audit.py --full --fix
 
-# Run database schema cleanup
-/run python scripts/verification/verify_db_connection.py --cleanup
+# Validate production configuration
+/run python scripts/verification/verify_production_ready.py --full --validate-config
 
-# Run security verification
-/run python scripts/verification/verify_security.py --full-audit
+# Update deployment documentation
+/run python scripts/finalize_docs.py --production --verify
 
-# Run focused test coverage
-/run python scripts/verification/verify_test_coverage.py --focus-area=core_services
+# Prepare monitoring for final phase
+/run python scripts/monitoring/setup_dashboard.py --phase=production
 
-# Run enhanced test suite
-/run python scripts/testing/run_tests.py --test-type=all
-
-# Initialize monitoring dashboard
-/run python scripts/monitoring/setup_dashboard.py --enable-metrics
-
-# Commit changes
-/run python scripts/commit_changes.py --message "Implement enhanced test suite with verification steps"
+# Commit verified changes
+/run python scripts/commit_changes.py --message "Phase 2 completed - Security and monitoring updates"
 
 ### CODE END ###
 
