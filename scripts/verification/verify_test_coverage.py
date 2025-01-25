@@ -64,7 +64,7 @@ def verify_coverage(threshold=85, critical_paths=True, verify=False, focus_areas
         try:
             total_line = coverage_lines[-1].strip()
             parts = total_line.split()
-            percentage_str = parts[-1].replace('%', '')
+            percentage_str = parts[-1].replace('%', '') if '%' in parts[-1] else parts[-2].replace('%', '')
             coverage_percent = float(percentage_str)
             
             if coverage_percent < threshold:
