@@ -3,20 +3,16 @@
 
 ### CODE START ###
 
-# Install test dependencies
-/run python scripts/install_test_dependencies.py
-
-# Apply migrations
+# Apply migrations and verify schema
 /run alembic upgrade head
-
-# Run security field tests
-/run python -m pytest tests/test_user_model.py -k test_security_columns -v
-
-# Verify database schema
 /run python scripts/verification/verify_db_schema.py --full-check
 
-# Perform security audit
+# Execute security column tests
+/run python -m pytest tests/test_user_model.py -k test_security_columns -v
+
+# Validate production readiness
 /run python scripts/verification/verify_security.py --full-audit
+/run python scripts/verification/verify_production_ready.py --full
 
 ### CODE END ###
 
