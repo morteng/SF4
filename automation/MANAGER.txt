@@ -14,7 +14,8 @@ FEATURE REQUEST: Ensure dashboard has stats and values for monitoring metrics an
 
 ### **New Initiatives**
 - Implement automated issue tracking
-- [x] Enhance monitoring dashboards
+- [x] Enhance monitoring dashboards 
 - Improve database connection reliability
+- Implement health check endpoints
 
 ---

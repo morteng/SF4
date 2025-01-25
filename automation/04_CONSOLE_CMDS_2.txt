@@ -18,11 +18,14 @@
 # Run focused test coverage
 /run scripts/verification/verify_test_coverage.py --focus-area=core_services
 
-# Run tests with coverage
-/run scripts/testing/run_tests.py --test-type=unit
+# Run enhanced test suite
+/run scripts/testing/run_tests.py --test-type=all
+
+# Initialize monitoring dashboard
+/run scripts/monitoring/setup_dashboard.py --enable-metrics
 
 # Commit changes
-/run scripts/commit_changes.py --message "Fix: Resolve SQLAlchemy conflicts and improve test coverage"
+/run scripts/commit_changes.py --message "Implement enhanced test suite with verification steps"
 
 ### CODE END ###
 
