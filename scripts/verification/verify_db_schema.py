@@ -71,7 +71,13 @@ def validate_schema(validate_relations=False, validate_required_fields=True):
 
         # Verify table columns with detailed error reporting
         for table, expected_columns in expected_schema.items():
-            actual_columns = [col['name'] for col in inspector.get_columns(table)]
+            # SQLite compatible column verification
+            if inspector.bind.engine.name == 'sqlite':
+                result = inspector.bind.execute(f"PRAGMA table_info({table})")
+                actual_columns = [row[1] for row in result]
+            else:
+                actual_columns = [col['name'] for col in inspector.get_columns(table)]
+            
             missing_columns = set(expected_columns) - set(actual_columns)
             
             if missing_columns:
