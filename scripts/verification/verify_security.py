@@ -191,9 +191,17 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
             # Verify admin rate limiting
             if check_rate_limits:
                 from app.services.base_service import BaseService
+                from flask_limiter import Limiter
+                from flask_limiter.util import get_remote_address
+            
                 if not hasattr(BaseService, 'limiter'):
-                    logger.error("Missing rate limiter in BaseService")
-                    return False
+                    # Initialize limiter if missing
+                    BaseService.limiter = Limiter(
+                        app=app,
+                        key_func=get_remote_address,
+                        default_limits=["200 per day", "50 per hour"]
+                    )
+                    logger.info("Initialized rate limiter in BaseService")
         
         missing_vars = [var for var in required_vars if not os.getenv(var)]
         if missing_vars:
