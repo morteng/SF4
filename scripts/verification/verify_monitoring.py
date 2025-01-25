@@ -145,6 +145,16 @@ def verify_monitoring_setup():
         logger.error(f"Monitoring verification failed: {str(e)}")
         return False
 
+    # New response time check
+    try:
+        response = test_client.get('/')
+        if response.headers.get('X-Response-Time') is None:
+            logger.error("Missing X-Response-Time header")
+            return False
+    except Exception as e:
+        logger.error(f"Response time check failed: {str(e)}")
+        return False
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     if verify_monitoring_setup():
