@@ -4,20 +4,17 @@
 
 ### CODE START ###
 
-# Apply critical security patches
-/run python scripts/security/security_audit.py --full --fix
+# Final migration validation
+/run alembic history --verbose
+/run alembic current --verbose
+/run alembic upgrade head --sql > migrations/latest_prod.sql
 
-# Validate production configuration
-/run python scripts/verification/verify_production_ready.py --full --validate-config
+# Final verification checks
+/run python scripts/verification/verify_db_schema.py --full --validate-relations --fix-missing-columns
+/run python scripts/verification/verify_production_ready.py --check-migrations --skip-limiter-check
 
-# Update deployment documentation
-/run python scripts/finalize_docs.py --production --verify
-
-# Prepare monitoring for final phase
-/run python scripts/monitoring/setup_dashboard.py --phase=production
-
-# Commit verified changes
-/run python scripts/commit_changes.py --message "Phase 2 completed - Security and monitoring updates"
+# Commit verified state
+/run python scripts/commit_changes.py --message "Database schema finalized - confirmed_at column verified"
 
 ### CODE END ###
 

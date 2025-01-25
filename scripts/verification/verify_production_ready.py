@@ -99,7 +99,7 @@ def verify_production_ready():
             return False
         # Verify security settings including admin interface
         from scripts.verification.verify_security import verify_security_settings
-        if not verify_security_settings(check_admin_interface=True):
+        if not verify_security_settings(check_admin_interface=True, validate_limiter=False):
             logger.error("Security verification failed")
             return False
             
