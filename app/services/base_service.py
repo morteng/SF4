@@ -33,7 +33,12 @@ def handle_errors(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         try:
-            return func(*args, **kwargs)
+            args[0].operation_metrics['total_operations'] += 1  # self is args[0]
+            args[0].operation_metrics['pending_operations'] += 1
+            result = func(*args, **kwargs)
+            args[0].operation_metrics['success_count'] += 1
+            args[0].operation_metrics['pending_operations'] -= 1
+            return result
         except ValidationError as e:
             db.session.rollback()
             logger.error(f"Validation error in {func.__name__}: {str(e)}", extra={
@@ -62,13 +67,41 @@ def handle_errors(func):
                 'user_id': kwargs.get('user_id'),
                 'data': kwargs.get('data')
             })
+            args[0].operation_metrics['error_count'] += 1
+            args[0].operation_metrics['last_error'] = str(e)
+            args[0].operation_metrics['pending_operations'] -= 1
             raise ValueError(FlashMessages.CRUD_OPERATION_ERROR.format(error=str(e)))
     return wrapper
+
+    def _init_metrics(self):
+        """Initialize metrics tracking structures"""
+        self.operation_metrics = {
+            'total_operations': 0,
+            'success_count': 0,
+            'error_count': 0,
+            'pending_operations': 0,
+            'last_error': None
+        }
+
+    @handle_errors
+    def get_operation_metrics(self):
+        """Get calculated performance metrics"""
+        return {
+            'success_rate': (self.operation_metrics['success_count'] / 
+                           self.operation_metrics['total_operations']) * 100 
+                           if self.operation_metrics['total_operations'] > 0 else 0,
+            'error_rate': (self.operation_metrics['error_count'] / 
+                          self.operation_metrics['total_operations']) * 100 
+                          if self.operation_metrics['total_operations'] > 0 else 0,
+            'pending_ops': self.operation_metrics['pending_operations'],
+            'last_error': self.operation_metrics['last_error']
+        }
 
 class BaseService:
     def __init__(self, model, audit_logger=None):
         self.model = model
         self.audit_logger = audit_logger
+        self._init_metrics()  # Initialize metrics tracking
         # Initialize rate limits without limiter
         self.rate_limits = {
             'create': "10 per minute",

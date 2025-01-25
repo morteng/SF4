@@ -37,6 +37,32 @@
     </div>
 </div>
 
+<div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Backup Status Card -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-bold mb-4">Backup Status</h3>
+        <div class="space-y-2">
+            <p>Success Rate: {{ "%.2f"|format(backup_metrics.get('success_rate', 0)) }}%</p>
+            <p>Last Backup: {{ backup_metrics.last_success|default('Never', true) }}</p>
+            <p>Avg Size: {{ "%.2f"|format(backup_metrics.get('avg_size', 0)) }} MB</p>
+        </div>
+    </div>
+
+    <!-- Service Health Card -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-bold mb-4">Service Health</h3>
+        <div class="grid grid-cols-2 gap-4">
+            {% for service, metrics in services_metrics.items() %}
+            <div class="p-3 {% if metrics.success_rate < 90 %}bg-red-50{% else %}bg-green-50{% endif %} rounded">
+                <h4 class="font-semibold">{{ service|title }} Service</h4>
+                <p class="text-sm">Success: {{ "%.1f"|format(metrics.success_rate) }}%</p>
+                <p class="text-xs text-gray-600">Pending: {{ metrics.pending_ops }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
 <style>
     .dashboard-card {
         @apply bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow;

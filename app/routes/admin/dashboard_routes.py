@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, current_app, request
+from scripts.db_monitor import BackupDashboard
 from flask_login import current_user, login_required
 from app.utils import admin_required
 from app.extensions import db
@@ -54,13 +55,26 @@ def dashboard():
         # Get check metrics
         check_metrics = get_check_metrics()
 
+        # Get backup metrics
+        backup_dashboard = BackupDashboard()
+        backup_dashboard.load_metrics()
+
+        # Get service metrics
+        services_metrics = {
+            'stipend': current_app.stipend_service.get_operation_metrics(),
+            'user': current_app.user_service.get_operation_metrics(),
+            'bot': current_app.bot_service.get_operation_metrics()
+        }
+
         return render_template('admin/dashboard.html',
                              title='Dashboard',
                              notification_count=notification_count,
                              recent_activity=recent_activity,
                              bots=bots,
                              performance_metrics=performance_metrics,
-                             check_metrics=check_metrics)
+                             check_metrics=check_metrics,
+                             backup_metrics=backup_dashboard.metrics,
+                             services_metrics=services_metrics)
     except Exception as e:
         current_app.logger.error(f"Error in dashboard route: {str(e)}")
         return render_template('admin/dashboard.html',
