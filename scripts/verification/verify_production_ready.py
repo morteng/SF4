@@ -18,6 +18,14 @@ def configure_logger():
 def verify_production_ready():
     """Verify production readiness with comprehensive checks"""
     try:
+        # Add path configuration first
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+        
+        from app import create_app
+        app = create_app()
+        with app.app_context():
         # Add project root to Python path
         project_root = str(Path(__file__).parent.parent.parent)
         if project_root not in sys.path:

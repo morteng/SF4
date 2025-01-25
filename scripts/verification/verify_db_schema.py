@@ -38,7 +38,13 @@ def verify_foreign_keys(inspector):
         logger.error(f"Foreign key verification failed: {str(e)}")
         return False
 
-def validate_schema(validate_relations=False, validate_required_fields=True):
+def validate_schema(validate_relations=False, validate_required_fields=True, test_config=None):
+    if test_config:
+        from flask import current_app
+        if not current_app:
+            from app import create_app
+            app = create_app(config=test_config)
+            app.app_context().push()
     """Validate database schema against expected structure."""
     if not configure_paths():
         logger.error("Path configuration failed")
