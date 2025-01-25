@@ -28,7 +28,9 @@ def cleanup():
         'htmlcov',
         'migrations/versions/*.pyc',  # Clean compiled migration files
         'instance/*.db-wal',          # Clean SQLite write-ahead logs
-        'instance/*.db-shm'           # Clean SQLite shared memory files
+        'instance/*.db-shm',          # Clean SQLite shared memory files
+        'instance/*.db-journal',      # Add SQLite journal files
+        'logs/*.log.*'                # Add rotated log files
     ]
     
     try:
