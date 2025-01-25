@@ -15,7 +15,15 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_production_ready():
+def verify_production_ready(check_migrations=False, validate_config=False):
+    """Final production readiness check with emergency fallback"""
+    from pathlib import Path
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    
+    from app import create_app
+    app = create_app()
+    with app.app_context():
     """Verify production readiness with comprehensive checks"""
     try:
         # Add path configuration first

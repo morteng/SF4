@@ -99,6 +99,14 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
     from app import create_app
     app = create_app()
     with app.app_context():
+    # Configure paths first
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    
+    from app import create_app
+    app = create_app()
+    with app.app_context():
         # Configure paths first
         import sys
         from pathlib import Path
