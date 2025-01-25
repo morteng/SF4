@@ -94,8 +94,16 @@ def verify_login_attempts():
                 logger.info("Run 'alembic upgrade head' to apply migrations")
                 return True  # Temporary bypass for missing fields
             
+            # Use timezone-aware datetime and handle missing columns
+            from datetime import timezone
+            
+            if not hasattr(User, 'last_failed_login'):
+                logger.error("Critical security field missing: last_failed_login")
+                return False
+                
+            time_threshold = datetime.now(timezone.utc) - timedelta(hours=24)
             recent_failures = User.query.filter(
-                User.last_failed_login > datetime.utcnow() - timedelta(hours=24)
+                User.last_failed_login > time_threshold
             ).count()
         except SQLAlchemyError as e:
             logger.warning(f"Security verification partial failure: {str(e)}")

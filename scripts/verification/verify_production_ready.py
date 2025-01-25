@@ -3,8 +3,12 @@ import sys
 import logging
 from pathlib import Path
 import secrets
-from scripts.verification.verify_db_schema import verify_db_schema
-from scripts.verification.verify_security import verify_security_settings
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from verification.verify_db_schema import verify_db_schema
+from verification.verify_security import verify_security_settings
 from scripts.verification.verify_monitoring import verify_monitoring
 
 def configure_logger():
