@@ -2,8 +2,8 @@
 
 
 # Add any new or externally modified files
-/git add .
-/commit
+/git add -A
+/commit "Cycle start automated commit"
 
 # Output cycle start timestamp
 /run python scripts/start_cycle.py

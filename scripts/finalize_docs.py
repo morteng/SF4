@@ -46,6 +46,8 @@ def configure_logger():
     return logger
 
 def update_release_notes(verify=False):
+    """Update release notes with current cycle metrics"""
+    from scripts.verification.verify_test_coverage import verify_coverage
     # Add path configuration first
     import sys
     from pathlib import Path
