@@ -62,7 +62,7 @@
 - [x] SECRET_KEY meets complexity and length requirements (64+ chars)
 - [x] ADMIN_PASSWORD meets length requirements (12+ chars)
 - [x] Debug mode is disabled in production
-- [x] Database schema validated
+- [x] Database schema validated (including confirmed_at column)
 - [x] All migrations applied
 - [x] Test coverage meets 80% target
 - [x] Security settings verified

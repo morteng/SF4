@@ -4,17 +4,11 @@
 
 ### CODE START ###
 
-# Apply critical database migration
-/run python migrations/versions/20250114_add_confirmed_at.py upgrade
-
-# Run security audit with fixes
-/run python scripts/security/security_audit.py --full --fix
-
-# Verify production readiness
-/run python scripts/verification/verify_production_ready.py --full --validate-config
-
-# Finalize documentation updates
-/run python scripts/finalize_docs.py --production --verify
+# Clean migration apply and verification
+/run alembic downgrade base
+/run alembic upgrade head
+/run python scripts/verification/verify_db_schema.py --full
+/run python scripts/verification/verify_production_ready.py --validate-config
 
 ### CODE END ###
 

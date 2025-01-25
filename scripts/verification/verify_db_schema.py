@@ -55,7 +55,7 @@ def validate_schema(validate_relations=False, validate_required_fields=True):
         
         # Define expected schema
         expected_schema = {
-            'user': ['id', 'username', 'email', 'password_hash'],
+            'user': ['id', 'username', 'email', 'password_hash', 'confirmed_at'],
             'stipend': ['id', 'name', 'description', 'tags'],
             'organization': ['id', 'name', 'description'],
             'tag': ['id', 'name']
