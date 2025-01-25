@@ -14,8 +14,11 @@ def configure_logger():
         logger.setLevel(logging.INFO)
     return logger
 
-def verify_security_patches():
-    """Verify recent security patches have been applied"""
+def verify_security_patches(check_bots=False):
+    """Verify recent security patches have been applied
+    Args:
+        check_bots (bool): Whether to verify bot security checks
+    """
     logger = configure_logger()
     try:
         # Check for critical security updates
@@ -41,7 +44,7 @@ def verify_security_patches():
             return False
             
         # Additional bot security checks
-        if check_bots:  # check_bots is passed as parameter to verify_security_settings()
+        if check_bots:
             from app.services.bot_service import TagBot, UpdateBot, ReviewBot
             for bot_class in [TagBot, UpdateBot, ReviewBot]:
                 bot = bot_class()
@@ -232,7 +235,7 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
         # Additional daily checks
         if daily:
             # Verify recent security patches
-            if not verify_security_patches():
+            if not verify_security_patches(check_bots=check_bots):
                 logger.error("Security patches verification failed")
                 return False
                 
