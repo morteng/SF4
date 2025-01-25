@@ -22,10 +22,10 @@ def init_extensions(app):
         csrf.init_app(app)
         app.extensions['limiter'] = limiter
         
-        # Initialize database components
+        # Initialize database with SQLite batch mode
         db.init_app(app)
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-        migrate.init_app(app, db)
+        migrate.init_app(app, db, render_as_batch=True)
         
         # Configure admin rate limits
         from app.routes.admin import admin_bp
