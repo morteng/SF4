@@ -11,7 +11,7 @@
 
 # Schema verification
 /run python scripts/verification/verify_db_schema.py --check-column user.confirmed_at
-/run sqlite3 instance/stipend.db ".schema user"
+/run python -c "import sqlite3; conn=sqlite3.connect('instance/stipend.db'); print(conn.execute('SELECT sql FROM sqlite_master WHERE type=\"table\" AND name=\"user\"').fetchone()[0])"
 
 # Security verification
 /run python scripts/verification/verify_security.py --full-audit --check-admin-interface

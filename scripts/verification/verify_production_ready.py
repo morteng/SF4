@@ -16,6 +16,10 @@ def configure_logger():
     return logger
 
 def verify_production_ready(check_migrations=False, validate_config=False):
+    from app.factory import create_app
+    app = create_app('production')
+    
+    with app.app_context():
     """Final production readiness check with emergency fallback"""
     from pathlib import Path
     import sys
