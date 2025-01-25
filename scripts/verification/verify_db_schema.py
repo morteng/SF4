@@ -71,7 +71,8 @@ def validate_schema(validate_relations=False, validate_required_fields=True, tes
         required_columns = {'confirmed_at', 'last_failed_login', 'is_admin', 'email', 'password_hash'}
         missing_cols = required_columns - set(user_columns)
         if missing_cols:
-            logger.error(f"Missing required user columns: {', '.join(missing_cols)}")
+            logger.error(f"Missing security columns in user table: {', '.join(missing_cols)}")
+            logger.info("Run 'alembic upgrade head' to apply missing migrations")
             return False
         db_uri = os.getenv('SQLALCHEMY_DATABASE_URI')
         if not db_uri:

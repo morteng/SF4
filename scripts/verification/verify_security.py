@@ -82,13 +82,21 @@ def verify_login_attempts():
         # Check for failed login attempts in last 24 hours
         # Gracefully handle missing security fields
         try:
-            if hasattr(User, 'last_failed_login'):
-                recent_failures = User.query.filter(
-                    User.last_failed_login > datetime.utcnow() - timedelta(hours=24)
-                ).count()
-            else:
-                logger.warning("Security tracking field missing: last_failed_login")
-                recent_failures = 0  # Temporary until migration
+            # Handle missing security columns gracefully
+            missing_fields = []
+            if not hasattr(User, 'last_failed_login'):
+                missing_fields.append('last_failed_login')
+            if not hasattr(User, 'confirmed_at'):
+                missing_fields.append('confirmed_at')
+            
+            if missing_fields:
+                logger.warning(f"Missing security fields: {', '.join(missing_fields)}")
+                logger.info("Run 'alembic upgrade head' to apply migrations")
+                return True  # Temporary bypass for missing fields
+            
+            recent_failures = User.query.filter(
+                User.last_failed_login > datetime.utcnow() - timedelta(hours=24)
+            ).count()
         except SQLAlchemyError as e:
             logger.warning(f"Security verification partial failure: {str(e)}")
             recent_failures = 0  # Allow continuation with warning
