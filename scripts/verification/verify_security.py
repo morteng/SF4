@@ -191,13 +191,13 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
             if not os.getenv('ADMIN_CSRF_SECRET'):
                 logger.error("Missing ADMIN_CSRF_SECRET for admin interface")
                 return False
-            # Verify admin rate limiting
+            # Verify and initialize rate limiting
             if check_rate_limits:
                 from app.services.base_service import BaseService
                 from flask_limiter import Limiter
                 from flask_limiter.util import get_remote_address
             
-                if not hasattr(BaseService, 'limiter'):
+                if not hasattr(BaseService, 'limiter') or not isinstance(BaseService.limiter, Limiter):
                     # Initialize limiter if missing
                     BaseService.limiter = Limiter(
                         app=app,
@@ -205,6 +205,11 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
                         default_limits=["200 per day", "50 per hour"]
                     )
                     logger.info("Initialized rate limiter in BaseService")
+            
+                # Verify active configuration
+                if not BaseService.limiter.enabled:
+                    logger.error("Rate limiter not enabled")
+                    return False
         
         missing_vars = [var for var in required_vars if not os.getenv(var)]
         if missing_vars:
