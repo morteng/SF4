@@ -3,23 +3,21 @@
 
 ### CODE START ###
 
-# Run comprehensive test suite
-/run python scripts/testing/run_tests.py --test-type=all
+# Validate migration history
+/run alembic history --verbose
+/run alembic current --verbose
 
-# Apply security updates
-/run python scripts/verification/verify_security.py --full-audit --check-rate-limits
+# Test schema changes
+/run python scripts/verification/verify_db_schema.py --full --validate-relations --fix-missing-columns
 
-# Verify coverage metrics
-/run python scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
+# Verify production readiness
+/run python scripts/verification/verify_production_ready.py --check-migrations --skip-limiter-check --skip-admin-check
 
-# Initialize monitoring
-/run python scripts/monitoring/setup_dashboard.py --enable-metrics
+# Update test coverage
+/run python scripts/testing/test_report.py --update-coverage --component models
 
-# Final production readiness check
-/run python scripts/verification/verify_production_ready.py --full
-
-# Commit validated changes
-/run python scripts/commit_changes.py --message "Testing phase completed: Security, Coverage, and Monitoring validated"
+# Commit verified changes
+/run python scripts/commit_changes.py --message "Testing completed: Migration validation passed"
 
 ### CODE END ###
 

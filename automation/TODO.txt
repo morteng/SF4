@@ -16,15 +16,13 @@
 ### **Current Priorities**  
 - [ ] Finalize Windows deployment guide
 - [ ] Document test coverage procedures
-- [ ] Create rollback procedure checklist
-- [ ] Add API response time metrics
-- [ ] Create system health dashboard
-- [ ] Add automated alert thresholds
-- [x] Implement load testing scenarios
-- [ ] Add performance benchmarks
-- [ ] Create documentation for new verification commands
-- [x] Add CSRF protection tests
-- [x] Add input sanitization tests
+- [ ] Create migration validation checklist
+- [ ] Add SQLite compatibility tests
+- [ ] Create schema version monitoring
+- [ ] Add automated migration rollback tests
+- [x] Implement SQLite schema modification tests
+- [x] Add confirmed_at column validation
+- [x] Update production verification checks
 
 ### **Completed Tasks**
 - [x] Increase coverage to 35%
