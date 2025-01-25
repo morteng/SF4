@@ -82,6 +82,9 @@ def verify_login_attempts():
         return False
 
 def verify_security_settings(full_audit=False, daily=True, validate_keys=False, check_stipends_security=False, check_admin_interface=True, check_rate_limits=True, verify_auth=True, monitoring=False, check_bots=False):
+    import secrets
+    import string
+    random = secrets.SystemRandom()
     """Verify security-related settings with enhanced checks
     Args:
         full_audit (bool): Perform comprehensive security audit

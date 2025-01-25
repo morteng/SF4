@@ -26,7 +26,7 @@ class User(db.Model, UserMixin):
     def is_active(self, value):
         self._is_active = value
 
-    def __init__(self, username, email, password=None, password_hash=None, is_admin=False, is_active=True, confirmed_at=None):
+    def __init__(self, username, email, password=None, password_hash=None, is_admin=False, is_active=False, confirmed_at=None):
         self.username = username
         self.email = email
         if password:
