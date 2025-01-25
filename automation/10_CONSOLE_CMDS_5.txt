@@ -4,8 +4,9 @@
 ### CODE START ###
 
 # Final production verification
-/run python scripts/path_config.py --production --verify
-/run python scripts/init_logging.py --production --verify
+/run python scripts/path_config.py --force --platform=win
+/run python -m pip install -r requirements.txt
+/run python scripts/verification/final_check.py
 
 # Comprehensive final checks
 /run python scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --verify-admin

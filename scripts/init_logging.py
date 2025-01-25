@@ -9,6 +9,14 @@ if project_root not in sys.path:
 
 def configure_logging(production=False, verify=False):
     """Configure logging system with proper error handling"""
+    # Fallback configuration
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[logging.StreamHandler()]
+    )
+    logger = logging.getLogger(__name__)
+
     try:
         # Add project root to path
         import sys
@@ -16,6 +24,7 @@ def configure_logging(production=False, verify=False):
         project_root = str(Path(__file__).resolve().parent.parent.parent)
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
+        logger.info("Logging system initialized with path config")
             
         # Configure paths first
         from scripts.path_config import configure_paths

@@ -37,9 +37,24 @@
 pytest
 ```
 
-### Troubleshooting
-#### Missing Dependencies
-If tests fail with `ModuleNotFoundError`:
+## Windows-Specific Setup  
+```bash  
+# Required for path resolution  
+python scripts/path_config.py --force --platform=win  
+
+# Install critical dependencies  
+python -m pip install Flask-Migrate==4.0.5 requests==2.32.3  
+```  
+
+## Troubleshooting  
+**Error**: `ModuleNotFoundError: No module named 'flask_migrate'`  
+**Fix**:  
+```bash  
+python -m pip install -r requirements.txt  
+python scripts/path_config.py --force  
+```  
+
+**Error**: `ModuleNotFoundError` (general)
 1. Ensure the virtual environment is activated
 2. Run `pip install -r requirements.txt`
 3. Verify installation with `pip show <package_name>`
