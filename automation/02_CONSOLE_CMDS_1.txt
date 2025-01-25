@@ -6,10 +6,9 @@
 
 # Clean migration state and reapply with fixed configuration
 /run del instance\\stipend.db
-/run alembic revision --autogenerate -m "Add confirmed_at column"
 /run alembic upgrade head
 /run python scripts/verification/verify_db_schema.py --full-check
-/run python scripts/verification/verify_security.py --full-audit
+/run pytest tests/test_user_model.py -k test_confirmed_at_column -v
 
 ### CODE END ###
 

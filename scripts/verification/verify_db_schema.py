@@ -68,7 +68,7 @@ def validate_schema(validate_relations=False, validate_required_fields=True, tes
         
         # Validate critical columns
         user_columns = [col['name'].lower() for col in inspector.get_columns('user')]
-        required_columns = {'confirmed_at', 'is_admin', 'email'}
+        required_columns = {'confirmed_at', 'is_admin', 'email', 'password_hash'}  # Add password_hash check
         missing_cols = required_columns - set(user_columns)
         if missing_cols:
             logger.error(f"Missing required user columns: {', '.join(missing_cols)}")

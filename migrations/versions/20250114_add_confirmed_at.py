@@ -15,26 +15,24 @@ branch_labels = None
 depends_on = None
 
 def upgrade():
-    # Force schema update for all database types
-    op.add_column('user',
-        sa.Column('confirmed_at', sa.DateTime(), nullable=False,
-                  server_default=sa.text('CURRENT_TIMESTAMP'))
-    )
-    op.create_index(op.f('ix_user_confirmed_at'), 'user', ['confirmed_at'], unique=False)
-    
-    # Emergency fallback for SQLite
     context = op.get_context()
+    
     if context.connection.engine.name == 'sqlite':
         with op.batch_alter_table('user') as batch_op:
+            batch_op.add_column(sa.Column('confirmed_at', sa.DateTime(), nullable=True))
             batch_op.create_index('ix_user_confirmed_at', ['confirmed_at'], unique=False)
     else:
-        op.add_column('user', sa.Column('confirmed_at', sa.DateTime(), nullable=True))
+        op.add_column('user',
+            sa.Column('confirmed_at', sa.DateTime(), nullable=True)
+        )
         op.create_index(op.f('ix_user_confirmed_at'), 'user', ['confirmed_at'], unique=False)
 
 def downgrade():
     context = op.get_context()
     if context.connection.engine.name == 'sqlite':
         with op.batch_alter_table('user') as batch_op:
+            batch_op.drop_index('ix_user_confirmed_at')
             batch_op.drop_column('confirmed_at')
     else:
+        op.drop_index(op.f('ix_user_confirmed_at'), table_name='user')
         op.drop_column('user', 'confirmed_at')
