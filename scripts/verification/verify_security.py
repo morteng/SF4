@@ -41,7 +41,7 @@ def verify_security_patches():
             return False
             
         # Additional bot security checks
-        if check_bots:
+        if check_bots:  # check_bots is passed as parameter to verify_security_settings()
             from app.services.bot_service import TagBot, UpdateBot, ReviewBot
             for bot_class in [TagBot, UpdateBot, ReviewBot]:
                 bot = bot_class()

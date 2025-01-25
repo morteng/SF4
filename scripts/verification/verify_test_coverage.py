@@ -43,9 +43,9 @@ def verify_coverage(threshold=85, critical_paths=True, verify=False, focus_areas
                        f'--cov-report=term-missing:skip-covered',
                        f'--cov-fail-under={threshold}']
         
-        if focus_area == 'core_services':
+        if focus_areas and 'core_services' in focus_areas:
             coverage_cmd.extend(['tests/test_base_service.py'])
-        elif focus_area == 'stipend_service':
+        if focus_areas and 'stipend_service' in focus_areas:
             coverage_cmd.extend(['tests/test_stipend_service.py'])
             
         result = subprocess.run(
