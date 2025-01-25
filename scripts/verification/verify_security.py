@@ -93,10 +93,13 @@ def verify_login_attempts():
         return False
 
 def verify_security_settings(full_audit=False, daily=True, validate_keys=False, check_stipends_security=False, check_admin_interface=True, check_rate_limits=True, verify_auth=True, monitoring=False, check_bots=False, validate_limiter=True):
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    
     from app.factory import create_app
     app = create_app('production')
-    
-    with app.app_context():
+    app.app_context().push()
         # Properly indent all code inside context manager
         import sys
         from pathlib import Path
