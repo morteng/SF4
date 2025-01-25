@@ -100,14 +100,15 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
     from app.factory import create_app
     app = create_app('production')
     app.app_context().push()
-        # Properly indent all code inside context manager
-        import sys
-        from pathlib import Path
-        sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-        
-        import secrets
-        import string
-        random = secrets.SystemRandom()
+    
+    # Properly indent all code inside context manager
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    
+    import secrets
+    import string
+    random = secrets.SystemRandom()
     import sys
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
