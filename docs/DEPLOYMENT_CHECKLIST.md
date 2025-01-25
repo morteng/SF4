@@ -64,7 +64,7 @@
 - [x] Debug mode is disabled in production
 - [x] Database schema validated
 - [x] All migrations applied
-- [ ] Test coverage meets 80% target
-- [ ] Security settings verified
+- [x] Test coverage meets 80% target
+- [x] Security settings verified
 - [x] Test database initialized
 - [x] Coverage meets 80% target
