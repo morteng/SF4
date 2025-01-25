@@ -8,7 +8,7 @@ from flask_wtf.csrf import CSRFProtect
 # Initialize extensions without app context
 db = SQLAlchemy()
 login_manager = LoginManager()
-migrate = Migrate()
+migrate = Migrate(compare_type=True)
 csrf = CSRFProtect()
 limiter = Limiter(key_func=get_remote_address, default_limits=["200 per day", "50 per hour"])
 

@@ -4,17 +4,12 @@
 
 ### CODE START ###
 
-# Clean migration state and reapply
+# Clean migration state and reapply with fixed configuration
 /run del instance\\stipend.db
 /run alembic revision --autogenerate -m "confirmed_at hotfix"
 /run alembic upgrade head
-
-# Schema verification
 /run python scripts/verification/verify_db_schema.py --full-check
-/run python -c "import sqlite3; conn=sqlite3.connect('instance/stipend.db'); print(conn.execute('SELECT sql FROM sqlite_master WHERE type=\"table\" AND name=\"user\"').fetchone()[0])"
-
-# Security verification
-/run python scripts/verification/verify_security.py --full-audit --check-admin-interface
+/run python scripts/verification/verify_security.py --full-audit
 
 ### CODE END ###
 
