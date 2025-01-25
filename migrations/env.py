@@ -79,6 +79,8 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
+    from app.config import ProductionConfig
+    config.set_main_option('sqlalchemy.url', ProductionConfig.SQLALCHEMY_DATABASE_URI)
 
     # this callback is used to prevent an auto-migration from being generated
     # when there are no changes to the schema
