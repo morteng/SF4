@@ -10,3 +10,9 @@ psycopg2-binary
 Flask-Migrate
 requests
 flask-limiter
+
+bleach
+markdown
+flask-htmx
+safety
+croniter
