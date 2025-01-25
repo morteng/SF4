@@ -43,9 +43,9 @@ def create_app(config_name='development'):
         _add_context_processors(app)
         logger.info("Application initialized successfully")
     except Exception as e:
-        logger.error(f"Init error: {str(e)}")
+        app.logger.error(f"Init error: {str(e)}")
         if 'no such column' in str(e):
-            logger.warning("Database schema outdated, proceeding in limited mode")
+            app.logger.warning("Database schema outdated, proceeding in limited mode")
             _register_blueprints(app)  # Force register routes anyway
         else:
             raise RuntimeError(f"Application initialization failed: {str(e)}")

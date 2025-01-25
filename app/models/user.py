@@ -29,6 +29,7 @@ class User(db.Model, UserMixin):
     def __init__(self, username, email, password=None, password_hash=None, is_admin=False, is_active=False, confirmed_at=None):
         self.username = username
         self.email = email
+        self.confirmed_at = confirmed_at
         if password:
             self.set_password(password)
         elif password_hash:
