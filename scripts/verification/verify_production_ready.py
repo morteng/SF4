@@ -103,6 +103,20 @@ def verify_production_ready():
             logger.error("Security verification failed")
             return False
             
+        # Verify security headers
+        test_client = app.test_client()
+        response = test_client.get('/admin/login')
+        required_headers = {
+            'Content-Security-Policy': "default-src 'self'",
+            'X-Content-Type-Options': 'nosniff', 
+            'X-Frame-Options': 'DENY',
+            'Strict-Transport-Security': 'max-age=63072000; includeSubDomains'
+        }
+        for header, value in required_headers.items():
+            if response.headers.get(header) != value:
+                logger.error(f"Missing security header: {header}")
+                return False
+            
         # Verify admin interface configuration
         if not os.getenv('ADMIN_CSRF_SECRET'):
             logger.error("Missing ADMIN_CSRF_SECRET for admin interface")

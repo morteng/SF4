@@ -36,14 +36,20 @@ def run_tests(test_type='all'):
         if not configure_test_environment():
             raise RuntimeError("Failed to configure test environment")
         
-        # Run tests with coverage
-        subprocess.run([
-            'pytest', 
-            'tests/',
-            '--cov=app',
-            '--cov-report=term-missing',
-            '--cov-report=xml'
-        ], check=True)
+        # Run enhanced test suite with verification steps
+        test_cmds = [
+            ['pytest', 'tests/', '--cov=app', '--cov-report=term-missing'],
+            ['python', 'scripts/verification/validate_datetime_fields.py', '--all-formats'],
+            ['python', 'scripts/verification/verify_audit_logs.py', '--with-notifications'],
+            ['python', 'scripts/verification/verify_security.py', '--test-headers'],
+            ['python', 'scripts/verification/verify_security.py', '--test-rate-limits']
+        ]
+        
+        failures = 0
+        for cmd in test_cmds:
+            result = subprocess.run(cmd, check=False)
+            if result.returncode != 0:
+                failures += 1
         
         # Verify coverage
         from scripts.verify_test_coverage import verify_coverage
