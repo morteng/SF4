@@ -112,7 +112,10 @@ def run_tests(test_type='all'):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--test-type', default='all')
+    parser.add_argument('--test-type', default='all', 
+                      help="Test type: unit, integration, e2e, or all")
+    parser.add_argument('--coverage', action='store_true',
+                      help="Enable coverage tracking")
     args = parser.parse_args()
     
     configure_logging()
