@@ -4,11 +4,19 @@
 
 ### CODE START ###
 
-# Clean migration state and reapply with fixed configuration
+# Initialize test environment
+/run python scripts/install_test_dependencies.py
+
+# Configure fresh database
+/run alembic init migrations
 /run del instance\\stipend.db
 /run alembic upgrade head
+
+# Verify schema
 /run python scripts/verification/verify_db_schema.py --full-check
-/run pytest tests/test_user_model.py -k test_confirmed_at_column -v
+
+# Run critical tests
+/run python -m pytest tests/test_user_model.py -k test_confirmed_at_column -v
 
 ### CODE END ###
 

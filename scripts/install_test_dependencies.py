@@ -3,40 +3,32 @@ import sys
 import logging
 from pathlib import Path
 
-def configure_logger():
-    """Configure the logger for dependency installation"""
-    logger = logging.getLogger('dependencies')
-    if not logger.handlers:
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
-    return logger
+def configure_logging():
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
+    return logging.getLogger('deps')
 
 def install_dependencies():
-    """Install required test dependencies"""
-    logger = configure_logger()
+    logger = configure_logging()
     try:
-        # Install requirements
-        logger.info("Installing test dependencies...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
-        
-        # Install test-specific requirements
-        test_reqs = Path("requirements-test.txt")
-        if test_reqs.exists():
-            logger.info("Installing test-specific dependencies...")
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(test_reqs)])
+        req_file = Path("requirements-test.txt")
+        if not req_file.exists():
+            logger.error("requirements-test.txt not found! Creating default...")
+            req_file.write_text("pytest>=7.0.0\ncoverage>=6.0\n")
             
+        logger.info("Installing test dependencies...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(req_file)])
         return True
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Failed to install dependencies: {e}")
+    except Exception as e:
+        logger.error(f"Dependency installation failed: {str(e)}")
         return False
 
 if __name__ == "__main__":
     if install_dependencies():
-        print("Dependencies installed successfully")
-        exit(0)
+        print("Setup completed successfully")
+        sys.exit(0)
     else:
-        print("Dependency installation failed")
-        exit(1)
+        print("Setup failed")
+        sys.exit(1)
