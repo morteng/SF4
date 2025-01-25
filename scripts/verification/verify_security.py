@@ -91,6 +91,9 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
     import secrets
     import string
     random = secrets.SystemRandom()
+    import secrets
+    import string
+    random = secrets.SystemRandom()
     """Verify security-related settings with enhanced checks
     Args:
         full_audit (bool): Perform comprehensive security audit
