@@ -70,8 +70,11 @@ def verify_login_attempts():
     """Check for suspicious login attempts"""
     logger = configure_logger()
     try:
-        from app.models.user import User
-        from datetime import datetime, timedelta
+        from app import create_app
+        app = create_app()
+        with app.app_context():
+            from app.models.user import User
+            from datetime import datetime, timedelta
         
         # Check for failed login attempts in last 24 hours
         recent_failures = User.query.filter(

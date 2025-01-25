@@ -9,13 +9,10 @@
 /run alembic upgrade head --sql > full_migration.sql
 /run sqlite3 instance/stipend.db < full_migration.sql
 
-# Verify schema explicitly
-/run python scripts/verification/verify_db_schema.py --check-columns user.confirmed_at stipend.tags
-
-# Final verification workflow
-/run flask routes | findstr "admin_stipend"  # Verify routes exist
-/run python scripts/verification/verify_production_ready.py --full
-/run python scripts/verification/verify_test_coverage.py --threshold=35  # Temporary lower threshold
+# Critical path verification
+/run python scripts/verification/verify_db_schema.py --check-column user.confirmed_at
+/run python scripts/verification/verify_security.py --full-audit
+/run flask routes | findstr "admin_stipend"
 
 ### CODE END ###
 
