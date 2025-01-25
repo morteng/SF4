@@ -54,6 +54,11 @@ def verify_security_patches(check_bots=False):
                 if not hasattr(bot, 'status'):
                     logger.error(f"Bot {bot_class.__name__} missing status tracking")
                     return False
+                # Initialize limiter if missing
+                if 'limiter' not in BaseService.__dict__:
+                    from flask_limiter import Limiter
+                    from flask_limiter.util import get_remote_address
+                    BaseService.limiter = Limiter(key_func=get_remote_address)
                     
         return True
     except Exception as e:
