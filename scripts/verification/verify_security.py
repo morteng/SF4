@@ -23,6 +23,7 @@ def verify_security_patches(check_bots=False):
     try:
         # Check for critical security updates
         from scripts.path_config import configure_paths
+        from app.services.base_service import BaseService
         if not configure_paths():
             return False
             
