@@ -59,7 +59,9 @@ def verify_coverage(threshold=85, critical_paths=True, verify=False, focus_areas
             coverage_line = [line for line in result.stdout.split('\n') 
                            if 'TOTAL' in line][0]
             parts = coverage_line.split()
-            coverage_percent = float(parts[-3].replace('%', ''))  # Get coverage percentage from correct column
+            # Handle varying output formats from coverage.py
+            percentage_str = [p for p in parts if '%' in p][0]
+            coverage_percent = float(percentage_str.replace('%', ''))
             
             if coverage_percent < threshold:
                 logger.error(f"Coverage {coverage_percent}% below {threshold}% minimum")
