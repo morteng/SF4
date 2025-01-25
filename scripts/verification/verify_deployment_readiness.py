@@ -14,6 +14,7 @@ def verify_deployment_requirements():
         
         # Run verification checks
         checks = [
+            ("Python environment", lambda: check_windows_paths()),
             ("Git state", verify_git_state),
             ("Database connection", verify_db_connection),
             ("Test coverage", verify_coverage),

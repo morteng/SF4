@@ -2,16 +2,30 @@ import sys
 import subprocess
 
 def check_virtualenv():
-    try:
-        import flask
-    except ImportError:
-        print("Virtual environment is not activated or dependencies are not installed.")
-        print("Run the following commands to set up the environment:")
-        print("  python -m venv .venv")
-        print("  source .venv/bin/activate  # macOS/Linux")
-        print("  .venv\\Scripts\\activate  # Windows")
-        print("  pip install -r requirements.txt")
+    """Check if running inside a virtual environment with Windows support"""
+    venv_path = os.getenv('VIRTUAL_ENV', '')
+    if not venv_path:
+        print("Virtual environment not activated!")
+        print("Run '.venv\\Scripts\\activate' (Windows) or 'source .venv/bin/activate' (Unix)")
         sys.exit(1)
+    
+    # Verify actual Python executable location
+    expected_python = str(Path(venv_path) / 'Scripts' / 'python.exe')
+    if not Path(expected_python).exists():
+        print(f"Missing Python in virtual environment: {expected_python}")
+        sys.exit(1)
+
+def check_windows_paths():
+    """Verify no spaces in critical paths for Windows deployments"""
+    critical_paths = [
+        Path(__file__).parent.parent,
+        Path(os.getenv('VIRTUAL_ENV', ''))
+    ]
+    for path in critical_paths:
+        if ' ' in str(path):
+            print(f"Space detected in critical path: {path}")
+            print("Windows deployments require space-free paths")
+            sys.exit(1)
 
 def check_dependencies():
     try:

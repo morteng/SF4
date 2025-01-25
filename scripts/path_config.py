@@ -3,17 +3,16 @@ import os
 from pathlib import Path
 
 def get_project_root():
-    """Centralized project root calculation."""
+    """Improved Windows-compatible root detection"""
+    markers = ['SF4', 'requirements.txt', 'app', 'scripts']
     current_path = Path(__file__).resolve()
     
-    # Traverse up to find the project root (SF4 directory).
-    while current_path.name != 'SF4' and current_path.parent != current_path:
+    for _ in range(5):  # Limit search depth
+        if any((current_path / m).exists() for m in markers):
+            return str(current_path)
         current_path = current_path.parent
-
-    if current_path.name != 'SF4':
-        raise RuntimeError("Could not find project root directory (SF4)")
-
-    return str(current_path)
+    
+    raise RuntimeError(f"Project root not found. Checked: {markers}")
 
 
 def configure_paths(production=False, verify=False):
