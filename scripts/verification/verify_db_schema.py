@@ -66,10 +66,12 @@ def validate_schema(validate_relations=False, validate_required_fields=True, tes
         engine = create_engine(db_uri)
         inspector = inspect(engine)
         
-        # Add explicit confirmed_at check
-        user_columns = [col['name'] for col in inspector.get_columns('user')]
-        if 'confirmed_at' not in user_columns:
-            logger.error("Missing critical confirmed_at column in user table")
+        # Validate critical columns
+        user_columns = [col['name'].lower() for col in inspector.get_columns('user')]
+        required_columns = {'confirmed_at', 'is_admin', 'email'}
+        missing_cols = required_columns - set(user_columns)
+        if missing_cols:
+            logger.error(f"Missing required user columns: {', '.join(missing_cols)}")
             return False
         db_uri = os.getenv('SQLALCHEMY_DATABASE_URI')
         if not db_uri:

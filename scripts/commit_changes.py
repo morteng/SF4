@@ -16,8 +16,11 @@ def configure_logging():
     return logging.getLogger(__name__)
 
 def commit_changes(message, push=False):
-    """Enhanced commit with proper path handling"""
+    """Enhanced commit with Windows path handling"""
     logger = configure_logging()
+    # Normalize paths for Windows
+    from pathlib import Path
+    Path('logs/commit.log').parent.mkdir(parents=True, exist_ok=True)
     try:
         # Add project root to Python path
         import sys

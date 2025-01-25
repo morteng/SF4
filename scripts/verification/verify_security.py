@@ -67,9 +67,12 @@ def verify_security_patches(check_bots=False):
         return False
 
 def verify_login_attempts():
-    """Check for suspicious login attempts"""
+    """Check for suspicious login attempts with proper context"""
     logger = configure_logger()
     try:
+        from app import create_app
+        app = create_app()
+        with app.app_context():
         from app import create_app
         app = create_app()
         with app.app_context():
