@@ -53,12 +53,26 @@ def verify_coverage(threshold=80, critical_paths=True, admin_only=False, verify=
             capture_output=True,
             text=True
         )
-        
+
+        # Parse coverage percentage from output
+        try:
+            coverage_line = [line for line in result.stdout.split('\n') 
+                           if 'TOTAL' in line][0]
+            coverage_percent = float(coverage_line.split()[-1].replace('%', ''))
+            
+            if coverage_percent < threshold:
+                logger.error(f"Coverage {coverage_percent}% below {threshold}% minimum")
+                return False
+                
+        except (IndexError, ValueError) as e:
+            logger.error(f"Failed to parse coverage results: {str(e)}")
+            return False
+
         if result.returncode != 0:
             logger.error(f"Coverage check failed: {result.stderr}")
             return False
             
-        logger.info("Coverage check passed")
+        logger.info(f"Coverage check passed at {coverage_percent}%")
         return True
     except Exception as e:
         logger.error(f"Coverage verification failed: {str(e)}")
