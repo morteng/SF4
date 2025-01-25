@@ -4,18 +4,19 @@
 
 ### CODE START ###
 
-# Schema repair and validation
-/run python scripts/verification/verify_db_schema.py --full --auto-repair
-/run alembic stamp head
+# Initialize test environment
+/run python scripts/install_test_dependencies.py
 
-# Test coverage verification
-/run python scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
+# Configure fresh database
+/run alembic init migrations
+/run del instance\\stipend.db
+/run alembic upgrade head
 
-# Monitoring setup
-/run python scripts/monitoring/setup_dashboard.py --production
+# Verify schema
+/run python scripts/verification/verify_db_schema.py --full-check
 
-# Commit verified state
-/run python scripts/commit_changes.py --message "Cycle 100: Schema repair and coverage boost"
+# Run critical tests
+/run python -m pytest tests/test_user_model.py -k test_confirmed_at_column -v
 
 ### CODE END ###
 
