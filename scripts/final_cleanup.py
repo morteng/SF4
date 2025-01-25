@@ -25,7 +25,10 @@ def cleanup():
         'dist',
         '__pycache__',
         '.pytest_cache',
-        'htmlcov'
+        'htmlcov',
+        'migrations/versions/*.pyc',  # Clean compiled migration files
+        'instance/*.db-wal',          # Clean SQLite write-ahead logs
+        'instance/*.db-shm'           # Clean SQLite shared memory files
     ]
     
     try:
