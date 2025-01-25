@@ -1,31 +1,31 @@
 # Console Commands for Step 2 (Coding)
 # Do not use echo
-# Only edit the section between CODE START and CODE END
+# Only edit the section between CODE START and CODE END - always run scripts using python, e.g. /run python scripts/myscript.py
 
 ### CODE START ###
 
 # Initialize system
-/run scripts/init_logging.py --production
-/run scripts/path_config.py --production --verify
-/run scripts/start_cycle.py
+/run python scripts/init_logging.py --production
+/run python scripts/path_config.py --production --verify
+/run python scripts/start_cycle.py
 
 # Run database schema cleanup
-/run scripts/verification/verify_db_connection.py --cleanup
+/run python scripts/verification/verify_db_connection.py --cleanup
 
 # Run security verification
-/run scripts/verification/verify_security.py --full-audit
+/run python scripts/verification/verify_security.py --full-audit
 
 # Run focused test coverage
-/run scripts/verification/verify_test_coverage.py --focus-area=core_services
+/run python scripts/verification/verify_test_coverage.py --focus-area=core_services
 
 # Run enhanced test suite
-/run scripts/testing/run_tests.py --test-type=all
+/run python scripts/testing/run_tests.py --test-type=all
 
 # Initialize monitoring dashboard
-/run scripts/monitoring/setup_dashboard.py --enable-metrics
+/run python scripts/monitoring/setup_dashboard.py --enable-metrics
 
 # Commit changes
-/run scripts/commit_changes.py --message "Implement enhanced test suite with verification steps"
+/run python scripts/commit_changes.py --message "Implement enhanced test suite with verification steps"
 
 ### CODE END ###
 

@@ -50,7 +50,7 @@ Below is a **concise guide** to **Aider scripting** for your LLM, emphasizing ho
 ## 3. Running Code
 - To run external scripts created in `scripts/`, use:
   ```
-  /run scripts/my_code.py
+  /run python scripts/my_code.py
   ```
 - This executes the file in your local environment (similar to shell commands).
 
@@ -77,7 +77,7 @@ Below is a **concise guide** to **Aider scripting** for your LLM, emphasizing ho
 
 ## Summary
 1. **Create/modify external code** by `/code` instructions or `/ask` Q&A, but **no code** inside `.aiderscript`.
-2. **Run** created scripts using `/run scripts/...`.
+2. **Run** created scripts using `/run python scripts/...`.
 3. **Load** the next `.aiderscript` with `/load`.
 4. Keep each command prompt on **one line**.
 

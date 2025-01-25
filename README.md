@@ -172,23 +172,23 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Backup Procedures
 - To create a production database backup:
   ```bash
-  /run scripts/verification/verify_backup.py --create
+  /run python scripts/verification/verify_backup.py --create
   ```
 
 ### Running Migrations
 - To run database migrations:
   ```bash
-  /run scripts/startup/init_db.py --migrate
+  /run python scripts/startup/init_db.py --migrate
   ```
 
 ### Release Process
 1. Update release notes:
    ```bash
-   /run scripts/finalize_docs.py --include-deployment
+   /run python scripts/finalize_docs.py --include-deployment
    ```
 2. Commit and push changes:
    ```bash
-   /run scripts/commit_changes.py --message "Release v1.2.11" --push
+   /run python scripts/commit_changes.py --message "Release v1.2.11" --push
    ```
 3. Create and push version tag:
    ```bash
@@ -199,11 +199,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Final Verification
 - Validate production environment:
   ```bash
-  /run scripts/verification/verify_production.py --full
+  /run python scripts/verification/verify_production.py --full
   ```
 - Verify deployment readiness:
   ```bash
-  /run scripts/verification/verify_deployment.py --check-type=final-check
+  /run python scripts/verification/verify_deployment.py --check-type=final-check
   ```
 
 - Flask and SQLAlchemy for the backend framework

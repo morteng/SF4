@@ -1,16 +1,16 @@
 # Cycle to verify and fix database connection and schema issues
 
 # 1) Verify database connection
-/run scripts/verification/verify_db_connection.py
+/run python scripts/verification/verify_db_connection.py
 
 # 2) If connection fails, run initialization
-/run scripts/init_db.py
+/run python scripts/init_db.py
 
 # 3) Verify database schema
-/run scripts/verification/verify_db_schema.py
+/run python scripts/verification/verify_db_schema.py
 
 # 4) If schema verification fails, fix path configuration
-/run scripts/path_config.py
+/run python scripts/path_config.py
 
 /ask how can we fix problem?
 /code implement suggested changes.

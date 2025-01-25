@@ -1,29 +1,29 @@
 # Console Commands for Step 4 (Review)
-# Only edit the section between CODE START and CODE END
+# Only edit the section between CODE START and CODE END - always run scripts using python, e.g. /run python scripts/myscript.py
 
 ### CODE START ###
 
 # Initialize review environment
-/run scripts/setup_test_env.py --production
-/run scripts/init_logging.py --production
-/run scripts/path_config.py --production
+/run python scripts/setup_test_env.py --production
+/run python scripts/init_logging.py --production
+/run python scripts/path_config.py --production
 
 # Run final verifications
-/run scripts/verification/verify_production_ready.py
-/run scripts/verification/verify_security.py --full-audit
-/run scripts/verification/verify_monitoring.py --dashboard
-/run scripts/verification/verify_db_connection.py --retries=3
+/run python scripts/verification/verify_production_ready.py
+/run python scripts/verification/verify_security.py --full-audit
+/run python scripts/verification/verify_monitoring.py --dashboard
+/run python scripts/verification/verify_db_connection.py --retries=3
 
 # Finalize documentation
-/run scripts/finalize_docs.py
-/run scripts/generate_deployment_checklist.py
+/run python scripts/finalize_docs.py
+/run python scripts/generate_deployment_checklist.py
 
 # Cleanup and request approval
-/run scripts/final_cleanup.py
-/run scripts/request_approval.py
+/run python scripts/final_cleanup.py
+/run python scripts/request_approval.py
 
 # Commit review results
-/run scripts/commit_changes.py --message "Final review completed"
+/run python scripts/commit_changes.py --message "Final review completed"
 
 ### CODE END ###
 

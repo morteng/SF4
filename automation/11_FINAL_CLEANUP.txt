@@ -6,7 +6,7 @@
 /code Implement final fixes or notes here.
 
 # timestamp cycle ends
-/run scripts/end_cycle.py
+/run python scripts/end_cycle.py
 
 /add docs/DEVLOG.md
 

@@ -2,7 +2,7 @@
 # REMEMBER: All /code, /architect and /ask prompts must be on single line only, no linebreaks!
 
 # 1. Analyze current test coverage
-/run scripts/analyze_test_coverage.py
+/run python scripts/analyze_test_coverage.py
 
 # 2. Verify test file consolidation
 /ask Verify that tests/app/routes/test_stipend_routes.py has been consolidated into tests/app/routes/admin/test_stipend_routes.py
@@ -17,7 +17,7 @@
 /code Add test cases for: - Invalid form submissions - Missing required fields - Database constraint violations - HTMX partial responses - Error conditions - Edge cases
 
 # 6. Verify coverage meets target
-/run scripts/verify_test_coverage.py
+/run python scripts/verify_test_coverage.py
 
 # 7. Update documentation
 /code Update DEVLOG.md with test coverage results

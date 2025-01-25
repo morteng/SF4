@@ -1,13 +1,13 @@
 # Database Backup/Restore Verification Cycle - 2025-01-14
 
 # 1. Create test database backup
-/run scripts/db_backup.py
+/run python scripts/db_backup.py
 
 # 2. Verify backup integrity
 /ask Verify the backup file was created and is valid
 
 # 3. Test restore functionality  
-/run scripts/db_restore.py
+/run python scripts/db_restore.py
 
 # 4. Add verification checks
 /code Add verification methods to scripts/db_backup.py to check backup integrity

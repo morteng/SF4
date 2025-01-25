@@ -4,7 +4,7 @@
 /code implement suggested changes.
 
 # 1) Clean up resources
-/run scripts/cleanup.py
+/run python scripts/cleanup.py
 
 # ALWATYS run the end cycle script!
 /run scripts\end_cycle.py

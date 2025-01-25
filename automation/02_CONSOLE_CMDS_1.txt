@@ -5,14 +5,14 @@
 ### CODE START ###
 
 # Initialize system with new monitoring
-/run scripts/init_logging.py --production --enable-monitoring
-/run scripts/path_config.py --production --verify
-/run scripts/start_cycle.py --phase=consolidation
+/run python scripts/init_logging.py --production --enable-monitoring
+/run python scripts/path_config.py --production --verify
+/run python scripts/start_cycle.py --phase=consolidation
 
 # Enhanced verifications
-/run scripts/verification/validate_datetime_fields.py --all-formats
-/run scripts/verification/verify_audit_logs.py --with-notifications
-/run scripts/monitoring/setup_dashboard.py --enable-metrics
+/run python scripts/verification/validate_datetime_fields.py --all-formats
+/run python scripts/verification/verify_audit_logs.py --with-notifications
+/run python scripts/monitoring/setup_dashboard.py --enable-metrics
 
 ### CODE END ###
 

@@ -1,29 +1,29 @@
 # Console Commands for Step 5 (Document, Pre-Demo)
-# Only edit the section between CODE START and CODE END
+# Only edit the section between CODE START and CODE END - always run scripts using python, e.g. /run python scripts/myscript.py
 
 ### CODE START ###
 
 # Final production verification
-/run scripts/path_config.py --production --verify
-/run scripts/init_logging.py --production --verify
+/run python scripts/path_config.py --production --verify
+/run python scripts/init_logging.py --production --verify
 
 # Comprehensive final checks
-/run scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --verify-admin
-/run scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits --check-csrf
-/run scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-metrics --check-response-times
-/run scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-pool --verify-timeout
-/run scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin --check-models
+/run python scripts/verification/verify_production_ready.py --full --validate-config --check-debug-mode --verify-admin
+/run python scripts/verification/verify_security.py --full-audit --check-admin-interface --verify-rate-limits --check-csrf
+/run python scripts/verification/verify_monitoring.py --check-dashboards --check-alerts --verify-metrics --check-response-times
+/run python scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-pool --verify-timeout
+/run python scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin --check-models
 
 # Final documentation updates
-/run scripts/finalize_docs.py --verify
-/run scripts/generate_deployment_checklist.py --validate --check-security
+/run python scripts/finalize_docs.py --verify
+/run python scripts/generate_deployment_checklist.py --validate --check-security
 
 # Cleanup and approval
-/run scripts/final_cleanup.py --verify --force
-/run scripts/request_approval.py --validate --check-coverage
+/run python scripts/final_cleanup.py --verify --force
+/run python scripts/request_approval.py --validate --check-coverage
 
 # Commit final changes
-/run scripts/commit_changes.py --message "Final deployment preparation completed" --verify --push --check-coverage --check-security
+/run python scripts/commit_changes.py --message "Final deployment preparation completed" --verify --push --check-coverage --check-security
 
 ### CODE END ###
 

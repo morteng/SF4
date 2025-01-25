@@ -6,7 +6,7 @@
 /commit
 
 # Output cycle start timestamp
-/run scripts/start_cycle.py
+/run python scripts/start_cycle.py
 
 # load project docs and IO
 /read automation/RULES.txt

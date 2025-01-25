@@ -1,13 +1,13 @@
 # Database Initialization Cycle
 
 # 1. Initialize database connection
-/run scripts/init_db.py
+/run python scripts/init_db.py
 
 # 2. Verify database connection
-/run scripts/verification/verify_db_connection.py
+/run python scripts/verification/verify_db_connection.py
 
 # 3. Verify database schema
-/run scripts/verification/verify_db_schema.py
+/run python scripts/verification/verify_db_schema.py
 
 # 4. Load finalize cycle
 /load meta_cycles/finalize_cycle.aiderscript
