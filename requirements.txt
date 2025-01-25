@@ -16,3 +16,6 @@ markdown
 flask-htmx
 safety
 croniter
+
+coverage 
+prometheus-flask-exporter
