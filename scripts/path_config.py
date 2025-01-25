@@ -18,7 +18,12 @@ def get_project_root():
 def configure_paths(production=False, verify=False):
     """Enhanced path configuration with proper error handling."""
     try:
+        import platform
         project_root = get_project_root()
+        
+        # Windows path normalization
+        if platform.system() == 'Windows':
+            project_root = project_root.replace('\\', '/')
 
         # Clear existing project paths from sys.path to avoid duplicates.
         sys.path = [p for p in sys.path if not p.startswith(project_root)]
@@ -42,11 +47,13 @@ def configure_paths(production=False, verify=False):
                 str(Path(project_root) / 'backups'),
             ])
 
-        # Add virtual environment site-packages if available.
+        # Add virtual environment paths (Windows specific)
         venv_path = os.getenv('VIRTUAL_ENV')
         if venv_path:
+            # Add both Lib and site-packages for Windows compatibility
+            lib_path = str(Path(venv_path) / 'Lib')
             site_packages = str(Path(venv_path) / 'Lib' / 'site-packages')
-            paths_to_add.append(site_packages)
+            paths_to_add.extend([lib_path, site_packages])
 
         # Insert paths into sys.path if not already present.
         # Ensure project root is first

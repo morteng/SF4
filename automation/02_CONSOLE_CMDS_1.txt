@@ -4,16 +4,13 @@
 
 ### CODE START ###
 
-# Strict environment validation
-/run python scripts/check_env.py --strict --windows
-# Configure paths for Windows
+# Install critical dependencies first
+/run python -m pip install bleach markdown flask-htmx safety
+
+# Validate core environment
 /run python scripts/path_config.py --production --force --platform=win
-# Verify git state
-/run python scripts/verification/verify_git_state.py --pull --auto-resolve
-# Deployment readiness check
+/run python scripts/verification/verify_dependencies.py
 /run python scripts/verification/verify_deployment_readiness.py --phase=analysis
-# Initialize analysis cycle
-/run python scripts/start_cycle.py --phase=analysis --instance-dir=instance
 
 ### CODE END ###
 

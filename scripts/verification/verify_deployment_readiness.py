@@ -12,10 +12,12 @@ def verify_deployment_requirements():
         from scripts.verify_db_connection import verify_db_connection
         from scripts.verify_test_coverage import verify_coverage
         from scripts.verify_deployment import verify_deployment
+        from scripts.verification.verify_dependencies import verify_dependencies
         
         # Run verification checks
         checks = [
             ("Python environment", lambda: check_windows_paths()),
+            ("Critical dependencies", verify_dependencies),
             ("Git state", verify_git_state),
             ("Database connection", verify_db_connection),
             ("Test coverage", verify_coverage),
