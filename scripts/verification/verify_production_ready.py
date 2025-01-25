@@ -20,14 +20,22 @@ def verify_production_ready(check_migrations=False, validate_config=False):
     app = create_app('production')
     
     with app.app_context():
-    """Final production readiness check with emergency fallback"""
-    from pathlib import Path
-    import sys
-    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-    
-    from app import create_app
-    app = create_app()
-    with app.app_context():
+        """Final production readiness check with emergency fallback"""
+        logger = configure_logger()
+        
+        # Verify core requirements
+        if not verify_db_schema():
+            return False
+            
+        if not verify_security_settings():
+            return False
+            
+        # Verify monitoring
+        if not verify_monitoring():
+            return False
+            
+        logger.info("Production environment verified")
+        return True
         # Actual verification logic
         logger = configure_logger()
         

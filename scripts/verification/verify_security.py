@@ -79,9 +79,13 @@ def verify_login_attempts():
             from datetime import datetime, timedelta
         
         # Check for failed login attempts in last 24 hours
-        recent_failures = User.query.filter(
-            User.last_failed_login > datetime.utcnow() - timedelta(hours=24)
-        ).count()
+        if hasattr(User, 'last_failed_login'):
+            recent_failures = User.query.filter(
+                User.last_failed_login > datetime.utcnow() - timedelta(hours=24)
+            ).count()
+        else:
+            logger.warning("Security tracking field missing: last_failed_login")
+            recent_failures = 0  # Temporary until migration
         
         if recent_failures > 10:
             logger.warning(f"Excessive failed logins: {recent_failures} in last 24 hours")

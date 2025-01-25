@@ -18,5 +18,21 @@
     {% if notification_count %}
     <div class="notifications">You have {{ notification_count }} unread notifications</div>
     {% endif %}
+    
+    <div class="system-metrics">
+        <h2>Monitoring Metrics</h2>
+        <div class="metric-grid">
+            <div class="metric-card">
+                <h3>Database Status</h3>
+                <p>Connections: {{ metrics.db_connections }}</p>
+                <p>Queue: {{ metrics.db_queue }}</p>
+            </div>
+            <div class="metric-card">
+                <h3>System Health</h3>
+                <p>Uptime: {{ metrics.uptime }}</p>
+                <p>Active Users: {{ metrics.active_users }}</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
