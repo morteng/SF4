@@ -57,3 +57,25 @@ def test_base_service_audit_logging(base_service, db_session):
         }
         base_service.create(test_data)
         mock_audit.assert_called()
+def test_audit_log_creates_notification(db_session):
+    """Test audit log creation triggers notification"""
+    log = AuditLog.create(
+        user_id=1,
+        action="test",
+        object_type="Stipend",
+        object_id=1,
+        details={"test": "data"}
+    )
+    notification = Notification.query.filter_by(related_object=log).first()
+    assert notification is not None
+    assert notification.type == NotificationType.SYSTEM
+    assert "Audit log created" in notification.message
+
+def test_audit_log_long_action_field():
+    """Test action field length validation"""
+    with pytest.raises(ValueError):
+        AuditLog.create(
+            action="a" * 101,  # Max length is 100
+            object_type="Stipend",
+            object_id=1
+        )
