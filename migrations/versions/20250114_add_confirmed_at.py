@@ -15,12 +15,16 @@ branch_labels = None
 depends_on = None
 
 def upgrade():
-    # SQLite-compatible schema modification with full transaction support
+    # SQLite-compatible schema modification with default value
     context = op.get_context()
     if context.connection.engine.name == 'sqlite':
         with op.batch_alter_table('user') as batch_op:
-            batch_op.add_column(sa.Column('confirmed_at', sa.DateTime(), nullable=True))
-            batch_op.create_index('ix_user_confirmed_at', ['confirmed_at'], unique=False)
+            batch_op.add_column(sa.Column(
+                'confirmed_at', 
+                sa.DateTime(), 
+                nullable=True,
+                server_default=sa.text('(CURRENT_TIMESTAMP)')
+            ))
     else:
         op.add_column('user', sa.Column('confirmed_at', sa.DateTime(), nullable=True))
         op.create_index(op.f('ix_user_confirmed_at'), 'user', ['confirmed_at'], unique=False)

@@ -101,7 +101,11 @@ class BaseService:
     def __init__(self, model, audit_logger=None):
         self.model = model
         self.audit_logger = audit_logger
-        self._init_metrics()  # Initialize metrics tracking
+        self.metrics = {
+            'success_count': 0,
+            'error_count': 0,
+            'last_operation': None
+        }
         # Initialize rate limits without limiter
         self.rate_limits = {
             'create': ("10/minute", "Rate limit: 10 creates/min"),

@@ -44,9 +44,11 @@ def create_app(config_name='development'):
         logger.info("Application initialized successfully")
     except Exception as e:
         app.logger.error(f"Init error: {str(e)}")
-        if 'no such column' in str(e):
-            app.logger.warning("Database schema outdated, proceeding in limited mode")
-            _register_blueprints(app)  # Force register routes anyway
+        if 'no such column' in str(e) or 'no such table' in str(e):
+            app.logger.warning("Database schema outdated, creating emergency tables")
+            with app.app_context():
+                db.create_all()
+            _register_blueprints(app)
         else:
             raise RuntimeError(f"Application initialization failed: {str(e)}")
 
