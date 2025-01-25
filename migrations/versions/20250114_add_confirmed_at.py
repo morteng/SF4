@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '20250114_add_confirmed_at'
-down_revision = None
+down_revision = '20240101_initial'  # Reference previous migration
 branch_labels = None
 depends_on = None
 
