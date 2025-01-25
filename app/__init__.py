@@ -23,9 +23,21 @@ def create_app(config_name='development'):
     load_dotenv()
 
     try:
-        # Initialize extensions only if they haven't been initialized
-        if not hasattr(app, 'extensions') or 'sqlalchemy' not in app.extensions:
-            init_extensions(app)
+        # Initialize extensions in proper order
+        if not hasattr(app, 'extensions'):
+            app.extensions = {}
+            
+        # Initialize database first
+        from app.extensions import db
+        db.init_app(app)
+        
+        # Then initialize migrations
+        from flask_migrate import Migrate
+        migrate = Migrate()
+        migrate.init_app(app, db)
+        
+        # Initialize other extensions
+        init_extensions(app)
             
         # Initialize Flask-Migrate
         from flask_migrate import Migrate

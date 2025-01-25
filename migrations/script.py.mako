@@ -4,6 +4,9 @@ Revision ID: ${up_revision}
 Revises: ${down_revision | comma,n}
 Create Date: ${create_date}
 
+IMPORTANT: This migration will be applied to the database at:
+${config.get_main_option('sqlalchemy.url')}
+
 """
 from alembic import op
 import sqlalchemy as sa
