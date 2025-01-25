@@ -17,8 +17,8 @@
 /run python scripts/verification/verify_db_connection.py --retries=5 --delay=2 --validate-schema --check-pool --verify-timeout
 /run python scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths --verify-admin --check-models
 
-# Only run if all verifications pass
-/run python app.py --host=0.0.0.0 --port=5000 --no-debug
+# Only run if all verifications from Step 11 pass
+# /run python app.py --host=0.0.0.0 --port=5000 --no-debug
 
 ### CODE END ###
 
