@@ -91,18 +91,9 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
     from app import create_app
     app = create_app()
     with app.app_context():  # Add application context
-    import secrets
-    import string
-    random = secrets.SystemRandom()
-    import secrets
-    import string
-    random = secrets.SystemRandom()
-    import secrets
-    import string
-    random = secrets.SystemRandom()
-    import secrets
-    import string
-    random = secrets.SystemRandom()
+        import secrets
+        import string
+        random = secrets.SystemRandom()
     """Verify security-related settings with enhanced checks
     Args:
         full_audit (bool): Perform comprehensive security audit
