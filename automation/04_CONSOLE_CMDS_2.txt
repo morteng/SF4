@@ -4,17 +4,18 @@
 
 ### CODE START ###
 
-# Final migration validation
-/run alembic history --verbose
-/run alembic current --verbose
-/run alembic upgrade head --sql > migrations/latest_prod.sql
+# Schema repair and validation
+/run python scripts/verification/verify_db_schema.py --full --auto-repair
+/run alembic stamp head
 
-# Final verification checks
-/run python scripts/verification/verify_db_schema.py --full --validate-relations --fix-missing-columns
-/run python scripts/verification/verify_production_ready.py --check-migrations --skip-limiter-check
+# Test coverage verification
+/run python scripts/verification/verify_test_coverage.py --threshold=85 --critical-paths
+
+# Monitoring setup
+/run python scripts/monitoring/setup_dashboard.py --production
 
 # Commit verified state
-/run python scripts/commit_changes.py --message "Database schema finalized - confirmed_at column verified"
+/run python scripts/commit_changes.py --message "Cycle 100: Schema repair and coverage boost"
 
 ### CODE END ###
 
