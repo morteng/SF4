@@ -2,6 +2,9 @@ import pytest
 from unittest.mock import Mock, patch
 from app.services.base_service import BaseService
 from app.models.stipend import Stipend
+from app.models.audit_log import AuditLog
+from app.models.notification import Notification
+from app.common.enums import NotificationType
 from app.extensions import db
 from datetime import datetime
 
