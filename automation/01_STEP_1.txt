@@ -7,7 +7,7 @@
 
 
 # Next, propose code updates, focusing on analysis-related changes. 
-/architect Choose the best way forward based on the analysis.  - Implement any new ideas or directions suggested by MANAGER.txt  - Update files if necessary  - Remove any previously used console commands from 02_CONSOLE_CMDS_1.txt  - Add new console commands you want to run before Step 2  - Do not run Python code directly with console commands; create or update .py files, then /run them. 
+/code Choose the best way forward based on the analysis.  - Implement any new ideas or directions suggested by MANAGER.txt  - Update files if necessary  - Remove any previously used console commands from 02_CONSOLE_CMDS_1.txt  - Add new console commands you want to run before Step 2  - Do not run Python code directly with console commands; create or update .py files, then /run them. 
 
 # Step 1 over, go to 02_CONSOLE_CMDS_1.txt
 /load automation/02_CONSOLE_CMDS_1.txt

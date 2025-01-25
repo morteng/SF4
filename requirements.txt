@@ -7,3 +7,6 @@ pytz
 email-validator
 python-dotenv
 psycopg2-binary
+Flask-Migrate
+requests
+flask-limiter

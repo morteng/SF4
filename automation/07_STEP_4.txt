@@ -7,7 +7,7 @@
 /architect How can we best implement Code Cycle Step 4 - Review? Objective: Perform a final review before deployment. Key Actions: - Ensure all implemented changes are correct and documented - Finalize updates and gather review notes - Confirm readiness for deployment. Think step by step.
 
 
-/architect Summarize final reviews and possible improvements. - Remove old console commands from 08_CONSOLE_CMDS_4.txt - Add any new commands for final checks - Do not run Python code with console commands directly
+/code Summarize final reviews and possible improvements. - Remove old console commands from 08_CONSOLE_CMDS_4.txt - Add any new commands for final checks - Do not run Python code with console commands directly
 
 
 # Step 4 over, go to 08_CONSOLE_CMDS_4.txt
