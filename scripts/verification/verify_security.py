@@ -98,7 +98,13 @@ def verify_security_settings(full_audit=False, daily=True, validate_keys=False, 
     
     with app.app_context():
         # Properly indented verification logic
-    # Configure paths first
+        import sys
+        from pathlib import Path
+        sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+        
+        import secrets
+        import string
+        random = secrets.SystemRandom()
     import sys
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))

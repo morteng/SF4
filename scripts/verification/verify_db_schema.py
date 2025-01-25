@@ -83,7 +83,8 @@ def validate_schema(validate_relations=False, validate_required_fields=True, tes
         
         # Define expected schema
         expected_schema = {
-            'user': ['id', 'username', 'email', 'password_hash', 'confirmed_at'],
+            'user': ['id', 'username', 'email', 'password_hash', 'is_admin', 
+                    'is_active', 'created_at', 'updated_at', 'confirmed_at'],
             'stipend': ['id', 'name', 'description', 'tags'],
             'organization': ['id', 'name', 'description'],
             'tag': ['id', 'name']

@@ -26,7 +26,7 @@ def init_extensions(app):
         # Initialize database with SQLite batch mode
         db.init_app(app)
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-        migrate.init_app(app, db, render_as_batch=True)
+        migrate.init_app(app, db, render_as_batch=True, compare_type=True)
         
         # Configure admin rate limits
         from app.routes.admin import admin_bp

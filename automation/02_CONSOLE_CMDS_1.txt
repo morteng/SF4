@@ -6,11 +6,11 @@
 
 # Clean migration state and reapply
 /run del instance\\stipend.db
-/run alembic upgrade head --sql > full_migration.sql
-/run sqlite3 instance/stipend.db < full_migration.sql
+/run alembic revision --autogenerate -m "confirmed_at hotfix"
+/run alembic upgrade head
 
 # Schema verification
-/run python scripts/verification/verify_db_schema.py --check-column user.confirmed_at
+/run python scripts/verification/verify_db_schema.py --full-check
 /run python -c "import sqlite3; conn=sqlite3.connect('instance/stipend.db'); print(conn.execute('SELECT sql FROM sqlite_master WHERE type=\"table\" AND name=\"user\"').fetchone()[0])"
 
 # Security verification
