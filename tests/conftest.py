@@ -1,6 +1,13 @@
 import pytest
 from app import create_app, db
 
+# Add freezegun availability check to conftest.py
+try:
+    from freezegun import freeze_time  # noqa: F401
+    FREEZEGUN_INSTALLED = True
+except ImportError:
+    FREEZEGUN_INSTALLED = False
+
 @pytest.fixture(scope="function")
 def app():
     """Application fixture with temporary database"""
