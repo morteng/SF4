@@ -1,6 +1,8 @@
 from flask import Response
 from app.constants import FlashMessages
 import logging
+from bs4 import BeautifulSoup
+import re
 
 def assert_flash_message(response: Response, message: FlashMessages) -> None:
     """Assert that a specific flash message is present in the response."""
@@ -26,9 +28,6 @@ def create_user_data(username="testuser", email="test@example.com", password="pa
 
 def extract_csrf_token(response_data):
     """Extract CSRF token from HTML response."""
-    import re
-    from bs4 import BeautifulSoup
-    
     soup = BeautifulSoup(response_data, 'html.parser')
     
     # Look for CSRF token in meta tag first
