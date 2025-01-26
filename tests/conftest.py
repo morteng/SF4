@@ -1,24 +1,24 @@
 import pytest
 from app import create_app, db
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def app():
-    """Session-wide test application"""
+    """Application fixture with database setup"""
     app = create_app(config_name='testing')
     with app.app_context():
+        db.create_all()
         yield app
+        db.drop_all()
 
 @pytest.fixture(scope="function")
 def client(app):
-    """Test client fixture with fresh database per test"""
+    """Test client fixture"""
     with app.test_client() as client:
         with app.app_context():
-            db.create_all()
             yield client
-            db.session.remove()
-            db.drop_all()
 
 @pytest.fixture(scope="function")
-def db_session(client):
+def db_session(app):
     """Database session fixture"""
-    yield db.session
+    with app.app_context():
+        yield db.session

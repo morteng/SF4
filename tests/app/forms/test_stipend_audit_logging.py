@@ -1,47 +1,62 @@
 import pytest
 from datetime import datetime
-from tests.conftest import FREEZEGUN_INSTALLED
-
-# Mark all tests in this file as requiring freezegun
-pytestmark = pytest.mark.freezegun
 from app.models.stipend import Stipend
 from app.models.audit_log import AuditLog
 from app.models.organization import Organization
 from app.models.tag import Tag
 from app.extensions import db
-from app.forms.admin_forms import StipendForm
 
-def test_audit_log_on_create(app, form_data, test_db):
-    """Test audit log creation on stipend create"""
-    with app.test_request_context():
-        tag_choices = [(tag.id, tag.name) for tag in Tag.query.all()]
+# Add freezegun availability check
+try:
+    from freezegun import freeze_time
+    FREEZEGUN_INSTALLED = True
+except ImportError:
+    FREEZEGUN_INSTALLED = False
+
+@pytest.fixture
+def test_organization(db_session):
+    """Create a test organization"""
+    org = Organization(name="Test Org")
+    db_session.add(org)
+    db_session.commit()
+    return org
+
+@pytest.fixture
+def test_tag(db_session):
+    """Create a test tag"""
+    tag = Tag(name="Test Tag")
+    db_session.add(tag)
+    db_session.commit()
+    return tag
+
+@pytest.mark.skipif(not FREEZEGUN_INSTALLED, reason="Requires freezegun")
+def test_audit_log_creation(app, test_organization, test_tag):
+    """Test audit log generation for stipend operations"""
+    with app.app_context(), freeze_time("2024-01-01 12:00:00"):
+        # Create initial stipend
+        stipend_data = {
+            'name': 'Test Stipend',
+            'organization_id': test_organization.id,
+            'tags': [test_tag.id]
+        }
         
-        form = StipendForm(data=form_data)
-        form.tags.choices = tag_choices
-        if form.validate():
-            stipend = Stipend(**form.data)
-            db.session.add(stipend)
+        # Create
+        stipend = Stipend.create(stipend_data)
+        create_log = AuditLog.query.filter_by(action='create_stipend').first()
+        assert create_log.timestamp == datetime(2024, 1, 1, 12, 0)
+        assert create_log.details_after['name'] == 'Test Stipend'
+
+        # Update
+        with freeze_time("2024-01-01 12:30:00"):
+            stipend.update({'name': 'Updated Stipend'})
+            update_log = AuditLog.query.filter_by(action='update_stipend').first()
+            assert update_log.timestamp == datetime(2024, 1, 1, 12, 30)
+            assert update_log.details_before['name'] == 'Test Stipend'
+            assert update_log.details_after['name'] == 'Updated Stipend'
+
+        # Delete
+        with freeze_time("2024-01-01 13:00:00"):
+            db.session.delete(stipend)
             db.session.commit()
-            
-            update_data = {
-                'name': 'Updated Stipend Name',
-                'summary': 'Updated summary',
-                'description': 'Updated description',
-                'tags': [tag_choices[0][0]]
-            }
-            
-            stipend.update(update_data)
-            
-            logs = AuditLog.query.filter_by(object_type='Stipend', object_id=stipend.id).order_by(AuditLog.timestamp.desc()).all()
-            assert len(logs) >= 2
-            
-            update_log = logs[0]
-            assert update_log is not None
-            assert update_log.action == 'update_stipend'
-            assert update_log.details_before is not None
-            assert update_log.details_after is not None
-            
-            create_log = logs[1]
-            assert create_log is not None
-            assert create_log.action == 'create_stipend'
-            assert create_log.details_after is not None
+            delete_log = AuditLog.query.filter_by(action='delete_stipend').first()
+            assert delete_log.timestamp == datetime(2024, 1, 1, 13, 0)
