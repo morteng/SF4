@@ -70,8 +70,9 @@ def app():
 
 @pytest.fixture(scope="session")
 def client(app):
-    with app.test_client() as client:
-        yield client
+    with app.app_context():
+        with app.test_client() as client:
+            yield client
 
 class BaseAdminTest:
     def __init__(self):
