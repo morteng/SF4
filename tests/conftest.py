@@ -63,6 +63,11 @@ def get_all_tags():
     # Implementation here
     pass
 
+@pytest.fixture(scope="session")
+def client():
+    with app.test_client() as client:
+        yield client
+
 class BaseAdminTest:
     def __init__(self):
         self.client = None
