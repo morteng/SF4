@@ -21,6 +21,7 @@
 /add automation/MANAGER.txt
 
 /run flask routes  
+/run python app.py
 
 # Startup is done, go to first Code Cycle step
 /load automation/01_STEP_1.txt
