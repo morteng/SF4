@@ -103,8 +103,9 @@ def verify_db_schema(validate_relations=False, validate_required_fields=True, te
         for table, expected_columns in expected_schema.items():
             # SQLite compatible column verification
             if inspector.bind.engine.name == 'sqlite':
-                result = inspector.bind.execute(f"PRAGMA table_info({table})")
-                actual_columns = [row[1] for row in result]
+                with engine.connect() as connection:
+                    result = connection.execute(f"PRAGMA table_info({table})")
+                    actual_columns = [row[1] for row in result]
             else:
                 actual_columns = [col['name'] for col in inspector.get_columns(table)]
 
