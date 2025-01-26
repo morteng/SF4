@@ -12,7 +12,7 @@
 - [x] Track restore test coverage
 - [x] Security column implementation
 - [x] Production verification system
-- [x] Windows path configuration fixes
+- [x] Windows deployment validation
 - [x] Dependency conflict resolution
 - [x] Core service metrics implementation
 - [x] Security audit automation
@@ -49,13 +49,6 @@
 - [x] Enhance test data cleanup
 - [x] Add branch coverage tracking
 - [x] Fix multiprocessing coverage collection
-- [x] Add edge case tests for stipend service
-- [x] Add database constraint violation tests
-- [x] Implement HTMX response testing
-- [x] Add error condition tests
-- [x] Add form validation edge case tests
-- [x] Improve test isolation and mocking
-- [x] Add comprehensive form validation tests
 - [x] Add edge case tests for stipend service
 - [x] Add database constraint violation tests
 - [x] Implement HTMX response testing
