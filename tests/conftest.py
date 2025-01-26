@@ -63,6 +63,23 @@ def get_all_tags():
     # Implementation here
     pass
 
+class BaseAdminTest:
+    def __init__(self):
+        self.client = None
+        self.db = None
+        
+    def get_csrf_token(self, endpoint):
+        # Implementation to get CSRF token
+        pass
+    
+    def verify_audit_log(self, action, object_type, object_id):
+        # Implementation to verify audit logs
+        pass
+    
+    def verify_notification(self, notification_type, message):
+        # Implementation to verify notifications
+        pass
+
 @pytest.fixture
 def BaseCRUDTest():
     from tests.base_test_case import BaseTestCase
