@@ -12,7 +12,7 @@ sys.path.insert(0, scripts_dir)
 
 from .verify_db_schema import verify_db_schema
 from .verify_security import verify_security_settings
-from .verify_monitoring import verify_monitoring
+from .verify_monitoring import verify_monitoring_setup
 
 def configure_logger():
     """Configure logger for production readiness verification"""
@@ -53,7 +53,7 @@ def verify_production_ready(check_migrations=False, validate_config=False):
             return False
 
         # Verify monitoring
-        if not verify_monitoring():
+        if not verify_monitoring_setup():
             return False
 
         logger.info("Production environment verified")
