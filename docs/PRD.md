@@ -14,15 +14,15 @@ This document outlines the objectives, target audience, and key features for the
    - Admin interface must use full page reloads for all CRUD operations
 2. **Tag-Based Filtering**  
    Real-time filtering via HTMX partial page updates.
-2. **Administrative Interface**  
+3. **Administrative Interface**  
    Secure dashboard for CRUD operations on stipends, tags, and organizations.
-3. **Automated Bots**  
+4. **Automated Bots**  
    Automate stipend tagging, updates, and data validation tasks.
-4. **Responsive UI**  
+5. **Responsive UI**  
    Mobile-first design for broad accessibility.
-5. **Testing & Coverage**  
+6. **Testing & Coverage**  
    Achieved 85% code coverage (Core: 92%, Routes: 88%, Models: 95%)
-6. **Semantic Version Management**  
+7. **Semantic Version Management**  
    Follow MAJOR.MINOR.PATCH releases with clear branching strategy.
 
 ## 4. Functional Requirements
