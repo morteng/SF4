@@ -2,6 +2,7 @@ import os
 import logging
 from pathlib import Path
 import sys
+import shutil
 from sqlalchemy import text, inspect
 
 # Configure logging
@@ -74,16 +75,29 @@ def main():
         # Initialize Flask app
         app = create_app('development')
         
+        # Create instance folder if missing
+        instance_path = app.instance_path
+        if not os.path.exists(instance_path):
+            os.makedirs(instance_path)
+            logger.info(f"Created instance folder at {instance_path}")
+
         with app.app_context():
-            # First try adding the tags column
+            # Force clean initialization if database doesn't exist
+            db_file = os.path.join(instance_path, 'stipend.db')
+            if not os.path.exists(db_file):
+                logger.info("Creating fresh database")
+                db.create_all()
+            
+            # Existing initialization logic
             if not add_tags_column():
-                # If that fails, recreate all tables
                 if not recreate_tables():
                     raise RuntimeError("Failed to initialize database schema")
             
-            # Create admin user
-            create_admin_user()
-            
+            # Ensure admin user exists
+            if not create_admin_user():
+                logger.warning("Admin user already exists")
+                
+            db.session.commit()
             logger.info("Database initialization completed successfully")
             
     except Exception as e:
