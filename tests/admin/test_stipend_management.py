@@ -1,7 +1,7 @@
 import pytest
 from flask import url_for
 from app.models import Stipend, Organization, Tag
-from tests.conftest import extract_csrf_token
+from tests.utils import extract_csrf_token
 
 class BaseAdminTest:
     """Base class for admin module tests"""
