@@ -21,3 +21,4 @@ flask-testing
 beautifulsoup4
 freezegun
 pytest-cov
+pytest-freezegun==1.2.2

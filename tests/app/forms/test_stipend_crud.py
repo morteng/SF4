@@ -1,9 +1,6 @@
 import pytest
 from datetime import datetime
-from tests.conftest import FREEZEGUN_INSTALLED
-
-# Mark all tests in this file as requiring freezegun
-pytestmark = pytest.mark.freezegun
+from freezegun import freeze_time
 
 from app.models.stipend import Stipend
 from app.models.organization import Organization
@@ -11,6 +8,7 @@ from app.models.tag import Tag
 from app.extensions import db
 from app.forms.admin_forms import StipendForm
 
+@freeze_time("2024-01-01")
 def test_stipend_create_operation(app, form_data, test_db):
     """Test CRUD create operation"""
     with app.test_request_context():
@@ -37,6 +35,7 @@ def test_stipend_create_operation(app, form_data, test_db):
             assert form.validate() is False
             assert field in form.errors
 
+@freeze_time("2024-01-01")
 def test_stipend_update_operation(app, form_data, test_db):
     """Test CRUD update operation"""
     with app.test_request_context():
