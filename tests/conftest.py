@@ -1,4 +1,5 @@
 import pytest
+from flask import current_app
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm.exc import StaleDataError
 from tests.utils import extract_csrf_token
@@ -63,8 +64,12 @@ def get_all_tags():
     # Implementation here
     pass
 
+@pytest.fixture
+def app():
+    return current_app
+
 @pytest.fixture(scope="session")
-def client():
+def client(app):
     with app.test_client() as client:
         yield client
 
