@@ -14,11 +14,11 @@ def configure_paths():
         project_root = str(Path(__file__).resolve().parent.parent.parent)
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
-        
+
         app_dir = str(Path(project_root) / 'app')
         if app_dir not in sys.path:
             sys.path.insert(0, app_dir)
-            
+
         return True
     except Exception as e:
         logger.error(f"Failed to configure paths: {str(e)}")
@@ -38,12 +38,12 @@ def verify_foreign_keys(inspector):
         logger.error(f"Foreign key verification failed: {str(e)}")
         return False
 
-def validate_schema(validate_relations=False, validate_required_fields=True, test_config=None, emergency_create=False):
+def verify_db_schema(validate_relations=False, validate_required_fields=True, test_config=None, emergency_create=False):
     """Enhanced schema validation with emergency table creation"""
     from pathlib import Path
     import sys
     sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-    
+
     from app import create_app
     app = create_app()
     with app.app_context():
@@ -62,10 +62,10 @@ def validate_schema(validate_relations=False, validate_required_fields=True, tes
         if not db_uri:
             logger.error("SQLALCHEMY_DATABASE_URI not set")
             return False
-            
+
         engine = create_engine(db_uri)
         inspector = inspect(engine)
-        
+
         # Validate critical columns
         user_columns = [col['name'].lower() for col in inspector.get_columns('user')]
         required_columns = {'confirmed_at', 'last_failed_login', 'is_admin', 'email', 'password_hash'}
@@ -78,13 +78,13 @@ def validate_schema(validate_relations=False, validate_required_fields=True, tes
         if not db_uri:
             logger.error("SQLALCHEMY_DATABASE_URI not set")
             return False
-            
+
         engine = create_engine(db_uri)
         inspector = inspect(engine)
-        
+
         # Define expected schema
         expected_schema = {
-            'user': ['id', 'username', 'email', 'password_hash', 'is_admin', 
+            'user': ['id', 'username', 'email', 'password_hash', 'is_admin',
                     'is_active', 'created_at', 'updated_at', 'confirmed_at'],
             'stipend': ['id', 'name', 'description', 'tags'],
             'organization': ['id', 'name', 'description'],
@@ -107,9 +107,9 @@ def validate_schema(validate_relations=False, validate_required_fields=True, tes
                 actual_columns = [row[1] for row in result]
             else:
                 actual_columns = [col['name'] for col in inspector.get_columns(table)]
-            
+
             missing_columns = set(expected_columns) - set(actual_columns)
-            
+
             if missing_columns:
                 # Special handling for tags column in stipend table
                 if table == 'stipend' and 'tags' in missing_columns:
@@ -123,17 +123,17 @@ def validate_schema(validate_relations=False, validate_required_fields=True, tes
                             conn.commit()
                             logger.info("Successfully added tags column")
                             # Re-verify schema after fix
-                            return validate_schema(validate_relations, validate_required_fields)
+                            return verify_db_schema(validate_relations, validate_required_fields)
                     except Exception as e:
                         logger.error(f"Failed to automatically fix schema: {str(e)}")
                         logger.info("Manual repair suggestion: Run 'flask db migrate' and 'flask db upgrade'")
-                
+
                 # General missing column error
                 logger.error(f"Missing columns in {table}: {', '.join(missing_columns)}")
                 logger.info(f"Expected columns for {table}: {', '.join(expected_columns)}")
                 logger.info(f"Actual columns found: {', '.join(actual_columns)}")
                 return False
-            
+
             # Verify column types for critical columns
             if table == 'stipend':
                 for col in inspector.get_columns(table):
@@ -168,5 +168,5 @@ def validate_schema(validate_relations=False, validate_required_fields=True, tes
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    success = validate_schema(validate_relations=True)
+    success = verify_db_schema(validate_relations=True)
     sys.exit(0 if success else 1)
