@@ -1,5 +1,6 @@
 import pytest
 from app import create_app, db
+from app.models.organization import Organization
 
 # Add freezegun availability check to conftest.py
 try:
