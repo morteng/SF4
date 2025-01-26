@@ -102,7 +102,6 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=get_metadata(),
-            render_as_batch=True,  # Enable batch mode for SQLite
             process_revision_directives=process_revision_directives,
             include_schemas=True,
             **conf_args
