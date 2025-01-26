@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 from sqlalchemy import inspect, create_engine
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import text
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -104,8 +105,7 @@ def verify_db_schema(validate_relations=False, validate_required_fields=True, te
             # SQLite compatible column verification
             if inspector.bind.engine.name == 'sqlite':
                 with engine.connect() as connection:
-                    result = connection.execute(f"PRAGMA table_info({table})")
-                    actual_columns = [row[1] for row in result]
+                    result = connection.execute(text(f"PRAGMA table_info({table})"))
             else:
                 actual_columns = [col['name'] for col in inspector.get_columns(table)]
 
