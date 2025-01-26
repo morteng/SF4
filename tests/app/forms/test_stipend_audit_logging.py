@@ -29,6 +29,16 @@ def test_tag(db_session):
     db_session.commit()
     return tag
 
+@pytest.fixture(autouse=True)
+def cleanup(request, db_session):
+    def clean_tables():
+        db_session.query(Stipend).delete()
+        db_session.query(AuditLog).delete()
+        db_session.query(Organization).delete()
+        db_session.query(Tag).delete()
+        db_session.commit()
+    request.addfinalizer(clean_tables)
+
 @pytest.mark.skipif(not FREEZEGUN_INSTALLED, reason="Requires freezegun")
 def test_audit_log_creation(app, test_organization, test_tag):
     """Test audit log generation for stipend operations"""
@@ -59,4 +69,5 @@ def test_audit_log_creation(app, test_organization, test_tag):
             db.session.delete(stipend)
             db.session.commit()
             delete_log = AuditLog.query.filter_by(action='delete_stipend').first()
+            assert delete_log is not None
             assert delete_log.timestamp == datetime(2024, 1, 1, 13, 0)

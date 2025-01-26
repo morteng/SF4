@@ -27,43 +27,11 @@ def create_user_data(username="testuser", email="test@example.com", password="pa
     }
 
 def extract_csrf_token(response_data):
-    """Extract CSRF token from HTML response."""
-    soup = BeautifulSoup(response_data, 'html.parser')
-    
-    # Look for CSRF token in meta tag first
-    meta_token = soup.find('meta', attrs={'name': 'csrf-token'})
-    if meta_token and meta_token.get('content'):
-        logging.info("Found CSRF token in meta tag")
-        return meta_token.get('content')
-    
-    # Look for CSRF token in hidden input
-    input_token = soup.find('input', attrs={'name': 'csrf_token', 'type': 'hidden'})
-    if input_token and input_token.get('value'):
-        logging.info("Found CSRF token in hidden input")
-        return input_token.get('value')
-    
-    # Look for CSRF token in form data
-    form = soup.find('form')
-    if form:
-        input_token = form.find('input', attrs={'name': 'csrf_token', 'type': 'hidden'})
-        if input_token and input_token.get('value'):
-            logging.info("Found CSRF token in form")
-            return input_token.get('value')
-    
-    # Debug: Log the HTML if no token found
-    logging.warning("CSRF token not found in response. HTML content:")
-    logging.warning(soup.prettify())
-    
-    # Look for CSRF token in HTMX headers
-    script_tags = soup.find_all('script')
-    for script in script_tags:
-        if 'hx-headers' in script.text:
-            match = re.search(r'"X-CSRFToken":\s*"([^"]+)"', script.text)
-            if match:
-                return match.group(1)
-    
-    # If no token found, log the issue
-    logging.warning("CSRF token not found in response")
+    """Extract CSRF token from HTML response using regex."""
+    decoded_data = response_data.decode()
+    match = re.search(r'name="csrf_token"[^>]+value="([^"]+)"', decoded_data)
+    if match:
+        return match.group(1)
     return None
 
 class AuthActions:
