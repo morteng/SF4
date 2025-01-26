@@ -19,3 +19,6 @@
 /run python -m pytest --cov=app tests/ -v
 
 ### CODE END ###
+
+# Console commands done, we go on to 05_STEP_4.txt
+/load automation/07_STEP_4.txt

@@ -19,3 +19,8 @@ croniter
 
 coverage 
 prometheus-flask-exporter
+
+flask_testing
+beautifulsoup4
+freezegun
+pytest-cov
