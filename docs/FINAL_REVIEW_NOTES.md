@@ -6,6 +6,7 @@
 3. Corrected user model test initialization
 4. Added comprehensive tests for stipend model
 5. Fixed ImportError in `test_stipend_service.py`
+6. Updated documentation for installation and usage
 
 ## Test Coverage
 - Overall coverage: 44%

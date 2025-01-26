@@ -22,6 +22,7 @@
 - [x] Emergency migration system
 - [x] Fix TypeError in user model test
 - [x] Correct pytest filter for user model tests
+- [x] Update documentation for installation and usage
 
 ### **Deployed in v1.2.11**
 - [x] Security columns (confirmed_at, last_failed_login)

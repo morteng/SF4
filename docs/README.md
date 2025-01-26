@@ -1,27 +1,26 @@
-# Stipend Discovery Website
+# Stipend Discovery Platform
 
-## Version 1.2.11
+A Flask-based platform for discovering and managing stipends with tag-based filtering.
 
-This is a Flask-based web application for discovering and managing stipend opportunities.
+## Installation
 
-### Deployment Instructions
-1. Install dependencies: `pip install -r requirements.txt`
-2. Configure paths: `python scripts/path_config.py --production`
-3. Initialize database: `python scripts/startup/init_db.py --production`
-4. Start application: `python app.py`
-5. Verify production readiness: `python scripts/verification/verify_production_ready.py --production`
+1. Clone the repository
+2. Create a virtual environment and install dependencies:
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+3. Initialize the database:
+   ```bash
+   /run python scripts/db_init.py
+   ```
 
-### Troubleshooting
-If you encounter import errors:
-1. Verify virtual environment is activated
-2. Check Python path configuration
-3. Ensure all dependencies are installed
+## Usage
 
-### Key Features
-- Tag-based filtering
-- Admin interface
-- Automated bots
-- Comprehensive testing
-- Enhanced security settings
-- Improved monitoring
-- Robust deployment verification
+1. Start the application:
+   ```bash
+   python app.py
+   ```
+2. Access the admin dashboard at `/admin`
+3. Use tag-based filtering to find relevant stipends
