@@ -1,3 +1,4 @@
+import pytest
 from app.models import User, Stipend, Tag, Organization
 import uuid
 from datetime import datetime, timedelta, timezone
