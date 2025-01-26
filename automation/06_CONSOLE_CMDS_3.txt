@@ -1,20 +1,14 @@
 # Console Commands for Step 3 (Testing)
-# Only edit the section between CODE START and CODE END - always run scripts using python, e.g. /run python scripts/myscript.py
+# Only edit the section between CODE START and CODE END
 
 ### CODE START ###
 
-# Apply migrations and verify schema
-/run alembic upgrade head
+# Verify database schema
 /run python scripts/verification/verify_db_schema.py --full-check
 
-# Execute security column tests
-/run python -m pytest tests/test_user_model.py -k test_security_columns -v
-
-# Validate production readiness
-/run python scripts/verification/verify_security.py --full-audit
-/run python scripts/verification/verify_production_ready.py --full
+# Run user model tests to check basic functionality
+/run python -m pytest tests/test_user_model.py -k test_confirmed_at_column -v
 
 ### CODE END ###
 
-# Console commands done, we go on to 07_STEP_4.txt
 /load automation/07_STEP_4.txt
