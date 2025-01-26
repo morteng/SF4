@@ -3,7 +3,7 @@
 
 /add automation/02_CONSOLE_CMDS_1.txt
 
-/ask How can we best implement Code Cycle Step 1 - Analysis? Any console output already present is the latest output from the app. Read the PRD for requirements, check design doc for the current architecture, and refer to the planning doc for ongoing progress. Instructions in MANAGER.txt have top priority. Key Actions:  - Review project documentation and context  - Perform problem analysis and planning  - Prepare for necessary file updates. Think step by step.
+/ask How can we best implement Code Cycle Step 1 - Analysis? Any console output already present is the latest output from the app. Read the PRD for requirements, check design doc for the current architecture, and refer to the planning doc for ongoing progress. Instructions in MANAGER.txt have top priority. Key Actions:  - Review project documentation and context  - Perform problem analysis and planning  - Prepare for necessary file updates.  
 
 
 # Next, propose code updates, focusing on analysis-related changes. 
