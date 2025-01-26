@@ -1,7 +1,7 @@
 import pytest
 from flask import url_for
 from app.models import Organization
-from tests.conftest import extract_csrf_token
+from tests.utils import extract_csrf_token
 from tests.base_test_case import BaseTestCase
 
 class TestOrganizationManagement(BaseTestCase):
