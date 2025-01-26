@@ -64,7 +64,7 @@ def get_all_tags():
     # Implementation here
     pass
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def app():
     return current_app
 
