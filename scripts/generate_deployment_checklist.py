@@ -18,7 +18,11 @@ def configure_logger():
 
 def generate_checklist(validate=False):
     """Generate deployment checklist with version info"""
-    from scripts.version import get_version
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+
+    from version import get_version
     # Add path configuration first
     import sys
     from pathlib import Path

@@ -51,7 +51,10 @@ def commit_changes(message, push=False):
         subprocess.run(['git', 'add', '.'], check=True)
         
         # Commit with message
+        # Force add all changes and push
+        subprocess.run(['git', 'add', '-A'], check=True)
         subprocess.run(['git', 'commit', '-m', message], check=True)
+        subprocess.run(['git', 'push', 'origin', 'main'], check=True)
         
         # Push changes if requested
         if push:
