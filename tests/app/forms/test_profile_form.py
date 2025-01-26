@@ -5,7 +5,7 @@ from flask_wtf.csrf import generate_csrf
 from app.forms.user_forms import ProfileForm
 from app.constants import FlashMessages
 from app.models.user import User
-from tests.conftest import extract_csrf_token
+from tests.utils import extract_csrf_token
 import logging
 
 def test_profile_form_valid(logged_in_client, db_session, test_user, app):
