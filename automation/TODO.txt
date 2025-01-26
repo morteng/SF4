@@ -5,6 +5,7 @@
 - [ ] Monitor restore test performance
 - [ ] Maintain backup version history
 - [ ] Monitor backup resource utilization
+- [ ] Investigate and remove duplicate logging initialization
 
 ### **Completed Tasks**
 - [x] Analyze backup storage utilization
@@ -15,10 +16,12 @@
 - [x] Dependency conflict resolution
 - [x] Core service metrics implementation
 - [x] Security audit automation
-- [x] Database schema validation
+- [x] Database schema validation (Initial `PRAGMA` error fix)
 - [x] Security context fixes
 - [x] Windows path normalization
 - [x] Emergency migration system
+- [x] Fix TypeError in user model test
+- [x] Correct pytest filter for user model tests
 
 ### **Deployed in v1.2.11**
 - [x] Security columns (confirmed_at, last_failed_login)
