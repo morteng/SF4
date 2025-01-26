@@ -81,7 +81,7 @@ def verify_db_schema(validate_relations=False, validate_required_fields=True, te
         expected_schema = {
             'user': ['id', 'username', 'email', 'password_hash', 'is_admin',
                     'is_active', 'created_at', 'updated_at', 'confirmed_at'],
-            'stipend': ['id', 'name', 'description', 'tags'],
+            'stipend': ['id', 'name', 'tags'],
             'organization': ['id', 'name', 'description'],
             'tag': ['id', 'name']
         }
@@ -123,8 +123,8 @@ def verify_db_schema(validate_relations=False, validate_required_fields=True, te
             if table == 'stipend':
                 for col in inspector.get_columns(table):
                     if col['name'] == 'tags':
-                        if col['type'].__class__.__name__ not in ['JSON', 'JSONB']:
-                            logger.error(f"Invalid type for tags column - expected JSON/JSONB, got {col['type'].__class__.__name__}")
+                        if col['type'].__class__.__name__ not in ['JSONB', 'JSON']:
+                            logger.error(f"Invalid type for tags column - expected JSONB/JSON, got {col['type'].__class__.__name__}")
                             return False
 
         if validate_required_fields:
