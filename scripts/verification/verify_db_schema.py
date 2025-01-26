@@ -123,6 +123,7 @@ def verify_db_schema(validate_relations=False, validate_required_fields=True, te
             if table == 'stipend':
                 for col in inspector.get_columns(table):
                     if col['name'] == 'tags':
+                        # Check for either JSONB or JSON type
                         if col['type'].__class__.__name__ not in ['JSONB', 'JSON']:
                             logger.error(f"Invalid type for tags column - expected JSONB/JSON, got {col['type'].__class__.__name__}")
                             return False
