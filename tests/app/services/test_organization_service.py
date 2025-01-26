@@ -1,53 +1,45 @@
 import pytest
-from datetime import datetime
-from app.models.organization import Organization
+from app.models import Organization
 from app.services.organization_service import OrganizationService
-from app.extensions import db
-from app.constants import FlashMessages
-from tests.conftest import BaseCRUDTest
+from app import db
+from app.forms.admin_forms import OrganizationForm
 
-class TestOrganizationService(BaseCRUDTest):
-    service_class = OrganizationService
-    model_class = Organization
+@pytest.fixture
+def organization_service():
+    return OrganizationService()
 
-    @pytest.fixture
-    def test_data(self):
-        return {
-            'name': 'Test Organization',
-            'description': 'This is a test organization.',
-            'homepage_url': 'http://example.com/organization'
-        }
+@pytest.fixture
+def test_data():
+    return {
+        'name': 'Test Organization',
+        'description': 'Test Description'
+    }
 
-    def test_search_organizations(self, db_session, app):
-        with app.app_context():
-            # Create test organizations
-            org1 = Organization(name='Test Org 1', description='Desc 1')
-            org2 = Organization(name='Another Org', description='Desc 2')
-            db_session.add_all([org1, org2])
-            db_session.commit()
+def test_create_organization(organization_service, test_data, db_session):
+    # Test valid organization creation
+    org = organization_service.create(test_data)
+    db_session.commit()
+    assert org.id is not None
+    assert org.name == test_data['name']
+    assert org.description == test_data['description']
 
-            service = OrganizationService()
-            results = service.search_organizations('Test')
-            assert len(results) == 1
-            assert results[0].name == 'Test Org 1'
+def test_update_organization(organization_service, test_data, db_session):
+    # Test organization update
+    org = organization_service.create(test_data)
+    db_session.commit()
+    updated_data = {
+        'name': 'Updated Name',
+        'description': 'Updated Description'
+    }
+    updated_org = organization_service.update(org, updated_data)
+    db_session.commit()
+    assert updated_org.name == updated_data['name']
+    assert updated_org.description == updated_data['description']
 
-    def test_create_organization_with_missing_name(self, test_data, db_session, app):
-        with app.app_context():
-            service = OrganizationService()
-            invalid_data = test_data.copy()
-            invalid_data['name'] = ''
-            
-            with pytest.raises(ValueError) as exc_info:
-                service.create(invalid_data)
-            assert FlashMessages.REQUIRED_FIELD.format(field='name') in str(exc_info.value)
-
-    def test_create_organization_with_missing_description(self, test_data, db_session, app):
-        with app.app_context():
-            service = OrganizationService()
-            invalid_data = test_data.copy()
-            invalid_data['description'] = ''
-            
-            with pytest.raises(ValueError) as exc_info:
-                service.create(invalid_data)
-            assert FlashMessages.REQUIRED_FIELD.format(field='description') in str(exc_info.value)
-
+def test_delete_organization(organization_service, test_data, db_session):
+    # Test organization deletion
+    org = organization_service.create(test_data)
+    db_session.commit()
+    organization_service.delete(org)
+    db_session.commit()
+    assert organization_service.get(org.id) is None

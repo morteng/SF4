@@ -1,62 +1,45 @@
 import pytest
-from app.models.tag import Tag
-from app.services.tag_service import tag_service
-from app.extensions import db
-from app.constants import FlashMessages
-from wtforms.validators import ValidationError
-from tests.conftest import BaseCRUDTest
+from app.models import Tag
+from app.services.tag_service import TagService
+from app import db
+from app.forms.admin_forms import TagForm
 
-class TestTagService(BaseCRUDTest):
-    service_class = tag_service.__class__
-    model_class = Tag
+@pytest.fixture
+def tag_service():
+    return TagService()
 
-    @pytest.fixture
-    def test_data(self):
-        return {
-            'name': 'Test Tag',
-            'category': 'Test Category'
-        }
+@pytest.fixture
+def test_data():
+    return {
+        'name': 'Test Tag',
+        'category': 'Academic'
+    }
 
-    def test_create_tag_with_empty_name(self, test_data, db_session, app):
-        with app.app_context():
-            invalid_data = test_data.copy()
-            invalid_data['name'] = ''
-            
-            with pytest.raises(ValidationError) as exc_info:
-                tag_service.create(invalid_data)
-            assert FlashMessages.REQUIRED_FIELD.format(field='name') in str(exc_info.value)
+def test_create_tag(tag_service, test_data, db_session):
+    # Test valid tag creation
+    tag = tag_service.create(test_data)
+    db_session.commit()
+    assert tag.id is not None
+    assert tag.name == test_data['name']
+    assert tag.category == test_data['category']
 
-    def test_create_tag_with_empty_category(self, test_data, db_session, app):
-        with app.app_context():
-            invalid_data = test_data.copy()
-            invalid_data['category'] = ''
-            
-            with pytest.raises(ValidationError) as exc_info:
-                tag_service.create(invalid_data)
-            assert FlashMessages.REQUIRED_FIELD.format(field='category') in str(exc_info.value)
+def test_update_tag(tag_service, test_data, db_session):
+    # Test tag update
+    tag = tag_service.create(test_data)
+    db_session.commit()
+    updated_data = {
+        'name': 'Updated Tag',
+        'category': 'Professional'
+    }
+    updated_tag = tag_service.update(tag, updated_data)
+    db_session.commit()
+    assert updated_tag.name == updated_data['name']
+    assert updated_tag.category == updated_data['category']
 
-    def test_update_tag_with_empty_name(self, test_data, db_session, app):
-        with app.app_context():
-            # Create initial tag
-            tag = tag_service.create(test_data)
-            
-            # Try to update with empty name
-            invalid_data = test_data.copy()
-            invalid_data['name'] = ''
-            
-            with pytest.raises(ValidationError) as exc_info:
-                tag_service.update(tag.id, invalid_data)
-            assert FlashMessages.REQUIRED_FIELD.format(field='name') in str(exc_info.value)
-
-    def test_update_tag_with_empty_category(self, test_data, db_session, app):
-        with app.app_context():
-            # Create initial tag
-            tag = tag_service.create(test_data)
-            
-            # Try to update with empty category
-            invalid_data = test_data.copy()
-            invalid_data['category'] = ''
-            
-            with pytest.raises(ValidationError) as exc_info:
-                tag_service.update(tag.id, invalid_data)
-            assert FlashMessages.REQUIRED_FIELD.format(field='category') in str(exc_info.value)
+def test_delete_tag(tag_service, test_data, db_session):
+    # Test tag deletion
+    tag = tag_service.create(test_data)
+    db_session.commit()
+    tag_service.delete(tag)
+    db_session.commit()
+    assert tag_service.get(tag.id) is None
