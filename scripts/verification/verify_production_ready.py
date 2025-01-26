@@ -3,9 +3,12 @@ import sys
 import logging
 from pathlib import Path
 import secrets
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+# Add project root and scripts directory to path
+project_root = str(Path(__file__).parent.parent.parent)
+scripts_dir = str(Path(__file__).parent.parent)
+sys.path.insert(0, project_root)
+sys.path.insert(0, scripts_dir)
 
 from verification.verify_db_schema import verify_db_schema
 from verification.verify_security import verify_security_settings

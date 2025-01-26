@@ -20,6 +20,10 @@ if project_root not in sys.path:
 
 # Import local modules after path configuration
 try:
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    
     from scripts.path_config import configure_paths
     from scripts.version import get_version
     if not configure_paths():
