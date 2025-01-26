@@ -1,6 +1,8 @@
 import pytest
 from app import create_app, db
 from app.models.organization import Organization
+from app.models.user import User
+from werkzeug.security import generate_password_hash
 
 # Add freezegun availability check to conftest.py
 try:
@@ -49,44 +51,44 @@ def db_session(app):
         connection.close()
         session.remove()
 
-    @pytest.fixture
-    def stipend_data(db_session):
-        """Fixture providing base stipend data"""
-        org = Organization(name="Test Org", description="Test Description")
-        db_session.add(org)
-        db_session.commit()
-    
-        return {
-            'name': 'Test Stipend',
-            'summary': 'Test summary',
-            'description': 'Test description',
-            'homepage_url': 'http://example.com',
-            'application_procedure': 'Test procedure',
-            'eligibility_criteria': 'Test criteria',
-            'application_deadline': '2024-12-31 23:59:59',
-            'organization_id': org.id,
-            'open_for_applications': True
-        }
+@pytest.fixture
+def stipend_data(db_session):
+    """Fixture providing base stipend data"""
+    org = Organization(name="Test Org", description="Test Description")
+    db_session.add(org)
+    db_session.commit()
 
-    @pytest.fixture
-    def logged_in_admin(client, db_session):
-        """Fixture to log in as admin user"""
-        from app.models.user import User
-        from werkzeug.security import generate_password_hash
-    
-        # Create admin user
-        admin = User(
-            username='admin',
-            email='admin@example.com',
-            password_hash=generate_password_hash('testpass'),
-            is_admin=True
-        )
-        db_session.add(admin)
-        db_session.commit()
-    
-        # Log in as admin
-        client.post('/login', data={
-            'username': 'admin',
-            'password': 'testpass'
-        })
-        return client
+    return {
+        'name': 'Test Stipend',
+        'summary': 'Test summary',
+        'description': 'Test description',
+        'homepage_url': 'http://example.com',
+        'application_procedure': 'Test procedure',
+        'eligibility_criteria': 'Test criteria',
+        'application_deadline': '2024-12-31 23:59:59',
+        'organization_id': org.id,
+        'open_for_applications': True
+    }
+
+@pytest.fixture
+def logged_in_admin(client, db_session):
+    """Fixture to log in as admin user"""
+    from app.models.user import User
+    from werkzeug.security import generate_password_hash
+
+    # Create admin user
+    admin = User(
+        username='admin',
+        email='admin@example.com',
+        password_hash=generate_password_hash('testpass'),
+        is_admin=True
+    )
+    db_session.add(admin)
+    db_session.commit()
+
+    # Log in as admin
+    client.post('/login', data={
+        'username': 'admin',
+        'password': 'testpass'
+    })
+    return client
