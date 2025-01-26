@@ -4,7 +4,7 @@
 ### CODE START ###
 
 # Install updated test dependencies
-/run pip install -r requirements-test.txt
+/run python scripts/install_test_dependencies.py
 
 # Full test suite with security focus
 /run python -m pytest --cov=app --cov-report=term-missing tests/ -v
