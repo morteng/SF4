@@ -4,21 +4,19 @@ import sys
 from pathlib import Path
 from sqlalchemy import inspect, create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy import text
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 def configure_paths():
     """Configure project paths with proper error handling."""
     try:
         project_root = str(Path(__file__).resolve().parent.parent.parent)
-        logger.info(f"Calculated project_root: {project_root}") # ADDED LOGGING
+        logger.info(f"Calculated project_root: {project_root}")
         if project_root not in sys.path:
             sys.path.insert(0, project_root)
 
         app_dir = str(Path(project_root) / 'app')
-        logger.info(f"Calculated app_dir: {app_dir}") # ADDED LOGGING
+        logger.info(f"Calculated app_dir: {app_dir}")
         if app_dir not in sys.path:
             sys.path.insert(0, app_dir)
 
@@ -55,6 +53,7 @@ def verify_db_schema(validate_relations=False, validate_required_fields=True, te
             if not current_app:
                 app = create_app(config=test_config)
                 app.app_context().push()
+
     """Validate database schema against expected structure."""
     if not configure_paths():
         logger.error("Path configuration failed")
@@ -77,13 +76,6 @@ def verify_db_schema(validate_relations=False, validate_required_fields=True, te
             logger.error(f"Missing security columns in user table: {', '.join(missing_cols)}")
             logger.info("Run 'alembic upgrade head' to apply missing migrations")
             return False
-        db_uri = os.getenv('SQLALCHEMY_DATABASE_URI')
-        if not db_uri:
-            logger.error("SQLALCHEMY_DATABASE_URI not set")
-            return False
-
-        engine = create_engine(db_uri)
-        inspector = inspect(engine)
 
         # Define expected schema
         expected_schema = {
@@ -104,49 +96,37 @@ def verify_db_schema(validate_relations=False, validate_required_fields=True, te
 
         # Verify table columns with detailed error reporting
         for table, expected_columns in expected_schema.items():
-            # SQLite compatible column verification
-            if inspector.bind.engine.name == 'sqlite':
-                with engine.connect() as connection:
-                    result = connection.execute(text(f"PRAGMA table_info({table})"))
-            else:
-                actual_columns = [col['name'] for col in inspector.get_columns(table)]
+            actual_columns = [col['name'] for col in inspector.get_columns(table)]
 
             missing_columns = set(expected_columns) - set(actual_columns)
 
             if missing_columns:
-                # Special handling for tags column in stipend table
                 if table == 'stipend' and 'tags' in missing_columns:
                     logger.error("Critical schema issue: Missing 'tags' column in stipend table")
                     logger.info("Attempting to fix schema automatically...")
                     try:
-                        from sqlalchemy import text
                         with engine.connect() as conn:
                             stmt = text("ALTER TABLE stipend ADD COLUMN tags JSONB")
                             conn.execute(stmt)
                             conn.commit()
                             logger.info("Successfully added tags column")
-                            # Re-verify schema after fix
                             return verify_db_schema(validate_relations, validate_required_fields)
                     except Exception as e:
                         logger.error(f"Failed to automatically fix schema: {str(e)}")
                         logger.info("Manual repair suggestion: Run 'flask db migrate' and 'flask db upgrade'")
 
-                # General missing column error
                 logger.error(f"Missing columns in {table}: {', '.join(missing_columns)}")
                 logger.info(f"Expected columns for {table}: {', '.join(expected_columns)}")
                 logger.info(f"Actual columns found: {', '.join(actual_columns)}")
                 return False
 
-            # Verify column types for critical columns
             if table == 'stipend':
                 for col in inspector.get_columns(table):
                     if col['name'] == 'tags':
-                        # Accept either JSON or JSONB type
                         if col['type'].__class__.__name__ not in ['JSON', 'JSONB']:
                             logger.error(f"Invalid type for tags column - expected JSON/JSONB, got {col['type'].__class__.__name__}")
                             return False
 
-        # Verify required fields
         if validate_required_fields:
             stipend_columns = inspector.get_columns('stipend')
             name_col = next((col for col in stipend_columns if col['name'] == 'name'), None)
@@ -154,7 +134,6 @@ def verify_db_schema(validate_relations=False, validate_required_fields=True, te
                 logger.error("Stipend name must be a required field")
                 return False
 
-        # Verify foreign key relationships
         if validate_relations and not verify_foreign_keys(inspector):
             logger.error("Foreign key validation failed")
             return False
