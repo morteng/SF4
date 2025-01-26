@@ -3,17 +3,20 @@
 
 ### CODE START ###
 
-# (DEBUG) Simplified schema verification to isolate 'text' issue
-/run python scripts/verification/verify_db_schema_debug.py
+# Install updated test dependencies
+/run pip install -r requirements-test.txt
 
-# Re-run test dependencies installation (again)
-/run python scripts/install_test_dependencies.py
+# Full test suite with security focus
+/run python -m pytest --cov=app --cov-report=term-missing tests/ -v
 
-# Try installing freezegun directly (again, for debugging)
-/run pip install freezegun
+# Validate production database schema
+/run python scripts/verification/verify_db_schema.py --full-check
 
-# Run user model tests (to check if freezegun is now available)
-/run python -m pytest tests/test_user_model.py -k test_confirmed_at_column -v
+# Generate migration verification report
+/run alembic -c migrations/alembic.ini upgrade head --sql > migration_plan.sql
+
+# Test backup/restore cycle
+/run python scripts/db_backup.py --test && python scripts/db_restore.py --test
 
 ### CODE END ###
 

@@ -37,7 +37,8 @@ class User(db.Model, UserMixin):
             self.password_hash = password_hash
         self.is_admin = is_admin
         self._is_active = is_active  # Set the private attribute directly
-        self.confirmed_at = confirmed_at  # Add this line
+        self.confirmed_at = confirmed_at
+        self.last_failed_login = last_failed_login
         self.created_at = db.func.current_timestamp()
         self.updated_at = db.func.current_timestamp()
 

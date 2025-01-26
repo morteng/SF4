@@ -2,7 +2,7 @@ import os
 import logging
 import sys
 from pathlib import Path
-from sqlalchemy import inspect, create_engine
+from sqlalchemy import inspect, create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import text
 
