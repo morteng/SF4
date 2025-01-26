@@ -3,12 +3,19 @@
 
 ### CODE START ###
 
-# Verify database schema
+# Retry Alembic upgrade, explicitly specifying config path
+/run alembic -c migrations/alembic.ini upgrade head
+
+# Re-run database schema verification to debug error
 /run python scripts/verification/verify_db_schema.py --full-check
 
-# Run user model tests to check basic functionality
-/run python -m pytest tests/test_user_model.py -k test_confirmed_at_column -v
+# Run ALL tests in tests/test_user_model.py (no filter)
+/run python -m pytest tests/test_user_model.py -v
+
+# Run the entire test suite (all tests in the tests/ directory)
+/run python -m pytest tests/ -v
+
+# Run tests with coverage to generate coverage report (initially may fail)
+/run python -m pytest --cov=app tests/ -v
 
 ### CODE END ###
-
-/load automation/07_STEP_4.txt
