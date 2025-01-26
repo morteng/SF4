@@ -1,9 +1,0 @@
-# Backup Monitoring Cycle
-
-
-# 3. Update backup service with monitoring hooks
-/code Update app/services/backup_service.py to: - Add monitoring hooks - Track backup metrics - Trigger alerts on failures - Integrate with the dashboard
-
-
-# 5. Transition to finalization
-/load meta_cycles/finalize_cycle.aiderscript
