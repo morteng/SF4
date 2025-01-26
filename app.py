@@ -16,8 +16,8 @@ if __name__ == '__main__':
     configure_paths(production=True)
     
     # Initialize production logging
-    from scripts.init_logging import init_logging
-    init_logging(production=True)
+    from scripts.init_logging import configure_logging
+    configure_logging(production=True)
     
     # Final verification
     from scripts.verification.verify_production_ready import verify_production_ready
