@@ -3,27 +3,23 @@
 
 ### CODE START ###
 
-# Initialize review environment
-/run python scripts/setup_test_env.py --production
-/run python scripts/init_logging.py --production
-/run python scripts/path_config.py --production
+# Apply final migrations and verify
+/run alembic upgrade head
+/run python scripts/verification/verify_db_schema.py --full-check
 
-# Run final verifications
-/run python scripts/verification/verify_production_ready.py
+# Security and monitoring verification
 /run python scripts/verification/verify_security.py --full-audit
-/run python scripts/verification/verify_monitoring.py --dashboard
-/run python scripts/verification/verify_db_connection.py --retries=3
+/run python scripts/verification/verify_monitoring.py --dashboard --metrics
+
+# Production readiness check
+/run python scripts/verification/verify_production_ready.py --full
 
 # Finalize documentation
-/run python scripts/finalize_docs.py
-/run python scripts/generate_deployment_checklist.py
+/run python scripts/generate_deployment_checklist.py --production
+/run python scripts/finalize_docs.py --version 1.2.11 --validate
 
-# Cleanup and request approval
-/run python scripts/final_cleanup.py
-/run python scripts/request_approval.py
-
-# Commit review results
-/run python scripts/commit_changes.py --message "Final review completed"
+# Commit release state
+/run python scripts/commit_changes.py --message "Release 1.2.11 - Production Ready"
 
 ### CODE END ###
 
