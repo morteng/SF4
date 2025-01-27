@@ -4,9 +4,11 @@ from app.extensions import db, mail, login_manager, migrate, csrf
 from app.routes.admin import register_admin_blueprints
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+import os
 
 def create_app(config_name='development'):
-    app = Flask(__name__)
+    root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    app = Flask(__name__, root_path=root_path)
     
     if config_name == 'development':
         app.config.from_object(DevelopmentConfig())
