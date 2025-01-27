@@ -51,6 +51,10 @@ def db_session(app):
         connection.close()
         session.remove()
 
+def extract_csrf_token(response_data):
+    """Extract CSRF token from response data"""
+    return response_data.find('name="csrf_token"').find('value="') + 7
+
 @pytest.fixture
 def stipend_data(db_session):
     """Fixture providing base stipend data"""
@@ -77,14 +81,6 @@ def organization_data(db_session):
         'name': 'Test Organization',
         'description': 'Test Description',
         'homepage_url': 'http://test.org'
-    }
-
-@pytest.fixture
-def tag_data():
-    """Fixture providing base tag data"""
-    return {
-        'name': 'Test Tag',
-        'category': 'Test Category'
     }
 
 @pytest.fixture
