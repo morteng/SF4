@@ -63,8 +63,6 @@ def test_update_user_route(logged_in_admin, test_user, db_session):
     assert updated_user.check_password('newpassword123')
     assert FlashMessages.UPDATE_USER_SUCCESS.value.encode() in response.data
 
-
-
 def test_create_user_route_with_database_error(logged_in_admin, user_data, db_session, monkeypatch):
     with logged_in_admin.application.app_context():
         data = user_data

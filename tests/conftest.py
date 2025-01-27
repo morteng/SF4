@@ -90,3 +90,11 @@ def tag_data():
         'name': 'Test Tag',
         'category': 'Test Category'
     }
+
+@pytest.fixture
+def user_data():
+    return {
+        'username': 'testuser',
+        'password': 'testpass123',
+        'email': 'test@example.com'
+    }
