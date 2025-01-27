@@ -8,7 +8,7 @@ class NotificationType(Enum):
     SYSTEM = 'system'
     
     # Audit and Logging
-    AUDIT_LOG = 'audit_log'
+    AUDIT_LOG = 'audit_log'  # Add this line
     CRUD_AUDIT = 'crud_audit'
     
     # User Actions
