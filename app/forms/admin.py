@@ -19,15 +19,15 @@ class TagForm(FlaskForm):
 class OrganizationForm(FlaskForm):
     """Form for creating and editing organizations"""
     name = StringField('Name', validators=[
-        DataRequired(),
-        Length(max=100)
+        DataRequired(message="Organization name is required"),
+        Length(min=2, max=100, message="Name must be between 2-100 characters")
     ])
     description = TextAreaField('Description')
     homepage_url = URLField('Website', validators=[
-        DataRequired(),
-        URL()
+        DataRequired(message="Website URL is required"),
+        URL(require_tld=True, message="Invalid URL format")
     ])
-    submit = SubmitField('Create')
+    submit = SubmitField('Save Organization')
 
 class StipendForm(FlaskForm):
     """Form for creating and editing stipends"""

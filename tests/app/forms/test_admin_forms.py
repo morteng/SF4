@@ -37,11 +37,12 @@ def test_organization_form_valid_data(app):
         )
         assert form.validate(), f"Errors: {form.errors}"
 
-@pytest.mark.parametrize("name,homepage_url,expected", [  # Updated params
+@pytest.mark.parametrize("name,homepage_url,expected", [
     ("", "https://valid.org", False),  # Missing name
-    ("Valid", "invalid-url", False),   # Bad URL
-    ("a"*101, "https://valid.org", False),  # Name too long
-    ("Valid", "https://valid.org", True),   # Valid case
+    ("Valid", "invalid-url", False),   # Bad URL format
+    ("a"*101, "https://valid.org", False),  # Name too long (101 chars)
+    ("Test Org", "https://valid.org", True),  # Valid case
+    ("ACME", "http://localhost:8000", True),  # Valid local URL
 ])
 def test_organization_form_validation(app, name, homepage_url, expected):
     """Test organization form with invalid data"""

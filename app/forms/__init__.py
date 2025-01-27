@@ -1,3 +1,3 @@
-from .admin_forms import StipendForm
+from .admin import StipendForm
 
 __all__ = ['StipendForm']
