@@ -1,5 +1,4 @@
-from flask import current_app
-from app.extensions import db
+from app import db
 from datetime import datetime
 from sqlalchemy import ForeignKey
 from app.common.enums import NotificationType, NotificationPriority

@@ -1,21 +1,19 @@
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
+from flask_wtf.csrf import CSRFProtect
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask_wtf.csrf import CSRFProtect
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
 
-# Initialize database components
-engine = create_engine('sqlite:///stipend.db')  # Update with your actual database URI
-db = scoped_session(sessionmaker(bind=engine))
-Base = declarative_base()
-
+# Initialize Flask extensions
+db = SQLAlchemy()
 login_manager = LoginManager()
-migrate = Migrate(compare_type=True)
+migrate = Migrate(db)
 csrf = CSRFProtect()
-limiter = Limiter(key_func=get_remote_address, default_limits=["200 per day", "50 per hour"])
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"]
+)
 
 def init_extensions(app):
     """Initialize all Flask extensions with proper configuration."""
@@ -29,7 +27,7 @@ def init_extensions(app):
     # Initialize database
     db.init_app(app)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    migrate.init_app(app, db, render_as_batch=True, compare_type=True)
+    migrate.init_app(app, db, render_as_batch=True)
     
     # Configure admin rate limits
     from app.routes.admin import admin_bp
