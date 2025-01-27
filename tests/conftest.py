@@ -4,6 +4,7 @@ from app.models.organization import Organization
 from app.models.user import User
 from app.models.stipend import Stipend
 from app.models.tag import Tag
+from app.extensions import db
 from werkzeug.security import generate_password_hash
 
 @pytest.fixture(scope="function")
