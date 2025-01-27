@@ -13,8 +13,12 @@ class BaseBlueprint(Blueprint):
     def __init__(self, name, import_name, **kwargs):
         super().__init__(name, import_name, **kwargs)
 
-def validate_blueprint_routes(bp):
+def validate_blueprint_routes(bp, required_routes=None):
     """Validate that all routes in the blueprint have proper permissions."""
+    if required_routes:
+        for route in required_routes:
+            if not hasattr(bp, route):
+                raise ValueError(f"Required route '{route}' not found in blueprint")
     for route in bp.routes:
         if not hasattr(route, 'is_admin_route'):
             raise ValueError(f"Route '{route.endpoint}' is missing required permissions")

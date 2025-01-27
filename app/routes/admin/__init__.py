@@ -160,7 +160,7 @@ def register_admin_blueprints(app):
             'admin.dashboard.dashboard'
         ]
         logger.debug(f"Validating required routes: {required_routes}")
-        validate_blueprint_routes(app, required_routes)
+        validate_blueprint_routes(admin_bp, required_routes)
         
         _admin_blueprints_registered = True
     except Exception as e:
