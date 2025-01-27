@@ -59,6 +59,14 @@ def logged_in_admin(client, db_session):
     yield client
 
 @pytest.fixture
+def organization_data():
+    return {
+        'name': 'Test Organization',
+        'description': 'Test Description',
+        'homepage_url': 'http://test.org'
+    }
+
+@pytest.fixture
 def stipend_data():
     return {
         'name': 'Test Stipend',
@@ -71,3 +79,4 @@ def stipend_data():
         'organization_id': 1,
         'open_for_applications': True
     }
+}
