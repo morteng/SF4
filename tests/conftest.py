@@ -79,4 +79,3 @@ def stipend_data():
         'organization_id': 1,
         'open_for_applications': True
     }
-}
