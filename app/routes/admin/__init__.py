@@ -166,6 +166,10 @@ def register_admin_blueprints(app):
     except Exception as e:
         logger.error(f"Failed to register admin blueprints: {str(e)}")
         raise
+
+# Export the admin blueprint
+admin_bp = create_admin_blueprint()
+
 from flask import abort
 from functools import wraps
 from flask_login import current_user

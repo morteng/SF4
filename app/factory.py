@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from flask_wtf.csrf import CSRFError
 from app.routes import register_blueprints
-from app.routes.admin import register_admin_blueprints
+from app.routes.admin import admin_bp
 from app.extensions import db, login_manager, migrate, csrf, limiter, init_extensions
 
 class Config:
@@ -37,7 +37,7 @@ def create_app(config_name='development'):
     
     # Register blueprints
     register_blueprints(app)
-    register_admin_blueprints(app)
+    app.register_blueprint(admin_bp)
     
     # Error handlers
     @app.errorhandler(CSRFError)
