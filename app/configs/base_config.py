@@ -21,6 +21,12 @@ class BaseConfig(Config):
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
     
+    # Directory Structure
+    ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    LOGS_PATH = os.path.join(ROOT_PATH, 'logs')
+    UPLOAD_FOLDER = os.path.join(ROOT_PATH, 'uploads')
+    DOWNLOAD_FOLDER = os.path.join(ROOT_PATH, 'downloads')
+    
     # Logging Configuration
     LOGGING = {
         'version': 1,
@@ -63,12 +69,6 @@ class BaseConfig(Config):
     SECRET_KEY = os.getenv('SECRET_KEY', os.urandom(24))
     CSRF_ENABLED = True
     CSRF_SECRET = os.getenv('CSRF_SECRET', os.urandom(24))
-    
-    # Directory Structure
-    ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    LOGS_PATH = os.path.join(ROOT_PATH, 'logs')
-    UPLOAD_FOLDER = os.path.join(ROOT_PATH, 'uploads')
-    DOWNLOAD_FOLDER = os.path.join(ROOT_PATH, 'downloads')
     
     # Initialize paths
     def __init__(self, root_path=None):
