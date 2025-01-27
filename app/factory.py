@@ -3,7 +3,6 @@ from app.models import db
 from flask_wtf.csrf import CSRFError
 from app.routes import register_blueprints
 from app.routes.admin import register_admin_blueprints
-from app.config import config_by_name  # Added import
 
 def create_app(config_name='development'):
     app = Flask(__name__)
