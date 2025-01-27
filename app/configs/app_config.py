@@ -5,6 +5,7 @@ class BaseConfig(Config):
     JSONIFY_PRETTYPRINT_REGULAR = True
     BUNDLE_ERRORS = True
     MAX_CONTENT_LENGTH = 25 * 1024 * 1024  # 25MB
+    ROOT_PATH = None  # Will be set during app creation
     
     def init_app(self, app):
         """Base configuration initialization"""

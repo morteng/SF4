@@ -2,6 +2,9 @@ from flask import Flask
 from app.configs import BaseConfig, DevelopmentConfig, ProductionConfig, TestingConfig
 from app.extensions import db, mail, login_manager, migrate, csrf
 from app.routes.admin import register_admin_blueprints
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from flask_limiter.storage import RedisStorage
 
 def create_app(config_name='development'):
     app = Flask(__name__)
@@ -40,10 +43,6 @@ def create_app(config_name='development'):
         logging.config.dictConfig(app.config['LOGGING'])
     
     # Initialize Flask-Limiter with Redis storage
-    from flask_limiter import Limiter
-    from flask_limiter.util import get_remote_address
-    from flask_limiter.storage import RedisStorage
-    
     limiter = Limiter(
         key_func=get_remote_address,
         storage=RedisStorage(
