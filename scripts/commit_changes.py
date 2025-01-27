@@ -4,9 +4,6 @@ from pathlib import Path
 import sys
 from logging_config import configure_logging
 
-def configure_logging(app):
-    configure_logging(app)
-
 def commit_changes(message, push=False):
     """Final deployment commit with force add"""
     # Force add all changes

@@ -20,6 +20,12 @@ def create_app(config_name='development'):
     else:
         raise ValueError(f'Invalid config name: {config_name}')
     
+    # Ensure LOG_PATH is set
+    app.config.setdefault('LOG_PATH', os.path.join(
+        app.instance_path or '',
+        'logs/app.log'
+    ))
+    
     # Initialize logging
     configure_logging(app)
     
