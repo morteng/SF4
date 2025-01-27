@@ -131,3 +131,26 @@ def logged_in_admin(client, db_session):
         'password': 'testpass'
     })
     return client
+
+@pytest.fixture
+def logged_in_client(client, db_session):
+    """Fixture to log in as regular user"""
+    from app.models.user import User
+    from werkzeug.security import generate_password_hash
+
+    # Create regular user
+    user = User(
+        username='clientuser',
+        email='client@example.com',
+        password_hash=generate_password_hash('testpass'),
+        is_admin=False
+    )
+    db_session.add(user)
+    db_session.commit()
+
+    # Log in as client
+    client.post('/login', data={
+        'username': 'clientuser',
+        'password': 'testpass'
+    })
+    return client
