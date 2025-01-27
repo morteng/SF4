@@ -1,28 +1,11 @@
-from .tag import Tag
-from .stipend import Stipend
-from .user import User
-from .bot import Bot
-from .notification import Notification
-from .organization import Organization
-from .audit_log import AuditLog
+from sqlalchemy import declarative_base
 
-def init_models(app):
-    """Initialize models with proper relationship mapping"""
-    from app.extensions import db
-    
-    # Ensure all models are imported before creating tables
-    with app.app_context():
-        # Configure mapper relationships
-        Tag.stipends = db.relationship(
-            'Stipend',
-            secondary='stipend_tag_association',
-            back_populates='tags'
-        )
-        
-        Stipend.tags = db.relationship(
-            'Tag',
-            secondary='stipend_tag_association',
-            back_populates='stipends'
-        )
-        
-        db.create_all()
+# Create the base class for declarative models
+db = declarative_base()
+
+# Import your models here
+from .tag import Tag
+from .user import User
+from .audit_log import AuditLog
+from .notification import Notification
+from .stipend import Stipend
