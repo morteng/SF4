@@ -45,11 +45,18 @@ class BaseConfig(Config):
     DOWNLOAD_FOLDER = os.path.join(ROOT_PATH, 'downloads')
     
     # Initialize paths
-    def __init__(self):
-        import logging
-        if not os.path.exists(self.LOGS_PATH):
-            os.makedirs(self.LOGS_PATH)
-        if not os.path.exists(self.UPLOAD_FOLDER):
-            os.makedirs(self.UPLOAD_FOLDER)
-        if not os.path.exists(self.DOWNLOAD_FOLDER):
-            os.makedirs(self.DOWNLOAD_FOLDER)
+    def __init__(self, root_path=None):
+        super().__init__()
+        self.root_path = root_path
+        if not hasattr(self, 'ROOT_PATH'):
+            self.ROOT_PATH = self.root_path or os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        
+        # Initialize paths
+        self.LOGS_PATH = os.path.join(self.ROOT_PATH, 'logs')
+        self.UPLOAD_FOLDER = os.path.join(self.ROOT_PATH, 'uploads')
+        self.DOWNLOAD_FOLDER = os.path.join(self.ROOT_PATH, 'downloads')
+        
+        # Create directories if they don't exist
+        for path in [self.LOGS_PATH, self.UPLOAD_FOLDER, self.DOWNLOAD_FOLDER]:
+            if not os.path.exists(path):
+                os.makedirs(path)
