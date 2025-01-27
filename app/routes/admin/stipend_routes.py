@@ -26,7 +26,7 @@ class StipendController(BaseCrudController):
         return super().create()
 
     def edit(self, id):
-        entity = self.service.get_by_id(id)
+        entity = self.service.get(id)
         form = self.form_class(obj=entity)
         form.organization_id.choices = [(org.id, org.name) for org in Organization.query.all()]
         return super().edit(id)

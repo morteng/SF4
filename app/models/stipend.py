@@ -1,52 +1,14 @@
+from app.models.base import Base
+from app.models import db
+from datetime import datetime
 import logging
-from .association_tables import stipend_tag_association, organization_stipends
-from app.extensions import db
-from .organization import Organization
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy import JSON  # Add this import
 
 logger = logging.getLogger(__name__)
-from datetime import datetime, timezone
-from dateutil.parser import parse
-from dateutil.relativedelta import relativedelta
 
-def parse_flexible_date(date_str):
-    """Parse flexible date formats into datetime objects"""
-    if not date_str:
-        return None
+class Stipend(Base):
+    __tablename__ = 'stipend'
     
-    try:
-        # Try parsing as full datetime first
-        dt = parse(date_str)
-        
-        # Handle vague descriptions like "in August"
-        if 'in ' in date_str.lower():
-            month = date_str.lower().split('in ')[1].strip()
-            dt = parse(month)
-            # Set to end of month if only month is specified
-            dt = dt + relativedelta(day=31)
-            
-        # Handle month/year format
-        elif len(date_str.split()) == 2 and not date_str[-1].isdigit():
-            dt = parse(date_str)
-            dt = dt + relativedelta(day=31)
-            
-        # Handle year only
-        elif len(date_str) == 4 and date_str.isdigit():
-            dt = parse(date_str)
-            dt = dt + relativedelta(month=12, day=31)
-            
-        # Validate the parsed date
-        if dt.year < 1900 or dt.year > 2100:
-            return None
-            
-        return dt.replace(tzinfo=timezone.utc)
-    except ValueError:
-        return None
-
-class Stipend(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    REQUIRED_FIELDS = ['name']  # Only name is required per management directive
     name = db.Column(db.String(100), nullable=False, unique=True)
     summary = db.Column(db.Text, nullable=True)
     description = db.Column(db.Text, nullable=True)
@@ -58,48 +20,15 @@ class Stipend(db.Model):
     organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'), nullable=True)
     organization = db.relationship('Organization', backref=db.backref('stipends', lazy=True))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
-    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
-    __mapper_args__ = {"confirm_deleted_rows": False}
-
-    @staticmethod
-    def create(data, user_id=None):
-        """Create stipend with only name required per management directive"""
-        try:
-            from app.services.stipend_service import StipendService
-            service = StipendService()
-            
-            # Validate only required field
-            if 'name' not in data or not data['name']:
-                raise ValueError("Name is required")
-                
-            # Set defaults for optional fields
-            data.setdefault('summary', '')
-            data.setdefault('description', '')
-            data.setdefault('homepage_url', '')
-            data.setdefault('organization_id', None)
-            data.setdefault('tags', [])
-            data.setdefault('application_procedure', '')
-            data.setdefault('eligibility_criteria', '')
-            data.setdefault('application_deadline', None)
-            data.setdefault('open_for_applications', True)
-            
-            # Create the stipend
-            result = service.create(data, user_id)
-            logger.info(f"Stipend created successfully: {result.id}")
-            return result
-        except Exception as e:
-            logger.error(f"Error creating stipend: {str(e)}")
-            raise
-
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), 
+                           onupdate=db.func.current_timestamp(), nullable=False)
+    
     def update(self, data, user_id=None):
-        """Update stipend fields with audit logging and validation"""
-        from app.services.stipend_service import StipendService
-        service = StipendService()
-        
+        """Update stipend fields"""
         try:
             # Handle tags separately
-            tags = data.pop('tags', None)
-            if tags is not None:
+            if 'tags' in data:
+                tags = data.pop('tags')
                 from app.models.tag import Tag
                 self.tags = [Tag.query.get(tag_id) for tag_id in tags]
             
@@ -114,13 +43,6 @@ class Stipend(db.Model):
             db.session.rollback()
             logger.error(f"Error updating stipend {self.id}: {str(e)}")
             raise
-
-    @staticmethod
-    def delete(stipend_id, user_id=None):
-        """Delete a stipend with audit logging"""
-        from app.services.stipend_service import StipendService
-        service = StipendService()
-        return service.delete(stipend_id, user_id=user_id)
 
     def __init__(self, **kwargs):
         # Initialize tags properly
@@ -177,7 +99,7 @@ class Stipend(db.Model):
             'updated_at': self.updated_at.isoformat(),
             'is_active': self.open_for_applications and (
                 not self.application_deadline or 
-                self.application_deadline.replace(tzinfo=timezone.utc) > datetime.now(timezone.utc)
+                self.application_deadline.replace(tzinfo=datetime.utcnow().tzinfo) > datetime.now(datetime.utcnow().tzinfo)
             )
         }
 
