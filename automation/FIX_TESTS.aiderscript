@@ -1,0 +1,15 @@
+### EDITABLE AREA STARTS ###
+/run pytest
+/ask how can we fix this issue?
+/architect implement suggested changes.
+
+/run pytest
+/ask how can we fix this issue?
+/architect implement suggested changes.
+### EDITABLE AREA ENDS ###
+
+/add automation/FIX_TESTS.aiderscript
+/code this has been a run of the script file FIX_TESTS.aiderscript. Given the results, make eny adits you need to the script file, changing only the section defined as editable. If you need to run any code or console commands, prepend them with /run. If you need to run any code, first create the script in scripts/ folder, then run it next iteration with /run python scripts/myscript.py.
+
+/reset
+/load automation/FIX_TESTS.aiderscript
