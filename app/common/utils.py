@@ -5,6 +5,7 @@ from app.constants import FlashMessages
 from wtforms.validators import ValidationError
 
 from flask import Blueprint, current_app
+from app.extensions import db
 
 logger = logging.getLogger(__name__)
 
@@ -149,4 +150,3 @@ def validate_application_deadline(field):
             0 <= field.data.minute <= 59 and 
             0 <= field.data.second <= 59):
         raise ValidationError(FlashMessages.INVALID_TIME_COMPONENTS)
-

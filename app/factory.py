@@ -2,25 +2,7 @@ from flask import Flask
 from flask_wtf.csrf import CSRFError
 from app.routes import register_blueprints
 from app.routes.admin import register_admin_blueprints
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy import SQLAlchemy
-import os
-
-# Initialize SQLAlchemy
-db = None
-
-def init_db():
-    global db
-    db = SQLAlchemy()
-    return db
-
-# Create a configured "Session" class
-engine = create_engine('sqlite:///stipend.db')
-Session = sessionmaker(bind=engine)
-db_session = Session()
-Base = declarative_base()
+from app.extensions import db
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(24)
@@ -50,7 +32,6 @@ def create_app(config_name='development'):
     app.debug = app.config.get('DEBUG', False)
 
     # Initialize extensions
-    db = init_db()
     db.init_app(app)
     
     # Register blueprints
