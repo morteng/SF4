@@ -1,5 +1,5 @@
 import pytest
-from app import create_app, db
+from app.factory import create_app
 from app.models.organization import Organization
 from app.models.user import User
 from app.models.stipend import Stipend
