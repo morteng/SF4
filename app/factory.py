@@ -23,22 +23,12 @@ def create_app(config_name='development'):
     load_dotenv()
 
     try:
-        # Initialize extensions in proper order
-        if not hasattr(app, 'extensions'):
-            app.extensions = {}
-            
         # Initialize database first
-        from app.extensions import db
         db.init_app(app)
         
-        # Then initialize migrations
-        from flask_migrate import Migrate
-        migrate = Migrate()
-        migrate.init_app(app, db)
-        
-        # Initialize other extensions
+        # Then initialize other extensions
         init_extensions(app)
-            
+        
         # Initialize Flask-Migrate
         from flask_migrate import Migrate
         migrate = Migrate()
