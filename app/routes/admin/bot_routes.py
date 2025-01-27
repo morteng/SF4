@@ -13,6 +13,8 @@ from app.extensions import db
 from app.utils import calculate_next_run
 from app.constants import FlashMessages, FlashCategory
 
+admin_bot_bp = Blueprint('bot_admin', __name__, url_prefix='/admin/bots')
+
 bot_controller = AdminBaseController(
     service=BotService(),
     entity_name='bot',
