@@ -23,10 +23,10 @@ def app():
     
     # Initialize database with the app if not already initialized
     with app.app_context():
+        db.init_app(app)  # Initialize the db with the app
         db.create_all()
-        yield app
-        db.session.remove()
-        db.drop_all()
+        yield app  # Yield the app after creating it
+        db.drop_all()  # Clean up after tests
 
 @pytest.fixture(scope="function")
 def client(app):
