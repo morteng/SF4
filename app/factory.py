@@ -1,9 +1,5 @@
 from flask import Flask
-from flask_wtf.csrf import CSRFError
-from app.routes import register_blueprints
-from app.routes.admin import admin_bp
-from app.extensions import db, login_manager, migrate, csrf, limiter, init_extensions
-from app.configs import DevelopmentConfig, ProductionConfig, TestingConfig
+from app.configs import BaseConfig, DevelopmentConfig, ProductionConfig, TestingConfig
 
 def create_app(config_name='development'):
     app = Flask(__name__)
