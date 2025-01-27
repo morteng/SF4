@@ -1,5 +1,4 @@
 ### EDITABLE AREA STARTS ###
-
 /run pytest -v
 /ask how can we fix this issue? Is there any duplicated code or functionality we can consolidate?
 /architect implement suggested changes.
@@ -9,9 +8,3 @@
 /architect implement suggested changes.
 
 ### EDITABLE AREA ENDS ###
-
-/add automation\FIX_TESTS.aiderscript
-/architect this has been a run of the script file FIX_TESTS.aiderscript. Given the results, make eny adits you need to the script file, changing only the section defined as editable (between editable area starts and editable area ends). If you need to run any console commands, prepend them with /run. This is a windows 10 machine, you are running in a powershell. If you need to run any code, first create the script in scripts/ folder, then run it next iteration with /run python scripts/myscript.py.
-
-/reset
-/load automation\FIX_TESTS.aiderscript
