@@ -2,6 +2,7 @@ from flask import Config
 import os
 from flask_mail import Mail
 import logging
+from .logging import LOGGING
 
 class BaseConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -17,34 +18,7 @@ class BaseConfig(Config):
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
     
     # Logging configuration
-    LOGGING = {
-        'version': 1,
-        'formatters': {
-            'default': {
-                'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-            }
-        },
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-                'level': 'DEBUG',
-                'formatter': 'default'
-            },
-            'file': {
-                'class': 'logging.FileHandler',
-                'level': 'WARNING',
-                'formatter': 'default',
-                'filename': 'app.log',
-                'mode': 'a',
-                'maxBytes': 1048576,
-                'backupCount': 3
-            }
-        },
-        'root': {
-            'level': 'INFO',
-            'handlers': ['console', 'file']
-        }
-    }
+    LOGGING = LOGGING
     
     # Flask-Limiter configuration
     RATE_LIMIT_GLOBAL = "200 per minute"
