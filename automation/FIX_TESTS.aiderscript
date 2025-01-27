@@ -1,7 +1,6 @@
 /add automation\MEMORY_BANK.md
 
 ### EDITABLE AREA STARTS ###
-Iteration: 7
 
 /run pytest -v
 /ask how can we fix this issue? Is there any duplicated code or functionality we can consolidate? Could any big files benefit from being modularized to improve maintainability?
@@ -12,9 +11,9 @@ Iteration: 7
 
 ### DO NOT CHANGE ANYTHING BELOW THIS LINE! ###
 /add automation\FIX_TESTS.aiderscript
-/architect this has been a run of the script file FIX_TESTS.aiderscript. It will now reset and restart. Given the results of this run, make any adits you need to the script file in preperation for the next run, changing only the section defined as editable (between editable area starts and editable area ends). Increase the iteration number by 1. If you need to run any console commands, prepend them with /run. This is a windows 10 machine, you are running in a powershell. If you need to run any code, first create the script in scripts/ folder, then run it next iteration with /run python scripts/myscript.py. 
+/architect this has been a run of the script file FIX_TESTS.aiderscript. Given the results of this run, make any adits you need to the script file in preperation for the next run, changing only the section defined as editable (between editable area starts and editable area ends). If you need to run any console commands, prepend them with /run. This is a windows 10 machine, you are running in a powershell. If you need to run any code, first create the script in scripts/ folder, then run it next iteration with /run python scripts/myscript.py. 
 
-/code Update your memory bank with any information you need in the next run. Remove older memories from the memory bank that are no longer needed.
+/code Update the memory bank with any information you need in the next run, documenting current state. The memory context will reset before next iteration. Remove older memories from the memory bank that are no longer needed.
 
 /reset
 /load automation\FIX_TESTS.aiderscript
