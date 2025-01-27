@@ -132,16 +132,40 @@ def register_admin_blueprints(app):
         from .tag_routes import admin_tag_bp
         
         # Register blueprints with debug logging
-        admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends', endpoint='admin_stipend')
+        admin_bp.register_blueprint(
+            admin_stipend_bp,
+            url_prefix='/stipends',
+            endpoint='admin_stipend'
+        )
         logger.debug(f"Registered stipend blueprint: {admin_stipend_bp.name}")
         
-        admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
+        admin_bp.register_blueprint(
+            admin_dashboard_bp,
+            url_prefix='/dashboard',
+            endpoint='admin_dashboard'
+        )
         logger.debug(f"Registered dashboard blueprint: {admin_dashboard_bp.name}")
         
-        admin_bp.register_blueprint(admin_user_bp, url_prefix='/users')
-        admin_bp.register_blueprint(admin_bot_bp, url_prefix='/bots')
-        admin_bp.register_blueprint(admin_org_bp, url_prefix='/organizations')
-        admin_bp.register_blueprint(admin_tag_bp, url_prefix='/tags')
+        admin_bp.register_blueprint(
+            admin_user_bp,
+            url_prefix='/users',
+            endpoint='admin_user'
+        )
+        admin_bp.register_blueprint(
+            admin_bot_bp,
+            url_prefix='/bots',
+            endpoint='admin_bot'
+        )
+        admin_bp.register_blueprint(
+            admin_org_bp,
+            url_prefix='/organizations',
+            endpoint='admin_organization'
+        )
+        admin_bp.register_blueprint(
+            admin_tag_bp,
+            url_prefix='/tags',
+            endpoint='admin_tag'
+        )
         
         # Register admin blueprint with app
         app.register_blueprint(admin_bp)
@@ -155,8 +179,8 @@ def register_admin_blueprints(app):
         
         # Validate required routes
         required_routes = [
-            'admin.admin_stipend.create',
-            'admin.dashboard.dashboard'
+            'admin_stipend.create',
+            'admin_dashboard.dashboard'
         ]
         logger.debug(f"Validating required routes: {required_routes}")
         validate_blueprint_routes(admin_bp, required_routes)
