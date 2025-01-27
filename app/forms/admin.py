@@ -2,7 +2,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import (
-    HiddenField, SelectField, SelectMultipleField
+    HiddenField, SelectField, SelectMultipleField, SubmitField
 )
 from app.models.organization import Organization
 from app.models.tag import Tag
