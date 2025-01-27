@@ -1,6 +1,6 @@
 import pytest
 from flask import Flask
-from app.forms.admin import OrganizationForm
+from app.forms.organization_form import OrganizationForm
 from app.config import TestConfig
 from app.extensions import db
 

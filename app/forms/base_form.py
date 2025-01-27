@@ -1,6 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import Field, ValidationError
-from app.constants import FlashMessages
+from wtforms import SubmitField
 
 class BaseForm(FlaskForm):
     """Base form class with common functionality"""
