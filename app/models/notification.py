@@ -1,5 +1,4 @@
-from app.models import Base
-from app.extensions import db
+from app.database import db, Base
 from datetime import datetime
 from sqlalchemy import ForeignKey
 from app.common.enums import NotificationType, NotificationPriority

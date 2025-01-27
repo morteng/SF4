@@ -1,4 +1,4 @@
-from app.extensions import Base, db
+from app.database import Base, db
 from app.models.organization import Organization
 from app.models.user import User
 from app.models.stipend import Stipend
