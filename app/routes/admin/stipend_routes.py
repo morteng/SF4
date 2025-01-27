@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, url_for, render_template, request, jsonify, flash
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
-from app.controllers.base_route_controller import BaseRouteController
+from app.controllers.base_crud_controller import BaseCrudController
 from app.services.stipend_service import StipendService
 from app.forms.admin_forms import StipendForm
 from app.utils import admin_required
@@ -9,10 +9,9 @@ from app.models import Stipend, Organization, Tag
 from app.constants import FlashMessages, FlashCategory
 from app.extensions import db, limiter
 
-# Create blueprint with enhanced error handling
 admin_stipend_bp = Blueprint('admin_stipend', __name__, url_prefix='/stipends')
 
-class StipendController(BaseRouteController):
+class StipendController(BaseCrudController):
     def __init__(self):
         super().__init__(
             service=StipendService(),
@@ -23,14 +22,12 @@ class StipendController(BaseRouteController):
 
     def create(self):
         form = self.form_class()
-        # Pre-populate organization choices
         form.organization_id.choices = [(org.id, org.name) for org in Organization.query.all()]
         return super().create()
 
     def edit(self, id):
         entity = self.service.get_by_id(id)
         form = self.form_class(obj=entity)
-        # Pre-populate organization choices
         form.organization_id.choices = [(org.id, org.name) for org in Organization.query.all()]
         return super().edit(id)
 
