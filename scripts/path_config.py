@@ -14,7 +14,6 @@ def get_project_root():
     
     raise RuntimeError(f"Project root not found. Checked: {markers}")
 
-
 def configure_paths(production=False, verify=False):
     """Enhanced path configuration with proper error handling."""
     try:
