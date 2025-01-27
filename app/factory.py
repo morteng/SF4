@@ -1,6 +1,6 @@
 from flask import Flask
 from app.configs import BaseConfig, DevelopmentConfig, ProductionConfig, TestingConfig
-from app.extensions import db, mail, login_manager, migrate, csrf, limiter
+from app.extensions import db, mail, login_manager, migrate, csrf, limiter, init_extensions
 from app.blueprints import admin_bp
 from flask_talisman import Talisman
 from flask_limiter import Limiter
