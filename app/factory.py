@@ -35,4 +35,27 @@ def create_app(config_name='development'):
     def page_not_found(e):
         return {'error': 'Page not found'}, 404
 
+    # Initialize logging
+    if app.config.get('LOGGING'):
+        import logging.config
+        logging.config.dictConfig(app.config['LOGGING'])
+    
+    # Initialize Flask-Limiter with Redis storage
+    from flask_limiter import Limiter
+    from flask_limiter.util import get_remote_address
+    from flask_limiter.storage import RedisStorage
+    
+    limiter = Limiter(
+        app=app,
+        key_func=get_remote_address,
+        storage=RedisStorage(
+            host='localhost',
+            port=6379,
+            db=0,
+            prefix='flask-limiter'
+        ),
+        default_limits=['200 per minute']
+    )
+    app.limiter = limiter
+
     return app
