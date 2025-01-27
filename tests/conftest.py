@@ -56,6 +56,12 @@ def extract_csrf_token(response_data):
     return response_data.find('name="csrf_token"').find('value="') + 7
 
 @pytest.fixture
+def get_all_tags(db_session):
+    """Fixture to get all tags from the database"""
+    from app.models.tag import Tag
+    return db_session.query(Tag).all()
+
+@pytest.fixture
 def stipend_data(db_session):
     """Fixture providing base stipend data"""
     org = Organization(name="Test Org", description="Test Description")
