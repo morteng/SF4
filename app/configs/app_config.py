@@ -1,4 +1,6 @@
 from flask import Config
+import os
+from pathlib import Path
 
 class BaseConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
