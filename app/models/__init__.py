@@ -11,5 +11,6 @@ __all__ = [
     'Notification',
     'AuditLog',
     'Tag',
-    'Bot'
+    'Bot',
+    'Organization'
 ]
