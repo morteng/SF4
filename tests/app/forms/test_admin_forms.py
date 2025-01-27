@@ -1,8 +1,10 @@
+"""Tests for admin forms"""
+
 import pytest
 from flask import Flask
 from app.configs.testing import TestingConfig
 from app.extensions import db
-from app.forms.admin import OrganizationForm
+from app.forms.admin import OrganizationForm  # Updated import path
 
 @pytest.fixture
 def app():
