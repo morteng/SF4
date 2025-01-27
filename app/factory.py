@@ -1,6 +1,6 @@
 from flask import Flask
 from app.configs import BaseConfig, DevelopmentConfig, ProductionConfig, TestingConfig
-from app.extensions import db, mail, login_manager, migrate, csrf, limiter
+from app.extensions import db, mail, login_manager, migrate, csrf
 from app.routes.admin import register_admin_blueprints
 
 def create_app(config_name='development'):
@@ -21,7 +21,6 @@ def create_app(config_name='development'):
     login_manager.init_app(app)
     migrate.init_app(app, db)
     csrf.init_app(app)
-    limiter.init_app(app)
     
     # Register blueprints
     register_admin_blueprints(app)
@@ -46,7 +45,6 @@ def create_app(config_name='development'):
     from flask_limiter.storage import RedisStorage
     
     limiter = Limiter(
-        app=app,
         key_func=get_remote_address,
         storage=RedisStorage(
             host='localhost',
@@ -56,6 +54,7 @@ def create_app(config_name='development'):
         ),
         default_limits=['200 per minute']
     )
+    limiter.init_app(app)
     app.limiter = limiter
 
     return app
