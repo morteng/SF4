@@ -8,7 +8,7 @@ from flask_limiter.util import get_remote_address
 from flask_cors import CORS
 from flask import jsonify
 from werkzeug.middleware.proxy_fix import ProxyFix
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect, CSRFError
 import logging
 
 def create_app(config_name='development'):
