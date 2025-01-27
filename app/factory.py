@@ -4,51 +4,39 @@ from flask_wtf.csrf import CSRFError
 from app.routes import register_blueprints
 from app.routes.admin import admin_bp
 from app.extensions import db, login_manager, migrate, csrf, limiter, init_extensions
+from app.configs import DevelopmentConfig, ProductionConfig, TestConfig
 
-class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(24)
-    WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or os.urandom(24)
-    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///stipend.db'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    DEBUG = False
-    TESTING = False
+class Factory:
+    def create_app(config_name='development'):
+        app = Flask(__name__)
+        
+        if config_name == 'development':
+            app.config.from_object(DevelopmentConfig())
+        elif config_name == 'production':
+            app.config.from_object(ProductionConfig())
+        elif config_name == 'testing':
+            app.config.from_object(TestConfig())
+        else:
+            raise ValueError('Invalid configuration name')
+            
+        # Initialize extensions
+        init_extensions(app)
+        
+        # Register blueprints
+        register_blueprints(app)
+        app.register_blueprint(admin_bp)
+        
+        # Error handlers
+        @app.errorhandler(CSRFError)
+        def handle_csrf_error(e):
+            return {'error': 'CSRF token missing or invalid'}, 400
 
-class DevelopmentConfig(Config):
-    DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///stipend.db'
-
-class TestingConfig(Config):
-    DEBUG = False
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    WTF_CSRF_ENABLED = True
-
-class ProductionConfig(Config):
-    DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///stipend.db'
-
-def create_app(config_name='development'):
-    app = Flask(__name__)
-    app.config.from_object(config_by_name[config_name])
-    app.debug = app.config.get('DEBUG', False)
-
-    # Initialize extensions
-    init_extensions(app)
-    
-    # Register blueprints
-    register_blueprints(app)
-    app.register_blueprint(admin_bp)
-    
-    # Error handlers
-    @app.errorhandler(CSRFError)
-    def handle_csrf_error(e):
-        return {'error': 'CSRF token missing or invalid'}, 400
-
-    return app
-
-config_by_name = {
-    'development': DevelopmentConfig,
-    'testing': TestingConfig,
-    'production': ProductionConfig,
-    'default': DevelopmentConfig
-}
+        @app.errorhandler(403)
+        def forbidden_page(e):
+            return {'error': 'Forbidden'}, 403
+            
+        @app.errorhandler(404)
+        def page_not_found(e):
+            return {'error': 'Page not found'}, 404
+            
+        return app
