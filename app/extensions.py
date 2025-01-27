@@ -7,6 +7,8 @@ from flask_limiter.util import get_remote_address
 
 # Initialize Flask extensions
 db = SQLAlchemy()
+Base = db.Model  # Add Base definition
+
 login_manager = LoginManager()
 migrate = Migrate(db)
 csrf = CSRFProtect()

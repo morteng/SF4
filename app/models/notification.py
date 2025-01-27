@@ -1,10 +1,10 @@
-from flask import current_app
-from app import db
+from app.models import Base
 from datetime import datetime
 from sqlalchemy import ForeignKey
 from app.common.enums import NotificationType, NotificationPriority
 
-class Notification(db.Model):
+class Notification(Base):
+    __tablename__ = 'notification'
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(255), nullable=False)
     type = db.Column(db.Enum(NotificationType), nullable=False)
