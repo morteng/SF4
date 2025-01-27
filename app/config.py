@@ -1,3 +1,5 @@
+from flask_config import Config
+
 class TestConfig(Config):
     DEBUG = False
     TESTING = True
