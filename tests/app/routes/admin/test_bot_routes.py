@@ -4,8 +4,7 @@ from flask import url_for
 from app.models.bot import Bot
 from app.models.notification import Notification
 from app.constants import FlashMessages, FlashCategory, NotificationType
-from tests.utils import extract_csrf_token  # Fixed import path
-from tests.utils import create_bot_data
+from tests.utils import extract_csrf_token, assert_flash_message, create_bot_data
 
 @pytest.fixture(scope='function')
 def bot_data():
@@ -17,10 +16,10 @@ def test_bot(db_session, bot_data):
     """Provide a test bot."""
     bot = Bot(**bot_data)
     db_session.add(bot)
-    test_bot.db.session.commit()
+    db_session.commit()
     yield bot
     db_session.delete(bot)
-    test_bot.db.session.commit()
+    db_session.commit()
 
 def test_create_bot_route(logged_in_admin, bot_data):
     create_response = logged_in_admin.get(url_for('admin.bot.create'))
@@ -55,7 +54,6 @@ def test_create_bot_route_with_invalid_data(logged_in_admin, bot_data):
     assert response.status_code == 400
     bots = Bot.query.all()
     assert not any(bot.name == '' for bot in bots)  # Ensure no bot with an empty name was created
-    # Assert the flash message using constants
     assert_flash_message(response, FlashMessages.CREATE_BOT_INVALID_DATA)
 
 def test_update_bot_route(logged_in_admin, test_bot, db_session):
@@ -66,20 +64,19 @@ def test_update_bot_route(logged_in_admin, test_bot, db_session):
     updated_data = {
         'name': 'Updated Bot Name',
         'description': test_bot.description,
-        'status': 'true' if test_bot.status else 'false',  # Convert boolean to string
+        'status': 'true' if test_bot.status else 'false',
         'csrf_token': csrf_token
     }
     response = logged_in_admin.post(url_for('admin.bot.edit', id=test_bot.id), data={
         'name': updated_data['name'],
         'description': updated_data['description'],
-        'status': updated_data['status'],  # Directly pass the value
+        'status': updated_data['status'],
         'csrf_token': csrf_token
     }, follow_redirects=True)
 
     assert response.status_code == 200
-    updated_bot = db_session.get(Bot, test_bot.id)  # Use db_session.get to retrieve the bot
+    updated_bot = db_session.get(Bot, test_bot.id)
     assert updated_bot.name == 'Updated Bot Name'
-    # Assert the flash message using constants
     assert_flash_message(response, FlashMessages.UPDATE_BOT_SUCCESS)
 
 def test_update_bot_route_with_invalid_id(logged_in_admin):
@@ -88,18 +85,15 @@ def test_update_bot_route_with_invalid_id(logged_in_admin):
     assert url_for('admin.bot.index', _external=False) == update_response.headers['Location']
 
 def test_delete_bot_route(logged_in_admin, test_bot, db_session):
-    # Perform the DELETE operation
     delete_response = logged_in_admin.post(
         url_for('admin.bot.delete', id=test_bot.id),
-        follow_redirects=True  # Follow the redirect to capture flash messages
+        follow_redirects=True
     )
-    assert delete_response.status_code == 200  # After following redirects, status should be 200
+    assert delete_response.status_code == 200
     
-    # Ensure the bot is no longer in the session after deleting
     db_session.expire_all()
     updated_bot = db_session.get(Bot, test_bot.id)
     assert updated_bot is None
-    # Assert the flash message using constants
     assert_flash_message(delete_response, FlashMessages.DELETE_BOT_SUCCESS)
 
 def test_delete_bot_route_with_invalid_id(logged_in_admin):
@@ -108,13 +102,11 @@ def test_delete_bot_route_with_invalid_id(logged_in_admin):
     assert url_for('admin.bot.index', _external=False) == delete_response.headers['Location']
 
 def test_run_bot_success(logged_in_admin, test_bot, db_session, mocker):
-    # Mock bot execution
     mock_bot = mocker.MagicMock()
     mock_bot.status = 'completed'
     mock_bot.error_log = None
     mock_bot.run = mocker.MagicMock()
     
-    # Patch bot creation
     mocker.patch('bots.tag_bot.TagBot', return_value=mock_bot)
     
     response = logged_in_admin.post(url_for('admin.bot.run', id=test_bot.id))
@@ -122,22 +114,18 @@ def test_run_bot_success(logged_in_admin, test_bot, db_session, mocker):
     assert response.status_code == 302
     assert url_for('admin.bot.index', _external=False) == response.headers['Location']
     
-    # Verify bot status was updated
     updated_bot = db_session.get(Bot, test_bot.id)
     assert updated_bot.status == 'completed'
     assert updated_bot.last_run is not None
     
-    # Verify notification was created
     notification = Notification.query.filter_by(type=NotificationType.BOT_SUCCESS).first()
     assert notification is not None
     assert test_bot.name in notification.message
 
 def test_run_bot_failure(logged_in_admin, test_bot, db_session, mocker):
-    # Mock bot execution to raise an error
     mock_bot = mocker.MagicMock()
     mock_bot.run = mocker.MagicMock(side_effect=Exception("Test error"))
     
-    # Patch bot creation
     mocker.patch('bots.tag_bot.TagBot', return_value=mock_bot)
     
     response = logged_in_admin.post(url_for('admin.bot.run', id=test_bot.id))
@@ -145,17 +133,15 @@ def test_run_bot_failure(logged_in_admin, test_bot, db_session, mocker):
     assert response.status_code == 302
     assert url_for('admin.bot.index', _external=False) == response.headers['Location']
     
-    # Verify bot status was updated
     updated_bot = db_session.get(Bot, test_bot.id)
     assert updated_bot.status == 'error'
     assert updated_bot.error_log == "Test error"
     
-    # Verify notification was created
     notification = Notification.query.filter_by(type=NotificationType.BOT_ERROR).first()
     assert notification is not None
     assert "error" in notification.message.lower()
 
-def test_run_bot_unknown_type(logged_in_admin, test_bot):
+def test_run_bot_unknown_type(logged_in_admin, test_bot, db_session):
     test_bot.name = 'UnknownBot'
     db_session.commit()
     
