@@ -23,6 +23,7 @@ def app():
     
     # Initialize database with the app if not already initialized
     with app.app_context():
+        db.create_all()
         yield app  # Yield the app after creating it
         db.drop_all()  # Clean up after tests
 
