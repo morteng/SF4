@@ -3,7 +3,6 @@ from flask_migrate import Migrate
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import CSRFProtect
-from app.models import db
 
 login_manager = LoginManager()
 migrate = Migrate(compare_type=True)
@@ -20,6 +19,7 @@ def init_extensions(app):
     app.extensions['limiter'] = limiter
     
     # Initialize database with SQLite batch mode
+    from app.database import db
     db.init_app(app)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     migrate.init_app(app, db, render_as_batch=True, compare_type=True)
