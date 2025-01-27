@@ -4,8 +4,7 @@ from flask_wtf.csrf import CSRFError
 from app.routes import register_blueprints
 from app.routes.admin import admin_bp
 from app.extensions import db, login_manager, migrate, csrf, limiter, init_extensions
-from app.configs import DevelopmentConfig, ProductionConfig
-from app.configs.testing import TestingConfig
+from app.configs import DevelopmentConfig, ProductionConfig, TestingConfig
 
 def create_app(config_name='development'):
     app = Flask(__name__)
@@ -13,9 +12,9 @@ def create_app(config_name='development'):
     if config_name == 'development':
         app.config.from_object(DevelopmentConfig())
     elif config_name == 'production':
-        app.config.from_object(ProductionConfig())
+        app.config.from_object(ProductionConfig(app.root_path))
     elif config_name == 'testing':
-        app.config.from_object(TestingConfig())
+        app.config.from_object(TestingConfig(app.root_path))
     else:
         raise ValueError(f'Invalid config name: {config_name}')
 
