@@ -24,13 +24,9 @@ def create_app(config_name='development'):
 
     try:
         # Initialize extensions in proper order
-        # Initialize database first
-        db.init_app(app)
-        
-        # Then initialize other extensions
         init_extensions(app)
         
-        # Initialize Flask-Migrate
+        # Then initialize Flask-Migrate
         from flask_migrate import Migrate
         migrate = Migrate()
         migrate.init_app(app, db)
@@ -64,43 +60,6 @@ def _configure_logging(debug):
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
 
-
-def _init_extensions(app):
-    """Initialize Flask extensions."""
-    # Configure database
-    db.init_app(app)
-    
-    # Configure SQLite-specific settings
-    if app.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite'):
-        engine_options = {
-            'poolclass': 'StaticPool',
-            'connect_args': {'check_same_thread': False}
-        }
-        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = engine_options
-    
-    # Configure login manager
-    login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'
-
-    @login_manager.user_loader
-    def load_user(user_id):
-        try:
-            return User.query.get(int(user_id))
-        except Exception as e:
-            logger.error(f"Error loading user: {str(e)}")
-            return None
-            
-    # Verify database connection using SQLAlchemy 2.0+ API
-    try:
-        with app.app_context():
-            with db.engine.connect() as connection:
-                connection.execute(text('SELECT 1'))
-            logger.info("Database connection verified")
-    except Exception as e:
-        logger.error(f"Database connection failed: {str(e)}")
-        raise RuntimeError(f"Database connection failed: {str(e)}")
-
-
 def _init_database(app):
     """Initialize and verify the database."""
     with app.app_context():
@@ -111,7 +70,6 @@ def _init_database(app):
         except Exception as e:
             logger.error(f"Database connection failed: {str(e)}")
             raise RuntimeError(f"Database connection failed: {str(e)}")
-
 
 def _ensure_admin_user(app):
     """Ensure an admin user exists in the database."""
@@ -140,12 +98,10 @@ def _ensure_admin_user(app):
             # Don't fail the entire app if admin creation fails
             logger.warning("Continuing without admin user creation")
 
-
 def _register_blueprints(app):
     """Register application blueprints."""
     register_admin_blueprints(app)
     register_blueprints(app)
-
 
 def _add_error_handlers(app):
     """Add error handlers to the application."""
@@ -153,7 +109,6 @@ def _add_error_handlers(app):
     def handle_csrf_error(error):
         flash("CSRF token missing or invalid", 'error')
         return redirect(url_for('auth.login'))
-
 
 def _add_context_processors(app):
     """Add context processors to the application."""
