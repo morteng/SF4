@@ -1,6 +1,6 @@
 import pytest
 from flask import Flask
-from app.configs.testing import TestConfig
+from app.configs.testing import TestingConfig
 from app.extensions import db
 from app.forms.admin import OrganizationForm  # Added import
 
@@ -8,7 +8,7 @@ from app.forms.admin import OrganizationForm  # Added import
 def app():
     """Create and configure a new app instance for each test."""
     app = Flask(__name__)
-    app.config.from_object(TestConfig)
+    app.config.from_object(TestingConfig)
     
     # Initialize extensions
     db.init_app(app)
