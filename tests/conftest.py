@@ -21,8 +21,9 @@ def app():
         'WTF_CSRF_ENABLED': False  # Disable CSRF for non-CSRF specific tests
     })
     
-    # Initialize database with the app
-    db.init_app(app)
+    # Initialize database with the app if not already initialized
+    if 'sqlalchemy' not in app.extensions:
+        db.init_app(app)
     
     with app.app_context():
         db.create_all()
