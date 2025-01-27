@@ -4,8 +4,8 @@ from flask import url_for
 from app.models.bot import Bot
 from app.models.notification import Notification
 from app.constants import FlashMessages, FlashCategory, NotificationType
-from tests.conftest import extract_csrf_token
-from tests.utils import assert_flash_message, create_bot_data
+from tests.utils import extract_csrf_token  # Fixed import path
+from tests.utils import create_bot_data
 
 @pytest.fixture(scope='function')
 def bot_data():
