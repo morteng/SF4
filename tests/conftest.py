@@ -79,3 +79,10 @@ def stipend_data():
         'organization_id': 1,
         'open_for_applications': True
     }
+
+@pytest.fixture
+def tag_data():
+    return {
+        'name': 'Test Tag',
+        'category': 'Test Category'
+    }
