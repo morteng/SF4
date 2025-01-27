@@ -21,10 +21,10 @@ class BaseConfig(Config):
         self.MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
         
         # Directory Structure
-        self.ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        self.LOGS_PATH = os.path.join(self.ROOT_PATH, 'logs')
-        self.UPLOAD_FOLDER = os.path.join(self.ROOT_PATH, 'uploads')
-        self.DOWNLOAD_FOLDER = os.path.join(self.ROOT_PATH, 'downloads')
+        self.ROOT_PATH = root_path
+        self.LOGS_PATH = os.path.join(self.ROOT_PATH, 'logs') if self.ROOT_PATH else None
+        self.UPLOAD_FOLDER = os.path.join(self.ROOT_PATH, 'uploads') if self.ROOT_PATH else None
+        self.DOWNLOAD_FOLDER = os.path.join(self.ROOT_PATH, 'downloads') if self.ROOT_PATH else None
         
         # Logging Configuration
         self.LOGGING = {
@@ -44,7 +44,7 @@ class BaseConfig(Config):
                     'class': 'RotatingFileHandler',
                     'level': 'DEBUG',
                     'formatter': 'default',
-                    'filename': os.path.join(self.LOGS_PATH, 'app.log'),
+                    'filename': os.path.join(self.LOGS_PATH, 'app.log') if self.LOGS_PATH else None,
                     'mode': 'a',
                     'maxBytes': 1048576,
                     'backupCount': 3
@@ -70,6 +70,7 @@ class BaseConfig(Config):
         self.CSRF_SECRET = os.getenv('CSRF_SECRET', os.urandom(24))
         
         # Create directories if they don't exist
-        for path in [self.LOGS_PATH, self.UPLOAD_FOLDER, self.DOWNLOAD_FOLDER]:
-            if not os.path.exists(path):
-                os.makedirs(path)
+        if self.ROOT_PATH:
+            for path in [self.LOGS_PATH, self.UPLOAD_FOLDER, self.DOWNLOAD_FOLDER]:
+                if not os.path.exists(path):
+                    os.makedirs(path)

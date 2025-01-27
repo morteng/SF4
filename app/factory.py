@@ -11,11 +11,11 @@ def create_app(config_name='development'):
     app = Flask(__name__, root_path=root_path)
     
     if config_name == 'development':
-        app.config.from_object(DevelopmentConfig())
+        app.config.from_object(DevelopmentConfig(root_path=root_path))
     elif config_name == 'production':
-        app.config.from_object(ProductionConfig())
+        app.config.from_object(ProductionConfig(root_path=root_path))
     elif config_name == 'testing':
-        app.config.from_object(TestingConfig())
+        app.config.from_object(TestingConfig(root_path=root_path))
     else:
         raise ValueError(f'Invalid config name: {config_name}')
     
