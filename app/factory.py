@@ -1,8 +1,16 @@
 from flask import Flask
-from app.models import db
 from flask_wtf.csrf import CSRFError
 from app.routes import register_blueprints
 from app.routes.admin import register_admin_blueprints
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, scoped_session
+
+# Create a configured "Session" class
+engine = create_engine('sqlite:///stipend.db')
+Session = sessionmaker(bind=engine)
+db_session = Session()
+Base = declarative_base()
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(24)
