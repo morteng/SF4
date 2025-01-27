@@ -5,6 +5,7 @@ from app.routes.admin import register_admin_blueprints
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import os
+from logging_config import configure_logging
 
 def create_app(config_name='development'):
     root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -18,6 +19,9 @@ def create_app(config_name='development'):
         app.config.from_object(TestingConfig(root_path=root_path))
     else:
         raise ValueError(f'Invalid config name: {config_name}')
+    
+    # Initialize logging
+    configure_logging(app)
     
     # Initialize extensions
     db.init_app(app)
@@ -38,11 +42,6 @@ def create_app(config_name='development'):
     def page_not_found(e):
         return {'error': 'Page not found'}, 404
 
-    # Initialize logging
-    if app.config.get('LOGGING'):
-        import logging.config
-        logging.config.dictConfig(app.config['LOGGING'])
-    
     # Initialize Flask-Limiter with Redis storage
     limiter = Limiter(
         key_func=get_remote_address,

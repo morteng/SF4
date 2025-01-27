@@ -7,7 +7,7 @@ app.config.from_object(BaseConfig())
 app.config['ROOT_PATH'] = app.root_path
 
 # Initialize logging
-import logging
-logging.config.dictConfig(app.config['LOGGING'])
+from logging_config import configure_logging
+configure_logging(app)
 
 # Initialize extensions and other setup
