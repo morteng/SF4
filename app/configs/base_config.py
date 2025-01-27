@@ -4,6 +4,7 @@ from flask import Config
 class BaseConfig(Config):
     # Directory structure
     ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    LOGS_PATH = os.path.join(ROOT_PATH, 'logs')
     
     # Basic configuration
     SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key-here')
