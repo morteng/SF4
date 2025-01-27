@@ -27,7 +27,7 @@ def db_session(app):
     with app.app_context():
         connection = db.engine.connect()
         transaction = connection.begin()
-        session = db.create_scoped_session(options=dict(bind=connection, binds={}})
+        session = db.create_scoped_session(options=dict(bind=connection, binds={}))
         try:
             yield session
         finally:

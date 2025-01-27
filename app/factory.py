@@ -22,3 +22,10 @@ def create_app(config_name='development'):
         return {'error': 'CSRF token missing or invalid'}, 400
 
     return app
+
+config_by_name = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig,
+    'default': DevelopmentConfig
+}
