@@ -1,9 +1,9 @@
 # MEMORY BANK
 
-Current Iteration: 14
-Previous Runs: 13
+Current Iteration: 15
+Previous Runs: 14
 Script Status: Active
-Context: Implemented base route controller and refactored stipend/tag routes
+Context: Fixed foreign key issue and improved code organization
 Known Issues:
 - Duplicate `init_app` method in TestConfig
 - Pytest warnings about unknown marks
@@ -13,11 +13,10 @@ Known Issues:
 - Duplicate code in route controllers
 
 Recent Changes:
-- Created BaseRouteController to handle common CRUD operations
-- Refactored StipendController and TagController to use base class
-- Standardized route handling and error management
-- Improved flash messaging and user feedback
-- Removed duplicate code in controllers
+- Fixed foreign key reference in Notification model
+- Ensured proper model imports and initialization
+- Updated database configuration
+- Improved error handling in route controllers
 
 Next Steps:
 - Remove duplicate `init_app` method in TestConfig
