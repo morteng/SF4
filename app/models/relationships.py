@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Integer, ForeignKey
+from sqlalchemy import Table, Integer, ForeignKey, Column
 from app.models.base import Base
 
 stipend_tag_association = Table(
