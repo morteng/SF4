@@ -71,6 +71,15 @@ def stipend_data(db_session):
     }
 
 @pytest.fixture
+def organization_data(db_session):
+    """Fixture providing base organization data"""
+    return {
+        'name': 'Test Organization',
+        'description': 'Test Description',
+        'homepage_url': 'http://test.org'
+    }
+
+@pytest.fixture
 def logged_in_admin(client, db_session):
     """Fixture to log in as admin user"""
     from app.models.user import User
