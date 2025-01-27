@@ -12,7 +12,7 @@ from scripts.archive_logs import archive_logs
 from scripts.init_logging import configure_logging
 
 # Current version
-__version__ = "1.2.5"
+__version__ = "0.2.0"
 
 # Configure logger at module level
 logger = logging.getLogger(__name__)
