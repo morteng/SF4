@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_mail import Mail
 
 # Initialize Flask extensions
 db = SQLAlchemy()
@@ -12,6 +13,7 @@ Base = db.Model  # Add Base definition
 login_manager = LoginManager()
 migrate = Migrate(db)
 csrf = CSRFProtect()
+mail = Mail()
 limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"]
@@ -24,6 +26,7 @@ def init_extensions(app):
     limiter.init_app(app)
     limiter.storage_uri = "memory://"  # Required for Windows compatibility
     csrf.init_app(app)
+    mail.init_app(app)
     app.extensions['limiter'] = limiter
     
     # Initialize database

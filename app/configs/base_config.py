@@ -1,12 +1,20 @@
 from flask import Config
 import logging
+import os
 from logging.handlers import RotatingFileHandler
+from flask_mail import Mail
 
 class BaseConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JSONIFY_PRETTYPRINT_REGULAR = True
     BUNDLE_ERRORS = True
     MAX_CONTENT_LENGTH = 25 * 1024 * 1024  # 25MB
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
     
     def __init__(self, root_path):
         super().__init__()

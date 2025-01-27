@@ -1,6 +1,6 @@
 from flask import Flask
 from app.configs import BaseConfig, DevelopmentConfig, ProductionConfig, TestingConfig
-from app.extensions import db, mail
+from app.extensions import db, mail, login_manager, migrate, csrf, limiter
 from app.blueprints import admin_bp
 from flask_talisman import Talisman
 from flask_limiter import Limiter
@@ -24,18 +24,7 @@ def create_app(config_name='development'):
         raise ValueError(f'Invalid config name: {config_name}')
 
     # Initialize extensions
-    db.init_app(app)
-    mail.init_app(app)
-    Talisman(app)
-    CORS(app)
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
-    csrf = CSRFProtect(app)
-    limiter = Limiter(
-        app=app,
-        key_func=get_remote_address,
-        default_limits=['200 per minute']
-    )
-    app.limiter = limiter
+    init_extensions(app)
     
     # Register blueprints
     app.register_blueprint(admin_bp)
