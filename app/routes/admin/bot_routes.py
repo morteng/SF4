@@ -5,7 +5,7 @@ from flask import (
     url_for, jsonify, current_app, flash
 )
 from flask_login import login_required, current_user
-from app.controllers.base_crud_controller import BaseCrudController
+from app.controllers.admin_base_controller import AdminBaseController
 from app.forms.admin_forms import BotForm
 from app.services.bot_service import BotService
 from app.models.audit_log import AuditLog
@@ -13,36 +13,18 @@ from app.extensions import db
 from app.utils import calculate_next_run
 from app.constants import FlashMessages, FlashCategory
 
-admin_bot_bp = Blueprint('bot', __name__, url_prefix='/bots')
-
-bot_controller = BaseCrudController(
+bot_controller = AdminBaseController(
     service=BotService(),
     entity_name='bot',
-    form_class=BotForm
+    form_class=BotForm,
+    template_dir='bots'
 )
-
-@admin_bot_bp.route('/create', methods=['GET', 'POST'])
-@login_required
-def create():
-    if request.method == 'POST':
-        form = BotForm(request.form)
-        if form.validate():
-            return bot_controller.create(form.data)
-    else:
-        form = BotForm()
-    return render_template('admin/bots/create.html', form=form)
+bot_controller._register_routes()
 
 @admin_bot_bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
 def delete(id):
     return bot_controller.delete(id)
-
-@admin_bot_bp.route('/', methods=['GET'])
-@login_required
-def index():
-    bot_service = BotService()
-    bots = bot_service.get_all()
-    return render_template('admin/bots/index.html', bots=bots)
 
 @admin_bot_bp.route('/<int:id>/run', methods=['POST'])
 @login_required
