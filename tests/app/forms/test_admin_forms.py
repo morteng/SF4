@@ -1,7 +1,7 @@
 import pytest
 from flask import Flask
 from app.forms.admin_forms import OrganizationForm
-from app.config import TestConfig
+from app.configs.testing import TestConfig
 from app.extensions import db
 
 @pytest.fixture
