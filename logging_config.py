@@ -8,6 +8,10 @@ def configure_logging(app):
     # Set default log path if not provided
     app.config.setdefault('LOG_PATH', 'instance/logs/app.log')
     
+    # Create directory if it doesn't exist
+    log_dir = os.path.dirname(app.config['LOG_PATH'])
+    os.makedirs(log_dir, exist_ok=True)
+
     # Clear existing handlers
     root_logger = logging.getLogger()
     for handler in root_logger.handlers[:]:

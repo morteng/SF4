@@ -11,20 +11,20 @@ def create_app(config_name='development'):
     root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     app = Flask(__name__, root_path=root_path)
     
-    if config_name == 'development':
-        app.config.from_object(DevelopmentConfig(root_path=root_path))
-    elif config_name == 'production':
-        app.config.from_object(ProductionConfig(root_path=root_path))
-    elif config_name == 'testing':
-        app.config.from_object(TestingConfig(root_path=root_path))
-    else:
-        raise ValueError(f'Invalid config name: {config_name}')
+    # Ensure instance directory exists
+    instance_path = app.instance_path
+    if instance_path:
+        os.makedirs(instance_path, exist_ok=True)
     
-    # Ensure LOG_PATH is set
-    app.config.setdefault('LOG_PATH', os.path.join(
-        app.instance_path or '',
-        'logs/app.log'
-    ))
+    # Select the appropriate config
+    config = {
+        'development': DevelopmentConfig,
+        'production': ProductionConfig,
+        'testing': TestingConfig
+    }
+    
+    app_config = config[config_name](root_path=root_path)
+    app.config.from_object(app_config)
     
     # Initialize logging
     configure_logging(app)
