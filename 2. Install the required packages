@@ -1,1 +1,0 @@
-pip install flask python-dotenv flask-sqlalchemy flask-migrate flask-limiter flask-wtf
