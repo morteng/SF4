@@ -1,21 +1,32 @@
 import pytest
-from app.config import DevelopmentConfig, TestingConfig, ProductionConfig
+from app.configs import (
+    BaseConfig,
+    DevelopmentConfig,
+    ProductionConfig,
+    TestingConfig
+)
+
+def test_base_config():
+    config = BaseConfig()
+    assert config.DEBUG == 'False'  # Inherit from BaseConfig
+    assert not config.TESTING
+    assert 'SQLALCHEMY_TRACK_MODIFICATIONS' in config
 
 def test_development_config():
     config = DevelopmentConfig()
     assert config.DEBUG is True
-    assert config.TESTING is False
-    assert config.SQLALCHEMY_DATABASE_URI.startswith('sqlite:///')
-
-def test_testing_config():
-    config = TestingConfig()
-    assert config.DEBUG is False
-    assert config.TESTING is True
-    assert config.SQLALCHEMY_DATABASE_URI == 'sqlite:///:memory:'
-    assert config.WTF_CSRF_ENABLED is True  # Changed from False to True
+    assert not config.TESTING
+    assert config.SQLALCHEMY_DATABASE_URI == 'sqlite:///dev.db'
 
 def test_production_config():
     config = ProductionConfig()
-    assert config.DEBUG is False
-    assert config.TESTING is False
-    assert config.SQLALCHEMY_DATABASE_URI.startswith('sqlite:///')
+    assert not config.DEBUG
+    assert not config.TESTING
+    assert config.SQLALCHEMY_DATABASE_URI == 'sqlite:///prod.db'
+
+def test_testing_config():
+    config = TestingConfig()
+    assert not config.DEBUG
+    assert config.TESTING
+    assert config.SQLALCHEMY_DATABASE_URI == 'sqlite:///:memory:'
+    assert config.WTF_CSRF_ENABLED is True
