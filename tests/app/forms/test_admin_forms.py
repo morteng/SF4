@@ -49,10 +49,10 @@ def test_organization_form_validation(app, name, homepage_url, expected):
         form = OrganizationForm(
             data={
                 'name': name,
-                'description': description,
+                'description': '',  # Description is optional
                 'homepage_url': homepage_url
             },
             meta={'csrf': False}
         )
         
-        assert form.validate() == expected, f"Expected validation to be {expected} for {name}, {description}, {homepage_url}"
+        assert form.validate() == expected, f"Expected validation to be {expected} for {name}, {homepage_url}"
