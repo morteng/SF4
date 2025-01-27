@@ -98,6 +98,18 @@ def tag_data():
     }
 
 @pytest.fixture
+def user_data():
+    """Fixture providing base user data"""
+    return {
+        'username': 'testuser',
+        'email': 'test@example.com',
+        'password': 'testpass',
+        'first_name': 'Test',
+        'last_name': 'User',
+        'is_admin': False
+    }
+
+@pytest.fixture
 def logged_in_admin(client, db_session):
     """Fixture to log in as admin user"""
     from app.models.user import User
