@@ -1,6 +1,6 @@
 # MEMORY BANK
 
-Current Iteration: 28
+Current Iteration: 29
 
 Context: Resolved import issues and improved configuration organization
 Known Issues:
@@ -15,6 +15,8 @@ Recent Changes:
 - Installed flask-mail package
 - Updated configuration files to eliminate duplication
 - Improved logging and limiter configuration
+- Removed BaseRouteController and consolidated controller functionality
+- Installed Flask-Limiter with Redis support
 
 Next Steps:
 - Implement proper logging configuration
