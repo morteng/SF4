@@ -6,9 +6,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 import os
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session
+
+# Initialize SQLAlchemy
+db = None
+
+def init_db():
+    global db
+    db = SQLAlchemy()
+    return db
 
 # Create a configured "Session" class
 engine = create_engine('sqlite:///stipend.db')
@@ -44,6 +49,7 @@ def create_app(config_name='development'):
     app.debug = app.config.get('DEBUG', False)
 
     # Initialize extensions
+    db = init_db()
     db.init_app(app)
     
     # Register blueprints
