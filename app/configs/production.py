@@ -17,7 +17,7 @@ class ProductionConfig(BaseConfig):
                 'class': 'RotatingFileHandler',
                 'level': 'INFO',
                 'formatter': 'default',
-                'filename': os.path.join(self.LOGS_PATH, 'prod.log'),
+                'filename': os.path.join(BaseConfig.LOGS_PATH, 'prod.log'),
                 'mode': 'a',
                 'maxBytes': 1048576,
                 'backupCount': 3
