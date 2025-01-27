@@ -5,3 +5,4 @@ from app.models.stipend import Stipend
 from app.models.notification import Notification
 from app.models.audit_log import AuditLog
 from app.models.tag import Tag
+from app.models.bot import Bot  # Added import
