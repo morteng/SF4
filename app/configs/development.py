@@ -2,35 +2,13 @@ from .base_config import BaseConfig
 import os
 
 class DevelopmentConfig(BaseConfig):
-    DEBUG = True
-    SQLALCHEMY_ECHO = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///dev.db'
-    # Override base logging configuration
-    LOGGING = {
-        'version': 1,
-        'formatters': {
-            'default': {
-                'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-            }
-        },
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-                'level': 'DEBUG',
-                'formatter': 'default'
-            },
-            'file': {
-                'class': 'RotatingFileHandler',
-                'level': 'DEBUG',
-                'formatter': 'default',
-                'filename': os.path.join(BaseConfig.LOGS_PATH, 'dev.log'),
-                'mode': 'a',
-                'maxBytes': 1048576,
-                'backupCount': 3
-            }
-        },
-        'root': {
-            'level': 'DEBUG',
-            'handlers': ['console', 'file']
-        }
-    }
+    def __init__(self, root_path=None):
+        super().__init__(root_path=root_path)
+        
+        # Override base configuration with development-specific settings
+        self.DEBUG = True
+        self.SQLALCHEMY_ECHO = True
+        self.SQLALCHEMY_DATABASE_URI = 'sqlite:///dev.db'
+        
+        # Update logging configuration
+        self.LOGGING['handlers']['file']['filename'] = os.path.join(self.LOGS_PATH, 'dev.log')

@@ -4,7 +4,18 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 class BaseConfig(Config):
+    # Directory structure
+    ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    LOGS_PATH = os.path.join(ROOT_PATH, 'logs')
+    UPLOAD_FOLDER = os.path.join(ROOT_PATH, 'uploads')
+    DOWNLOAD_FOLDER = os.path.join(ROOT_PATH, 'downloads')
+    
     def __init__(self, root_path=None):
+        if root_path:
+            self.ROOT_PATH = root_path
+            self.LOGS_PATH = os.path.join(root_path, 'logs')
+            self.UPLOAD_FOLDER = os.path.join(root_path, 'uploads')
+            self.DOWNLOAD_FOLDER = os.path.join(root_path, 'downloads')
         super().__init__(root_path=root_path)
         self.SQLALCHEMY_TRACK_MODIFICATIONS = False
         self.SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///:memory:')
@@ -19,12 +30,6 @@ class BaseConfig(Config):
         self.MAIL_USE_SSL = os.getenv('MAIL_USE_SSL', 'true').lower() in ('true', 'on', '1')
         self.MAIL_USERNAME = os.getenv('MAIL_USERNAME')
         self.MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
-        
-        # Directory Structure
-        self.ROOT_PATH = root_path
-        self.LOGS_PATH = os.path.join(self.ROOT_PATH, 'logs') if self.ROOT_PATH else None
-        self.UPLOAD_FOLDER = os.path.join(self.ROOT_PATH, 'uploads') if self.ROOT_PATH else None
-        self.DOWNLOAD_FOLDER = os.path.join(self.ROOT_PATH, 'downloads') if self.ROOT_PATH else None
         
         # Logging Configuration
         self.LOGGING = {
@@ -44,7 +49,7 @@ class BaseConfig(Config):
                     'class': 'RotatingFileHandler',
                     'level': 'DEBUG',
                     'formatter': 'default',
-                    'filename': os.path.join(self.LOGS_PATH, 'app.log') if self.LOGS_PATH else None,
+                    'filename': os.path.join(self.LOGS_PATH, 'app.log'),
                     'mode': 'a',
                     'maxBytes': 1048576,
                     'backupCount': 3
