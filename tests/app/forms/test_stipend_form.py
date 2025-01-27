@@ -16,10 +16,10 @@ pytestmark = pytest.mark.skipif(
     reason="freezegun is not installed. Run `pip install -r requirements.txt` to install dependencies."
 )
 
-from app.forms.admin_forms import StipendForm, CustomDateTimeField
+from app.forms.admin_forms import StipendForm
+from app.forms.custom_fields import CustomDateTimeField
 from app.constants import FlashMessages
 from app.models import Organization, Tag, Stipend, AuditLog
-from app.forms.fields import CustomDateTimeField
 from app.extensions import db
 from wtforms import Form
 from tests.base_test_case import BaseTestCase
@@ -93,6 +93,7 @@ def test_valid_date_format(app, form_data, test_db):
 @pytest.mark.parametrize("invalid_date", [
     '2025-12-31',            # Missing time
     '2025-12-31 25:00:00',   # Invalid hour
+    '2025-12-31 23:60:00',   # Invalid minute
     '2025-02-30 12:00:00',   # Invalid date
     'invalid-date',          # Completely invalid
 ])

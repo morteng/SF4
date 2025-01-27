@@ -10,6 +10,7 @@ from wtforms.validators import DataRequired, Length, URL
 from app.models.organization import Organization
 from app.models.tag import Tag
 from app.extensions import db
+from .custom_fields import CustomDateTimeField
 
 class TagForm(FlaskForm):
     """Form for handling tag selections"""
