@@ -13,6 +13,7 @@ def get_notification_model():
 logger = logging.getLogger(__name__)
 
 class AuditLog(db.Model):
+    __tablename__ = 'audit_log'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     action = db.Column(db.String(100), nullable=False)

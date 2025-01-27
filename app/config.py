@@ -1,35 +1,3 @@
-# app/config.py
-import os
-import secrets
-from dotenv import load_dotenv
-
-load_dotenv()
-
-class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or secrets.token_urlsafe(64)
-    WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or secrets.token_urlsafe(64)
-    BACKUP_DIR = os.environ.get('BACKUP_DIR', 'backups')
-    LOG_DIR = os.environ.get('LOG_DIR', 'logs')
-    DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///stipend.db'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    # Default engine options - will be overridden for SQLite
-    SQLALCHEMY_ENGINE_OPTIONS = {
-        'pool_pre_ping': True,  # Enable connection health checks
-        'connect_args': {
-            'timeout': 30  # seconds
-        }
-    }
-    WTF_CSRF_ENABLED = True
-    WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or 'a-very-long-and-complex-csrf-key-with-at-least-64-characters-1234567890'
-    WTF_CSRF_TIME_LIMIT = 3600  # 1 hour
-    
-    # Rate limiting configuration
-    RATELIMIT_STORAGE = 'redis://localhost:6379/0'
-    RATELIMIT_GLOBAL = "200 per day,50 per hour"
-    RATELIMIT_STRATEGY = 'fixed-window'
-    RATELIMIT_ENABLED = True
-
 class TestConfig(Config):
     DEBUG = False
     TESTING = True
@@ -121,39 +89,3 @@ class TestConfig(Config):
                 csrf_token = generate_csrf()
                 from flask import g
                 g.csrf_token = csrf_token
-
-class DevelopmentConfig(Config):
-    DEBUG = True
-    TESTING = False
-    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath(os.path.join('instance', 'site.db'))}"
-
-class TestingConfig(Config):
-    DEBUG = False
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    WTF_CSRF_ENABLED = True  # Enable CSRF in testing to match production
-    SERVER_NAME = 'localhost'
-    APPLICATION_ROOT = '/'
-    PREFERRED_URL_SCHEME = 'http'
-
-class ProductionConfig(Config):
-    DEBUG = False
-    TESTING = False
-    SQLALCHEMY_DATABASE_URI = f"sqlite:///{os.path.abspath(os.path.join('instance', 'site.db'))}"
-    WTF_CSRF_ENABLED = True
-    WTF_CSRF_SECRET_KEY = os.environ.get('WTF_CSRF_SECRET_KEY') or secrets.token_urlsafe(64)
-    SECRET_KEY = os.environ.get('SECRET_KEY') or secrets.token_urlsafe(64)
-    SESSION_COOKIE_SECURE = True
-    REMEMBER_COOKIE_SECURE = True
-    SESSION_COOKIE_HTTPONLY = True
-    SESSION_COOKIE_SAMESITE = 'Lax'
-    FLASK_ENV = 'production'
-    FLASK_DEBUG = '0'
-    PROPAGATE_EXCEPTIONS = True
-
-config_by_name = {
-    'development': DevelopmentConfig,
-    'testing': TestingConfig,
-    'production': ProductionConfig,
-    'default': DevelopmentConfig
-}
