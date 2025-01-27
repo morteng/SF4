@@ -25,9 +25,9 @@ class Config:
     WTF_CSRF_TIME_LIMIT = 3600  # 1 hour
     
     # Rate limiting configuration
-    RATELIMIT_STORAGE_URI = 'memory://'
+    RATELIMIT_STORAGE = 'redis://localhost:6379/0'
+    RATELIMIT_GLOBAL = "200 per day,50 per hour"
     RATELIMIT_STRATEGY = 'fixed-window'
-    RATELIMIT_DEFAULT = "200 per day;50 per hour"
     RATELIMIT_ENABLED = True
 
 class TestConfig(Config):
@@ -62,7 +62,7 @@ class TestConfig(Config):
     
     # Disable all rate limiting in tests
     RATELIMIT_ENABLED = False
-    RATELIMIT_STORAGE_URI = 'memory://'
+    RATELIMIT_STORAGE = 'redis://localhost:6379/0'
     RATELIMIT_DEFAULT = "9999999 per second"
     RATELIMIT_USER_MANAGEMENT = "9999999 per second"
     RATELIMIT_BOT_OPERATIONS = "9999999 per second"

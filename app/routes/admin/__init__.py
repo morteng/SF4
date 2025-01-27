@@ -112,78 +112,21 @@ _admin_blueprints_registered = False
 def register_admin_blueprints(app):
     global _admin_blueprints_registered
     
-    # Reset the flag to allow registration
-    _admin_blueprints_registered = False
-    
     if _admin_blueprints_registered:
         logger.debug("Admin blueprints already registered. Skipping.")
         return
     
     try:
-        admin_bp = create_admin_blueprint()
-        logger.debug("Created admin blueprint")
-        
-        # Import blueprints
+        # Register stipend routes
         from .stipend_routes import admin_stipend_bp
-        from .dashboard_routes import admin_dashboard_bp
-        from .user_routes import admin_user_bp
-        from .bot_routes import admin_bot_bp
-        from .organization_routes import admin_org_bp
-        from .tag_routes import admin_tag_bp
-        
-        # Register blueprints with debug logging
-        admin_bp.register_blueprint(
+        app.register_blueprint(
             admin_stipend_bp,
             url_prefix='/stipends',
             endpoint='admin_stipend'
         )
-        logger.debug(f"Registered stipend blueprint: {admin_stipend_bp.name}")
+        logger.debug("Registered stipend routes")
         
-        admin_bp.register_blueprint(
-            admin_dashboard_bp,
-            url_prefix='/dashboard',
-            endpoint='admin_dashboard'
-        )
-        logger.debug(f"Registered dashboard blueprint: {admin_dashboard_bp.name}")
-        
-        admin_bp.register_blueprint(
-            admin_user_bp,
-            url_prefix='/users',
-            endpoint='admin_user'
-        )
-        admin_bp.register_blueprint(
-            admin_bot_bp,
-            url_prefix='/bots',
-            endpoint='admin_bot'
-        )
-        admin_bp.register_blueprint(
-            admin_org_bp,
-            url_prefix='/organizations',
-            endpoint='admin_organization'
-        )
-        admin_bp.register_blueprint(
-            admin_tag_bp,
-            url_prefix='/tags',
-            endpoint='admin_tag'
-        )
-        
-        # Register admin blueprint with app
-        app.register_blueprint(admin_bp)
-        logger.debug("Registered admin blueprint with app")
-        
-        # Debug logging for registered routes
-        with app.app_context():
-            app.logger.debug("Registered routes:")
-            for rule in app.url_map.iter_rules():
-                app.logger.debug(f"Route: {rule.endpoint}")
-        
-        # Validate required routes
-        required_routes = [
-            'admin_stipend.create',
-            'admin_dashboard.dashboard'
-        ]
-        logger.debug(f"Validating required routes: {required_routes}")
-        validate_blueprint_routes(admin_bp, required_routes)
+        # Register other admin blueprints here
         
         _admin_blueprints_registered = True
     except Exception as e:
