@@ -86,7 +86,6 @@ def create_admin_blueprint():
     # Make audit logging available to routes
     admin_bp.log_audit = log_audit
 
-    
     # Add before_request handler for security checks
     @admin_bp.before_request
     def check_admin_access():
@@ -133,7 +132,7 @@ def register_admin_blueprints(app):
         from .tag_routes import admin_tag_bp
         
         # Register blueprints with debug logging
-        admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
+        admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends', endpoint='admin_stipend')
         logger.debug(f"Registered stipend blueprint: {admin_stipend_bp.name}")
         
         admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
