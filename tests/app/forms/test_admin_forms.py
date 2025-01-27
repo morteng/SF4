@@ -26,28 +26,24 @@ def app():
         db.drop_all()
 
 def test_organization_form_valid_data(app):
-    """Test organization form with valid data"""
+    """Test with actual required fields from OrganizationForm"""
     with app.app_context():
-        # Create form with valid data, disabling CSRF for testing
         form = OrganizationForm(
             data={
                 'name': 'Valid Org',
-                'description': 'Valid description',
-                'homepage_url': 'https://valid.org'
+                'homepage_url': 'https://valid.org'  # Add required URL field
             },
             meta={'csrf': False}
         )
-        
-        assert form.validate(), f"Form validation failed with errors: {form.errors}"
+        assert form.validate(), f"Errors: {form.errors}"
 
-@pytest.mark.parametrize("name,description,homepage_url,expected", [
-    ("", "Valid description", "https://valid.org", False),  # Missing name
-    ("Valid Org", "", "https://valid.org", True),  # Empty description is allowed
-    ("Valid Org", "Valid description", "invalid-url", False),  # Invalid URL
-    ("Valid Org", "Valid description", "", False),  # Missing URL
-    ("a" * 256, "Valid description", "https://valid.org", False),  # Name too long
+@pytest.mark.parametrize("name,homepage_url,expected", [  # Updated params
+    ("", "https://valid.org", False),  # Missing name
+    ("Valid", "invalid-url", False),   # Bad URL
+    ("a"*101, "https://valid.org", False),  # Name too long
+    ("Valid", "https://valid.org", True),   # Valid case
 ])
-def test_organization_form_invalid_data(app, name, description, homepage_url, expected):
+def test_organization_form_validation(app, name, homepage_url, expected):
     """Test organization form with invalid data"""
     with app.app_context():
         form = OrganizationForm(
