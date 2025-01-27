@@ -1,6 +1,4 @@
 from flask import Config
-import os
-from pathlib import Path
 
 class BaseConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -24,3 +22,12 @@ class BaseConfig(Config):
         
         from .logging_config import configure_logging
         configure_logging(app)
+
+class ProductionConfig(BaseConfig):
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///production.db'
+    DEBUG = False
+
+    def init_app(self, app):
+        super().init_app(app)
+        # Add production-specific configurations
+        app.config.from_object('app.configs.ProductionConfig')
