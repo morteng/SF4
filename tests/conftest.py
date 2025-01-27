@@ -22,10 +22,9 @@ def app():
     })
     
     # Initialize database with the app if not already initialized
-    if 'sqlalchemy' not in app.extensions:
-        db.init_app(app)
-    
     with app.app_context():
+        if 'sqlalchemy' not in app.extensions:
+            db.init_app(app)
         db.create_all()
         yield app
         db.session.remove()
