@@ -15,7 +15,7 @@
 
 /run python app.py
 /ask how can we fix issues with the app? Is there any duplicated code or functionality we can consolidate? Could any large files benefit from being modularized to improve maintainability?
-/architect implement suggested changes
+/architect implement suggested changes.
 
 ### EDITABLE AREA ENDS ###
 
