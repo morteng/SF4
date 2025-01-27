@@ -6,6 +6,8 @@ from .logging import LOGGING
 
 class BaseConfig(Config):
     # General Flask Configurations
+    DEBUG = False
+    TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///:memory:')
     JSONIFY_PRETTYPRINT_REGULAR = True
@@ -36,6 +38,18 @@ class BaseConfig(Config):
     CSRF_ENABLED = True
     CSRF_SECRET = os.getenv('CSRF_SECRET', os.urandom(24))
     
-    # Debugging
-    DEBUG = False
-    TESTING = False
+    # Directory Structure
+    ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    LOGS_PATH = os.path.join(ROOT_PATH, 'logs')
+    UPLOAD_FOLDER = os.path.join(ROOT_PATH, 'uploads')
+    DOWNLOAD_FOLDER = os.path.join(ROOT_PATH, 'downloads')
+    
+    # Initialize paths
+    def __init__(self):
+        import logging
+        if not os.path.exists(self.LOGS_PATH):
+            os.makedirs(self.LOGS_PATH)
+        if not os.path.exists(self.UPLOAD_FOLDER):
+            os.makedirs(self.UPLOAD_FOLDER)
+        if not os.path.exists(self.DOWNLOAD_FOLDER):
+            os.makedirs(self.DOWNLOAD_FOLDER)
