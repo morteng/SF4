@@ -4,7 +4,6 @@ from app.extensions import db, mail, login_manager, migrate, csrf
 from app.routes.admin import register_admin_blueprints
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask_limiter.storage import RedisStorage
 
 def create_app(config_name='development'):
     app = Flask(__name__)
@@ -45,13 +44,7 @@ def create_app(config_name='development'):
     # Initialize Flask-Limiter with Redis storage
     limiter = Limiter(
         key_func=get_remote_address,
-        storage=RedisStorage(
-            host='localhost',
-            port=6379,
-            db=0,
-            prefix='flask-limiter'
-        ),
-        default_limits=['200 per minute']
+        storage_uri=app.config['REDIS_URL']
     )
     limiter.init_app(app)
     app.limiter = limiter
