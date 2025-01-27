@@ -2,6 +2,7 @@ from app.models import Base
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import current_app
+from app.database import db
 
 class User(Base, UserMixin):
     __tablename__ = 'user'
