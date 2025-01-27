@@ -80,6 +80,14 @@ def organization_data(db_session):
     }
 
 @pytest.fixture
+def tag_data():
+    """Fixture providing base tag data"""
+    return {
+        'name': 'Test Tag',
+        'category': 'Test Category'
+    }
+
+@pytest.fixture
 def logged_in_admin(client, db_session):
     """Fixture to log in as admin user"""
     from app.models.user import User
