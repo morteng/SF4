@@ -1,6 +1,7 @@
 from app.models.base import Base
 from sqlalchemy import Column, String, DateTime, Integer
 from sqlalchemy.orm import relationship
+from datetime import datetime
 
 class Organization(Base):
     __tablename__ = "organizations"
