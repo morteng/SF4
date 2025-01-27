@@ -1,23 +1,17 @@
-from app.database import db
+from app.models.base import Base
+from sqlalchemy import Column, String, DateTime, Integer
+from sqlalchemy.orm import relationship
 
-class Organization(db.Model):
-    __mapper_args__ = {'confirm_deleted_rows': False}
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    homepage_url = db.Column(db.String(255), nullable=True)
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
-    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp(), nullable=False)
+class Organization(Base):
+    __tablename__ = "organizations"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)
+    description = Column(String(500))
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    stipends = relationship("Stipend", back_populates="organization")
 
     def __repr__(self):
-        return f'<Organization {self.name}>'
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'homepage_url': self.homepage_url,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
-        }
+        return f"Organization('{self.name}')"
