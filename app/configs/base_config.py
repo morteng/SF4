@@ -6,12 +6,8 @@ class BaseConfig(Config):
     BUNDLE_ERRORS = True
     MAX_CONTENT_LENGTH = 25 * 1024 * 1024  # 25MB
     
-    def __init__(self, root_path):
-        super().__init__(root_path)
-        self.init_app()
-    
-    def init_app(self):
+    def init_app(self, app):
         """Base configuration initialization"""
-        self.root_path = self.root_path
-        self.jinja_env.trim_blocks = True
-        self.jinja_env.lstrip_blocks = True
+        app.config.from_object(self)
+        app.jinja_env.trim_blocks = True
+        app.jinja_env.lstrip_blocks = True
