@@ -1,16 +1,20 @@
+from app.models.base import Base
 from app.models import db
+from app.models.stipend import stipend_tag_association
 
-class Tag(db.Model):
+class Tag(Base):
+    __tablename__ = 'tag'
+    
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
-    category = db.Column(db.String(100), nullable=False)  # Add this if missing
+    category = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
 
     # Define relationship with Stipend through association table
     stipends = db.relationship(
         'Stipend',
         secondary=stipend_tag_association,
-        back_populates='tags',  # Changed to back_populates to match Stipend model
+        back_populates='tags',
         lazy='dynamic'
     )
 
