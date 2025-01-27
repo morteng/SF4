@@ -22,3 +22,4 @@ beautifulsoup4
 freezegun
 pytest-cov
 pytest-freezegun
+flask-mail
