@@ -23,6 +23,7 @@ def create_app(config_name='development'):
     load_dotenv()
 
     try:
+        # Initialize extensions in proper order
         # Initialize database first
         db.init_app(app)
         
