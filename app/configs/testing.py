@@ -1,6 +1,6 @@
 from app.configs.app_config import BaseConfig
 
-class TestingConfig(BaseConfig):
+class TestConfig(BaseConfig):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     WTF_CSRF_ENABLED = True
