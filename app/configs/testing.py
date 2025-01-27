@@ -1,4 +1,4 @@
-from .base import BaseConfig
+from app.configs.app_config import BaseConfig
 
 class TestConfig(BaseConfig):
     TESTING = True

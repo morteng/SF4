@@ -10,10 +10,6 @@ def app():
     app = Flask(__name__)
     app.config.from_object(TestConfig)
     
-    # Set up in-memory SQLite database for testing
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
     # Initialize extensions
     db.init_app(app)
     
