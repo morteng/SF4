@@ -1,22 +1,17 @@
 from app.models.base import Base
-from app.models import db
-from app.models.stipend import stipend_tag_association
+from sqlalchemy import Column, String, Integer
+from sqlalchemy.orm import relationship
+from app.models.relationships import stipend_tag_association
 
 class Tag(Base):
     __tablename__ = 'tag'
     
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False, unique=True)
-    category = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text)
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False, unique=True)
+    category = Column(String(100), nullable=False)
+    description = Column(String(500))
 
-    # Define relationship with Stipend through association table
-    stipends = db.relationship(
-        'Stipend',
-        secondary=stipend_tag_association,
-        back_populates='tags',
-        lazy='dynamic'
-    )
+    stipends = relationship('Stipend', secondary=stipend_tag_association, back_populates='tags')
 
     __mapper_args__ = {"confirm_deleted_rows": False}
 

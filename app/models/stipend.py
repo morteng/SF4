@@ -1,16 +1,9 @@
 from app.models.base import Base
-from sqlalchemy import Column, String, DateTime, Integer, Boolean, ForeignKey, Table
+from sqlalchemy import Column, String, DateTime, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.models.organization import Organization
-
-# Define the association table before the Stipend class
-stipend_tag_association = Table(
-    'stipend_tag_association',
-    Base.metadata,
-    Column('stipend_id', Integer, ForeignKey('stipend.id')),
-    Column('tag_id', Integer, ForeignKey('tag.id'))
-)
+from app.models.relationships import stipend_tag_association
 
 class Stipend(Base):
     __tablename__ = "stipends"
@@ -24,7 +17,7 @@ class Stipend(Base):
 
     organization_id = Column(Integer, ForeignKey('organization.id'))
     organization = relationship(Organization, back_populates='stipends')
-    tags = relationship("Tag", secondary=stipend_tag_association)
+    tags = relationship("Tag", secondary=stipend_tag_association, back_populates='stipends')
 
     def __repr__(self):
         return f"Stipend('{self.name}')"
