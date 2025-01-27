@@ -4,6 +4,7 @@ from flask_limiter.util import get_remote_address
 from app.configs import BaseConfig, ProductionConfig
 import logging
 import logging.config
+import os  # Added missing import
 
 app = Flask(__name__)
 config = ProductionConfig(app.root_path)
