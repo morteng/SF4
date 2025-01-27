@@ -1,5 +1,5 @@
 import pytest
-from app.forms.admin_forms import StipendForm
+from app.forms.admin import StipendForm
 from app.constants import FlashMessages
 
 def test_stipend_form_validation():
