@@ -1,7 +1,6 @@
 import os
-from flask import Config
 import logging
-from logging.handlers import RotatingFileHandler
+from flask import Config
 
 class BaseConfig(Config):
     # Directory structure
@@ -46,7 +45,7 @@ class BaseConfig(Config):
                     'formatter': 'default'
                 },
                 'file': {
-                    'class': 'RotatingFileHandler',
+                    'class': 'logging.handlers.RotatingFileHandler',
                     'level': 'DEBUG',
                     'formatter': 'default',
                     'filename': os.path.join(self.LOGS_PATH, 'app.log'),
