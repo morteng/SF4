@@ -1,5 +1,5 @@
 from flask import Flask
-from app.configs import BaseConfig, DevelopmentConfig, ProductionConfig, TestingConfig
+from app.configs import BaseConfig, ProductionConfig, TestingConfig
 from app.extensions import db, mail, login_manager, migrate, csrf
 from app.routes.admin import register_admin_blueprints
 from flask_limiter import Limiter
@@ -18,7 +18,7 @@ def create_app(config_name='development'):
     
     # Select the appropriate config
     config = {
-        'development': DevelopmentConfig,
+        'development': BaseConfig,
         'production': ProductionConfig,
         'testing': TestingConfig
     }
