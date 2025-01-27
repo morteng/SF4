@@ -1,4 +1,4 @@
-from app.models import db
+from app.database import db
 
 class Organization(db.Model):
     __mapper_args__ = {'confirm_deleted_rows': False}
