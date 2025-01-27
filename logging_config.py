@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
 def configure_logging(app):
     """Centralized logging configuration"""
     # Set default log path if not provided
-    app.config.setdefault('LOG_PATH', 'instance/logs/app.log')
+    app.config.setdefault('LOG_PATH', str(Path(app.root_path).joinpath('instance', 'logs', 'app.log')))
     
     # Create directory if it doesn't exist
     log_dir = os.path.dirname(app.config['LOG_PATH'])
