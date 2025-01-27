@@ -1,19 +1,13 @@
 from flask import Flask
-from app.configs import BaseConfig
+from app.configs import BaseConfig, ProductionConfig
 import logging
 import logging.config
 
 app = Flask(__name__)
-config = BaseConfig(app.root_path)
+config = ProductionConfig(app.root_path)
 app.config.from_object(config)
+config.init_app(app)
 
-# Initialize logging
-logging.config.dictConfig(app.config['LOGGING'])
-
-# Production configuration
-from scripts.path_config import configure_paths
-configure_paths(production=True)
-    
 # Final verification
 from scripts.verification.verify_production_ready import verify_production_ready
 if verify_production_ready():
