@@ -1,13 +1,6 @@
-from app.configs.app_config import BaseConfig
+from .base_config import BaseConfig
 
 class TestingConfig(BaseConfig):
-    TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    WTF_CSRF_ENABLED = True
-    WTF_CSRF_SECRET_KEY = 'test-secret-key'
-    
-    # Configure SQLite for testing
-    SQLALCHEMY_ENGINE_OPTIONS = {
-        'poolclass': 'StaticPool',
-        'connect_args': {'check_same_thread': False}
-    }
+    SQLALCHEMY_ECHO = True
+    TESTING = True
