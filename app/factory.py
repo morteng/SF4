@@ -1,5 +1,6 @@
-from app.configs.base_config import BaseConfig, ProductionConfig, TestingConfig
 from flask import Flask
+from config import BaseConfig, ProductionConfig, TestingConfig
+from config.logging import configure_logging
 
 def create_app(config_name='development'):
     config = {
@@ -10,5 +11,9 @@ def create_app(config_name='development'):
 
     app = Flask(__name__)
     app.config.from_object(config)
+    
+    # Configure logging
+    configure_logging(app)
+    
     # Initialize extensions and other setup
     return app
