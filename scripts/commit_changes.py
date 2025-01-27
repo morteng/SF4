@@ -2,24 +2,16 @@ import subprocess
 import logging
 from pathlib import Path
 import sys
+from logging_config import configure_logging
 
-def configure_logging():
-    """Configure logging for commit script"""
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler('logs/commit.log'),
-            logging.StreamHandler()
-        ]
-    )
-    return logging.getLogger(__name__)
+def configure_logging(app):
+    configure_logging(app)
 
 def commit_changes(message, push=False):
     """Final deployment commit with force add"""
     # Force add all changes
     subprocess.run(['git', 'add', '-A'], check=True)
-    logger = configure_logging()
+    logger = logging.getLogger(__name__)
     # Normalize paths for Windows
     from pathlib import Path
     Path('logs/commit.log').parent.mkdir(parents=True, exist_ok=True)
