@@ -1,7 +1,9 @@
 from app.models import Base
+from app.extensions import db
 from datetime import datetime
 from sqlalchemy import ForeignKey
 from app.common.enums import NotificationType, NotificationPriority
+from flask import current_app
 
 class Notification(Base):
     __tablename__ = 'notification'
