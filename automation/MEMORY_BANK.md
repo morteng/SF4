@@ -1,9 +1,9 @@
 # MEMORY BANK
 
-Current Iteration: 12
-Previous Runs: 11
+Current Iteration: 13
+Previous Runs: 12
 Script Status: Active
-Context: Fixed route registration issue in stipend routes
+Context: Implemented base route controller and refactored stipend/tag routes
 Known Issues:
 - Duplicate `init_app` method in TestConfig
 - Pytest warnings about unknown marks
@@ -13,13 +13,11 @@ Known Issues:
 - Duplicate code in route controllers
 
 Recent Changes:
-- Fixed missing route 'admin_stipend.create'
-- Updated blueprint registration logic
-- Added proper Flask-Limiter configuration
-- Registered CSRF pytest mark
-- Improved error handling in route registration
-- Added comprehensive logging for blueprint registration
-- Fixed app factory blueprint registration process
+- Created BaseRouteController to handle common CRUD operations
+- Refactored StipendController and TagController to use base class
+- Standardized route handling and error management
+- Improved flash messaging and user feedback
+- Removed duplicate code in controllers
 
 Next Steps:
 - Remove duplicate `init_app` method in TestConfig
