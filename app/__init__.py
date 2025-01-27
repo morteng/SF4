@@ -6,4 +6,8 @@ app = Flask(__name__)
 app.config.from_object(BaseConfig())
 app.config['ROOT_PATH'] = app.root_path
 
+# Initialize logging
+import logging
+logging.config.dictConfig(app.config['LOGGING'])
+
 # Initialize extensions and other setup

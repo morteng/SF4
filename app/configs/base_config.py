@@ -1,8 +1,7 @@
 from flask import Config
 import os
-from flask_mail import Mail
 import logging
-from .logging import LOGGING
+from logging.handlers import RotatingFileHandler
 
 class BaseConfig(Config):
     # General Flask Configurations
@@ -23,7 +22,34 @@ class BaseConfig(Config):
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
     
     # Logging Configuration
-    LOGGING = LOGGING
+    LOGGING = {
+        'version': 1,
+        'formatters': {
+            'default': {
+                'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+            }
+        },
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+                'level': 'INFO',
+                'formatter': 'default'
+            },
+            'file': {
+                'class': 'RotatingFileHandler',
+                'level': 'DEBUG',
+                'formatter': 'default',
+                'filename': os.path.join(LOGS_PATH, 'app.log'),
+                'mode': 'a',
+                'maxBytes': 1048576,
+                'backupCount': 3
+            }
+        },
+        'root': {
+            'level': 'DEBUG',
+            'handlers': ['console', 'file']
+        }
+    }
     
     # Flask-Limiter Configuration
     RATE_LIMIT_GLOBAL = "200 per minute"

@@ -1,4 +1,5 @@
 from .base_config import BaseConfig
+import os
 
 class TestingConfig(BaseConfig):
     __test__ = False  # Explicitly disable pytest test collection
@@ -6,6 +7,7 @@ class TestingConfig(BaseConfig):
     SQLALCHEMY_ECHO = True
     TESTING = True
     WTF_CSRF_ENABLED = False  # Disabled only for testing
+    # Override base logging configuration
     LOGGING = {
         'version': 1,
         'formatters': {

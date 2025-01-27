@@ -1,9 +1,11 @@
 from .base_config import BaseConfig
+import os
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///dev.db'
+    # Override base logging configuration
     LOGGING = {
         'version': 1,
         'formatters': {
@@ -18,10 +20,10 @@ class DevelopmentConfig(BaseConfig):
                 'formatter': 'default'
             },
             'file': {
-                'class': 'logging.FileHandler',
+                'class': 'RotatingFileHandler',
                 'level': 'DEBUG',
                 'formatter': 'default',
-                'filename': 'dev.log',
+                'filename': os.path.join(BaseConfig.LOGS_PATH, 'dev.log'),
                 'mode': 'a',
                 'maxBytes': 1048576,
                 'backupCount': 3
