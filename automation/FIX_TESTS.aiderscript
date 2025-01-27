@@ -4,7 +4,7 @@
 Iteration: 4
 
 /run pytest -v
-/ask how can we fix this issue? Is there any duplicated code or functionality we can consolidate?
+/ask how can we fix this issue? Is there any duplicated code or functionality we can consolidate? Could any big files benefit from being modularized to improve maintainability?
 /architect implement suggested changes.
 
 ### EDITABLE AREA ENDS ###
