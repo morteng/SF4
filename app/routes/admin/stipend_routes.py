@@ -120,11 +120,11 @@ def register_stipend_routes(app) -> None:
         # Verify routes are registered correctly
         registered_routes = [rule.endpoint for rule in app.url_map.iter_rules()]
         required_routes = [
-            'stipend.create',
-            'stipend.edit',
-            'stipend.delete',
-            'stipend.index',
-            'stipend.paginate'
+            'admin_stipend.create',
+            'admin_stipend.edit',
+            'admin_stipend.delete',
+            'admin_stipend.index',
+            'admin_stipend.paginate'
         ]
         
         # Check if all required routes are registered
@@ -258,7 +258,6 @@ def edit(id):
                          form=form, 
                          stipend=stipend)
 
-
 @admin_stipend_bp.route('/<int:id>/delete', methods=['POST'])
 @limiter.limit("3 per minute")
 @login_required
@@ -274,7 +273,6 @@ def delete(id):
         logger.error(f"Error deleting stipend {id}: {str(e)}")
         flash(FlashMessages.DELETE_ERROR.value, 'error')
     return redirect(url_for('admin.admin_stipend.index'))
-
 
 @admin_stipend_bp.route('/', methods=['GET'])
 @login_required
@@ -298,7 +296,6 @@ def index():
         logger.error(f"Error loading stipend index: {str(e)}")
         flash('Error loading stipends', 'error')
         return redirect(url_for('admin.dashboard.dashboard'))
-
 
 @admin_stipend_bp.route('/paginate', methods=['GET'])
 @login_required
