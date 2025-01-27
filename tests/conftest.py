@@ -2,6 +2,7 @@ import pytest
 from app import create_app, db
 from app.models.organization import Organization
 from app.models.user import User
+from app.models.stipend import Stipend
 from werkzeug.security import generate_password_hash
 
 @pytest.fixture(scope="function")
@@ -56,3 +57,17 @@ def logged_in_admin(client, db_session):
         'password': 'testpass'
     })
     yield client
+
+@pytest.fixture
+def stipend_data():
+    return {
+        'name': 'Test Stipend',
+        'summary': 'Test summary',
+        'description': 'Test description',
+        'homepage_url': 'http://example.com',
+        'application_procedure': 'Test procedure',
+        'eligibility_criteria': 'Test criteria',
+        'application_deadline': '2024-01-01',
+        'organization_id': 1,
+        'open_for_applications': True
+    }
