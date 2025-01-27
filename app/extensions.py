@@ -3,6 +3,14 @@ from flask_migrate import Migrate
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import CSRFProtect
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, scoped_session
+
+# Initialize database components
+engine = create_engine('sqlite:///stipend.db')  # Update with your actual database URI
+db = scoped_session(sessionmaker(bind=engine))
+Base = declarative_base()
 
 login_manager = LoginManager()
 migrate = Migrate(compare_type=True)
@@ -18,8 +26,7 @@ def init_extensions(app):
     csrf.init_app(app)
     app.extensions['limiter'] = limiter
     
-    # Initialize database with SQLite batch mode
-    from app.database import db
+    # Initialize database
     db.init_app(app)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     migrate.init_app(app, db, render_as_batch=True, compare_type=True)

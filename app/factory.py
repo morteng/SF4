@@ -3,7 +3,7 @@ from flask import Flask
 from flask_wtf.csrf import CSRFError
 from app.routes import register_blueprints
 from app.routes.admin import register_admin_blueprints
-from app.extensions import db
+from app.extensions import db, Base, login_manager, migrate, csrf, limiter
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(24)
@@ -34,6 +34,10 @@ def create_app(config_name='development'):
 
     # Initialize extensions
     db.init_app(app)
+    login_manager.init_app(app)
+    migrate.init_app(app, db)
+    csrf.init_app(app)
+    limiter.init_app(app)
     
     # Register blueprints
     register_blueprints(app)

@@ -1,6 +1,3 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, scoped_session, relationship
+from app.extensions import db, Base
 
-db = scoped_session(sessionmaker())
-Base = declarative_base()
+# Initialize models here if needed
