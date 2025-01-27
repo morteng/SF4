@@ -70,3 +70,6 @@ def paginate():
     page = request.args.get('page', 1, type=int)
     entities = Stipend.query.paginate(page=page, per_page=10, error_out=False)
     return render_template('admin/stipends/_stipends_table.html', entities=entities)
+
+def register_stipend_routes(app):
+    app.register_blueprint(admin_stipend_bp)
