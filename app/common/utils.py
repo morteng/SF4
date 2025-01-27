@@ -12,3 +12,9 @@ logger = logging.getLogger(__name__)
 class BaseBlueprint(Blueprint):
     def __init__(self, name, import_name, **kwargs):
         super().__init__(name, import_name, **kwargs)
+
+def validate_blueprint_routes(bp):
+    """Validate that all routes in the blueprint have proper permissions."""
+    for route in bp.routes:
+        if not hasattr(route, 'is_admin_route'):
+            raise ValueError(f"Route '{route.endpoint}' is missing required permissions")
