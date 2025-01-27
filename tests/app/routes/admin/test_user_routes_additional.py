@@ -101,4 +101,3 @@ def test_edit_profile_route_with_invalid_data(logged_in_client, test_user):
     assert response.status_code == 200
     # Assert the flash message using constants
     assert FlashMessages.PROFILE_UPDATE_INVALID_DATA.value.encode() in response.data
-

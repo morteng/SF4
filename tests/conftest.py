@@ -63,6 +63,27 @@ def logged_in_admin(client, db_session):
     yield client
 
 @pytest.fixture
+def logged_in_client(client, db_session):
+    """Create a logged-in client for testing."""
+    # Create a test user
+    user = User(
+        username='testuser',
+        email='test@example.com',
+        password_hash=generate_password_hash('testpass'),
+        is_admin=False  # Regular user
+    )
+    db_session.add(user)
+    db_session.commit()
+    
+    # Login the user
+    login_response = client.post('/login', data={
+        'username': 'testuser',
+        'password': 'testpass'
+    })
+    # Return the client with the session cookie
+    yield client
+
+@pytest.fixture
 def organization_data():
     return {
         'name': 'Test Organization',
