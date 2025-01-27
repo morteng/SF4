@@ -1,11 +1,14 @@
 ### EDITABLE AREA STARTS ###
-/run pytest
+/run pytest -v
 /ask how can we fix this issue?
 /architect implement suggested changes.
 
-/run pytest
+/run pytest -v
 /ask how can we fix this issue?
 /architect implement suggested changes.
+
+/reset
+/load automation/FIX_TESTS.aiderscript
 ### EDITABLE AREA ENDS ###
 
 /add automation/FIX_TESTS.aiderscript
