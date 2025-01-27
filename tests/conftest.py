@@ -3,6 +3,7 @@ from app import create_app, db
 from app.models.organization import Organization
 from app.models.user import User
 from app.models.stipend import Stipend
+from app.models.tag import Tag
 from werkzeug.security import generate_password_hash
 
 @pytest.fixture(scope="function")
@@ -40,6 +41,9 @@ def extract_csrf_token(response_data):
     import re
     match = re.search(r'name="csrf_token" value="([^"]+)"', response_data.decode('utf-8'))
     return match.group(1) if match else None
+
+def get_all_tags():
+    return Tag.query.all()
 
 @pytest.fixture
 def logged_in_admin(client, db_session):
