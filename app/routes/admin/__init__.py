@@ -133,7 +133,7 @@ def register_admin_blueprints(app):
         from .tag_routes import admin_tag_bp
         
         # Register blueprints with debug logging
-        admin_bp.register_blueprint(admin_stipend_bp)
+        admin_bp.register_blueprint(admin_stipend_bp, url_prefix='/stipends')
         logger.debug(f"Registered stipend blueprint: {admin_stipend_bp.name}")
         
         admin_bp.register_blueprint(admin_dashboard_bp, url_prefix='/dashboard')
