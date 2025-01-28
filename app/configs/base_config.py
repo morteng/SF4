@@ -1,6 +1,4 @@
 from pathlib import Path
-import logging
-from .logging_config import LoggingConfig
 
 class BaseConfig:
     def __init__(self, root_path: Path):
@@ -15,14 +13,43 @@ class BaseConfig:
         self.SQLALCHEMY_DATABASE_URI: str = 'sqlite:///:memory:'
         self.SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
         
+        # Logging configuration
+        self.LOGGING = {
+            'version': 1,
+            'formatters': {
+                'default': {
+                    'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+                }
+            },
+            'handlers': {
+                'console': {
+                    'class': 'logging.StreamHandler',
+                    'level': 'DEBUG',
+                    'formatter': 'default',
+                    'stream': 'ext://sys.stdout'
+                },
+                'file': {
+                    'class': 'logging.handlers.RotatingFileHandler',
+                    'level': 'WARNING',
+                    'formatter': 'default',
+                    'filename': 'app.log',
+                    'mode': 'a',
+                    'maxBytes': 104857600,  # 100MB
+                    'backupCount': 20,
+                    'encoding': 'utf-8',
+                    'delay': False
+                }
+            },
+            'root': {
+                'level': 'DEBUG',
+                'handlers': ['console', 'file']
+            }
+        }
+        
     def init_app(self, app):
         """Initialize Flask app with this configuration."""
         app.config.from_object(self)
         self._setup_paths(app)
-        
-        # Configure logging using LoggingConfig
-        logging_config = LoggingConfig(app.root_path)
-        logging_config.init_app(app)
         
     def _setup_paths(self):
         """Setup paths used by the application."""
