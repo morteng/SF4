@@ -53,6 +53,18 @@ def _configure_file_handlers(app):
         encoding='utf-8'
     )
     timed_handler.setFormatter(logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        '%(asctime)s - %(levelname)s - %(message)s'
     ))
     logging.getLogger().addHandler(timed_handler)
+
+def remove_logging_handlers():
+    """Remove all existing logging handlers"""
+    root_logger = logging.getLogger()
+    for handler in root_logger.handlers[:]:
+        root_logger.removeHandler(handler)
+
+def get_logger(name: str) -> logging.Logger:
+    """Get a logger instance with the specified name"""
+    logger = logging.getLogger(name)
+    logger.setLevel(os.getenv('LOG_LEVEL', 'INFO'))
+    return logger

@@ -1,5 +1,4 @@
 import os
-import logging
 import string
 import secrets
 import json
@@ -28,7 +27,9 @@ from app.extensions import db
 from app.constants import FlashMessages, FlashCategory
 from contextlib import contextmanager
 
-logger = logging.getLogger(__name__)
+from app.configs.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 limiter = Limiter(
     key_func=get_remote_address,
