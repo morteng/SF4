@@ -1,4 +1,5 @@
-import logging
+"""Forms for user-related functionality"""
+
 from flask_wtf import FlaskForm
 from flask_login import current_user
 from wtforms import StringField, SubmitField, PasswordField, HiddenField
@@ -32,26 +33,12 @@ class ProfileForm(FlaskForm):
             if user and (not hasattr(current_user, 'id') or user.id != current_user.id):
                 raise ValidationError(FlashMessages.EMAIL_ALREADY_EXISTS.value)
 
-    def validate_csrf_token(self, field):
-        """Custom CSRF token validation with enhanced error handling."""
-        logger = logging.getLogger(__name__)
-        if not field.data:
-            logger.warning("Missing CSRF token in profile form")
-            raise ValidationError(FlashMessages.CSRF_ERROR.value)
-        try:
-            from flask_wtf.csrf import validate_csrf
-            validate_csrf(field.data)
-        except Exception as e:
-            logger.error(f"CSRF validation failed: {str(e)}")
-            raise ValidationError(FlashMessages.CSRF_ERROR.value)
-
     def __init__(self, original_username, original_email, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.original_username = original_username
         self.original_email = original_email
         # Initialize CSRF token
         self.csrf_token.data = generate_csrf_token()
-
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -82,12 +69,12 @@ class RegisterForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
-    def validate_username(self, username: StringField) -> None:
+    def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
             raise ValidationError(FlashMessages.USERNAME_ALREADY_EXISTS)
 
-    def validate_email(self, email: StringField) -> None:
+    def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError(FlashMessages.EMAIL_ALREADY_EXISTS)
