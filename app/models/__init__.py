@@ -1,7 +1,6 @@
 from app.database import db
 
-class Base(db.Model):
-    __abstract__ = True
+from .base_model import Base
 
 from .organization import Organization
 from .stipend import Stipend
