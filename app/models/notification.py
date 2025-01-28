@@ -1,4 +1,4 @@
-from app.models import Base
+from app.models.base_model import BaseModel
 from app.extensions import db
 from datetime import datetime
 from sqlalchemy import ForeignKey
@@ -6,7 +6,7 @@ from app.common.enums import NotificationType, NotificationPriority
 from flask import current_app
 from app.models.user import User
 
-class Notification(Base):
+class Notification(BaseModel):
     __tablename__ = 'notification'
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(255), nullable=False)
@@ -21,6 +21,7 @@ class Notification(Base):
     user = db.relationship(User, backref='notifications')
 
     def __init__(self, message, type, user_id=None, related_object_type=None, related_object_id=None):
+        super().__init__()
         self.message = message
         self.type = type
         self.user_id = user_id
