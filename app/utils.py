@@ -130,6 +130,88 @@ def format_error_message(field: Any, error: Union[str, Exception]) -> str:
         return f"{field_label.text}: {error}"
     return f"{field.name if hasattr(field, 'name') else str(field)}: {error}"
 
+def flash_message(category, message):
+    """Helper function to create flash messages with category."""
+    return (message, category)
+
+def validate_password_strength(password: str) -> bool:
+    """Validate password strength according to project requirements."""
+    if len(password) < 8:
+        return False
+    if not re.search(r'[A-Z]', password):
+        return False
+    if not re.search(r'[a-z]', password):
+        return False
+    if not re.search(r'[0-9]', password):
+        return False
+    if not re.search(r'[^A-Za-z0-9]', password):
+        return False
+
+    # Check against common passwords
+    common_passwords = ['password', '123456', 'qwerty']
+    if password.lower() in common_passwords:
+        return False
+
+    return True
+
+def get_unread_notification_count() -> int:
+    """Get count of unread notifications."""
+    return Notification.query.filter_by(read_status=False).count()
+
+def generate_temp_password(length: int = 12) -> str:
+    """Generate a temporary password."""
+    chars = string.ascii_letters + string.digits + "!@#$%^&*"
+    return ''.join(secrets.choice(chars) for _ in range(length))
+
+def validate_url(url: str) -> bool:
+    """
+    Validate URL format according to RFC standards:
+    - Must start with http:// or https://
+    - Must be properly formatted
+    """
+    if not url:
+        logger.warning("Empty URL provided for validation.")
+        return False
+
+    try:
+        result = urlparse(url)
+        if not all([result.scheme, result.netloc]):
+            logger.warning(f"Invalid URL format: {url}")
+            return False
+        if not re.match(r'^https?://', url):
+            logger.warning(f"URL must start with http:// or https://: {url}")
+            return False
+        return True
+    except ValueError as e:
+        logger.error(f"Error validating URL {url}: {e}")
+        return False
+
+def format_error_message(field: Any, error: Union[str, Exception]) -> str:
+    """
+    Format error messages consistently for both HTMX and regular requests.
+    """
+    error_map = {
+        'invalid_format': FlashMessages.INVALID_FORMAT,
+        'invalid_date': FlashMessages.INVALID_DATE,
+        'invalid_time': FlashMessages.INVALID_TIME,
+        'invalid_timezone': FlashMessages.INVALID_TIMEZONE,
+        'daylight_saving': FlashMessages.DAYLIGHT_SAVING,
+        'future_date': FlashMessages.FUTURE_DATE_REQUIRED,
+        'past_date': FlashMessages.PAST_DATE_REQUIRED,
+        'timezone_conversion': FlashMessages.TIMEZONE_CONVERSION_ERROR,
+        'missing_time': FlashMessages.TIME_REQUIRED,
+        'required': FlashMessages.FIELD_REQUIRED
+    }
+
+    for key, msg in error_map.items():
+        if key in str(error):
+            return msg
+
+    field_label = getattr(field, 'label', None)
+    if field_label:
+        return f"{field_label.text}: {error}"
+    return f"{field.name if hasattr(field, 'name') else str(field)}: {error}"
+
 def setup_rate_limits(app):
     """Set up rate limits on certain endpoints or services."""
     limiter.init_app(app)
