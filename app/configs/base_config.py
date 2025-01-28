@@ -1,4 +1,5 @@
 import os
+import logging
 from pathlib import Path
 from typing import Dict, Any
 
@@ -9,6 +10,10 @@ class BaseConfig:
     PROJECT_NAME: str = "Stipend Discovery Platform"
     PROJECT_ROOT: Path = Path(__file__).parent.parent
     LOGS_PATH: Path = PROJECT_ROOT / 'logs'
+    STATIC_FOLDER: Path = PROJECT_ROOT / 'static'
+    TEMPLATES_FOLDER: Path = PROJECT_ROOT / 'templates'
+    INSTANCE_PATH: Path = PROJECT_ROOT / 'instance'
+    BACKUPS_PATH: Path = INSTANCE_PATH / 'backups'
     
     # Security
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-here")  # Should be overridden in environment
@@ -34,11 +39,49 @@ class BaseConfig:
     # Rate limiting (if implemented)
     RATE_LIMIT_GLOBAL: str = "100 per minute"
     
+    # Logging configuration
+    LOGGING: Dict[str, Any] = {
+        'version': 1,
+        'formatters': {
+            'default': {
+                'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+            }
+        },
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+                'level': 'DEBUG',
+                'formatter': 'default',
+                'stream': 'ext://sys.stdout'
+            }
+        },
+        'root': {
+            'level': 'INFO',
+            'handlers': ['console']
+        }
+    }
+
     def __init__(self):
         """Initialize configuration from environment variables."""
         # Override any settings from environment variables
         for env_var, default in self._get_env_vars().items():
             setattr(self, env_var, os.getenv(env_var, default))
+        
+    def init_app(self, app):
+        """Initialize Flask app with this configuration."""
+        app.config.from_object(self)
+        self._setup_paths(app)
+        
+    def _setup_paths(self, app):
+        """Setup paths used by the application."""
+        # Ensure directories exist
+        self.INSTANCE_PATH.mkdir(exist_ok=True)
+        self.LOGS_PATH.mkdir(exist_ok=True)
+        self.BACKUPS_PATH.mkdir(exist_ok=True)
+        
+        # Set Flask-specific paths
+        app.static_folder = str(self.STATIC_FOLDER)
+        app.template_folder = str(self.TEMPLATES_FOLDER)
     
     @classmethod
     def _get_env_vars(cls) -> Dict[str, Any]:
@@ -50,3 +93,24 @@ class BaseConfig:
             "DEBUG": "False",
             "TESTING": "False"
         }
+
+class ProductionConfig(BaseConfig):
+    def __init__(self):
+        super().__init__()
+        self.DEBUG = False
+        self.SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "postgresql://user:password@host:port/dbname")
+        self.LOGGING['root']['level'] = 'INFO'
+
+class DevelopmentConfig(BaseConfig):
+    def __init__(self):
+        super().__init__()
+        self.DEBUG = True
+        self.SQLALCHEMY_DATABASE_URI = 'sqlite:///dev.db'
+        self.LOGGING['root']['level'] = 'DEBUG'
+
+class TestingConfig(BaseConfig):
+    def __init__(self):
+        super().__init__()
+        self.TESTING = True
+        self.SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+        self.LOGGING['root']['level'] = 'WARNING'

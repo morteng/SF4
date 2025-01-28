@@ -1,13 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from app.configs import BaseConfig
+from app.configs.base_config import BaseConfig
 from app.common.utils import configure_logging
 
 db = SQLAlchemy()
 
 def create_app(config_class=BaseConfig):
     app = Flask(__name__)
-    app.config.from_object(config_class)
+    app.config.from_object(config_class())
     
     # Initialize logging
     configure_logging(app)
