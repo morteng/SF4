@@ -45,9 +45,9 @@ The next run will verify these fixes by running flask routes and pytest.
 
 /architect this has been a run of the script file CYCLE.txt. Given the results of this run, make any edits you need to CYCLE.txt in preperation for the next run, changing only the section defined as editable (between editable area starts and editable area ends). If you need to run any console commands, prepend them with /run. This is a windows 10 machine, you are running in a powershell. If you need to run any code, first create or edit the script in scripts/ folder, then run it next iteration with /run python scripts/myscript.py. 
 
-/architect Update the automation\MEMORY.md file with current state so you will have the knowledge after we reset working memory and restart the script. Increment the "current iteration" number each cycle.
+/architect Update the MEMORY.md file with current state so you will have the knowledge after we reset working memory and restart the script. Increment the "current iteration" number each cycle. Remove memories that are no longer needed.
 
-/architect Update any other documentation if major changes have been made that affects them.
+/architect Update documentation if major changes have been made that affects them.
 
 
 /reset
