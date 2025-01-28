@@ -4,6 +4,9 @@
 /add docs\Design_Documentation.md
 /add docs\PRD.md
 
+/add automation\MANAGER.txt
+/add automation\RULES.txt
+
 /add automation\MEMORY_BANK.md
 
 /run flask routes
