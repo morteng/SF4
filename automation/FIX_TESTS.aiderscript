@@ -1,21 +1,21 @@
+/git add .
+/commit
 /add docs\Planning_and_Progress.md
 /add docs\Design_Documentation.md
 /add docs\PRD.md
 
 /add automation\MEMORY_BANK.md
 
-### EDITABLE AREA STARTS ###
+/run flask routes
 
-/ask how can we fix the outstanding issues by performing the next steps mentioned in memory bank?
+### EDITABLE AREA STARTS ###
+/ask how can we fix issues with the app? Is there any duplicated code or functionality we can consolidate? Could any large files benefit from being modularized to improve maintainability? Are there any superflous files we can delete?
 /architect implement suggested changes.
 
 /run pytest -v
-/ask how can we fix this test issue? Is there any duplicated code or functionality we can consolidate? Could any large files benefit from being modularized to improve maintainability?
+/ask how can we fix this test issue? Is there any duplicated code or functionality we can consolidate? Could any large files benefit from being modularized to improve maintainability? Are there any superflous files we can delete?
 /architect implement suggested changes.
 
-/run python app.py
-/ask how can we fix issues with the app? Is there any duplicated code or functionality we can consolidate? Could any large files benefit from being modularized to improve maintainability?
-/architect implement suggested changes.
 
 ### EDITABLE AREA ENDS ###
 
@@ -24,7 +24,8 @@
 /add automation\FIX_TESTS.aiderscript
 /architect this has been a run of the script file FIX_TESTS.aiderscript. Given the results of this run, make any adits you need to the script file in preperation for the next run, changing only the section defined as editable (between editable area starts and editable area ends). If you need to run any console commands, prepend them with /run. This is a windows 10 machine, you are running in a powershell. If you need to run any code, first create the script in scripts/ folder, then run it next iteration with /run python scripts/myscript.py. 
 
-/code Update the memory bank with any information you need in the next run, documenting current state. The memory context will reset before next iteration. Remove older memories from the memory bank that are no longer needed.
+/architect Update the memory bank with any information you need in the next run, documenting current state. The memory context will reset before next iteration. Remove older memories from the memory bank that are no longer needed.
 
 /reset
+
 /load automation\FIX_TESTS.aiderscript
