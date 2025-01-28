@@ -1,20 +1,10 @@
-import os
-import time
 import logging
-import sqlite3
-from pathlib import Path
-from sqlalchemy import create_engine
-from sqlalchemy.exc import SQLAlchemyError
+import time
 from datetime import datetime
+from sqlalchemy.exc import SQLAlchemyError
 from typing import Optional, Dict, Any
 
-# Configure logging
 logger = logging.getLogger(__name__)
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.INFO)
 
 class DatabaseError(Exception):
     """Base class for database errors"""
@@ -145,7 +135,7 @@ def _verify_db_connection(db_uri: str) -> bool:
                         logger.error("Invalid schema version")
                         return False
                     cursor.close()
-                        
+                    
                 # Verify core tables exist
                 required_tables = ['stipend', 'tag', 'organization', 'user']
                 result = conn.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -155,7 +145,7 @@ def _verify_db_connection(db_uri: str) -> bool:
                 if missing_tables:
                     logger.error(f"Missing required tables: {', '.join(missing_tables)}")
                     return False
-                    
+                
                 logger.info("Database connection and schema validation successful")
                 return True
             
