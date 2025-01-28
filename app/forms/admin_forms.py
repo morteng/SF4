@@ -47,7 +47,7 @@ class UserForm(FlaskForm):
         DataRequired(message="Email is required"),
         Email(message="Invalid email format")
     ])
-    password = StringField('Password', validators=[
+    password = PasswordField('Password', validators=[
         DataRequired(message="Password is required")
     ])
     is_admin = SelectField('Role', choices=[(True, 'Admin'), (False, 'User')])
