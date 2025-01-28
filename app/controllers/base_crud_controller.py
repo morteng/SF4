@@ -17,7 +17,6 @@ class BaseCrudController:
                 return redirect(url_for(f'{self.template_dir}.index'))
             except Exception as e:
                 db.session.rollback()
-                # Log the error
                 return render_template(f'{self.template_dir}/create.html', form=form), 400
         return render_template(f'{self.template_dir}/create.html', form=form)
 
@@ -30,7 +29,6 @@ class BaseCrudController:
                 return redirect(url_for(f'{self.template_dir}.index'))
             except Exception as e:
                 db.session.rollback()
-                # Log the error
                 return render_template(f'{self.template_dir}/edit.html', form=form), 400
         return render_template(f'{self.template_dir}/edit.html', form=form)
 
@@ -40,7 +38,6 @@ class BaseCrudController:
             return redirect(url_for(f'{self.template_dir}.index'))
         except Exception as e:
             db.session.rollback()
-            # Log the error
             return redirect(url_for(f'{self.template_dir}.index'))
 
     def index(self):
