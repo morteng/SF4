@@ -1,8 +1,8 @@
-from app.models.base import Base
+from app.models.base_model import BaseModel
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
 
-class Organization(Base):
+class Organization(BaseModel):
     __tablename__ = 'organization'
 
     id = Column(Integer, primary_key=True)
