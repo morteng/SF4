@@ -1,4 +1,5 @@
 from pathlib import Path
+import logging
 
 class BaseConfig:
     def __init__(self, root_path: Path):
@@ -49,7 +50,7 @@ class BaseConfig:
     def init_app(self, app):
         """Initialize Flask app with this configuration."""
         app.config.from_object(self)
-        self._setup_paths(app)
+        self._setup_paths()
         
     def _setup_paths(self):
         """Setup paths used by the application."""
