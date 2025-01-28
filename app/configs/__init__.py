@@ -1,1 +1,1 @@
-from .base import BaseConfig, ProductionConfig, DevelopmentConfig, TestingConfig
+from .base_config import BaseConfig, ProductionConfig, DevelopmentConfig, TestingConfig
