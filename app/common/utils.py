@@ -18,3 +18,21 @@ class BaseBlueprint:
         
     def get_blueprint(self):
         return self.blueprint
+
+def configure_logging(app):
+    """Configure logging for the application."""
+    app.logger.setLevel(app.config['LOG_LEVEL'])
+    
+    # Rotating file handler
+    file_handler = RotatingFileHandler(
+        app.config['LOG_FILE'],
+        maxBytes=app.config['LOG_FILE_SIZE'],
+        backupCount=app.config['LOG_BACKUP_COUNT']
+    )
+    
+    # Formatter
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
+    
+    # Add handler to logger
+    app.logger.addHandler(file_handler)
