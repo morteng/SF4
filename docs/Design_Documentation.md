@@ -9,7 +9,7 @@
 - **Stipend**  
   - Represents a funding opportunity with fields like `id`, `name`, `description`, and `tags`.
   - Only `name` field is required - other fields can be populated later by AI bot.
-  - Inherits from `Base` model in `app.models.base`.
+  - Inherits from `BaseModel` in `app.models.base_model`.
 - **Tag**  
   - Represents a tag (e.g., `id`, `name`) in a many-to-many relationship with Stipend.
 - **Organization**  
@@ -19,9 +19,11 @@
 - **Routes (`routes/`)**  
   Defines endpoint logic, e.g., `admin_routes.py`, `user_routes.py`.
 - **Models (`models/`)**  
-  Contains ORM classes for `Stipend`, `Tag`, `Organization`, etc., all inheriting from `Base` model.
+  Contains ORM classes for `Stipend`, `Tag`, `Organization`, etc., all inheriting from `BaseModel`.
 - **Services (`services/`)**  
   Houses business logic for stipend management, tagging, data validation, and more.
+- **Configs (`configs/`)**  
+  Centralized configuration management with environment-specific settings.
 
 ## 4. Security & Authentication
 - **Administrative Access**: Restrict administrative routes to authenticated users.
