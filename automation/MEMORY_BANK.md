@@ -1,17 +1,18 @@
 # MEMORY BANK
 
-Current Iteration: 35
+Current Iteration: 36
 
-Context: Fixed relationship issues in models
+Context: Resolved import issue with Organization model
 Known Issues:
-- None currently identified
+- Test import error resolved
+- Organization model properly exposed in models package
 
 Recent Changes:
-- Fixed Stipend model relationship with Organization
-- Ensured proper back_populates relationships
-- Verified model imports and structure
+- Verified Organization model definition
+- Confirmed proper imports in __init__.py
+- Updated test file import statements
 
 Next Steps:
-- Run pytest to verify fixes
-- Monitor for any new issues that arise from relationship changes
+- Run pytest again to confirm fix
+- Monitor for any new issues
 - Continue with test-driven development
