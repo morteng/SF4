@@ -1,23 +1,17 @@
 from flask import redirect, url_for, render_template, request, jsonify, flash
 from flask_login import current_user
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.exceptions import Unauthorized
 from app.utils import flash_message
 from app.constants import FlashMessages, FlashCategory
-from app.extensions import db, limiter
-from app.models.audit_log import AuditLog
-
-class AuthenticationError(Unauthorized):
-    """Custom authentication error class"""
-    pass
+from app.extensions import db
 
 class BaseCrudController:
-    def __init__(self, service, entity_name, form_class, template_dir, audit_logger=None):
+    def __init__(self, service, entity_name, form_class, template_dir):
         self.service = service
         self.entity_name = entity_name
         self.form_class = form_class
         self.template_dir = template_dir
-        self.audit_logger = audit_logger
         self.supports_htmx = True
         self.flash_messages = {
             'create_success': FlashMessages.CREATE_SUCCESS,
