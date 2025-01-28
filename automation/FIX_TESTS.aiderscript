@@ -23,7 +23,7 @@
 /run pytest -v
 
 # Continue with configuration consolidation
-/architect how can we further consolidate logging and configuration files? Are there any remaining circular imports or duplicated code?
+/architect let's fix the problems. How can we further consolidate logging and configuration files? Are there any remaining circular imports or duplicated code?
 
 ### EDITABLE AREA ENDS ###
 
