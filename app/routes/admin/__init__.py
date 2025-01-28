@@ -44,8 +44,13 @@ def register_admin_blueprints(app):
         logger.error(f"Failed to register admin blueprints: {str(e)}")
         raise
 
-# Export the admin blueprint
-admin_bp = create_admin_blueprint()
+# Create the admin blueprint instance
+admin_bp = BaseBlueprint(
+    name='admin',
+    import_name=__name__,
+    url_prefix='/admin',
+    template_folder='templates'
+)
 
 from flask import abort
 from functools import wraps
