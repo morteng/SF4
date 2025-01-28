@@ -1,9 +1,9 @@
 from sqlalchemy import Table, Integer, ForeignKey, Column
-from app.models.base import Base
+from app.models.base_model import BaseModel
 
 stipend_tag_association = Table(
     'stipend_tag_association',
-    Base.metadata,
-    Column('stipend_id', Integer, ForeignKey('stipend.id')),
-    Column('tag_id', Integer, ForeignKey('tag.id'))
+    BaseModel.metadata,
+    Column('stipend_id', Integer, ForeignKey('stipends.id')),
+    Column('tag_id', Integer, ForeignKey('tags.id'))
 )

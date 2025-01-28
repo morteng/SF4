@@ -7,3 +7,7 @@ Base = declarative_base()
 class BaseModel(Base, TimestampMixin, SoftDeleteMixin):
     """Base model class that other models inherit from."""
     __abstract__ = True
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
