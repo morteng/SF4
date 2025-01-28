@@ -2,3 +2,4 @@ Just try to get something, an MVP, up and running, before starting building out 
 
 FEATURE REQUEST: Ensure dashboard has stats and values for monitoring metrics and other relevant info.
 
+Important info: There is an .env file even tho you cannot see it. It is identical to the .env.example file in the project root folder.
