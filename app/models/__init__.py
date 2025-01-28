@@ -9,12 +9,12 @@ from .notification import Notification
 from .audit_log import AuditLog
 from .tag import Tag
 from .bot import Bot
-from .user import User  # Added User import
+from .user import User
 
 __all__ = [
     'Base',
     'db',
-    'User',  # Added User to __all__
+    'User',
     'Stipend',
     'Notification',
     'AuditLog',
