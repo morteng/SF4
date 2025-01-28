@@ -11,24 +11,21 @@
 
 ### EDITABLE AREA STARTS ###
 
+/architect implement code changes according to the memory bank
 
 /run flask routes
 /run pytest -v
 
-
 /architect let's fix the problems. How can we further consolidate logging and configuration files? Are there any remaining circular imports or duplicated code?
-
 
 ### EDITABLE AREA ENDS ###
 
 
 ### DO NOT CHANGE ANYTHING BELOW THIS LINE! ###
 
-/add automation\CYCLE.txt
+/architect Update the MEMORY.md file with what to do next cycle, current state so you will have the knowledge after we reset working memory and restart the script. Increment the "current iteration" number each cycle. Remove memories that are no longer needed.
 
-/architect this has been a run of the script file CYCLE.txt. Given the results of this run, make any edits you need to CYCLE.txt in preperation for the next run, changing only the section defined as editable (between editable area starts and editable area ends). If you need to run any console commands, prepend them with /run. This is a windows 10 machine, you are running in a powershell. If you need to run any code, first create or edit the script in scripts/ folder, then run it next iteration with /run python scripts/myscript.py. 
-
-/architect Update the MEMORY.md file with current state so you will have the knowledge after we reset working memory and restart the script. Increment the "current iteration" number each cycle. Remove memories that are no longer needed.
+/code ensure MEMORY.md has been updated with latest memories.
 
 
 
