@@ -8,6 +8,7 @@ class BaseConfig:
     # Project structure
     PROJECT_NAME: str = "Stipend Discovery Platform"
     PROJECT_ROOT: Path = Path(__file__).parent.parent
+    LOGS_PATH: Path = PROJECT_ROOT / 'logs'
     
     # Security
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-here")  # Should be overridden in environment
