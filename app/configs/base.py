@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
 from typing import Dict, Any
+from .logging_config import LoggingConfig
 
 class BaseConfig:
     def __init__(self, root_path: Path):
@@ -15,32 +16,14 @@ class BaseConfig:
         self.SQLALCHEMY_DATABASE_URI: str = 'sqlite:///:memory:'
         self.SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
         
-        # Logging configuration
-        self.LOGGING: Dict[str, Any] = {
-            'version': 1,
-            'formatters': {
-                'default': {
-                    'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
-                }
-            },
-            'handlers': {
-                'console': {
-                    'class': 'logging.StreamHandler',
-                    'level': 'DEBUG',
-                    'formatter': 'default',
-                    'stream': 'ext://sys.stdout'
-                }
-            },
-            'root': {
-                'level': 'INFO',
-                'handlers': ['console']
-            }
-        }
-
+        # Initialize logging
+        self.logging = LoggingConfig(root_path)
+        
     def init_app(self, app):
         """Initialize Flask app with this configuration."""
         app.config.from_object(self)
-        self._setup_paths()
+        self._setup_paths(app)
+        self.logging.configure_logging(app)
         
     def _setup_paths(self):
         """Setup paths used by the application."""
@@ -60,18 +43,18 @@ class ProductionConfig(BaseConfig):
         super().__init__(root_path)
         self.DEBUG = False
         self.SQLALCHEMY_DATABASE_URI = 'postgresql://user:password@host:port/dbname'
-        self.LOGGING['root']['level'] = 'INFO'
+        self.logging = LoggingConfig(root_path)
 
 class DevelopmentConfig(BaseConfig):
     def __init__(self, root_path: Path):
         super().__init__(root_path)
         self.DEBUG = True
         self.SQLALCHEMY_DATABASE_URI = 'sqlite:///dev.db'
-        self.LOGGING['root']['level'] = 'DEBUG'
+        self.logging = LoggingConfig(root_path)
 
 class TestingConfig(BaseConfig):
     def __init__(self, root_path: Path):
         super().__init__(root_path)
         self.TESTING = True
         self.SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-        self.LOGGING['root']['level'] = 'WARNING'
+        self.logging = LoggingConfig(root_path)
