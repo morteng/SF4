@@ -9,16 +9,15 @@
 
 /add automation\MEMORY_BANK.md
 
-/run flask routes
-/run python app.py
+
 
 ### EDITABLE AREA STARTS ###
-/ask how can we fix issues with the app? Is there any duplicated code or functionality we can consolidate? Could any large files benefit from being modularized to improve maintainability? Are there any superflous files we can delete?
-/architect implement suggested changes.
+/run flask routes
+/run python app.py
+/architect how can we fix issues with the app? Is there any duplicated code or functionality we can consolidate? Could any large files benefit from being modularized to improve maintainability? Are there any superflous files we can delete?
 
 /run pytest -v
-/ask how can we fix this test issue? Is there any duplicated code or functionality we can consolidate? Could any large files benefit from being modularized to improve maintainability? Are there any superflous files we can delete?
-/architect implement suggested changes.
+/architect how can we fix this test issue? Is there any duplicated code or functionality we can consolidate? Could any large files benefit from being modularized to improve maintainability? Are there any superflous files we can delete?
 ### EDITABLE AREA ENDS ###
 
 
