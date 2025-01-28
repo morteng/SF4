@@ -1,3 +1,4 @@
+# add important files
 /git add .
 /commit
 /add docs\Planning_and_Progress.md
@@ -6,12 +7,11 @@
 
 /add automation\MANAGER.txt
 /add automation\RULES.txt
-
-
+/add automation\CYCLE.txt
 
 ### EDITABLE AREA STARTS ###
 
-### MEMORY BANK STARTS ###
+# MEMORY BANK STARTS
 
 Current Iteration: 48
 
@@ -38,8 +38,9 @@ Next Steps:
 - Finalize controller consolidation
 - Conduct full test suite verification
 
-### MEMORY BANK ENDS ###
+# MEMORY BANK ENDS
 
+# CODE AREA STARTS
 
 # Fix circular imports
 /run python scripts/fix_imports.py
@@ -51,8 +52,13 @@ Next Steps:
 /run flask routes
 /run pytest -v
 
-# Continue with configuration consolidation
+# CODE AREA ENDS
+
+# AIDER AREA STARTS
+
 /architect let's fix the problems. How can we further consolidate logging and configuration files? Are there any remaining circular imports or duplicated code?
+
+# AIDER AREA ENDS
 
 ### EDITABLE AREA ENDS ###
 
@@ -60,8 +66,8 @@ Next Steps:
 ### DO NOT CHANGE ANYTHING BELOW THIS LINE! ###
 
 
-/add automation\FIX_TESTS.aiderscript
-/architect this has been a run of the script file FIX_TESTS.aiderscript. Given the results of this run, make any edits you need to automation\FIX_TESTS.aiderscript in preperation for the next run, changing only the section defined as editable (between editable area starts and editable area ends). If you need to run any console commands, prepend them with /run. This is a windows 10 machine, you are running in a powershell. If you need to run any code, first create or edit the script in scripts/ folder, then run it next iteration with /run python scripts/myscript.py. Always update the memory bank area with current state so you will have the knowledge after we reset working memory and restart the script. Increment the "current iteration" number each cycle.
+
+/architect this has been a run of the script file CYCLE.txt. Given the results of this run, make any edits you need to CYCLE.txt in preperation for the next run, changing only the section defined as editable (between editable area starts and editable area ends). If you need to run any console commands, prepend them with /run. This is a windows 10 machine, you are running in a powershell. If you need to run any code, first create or edit the script in scripts/ folder, then run it next iteration with /run python scripts/myscript.py. Always update the memory bank area with current state so you will have the knowledge after we reset working memory and restart the script. Increment the "current iteration" number each cycle.
 
 /architect Update any other documentation if major changes have been made that affects them.
 
