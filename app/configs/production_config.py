@@ -1,3 +1,4 @@
+import os
 from app.configs.base_config import BaseConfig
 
 class ProductionConfig(BaseConfig):
