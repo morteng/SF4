@@ -1,3 +1,4 @@
-from .base_model import BaseModel
-from .stipend import Stipend
-from .audit_log import AuditLog
+from app.models.base_model import BaseModel
+from app.models.user import User
+from app.models.notification import Notification
+from app.models.audit_log import AuditLog

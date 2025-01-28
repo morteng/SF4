@@ -273,9 +273,9 @@ def log_audit(user_id, action, object_type=None, object_id=None, before=None, af
             object_id=object_id,
             details_before=json.dumps(before) if before else None,
             details_after=json.dumps(after) if after else None,
-            ip_address=request.remote_addr if request else None,
-            http_method=request.method if request else None,
-            endpoint=request.endpoint if request else None
+            ip_address=request.remote_addr if request else '0.0.0.0',
+            http_method=request.method if request else 'UNKNOWN',
+            endpoint=request.endpoint if request else 'unknown'
         )
         with db_session_scope() as session:
             session.add(audit_log)
@@ -408,7 +408,3 @@ def role_required(role="user"):
             return f(*args, **kwargs)
         return decorated_function
     return decorator
-
-
-# If you do want the default Flask-Login decorator, use:
-# login_required = flask_login_required
