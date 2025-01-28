@@ -47,11 +47,6 @@ class BaseConfig:
             }
         }
         
-    def init_app(self, app):
-        """Initialize Flask app with this configuration."""
-        app.config.from_object(self)
-        self._setup_paths()
-        
     def _setup_paths(self):
         """Setup paths used by the application."""
         self.STATIC_FOLDER = self.root_path / 'static'
