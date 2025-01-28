@@ -27,17 +27,15 @@
 
 
 ### DO NOT CHANGE ANYTHING BELOW THIS LINE! ###
-/architect Work on improving code and tests
 
 
 /add automation\FIX_TESTS.aiderscript
-/architect this has been a run of the script file FIX_TESTS.aiderscript. Given the results of this run, make any adits you need to automation\FIX_TESTS.aiderscript in preperation for the next run, changing only the section defined as editable (between editable area starts and editable area ends). If you need to run any console commands, prepend them with /run. This is a windows 10 machine, you are running in a powershell. If you need to run any code, first create or edit the script in scripts/ folder, then run it next iteration with /run python scripts/myscript.py. 
+/architect this has been a run of the script file FIX_TESTS.aiderscript. Given the results of this run, make any edits you need to automation\FIX_TESTS.aiderscript in preperation for the next run, changing only the section defined as editable (between editable area starts and editable area ends). If you need to run any console commands, prepend them with /run. This is a windows 10 machine, you are running in a powershell. If you need to run any code, first create or edit the script in scripts/ folder, then run it next iteration with /run python scripts/myscript.py. 
 
 /code Update automation\MEMORY_BANK.md with any information you need in the next run, documenting current state. The working memory context will reset before next iteration, so this is your chance to remember important information. 
 
 /architect Update any other documentation if you need to.
 
-/code have all edits been completed? 
 
 /reset
 
