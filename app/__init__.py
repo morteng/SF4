@@ -1,13 +1,14 @@
 from flask import Flask
+from app.configs.base_config import BaseConfig
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-def create_app(config_class):
+def create_app():
     app = Flask(__name__)
     
     # Initialize configuration
-    app.config = config_class(app.root_path)
+    app.config = BaseConfig(app.root_path)
     
     # Initialize database
     db.init_app(app)
