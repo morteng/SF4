@@ -11,6 +11,10 @@ app.config.from_object(config)
 db.init_app(app)
 migrate.init_app(app, db)
 
+# Configure logging
+from app.common.utils import configure_logging
+configure_logging(app)
+
 with app.app_context():
     # Initialize any required data or services here
     pass
