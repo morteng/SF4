@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from configs.config import Configuration
+from app.configs.base import BaseConfig
 
 db = SQLAlchemy()
 
-def create_app(config_class=Configuration):
+def create_app(config_class=BaseConfig):
     app = Flask(__name__)
     config = config_class()
     app.config.from_object(config)
@@ -14,7 +14,9 @@ def create_app(config_class=Configuration):
         config.init_app(app)
     
     # Configure logging
-    config.configure_logging()
+    from logging_config import LoggingConfig
+    logging_config = LoggingConfig(app.root_path)
+    logging_config.configure_logging(app)
     
     db.init_app(app)
     

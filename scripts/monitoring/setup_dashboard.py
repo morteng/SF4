@@ -4,12 +4,13 @@ import logging
 from flask import Flask
 from prometheus_flask_exporter import PrometheusMetrics
 
+from logging_config import LoggingConfig
+
 def configure_logging():
     """Configure basic logging for the script"""
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
+    logger = LoggingConfig(root_path=Path(__file__).parent.parent)
+    logger.configure_logging()
+    return logging.getLogger('monitoring')
 
 def setup_dashboard(port=9100):
     app = Flask(__name__)

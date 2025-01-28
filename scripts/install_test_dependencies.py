@@ -3,12 +3,12 @@ import sys
 import logging
 from pathlib import Path
 
+from logging_config import LoggingConfig
+
 def configure_logging():
     """Configure basic logging for the script"""
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s'
-    )
+    logger = LoggingConfig(root_path=Path(__file__).parent.parent)
+    logger.configure_logging()
     return logging.getLogger('deps')
 
 def install_dependencies():
@@ -20,8 +20,6 @@ def install_dependencies():
             req_file.write_text(
                 "pytest>=8.0.0\n"
                 "freezegun>=1.2.0\n"
-                "factory-boy>=3.3.0\n"
-                "python-dotenv>=1.0.0\n"
                 "factory-boy>=3.3.0\n"
                 "python-dotenv>=1.0.0\n"
             )
