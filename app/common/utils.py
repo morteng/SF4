@@ -261,8 +261,6 @@ def log_audit(user_id, action, object_type=None, object_id=None, before=None, af
             details_after=json.dumps(after) if after else None,
             ip_address=request.remote_addr if request else '0.0.0.0',
             http_method=request.method if request else 'UNKNOWN',
-            endpoint=request.endpoint if request else 'unknown',
-            http_method=request.method if request else 'UNKNOWN',
             endpoint=request.endpoint if request else 'unknown'
         )
         with db_session_scope() as session:
