@@ -23,11 +23,9 @@
 
 ### DO NOT CHANGE ANYTHING BELOW THIS LINE! ###
 
-/architect Update the MEMORY.md file with what to do next cycle, current state so you will have the knowledge after we reset working memory and restart the script. Increment the "current iteration" number each cycle. Remove memories that are no longer needed.
+/architect Update the MEMORY.md file with what to do next cycle, focusing on one task. Update to current state so you will have the knowledge after we reset working memory and restart the script. Increment the "current iteration" number each cycle. Remove memories and tasks that are no longer needed.
 
 /code ensure MEMORY.md has been updated with latest memories.
-
-
 
 /reset
 
