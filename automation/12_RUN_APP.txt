@@ -1,2 +1,0 @@
-# Command to run the application for demo
-/run python app.py

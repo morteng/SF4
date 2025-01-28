@@ -1,6 +1,0 @@
-pytest
-coverage
-freezegun
-flask_testing
-beautifulsoup4
-pytest-cov

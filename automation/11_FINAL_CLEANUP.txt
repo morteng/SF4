@@ -1,1 +1,0 @@
-/load automation/11_FINAL_CLEANUP.txt
