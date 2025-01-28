@@ -24,6 +24,8 @@
   Houses business logic for stipend management, tagging, data validation, and more.
 - **Configs (`configs/`)**  
   Centralized configuration management with environment-specific settings.
+- **Common Utilities (`common/`)**  
+  Shared utility functions including logging configuration.
 
 ## 4. Security & Authentication
 - **Administrative Access**: Restrict administrative routes to authenticated users.
