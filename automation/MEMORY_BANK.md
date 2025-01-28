@@ -7,6 +7,8 @@ Known Issues:
 - Circular import between routes/admin and common/utils via BaseBlueprint
 - Duplicate logging configuration in utils.py and logging_config.py
 - Potential configuration validation gaps
+• Flask routes command failed due to config loading issue
+• Test import error: No module named 'app.controllers.base_crud_controller'
 
 Recent Changes:
 - Moved BaseBlueprint to common/base_blueprint.py
