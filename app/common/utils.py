@@ -1,6 +1,7 @@
 import os
 import logging
 from flask import Blueprint
+from logging.handlers import RotatingFileHandler
 
 logger = logging.getLogger(__name__)
 
