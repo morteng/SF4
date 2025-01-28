@@ -1,15 +1,15 @@
 # MEMORY BANK
 
-Current Iteration: 39
+Current Iteration: 40
 
-Context: Resolved configuration import issues
+Context: Resolved base model issues
 Known Issues:
-- Test failures due to missing Base model
+- Test failures due to missing __tablename__ in models
 - Duplicate code in controllers
 - Multiple configuration files causing confusion
 
 Recent Changes:
-- Removed duplicate Base model file
+- Added __tablename__ to BaseModel
 - Updated imports to reference single Base model
 - Began consolidating controller logic
 
