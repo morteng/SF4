@@ -384,5 +384,5 @@ def role_required(role="user"):
                 flash('You do not have permission to access this page.', 'danger')
                 return redirect(url_for('main.index'))
             return f(*args, **kwargs)
-        return decorated_function
+        return decorator
     return decorator

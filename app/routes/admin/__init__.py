@@ -55,7 +55,6 @@ admin_bp = BaseBlueprint(
 from flask import abort
 from functools import wraps
 from flask_login import current_user
-from app.common.utils import validate_blueprint_routes
 
 def admin_required(f):
     @wraps(f)
