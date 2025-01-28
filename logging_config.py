@@ -1,12 +1,19 @@
 import logging
 import os
+import json
 from pathlib import Path
+from functools import wraps
+from flask import flash, redirect, url_for, abort, request, current_app
+from flask_login import current_user
+from sqlalchemy import inspect
+from sqlalchemy.exc import SQLAlchemyError
 from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
-from flask import flash
 from app.models.audit_log import AuditLog
 from app.models.notification import Notification
-from flask_login import current_user
-from app.utils import admin_required
+from app.models.user import User
+from app.extensions import db
+from app.constants import FlashMessages, FlashCategory
+from contextlib import contextmanager
 
 def configure_logging(app):
     """Centralized logging configuration"""
@@ -219,4 +226,21 @@ def clean(text, tags=None, attributes=None):
     """Sanitize input text using bleach."""
     if not text:
         return text
+    from bleach import clean as bleach_clean
     return bleach_clean(text, tags=tags, attributes=attributes)
+
+@contextmanager
+def db_session_scope():
+    """Provide a transactional scope for DB operations."""
+    session = db.session
+    try:
+        yield session
+        session.commit()
+    except Exception as e:
+        session.rollback()
+        logger.error(f"Database operation failed: {str(e)}")
+        raise
+    finally:
+        session.close()
+
+logger = logging.getLogger(__name__)
