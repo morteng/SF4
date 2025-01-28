@@ -5,26 +5,25 @@
 /add docs\PRD.md
 
 /add automation\MANAGER.md
-/add automation\RULES.md
 /read automation\MEMORY.md
 
 ### EDITABLE AREA STARTS ###
 
-/architect implement code changes according to the memory bank
+/architect Work on the issues noted in the memory bank.
 
 /run flask routes
 /run pytest -v
 
 /architect let's fix the problems. How can we further consolidate logging and configuration files? Are there any remaining circular imports or duplicated code?
 
-### EDITABLE AREA ENDS ###
+/code have all changes been implemented?
 
+### EDITABLE AREA ENDS ###
 
 ### DO NOT CHANGE ANYTHING BELOW THIS LINE! ###
 /add automation\MEMORY.md
 
-/code Update the automation\MEMORY.md file with what to do next cycle, focusing on one task. Update to current state so you will have the knowledge after we reset working memory and restart the script. Increment the "current iteration" number each cycle. Remove memories and tasks that are no longer needed.
-
+/code Update the automation\MEMORY.md file with what to do next cycle, focusing on one task. Include current state so you will have the knowledge after we reset working memory and restart the script. Increment the "current iteration" number each cycle. Remove memories and tasks that are no longer needed.
 
 /reset
 
