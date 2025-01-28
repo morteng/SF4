@@ -1,9 +1,9 @@
-from app.models.base import Base
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
 from app.models.relationships import stipend_tag_association
+from app.models.base_model import BaseModel
 
-class Tag(Base):
+class Tag(BaseModel):
     __tablename__ = 'tag'
     
     id = Column(Integer, primary_key=True)
