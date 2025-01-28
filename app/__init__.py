@@ -1,5 +1,7 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 from app.configs import BaseConfig
+from app.common.utils import configure_logging
 
 db = SQLAlchemy()
 
