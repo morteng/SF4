@@ -1,7 +1,7 @@
 # Product Requirements Document (PRD)
 
 ## 1. Purpose
-This document outlines the objectives, target audience, and key features for the Stipend Discovery Website.
+This document outlines the objectives, target audience, and key features for the Stipend Discovery Platform.
 
 ## 2. Target Audience and Use Cases
 - **General Users**: Explore and filter stipends by tag/category.
