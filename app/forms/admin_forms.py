@@ -5,10 +5,11 @@ from wtforms import (
     StringField, TextAreaField, URLField, SubmitField,
     SelectField, SelectMultipleField
 )
-from wtforms.validators import DataRequired, Length, URL
+from wtforms.validators import DataRequired, Length, URL, Email, EqualTo
 
 from app.models.organization import Organization
 from app.models.tag import Tag
+from app.models.user import User
 from app.extensions import db
 from .custom_fields import CustomDateTimeField
 
@@ -35,3 +36,19 @@ class StipendForm(FlaskForm):
     """Form for creating and editing stipends"""
     name = StringField('Name', validators=[DataRequired()])
     submit = SubmitField('Create')
+
+class UserForm(FlaskForm):
+    """Form for creating and editing users"""
+    username = StringField('Username', validators=[
+        DataRequired(message="Username is required"),
+        Length(min=3, max=50, message="Username must be between 3-50 characters")
+    ])
+    email = StringField('Email', validators=[
+        DataRequired(message="Email is required"),
+        Email(message="Invalid email format")
+    ])
+    password = StringField('Password', validators=[
+        DataRequired(message="Password is required")
+    ])
+    is_admin = SelectField('Role', choices=[(True, 'Admin'), (False, 'User')])
+    submit = SubmitField('Save User')
