@@ -2,8 +2,8 @@ from pathlib import Path
 import logging
 
 class BaseConfig:
-    def __init__(self, root_path: Path):
-        self.root_path = root_path.resolve()
+    def __init__(self, root_path: str):
+        self.root_path = Path(root_path).resolve()
         
         # Basic configuration
         self.SECRET_KEY: str = 'your-secret-key-here'
@@ -61,19 +61,19 @@ class BaseConfig:
         self.BACKUPS_PATH.mkdir(exist_ok=True)
 
 class ProductionConfig(BaseConfig):
-    def __init__(self, root_path: Path):
+    def __init__(self, root_path: str):
         super().__init__(root_path)
         self.DEBUG = False
         self.SQLALCHEMY_DATABASE_URI = 'postgresql://user:password@host:port/dbname'
 
 class DevelopmentConfig(BaseConfig):
-    def __init__(self, root_path: Path):
+    def __init__(self, root_path: str):
         super().__init__(root_path)
         self.DEBUG = True
         self.SQLALCHEMY_DATABASE_URI = 'sqlite:///dev.db'
 
 class TestingConfig(BaseConfig):
-    def __init__(self, root_path: Path):
+    def __init__(self, root_path: str):
         super().__init__(root_path)
         self.TESTING = True
         self.SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'

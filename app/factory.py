@@ -11,7 +11,8 @@ def create_app(env='development'):
         config_class = ProductionConfig
         
     app = Flask(__name__)
-    config = config_class(app.root_path)
+    # Pass app.root_path as a string to BaseConfig
+    config = config_class(str(app.root_path))
     app.config = config
     
     # Initialize database
