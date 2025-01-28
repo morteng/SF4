@@ -16,7 +16,7 @@ def create_app(config_class=BaseConfig):
     db.init_app(app)
     
     with app.app_context():
-        from . import routes
-        db.create_all()
+        from app.routes import register_blueprints
+        register_blueprints(app)
         
     return app
