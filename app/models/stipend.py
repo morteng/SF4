@@ -1,11 +1,11 @@
-from app.models.base import Base
+from app.models.base_model import BaseModel
 from sqlalchemy import Column, String, DateTime, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.models.organization import Organization
 from app.models.relationships import stipend_tag_association
 
-class Stipend(Base):
+class Stipend(BaseModel):
     __tablename__ = "stipends"
 
     id = Column(Integer, primary_key=True)
