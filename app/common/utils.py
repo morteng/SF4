@@ -34,6 +34,21 @@ limiter = Limiter(
     default_limits=["200 per day", "50 per hour"]
 )
 
+class BaseBlueprint:
+    def __init__(self, name, import_name, url_prefix=None, template_folder=None):
+        self.blueprint = Blueprint(
+            name=name,
+            import_name=import_name,
+            url_prefix=url_prefix,
+            template_folder=template_folder
+        )
+        
+    def register_route(self, rule, endpoint=None, view_func=None, **options):
+        self.blueprint.add_url_rule(rule, endpoint, view_func, **options)
+        
+    def get_blueprint(self):
+        return self.blueprint
+
 def generate_csrf_token():
     """Generate a CSRF token for form validation."""
     return generate_csrf()
