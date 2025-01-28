@@ -1,5 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
 from app.models.mixins import TimestampMixin, SoftDeleteMixin
+from app.extensions import db
 
 Base = declarative_base()
 
