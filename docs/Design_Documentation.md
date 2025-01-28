@@ -9,6 +9,7 @@
 - **Stipend**  
   - Represents a funding opportunity with fields like `id`, `name`, `description`, and `tags`.
   - Only `name` field is required - other fields can be populated later by AI bot.
+  - Inherits from `Base` model in `app.models.base`.
 - **Tag**  
   - Represents a tag (e.g., `id`, `name`) in a many-to-many relationship with Stipend.
 - **Organization**  
@@ -18,7 +19,7 @@
 - **Routes (`routes/`)**  
   Defines endpoint logic, e.g., `admin_routes.py`, `user_routes.py`.
 - **Models (`models/`)**  
-  Contains ORM classes for `Stipend`, `Tag`, `Organization`, etc.
+  Contains ORM classes for `Stipend`, `Tag`, `Organization`, etc., all inheriting from `Base` model.
 - **Services (`services/`)**  
   Houses business logic for stipend management, tagging, data validation, and more.
 
@@ -37,4 +38,3 @@
 - **Backup Strategy**: Automated database backups with retention policy and integrity checks
 - **Environment Variables**: Store sensitive data (e.g., credentials) securely, verified at runtime
 - **Monitoring**: Comprehensive production monitoring with alert thresholds
-
