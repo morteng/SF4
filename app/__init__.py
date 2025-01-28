@@ -1,21 +1,10 @@
 from flask import Flask
-from app.configs.base_config import BaseConfig
-from flask_sqlalchemy import SQLAlchemy
+from app.factory import create_app
 
-db = SQLAlchemy()
+app = Flask(__name__)
 
-def create_app():
-    app = Flask(__name__)
-    
-    # Initialize configuration
-    app.config = BaseConfig(app.root_path)
-    
-    # Initialize database
-    db.init_app(app)
-    
-    # Register blueprints
-    with app.app_context():
-        from app.routes import register_blueprints
-        register_blueprints(app)
-        
-    return app
+# Initialize the app
+app = create_app()
+
+if __name__ == '__main__':
+    app.run()
