@@ -9,7 +9,10 @@ from datetime import datetime, timezone
 from typing import Any, Union, Tuple
 from functools import wraps
 from urllib.parse import urlparse
-from flask import Blueprint, abort, redirect, url_for, flash, request, current_app, render_template
+from flask import (
+    Blueprint, render_template, request, redirect, 
+    url_for, jsonify, current_app, flash
+)
 from flask_login import current_user, login_required as flask_login_required
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -411,3 +414,22 @@ def configure_logging(app):
     # Apply the logging configuration
     app.config['LOGGING'] = LOGGING
     app.logger.info('Logging configuration loaded')
+
+def validate_blueprint_routes(blueprint):
+    """Validate that all routes in a blueprint have proper documentation."""
+    missing_docs = []
+    
+    for route in blueprint.routes:
+        if not route.get('doc'):
+            missing_docs.append({
+                'endpoint': route.endpoint,
+                'rule': route.rule,
+                'methods': route.methods
+            })
+    
+    if missing_docs:
+        logger.warning(f"Routes missing documentation in {blueprint.name}:")
+        for item in missing_docs:
+            logger.warning(f"Endpoint: {item['endpoint']}, Rule: {item['rule']}, Methods: {item['methods']}")
+    
+    return len(missing_docs) == 0
