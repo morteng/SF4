@@ -4,6 +4,7 @@ import logging
 from pathlib import Path
 
 def configure_logging():
+    """Configure basic logging for the script"""
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s'

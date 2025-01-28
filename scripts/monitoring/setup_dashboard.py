@@ -5,6 +5,7 @@ from flask import Flask
 from prometheus_flask_exporter import PrometheusMetrics
 
 def configure_logging():
+    """Configure basic logging for the script"""
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -23,7 +24,8 @@ def setup_dashboard(port=9100):
         return 'OK', 200
     
     # Start the server
-    logging.info(f"Starting monitoring dashboard on port {port}")
+    logger = configure_logging()
+    logger.info(f"Starting monitoring dashboard on port {port}")
     app.run(host='0.0.0.0', port=port)
 
 if __name__ == '__main__':

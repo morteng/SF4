@@ -1,20 +1,20 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from app.configs.base_config import BaseConfig
-from logging_config import configure_logging
+from configs.config import Configuration
 
 db = SQLAlchemy()
 
-def create_app(config_class=BaseConfig):
+def create_app(config_class=Configuration):
     app = Flask(__name__)
-    app.config.from_object(config_class)
+    config = config_class()
+    app.config.from_object(config)
     
     # Initialize configuration
-    if hasattr(config_class, 'init_app'):
-        config_class.init_app(app)
+    if hasattr(config, 'init_app'):
+        config.init_app(app)
     
     # Configure logging
-    configure_logging(app)
+    config.configure_logging()
     
     db.init_app(app)
     

@@ -1,36 +1,16 @@
 """Consolidated configuration management with validation"""
 import logging
 import os
+import logging.config
 from pathlib import Path
-from typing import Dict, Any
 from dataclasses import dataclass
+from typing import Dict, Any
 
 @dataclass
 class DatabaseConfig:
     uri: str
     echo: bool = False
     track_modifications: bool = False
-
-@dataclass
-class LoggingConfig:
-    level: str = 'INFO'
-    format: str = '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-    handlers: Dict[str, Dict[str, Any]] = {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'level': 'DEBUG',
-            'formatter': 'default',
-            'stream': 'ext://sys.stdout'
-        },
-        'file': {
-            'class': 'logging.FileHandler',
-            'level': 'WARNING',
-            'formatter': 'default',
-            'filename': None,
-            'mode': 'a',
-            'encoding': 'utf-8'
-        }
-    }
 
 class Configuration:
     def __init__(self, env: str = "development"):
@@ -50,26 +30,35 @@ class Configuration:
         )
         
         # Logging configuration
-        self.LOGGING: LoggingConfig = LoggingConfig(
-            level=os.getenv('LOG_LEVEL', 'INFO'),
-            format=os.getenv('LOG_FORMAT', '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'),
-            handlers={
+        self.LOGGING: Dict[str, Any] = {
+            'version': 1,
+            'disable_existing_loggers': False,
+            'formatters': {
+                'default': {
+                    'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+                }
+            },
+            'handlers': {
                 'console': {
                     'class': 'logging.StreamHandler',
-                    'level': os.getenv('LOG_LEVEL_CONSOLE', 'DEBUG'),
+                    'level': 'DEBUG',
                     'formatter': 'default',
                     'stream': 'ext://sys.stdout'
                 },
                 'file': {
                     'class': 'logging.FileHandler',
-                    'level': os.getenv('LOG_LEVEL_FILE', 'WARNING'),
+                    'level': 'WARNING',
                     'formatter': 'default',
-                    'filename': self.root_path / 'app.log',
+                    'filename': str(self.root_path / 'instance' / 'logs' / 'app.log'),
                     'mode': 'a',
                     'encoding': 'utf-8'
                 }
+            },
+            'root': {
+                'level': 'INFO',
+                'handlers': ['console', 'file']
             }
-        )
+        }
 
     def _get_bool_env(self, var_name: str, default: str) -> bool:
         """Get boolean environment variable with default"""
@@ -89,10 +78,9 @@ class Configuration:
             raise ValueError("DATABASE_URI cannot be empty")
             
         # Ensure log file path exists
-        log_file = self.LOGGING.handlers['file']['filename']
-        if log_file:
-            log_dir = os.path.dirname(log_file)
-            os.makedirs(log_dir, exist_ok=True)
+        log_file = self.LOGGING['handlers']['file']['filename']
+        log_dir = os.path.dirname(log_file)
+        os.makedirs(log_dir, exist_ok=True)
 
     def init_app(self, app):
         """Initialize Flask application configuration"""
@@ -102,40 +90,19 @@ class Configuration:
         self.validate()
         
         # Setup logging
-        self._configure_logging(app)
+        self.configure_logging(app)
         
         # Environment-specific configurations
         if self.env == 'development':
             app.config['DATABASE'].uri = 'sqlite:///dev.db'
-            app.config['LOGGING'].level = 'DEBUG'
+            app.config['LOGGING']['root']['level'] = 'DEBUG'
         elif self.env == 'production':
             app.config['DATABASE'].uri = os.getenv('PRODUCTION_DATABASE_URI', 'postgresql://user:pass@host:port/dbname')
-            app.config['LOGGING'].level = 'INFO'
+            app.config['LOGGING']['root']['level'] = 'INFO'
 
-    def _configure_logging(self, app):
+    def configure_logging(self, app=None):
         """Configure logging for the application"""
-        # Remove existing handlers
-        root_logger = logging.getLogger()
-        for handler in root_logger.handlers[:]:
-            root_logger.removeHandler(handler)
-
-        # Apply configuration
-        logging.config.dictConfig({
-            'version': 1,
-            'formatters': {
-                'default': {
-                    'format': self.LOGGING.format,
-                }
-            },
-            'handlers': {
-                'console': self.LOGGING.handlers['console'],
-                'file': {
-                    **self.LOGGING.handlers['file'],
-                    'filename': str(self.LOGGING.handlers['file']['filename'])
-                }
-            },
-            'root': {
-                'level': self.LOGGING.level,
-                'handlers': ['console', 'file']
-            }
-        })
+        if app is None:
+            from flask import current_app
+            app = current_app
+        logging.config.dictConfig(self.LOGGING)
