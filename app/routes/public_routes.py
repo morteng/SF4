@@ -12,38 +12,28 @@ public_bp = Blueprint('public', __name__)
 @public_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        current_app.logger.debug("User already authenticated, redirecting to dashboard")
         return redirect(url_for('admin.dashboard.dashboard'))
     
     form = LoginForm()
     
     if form.validate_on_submit():
-        current_app.logger.debug(f"Login form submitted for user: {form.username.data}")
         user = User.query.filter_by(username=form.username.data).first()
         
         if user and user.check_password(form.password.data) and user.is_active:
             login_user(user, remember=True)
             
-            # Verify login succeeded
             if not current_user.is_authenticated:
-                current_app.logger.error("Login failed - user not authenticated")
                 flash('Login failed', 'danger')
                 return redirect(url_for('public.login'))
             
-            current_app.logger.debug("Login successful, redirecting to dashboard")
             return redirect(url_for('admin.dashboard.dashboard'))
         
-        # Generic error message to prevent user enumeration
         flash('Invalid username or password', 'danger')
     
-    # Add form error logging
     if form.errors:
-        current_app.logger.error(f"Form validation errors: {form.errors}")
+        flash('Form validation failed', 'danger')
     
     return render_template('login.html', form=form)
-
-from app.models.tag import Tag
-from app.models.stipend import Stipend
 
 @public_bp.route('/')
 def index():
@@ -63,8 +53,8 @@ def filter_stipends():
     
     if search_term:
         query = query.filter(
-            Stipend.name.ilike(f'%{search_term}%') |
-            Stipend.description.ilike(f'%{search_term}%')
+            Stipend.name.ilike(f'%{search_term}%") |
+            Stipend.description.ilike(f'%{search_term}%")
         )
     
     stipends = query.order_by(Stipend.application_deadline).all()
@@ -74,15 +64,12 @@ def filter_stipends():
 @public_bp.route('/logout')
 @login_required
 def logout():
-    # Clear session data
     session.pop('_user_id', None)
     session.pop('is_admin', None)
     session.pop('_fresh', None)
     
-    # Logout user
     logout_user()
     
-    # Create audit log
     try:
         AuditLog.create(
             user_id=current_user.id,
@@ -98,7 +85,6 @@ def logout():
     flash('You have been logged out.', 'success')
     return redirect(url_for('public.index'))
 
-# Add register route
 @public_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
