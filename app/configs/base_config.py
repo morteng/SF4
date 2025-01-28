@@ -39,28 +39,6 @@ class BaseConfig:
     # Rate limiting (if implemented)
     RATE_LIMIT_GLOBAL: str = "100 per minute"
     
-    # Logging configuration
-    LOGGING: Dict[str, Any] = {
-        'version': 1,
-        'formatters': {
-            'default': {
-                'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
-            }
-        },
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-                'level': 'DEBUG',
-                'formatter': 'default',
-                'stream': 'ext://sys.stdout'
-            }
-        },
-        'root': {
-            'level': 'INFO',
-            'handlers': ['console']
-        }
-    }
-
     def __init__(self):
         """Initialize configuration from environment variables."""
         # Override any settings from environment variables
@@ -99,18 +77,15 @@ class ProductionConfig(BaseConfig):
         super().__init__()
         self.DEBUG = False
         self.SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "postgresql://user:password@host:port/dbname")
-        self.LOGGING['root']['level'] = 'INFO'
 
 class DevelopmentConfig(BaseConfig):
     def __init__(self):
         super().__init__()
         self.DEBUG = True
         self.SQLALCHEMY_DATABASE_URI = 'sqlite:///dev.db'
-        self.LOGGING['root']['level'] = 'DEBUG'
 
 class TestingConfig(BaseConfig):
     def __init__(self):
         super().__init__()
         self.TESTING = True
         self.SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-        self.LOGGING['root']['level'] = 'WARNING'
